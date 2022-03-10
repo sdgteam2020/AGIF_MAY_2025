@@ -39,6 +39,18 @@ namespace Agif_V2.Controllers
             return File(stream, "application/pdf");
 
         }
+
+        private string GetClientIp()
+        {
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                return forwardedHeader.Split(',')[0].Trim();
+            }
+
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        }
         public IActionResult AGIFLoanInwardPaymentUsingNEFT()
         {
 
@@ -462,13 +474,14 @@ namespace Agif_V2.Controllers
 
         }
         
+
         public void OpenPdf(PdfReader pdfReader)
         {
             if(ModelState.IsValid == false)
             {
                 return;
             }
-            string ipAddress = HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
+            string ipAddress = GetClientIp();
             string wwwRootPath = _env.WebRootPath;
             string outputPath = System.IO.Path.Combine(wwwRootPath, "ImportantPdfFiles", "TempPdf.pdf");
             using (var memoryStream = new MemoryStream())

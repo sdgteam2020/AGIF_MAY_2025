@@ -309,10 +309,12 @@ namespace Agif_V2.Controllers
             {
                 if (model.CommonData != null)
                 {
+                    string? ip = GetClientIp();
                     model.CommonData.ApplicationType = int.Parse(model.loantype);
                     model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
                     model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
-                    if(string.IsNullOrEmpty(model.CommonData.pcda_AcctNo))
+                    model.CommonData.IPAddress = ip;
+                    if (string.IsNullOrEmpty(model.CommonData.pcda_AcctNo))
                     {
                         model.CommonData.pcda_AcctNo = string.Empty;
                     }

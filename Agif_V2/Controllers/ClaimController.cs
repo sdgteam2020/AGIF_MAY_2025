@@ -398,11 +398,11 @@ namespace Agif_V2.Controllers
 
         private async Task<ClaimCommonModel> SaveClaimCommonDataAsync(DTOClaimApplication model)
         {
-            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            if (string.IsNullOrEmpty(ip))
-            {
-                ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            }
+            string? ip = GetClientIp();
+            //if (string.IsNullOrEmpty(ip))
+            //{
+            //    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            //}
 
             if (model.ClaimCommonData == null) return new ClaimCommonModel();
 

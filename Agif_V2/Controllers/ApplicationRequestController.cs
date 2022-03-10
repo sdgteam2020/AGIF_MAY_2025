@@ -351,6 +351,16 @@ namespace Agif_V2.Controllers
                     throw new Exception("Session expired or invalid user context.");
 
 
+                string ipAddress = string.Empty;
+
+                var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(forwardedHeader))
+                {
+                    ipAddress = forwardedHeader.Split(',')[0].Trim();
+                }
+                else
+                    ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
 
                 var digitalSignRecords = new DigitalSignRecords
                 {
@@ -361,7 +371,8 @@ namespace Agif_V2.Controllers
                     IsSign = true,
                     DomainId = dTOTempSession.DomainId,
                     ArmyNo = dTOTempSession.ArmyNo,
-                    RankName = dTOTempSession.RankName
+                    RankName = dTOTempSession.RankName,
+                    IPAddress = ipAddress
                 };
 
                 await _onlineApplication.UpdateApplicationStatus(applId, 2);
@@ -397,7 +408,7 @@ namespace Agif_V2.Controllers
                 throw;
             }
         }
-
+      
         public async Task SaveClaimXML(int applId, string xmlResString, string remarks)
         {
             if(!ModelState.IsValid)
@@ -412,18 +423,29 @@ namespace Agif_V2.Controllers
                 if (dTOTempSession == null)
                     throw new Exception("Session expired or invalid user context.");
 
+                string ipAddress = string.Empty;
+
+                var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(forwardedHeader))
+                {
+                    ipAddress= forwardedHeader.Split(',')[0].Trim();
+                }
+                else
+                    ipAddress= HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
 
 
                 var digitalSignRecords = new ClaimDigitalSignRecords
-                {
-                    ApplId = applId,
-                    XMLSignResponse = xmlResString,
-                    SignOn = DateTime.Now,
-                    Remarks = remarks,
-                    IsSign = true,
-                    DomainId = dTOTempSession.DomainId,
-                    ArmyNo = dTOTempSession.ArmyNo,
-                    RankName = dTOTempSession.RankName
+                    {
+                        ApplId = applId,
+                        XMLSignResponse = xmlResString,
+                        SignOn = DateTime.Now,
+                        Remarks = remarks,
+                        IsSign = true,
+                        DomainId = dTOTempSession.DomainId,
+                        ArmyNo = dTOTempSession.ArmyNo,
+                        RankName = dTOTempSession.RankName,
+                        IPAddress= ipAddress
                 };
 
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);

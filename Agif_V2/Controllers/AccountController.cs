@@ -585,6 +585,22 @@ namespace Agif_V2.Controllers
             return Json(ret);
 
         }
+        private string GetClientIp()
+        {
+            // 1. Check for the X-Forwarded-For header
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                // The header can contain multiple IPs separated by commas if it passed 
+                // through multiple proxies (e.g., "client_ip, proxy1_ip, proxy2_ip").
+                // The first IP is the original client.
+                return forwardedHeader.Split(',')[0].Trim();
+            }
+
+            // 2. Fall back to the current connection's RemoteIpAddress
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        }
 
         [HttpPost]
         public async Task<JsonResult> UpdateUserStatus(string domainId, bool isActive)
@@ -595,11 +611,11 @@ namespace Agif_V2.Controllers
             }
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
-            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            if (string.IsNullOrEmpty(ip))
-            {
-                ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            }
+            string? ip = GetClientIp();
+            //if (string.IsNullOrEmpty(ip))
+            //{
+            //    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            //}
             if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
@@ -702,11 +718,11 @@ namespace Agif_V2.Controllers
             }
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
-            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            if (string.IsNullOrEmpty(ip))
-            {
-                ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            }
+            string? ip = GetClientIp();
+            //if (string.IsNullOrEmpty(ip))
+            //{
+            //    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            //}
             if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
