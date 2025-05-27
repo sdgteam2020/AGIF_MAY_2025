@@ -1,0 +1,1216 @@
+﻿@{
+    ViewData["Title"] = "Application Form";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    string loanType = Context.Request.Query["loanType"].ToString() ?? "CA";
+
+}
+
+
+<link href="~/css/onlineapplication.css" rel="stylesheet" />
+
+<div class="container-fluid mt-2">
+
+    <div class="pagetitletwo position-relative text-center mb-3">
+        <h1>Application Form <span id="loanTypeSpan">Loan Type</span></h1>
+        <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y" style=" margin-top:-29px" id="toggleAll">Expand All</button>
+    </div>
+
+    <div class="accordion" id="formAccordion">
+        <form id="myForm" class="needs-validation mb-8">
+            <!-- Personal Info -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
+                        <span class="w-100 text-center text-decoration-underline"><strong>Personal Details </strong></span>
+                    </button>
+                </h2>
+                <div id="personalInfo" class="accordion-collapse collapse show" data-bs-parent="#formAccordion">
+                    <div class="accordion-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-2">
+                                                <span class="input-group-text">👮</span>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="select form-select" id="armyPrefix" name="CommonData.ArmyPrefix" required>
+                                                </select>
+                                                <label class="form-label select-label ">Army No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🔟</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="armyNumber" name="CommonData.Number" onchange="SetSuffixLetter(this)" class="form-control" oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                                <label class="form-label" for="armyNumber">Number</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🧩</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="txtSuffix" name="CommonData.Suffix" class="form-control readonly-blocked" required maxlength="1" readonly tabindex="-1" />
+                                                <label class="form-label" for="txtSuffix">Suffix</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-2">
+                                                <span class="input-group-text">👮</span>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <select class="select form-select" id="oldArmyPrefix" name="CommonData.OldArmyPrefix" required>
+                                                </select>
+                                                <label class="form-label select-label ">Old Army No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🔟</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="oldArmyNo" name="CommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" maxlength="8" oninput="ValInDataNo(this)" pattern="^\d{3,8}$" required />
+                                                <label class="form-label" for="txtOldNumber">Number</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🧩</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="txtOldSuffix" name="CommonData.oldSuffix" class="form-control readonly-blocked" required readonly tabindex="-1" />
+                                                <label class="form-label" for="txtOldSuffix">Suffix</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">👮</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="select form-select" id="ddlrank" name="CommonData.DdlRank" required>
+                                        </select>
+                                        <label class="form-label select-label ">Rank & Trade</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">👮</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" oninput="ValInDataLetter(this)" required />
+                                        <label class="form-label" for="armyNumber">Applicant Name</label>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🎂</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" onchange="SetRetDate()">
+                                        <label class="form-label select-label ">DOB</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📅</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="date" class="form-control" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission" onchange="calculateYearDifference();SetRetDate()">
+                                        <label class="form-label select-label ">DOC/DOE</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">👮</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="select form-select" id="ExtnOfService" onchange="extensionOfService()" name="CommonData.ExtnOfService" onblur="ExtensionOfServiceAccess()">
+                                            <option value="" selected disabled>Select one</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        <label class="form-label select-label ">Extn of Service in Present Rank</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📅</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="date" class="form-control" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" disabled onchange="updateRetDateOnPromotionDateSelection()">
+                                        <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📅</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="date" class="form-control readonly-blocked" id="dateOfRetirement" aria-label="Date of Retirement" name="CommonData.DateOfRetirement" readonly tabindex="-1">
+                                        <label class="form-label select-label ">Date of Retirement</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🆔</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="aadharCardNo" name="CommonData.AadharCardNo" class="form-control" oninput="formatAadhar(this)" onkeyup="ValInAadhar(this)" maxlength="14" required />
+                                        <label class="form-label select-label ">Aadhar Card No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🆔</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="panCardNo" name="CommonData.PanCardNo" data-inputmask="'mask': 'AAAAA9999A', 'placeholder': 'AAAAA0000A'" class="form-control" placeholder="AAAAA0000A" required />
+                                        <label class="form-label select-label ">PAN No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📱</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="mobileNo" name="CommonData.MobileNo" class="form-control" maxlength="10" onblur="verifyMobileNo(this)" oninput="ValInDataNo(this)" required />
+                                        <label class="form-label select-label ">Mobile No</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📧</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="email" id="emailId" name="CommonData.Email" class="form-control" maxlength="64" required />
+                                        <label class="form-label select-label ">Email ID</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="input-group mb-2">
+                                    <select id="emailDomain" name="CommonData.EmailDomain" class="form-select" required>
+                                        <option value="gmail.com">gmail.com</option>
+                                        <option value="yahoo.com">yahoo.com</option>
+                                        <option value="outlook.com">outlook.com</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📆</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="totalService" name="CommonData.TotalService" class="form-control readonly-blocked" readonly required tabindex="-1" />
+                                        <label class="form-label select-label ">Total Service(Years)</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📆</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="residualService" name="CommonData.ResidualService" class="form-control readonly-blocked" readonly required tabindex="-1" />
+                                        <label class="form-label select-label ">Residual Service(Years)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--Regt/Unit Details-->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
+                        <span class="w-100 text-center text-decoration-underline"><strong>Regt/Unit Details</strong></span>
+                    </button>
+                </h2>
+                <div id="regt_Unit" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                    <div class="accordion-body">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">💼</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="CommonData.RegtCorps" required onchange="fetchPCDA_PAO()">
+                                        </select>
+                                        <label class="form-label select-label ">Regt/Corps</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💼</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="pcda_pao" name="CommonData.pcda_pao" class="form-control readonly-blocked" required readonly tabindex="-1" />
+                                        <label class="form-label select-label ">PCDA(O)/PAO(OR)</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">📒</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="pcda_AcctNo" name="CommonData.pcda_AcctNo" class="form-control" data-inputmask="'mask': '99/999/999999A', 'placeholder': '99/999/999999A'" placeholder="99/999/999999A" required readonly />
+                                        <label class="form-label select-label ">PCDA(O) Acct No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">🪖</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-select select" id="parentUnit" name="CommonData.ParentUnit" aria-label="parentUnit" required>
+                                        </select>
+                                        <label class="form-label select-label ">Parent Unit</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">🪖</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-select select" name="CommonData.PresentUnit" id="presentUnit" aria-label="presentUnit" required>
+                                        </select>
+                                        <label class="form-label select-label ">Present Unit</label>
+                                    </div>
+                                </div>
+                                @* <span class="input-group-text">🪖</span> *@
+
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🧷</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="presentUnitPin" name="CommonData.presentUnitPin" class="form-control" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" />
+                                        <label class="form-label select-label ">Present Unit PIN</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">📮</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-select select" id="armyPostOffice" name="CommonData.ArmyPostOffice" aria-label="armyPostOffice" required>
+                                        </select>
+                                        <label class="form-label select-label ">Army Post Office</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏠</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="civilPostalAddress" name="CommonData.civilPostalAddress" class="form-control readonly-blocked" required readonly />
+                                        <label class="form-label select-label ">Civ Postal Address</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏢</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="nextFmnHQ" name="CommonData.nextFmnHQ" class="form-control" required />
+                                        <label class="form-label select-label ">Next Fmn HQ</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
+
+                        <span class="w-100 text-center text-decoration-underline"><strong>Home Address</strong></span>
+                    </button>
+                </h2>
+                <div id="address" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                    <div class="accordion-body">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏠</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="Vill_Town" name="CommonData.Vill_Town" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required />
+                                        <label class="form-label" for="Vill_Town">Village/Town</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏠</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="postOffice" name="CommonData.postOffice" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required />
+                                        <label class="form-label" for="postOffice">Post Office</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🗺️</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="distt" name="CommonData.distt" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required />
+                                        <label class="form-label" for="distt">Enter Dist</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🗺️</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="state" name="CommonData.state" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required />
+                                        <label class="form-label" for="state">Enter State</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🧷</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="Code" name="CommonData.code" class="form-control" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" maxlength="6" required />
+                                        <label class="form-label" for="Code">Zip Code</label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salary Account Details -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
+
+                        <span class="w-100 text-center text-decoration-underline"><strong>Salary Account Details</strong></span>
+                    </button>
+                </h2>
+                <div id="salaryAcctDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                    <div class="accordion-body">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏧</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="password" id="salaryAcctNo" name="CommonData.salaryAcctNo" class="form-control" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onchange="validateAccountNo(this)" required />
+                                        <label class="form-label select-label ">Applicant's Salary Acct No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏧</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="confirmSalaryAcctNo" name="CommonData.confirmSalaryAcctNo" class="form-control" onchange="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" required />
+                                        <label class="form-label select-label ">Re-Enter Salary Acct No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏦</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="ifsCode" name="CommonData.ifsCode" class="form-control" data-inputmask="'mask': 'AAAA9999999', 'placeholder': 'AAAA9999999'" placeholder="AAAA9999999" required />
+                                        <label class="form-label select-label ">IFSC of Bank</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏦</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="nameOfBank" name="CommonData.nameOfBank" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" required />
+                                        <label class="form-label select-label ">Name of Bank</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🏦</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="nameOfBankBranch" name="CommonData.nameOfBankBranch" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" required />
+                                        <label class="form-label select-label ">Name of Bank Branch</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salary Details -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#salaryDetails" aria-expanded="false">
+
+                        <span class="w-100 text-center text-decoration-underline"><strong>Salary Details</strong></span>
+                    </button>
+                </h2>
+                <div id="salaryDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                    <div class="accordion-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🗓️</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="date" class="form-control" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" onchange="Validate_Salary_Slip_date(this)">
+                                        <label class="form-label select-label ">Monthly Pay Slip</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4 text-center">
+                                <h3 class="fw-bold" style="color:green"><u>Credit</u></h3>
+                            </div>
+                            <div class="col-md-4 fw-bold text-center">
+                                <h3 class="fw-bold" style="color:red"><u>Debit</u></h3>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="basicPay" name="CommonData.basicPay" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Basic Pay</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="dsop_afpp" name="CommonData.dsop_afpp" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">DSOP/AFPP Subs</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="rank_gradePay" name="CommonData.rank_gradePay" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Rank/Grade Pay</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="agif_Subs" name="CommonData.agif_Subs" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">AGIF Subs</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="msp" name="CommonData.msp" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">MSP</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="incomeTaxMonthly" name="CommonData.incomeTaxMonthly" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Income Tax Monthly</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="CI_Pay" name="CommonData.CI_Pay" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">CI Pay</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="educationCess" name="CommonData.educationCess" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Education Cess</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="npax_Pay" name="CommonData.npax_Pay" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">NPA/X Gp Pay</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="pli" name="CommonData.pli" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">PLI</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="techPay" name="CommonData.techPay" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Tech Pay</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="misc_Deduction" name="CommonData.misc_Deduction" class="form-control" maxlength="9" required oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">MISC Deduction(Regular Nature)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="da" name="CommonData.da" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">DA</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="loanEMI_Outside" name="CommonData.loanEMI_Outside" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Loan EMI(Outside AGIF)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="pmha" name="CommonData.pmha" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">PMHA</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="loanEMI" name="CommonData.loanEMI" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">Loan EMI(AGIF)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="lra" name="CommonData.lra" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">LRA</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="miscPay" name="CommonData.miscPay" class="form-control" maxlength="9" required onchange="textChange()" oninput="formatIndianNumber(this)" />
+                                        <label class="form-label select-label ">MISC Pay(Regular Nature)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="totalCredit" name="CommonData.totalCredit" class="form-control readonly-blocked" maxlength="11" required readonly />
+                                        <label class="form-label select-label ">Total Credit</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="totalDeductions" name="CommonData.totalDeductions" class="form-control readonly-blocked" maxlength="11" required readonly />
+                                        <label class="form-label select-label ">Total Deductions</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">💸</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="salary_After_Deductions" name="CommonData.salary_After_Deductions" class="form-control readonly-blocked" maxlength="11" required readonly />
+                                        <label class="form-label select-label ">Salary After Deductions</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @{
+                if (loanType == "1")
+                {
+                    <!-- HBA Application -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#propertyDetails" aria-expanded="false">
+
+                                <span class="w-100 text-center text-decoration-underline"><strong>Property and Loan Details</strong></span>
+                            </button>
+                        </h2>
+                        <div id="propertyDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-1">
+                                                <span class="input-group-text">👮</span>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <select class="form-select select" id="propertyType" aria-label="Property Type" name="HBAApplication.propertyType" required>
+                                                </select>
+                                                <label class="form-label select-label ">Property Type</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">👨</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="propertySeller" name="HBAApplication.propertySeller" class="form-control" required />
+                                                <label class="form-label select-label ">Property Seller Name and Address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="propertyAddress" name="HBAApplication.propertyAddress" class="form-control" required />
+                                                <label class="form-label select-label ">Property Address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💰</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="propertyCost" name="HBAApplication.propertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required />
+                                                <label class="form-label select-label ">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-1">
+                                                <span class="input-group-text">🔁</span>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <select class="form-select select" id="HBA_LoanFreq" aria-label="Frequency of Loan" name="HBAApplication.HBA_LoanFreq" required>
+                                                </select>
+                                                <label class="form-label select-label ">Frequency of Loan</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_repayingCapacity" name="HBAApplication.HBA_repayingCapacity" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Your max EMI Repaying Capacity</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_Amt_Eligible_for_loan" name="HBAApplication.HBA_Amt_Eligible_for_loan" class="form-control readonly-blocked" required readonly />
+
+                                                <label class="form-label select-label ">Max Eligible Loan Amount</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗓</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_EMI_Eligible" name="HBAApplication.HBA_EMI_Eligible" class="form-control readonly-blocked" required readonly />
+
+                                                <label class="form-label select-label ">Max EMI Eligible</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_Amount_Applied_For_Loan" name="HBAApplication.HBA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_HBA(this)" required />
+                                                <label class="form-label select-label ">Amount Applied For Loan</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗓</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required />
+                                                <label class="form-label select-label ">No of EMI Applied</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_approxEMIAmount" name="HBAApplication.HBA_approxEMIAmount" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Your Approx EMI Amount will be</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="HBA_approxDisbursementAmt" name="HBAApplication.HBA_approxDisbursementAmt" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Approx Disbursement Amount</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (loanType == "2")
+                {
+                    <!-- CA Application -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#vehicleDetails" aria-expanded="false">
+
+                                <span class="w-100 text-center text-decoration-underline"><strong>Vehicle Loan and Driving License Details</strong></span>
+                            </button>
+                        </h2>
+                        <div id="vehicleDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">👨</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="dealerName" name="CarApplication.DealerName" class="form-control" required />
+                                                <label class="form-label select-label ">Dealers Name and Address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @* <span class="input-group-text">🚗</span> *@
+                                        <select class="form-select select" id="veh_Loan_Type" name="CarApplication.Veh_Loan_Type" aria-label="Vehicle Loan Type" required>
+                                        </select>
+                                        <label class="form-label select-label ">Vehicle Loan Type</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🏢</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="companyName" name="CarApplication.CompanyName" class="form-control" required />
+                                                <label class="form-label select-label ">Company Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🚘</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="modelName" name="CarApplication.ModelName" class="form-control" required />
+                                                <label class="form-label" for="modelName">Model Name</label>
+                                                <label class="form-label select-label ">Model Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="vehicleCost" name="CarApplication.VehicleCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required />
+                                                <label class="form-label select-label ">Vehicle Ex-Showroom Price</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @* <span class="input-group-text">🔁</span> *@
+                                        <select class="form-select select" id="CA_LoanFreq" name="CarApplication.CA_LoanFreq" aria-label="Frequency of Loan" required>
+                                        </select>
+                                        <label class="form-label select-label ">Frequency of Loan</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_Amt_Eligible_for_loan" name="CarApplication.CA_Amt_Eligible_for_loan" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Max Eligible Loan Amount</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗓</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_EMI_Eligible" name="CarApplication.CA_EMI_Eligible" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Max EMI Eligible</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_repayingCapacity" name="CarApplication.CA_repayingCapacity" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Your max EMI Repaying Capacity</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_Amount_Applied_For_Loan" name="CarApplication.CA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_CA(this)" required />
+                                                <label class="form-label select-label ">Amount Applied For Loan</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗓</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control" oninput="validateEMI_CA(this);calculateEMI_CA()" required />
+                                                <label class="form-label select-label ">No of EMI Applied</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_approxEMIAmount" name="CarApplication.CA_approxEMIAmount" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Your Approx EMI Amount will be</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🪪</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="drivingLicenseNo" name="CarApplication.DrivingLicenseNo" class="form-control" required />
+                                                <label class="form-label select-label ">Driving License No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">📆</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control" required />
+                                                <label class="form-label select-label ">Validity Date of Driving License No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🪪</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="DL_IssuingAuth" name="CarApplication.DL_IssuingAuth" class="form-control" required />
+                                                <label class="form-label select-label ">Driving License Issuing Auth</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💵</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="CA_approxDisbursementAmt" name="CarApplication.CA_approxDisbursementAmt" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Approx Disbursement Amount</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <!-- PCA Application -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#computerDetails" aria-expanded="false">
+
+                                <span class="w-100 text-center text-decoration-underline"><strong>Personal Computer and Loan Details</strong></span>
+                            </button>
+                        </h2>
+                        <div id="computerDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🏠</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_dealerName" name="PCAApplication.PCA_dealerName" class="form-control" required onkeyup="ValInData(this)" />
+                                                <label class="form-label select-label ">Dealers Name and Address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-1">
+                                                <span class="input-group-text">👮</span>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <select class="form-select select" id="computer_Loan_Type" aria-label="Computer Loan Type" name="PCAApplication.computer_Loan_Type" required>
+                                                </select>
+                                                <label class="form-label select-label" for="computer_Loan_Type">Computer Loan Type</label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_companyName" name="PCAApplication.PCA_companyName" class="form-control" onkeyup="ValInData(this)" required />
+                                                <label class="form-label select-label ">Company Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_modelName" name="PCAApplication.PCA_modelName" class="form-control" onkeyup="ValInData(this)" required />
+                                                <label class="form-label select-label ">Model Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required />
+                                                <label class="form-label select-label ">Total Price of Computer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-1">
+                                                <span class="input-group-text">👮</span>
+                                            </div>
+                                            <div class="col-md-11">
+                                                <select class="form-select select" id="PCA_LoanFreq" aria-label="Frequency of Loan" name="PCAApplication.PCA_LoanFreq" required>
+                                                </select>
+                                                <label class="form-label select-label ">Frequency of Loan</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_Amt_Eligible_for_loan" name="PCAApplication.PCA_Amt_Eligible_for_loan" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Max Eligible Loan Amount</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_EMI_Eligible" name="PCAApplication.PCA_EMI_Eligible" class="form-control readonly-blocked" required readonly />
+                                                <label class="form-label select-label ">Max EMI Eligible</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_repayingCapacity" name="PCAApplication.PCA_repayingCapacity" class="form-control readonly-blocked" readonly required />
+                                                <label class="form-label select-label ">Your max EMI Repaying Capacity</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required />
+                                                <label class="form-label select-label ">Amount Applied For Loan</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control" oninput="validateEMI_PCA(this);calculateEMI_PCA()" required />
+                                                <label class="form-label select-label ">No of EMI Applied</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_approxEMIAmount" name="PCAApplication.PCA_approxEMIAmount" class="form-control readonly-blocked" readonly required />
+                                                <label class="form-label select-label ">Your Approx EMI Amount will be</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PCA_approxDisbursementAmt" name="PCAApplication.PCA_approxDisbursementAmt" class="form-control readonly-blocked" readonly required />
+                                                <label class="form-label select-label ">Approx Disbursement Amount</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="totalResidualMonth" name="PCAApplication.totalResidualMonth" value="0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="col-md-12">
+                <div class="mt-4 text-center">
+                    <button class="btn btn-primary" id="btn-save" type="submit">Next</button>
+                    <a href="/Upload/Upload?formType=CA" class="btn btn-primary">CA Form</a>
+                    <a href="/Upload/Upload?formType=PCA" class="btn btn-primary">PCA Form</a>
+                    <a href="/Upload/Upload?formType=HBA" class="btn btn-primary">HBA Form</a>
+
+                </div>
+            </div>
+            <div class="col-md-12">
+                <span class="error" id="msgerror"></span>
+            </div>
+        </form>
+    </div>
+
+    <!-- Submit Button -->
+
+</div>
+
+<script src="~/devjs/Validation.js"></script>
+<script src="~/devjs/onlineApplication.js"></script>
+<script src="~/lib/inputmask/dist/inputmask.min.js"></script>
+<script type="text/javascript" src="~/js/mdb/new-prism.js"></script>
+<script type="text/javascript" src="~/js/mdb/mdbsnippet.min.js"></script>
+<script type="text/javascript" src="~/js/mdb/mdb.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        expandAccordions();
+        confirmAccountNo();
+        loadDropdown();
+        enableDisablePromotionDate();
+        Inputmask().mask(document.querySelectorAll("input"));
+        EnableDisablePCDA();
+        EnableDisableCivilPostalAdd();
+        RefreshMaxAmt_PCA();
+        RefreshMaxAmt_CA();
+        RefreshMaxAmt_HBA();
+        handleSubmitClick();
+    });
+</script>

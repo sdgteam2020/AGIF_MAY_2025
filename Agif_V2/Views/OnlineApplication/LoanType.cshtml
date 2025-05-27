@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Loan type";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="container-fluid mt-2">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card shadow p-4 w-25 mt-lg-5">
+            <div class="pagetitle">
+                <h1>
+                    Apply Loan
+                </h1>
+            </div>
+            <form>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="loanType">Loan Type:</label>
+                        <select id="loanType" name="loanType" class="form-select">
+                        </select>
+                    </div>
+
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="applicantCategory">Applicant Category:</label>
+                        <select id="applicantCategory" name="applicantCategory" class="form-select">
+                        </select>
+                    </div>
+                </div>
+                <!-- Terms -->
+                <div class="mb-3">
+
+                    <span>
+                        I have read the Gen Instruction of HBA/CA/PCA loan
+                        <strong>(As applicable)</strong>. I have understood all rules, terms and
+                        conditions for grant of loan. These rules are acceptable to me.
+                    </span>
+
+                </div>
+
+                <!-- Buttons -->
+                <div class="errormessage">
+                </div>
+
+                <a id="genInstr" class="alert link-danger" target="_blank" href="Home/Index" data-title="Apply for Loan Online">Download Gen Instr</a>
+                <div class="form-buttons text-center">
+
+                    <a class="btn btn-outline-warning mt-2 " href="Home/Index">Do Not Agree</a>
+                    <button type="button" id="btnAgree" class="btn btn-primary mr-2 mt-2">Agree</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/devjs/loantype.js"></script>
+<script>
+
+    $(document).ready(function () {
+        mMsater(0, "loanType", 5, 0);
+        mMsater(0, "applicantCategory", 6, 0);
+    });
+</script>

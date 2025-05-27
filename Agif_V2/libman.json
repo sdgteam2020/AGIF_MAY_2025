@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "sweetalert2@11.16.1",
+      "destination": "wwwroot/lib/sweetalert2/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "bootstrap-icons@1.10.5",
+      "destination": "wwwroot/lib/bootstrap-icons/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "inputmask@5.0.9",
+      "destination": "wwwroot/lib/",
+      "files": [
+        "dist/inputmask.min.js"
+      ]
+    }
+  ]
+}

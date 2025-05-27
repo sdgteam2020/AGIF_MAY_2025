@@ -1,0 +1,343 @@
+﻿@{
+    ViewData["Title"] = "Insurance Cover";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="container py-4 bg-white">
+    <div class="row">
+        <div class="col-12 text-center mb-3 pagetitlethree">
+            <h1 class="display-4 fw-bold">Insurance Cover</h1>
+        </div>
+    </div>
+
+    <!-- Life Insurance Cover Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3 fw-bold"><u>Life Insurance Cover</u></h2>
+            <p class="lead">
+                AGIF pays insurance amount to its members irrespective of cause of death,
+                including war and warlike situation, medical diseases, suicide and accidents. The monthly subscription comprises of Saving Element as a major component and insurance component
+                consisting of Insurance, War Risk and Disability Benefit:
+            </p>
+        </div>
+    </div>
+
+    <!-- Insurance Details -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3 fw-bold"><u>Insurance</u></h4>
+            <p>Present insurance cover is as under:</p>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center fw-bold" colspan="2">Category</th>
+                            <th class="text-center fw-bold" colspan="3">Monthly Subscription</th>
+                            <th class="text-center fw-bold" colspan="3">Benefits</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" colspan="2"></th>
+                            <th class="text-center fw-bold"><u>Saving Element</u></th>
+                            <th class="text-center fw-bold"><u>Risk Element</u></th>
+                            <th class="text-center fw-bold"><u>Total</u></th>
+                            <th class="text-center fw-bold" colspan="3"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Regular Army -->
+                        <tr class="table-secondary">
+                            <td colspan="6"><strong><u>Regular Army</u></strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">(i) Officers</td>
+                            <td class="text-center">&#x20B9; 8,722/-</td>
+                            <td class="text-center">&#x20B9; 1,278/-</td>
+                            <td class="text-center">&#x20B9; 10,000/-</td>
+                            <td colspan="3">Insurance 100 lac <br>Disability 25 lac</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">(ii) JCOs/ OR</td>
+                            <td class="text-center">&#x20B9; 4,440/-</td>
+                            <td class="text-center">&#x20B9; 560/-</td>
+                            <td class="text-center">&#x20B9; 5,000/-</td>
+                            <td colspan="3">Insurance 50 lac <br>Disability 12.50 lac</td>
+                        </tr>
+
+                        <!-- APS -->
+                        <tr class="table-secondary">
+                            <td colspan="6"><strong><u>APS (Deputationists from P &amp; T)</u></strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">(i) Officers</td>
+                            <td class="text-center">&#x20B9; 3,762.50/-</td>
+                            <td class="text-center">&#x20B9; 1,427.50/-</td>
+                            <td class="text-center">&#x20B9; 5,190/-</td>
+                            <td colspan="3">Insurance 75 lac <br>Disability 25 lac</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">(ii) JCOs &amp; OR</td>
+                            <td class="text-center">&#x20B9; 1,867.50/-</td>
+                            <td class="text-center">&#x20B9; 657.50/-</td>
+                            <td class="text-center">&#x20B9; 2,525/-</td>
+                            <td colspan="3">Insurance 37.50 lac <br>Disability 12.50 lac</td>
+                        </tr>
+
+                        <!-- TA -->
+                        <tr class="table-secondary">
+                            <td colspan="6"><strong><u>TA</u></strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">(i) Officers</td>
+                            <td class="text-center">&#x20B9; 38,244/-</td>
+                            <td class="text-center">&#x20B9; 9,756/-</td>
+                            <td class="text-center">&#x20B9; 48,000/-</td>
+                            <td colspan="3">Insurance 50 lac <br>Disability 15 lac</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">(ii) JCOs &amp; OR</td>
+                            <td class="text-center">&#x20B9; 20,118/-</td>
+                            <td class="text-center">&#x20B9; 3,882/-</td>
+                            <td class="text-center">&#x20B9; 24,000/-</td>
+                            <td colspan="3">Insurance 25 lac <br>Disability 7.50 lac</td>
+                        </tr>
+
+                        <!-- DSC -->
+                        <tr class="table-secondary">
+                            <td colspan="6"><strong><u>DSC JCOs/ OR</u></strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td class="text-center">&#x20B9; 1,646.50/-</td>
+                            <td class="text-center">&#x20B9; 943.50/-</td>
+                            <td class="text-center">&#x20B9; 2,590/-</td>
+                            <td colspan="3">Insurance 37.50 lac <br>Disability 12.50 lac</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-info mt-3">
+                Insurance cover for TA has been enhanced to ₹ 50 lakh for Offrs & ₹ 25 lakh for JCOs/OR wef 01 Apr 2021.
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits to Cadets -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3 fw-bold"><u>Benefits to Cadets</u></h4>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">Member</th>
+                            <th class="text-center" style="width:8%">Subs</th>
+                            <th class="text-center" style="width:12%">Insurance Cover</th>
+                            <th class="text-center" style="width:12%">Disability Cover</th>
+                            <th class="text-center">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-secondary">
+                            <td colspan="5"><strong><u>Insurance Cover</u></strong></td>
+                        </tr>
+                        <tr>
+                            <td>Cadets of NDA (3 yrs), AFMC (4 yrs), 10+2 (TES), CME, MCEME, MCTE (3 yrs)</td>
+                            <td class="text-center">₹ 7,200</td>
+                            <td class="text-center">₹ 15 lac</td>
+                            <td class="text-center">₹ 15 lac</td>
+                            <td>
+                                (a) For less than 20% disability, Ex-gratia of ₹ 50,000/- in initial years of trg & ₹ 1 lakh in the last year of trg.
+                                <br>
+                                (b) ₹1,355/- per relegated term
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>B. Sc (Nursing)(4 Yrs)</td>
+                            <td class="text-center">₹ 4,625</td>
+                            <td class="text-center">₹ 8 lac</td>
+                            <td class="text-center">₹ 4 lac</td>
+                            <td>₹ 645/- per relegated term.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ex-Gratia Grant for Cadets -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-3"><u>Ex-Gratia Grant for Cadets</u></h2>
+            <p class="lead">
+                Ex-Gratia Grant is paid to those Cadets of NDA, AFMC and 10+2(TES) who are invalided out with less than 20% disability.
+                The amount of Ex-Gratia Grant is ₹ 50000/- for initial yrs of trg and ₹ one Lakh is paid to cadets who are invalided
+                out with less than 20% disability during their last year of training. Disability due to alcoholism, drug addiction and
+                due to diseases of pre-enrolment origin is not eligible for Ex-Gratia Grant.
+            </p>
+        </div>
+    </div>
+    <div class="alert alert-warning mt-3">
+        The insurance cover is paid irrespective of cause of death including War and Warlike situations, Medical diseases, Suicide and Accidents.
+    </div>
+
+    <!-- Documents Required Section -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">Documents Required for Obtaining Insurance Benefits</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(a)</span>
+                            <div>
+                                Claim for Insurance Benefits: AGIF (Appendix 'B' to AO 23/2002/AGI).<a href="../_forms/docu_insurance_claim/Appx B.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(b)</span>
+                            <div>
+                                Claim for Insurance Benefits: AGIF (Appendix 'C' to AO 23/2002/AGI).
+                                <a href="../_forms/docu_insurance_claim/Claim_for_Insurance_Benefits.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(c)</span>
+                            <div>
+                                Nomination for AGIF.
+                                <a href="../_forms/docu_insurance_claim/REVISED NOMINATION FORM 26 Mar 2019.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(d)</span>
+                            <div>
+                                Death Certificate.
+                                <a href="../_forms/docu_insurance_claim/Death_certificate_for_Insurance_and_Extended_Insurance_Bene.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(e)</span>
+                            <div>
+                                Consent Affidavit from Beneficiary.
+                                <a href="../_forms/docu_insurance_claim/Affidavit_for_Consent_Certificate_Required_for_Insurance_and.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Certificate</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(f)</span>
+                            <div>
+                                Affidavit-cum-Indemnity Bond Form.
+                                <a href="../_forms/docu_insurance_claim/Affidavit Cum Indemnity Bond.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(g)</span>
+                            <div>
+                                Form 15 G (To be submitted by the beneficiary less than 60 years of age).
+                                <a href="../_forms/docu_insurance_claim/Form 15 G.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(h)</span>
+                            <div>
+                                Form 15 H (To be submitted by the beneficiary more than 60 years of age).
+                                <a href="../_forms/docu_insurance_claim/Form 15 H.pdf" target="_blank" class="btn btn-outline-primary btn-sm ms-2">Download Form</a>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(i)</span>
+                            <div>
+                                Cancelled cheque with printed name of the beneficiary.
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(j)</span>
+                            <div>
+                                Copy of PAN Card.
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(k)</span>
+                            <div>
+                                Copy of Aadhar Card.
+                            </div>
+                        </li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Instructions Section -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">Important Instructions on Life Insurance Cover of AGIF</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(a)</span>
+                            <div>
+                                A/56271/R/AG/Ins (Coord) dated 16 Dec 2010 regarding revision of Ex-Gratia Grant to Cadets of IMA, OTA, NDA, CME, MCTE, MCEME and AFMC.
+                            </div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(b)</span>
+                            <div>A/56271/R/AG/Ins (Coord) (ii) dated 20 Jul 2015 regarding review of insurance cover for NDA and AFMC cadets.</div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(c)</span>
+                            <div>A/56271/R/AG/Ins (Coord) (i) dated 22 Aug 2016 regarding revision of insurance cover to Gentlemen and Lady cadets.</div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(d)</span>
+                            <div>A/56271/R/AG/Ins (Coord) dated 01 Dec 2017 regarding increase of insurance cover to serving Army personnel.</div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(e)</span>
+                            <div>AO 23/2002/AGI.</div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(f)</span>
+                            <div>AGIF policy letter No A/56271/R/AG/ Ins (Coord) dt 12 Nov 2009 regarding distr of insurance cover.</div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(g)</span>
+                            <div>AGIF policy letter No A/56271/R/AG/ Ins (Coord) dt 26 Mar 2019 regarding revision of nomination form.</div>
+                        </li>
+
+                        <li class="list-group-item d-flex">
+                            <span class="fw-bold me-2">(h)</span>
+                            <div>AGIF policy letter No A/56271/R/AG/ Ins (Coord) dt 03 Nov 2021 regarding increase of insurance cover to serving Army personnel.</div>
+                        </li>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  

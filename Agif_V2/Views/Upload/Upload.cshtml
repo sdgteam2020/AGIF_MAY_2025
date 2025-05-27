@@ -1,0 +1,183 @@
+﻿@{
+    ViewData["Title"] = "Upload";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "CA";
+}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Upload Your PDF File - @formType Form</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Instructions Section -->
+                    <div class="alert alert-info mb-4">
+                        @* <h6 class="alert-heading mb-3">
+                            <strong>UPLOAD PDF OF SUPPORTING DOCUMENTS</strong>
+                        </h6> *@
+
+                        @if (formType == "CA")
+                        {
+                            <div>
+                                <strong>
+                                    For CAR/TWO WHEELER LOAN (CA) Only
+                                </strong>
+                                <ul class="mt-2 mb-2">
+                                    <li>Page 1 - Cancelled cheque of salary account.</li>
+                                    <li>Page 2 - First page of latest monthly pay slip (first page only).</li>
+                                    <li>
+                                        Page 3 - Quotation from authorized dealer (RC and insurance in case of
+                                        second hand car).
+                                    </li>
+                                    <li>Page 4 - Valid Driver License (Learners is also accepted).</li>
+                                    <li>
+                                        Page 5 - Service Extn Pt II order/ Pay Slip in which Pt II order adjusted (if
+                                        applicable).
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else if (formType == "PCA")
+                        {
+                            <div>
+                                <strong>For COMPUTER LOAN (PCA) Only</strong>
+                                <ul class="mt-2 mb-2">
+                                    <li>Page 1 - Cancelled cheque of salary account.</li>
+                                    <li>Page 2 - First page of latest monthly pay slip (first page only).</li>
+                                    <li>Page 3 - Quotation from authorized dealer.</li>
+                                    <li>Page 4 - Service Extn Pt II order/ Pay Slip in which Pt II order adjusted (if applicable).</li>
+                                </ul>
+                            </div>
+                        }
+                        else if (formType == "HBA")
+                        {
+                            <div>
+                                <strong>
+                                    For HOUSE LOAN (HBA) Only
+                                </strong>
+                                <ul class="mt-2 mb-2">
+                                    <li>
+                                        Page 1 - Cancelled cheque of salary account.
+                                    </li>
+                                    <li>Page 2 - First page of latest monthly pay slip (first page only).</li>
+                                </ul>
+                            </div>
+                        }
+
+                        <div class="alert alert-warning mt-3 mb-0">
+                            <strong>Note:</strong> Total file size of file after merging pdf including application should not be more than <strong>1 MB</strong>.
+                        </div>
+                    </div>
+
+                    <form action="@Url.Action("ProcessUpload", "Upload")" method="post" enctype="multipart/form-data">
+                        <!-- Hidden field to pass form type to controller -->
+                        <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
+
+                        @if (formType == "CA")
+                        {
+                            <!-- CA Form Upload Fields -->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="CancelledCheque" class="form-label fw-bold">
+                                            1. Cancelled Cheque
+                                        </label>
+                                        <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="PaySlipPdf" class="form-label fw-bold">
+                                            2. First Page of Pay Slip
+                                        </label>
+                                        <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="QuotationPdf" class="form-label fw-bold">
+                                            3. Quotation (RC & Insurance in case of old car)
+                                        </label>
+                                        <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="DrivingLicensePdf" class="form-label fw-bold">
+                                            4. Valid Driving License
+                                        </label>
+                                        <input class="form-control" type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="SeviceExtnPdf" class="form-label fw-bold">
+                                            5. Service Extn Pt II order (If Applicable)
+                                        </label>
+                                        <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (formType == "PCA")
+                        {
+                            <!-- PCA Form Upload Fields -->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="CancelledCheque" class="form-label fw-bold">
+                                            1. Cancelled Cheque
+                                        </label>
+                                        <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="PaySlipPdf" class="form-label fw-bold">
+                                            2. First Page of Pay Slip
+                                        </label>
+                                        <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="QuotationPdf" class="form-label fw-bold">
+                                            3. Quotation
+                                        </label>
+                                        <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="SeviceExtnPdf" class="form-label fw-bold">
+                                            4. Service Extn Pt II order (If Applicable)
+                                        </label>
+                                        <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (formType == "HBA")
+                        {
+                            <!-- HBA Form Upload Fields -->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="CancelledCheque" class="form-label fw-bold">
+                                            1. Cancelled Cheque
+                                        </label>
+                                        <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="PaySlipPdf" class="form-label fw-bold   ">
+                                            2. First Page of Pay Slip
+                                        </label>
+                                        <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success" id="uploadBtn" disabled>Upload Documents</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/devjs/upload.js"></script>
+<script>
+    $(document).ready(function () {
+        checkUploadFiles();
+    })
+</script>
