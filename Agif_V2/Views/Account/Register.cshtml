@@ -1,9 +1,84 @@
 ﻿@{
-    ViewData["Title"] = "Loan type";
+    ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
 <div class="container-fluid mt-2">
-    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="card shadow p-4 container-sm">
+                    <div class="pagetitle text-center mb-4">
+                        <h1>Sign Up</h1>
+                    </div>
+                    <form>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="userName">Username:</label>
+                                    <input type="text" id="userName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password">Army No:</label>
+                                    <input type="password" id="password" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="rank">Rank:</label>
+                                    <select class="form-select select" id="rank"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" id="name" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" id="email" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mobileNo">Mobile No:</label>
+                                    <input type="number" id="mobileNo" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="regtCorps">Regt/Corps:</label>
+                                    <select class="form-select select" id="regtCorps"></select>
+                                </div>
+                            </div><div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="unit">Unit Name:</label>
+                                    <select class="form-select select" id="unit"></select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="appointment">Appointment:</label>
+                                    <select class="form-select select" id="appointment"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <a id="login" class="btn btn-success" target="_blank" href="~/Account/Register" data-title="Login">Sign Up</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="~/devjs/register.js"></script>
+<script>
+    $(document).ready(function () {
+        loadDropdown();
+    })
+</script>
