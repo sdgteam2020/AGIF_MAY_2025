@@ -1,0 +1,249 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataTransferObject.Model
+{
+    public class CommonDataModel
+    {
+        [Required(ErrorMessage = "Army Prefix is required.")]
+        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        public string? ArmyPrefix { get; set; }
+
+        [Required(ErrorMessage = "Number is required.")]
+        [RegularExpression(@"^\d{7,8}$", ErrorMessage = "Number should be 7 or 8 digits.")]
+        public string? Number { get; set; }
+
+        [Required(ErrorMessage = "Suffix is required.")]
+        [StringLength(5, ErrorMessage = "Suffix can't be longer than 5 characters.")]
+        public string? Suffix { get; set; }
+
+        [Required(ErrorMessage = "Old Army Prefix is required.")]
+        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        public string? OldArmyPrefix { get; set; }
+
+        [Required(ErrorMessage = "Old Number is required.")]
+        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        public string? OldNumber { get; set; }
+
+        [Required(ErrorMessage = "Old Army Prefix is required.")]
+        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        public string? OldSuffix { get; set; }
+
+        [Required(ErrorMessage = "Rank is required.")]
+        [StringLength(100, ErrorMessage = "Rank can't be longer than 100 characters.")]
+        public string? DdlRank { get; set; }
+
+        [Required(ErrorMessage = "Applicant Name is required.")]
+        [StringLength(200, ErrorMessage = "Applicant Name can't be longer than 200 characters.")]
+        public string? ApplicantName { get; set; }
+
+        [Required(ErrorMessage = "Date of Birth is required.")]
+        [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
+        public DateTime? DateOfBirth { get; set; }
+
+        [Required(ErrorMessage = "Date of Commission is required.")]
+        [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
+        public DateTime? DateOfCommission { get; set; }
+
+        //[Required(ErrorMessage = "Extension of Service is required.")]
+        //[StringLength(50, ErrorMessage = "Extension of Service can't be longer than 50 characters.")]
+        public string? ExtnOfService { get; set; }
+
+        //[Required(ErrorMessage = "Date of Promotion is required.")]
+        //[DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
+        public DateTime? DateOfPromotion { get; set; }
+
+        //[Required(ErrorMessage = "Date of Retirement is required.")]
+        //[DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
+        public DateTime? DateOfRetirement { get; set; }
+
+        [Required(ErrorMessage = "Aadhar Card No is required.")]
+        //[StringLength(12, ErrorMessage = "Aadhar Card No must be 12 digits.")]
+        //[RegularExpression(@"^\d{12}$", ErrorMessage = "Invalid Aadhar Card No.")]
+        public string? AadharCardNo { get; set; }
+
+        [Required(ErrorMessage = "PAN Card No is required.")]
+        //[StringLength(10, ErrorMessage = "PAN Card No must be 10 characters.")]
+        public string? PanCardNo { get; set; }
+
+        [Required(ErrorMessage = "Mobile No is required.")]
+        [StringLength(10, ErrorMessage = "Mobile No must be 10 digits.")]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid Mobile No.")]
+        public string? MobileNo { get; set; }
+
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address.")]
+        public string? Email { get; set; }
+
+        [Required(ErrorMessage = "Email Domain is required.")]
+        [StringLength(100, ErrorMessage = "Email Domain can't be longer than 100 characters.")]
+        public string? EmailDomain { get; set; }
+
+        //[Required(ErrorMessage = "Total Service is required.")]
+        //[Range(0, int.MaxValue, ErrorMessage = "Total Service must be a positive number.")]
+        public int? TotalService { get; set; }
+
+        //[Required(ErrorMessage = "Residual Service is required.")]
+        //[Range(0, int.MaxValue, ErrorMessage = "Residual Service must be a positive number.")]
+        public int? ResidualService { get; set; }
+
+        // Additional properties for addresses, salary, and financial data.
+        [Required(ErrorMessage = "Regt/Corps is required.")]
+        [StringLength(100, ErrorMessage = "Regt/Corps can't be longer than 100 characters.")]
+        public string? RegtCorps { get; set; }
+
+        [StringLength(200, ErrorMessage = "PCDA PAO can't be longer than 200 characters.")]
+        public string? pcda_pao { get; set; }
+
+        [StringLength(20, ErrorMessage = "PCDA Account No can't be longer than 20 characters.")]
+        public string? pcda_AcctNo { get; set; }
+
+        [Required(ErrorMessage = "Parent Unit is required.")]
+        [StringLength(100, ErrorMessage = "Parent Unit can't be longer than 100 characters.")]
+        public string? ParentUnit { get; set; }
+
+        [Required(ErrorMessage = "Present Unit is required.")]
+        [StringLength(100, ErrorMessage = "Present Unit can't be longer than 100 characters.")]
+        public string? PresentUnit { get; set; }
+
+
+        [Required(ErrorMessage = "Present Unit Pin is required.")]
+        [StringLength(6, ErrorMessage = "Present Unit Pin can't be longer than 6 characters.")]
+        public string? PresentUnitPin { get; set; }
+
+        [Required(ErrorMessage = "Army Post Office is required.")]
+        [StringLength(100, ErrorMessage = "Army Post Office can't be longer than 100 characters.")]
+        public string? ArmyPostOffice { get; set; }
+
+
+        //[StringLength(300, ErrorMessage = "Civil Postal Address can't be longer than 300 characters.")]
+        public string? CivilPostalAddress { get; set; }
+
+        [Required(ErrorMessage = "Next Fmn HQ is required.")]
+        [StringLength(100, ErrorMessage = "Next Fmn HQ can't be longer than 100 characters.")]
+        public string? NextFmnHQ { get; set; }
+
+        [Required(ErrorMessage = "Village/Town is required.")]
+        [StringLength(100, ErrorMessage = "Village/Town can't be longer than 100 characters.")]
+        public string? Vill_Town { get; set; }
+
+        [Required(ErrorMessage = "Post Office is required.")]
+        [StringLength(100, ErrorMessage = "Post Office can't be longer than 100 characters.")]
+        public string? PostOffice { get; set; }
+
+        [Required(ErrorMessage = "District is required.")]
+        [StringLength(100, ErrorMessage = "District can't be longer than 100 characters.")]
+        public string? Distt { get; set; }
+
+
+        [Required(ErrorMessage = "State is required.")]
+        [StringLength(100, ErrorMessage = "State can't be longer than 100 characters.")]
+        public string? State { get; set; }
+
+        [Required(ErrorMessage = "Zip Code is required.")]
+        [StringLength(6, ErrorMessage = "Zip Code can't be longer than 6 characters.")]
+        public string? Code { get; set; }
+
+
+        [Required(ErrorMessage = "Salary Account No is required.")]
+        [StringLength(20, ErrorMessage = "Salary Account No can't be longer than 20 characters.")]
+        public string? SalaryAcctNo { get; set; }
+
+        [Required(ErrorMessage = "Re-Enter Salary Account No is required.")]
+        [StringLength(20, ErrorMessage = "Confirm Salary Account No can't be longer than 20 characters.")]
+        public string? ConfirmSalaryAcctNo { get; set; }
+
+        [Required(ErrorMessage = "IFSC Code is required.")]
+        [StringLength(11, ErrorMessage = "IFSC Code can't be longer than 11 characters.")]
+        public string? IfsCode { get; set; }
+
+        [Required(ErrorMessage = "Bank Name is required.")]
+        [StringLength(100, ErrorMessage = "Bank Name can't be longer than 100 characters.")]
+        public string? NameOfBank { get; set; }
+
+        [Required(ErrorMessage = "Bank Branch is required.")]
+        [StringLength(100, ErrorMessage = "Bank Branch Name can't be longer than 100 characters.")]
+        public string? NameOfBankBranch { get; set; }
+
+        // Financial information
+
+        [Required(ErrorMessage = "Monthly Pay Slip is required.")]
+        [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
+
+        public DateTime? MonthlyPaySlip { get; set; }
+
+        [Required(ErrorMessage = "BasicPay is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Basic Pay must be a positive number.")]
+
+        public decimal? BasicPay { get; set; }
+
+        [Required(ErrorMessage = "DSOP/AFPP is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "DSOP/AFPP must be a positive number.")]
+        public decimal? dsop_afpp { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Rank Grade Pay must be a positive number.")]
+        public decimal? rank_gradePay { get; set; }
+
+        [Required(ErrorMessage = "AGIF Subs is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "AGIF Subs must be a positive number.")]
+        public decimal? agif_Subs { get; set; }
+
+        [Required(ErrorMessage = "MSP is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "MSP must be a positive number.")]
+        public decimal? Msp { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Income Tax Monthly must be a positive number.")]
+        public decimal? IncomeTaxMonthly { get; set; }
+
+       // [Range(0, double.MaxValue, ErrorMessage = "CI Pay must be a positive number.")]
+        public decimal? CI_Pay { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Education Cess must be a positive number.")]
+        public decimal? EducationCess { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "NPA/X Gp Pay must be a positive number.")]
+        public decimal? npax_Pay { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "PLI must be a positive number.")]
+        public decimal? Pli { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Tech Pay must be a positive number.")]
+        public string? TechPay { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Misc Deduction must be a positive number.")]
+        public decimal? misc_Deduction { get; set; }
+
+
+        [Required(ErrorMessage = "DA is required.")]
+        [Range(0, double.MaxValue, ErrorMessage = "DA must be a positive number.")]
+        public decimal? Da { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Loan EMI Outside must be a positive number.")]
+        public decimal? loanEMI_Outside { get; set; }
+
+       // [Range(0, double.MaxValue, ErrorMessage = "PMHA must be a positive number.")]
+        public decimal? Pmha { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Loan EMI must be a positive number.")]
+        public decimal? LoanEmi { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "LRA must be a positive number.")]
+        public decimal? Lra { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Misc Pay must be a positive number.")]
+        public decimal? MiscPay { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Total Credit must be a positive number.")]
+        public decimal? TotalCredit { get; set; }
+
+        //[Range(0, double.MaxValue, ErrorMessage = "Total Deductions must be a positive number.")]
+        public decimal? TotalDeductions { get; set; }
+
+       // [Range(0, double.MaxValue, ErrorMessage = "Salary After Deductions must be a positive number.")]
+        public decimal? salary_After_Deductions { get; set; }
+    }
+}

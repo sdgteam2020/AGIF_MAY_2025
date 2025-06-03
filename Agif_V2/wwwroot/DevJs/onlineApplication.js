@@ -40,39 +40,66 @@ function formatAadhar(input) {
 }
 function loadDropdown() {
     const params = new URLSearchParams(window.location.search);
-    const loanType = params.get("loanType");
-    const applicantCategory = params.get("applicantCategory");
+
+    const loanTypeFromUrl = params.get("loanType");
+
+    const loanTypeFromInput = document.getElementById('loanType')?.value || null;
+
+    const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+
+    //const applicantCategory = params.get("applicantCategory");
+
+    const applicantCategoryFromUrl = params.get("applicantCategory");
+
+    const applicantCategoryFromInput = document.getElementById('applicantCategory')?.value || null;
+
+    const applicantCategory = applicantCategoryFromUrl ? applicantCategoryFromUrl : applicantCategoryFromInput;
+
+    var armyPrefixValue = $('#armyPrefix').data('army-prefix');  // Access the data-attribute value
+    var OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix'); 
+    var Rank = $('#ddlrank').data('rank-prefix');
+    var regtcorps = $('#regtCorps').data('regt-prefix');
+    var parentunit = $('#parentUnit').data('parent-prefix');
+    var presentunit = $('#presentUnit').data('present-prefix');
+    var Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
+    var propertytype = $('#propertyType').data('propertytype-prefix');
+    var hbaloanfreq = $('#HBA_LoanFreq').data('hbaloanfreq-prefix');
+    var vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
+    var Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
+    var computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
+    var Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
+
     if (applicantCategory == 1) {
-        mMsater(0, "armyPrefix", 9, 0);
-        mMsater(0, "oldArmyPrefix", 9, 0);
-        mMsater(0, "ddlrank", 3, 0);
+        mMsater(armyPrefixValue, "armyPrefix", 9, 0);
+        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 9, 0);
+        mMsater(Rank, "ddlrank", 3, 0);
     }
     else if (applicantCategory == 2) {
-        mMsater(0, "armyPrefix", 10, 0);
-        mMsater(0, "oldArmyPrefix", 10, 0);
-        mMsater(0, "ddlrank", 4, 0);
+        mMsater(armyPrefixValue, "armyPrefix", 10, 0);
+        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 10, 0);
+        mMsater(Rank, "ddlrank", 4, 0);
     }
     else if (applicantCategory == 3) {
-        mMsater(0, "armyPrefix", 11, 0);
-        mMsater(0, "oldArmyPrefix", 11, 0);
-        mMsater(0, "ddlrank", 13, 0);
+        mMsater(armyPrefixValue, "armyPrefix", 11, 0);
+        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
+        mMsater(Rank, "ddlrank", 13, 0);
     }
     if (loanType == 1) {
-        mMsater(0, "propertyType", 16, 0);
+        mMsater(propertytype, "propertyType", 16, 0);
     }
     else if (loanType == 2) {
-        mMsater(0, "veh_Loan_Type", 17, 0);
+        mMsater(vehicletype, "veh_Loan_Type", 17, 0);
     }
     else if (loanType == 3) {
-        mMsater(0, "computer_Loan_Type", 18, 0);
+        mMsater(computer_Loan_Type, "computer_Loan_Type", 18, 0);
     }
-    mMsater(0, "regtCorps", 8, 0);
-    mMsater(0, "parentUnit", 2, 0);
-    mMsater(0, "presentUnit", 2, 0);
-    mMsater(0, "armyPostOffice", 14, 0);
-    mMsater(0, "CA_LoanFreq", 15, 0);
-    mMsater(0, "PCA_LoanFreq", 15, 0);
-    mMsater(0, "HBA_LoanFreq", 15, 0);
+    mMsater(regtcorps, "regtCorps", 8, 0);
+    mMsater(parentunit, "parentUnit", 2, 0);
+    mMsater(presentunit, "presentUnit", 2, 0);
+    mMsater(Armypostoffice, "armyPostOffice", 14, 0);
+    mMsater(Cavehicleloanfreq, "CA_LoanFreq", 15, 0);
+    mMsater(Pcaloanfreq, "PCA_LoanFreq", 15, 0);
+    mMsater(hbaloanfreq, "HBA_LoanFreq", 15, 0);
 
 
 

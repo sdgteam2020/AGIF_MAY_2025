@@ -20,8 +20,8 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> OnlineApplication()
         {
-           
-            return View();
+           DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
+            return View(DTOOnlineapplication);
         }
         public IActionResult SaveApplication(DTOOnlineApplicationRequest Data)
         {
@@ -73,6 +73,191 @@ namespace Agif_V2.Controllers
             {
                 return Json("0");
             }
+        }
+
+
+        /*
+        public IActionResult SubmitApplication(DTOOnlineApplication model)
+        {
+            //string formType = string.Empty;
+
+            //// Check which application model is populated
+            //if (model.CarApplication != null)
+            //{
+            //    formType = "CA"; // If CarApplication is populated, use "CA"
+            //}
+            //else if (model.PCAApplication != null)
+            //{
+            //    formType = "PCA"; // If PCAApplication is populated, use "PCA"
+            //}
+            //else if (model.HBAApplication != null)
+            //{
+            //    formType = "HBA"; // If HBAApplication is populated, use "HBA"
+            //}
+            //else
+            //{
+            //    // Handle the case where none of the models are populated (optional)
+            //    return RedirectToAction("OnlineApplication", "OnlineApplication"); // Or any appropriate action
+            //}
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return View("OnlineApplication", model); // Redirect to OnlineApplication if validation fails
+            //}
+
+            //// Redirect to the Upload action with the formType
+            //return RedirectToAction("Upload", "Upload", new { formType });
+
+            string formType = string.Empty;
+
+            // Perform server-side validation on the entire model
+            var validationContext = new ValidationContext(model);
+            var validationResults = new List<ValidationResult>();
+
+            // Validate the DTO model and all its properties (including nested models)
+            bool isValid = Validator.TryValidateObject(
+                model,
+                validationContext,
+                validationResults,
+                validateAllProperties: true
+            );
+
+            // If validation fails, add errors to ModelState and return the view with validation errors
+            if (!isValid)
+            {
+                foreach (var validationResult in validationResults)
+                {
+                    // Add each validation error message to ModelState
+                    ModelState.AddModelError("", validationResult.ErrorMessage);
+                }
+
+                // Return to the same view with validation errors
+                return View("OnlineApplication", model);
+            }
+
+            // If the model is valid, check which application model is populated and set formType
+            if (model.CarApplication != null)
+            {
+                formType = "CA"; // If CarApplication is populated, use "CA"
+            }
+            else if (model.PCAApplication != null)
+            {
+                formType = "PCA"; // If PCAApplication is populated, use "PCA"
+            }
+            else if (model.HBAApplication != null)
+            {
+                formType = "HBA"; // If HBAApplication is populated, use "HBA"
+            }
+            else
+            {
+                ModelState.AddModelError("", "Please select an application type."); // Add validation error
+                return View("OnlineApplication", model); // Return the view with validation errors
+            }
+
+            // Proceed to the next step (e.g., redirecting to Upload page)
+            return RedirectToAction("Upload", "Upload", new { formType });
+
+        }
+        */
+        public IActionResult SubmitApplication(DTOOnlineApplication model)
+        {
+            string formType = string.Empty;
+
+            // First, determine the form type
+            if (model.CarApplication != null)
+            {
+                formType = "CA";
+            }
+            else if (model.PCAApplication != null)
+            {
+                formType = "PCA";
+            }
+            else if (model.HBAApplication != null)
+            {
+                formType = "HBA";
+            }
+            else
+            {
+                ModelState.AddModelError("", "Please select an application type.");
+            }
+
+            // Validate nested objects more specifically based on form type
+            if (formType == "CA" && model.CarApplication != null)
+            {
+                var carValidationContext = new ValidationContext(model.CarApplication);
+                var carValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.CarApplication, carValidationContext, carValidationResults, true))
+                {
+                    foreach (var result in carValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "CarApplication"
+                            : $"CarApplication.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+            else if (formType == "PCA" && model.PCAApplication != null)
+            {
+                var pcaValidationContext = new ValidationContext(model.PCAApplication);
+                var pcaValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.PCAApplication, pcaValidationContext, pcaValidationResults, true))
+                {
+                    foreach (var result in pcaValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "PCAApplication"
+                            : $"PCAApplication.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+            else if (formType == "HBA" && model.HBAApplication != null)
+            {
+                var hbaValidationContext = new ValidationContext(model.HBAApplication);
+                var hbaValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.HBAApplication, hbaValidationContext, hbaValidationResults, true))
+                {
+                    foreach (var result in hbaValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "HBAApplication"
+                            : $"HBAApplication.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+
+            // Also validate the CommonData if it exists
+            if (model.CommonData != null)
+            {
+                var commonDataValidationContext = new ValidationContext(model.CommonData);
+                var commonDataValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.CommonData, commonDataValidationContext, commonDataValidationResults, true))
+                {
+                    foreach (var result in commonDataValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "CommonData"
+                            : $"CommonData.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+
+            // Check ModelState validity after all validations
+            if (!ModelState.IsValid)
+            {
+                // Preserve the loan type for the view
+                return View("OnlineApplication", model);
+            }
+
+            // Proceed to the next step
+            return RedirectToAction("Upload", "Upload", new { formType });
         }
     }
 }
