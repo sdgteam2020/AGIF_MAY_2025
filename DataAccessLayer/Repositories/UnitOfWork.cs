@@ -45,16 +45,18 @@ namespace DataAccessLayer.Repositories
             }
             else if (Data.id == Convert.ToInt16(Constants.Appt))
             {
-                var Ret = await Appointment.GetAll();
-                foreach (var Forma in Ret)
-                {
+                //var Ret = await Appointment.GetAll();
+                //foreach (var Forma in Ret)
+                //{
 
-                    DTOMasterResponse db = new DTOMasterResponse();
+                //    DTOMasterResponse db = new DTOMasterResponse();
 
-                    db.Id = Forma.ApptId;
-                    db.Name = Forma.AppointmentName;
-                    lst.Add(db);
-                }
+                //    db.Id = Forma.ApptId;
+                //    db.Name = Forma.AppointmentName;
+                //    lst.Add(db);
+                //}
+                var ret = await MasterOnlyTable.GetAppointment();
+                lst = ret;
             }
             else if (Data.id == Convert.ToInt16(Constants.ApplicationType))
             {

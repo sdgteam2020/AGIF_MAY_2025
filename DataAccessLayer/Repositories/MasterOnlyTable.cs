@@ -208,5 +208,17 @@ namespace DataAccessLayer.Repositories
 
             return ret;
         }
+        public async Task<List<DTOMasterResponse>> GetAppointment()
+        {
+            var ret = await (from apptType in _context.MAppointments
+                             select new DTOMasterResponse
+                             {
+                                 Id = apptType.ApptId,
+                                 Name = Convert.ToString(apptType.AppointmentName),
+
+                             }).ToListAsync();
+
+            return ret;
+        }
     }
 }
