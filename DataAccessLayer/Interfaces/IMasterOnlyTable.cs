@@ -22,6 +22,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetArmyPostOffice();
         Task<List<DTOMasterResponse>> GetLoanFreq();
         Task<List<DTOMasterResponse>> GetLoanType(int type);
+        Task<List<DTOMasterResponse>> GetAppointment();
         
     }
 }

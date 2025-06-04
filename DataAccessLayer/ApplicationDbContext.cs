@@ -28,6 +28,8 @@ namespace DataAccessLayer
         public virtual DbSet<MArmyPostOffice> MArmyPostOffices { get; set; }
         public virtual DbSet<MLoanFreq> MLoanFreqs { get; set; }
         public virtual DbSet<MLoanType> MLoanTypes { get; set; }
+        public virtual DbSet<UserProfile> UserProfiles { get; set; }
+        public virtual DbSet<UserMapping> UserMappings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

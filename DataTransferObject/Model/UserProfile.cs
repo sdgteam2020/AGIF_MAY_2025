@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class tbl_CO_Info
+    public class UserProfile
     {
         [Key]
-        public int Id { get; set; }
-        public string armyNo { get; set; }
+        public int ProfileId { get; set; }
+        public string ArmyNo { get; set; }
+        public string userName { get; set; }
         public string Name { get; set; }
-        public string email { get; set; }
-        public string mobileNo { get; set; }
-        public int unit { get; set; }
-        public int UnitId { get; set; }
+        public string Email { get; set; }
+        public string MobileNo { get; set; }
         public int rank { get; set; }
-        public string userId { get; set; }
+        public int regtCorps { get; set; }
         public bool isActive { get; set; }
-        public DateTime CoRegisteredDate { get; set; }
+        public DateTime CreatedOn { get; set; }
         public int ApptId { get; set; }
     }
 }

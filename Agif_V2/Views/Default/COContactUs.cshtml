@@ -1,0 +1,210 @@
+﻿@{
+    ViewData["Title"] = "CO Contact Us";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+    <style>
+        :root {
+            --primary-color: #2596be;
+            --accent-color: #ffc107;
+        }
+
+        .bg-primary-custom {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1e7ba8 100%);
+        }
+
+        .contact-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .contact-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+
+        .logo-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+            .logo-container::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(255,255,255,0.1);
+                border-radius: 50%;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+
+            .logo-container:hover::after {
+                opacity: 1;
+            }
+    </style>
+
+    <div class="container-fluid vh-100 bg-primary-custom">
+        <!-- Header Section -->
+        <div class="row py-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <!-- Logo -->
+                    <div class="logo-container">
+                        <img src="~/Images/AGIF_Logo.png"
+                             class="rounded-circle shadow-lg"
+                             style="height: 100px; width: 100px;"
+                             alt="AGIF Logo">
+                    </div>
+
+                    <!-- Time Display -->
+                    <div class="text-white">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-clock me-2 fs-5"></i>
+                            <span class="fw-bold fs-6">
+                                ("dd-MM-yyyy HH:mm:ss")
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <div class="mb-4">
+                    <h2 class="text-white fw-bold mb-3">
+                        <i class="bi bi-chat-dots me-2"></i>
+                        AVIATION DTE WELCOMES ALL SUGGESTIONS/FEEDBACK FROM THE USER
+                    </h2>
+                    <div class="border-bottom border-warning w-25 mx-auto mb-4"></div>
+                </div>
+
+                <div class="text-white">
+                    <h3 class="fw-bold mb-3">Army Group Insurance Fund</h3>
+                    <p class="fs-6 mb-3">
+                        AGI Bhawan, Rao Tula Ram Marg Post Bag No 14,<br>
+                        PO-Vasant Vihar New Delhi – 110057
+                    </p>
+
+                    <div class="alert alert-warning d-inline-block shadow" role="alert">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <strong>Dear User, you have Successfully Registered.</strong><br>
+                        Please Approach for Necessary Approval (7090090478).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information Cards -->
+        <div class="row g-4 px-4 pb-5">
+            <!-- Email Contact Card -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card contact-card h-100 bg-white bg-opacity-10 border-0 text-white">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <img src="~/Images/walk__.jpg"
+                                 class="rounded-circle shadow"
+                                 style="height: 80px; width: 80px;"
+                                 alt="Email Contact">
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">
+                            <i class="bi bi-envelope-fill me-2 text-warning"></i>
+                            Email Contact
+                        </h5>
+                        <div class="card-text">
+                            <p class="mb-2">
+                                <i class="bi bi-envelope me-2"></i>
+                                <strong>Email:</strong> adgif@gmail.com
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-person-badge me-2"></i>
+                                <strong>ASIGMA ID:</strong> Inaarmy_aa7
+                            </p>
+                            <p class="mb-0">
+                                <i class="bi bi-building me-2"></i>
+                                <strong>eOffice ID:</strong> clk20_dgavn_ihqa
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone Contact Card -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card contact-card h-100 bg-white bg-opacity-10 border-0 text-white">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <img src="~/Images/calls2__.jpg"
+                                 class="rounded-circle shadow"
+                                 style="height: 80px; width: 80px;"
+                                 alt="Phone Contact">
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">
+                            <i class="bi bi-telephone-fill me-2 text-warning"></i>
+                            Phone Contact
+                        </h5>
+                        <div class="card-text">
+                            <p class="mb-2">
+                                <i class="bi bi-shield-check me-2"></i>
+                                <strong>Army:</strong> 39275
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-person me-2"></i>
+                                <strong>Civilian:</strong> -
+                            </p>
+                            <p class="mb-0">
+                                <i class="bi bi-phone me-2"></i>
+                                <strong>Mobile:</strong> -
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Card -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card contact-card h-100 bg-white bg-opacity-10 border-0 text-white">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-3">
+                            <img src="~/Images/call1.jpg"
+                                 class="rounded-circle shadow"
+                                 style="height: 80px; width: 80px;"
+                                 alt="Support">
+                        </div>
+                        <h5 class="card-title fw-bold mb-3">
+                            <i class="bi bi-headset me-2 text-warning"></i>
+                            Support Services
+                        </h5>
+                        <div class="card-text">
+                            <p class="mb-2">
+                                <i class="bi bi-question-circle me-2"></i>
+                                <strong>Log Query</strong>
+                            </p>
+                            <p class="mb-2">
+                                <i class="bi bi-lightbulb me-2"></i>
+                                <strong>Suggestions</strong>
+                            </p>
+                            <p class="mb-0">
+                                <i class="bi bi-star me-2"></i>
+                                <strong>Recommendations</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="row mt-auto">
+            <div class="col-12 text-center text-white-50 py-3">
+                <small>
+                    <i class="bi bi-shield-shaded me-1"></i>
+                    Army Group Insurance Fund - Aviation Directorate
+                </small>
+            </div>
+        </div>
+    </div>

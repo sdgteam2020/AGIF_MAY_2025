@@ -1,4 +1,6 @@
-﻿@{
+﻿@using DataTransferObject.Request;
+@model userProfileDTO;
+@{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
@@ -11,64 +13,64 @@
                     <div class="pagetitle text-center mb-4">
                         <h1>Sign Up</h1>
                     </div>
-                    <form>
+                    <form asp-action="Register" method="post">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="userName">Username:</label>
-                                    <input type="text" id="userName" class="form-control" />
+                                    <label asp-for="userName">Username:</label>
+                                    <input asp-for="userName" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="password">Army No:</label>
-                                    <input type="password" id="password" class="form-control" />
+                                    <label asp-for="ArmyNo">Army No:</label>
+                                    <input asp-for="ArmyNo" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="rank">Rank:</label>
-                                    <select class="form-select select" id="rank"></select>
+                                    <label asp-for="rank">Rank:</label>
+                                    <select class="form-select select" asp-for="rank"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="name">Name:</label>
-                                    <input type="text" id="name" class="form-control" />
+                                    <label asp-for="Name">Name:</label>
+                                    <input  asp-for="Name" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="email">Email:</label>
-                                    <input type="email" id="email" class="form-control" />
+                                    <label asp-for="Email">Email:</label>
+                                    <input type="email" asp-for="Email" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="mobileNo">Mobile No:</label>
-                                    <input type="number" id="mobileNo" class="form-control" />
+                                    <label asp-for="MobileNo">Mobile No:</label>
+                                    <input type="number" asp-for="MobileNo" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="regtCorps">Regt/Corps:</label>
-                                    <select class="form-select select" id="regtCorps"></select>
+                                    <label asp-for="regtCorps">Regt/Corps:</label>
+                                    <select class="form-select select" asp-for="regtCorps"></select>
                                 </div>
                             </div><div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="unit">Unit Name:</label>
-                                    <select class="form-select select" id="unit"></select>
+                                    <label asp-for="UnitId">Unit Name:</label>
+                                    <select class="form-select select" asp-for="UnitId"></select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="appointment">Appointment:</label>
-                                    <select class="form-select select" id="appointment"></select>
+                                    <label asp-for="ApptId">Appointment:</label>
+                                    <select class="form-select select" asp-for="ApptId"></select>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center align-items-center">
-                            <a id="login" class="btn btn-success" target="_blank" href="~/Account/Register" data-title="Login">Sign Up</a>
+                            <button type ="submit" class="btn btn-success">Sign Up</button>
                         </div>
                     </form>
                 </div>

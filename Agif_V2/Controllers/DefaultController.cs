@@ -23,6 +23,10 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        public IActionResult COContactUs()
+        {
+            return View();
+        }
         public IActionResult InsuranceCover()
         {
             return View();
