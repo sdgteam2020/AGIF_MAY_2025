@@ -25,8 +25,12 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 builder.Services.AddTransient<IOnlineApplication, OnlineApplicationDL>();
 builder.Services.AddTransient<IAppointment, AppointmentDL>();
 builder.Services.AddTransient<IMasterOnlyTable, MasterOnlyTable>();
+builder.Services.AddTransient<ICar, CarDL>();
+builder.Services.AddTransient<IHba, HbaDL>();
+builder.Services.AddTransient<IPca, PcaDL>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 builder.Services.AddCors(options =>
 {

@@ -4,8 +4,11 @@
     ViewData["Title"] = "Application Form";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-    string loanType = Model?.loantype ?? Context.Request.Query["loanType"].ToString() ?? "CA";
-    string applicantCategory = Model?.applicantCategory ?? Context.Request.Query["applicantCategory"].ToString() ?? "CA";
+    // string loanType = Model?.loantype ?? Context.Request.Query["loanType"].ToString() ?? "CA";
+    // string applicantCategory = Model?.applicantCategory ?? Context.Request.Query["applicantCategory"].ToString() ?? "CA";
+
+    string loanType = Model?.loantype ?? TempData["loantypeNew"] as string ?? "CA";
+    string applicantCategory = Model?.applicantCategory ?? TempData["applicantcategoryNew"] as string ?? "CA";
 }
 
 
@@ -22,6 +25,7 @@
     @* <span>
         Prefix:- @if (Model.CommonData != null) { @Model.CommonData.ArmyPrefix; }
     </span> *@
+    
     <div class="accordion" id="formAccordion">
         <form id="myForm" class="needs-validation mb-8" name="myForm" method="post" action="/OnlineApplication/SubmitApplication" enctype="multipart/form-data">
             <!-- Personal Info -->
@@ -1295,8 +1299,7 @@
 
                 </div>
             </div>
-            <div class="col-md-12">
-                <span class="error" id="msgerror"></span>
+            <div class="col-md-12" id="msgerror" style="margin-top: 10px;">
             </div>
 
             <input type="hidden" id="loanType" name="loanType" value=@loanType />

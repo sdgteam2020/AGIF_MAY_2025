@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class OnlineApplicationDL : GenericRepositoryDL<OnlineApplications>, IOnlineApplication
+    public class OnlineApplicationDL : GenericRepositoryDL<CommonDataModel>, IOnlineApplication
     {
         protected new readonly ApplicationDbContext _context;
 

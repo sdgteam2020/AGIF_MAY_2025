@@ -636,7 +636,8 @@ function textChange() {
     setOutlineActive("salary_After_Deductions");
 }
 function handleSubmitClick() {
-    document.getElementById("btn-save").addEventListener("click", function () {
+    document.getElementById("btn-save").addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent form submission
         const form = document.getElementById("myForm");
         const inputs = form.querySelectorAll("input, select");
 
@@ -649,6 +650,8 @@ function handleSubmitClick() {
 
         const params = new URLSearchParams(window.location.search);
         const loanType = params.get("loanType");
+
+
 
         inputs.forEach(input => {
 
@@ -673,26 +676,43 @@ function handleSubmitClick() {
                 prefixes.forEach(prefix => {
                     if (errorText.includes(prefix)) {
                         errorText = errorText.replace(prefix, "");
-                    }
+                    }   
                 });
                 errorlist.push(errorText);
                 hasError = true;
+                if (input.value.trim() !== "") {
+                    input.removeAttribute("required");
+                }
+
             }
         });
 
 
         //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
-        document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
+      //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
 
-        if (!form.reportValidity()) {
-            console.log("Invalid fields found.");
-        } else if (!hasError) {
-            alert("Form is valid!");
-            // You can now submit or process the form
+        var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors +' </div>')
+
+        if (hasError) {
+            return false;
         }
+        else {
+            alert("Form is valid!");
+            form.submit();
+        }
+
+        //if (!form.reportValidity()) {
+        //    console.log("Invalid fields found.");
+        //} else if (!hasError) {
+        //    alert("Form is valid!");
+        //    // You can now submit or process the form
+        //}
     });
 
 }
+
+
 function formatIndianNumber(input) {
 
     let num = input.value.replace(/[^0-9]/g, '');

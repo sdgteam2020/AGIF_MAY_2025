@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface IOnlineApplication : IGenericRepositoryDL<OnlineApplications>
+    public interface IOnlineApplication : IGenericRepositoryDL<CommonDataModel>
     {
         Task<bool> IsUser(string AadharNo);
         Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);

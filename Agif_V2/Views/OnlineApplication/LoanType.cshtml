@@ -11,11 +11,11 @@
                     Apply Loan
                 </h1>
             </div>
-            <form>
+            <form id="loanForm" action="/OnlineApplication/Redirection" method="post">
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="loanType">Loan Type:</label>
-                        <select id="loanType" name="loanType" class="form-select">
+                        <select id="loanType" name="loanType" class="form-select" required>
                         </select>
                     </div>
 
@@ -23,7 +23,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="applicantCategory">Applicant Category:</label>
-                        <select id="applicantCategory" name="applicantCategory" class="form-select">
+                        <select id="applicantCategory" name="applicantCategory" class="form-select" required>
                         </select>
                     </div>
                 </div>

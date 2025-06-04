@@ -1,6 +1,8 @@
-﻿using DataAccessLayer.Interfaces;
+﻿using DataAccessLayer;
+using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
@@ -12,15 +14,35 @@ namespace Agif_V2.Controllers
     {
         private readonly IOnlineApplication _IonlineApplication1;
         private readonly IMasterOnlyTable _IMasterOnlyTable;
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable)
+        private readonly ApplicationDbContext _context;
+        private readonly ICar _car;
+        private readonly IHba _Hba;
+        private readonly IPca _Pca;
+
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
+            this._car=_car;
+            this._Hba = _Hba;
+            this._Pca = _Pca;
         }
 
         public async Task<IActionResult> OnlineApplication()
         {
-           DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
+            var loanType = TempData["LoanType"] as string;
+            var applicantCategory = TempData["ApplicantCategory"] as string;
+
+            
+            TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType);
+            
+            TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory);
+          
+
+            TempData.Keep("LoanType");
+            TempData.Keep("ApplicantCategory");
+
+            DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
             return View(DTOOnlineapplication);
         }
         public IActionResult SaveApplication(DTOOnlineApplicationRequest Data)
@@ -75,6 +97,18 @@ namespace Agif_V2.Controllers
             }
         }
 
+        public IActionResult Redirection(string loanType, string applicantCategory)
+        {
+            // Handle the received loanType and applicantCategory
+            // You can now access the form data here
+            // For example, you can pass these values to a view or use them in processing logic
+            string Loan= EncryptDecrypt.EncryptionData(loanType);
+            string Category = EncryptDecrypt.EncryptionData(applicantCategory);
+
+            TempData["LoanType"] = Loan;
+            TempData["ApplicantCategory"] = Category;
+            return RedirectToAction("OnlineApplication");
+        }
 
         /*
         public IActionResult SubmitApplication(DTOOnlineApplication model)
@@ -159,7 +193,7 @@ namespace Agif_V2.Controllers
 
         }
         */
-        public IActionResult SubmitApplication(DTOOnlineApplication model)
+        public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
         {
             string formType = string.Empty;
 
@@ -252,12 +286,66 @@ namespace Agif_V2.Controllers
             // Check ModelState validity after all validations
             if (!ModelState.IsValid)
             {
+
                 // Preserve the loan type for the view
                 return View("OnlineApplication", model);
             }
+            else
+            {
+                try
+                {
+                    CommonDataModel common = new CommonDataModel();
+                    if (model.CommonData != null)
+                    {
+                        common = await _IonlineApplication1.AddWithReturn(model.CommonData);
+                    }
 
-            // Proceed to the next step
-            return RedirectToAction("Upload", "Upload", new { formType });
+                    if (formType == "HBA" && model.HBAApplication != null)
+                    {
+                        HBAApplicationModel HBA = new HBAApplicationModel();
+
+                        HBA = model.HBAApplication;
+
+                        HBA.ApplicationId = common.ApplicationId;
+
+                        await _Hba.Add(HBA);
+                    }
+
+                    else if (formType == "CA" && model.CarApplication != null)
+                    {
+                        CarApplicationModel Car = new CarApplicationModel();
+
+                        Car = model.CarApplication;
+
+                        Car.ApplicationId = common.ApplicationId;
+
+                        await _car.Add(Car);
+                    }
+
+                    else if (formType == "PCA" && model.PCAApplication != null)
+                    {
+                        PCAApplicationModel PCA = new PCAApplicationModel();
+
+                        PCA = model.PCAApplication;
+
+                        PCA.ApplicationId = common.ApplicationId;
+
+                        await _Pca.Add(PCA);
+                    }
+
+                }
+
+                catch(Exception ex)
+                {
+
+                    ModelState.AddModelError("", "An error occurred while processing your application.");
+                }
+
+
+            }
+
+                // Proceed to the next step
+                return RedirectToAction("Upload", "Upload", new { formType });
         }
     }
 }

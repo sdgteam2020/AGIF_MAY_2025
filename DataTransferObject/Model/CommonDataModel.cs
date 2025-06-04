@@ -7,38 +7,52 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class CommonDataModel
+    public class CommonDataModel:Common
     {
+        [Key]
+        public int ApplicationId { get; set; }
+
         [Required(ErrorMessage = "Army Prefix is required.")]
         [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Army Prefix must only contain alphanumeric characters.")]
         public string? ArmyPrefix { get; set; }
 
         [Required(ErrorMessage = "Number is required.")]
-        [RegularExpression(@"^\d{7,8}$", ErrorMessage = "Number should be 7 or 8 digits.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Number must only contain alphanumeric characters.")]
+
+        //[RegularExpression(@"^\d{7,8}$", ErrorMessage = "Number should be 7 or 8 digits.")]
         public string? Number { get; set; }
 
         [Required(ErrorMessage = "Suffix is required.")]
         [StringLength(5, ErrorMessage = "Suffix can't be longer than 5 characters.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Suffix must only contain alphanumeric characters.")]
+
         public string? Suffix { get; set; }
 
         [Required(ErrorMessage = "Old Army Prefix is required.")]
-        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        [StringLength(10, ErrorMessage = "Old Army Prefix can't be longer than 10 characters.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Old Army Prefix must only contain alphanumeric characters.")]
         public string? OldArmyPrefix { get; set; }
 
         [Required(ErrorMessage = "Old Number is required.")]
         [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Old Number must only contain alphanumeric characters.")]
         public string? OldNumber { get; set; }
 
-        [Required(ErrorMessage = "Old Army Prefix is required.")]
-        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        [Required(ErrorMessage = "Old Suffix is required.")]
+        [StringLength(10, ErrorMessage = "Old Suffix can't be longer than 10 characters.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Old Suffix must only contain alphanumeric characters.")]
         public string? OldSuffix { get; set; }
 
         [Required(ErrorMessage = "Rank is required.")]
         [StringLength(100, ErrorMessage = "Rank can't be longer than 100 characters.")]
+        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Rank must only contain alphanumeric characters.")]
+
         public string? DdlRank { get; set; }
 
         [Required(ErrorMessage = "Applicant Name is required.")]
         [StringLength(200, ErrorMessage = "Applicant Name can't be longer than 200 characters.")]
+        [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Applicant Name must only contain alphabets and spaces.")]
         public string? ApplicantName { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required.")]

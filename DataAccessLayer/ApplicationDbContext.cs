@@ -29,6 +29,13 @@ namespace DataAccessLayer
         public virtual DbSet<MLoanFreq> MLoanFreqs { get; set; }
         public virtual DbSet<MLoanType> MLoanTypes { get; set; }
 
+        public virtual DbSet<CarApplicationModel> Car { get; set; }
+
+        public virtual DbSet<PCAApplicationModel> PCA { get; set; }
+
+        public virtual DbSet<HBAApplicationModel> HBA { get; set; }
+
+        public virtual DbSet<CommonDataModel> Applications { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

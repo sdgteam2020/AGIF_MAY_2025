@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class HBAApplicationModel
+    public class HBAApplicationModel:Common
     {
+        [Key]
+        public int HbaId {  get; set; }
+
+        [ForeignKey("CommonDataModel")]
+        public int ApplicationId { get; set; }
 
         [Required(ErrorMessage = "Property Type is required.")]
         [StringLength(100, ErrorMessage = "Property Type can't be longer than 100 characters.")]
