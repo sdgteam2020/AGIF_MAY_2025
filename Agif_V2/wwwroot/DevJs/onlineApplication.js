@@ -638,12 +638,13 @@ function textChange() {
 function handleSubmitClick() {
     document.getElementById("btn-save").addEventListener("click", function () {
         const form = document.getElementById("myForm");
-        const inputs = form.querySelectorAll("input");
+        const inputs = form.querySelectorAll("input, select");
 
         // Clear previous error messages
         form.querySelectorAll(".error").forEach(span => span.textContent = "");
 
-        let errorlist = "";
+       // let errorlist = "";
+        let errorlist = []; // Use an array to store individual error messages
         let hasError = false;
 
         const params = new URLSearchParams(window.location.search);
@@ -666,12 +667,22 @@ function handleSubmitClick() {
                 if (errorSpan) {
                     errorSpan.textContent = input.validationMessage;
                 }
-                errorlist += input.name + ", ";
+                // errorlist += input.name + ", ";
+                let errorText = input.name;
+                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication."];
+                prefixes.forEach(prefix => {
+                    if (errorText.includes(prefix)) {
+                        errorText = errorText.replace(prefix, "");
+                    }
+                });
+                errorlist.push(errorText);
                 hasError = true;
             }
         });
 
-        document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
+
+        //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
+        document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
 
         if (!form.reportValidity()) {
             console.log("Invalid fields found.");
