@@ -14,7 +14,6 @@ namespace Agif_V2.Controllers
     {
         private readonly IOnlineApplication _IonlineApplication1;
         private readonly IMasterOnlyTable _IMasterOnlyTable;
-        private readonly ApplicationDbContext _context;
         private readonly ICar _car;
         private readonly IHba _Hba;
         private readonly IPca _Pca;
@@ -290,11 +289,13 @@ namespace Agif_V2.Controllers
                 // Preserve the loan type for the view
                 return View("OnlineApplication", model);
             }
+            
             else
             {
+                CommonDataModel common = new CommonDataModel();
                 try
                 {
-                    CommonDataModel common = new CommonDataModel();
+                   
                     if (model.CommonData != null)
                     {
                         common = await _IonlineApplication1.AddWithReturn(model.CommonData);
@@ -340,12 +341,12 @@ namespace Agif_V2.Controllers
 
                     ModelState.AddModelError("", "An error occurred while processing your application.");
                 }
-
+                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+                return RedirectToAction("Upload", "Upload", new { formType, applicationId = common.ApplicationId });
 
             }
 
-                // Proceed to the next step
-                return RedirectToAction("Upload", "Upload", new { formType });
+            // Proceed to the next step
         }
     }
 }

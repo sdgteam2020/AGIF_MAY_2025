@@ -1,8 +1,11 @@
-﻿@{
+﻿@model DataTransferObject.Model.FileUploadViewModel
+
+@{
     ViewData["Title"] = "Upload";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
     string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "CA";
+    var message = TempData["Message"] ?? string.Empty;
 }
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -80,75 +83,279 @@
                             <!-- CA Form Upload Fields -->
                             <div class="col-md-12">
                                 <div class="row">
+                                    <!-- Cancelled Cheque -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="CancelledCheque" class="form-label fw-bold">
-                                            1. Cancelled Cheque
-                                        </label>
-                                        <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                        <div class="row">
+                                        <div class="col-md-10">
+                                            <label for="CancelledCheque" class="form-label fw-bold">
+                                                1. Cancelled Cheque
+                                            </label>
+                                            <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label class="form-label fw-bold"></label>
+                                            <div id="cancelledChequePreview" class="file-preview-container">
+                                                <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                            </div>
+                                        </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="PaySlipPdf" class="form-label fw-bold">
-                                            2. First Page of Pay Slip
-                                        </label>
-                                        <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="QuotationPdf" class="form-label fw-bold">
-                                            3. Quotation (RC & Insurance in case of old car)
-                                        </label>
-                                        <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="DrivingLicensePdf" class="form-label fw-bold">
-                                            4. Valid Driving License
-                                        </label>
-                                        <input class="form-control" type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" accept=".pdf" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="SeviceExtnPdf" class="form-label fw-bold">
-                                            5. Service Extn Pt II order (If Applicable)
-                                        </label>
-                                        <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf">
-                                    </div>
+                               
                                 </div>
+
+                                <div class="row">
+                                    <!-- Pay Slip -->
+                                    <div class="col-md-6 mb-3">
+
+
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <label for="PaySlipPdf" class="form-label fw-bold">
+                                                    2. First Page of Pay Slip
+                                                </label>
+                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold"></label>
+                                                <div id="paySlipPreview" class="file-preview-container">
+                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        
+                                    </div>
+
+                                    <!-- Preview for Pay Slip -->
+
+
+                                </div>
+
+
+                                
+                               <div class="row">
+                                   <!-- Quotation -->
+                                   <div class="col-md-6 mb-3">
+
+
+                                       <div class="row">
+                                           <div class="col-md-10">
+                                               <label for="PaySlipPdf" class="form-label fw-bold">
+                                                   3. Quotation (RC & Insurance in case of old car)
+                                               </label>
+                                               <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
+                                               <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                               @Html.ValidationMessageFor(m => m.QuotationPdf, "", new { @class = "text-danger" })
+                                           </div>
+
+                                           <div class="col-md-2">
+                                               <label class="form-label fw-bold"></label>
+                                               <div id="quotationPreview" class="file-preview-container">
+                                                   <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                               </div>
+                                           </div>
+                                       </div>
+
+
+                                       
+                                   </div>
+
+
+
+                                </div>
+
+
+                                <div class="row">
+                                   <!-- Valid Driving License -->
+                                   <div class="col-md-6 mb-3">
+
+
+                                       <div class="row">
+                                           <div class="col-md-10">
+                                               <label for="DrivingLicensePdf" class="form-label fw-bold">
+                                                   4. Valid Driving License
+                                               </label>
+                                               <input class="form-control" type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" accept=".pdf" required>
+                                               <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                               @Html.ValidationMessageFor(m => m.DrivingLicensePdf, "", new { @class = "text-danger" })
+                                           </div>
+
+                                           <div class="col-md-2">
+                                               <label class="form-label fw-bold"></label>
+                                               <div id="DrivingLicensePreview" class="file-preview-container">
+                                                   <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                               </div>
+                                           </div>
+                                       </div>
+
+
+                                       
+                                   </div>
+
+
+
+                                </div>
+
+                                 <div class="row">
+                                     <!-- Service Extn -->
+                                     <div class="col-md-6 mb-3">
+
+
+                                         <div class="row">
+                                             <div class="col-md-10">
+                                                 <label for="SeviceExtnPdf" class="form-label fw-bold">
+                                                     5. Service Extn Pt II order (If Applicable)
+                                                 </label>
+                                                 <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf" required>
+                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                 @Html.ValidationMessageFor(m => m.SeviceExtnPdf, "", new { @class = "text-danger" })
+                                             </div>
+
+                                             <div class="col-md-2">
+                                                 <label class="form-label fw-bold"></label>
+                                                 <div id="SeviceExtnPre" class="file-preview-container">
+                                                     <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                     </div>
+    
+                                     </div>
                             </div>
                         }
                         else if (formType == "PCA")
                         {
                             <!-- PCA Form Upload Fields -->
-                            <div class="col-md-12">
+                             <div class="col-md-12">
                                 <div class="row">
+                                    <!-- Cancelled Cheque -->
                                     <div class="col-md-6 mb-3">
-                                        <label for="CancelledCheque" class="form-label fw-bold">
-                                            1. Cancelled Cheque
-                                        </label>
-                                        <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                        <div class="row">
+                                        <div class="col-md-10">
+                                            <label for="CancelledCheque" class="form-label fw-bold">
+                                                1. Cancelled Cheque
+                                            </label>
+                                            <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label class="form-label fw-bold"></label>
+                                            <div id="cancelledChequePreview" class="file-preview-container">
+                                                <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                            </div>
+                                        </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="PaySlipPdf" class="form-label fw-bold">
-                                            2. First Page of Pay Slip
-                                        </label>
-                                        <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="QuotationPdf" class="form-label fw-bold">
-                                            3. Quotation
-                                        </label>
-                                        <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="SeviceExtnPdf" class="form-label fw-bold">
-                                            4. Service Extn Pt II order (If Applicable)
-                                        </label>
-                                        <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf">
-                                    </div>
+                               
                                 </div>
+
+                                <div class="row">
+                                    <!-- Pay Slip -->
+                                    <div class="col-md-6 mb-3">
+
+
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <label for="PaySlipPdf" class="form-label fw-bold">
+                                                    2. First Page of Pay Slip
+                                                </label>
+                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold"></label>
+                                                <div id="paySlipPreview" class="file-preview-container">
+                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        
+                                    </div>
+
+                                    <!-- Preview for Pay Slip -->
+
+
+                                </div>
+
+
+                                
+                               <div class="row">
+                                   <!-- Quotation -->
+                                   <div class="col-md-6 mb-3">
+
+
+                                       <div class="row">
+                                           <div class="col-md-10">
+                                               <label for="PaySlipPdf" class="form-label fw-bold">
+                                                   3. Quotation
+                                               </label>
+                                               <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
+                                               <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                               @Html.ValidationMessageFor(m => m.QuotationPdf, "", new { @class = "text-danger" })
+                                           </div>
+
+                                           <div class="col-md-2">
+                                               <label class="form-label fw-bold"></label>
+                                               <div id="quotationPreview" class="file-preview-container">
+                                                   <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                               </div>
+                                           </div>
+                                       </div>
+
+
+                                       
+                                   </div>
+
+
+
+                                </div>
+
+                                 <div class="row">
+                                     <!-- Service Extn -->
+                                     <div class="col-md-6 mb-3">
+
+
+                                         <div class="row">
+                                             <div class="col-md-10">
+                                                 <label for="SeviceExtnPdf" class="form-label fw-bold">
+                                                     4. Service Extn Pt II order (If Applicable)
+                                                 </label>
+                                                 <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf" required>
+                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                 @Html.ValidationMessageFor(m => m.SeviceExtnPdf, "", new { @class = "text-danger" })
+                                             </div>
+
+                                             <div class="col-md-2">
+                                                 <label class="form-label fw-bold"></label>
+                                                 <div id="SeviceExtnPre" class="file-preview-container">
+                                                     <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                 </div>
+                                             </div>
+                                         </div>
+
+                                     </div>
+    
+                                     </div>
                             </div>
                         }
                         else if (formType == "HBA")
                         {
                             <!-- HBA Form Upload Fields -->
-                            <div class="col-md-12">
+                           @* <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="CancelledCheque" class="form-label fw-bold">
@@ -163,6 +370,66 @@
                                         <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
                                     </div>
                                 </div>
+                            </div>*@
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- Cancelled Cheque -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="row">
+                                        <div class="col-md-10">
+                                            <label for="CancelledCheque" class="form-label fw-bold">
+                                                1. Cancelled Cheque
+                                            </label>
+                                            <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <label class="form-label fw-bold"></label>
+                                            <div id="cancelledChequePreview" class="file-preview-container">
+                                                <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                               
+                                </div>
+
+                                <div class="row">
+                                    <!-- Pay Slip -->
+                                    <div class="col-md-6 mb-3">
+
+
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <label for="PaySlipPdf" class="form-label fw-bold">
+                                                    2. First Page of Pay Slip
+                                                </label>
+                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold"></label>
+                                                <div id="paySlipPreview" class="file-preview-container">
+                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        
+                                    </div>
+
+                                    <!-- Preview for Pay Slip -->
+
+
+                                </div>
+
+
+
                             </div>
                         }
 
@@ -175,9 +442,97 @@
         </div>
     </div>
 </div>
+
+<style>
+    .file-preview-container {
+        
+        
+        margin-top:6px;
+        
+        overflow: hidden;
+    }
+
+        .file-preview-container embed {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .file-preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .file-preview-container p {
+            color: #888;
+            font-style: italic;
+        }
+</style>
 <script src="~/devjs/upload.js"></script>
 <script>
     $(document).ready(function () {
         checkUploadFiles();
+        
+         $('#CancelledCheque').change(function() {
+            previewFile(this, '#cancelledChequePreview');
+        }); 
+
+         $('#PaySlipPdf').change(function() {
+             previewFile(this, '#paySlipPreview');
+        }); 
+
+         $('#QuotationPdf').change(function() {
+             previewFile(this, '#quotationPreview');
+        }); 
+ 
+          $('#DrivingLicensePdf').change(function() {
+             previewFile(this, '#DrivingLicensePreview');
+        }); 
+ 
+
+          $('#SeviceExtnPdf').change(function() {
+             previewFile(this, '#SeviceExtnPre');
+        }); 
+
+        // Function to preview the file (PDF or Image)
+           function previewFile(input, previewSelector) {
+        const file = input.files[0];
+        const preview = $(previewSelector);
+        const errorContainer = $(input).closest('.col-md-10').find('.file-error-message'); // Find the error container below the input
+        const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+        errorContainer.text('');
+
+        if (file) {
+            // Check if the file is a PDF
+            if (file.type !== 'application/pdf') {
+                errorContainer.text('Only PDF files are allowed').css('color', 'red');
+                input.value = ''; // Clear the input field
+                return;
+            }
+
+            // Check the file size (must not exceed 1MB)
+            if (file.size > maxFileSize) {
+                errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
+                input.value = ''; // Clear the input field
+            } else {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    // Create a link with the eye icon and the PDF file URL
+                    const fileUrl = URL.createObjectURL(file); // Create a Blob URL for the file
+                    preview.html(`
+                        <a href="${fileUrl}" target="_blank" style="font-size: 1.5rem; text-decoration: none;">
+                            <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                        </a>
+                    `);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        } else {
+            preview.html('<p>No file selected</p>');
+        }
+    }
     })
 </script>

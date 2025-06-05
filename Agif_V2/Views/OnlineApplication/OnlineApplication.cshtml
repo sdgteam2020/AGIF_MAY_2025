@@ -174,11 +174,23 @@
                                         <span class="input-group-text">👮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="select form-select" id="ExtnOfService" onchange="extensionOfService()" name="CommonData.ExtnOfService"  onblur="ExtensionOfServiceAccess()">
+                                        @*<select class="select form-select" id="ExtnOfService" onchange="extensionOfService()" name="CommonData.ExtnOfService"  onblur="ExtensionOfServiceAccess()">
                                             <option value="" selected disabled>Select one</option>
                                             <option value="Yes">Yes</option>
                                             <option value="No">No</option>
-                                        </select>
+                                        </select>*@
+                                         @Html.DropDownListFor(m => m.CommonData.ExtnOfService, 
+                                                                            new SelectList(new[] {
+                                                                                new { Value = "", Text = "Select one" },
+                                                                                new { Value = "Yes", Text = "Yes" },
+                                                                                new { Value = "No", Text = "No" }
+                                                                            }, "Value", "Text"), 
+                                                                            new { 
+                                                                                @class = "select form-select", 
+                                                                                id = "ExtnOfService", 
+                                                                                onchange = "extensionOfService()", 
+                                                                                onblur = "ExtensionOfServiceAccess()" 
+                                                                            })
                                         <label class="form-label select-label ">Extn of Service in Present Rank</label>
                                         @* @Html.ValidationMessageFor(m => m.CommonData.ExtnOfService, "", new { @class = "text-danger" }) *@
                                     </div>
@@ -1345,7 +1357,6 @@
             { id: 'txtApplicantName', value: 'John Doe' },
             { id: 'dateOfBirth', value: '1980-01-01' },
             { id: 'dateOfCommission', value: '2005-05-10' },
-            { id: 'dateOfPromotion', value: '2015-12-01' },
             { id: 'dateOfRetirement', value: '2040-01-01' },
             { id: 'aadharCardNo', value: '1234 5678 9012' },
             { id: 'panCardNo', value: 'ABCDE1234F' },
