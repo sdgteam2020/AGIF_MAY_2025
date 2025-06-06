@@ -9,8 +9,9 @@ namespace DataTransferObject.Helpers
     public class SessionUserDTO
     {
         public int ProfileId { get; set; }
-        public string UserName { get; set; }
+        public string UserName { get; set; } = string.Empty;
         public bool IsCO { get; set; }
+        public string Role { get; set; } = string.Empty;
 
     }
 }

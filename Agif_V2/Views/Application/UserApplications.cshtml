@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "User Applications";
+    var status = Context.Request.Query["status"];
+}
+
+<div class="container">
+
+    <div class="card mt-2">
+        <div class="card-header">
+            Applications
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-wrapper table-responsive">
+                        <div class="d-none" id="status">@status</div>
+                        <table class="tblList">
+                            <thead>
+                                <tr>                                    
+                                    <th><h6>Sr.No.</h6></th>
+                                    <th><h6>Army No.</h6></th>
+                                    <th><h6>Applicant Name</h6></th>
+                                    <th><h6>Application Type</h6></th>
+                                    <th><h6>Date of Birth</h6></th>
+                                    <th><h6>Applied Date</h6></th>
+                                    <th><h6>Present Status</h6></th>
+                                    <th><h6>Action</h6></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/DevJs/UserApplications.js"></script>

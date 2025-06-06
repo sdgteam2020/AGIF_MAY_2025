@@ -49,9 +49,11 @@ namespace Agif_V2.Controllers
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
                 var roles = await _userManager.GetRolesAsync(user);
+                string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
                 SessionUserDTO sessionUserDTO = new SessionUserDTO
                 {
                     UserName = user.UserName,
+                    Role = role
                 };
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
                 SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -59,7 +61,7 @@ namespace Agif_V2.Controllers
                 
                 if(roles.Contains("Admin"))
                 {
-                   return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -73,7 +75,7 @@ namespace Agif_V2.Controllers
                     HttpContext.Session.SetString("SAMLRole", "unitCdr");
                 }
                 HttpContext.Session.SetString("UserGUID",_db.Users.FirstOrDefault(x=>x.UserName == model.UserName).Id.ToString());
-                return RedirectToAction("Index", "Default");
+                return RedirectToAction("Index", "Home");
             }
             else if(result.IsLockedOut)
             {

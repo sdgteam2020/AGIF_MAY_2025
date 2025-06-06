@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Agif_V2.Models;
+using DataTransferObject.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Agif_V2.Controllers
@@ -15,7 +16,8 @@ namespace Agif_V2.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            return View(sessionUser);
         }
 
         public IActionResult Privacy()
@@ -27,6 +29,12 @@ namespace Agif_V2.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult CORecords()
+        {
+
+            return View();
         }
     }
 }

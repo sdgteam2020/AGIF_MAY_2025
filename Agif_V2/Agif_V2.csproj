@@ -43,12 +43,14 @@
 
   <ItemGroup>
     <Content Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+    <Content Remove="Views\Home\CORecords.cshtml" />
     <Content Remove="wwwroot\DevJs\onlineApplication.js" />
     <Content Remove="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+    <None Include="Views\Home\CORecords.cshtml" />
     <None Include="wwwroot\DevJs\onlineApplication.js" />
     <None Include="wwwroot\images\auth\.DS_Store" />
     <None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
@@ -97,6 +99,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\CORecords.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Home\CORecords.cshtml" />
   </ItemGroup>
 
 </Project>
