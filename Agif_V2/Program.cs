@@ -28,6 +28,8 @@ builder.Services.AddTransient<IMasterOnlyTable, MasterOnlyTable>();
 builder.Services.AddTransient<ICar, CarDL>();
 builder.Services.AddTransient<IHba, HbaDL>();
 builder.Services.AddTransient<IPca, PcaDL>();
+builder.Services.AddTransient<IArmyPrefixes, ArmyPrefixesDL>();
+builder.Services.AddTransient<IDoucmentupload, DocumentUploadDL>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

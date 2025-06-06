@@ -13,9 +13,10 @@ namespace DataTransferObject.Model
         public int ApplicationId { get; set; }
 
         [Required(ErrorMessage = "Army Prefix is required.")]
-        [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
-        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Army Prefix must only contain alphanumeric characters.")]
-        public string? ArmyPrefix { get; set; }
+        //[StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
+        //[RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Army Prefix must only contain alphanumeric characters.")]
+        public int ArmyPrefix { get; set; }
+       
 
         [Required(ErrorMessage = "Number is required.")]
         [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Number must only contain alphanumeric characters.")]
