@@ -23,9 +23,8 @@ namespace DataTransferObject.Identitytable
         [DataType(DataType.Date)]
         [Column(TypeName = "datetime")]
         public DateTime UpdatedOn { get; set; }
-
-        public int IntId { get; set; } = 0;
-
+        [NotMapped]
+        public int IntId { get; set; }
     }
 
 }

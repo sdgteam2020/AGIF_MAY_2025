@@ -1,5 +1,6 @@
 ﻿using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
+using DataTransferObject.Request;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -38,6 +39,8 @@ namespace DataAccessLayer
         public virtual DbSet<HBAApplicationModel> HBA { get; set; }
 
         public virtual DbSet<CommonDataModel> Applications { get; set; }
+
+        public virtual DbSet<DocumentUpload> DocumentUpload { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

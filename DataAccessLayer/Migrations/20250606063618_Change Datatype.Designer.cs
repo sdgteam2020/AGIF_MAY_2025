@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250606063618_Change Datatype")]
+    partial class ChangeDatatype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -477,61 +480,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("ApplicationId");
 
                     b.ToTable("Applications");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.DocumentUpload", b =>
-                {
-                    b.Property<int>("UploadId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UploadId"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CancelledCheque")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DrivingLicensePdf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsCancelledCheque")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDrivingLicensePdf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPaySlipPdf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsQuotationPdf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSeviceExtnPdf")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PaySlipPdf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuotationPdf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SeviceExtnPdf")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
-
-                    b.Property<int?>("Updatedby")
-                        .HasColumnType("int");
-
-                    b.HasKey("UploadId");
-
-                    b.ToTable("DocumentUpload");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ErrorLog", b =>
