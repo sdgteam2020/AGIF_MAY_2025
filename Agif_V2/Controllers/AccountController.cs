@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
 using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
@@ -72,7 +73,7 @@ namespace Agif_V2.Controllers
                         HttpContext.Session.SetString("userActivate", "false");
                         return RedirectToAction("COContactUs", "Default");
                     }
-                    HttpContext.Session.SetString("SAMLRole", "unitCdr");
+                    HttpContext.Session.SetString("SAMLRole", "CO");
                 }
                 HttpContext.Session.SetString("UserGUID",_db.Users.FirstOrDefault(x=>x.UserName == model.UserName).Id.ToString());
                 return RedirectToAction("Index", "Home");
@@ -90,13 +91,13 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> Register(int id)
         {
-            userProfileDTO userProfileDTO = new userProfileDTO();
+            DTOuserProfile userProfileDTO = new DTOuserProfile();
            ///////GetUserProfile
             return View(userProfileDTO);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(userProfileDTO signUpDto)
+        public async Task<IActionResult> Register(DTOuserProfile signUpDto)
         {
             if(ModelState.IsValid)
             {
@@ -115,14 +116,33 @@ namespace Agif_V2.Controllers
                 {
                     return Json(Result.Errors);
                 }
-                var RoleRet = await _userManager.AddToRoleAsync(newUser, "UnitCdr");
+                var RoleRet = await _userManager.AddToRoleAsync(newUser, "Admin");
 
                 await _db.SaveChangesAsync();
 
-                UserProfile userProfile = new UserProfile();
+                UserProfile userProfile = new UserProfile
+                {
+                    ProfileId = 0, // Assuming ProfileId is auto-generated
+                    ArmyNo = signUpDto.ArmyNo,
+                    userName = signUpDto.userName,
+                    Name = signUpDto.Name,
+                    Email = signUpDto.Email,
+                    MobileNo = signUpDto.MobileNo,
+                    rank = signUpDto.rank,
+                    regtCorps = signUpDto.regtCorps,
+                    ApptId = signUpDto.ApptId,
+                    isActive = false,
+                    CreatedOn = DateTime.Now
+                };
                 await _userProfile.Add(userProfile);
 
-                UserMapping userMapping = new UserMapping();
+                UserMapping userMapping = new UserMapping
+                {
+                    UserID = await _userManager.GetUserIdAsync(newUser),
+                    ProfileId = userProfile.ProfileId,
+                    UnitId = signUpDto.UnitId,
+                    CreatedOn = DateTime.Now
+                };
                 await _userMapping.Add(userMapping);
                 return RedirectToAction("COContactUs", "Default");
             }
