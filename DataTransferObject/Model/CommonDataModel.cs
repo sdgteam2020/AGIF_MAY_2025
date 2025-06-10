@@ -31,9 +31,9 @@ namespace DataTransferObject.Model
         public string? Suffix { get; set; }
 
         [Required(ErrorMessage = "Old Army Prefix is required.")]
-        [StringLength(10, ErrorMessage = "Old Army Prefix can't be longer than 10 characters.")]
-        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Old Army Prefix must only contain alphanumeric characters.")]
-        public string? OldArmyPrefix { get; set; }
+        //[StringLength(10, ErrorMessage = "Old Army Prefix can't be longer than 10 characters.")]
+        //[RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Old Army Prefix must only contain alphanumeric characters.")]
+        public int OldArmyPrefix { get; set; }
 
         [Required(ErrorMessage = "Old Number is required.")]
         [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]
@@ -46,10 +46,10 @@ namespace DataTransferObject.Model
         public string? OldSuffix { get; set; }
 
         [Required(ErrorMessage = "Rank is required.")]
-        [StringLength(100, ErrorMessage = "Rank can't be longer than 100 characters.")]
-        [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Rank must only contain alphanumeric characters.")]
+        //[StringLength(100, ErrorMessage = "Rank can't be longer than 100 characters.")]
+       // [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "Rank must only contain alphanumeric characters.")]
 
-        public string? DdlRank { get; set; }
+        public int DdlRank { get; set; }
 
         [Required(ErrorMessage = "Applicant Name is required.")]
         [StringLength(200, ErrorMessage = "Applicant Name can't be longer than 200 characters.")]
@@ -108,8 +108,8 @@ namespace DataTransferObject.Model
 
         // Additional properties for addresses, salary, and financial data.
         [Required(ErrorMessage = "Regt/Corps is required.")]
-        [StringLength(100, ErrorMessage = "Regt/Corps can't be longer than 100 characters.")]
-        public string? RegtCorps { get; set; }
+       // [StringLength(100, ErrorMessage = "Regt/Corps can't be longer than 100 characters.")]
+        public int RegtCorps { get; set; }
 
         [StringLength(200, ErrorMessage = "PCDA PAO can't be longer than 200 characters.")]
         public string? pcda_pao { get; set; }
@@ -118,12 +118,12 @@ namespace DataTransferObject.Model
         public string? pcda_AcctNo { get; set; }
 
         [Required(ErrorMessage = "Parent Unit is required.")]
-        [StringLength(100, ErrorMessage = "Parent Unit can't be longer than 100 characters.")]
-        public string? ParentUnit { get; set; }
+       // [StringLength(100, ErrorMessage = "Parent Unit can't be longer than 100 characters.")]
+        public int ParentUnit { get; set; }
 
         [Required(ErrorMessage = "Present Unit is required.")]
-        [StringLength(100, ErrorMessage = "Present Unit can't be longer than 100 characters.")]
-        public string? PresentUnit { get; set; }
+        //[StringLength(100, ErrorMessage = "Present Unit can't be longer than 100 characters.")]
+        public int PresentUnit { get; set; }
 
 
         [Required(ErrorMessage = "Present Unit Pin is required.")]
@@ -131,8 +131,8 @@ namespace DataTransferObject.Model
         public string? PresentUnitPin { get; set; }
 
         [Required(ErrorMessage = "Army Post Office is required.")]
-        [StringLength(100, ErrorMessage = "Army Post Office can't be longer than 100 characters.")]
-        public string? ArmyPostOffice { get; set; }
+       // [StringLength(100, ErrorMessage = "Army Post Office can't be longer than 100 characters.")]
+        public int ArmyPostOffice { get; set; }
 
 
         //[StringLength(300, ErrorMessage = "Civil Postal Address can't be longer than 300 characters.")]

@@ -290,7 +290,7 @@ namespace Agif_V2.Controllers
                 return View("OnlineApplication", model);
             }
             
-            /*
+            
             else
             {
                 CommonDataModel common = new CommonDataModel();
@@ -347,7 +347,7 @@ namespace Agif_V2.Controllers
              
 
             }
-            */
+            
             int Applicationid = 1;
             TempData["applicationId"] = Applicationid;
             TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";

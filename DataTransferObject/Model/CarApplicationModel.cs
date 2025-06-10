@@ -22,8 +22,8 @@ namespace DataTransferObject.Model
         public string? DealerName { get; set; }
 
         [Required(ErrorMessage = "Vehicle Loan Type is required.")]
-        [StringLength(50, ErrorMessage = "Loan Type can't be longer than 50 characters.")]
-        public string? Veh_Loan_Type { get; set; }
+        //[StringLength(50, ErrorMessage = "Loan Type can't be longer than 50 characters.")]
+        public int Veh_Loan_Type { get; set; }
 
         [Required(ErrorMessage = "Company Name is required.")]
         [StringLength(100, ErrorMessage = "Company Name can't be longer than 100 characters.")]

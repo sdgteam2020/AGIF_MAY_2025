@@ -1,0 +1,167 @@
+﻿@model DataTransferObject.Model.CommonOnlineApplicationResponse
+
+@{
+    ViewData["Title"] = "Application Deatils";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    // Fetch loantype from query string
+    string loanType = Context.Request.Query["formtype"].ToString()?.ToUpper() ?? "CA";
+}
+
+<h2 class="text-center mb-4">Application Details</h2>
+
+@if (Model != null)
+{
+    <div class="container">
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Army Number</strong><br />
+                <span>(@Model.OnlineApplicationResponse.DdlRank) @Model.OnlineApplicationResponse.Number</span>
+            </div>
+            <div class="col-md-6">
+                <strong>Applicant Name</strong><br />
+                @Model.OnlineApplicationResponse.ApplicantName
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Date of Birth</strong><br />
+                @Model.OnlineApplicationResponse.DateOfBirth?.ToString("dd-MM-yyyy")
+            </div>
+            <div class="col-md-6">
+                <strong>Date of Commission</strong><br />
+                @Model.OnlineApplicationResponse.DateOfCommission?.ToString("dd-MM-yyyy")
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Date of Retirement</strong><br />
+                @Model.OnlineApplicationResponse.DateOfRetirement?.ToString("dd-MM-yyyy")
+            </div>
+            <div class="col-md-6">
+                <strong>Aadhar Card No</strong><br />
+                @Model.OnlineApplicationResponse.AadharCardNo
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>PAN Card No</strong><br />
+                @Model.OnlineApplicationResponse.PanCardNo
+            </div>
+            <div class="col-md-6">
+                <strong>Mobile No</strong><br />
+                @Model.OnlineApplicationResponse.MobileNo
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Email</strong><br />
+                @Model.OnlineApplicationResponse.Email
+            </div>
+            <div class="col-md-6">
+                <strong>Regt/Corps</strong><br />
+                @Model.OnlineApplicationResponse.RegtCorps
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Parent Unit</strong><br />
+                @Model.OnlineApplicationResponse.ParentUnit
+            </div>
+            <div class="col-md-6">
+                <strong>Present Unit</strong><br />
+                @Model.OnlineApplicationResponse.PresentUnit
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Present Unit Pin</strong><br />
+                @Model.OnlineApplicationResponse.PresentUnitPin
+            </div>
+            <div class="col-md-6">
+                <strong>Army Post Office</strong><br />
+                @Model.OnlineApplicationResponse.ArmyPostOffice
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Next Fmn HQ</strong><br />
+                @Model.OnlineApplicationResponse.NextFmnHQ
+            </div>
+            <div class="col-md-6">
+                <strong>Village/Town</strong><br />
+                @Model.OnlineApplicationResponse.Vill_Town
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Post Office</strong><br />
+                @Model.OnlineApplicationResponse.PostOffice
+            </div>
+            <div class="col-md-6">
+                <strong>District</strong><br />
+                @Model.OnlineApplicationResponse.Distt
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>State</strong><br />
+                @Model.OnlineApplicationResponse.State
+            </div>
+            <div class="col-md-6">
+                <strong>Zip Code</strong><br />
+                @Model.OnlineApplicationResponse.Code
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Salary Account No</strong><br />
+                @Model.OnlineApplicationResponse.SalaryAcctNo
+            </div>
+            <div class="col-md-6">
+                <strong>IFSC Code</strong><br />
+                @Model.OnlineApplicationResponse.IfsCode
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <strong>Bank Name</strong><br />
+                @Model.OnlineApplicationResponse.NameOfBank
+            </div>
+            <div class="col-md-6">
+                <strong>Bank Branch</strong><br />
+                @Model.OnlineApplicationResponse.NameOfBankBranch
+            </div>
+        </div>
+
+        @* Conditional fields based on loantype *@
+        @if (loanType == "HBA")
+        {
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <strong>Loan Type</strong><br />
+                    HBA
+                </div>
+                <div class="col-md-6">
+                    <strong>Property Type</strong><br />
+                    @Model.HbaApplicationResponse.PropertyType
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-6">
+                    <strong>Property Address</strong><br />
+                    @Model.HbaApplicationResponse.PropertyAddress
+                </div>
+                <div class="col-md-6">
+                    <strong>Property Cost</strong><br />
+                    @Model.HbaApplicationResponse.PropertyCost
+                </div>
+            </div>
+        }
+        @* Add more loan type conditions as needed *@
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">No application data found.</div>
+}

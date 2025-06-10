@@ -24,6 +24,23 @@ namespace Agif_V2.Controllers
             return View(fileUploadViewModel);
         }
 
+        public async Task<IActionResult> ApplicationDetails(int applicationId,string formtype)
+        {
+            if (applicationId == 0)
+            {
+                return NotFound();
+            }
+
+            var application = await _IonlineApplication1.GetApplicationDetails(applicationId, formtype);
+            if (application == null)
+            {
+                return NotFound();
+            }
+
+            return View(application);
+        }
+
+        // Update ProcessUpload to redirect to ApplicationDetails after upload
         [HttpPost]
         public async Task<IActionResult> ProcessUpload(FileUploadViewModel model, string formType, int applicationId)
         {
@@ -72,75 +89,79 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
-            string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads");
-            if (!Directory.Exists(tempFolder))
-            {
-                Directory.CreateDirectory(tempFolder);
-            }
+            //string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads");
+            //if (!Directory.Exists(tempFolder))
+            //{
+            //    Directory.CreateDirectory(tempFolder);
+            //}
 
-            string folderName = $"{formType}_{ArmyNo}_{applicationId}";
-            string folderPath = Path.Combine(tempFolder, folderName);
-            if (!Directory.Exists(folderPath))
-            {
-                Directory.CreateDirectory(folderPath);
-            }
+            //string folderName = $"{formType}_{ArmyNo}_{applicationId}";
+            //string folderPath = Path.Combine(tempFolder, folderName);
+            //if (!Directory.Exists(folderPath))
+            //{
+            //    Directory.CreateDirectory(folderPath);
+            //}
 
-            var fileUpload = new DocumentUpload
-            {
-                ApplicationId = applicationId,
-                CancelledCheque = null,
-                PaySlipPdf = null,
-                QuotationPdf = null,
-                DrivingLicensePdf = null,
-                SeviceExtnPdf = null,
-                IsCancelledCheque = false,
-                IsPaySlipPdf = false,
-                IsQuotationPdf = false,
-                IsDrivingLicensePdf = false,
-                IsSeviceExtnPdf = false
-            };
+            //var fileUpload = new DocumentUpload
+            //{
+            //    ApplicationId = applicationId,
+            //    CancelledCheque = null,
+            //    PaySlipPdf = null,
+            //    QuotationPdf = null,
+            //    DrivingLicensePdf = null,
+            //    SeviceExtnPdf = null,
+            //    IsCancelledCheque = false,
+            //    IsPaySlipPdf = false,
+            //    IsQuotationPdf = false,
+            //    IsDrivingLicensePdf = false,
+            //    IsSeviceExtnPdf = false
+            //};
 
-            foreach (var file in files)
-            {
-                string fileExtension = Path.GetExtension(file.FileName);
-                string fileName = $"{formType}_{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
-                string outputFile = Path.Combine(folderPath, fileName);
+            //foreach (var file in files)
+            //{
+            //    string fileExtension = Path.GetExtension(file.FileName);
+            //    string fileName = $"{formType}_{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
+            //    string outputFile = Path.Combine(folderPath, fileName);
 
-                using (var fileStream = new FileStream(outputFile, FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
+            //    using (var fileStream = new FileStream(outputFile, FileMode.Create))
+            //    {
+            //        await file.CopyToAsync(fileStream);
+            //    }
 
-                if (file.Name == nameof(model.CancelledCheque))
-                {
-                    fileUpload.CancelledCheque = fileName;
-                    fileUpload.IsCancelledCheque = true;
-                }
-                else if (file.Name == nameof(model.PaySlipPdf))
-                {
-                    fileUpload.PaySlipPdf = fileName;
-                    fileUpload.IsPaySlipPdf = true;
-                }
-                else if (file.Name == nameof(model.QuotationPdf))
-                {
-                    fileUpload.QuotationPdf = fileName;
-                    fileUpload.IsQuotationPdf = true;
-                }
-                else if (file.Name == nameof(model.DrivingLicensePdf))
-                {
-                    fileUpload.DrivingLicensePdf = fileName;
-                    fileUpload.IsDrivingLicensePdf = true;
-                }
-                else if (file.Name == nameof(model.SeviceExtnPdf))
-                {
-                    fileUpload.SeviceExtnPdf = fileName;
-                    fileUpload.IsSeviceExtnPdf = true;
-                }
-            }
+            //    if (file.Name == nameof(model.CancelledCheque))
+            //    {
+            //        fileUpload.CancelledCheque = fileName;
+            //        fileUpload.IsCancelledCheque = true;
+            //    }
+            //    else if (file.Name == nameof(model.PaySlipPdf))
+            //    {
+            //        fileUpload.PaySlipPdf = fileName;
+            //        fileUpload.IsPaySlipPdf = true;
+            //    }
+            //    else if (file.Name == nameof(model.QuotationPdf))
+            //    {
+            //        fileUpload.QuotationPdf = fileName;
+            //        fileUpload.IsQuotationPdf = true;
+            //    }
+            //    else if (file.Name == nameof(model.DrivingLicensePdf))
+            //    {
+            //        fileUpload.DrivingLicensePdf = fileName;
+            //        fileUpload.IsDrivingLicensePdf = true;
+            //    }
+            //    else if (file.Name == nameof(model.SeviceExtnPdf))
+            //    {
+            //        fileUpload.SeviceExtnPdf = fileName;
+            //        fileUpload.IsSeviceExtnPdf = true;
+            //    }
+            //}
 
-            await _IDocumentUpload.Add(fileUpload);
-            TempData["Message"] = $"Files saved successfully in: {folderPath}";
-            return RedirectToAction("UploadSuccess");
+            //await _IDocumentUpload.Add(fileUpload);
+
+
+            TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
+            return RedirectToAction("ApplicationDetails", new { applicationId = applicationId,formType = formType });
+            //TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
+            //return View("Upload", model);
         }
         public IActionResult UploadSuccess()
         {

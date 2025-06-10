@@ -207,10 +207,8 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Veh_Loan_Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("Veh_Loan_Type")
+                        .HasColumnType("int");
 
                     b.Property<int>("VehicleCost")
                         .HasColumnType("int");
@@ -237,10 +235,8 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("ArmyPostOffice")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("ArmyPostOffice")
+                        .HasColumnType("int");
 
                     b.Property<int>("ArmyPrefix")
                         .HasColumnType("int");
@@ -279,10 +275,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("DateOfRetirement")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DdlRank")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("DdlRank")
+                        .HasColumnType("int");
 
                     b.Property<string>("Distt")
                         .IsRequired()
@@ -354,10 +348,8 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OldArmyPrefix")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                    b.Property<int>("OldArmyPrefix")
+                        .HasColumnType("int");
 
                     b.Property<string>("OldNumber")
                         .IsRequired()
@@ -373,10 +365,8 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ParentUnit")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("ParentUnit")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("Pli")
                         .HasColumnType("decimal(18,2)");
@@ -389,20 +379,16 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("PresentUnit")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("PresentUnit")
+                        .HasColumnType("int");
 
                     b.Property<string>("PresentUnitPin")
                         .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<string>("RegtCorps")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("RegtCorps")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ResidualService")
                         .HasColumnType("int");
@@ -616,10 +602,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("PropertySeller")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PropertyType")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("PropertyType")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime");
@@ -983,10 +967,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("computerCost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("computer_Loan_Type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("computer_Loan_Type")
+                        .HasColumnType("int");
 
                     b.Property<int?>("totalResidualMonth")
                         .HasColumnType("int");

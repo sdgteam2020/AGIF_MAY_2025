@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250516045352_MloanType Table Updated")]
-    partial class MloanTypeTableUpdated
+    [Migration("20250609101259_initilizetables")]
+    partial class initilizetables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,6 +137,392 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.CarApplicationModel", b =>
+                {
+                    b.Property<int>("CarId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CA_Amount_Applied_For_Loan")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CA_Amt_Eligible_for_loan")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CA_EMI_Applied")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CA_EMI_Eligible")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CA_LoanFreq")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("CA_approxDisbursementAmt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CA_approxEMIAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("CA_repayingCapacity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DL_IssuingAuth")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DealerName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("DrivingLicenseNo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ModelName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Validity_Date_DL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Veh_Loan_Type")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleCost")
+                        .HasColumnType("int");
+
+                    b.HasKey("CarId");
+
+                    b.ToTable("Car");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<string>("AadharCardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicantName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ArmyPostOffice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ArmyPrefix")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("BasicPay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("CI_Pay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("CivilPostalAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("ConfirmSalaryAcctNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("Da")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfCommission")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfPromotion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfRetirement")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DdlRank")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Distt")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal?>("EducationCess")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailDomain")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ExtnOfService")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IfsCode")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<decimal?>("IncomeTaxMonthly")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("LoanEmi")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Lra")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("MiscPay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("MobileNo")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("MonthlyPaySlip")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Msp")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NameOfBank")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameOfBankBranch")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NextFmnHQ")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OldArmyPrefix")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OldNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("OldSuffix")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("PanCardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ParentUnit")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Pli")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("Pmha")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PostOffice")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("PresentUnit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PresentUnitPin")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<int>("RegtCorps")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ResidualService")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SalaryAcctNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Suffix")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("TechPay")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("TotalCredit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("TotalDeductions")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("TotalService")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Vill_Town")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("agif_Subs")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("dsop_afpp")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("loanEMI_Outside")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("misc_Deduction")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("npax_Pay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("pcda_AcctNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("pcda_pao")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<decimal?>("rank_gradePay")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("salary_After_Deductions")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ApplicationId");
+
+                    b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.DocumentUpload", b =>
+                {
+                    b.Property<int>("UploadId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UploadId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CancelledCheque")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DrivingLicensePdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancelledCheque")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDrivingLicensePdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaySlipPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsQuotationPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSeviceExtnPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PaySlipPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuotationPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeviceExtnPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("UploadId");
+
+                    b.ToTable("DocumentUpload");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.ErrorLog", b =>
                 {
                     b.Property<int>("Id")
@@ -166,6 +552,71 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ErrorLogs");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.HBAApplicationModel", b =>
+                {
+                    b.Property<int>("HbaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HbaId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("HBA_Amount_Applied_For_Loan")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("HBA_Amt_Eligible_for_loan")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("HBA_EMI_Applied")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("HBA_EMI_Eligible")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("HBA_LoanFreq")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("HBA_approxDisbursementAmt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("HBA_approxEMIAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("HBA_repayingCapacity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PropertyAddress")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<decimal>("PropertyCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PropertySeller")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PropertyType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("HbaId");
+
+                    b.ToTable("HBA");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MApplicantType", b =>
@@ -454,6 +905,154 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Application_Id");
 
                     b.ToTable("OnlineApplications");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.PCAApplicationModel", b =>
+                {
+                    b.Property<int>("PcaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PcaId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("PCA_Amount_Applied_For_Loan")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PCA_Amt_Eligible_for_loan")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PCA_EMI_Applied")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PCA_EMI_Eligible")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PCA_LoanFreq")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("PCA_approxDisbursementAmt")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PCA_approxEMIAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PCA_companyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PCA_dealerName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PCA_modelName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("PCA_repayingCapacity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("computerCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("computer_Loan_Type")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("totalResidualMonth")
+                        .HasColumnType("int");
+
+                    b.HasKey("PcaId");
+
+                    b.ToTable("PCA");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>
+                {
+                    b.Property<int>("MappingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MappingId"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UnitId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MappingId");
+
+                    b.ToTable("UserMappings");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.UserProfile", b =>
+                {
+                    b.Property<int>("ProfileId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProfileId"));
+
+                    b.Property<int>("ApptId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ArmyNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobileNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("rank")
+                        .HasColumnType("int");
+
+                    b.Property<int>("regtCorps")
+                        .HasColumnType("int");
+
+                    b.Property<string>("userName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProfileId");
+
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

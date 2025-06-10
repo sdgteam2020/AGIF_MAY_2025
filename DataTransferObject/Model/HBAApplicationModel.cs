@@ -17,8 +17,8 @@ namespace DataTransferObject.Model
         public int ApplicationId { get; set; }
 
         [Required(ErrorMessage = "Property Type is required.")]
-        [StringLength(100, ErrorMessage = "Property Type can't be longer than 100 characters.")]
-        public string? PropertyType { get; set; }
+       // [StringLength(100, ErrorMessage = "Property Type can't be longer than 100 characters.")]
+        public int PropertyType { get; set; }
 
         //[Required(ErrorMessage = "Property Seller Name and Address is required.")]
         //[StringLength(200, ErrorMessage = "Property Seller Name and Address can't be longer than 200 characters.")]
@@ -33,7 +33,7 @@ namespace DataTransferObject.Model
         public decimal? PropertyCost { get; set; }
 
         [Required(ErrorMessage = "Loan Frequency is required.")]
-        [StringLength(50, ErrorMessage = "Loan Frequency can't be longer than 50 characters.")]
+       [StringLength(50, ErrorMessage = "Loan Frequency can't be longer than 50 characters.")]
         public string? HBA_LoanFreq { get; set; }
 
         [Required(ErrorMessage = "Repaying Capacity is required.")]
