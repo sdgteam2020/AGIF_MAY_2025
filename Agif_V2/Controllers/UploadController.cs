@@ -103,7 +103,7 @@ namespace Agif_V2.Controllers
             }
 
             var fileUpload = new DocumentUpload();
-            
+            fileUpload.ApplicationId= applicationId;
 
             foreach (var file in files)
             {

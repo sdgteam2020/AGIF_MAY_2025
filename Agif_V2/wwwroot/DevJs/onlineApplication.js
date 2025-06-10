@@ -698,7 +698,6 @@ function handleSubmitClick() {
             return false;
         }
         else {
-            alert("Form is valid!");
             form.submit();
         }
 

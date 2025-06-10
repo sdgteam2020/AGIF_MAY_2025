@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransferObject.Model
+namespace DataTransferObject.Response
 {
     public class DTOCarApplicationresponse
     {
 
-     
         public string? DealerName { get; set; }
         public string Veh_Loan_Type { get; set; }
         public string? CompanyName { get; set; }

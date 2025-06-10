@@ -211,25 +211,25 @@ namespace DataTransferObject.Model
         [Range(0, double.MaxValue, ErrorMessage = "MSP must be a positive number.")]
         public decimal? Msp { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Income Tax Monthly must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Income Tax Monthly must be a positive number.")]
         public decimal? IncomeTaxMonthly { get; set; }
 
-       // [Range(0, double.MaxValue, ErrorMessage = "CI Pay must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "CI Pay must be a positive number.")]
         public decimal? CI_Pay { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Education Cess must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Education Cess must be a positive number.")]
         public decimal? EducationCess { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "NPA/X Gp Pay must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "NPA/X Gp Pay must be a positive number.")]
         public decimal? npax_Pay { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "PLI must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "PLI must be a positive number.")]
         public decimal? Pli { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Tech Pay must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Tech Pay must be a positive number.")]
         public string? TechPay { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Misc Deduction must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Misc Deduction must be a positive number.")]
         public decimal? misc_Deduction { get; set; }
 
 
@@ -237,28 +237,31 @@ namespace DataTransferObject.Model
         [Range(0, double.MaxValue, ErrorMessage = "DA must be a positive number.")]
         public decimal? Da { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Loan EMI Outside must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Loan EMI Outside must be a positive number.")]
         public decimal? loanEMI_Outside { get; set; }
 
-       // [Range(0, double.MaxValue, ErrorMessage = "PMHA must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "PMHA must be a positive number.")]
         public decimal? Pmha { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Loan EMI must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Loan EMI must be a positive number.")]
         public decimal? LoanEmi { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "LRA must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "LRA must be a positive number.")]
         public decimal? Lra { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Misc Pay must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Misc Pay must be a positive number.")]
         public decimal? MiscPay { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Total Credit must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Total Credit must be a positive number.")]
         public decimal? TotalCredit { get; set; }
 
-        //[Range(0, double.MaxValue, ErrorMessage = "Total Deductions must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Total Deductions must be a positive number.")]
         public decimal? TotalDeductions { get; set; }
 
-       // [Range(0, double.MaxValue, ErrorMessage = "Salary After Deductions must be a positive number.")]
+        [Range(0, double.MaxValue, ErrorMessage = "Salary After Deductions must be a positive number.")]
         public decimal? salary_After_Deductions { get; set; }
+
+        [Required]
+        public int ApplicationType { get; set; } 
     }
 }

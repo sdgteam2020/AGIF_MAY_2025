@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransferObject.Model
+namespace DataTransferObject.Response
 {
-    public class OnlineApplicationResponse
+    public class CommonDataonlineResponse
     {
         public int ApplicationId { get; set; }
 
@@ -184,5 +184,7 @@ namespace DataTransferObject.Model
 
 
         public decimal? salary_After_Deductions { get; set; }
+
+        public int ApplicationType { get; set; }
     }
 }

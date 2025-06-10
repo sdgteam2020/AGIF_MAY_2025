@@ -342,16 +342,16 @@ namespace Agif_V2.Controllers
 
                     ModelState.AddModelError("", "An error occurred while processing your application.");
                 }
-                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+               // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
-             
+                int Applicationid = common.ApplicationId;
+                TempData["applicationId"] = Applicationid;
+                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+                return RedirectToAction("Upload", "Upload", new { formType });
 
             }
             
-            int Applicationid = 1;
-            TempData["applicationId"] = Applicationid;
-            TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
-            return RedirectToAction("Upload", "Upload", new { formType });
+           
 
             // Proceed to the next step
         }

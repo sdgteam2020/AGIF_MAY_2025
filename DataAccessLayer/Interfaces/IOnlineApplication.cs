@@ -12,6 +12,6 @@ namespace DataAccessLayer.Interfaces
     {
         Task<bool> IsUser(string AadharNo);
         Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);
-        Task<CommonOnlineApplicationResponse> GetApplicationDetails(int applicationId,string formtype);
+        Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId,string formtype);
     }
 }
