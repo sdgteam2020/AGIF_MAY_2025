@@ -1,7 +1,8 @@
-﻿
+﻿@using DataTransferObject.Request;
+@model DTOGetApplRequest;
 @{
     ViewData["Title"] = "User Applications";
-    var status = Context.Request.Query["status"];
+    var status = Model.status;
 }
 
 <div class="container">

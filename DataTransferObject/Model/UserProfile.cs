@@ -11,11 +11,11 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int ProfileId { get; set; }
-        public string ArmyNo { get; set; }
-        public string userName { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string MobileNo { get; set; }
+        public string ArmyNo { get; set; } = string.Empty;
+        public string userName { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string MobileNo { get; set; } = string.Empty;
         public int rank { get; set; }
         public int regtCorps { get; set; }
         public bool isActive { get; set; }

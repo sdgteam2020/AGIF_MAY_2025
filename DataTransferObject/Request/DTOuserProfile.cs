@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Request
 {
-    public class userProfileDTO
+    public class DTOuserProfile
     {
 
         [Required]
