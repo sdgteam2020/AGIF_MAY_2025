@@ -8,8 +8,8 @@ namespace DataTransferObject.Model
 {
     public class CommonOnlineApplicationResponse
     {
-       public DTOCarApplicationresponse? CarApplicationResponse { get; set; }
-       public DTOHbaApplicationresponse? HbaApplicationResponse { get; set; }
+       public DTOCarApplicationresponse CarApplicationResponse { get; set; }
+       public DTOHbaApplicationresponse HbaApplicationResponse { get; set; }
        public OnlineApplicationResponse? OnlineApplicationResponse { get; set; }
     }
 }
