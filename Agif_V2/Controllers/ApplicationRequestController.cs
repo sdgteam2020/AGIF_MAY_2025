@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Agif_V2.Controllers
 {
-    public class ApplicationController : Controller
+    public class ApplicationRequestController : Controller
     {
         private readonly IApplication _application;
-        public ApplicationController(IApplication application)
+        public ApplicationRequestController(IApplication application)
         {
             this._application = application;
         }

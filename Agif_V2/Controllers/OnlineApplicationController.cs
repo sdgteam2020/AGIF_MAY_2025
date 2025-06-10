@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Interfaces;
+using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using Microsoft.AspNetCore.Builder;
@@ -44,23 +45,23 @@ namespace Agif_V2.Controllers
             DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
             return View(DTOOnlineapplication);
         }
-        public IActionResult SaveApplication(DTOOnlineApplicationRequest Data)
-        {
-            var validationContext = new ValidationContext(Data.onlineApplications);
-            var validationResults = new List<ValidationResult>();
+        //public IActionResult SaveApplication(DTOOnlineApplicationRequest Data)
+        //{
+        //    var validationContext = new ValidationContext(Data.onlineApplications);
+        //    var validationResults = new List<ValidationResult>();
 
-            bool isValid = Validator.TryValidateObject(
-                Data.onlineApplications,
-                validationContext,
-                validationResults,
-                validateAllProperties: true);
+        //    bool isValid = Validator.TryValidateObject(
+        //        Data.onlineApplications,
+        //        validationContext,
+        //        validationResults,
+        //        validateAllProperties: true);
 
-            if (!isValid)
-            {
-                // validationResults contains errors
-            }
-            return View();  
-        }
+        //    if (!isValid)
+        //    {
+        //        // validationResults contains errors
+        //    }
+        //    return View();  
+        //}
         public IActionResult LoanType()
         {
             return View();

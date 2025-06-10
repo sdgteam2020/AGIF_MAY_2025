@@ -11,6 +11,8 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int ApplicantTypeId { get; set; }
+
+        [Required(ErrorMessage = "ApplicantTypeName is Required")]
         public string ApplicantTypeName { get; set; } = string.Empty;
     }
 }

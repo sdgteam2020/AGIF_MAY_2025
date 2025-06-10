@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransferObject.Model
+namespace DataTransferObject.Helpers
 {
     public class EncryptDecrypt
     {

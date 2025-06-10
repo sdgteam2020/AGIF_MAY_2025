@@ -13,15 +13,14 @@ namespace DataTransferObject.Model
         [Key]
         public int HbaId {  get; set; }
 
-        [ForeignKey("CommonDataModel")]
+        [Required(ErrorMessage = "Application ID is required.")]
         public int ApplicationId { get; set; }
+        [ForeignKey("ApplicationId")]
+        public CommonDataModel? CommonDataModels { get; set; }
 
         [Required(ErrorMessage = "Property Type is required.")]
-       // [StringLength(100, ErrorMessage = "Property Type can't be longer than 100 characters.")]
         public int PropertyType { get; set; }
 
-        //[Required(ErrorMessage = "Property Seller Name and Address is required.")]
-        //[StringLength(200, ErrorMessage = "Property Seller Name and Address can't be longer than 200 characters.")]
         public string? PropertySeller { get; set; }
 
         [Required(ErrorMessage = "Property Address is required.")]
@@ -33,7 +32,7 @@ namespace DataTransferObject.Model
         public decimal? PropertyCost { get; set; }
 
         [Required(ErrorMessage = "Loan Frequency is required.")]
-       [StringLength(50, ErrorMessage = "Loan Frequency can't be longer than 50 characters.")]
+        [StringLength(50, ErrorMessage = "Loan Frequency can't be longer than 50 characters.")]
         public string? HBA_LoanFreq { get; set; }
 
         [Required(ErrorMessage = "Repaying Capacity is required.")]

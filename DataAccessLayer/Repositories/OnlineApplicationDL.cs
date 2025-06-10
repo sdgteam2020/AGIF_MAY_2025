@@ -21,19 +21,19 @@ namespace DataAccessLayer.Repositories
            
         }
 
-        public Task<bool> IsUser(string AadharNo)
-        {
-           _context.OnlineApplications.ToList();
-            var user = _context.OnlineApplications.FirstOrDefault(x => x.AadharNo == AadharNo);
-            if (user != null)
-            {
-                return Task.FromResult(true);
-            }
-            else
-            {
-                return Task.FromResult(false);
-            }
-        }
+        //public Task<bool> IsUser(string AadharNo)
+        //{
+        //   _context.OnlineApplications.ToList();
+        //    var user = _context.OnlineApplications.FirstOrDefault(x => x.AadharNo == AadharNo);
+        //    if (user != null)
+        //    {
+        //        return Task.FromResult(true);
+        //    }
+        //    else
+        //    {
+        //        return Task.FromResult(false);
+        //    }
+        //}
         public Task<DateTime> GetRetirementDate(int rankId, int Prefix, DateTime dateTime)
         {
             var userType = _context.MArmyPrefixes.FirstOrDefault(x => x.Id == Prefix);
@@ -115,7 +115,7 @@ namespace DataAccessLayer.Repositories
 
 
 
-            return data;
+            return null;
             
         }
     }

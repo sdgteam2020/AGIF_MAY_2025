@@ -14,8 +14,10 @@ namespace DataTransferObject.Model
         [Key]
         public int CarId { get; set; }
 
-        [ForeignKey("CommonDataModel")]
+        [Required(ErrorMessage = "Application ID is required.")]
         public int ApplicationId { get; set; }
+        [ForeignKey("ApplicationId")]
+        public CommonDataModel? CommonDataModels { get; set; }
 
         [Required(ErrorMessage = "Dealer Name is required.")]
         [StringLength(100, ErrorMessage = "Dealer Name can't be longer than 100 characters.")]

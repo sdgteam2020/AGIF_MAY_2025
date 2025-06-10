@@ -11,6 +11,7 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "ArmyPostOffice is Required")]
         public string? ArmyPostOffice { get; set; } = string.Empty;
     }
 }
