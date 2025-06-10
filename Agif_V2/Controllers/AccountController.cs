@@ -22,10 +22,12 @@ namespace Agif_V2.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
 
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping)
         {   
             _signInManager = signInManager;
             _userManager = userManager;
+            _userProfile = userProfile;
+            _userMapping = userMapping;
             _db = db;
         }
         public IActionResult Index()
@@ -34,7 +36,6 @@ namespace Agif_V2.Controllers
         }
         public IActionResult Login()
         {
-            HttpContext.Session.SetString("coId", "IC111111A"); // Clear the session variable for coId
             return View();
         }
 
@@ -66,8 +67,8 @@ namespace Agif_V2.Controllers
                 }
                 else
                 {
-                    var ActiveCO = await _db.UserProfiles.FirstOrDefaultAsync(x=>x.userName==model.UserName);
-                    bool isCOActive = ActiveCO.isActive;
+                    var ActiveCO = await _userProfile.GetByUserName(model.UserName);
+                    bool isCOActive = ActiveCO.IsActive;
                     if(!isCOActive)
                     {
                         HttpContext.Session.SetString("userActivate", "false");
@@ -116,13 +117,12 @@ namespace Agif_V2.Controllers
                 {
                     return Json(Result.Errors);
                 }
-                var RoleRet = await _userManager.AddToRoleAsync(newUser, "Admin");
+                var RoleRet = await _userManager.AddToRoleAsync(newUser, "CO");
 
                 await _db.SaveChangesAsync();
 
                 UserProfile userProfile = new UserProfile
                 {
-                    ProfileId = 0, // Assuming ProfileId is auto-generated
                     ArmyNo = signUpDto.ArmyNo,
                     userName = signUpDto.userName,
                     Name = signUpDto.Name,
@@ -131,17 +131,17 @@ namespace Agif_V2.Controllers
                     rank = signUpDto.rank,
                     regtCorps = signUpDto.regtCorps,
                     ApptId = signUpDto.ApptId,
-                    isActive = false,
-                    CreatedOn = DateTime.Now
+                    IsActive = false,
+                    UpdatedOn = DateTime.Now
                 };
                 await _userProfile.Add(userProfile);
 
                 UserMapping userMapping = new UserMapping
                 {
-                    UserID = await _userManager.GetUserIdAsync(newUser),
+                    UserID = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
                     ProfileId = userProfile.ProfileId,
                     UnitId = signUpDto.UnitId,
-                    CreatedOn = DateTime.Now
+                    UpdatedOn = DateTime.Now
                 };
                 await _userMapping.Add(userMapping);
                 return RedirectToAction("COContactUs", "Default");
@@ -152,6 +152,11 @@ namespace Agif_V2.Controllers
 
             }
          
+        }
+
+        public async Task<IActionResult> GetAllUsers()
+        {
+            return View();
         }
     }
 }

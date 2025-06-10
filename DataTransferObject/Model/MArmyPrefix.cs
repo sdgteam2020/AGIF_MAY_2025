@@ -11,7 +11,10 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Prefix is required")]
         public string Prefix { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "UserType is required")]
         public int UserType { get; set; }
     }
 }

@@ -16,7 +16,7 @@ namespace DataAccessLayer
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
-        public virtual DbSet<OnlineApplications> OnlineApplications { get; set; }
+      
         public virtual DbSet<MAppointment> MAppointments { get; set; }
         public virtual DbSet<MUnit> MUnits { get; set; }
         public virtual DbSet<MApplyFor> MApplyFor { get; set; }
@@ -30,19 +30,20 @@ namespace DataAccessLayer
         public virtual DbSet<MLoanFreq> MLoanFreqs { get; set; }
         public virtual DbSet<MLoanType> MLoanTypes { get; set; }
         public virtual DbSet<UserProfile> UserProfiles { get; set; }
-        public virtual DbSet<UserMapping> UserMappings { get; set; }
+        public virtual DbSet<UserMapping> trnUserMappings { get; set; }
 
-        public virtual DbSet<CarApplicationModel> Car { get; set; }
+        public virtual DbSet<CarApplicationModel> trnCar { get; set; }
 
-        public virtual DbSet<PCAApplicationModel> PCA { get; set; }
+        public virtual DbSet<PCAApplicationModel> trnPCA { get; set; }
 
-        public virtual DbSet<HBAApplicationModel> HBA { get; set; }
+        public virtual DbSet<HBAApplicationModel> trnHBA { get; set; }
 
-        public virtual DbSet<CommonDataModel> Applications { get; set; }
+        public virtual DbSet<CommonDataModel> trnApplications { get; set; }
 
-        public virtual DbSet<DocumentUpload> DocumentUpload { get; set; }
+        public virtual DbSet<DocumentUpload> trnDocumentUpload { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
+           
             base.OnModelCreating(builder);
         }
     }

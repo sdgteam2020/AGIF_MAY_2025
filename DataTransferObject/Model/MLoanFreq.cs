@@ -11,6 +11,7 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int ID { get; set; }
+        [Required(ErrorMessage = "LoanFreq is Required")]
         public int LoanFreq { get; set; }
     }
 }

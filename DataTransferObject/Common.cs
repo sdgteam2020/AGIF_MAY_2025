@@ -14,9 +14,7 @@ namespace DataTransferObject
         [Required]
         public bool IsActive { get; set; } = true;
 
-        //[ForeignKey("ApplicationUserUpdate"), DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int? Updatedby { get; set; }
-       // public ApplicationUser? ApplicationUserUpdate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

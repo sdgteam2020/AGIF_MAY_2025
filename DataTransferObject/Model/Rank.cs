@@ -13,7 +13,7 @@ namespace DataTransferObject.Model
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [RegularExpression(@"^[\d]+$", ErrorMessage = "Rank Id is number.")]
-        public short RankId { get; set; }
+        public int RankId { get; set; }
 
         [Required(ErrorMessage = "required!")]
         [RegularExpression("^[a-zA-Z0-9 ]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]

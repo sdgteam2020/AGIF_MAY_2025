@@ -13,15 +13,16 @@ namespace DataTransferObject.Model
         [Key]
         public int PcaId {  get; set; }
 
-        [ForeignKey("CommonDataModel")]
+        [Required(ErrorMessage = "Application ID is required.")]
         public int ApplicationId { get; set; }
+        [ForeignKey("ApplicationId")]
+        public CommonDataModel? CommonDataModels { get; set; }
 
         [Required(ErrorMessage = "Dealer Name is required.")]
         [StringLength(100, ErrorMessage = "Dealer Name can't be longer than 100 characters.")]
         public string? PCA_dealerName { get; set; }
 
         [Required(ErrorMessage = "Loan Type is required.")]
-        //[StringLength(50, ErrorMessage = "Loan Type can't be longer than 50 characters.")]
         public int computer_Loan_Type { get; set; }
 
         [Required(ErrorMessage = "Company Name is required.")]

@@ -31,6 +31,8 @@ builder.Services.AddTransient<IPca, PcaDL>();
 builder.Services.AddTransient<IArmyPrefixes, ArmyPrefixesDL>();
 builder.Services.AddTransient<IDoucmentupload, DocumentUploadDL>();
 builder.Services.AddTransient<IApplication, Application>();
+builder.Services.AddTransient<IUserProfile, UserProfileDL>();
+builder.Services.AddTransient<IUserMapping, UserMappingDL>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

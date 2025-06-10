@@ -10,7 +10,7 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IOnlineApplication : IGenericRepositoryDL<CommonDataModel>
     {
-        Task<bool> IsUser(string AadharNo);
+        //Task<bool> IsUser(string AadharNo);
         Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);
         Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId,string formtype);
     }

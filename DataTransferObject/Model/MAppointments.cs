@@ -7,15 +7,12 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class MAppointment
+    public class MAppointment:Common
     {
         [Key]
-        public short ApptId { get; set; }
-        public string AppointmentName { get; set; }
-        public bool IsActive { get; set; }
-        public int Updatedby { get; set; }
-        public DateTime UpdatedOn { get; set; }
-        public string AppointmentAbbreviation { get; set; }
+        public int ApptId { get; set; }
+        [Required(ErrorMessage ="Appointment Name is Required")]
+        public string AppointmentName { get; set; }=string.Empty;
 
     }
 }
