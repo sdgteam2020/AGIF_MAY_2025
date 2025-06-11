@@ -28,7 +28,7 @@ namespace Agif_V2.Controllers
             List<DTOCoDashBoard> list = new List<DTOCoDashBoard>();
             List<DTOCoDashBoard> data;
             int userId  = Convert.ToInt32(HttpContext.Session.GetString("UserGUID").ToString());
-            int unitId = _db.UserMappings.FirstOrDefaultAsync(x => x.UserID == userId).Result.UnitId;
+            int unitId = _db.trnUserMappings.FirstOrDefaultAsync(x => x.UserId == userId).Result.UnitId;
             if(TypeId == 1) // For CO
             {
                 //data = _db.CoDashBoards.Where(x => x.UnitId == unitId && x.TypeId == TypeId).ToList();

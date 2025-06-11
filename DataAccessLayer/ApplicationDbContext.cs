@@ -3,6 +3,7 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace DataAccessLayer
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
-      
+
         public virtual DbSet<MAppointment> MAppointments { get; set; }
         public virtual DbSet<MUnit> MUnits { get; set; }
         public virtual DbSet<MApplyFor> MApplyFor { get; set; }
@@ -43,7 +44,16 @@ namespace DataAccessLayer
         public virtual DbSet<DocumentUpload> trnDocumentUpload { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-           
+
+            // Configure foreign key relationship
+            builder.Entity<CommonDataModel>()
+                .HasOne<MUnit>()
+                .WithMany()
+                .HasForeignKey(a => a.PresentUnit)
+                .HasPrincipalKey(u => u.UnitId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_trnApplications_MUnits_PresentUnit");
+
             base.OnModelCreating(builder);
         }
     }

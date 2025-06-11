@@ -39,7 +39,9 @@ namespace DataTransferObject.Model
 
         [Required(ErrorMessage = "Loan Frequency is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Loan Frequency must be a valid number.")]
-        public string? PCA_LoanFreq { get; set; }
+        public int? PCA_LoanFreq { get; set; }
+        [ForeignKey("PCA_LoanFreq")]
+        public MLoanFreq? MLoanFreq { get; set; }
 
         [Required(ErrorMessage = "Eligible loan amount is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for eligible loan amount.")]

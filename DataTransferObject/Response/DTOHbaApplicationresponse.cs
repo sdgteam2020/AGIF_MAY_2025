@@ -20,7 +20,7 @@ namespace DataTransferObject.Response
         public decimal? PropertyCost { get; set; }
 
 
-        public string? HBA_LoanFreq { get; set; }
+        public int? HBA_LoanFreq { get; set; }
 
 
         public decimal? HBA_repayingCapacity { get; set; }
