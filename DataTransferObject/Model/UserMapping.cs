@@ -1,4 +1,5 @@
 ﻿using DataTransferObject.Identitytable;
+using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,5 +32,8 @@ namespace DataTransferObject.Model
 
         [ForeignKey("UnitId")]
         public MUnit? MUnit { get; set; }
+
+        public bool IsFmn { get; set; } = false;
+        public bool IsPrimary { get; set; }
     }
 }
