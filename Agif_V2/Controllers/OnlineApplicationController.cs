@@ -23,7 +23,7 @@ namespace Agif_V2.Controllers
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
-            this._car=_car;
+            this._car = _car;
             this._Hba = _Hba;
             this._Pca = _Pca;
         }
@@ -33,11 +33,11 @@ namespace Agif_V2.Controllers
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
-            
+
             TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType);
-            
+
             TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory);
-          
+
 
             TempData.Keep("LoanType");
             TempData.Keep("ApplicantCategory");
@@ -66,13 +66,13 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
-        public async Task <JsonResult> GetRetirementDate(int rankId,int Prefix)
+        public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix)
         {
             var userType = await _IMasterOnlyTable.GetUserType(Prefix);
             var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId);
             var retirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0;
             var userTypeId = userType.FirstOrDefault()?.UserType ?? 0;
-            if(retirementAge > 0 && userTypeId != 0)
+            if (retirementAge > 0 && userTypeId != 0)
             {
 
                 return Json(new { retirementAge = retirementAge, userTypeId = userTypeId });
@@ -87,7 +87,7 @@ namespace Agif_V2.Controllers
         {
             var pcda = await _IMasterOnlyTable.GetPCDA_PAO(regt);
             var pcdaPao = pcda.FirstOrDefault()?.Pcda_Pao ?? string.Empty;
-            if(!string.IsNullOrEmpty(pcdaPao))
+            if (!string.IsNullOrEmpty(pcdaPao))
             {
                 return Json(new { pcdaPao = pcdaPao });
             }
@@ -102,7 +102,7 @@ namespace Agif_V2.Controllers
             // Handle the received loanType and applicantCategory
             // You can now access the form data here
             // For example, you can pass these values to a view or use them in processing logic
-            string Loan= EncryptDecrypt.EncryptionData(loanType);
+            string Loan = EncryptDecrypt.EncryptionData(loanType);
             string Category = EncryptDecrypt.EncryptionData(applicantCategory);
 
             TempData["LoanType"] = Loan;
@@ -197,6 +197,7 @@ namespace Agif_V2.Controllers
         {
             string formType = string.Empty;
 
+
             // First, determine the form type
             if (model.CarApplication != null)
             {
@@ -283,6 +284,8 @@ namespace Agif_V2.Controllers
                 }
             }
 
+            // int Applicationtype = int.Parse(model.loantype);
+            //int ApplicantType = int.Parse(model.applicantCategory);
             // Check ModelState validity after all validations
             if (!ModelState.IsValid)
             {
@@ -291,15 +294,19 @@ namespace Agif_V2.Controllers
                 return View("OnlineApplication", model);
             }
 
-            /*
+
             else
             {
                 CommonDataModel common = new CommonDataModel();
+
                 try
                 {
-                   
+
                     if (model.CommonData != null)
                     {
+                        model.CommonData.ApplicationType = int.Parse(model.loantype);
+                        model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
+
                         common = await _IonlineApplication1.AddWithReturn(model.CommonData);
                     }
 
@@ -337,26 +344,28 @@ namespace Agif_V2.Controllers
                     }
 
                 }
-            
-                catch(Exception ex)
+
+                catch (Exception ex)
                 {
 
                     ModelState.AddModelError("", "An error occurred while processing your application.");
                 }
-            */
-            // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
-           // int Applicationid = common.ApplicationId;
+                // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
-                TempData["applicationId"] = 1;
+                 int Applicationid = common.ApplicationId;
+
+                TempData["applicationId"] = Applicationid;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
                 return RedirectToAction("Upload", "Upload", new { formType });
 
-            
-            
-           
 
-            // Proceed to the next step
+
+
+
+                // Proceed to the next step
+            }
         }
     }
+
 }

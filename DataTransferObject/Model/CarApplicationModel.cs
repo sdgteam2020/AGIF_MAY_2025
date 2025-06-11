@@ -84,5 +84,7 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage = "Approximate Disbursement Amount is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for disbursement amount.")]
         public decimal? CA_approxDisbursementAmt { get; set; }
+
+        
     }
 }

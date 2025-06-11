@@ -19,6 +19,6 @@ namespace DataTransferObject
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "datetime2")]
-        public DateTime? UpdatedOn { get; set; } 
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now; 
     }
 }

@@ -219,7 +219,7 @@ function getApplicantDetalis() {
     $.ajax({
         type: "get",
         url: "/OnlineApplication/CkeckExistUser",
-        data: { armyNo: CombineArmyNo, AppType: appType },
+        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
         success: function (data) {
             if (data.length > 0) {
                 Swal.fire({

@@ -189,7 +189,7 @@ namespace DataAccessLayer.Repositories
                     data.PcaApplicationResponse = PcaModal;
                 }               
 
-                var DocumentModel= _context.DocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
+                var DocumentModel= _context.trnDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
 
                 if(DocumentModel!=null)
                 {
