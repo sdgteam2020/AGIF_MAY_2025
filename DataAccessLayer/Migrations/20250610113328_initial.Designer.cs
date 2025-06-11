@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250610070929_ForignKey")]
-    partial class ForignKey
+    [Migration("20250610113328_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,7 +201,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -218,7 +218,9 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("CarId");
 
-                    b.ToTable("Car");
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnCar");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
@@ -237,6 +239,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("int");
 
                     b.Property<int>("ArmyPostOffice")
                         .HasColumnType("int");
@@ -317,6 +322,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<decimal?>("Lra")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("MUnitsPresentUnitId")
+                        .HasColumnType("int");
 
                     b.Property<decimal?>("MiscPay")
                         .HasColumnType("decimal(18,2)");
@@ -424,7 +432,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -465,9 +473,21 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("ApplicationId");
 
+                    b.HasIndex("ArmyPostOffice");
+
                     b.HasIndex("ArmyPrefix");
 
-                    b.ToTable("Applications");
+                    b.HasIndex("DdlRank");
+
+                    b.HasIndex("MUnitsPresentUnitId");
+
+                    b.HasIndex("ParentUnit");
+
+                    b.HasIndex("PresentUnit");
+
+                    b.HasIndex("RegtCorps");
+
+                    b.ToTable("trnApplications");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.DocumentUpload", b =>
@@ -515,14 +535,14 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
 
                     b.HasKey("UploadId");
 
-                    b.ToTable("DocumentUpload");
+                    b.ToTable("trnDocumentUpload");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ErrorLog", b =>
@@ -611,14 +631,16 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
 
                     b.HasKey("HbaId");
 
-                    b.ToTable("HBA");
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnHBA");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MApplicantType", b =>
@@ -674,15 +696,11 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataTransferObject.Model.MAppointment", b =>
                 {
-                    b.Property<short>("ApptId")
+                    b.Property<int>("ApptId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("ApptId"));
-
-                    b.Property<string>("AppointmentAbbreviation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApptId"));
 
                     b.Property<string>("AppointmentName")
                         .IsRequired()
@@ -694,7 +712,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Updatedby")
+                    b.Property<int?>("Updatedby")
                         .HasColumnType("int");
 
                     b.HasKey("ApptId");
@@ -711,6 +729,7 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ArmyPostOffice")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -774,16 +793,18 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ApplicationType");
+
                     b.ToTable("MLoanTypes");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MRank", b =>
                 {
-                    b.Property<short>("RankId")
+                    b.Property<int>("RankId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("smallint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("RankId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RankId"));
 
                     b.Property<byte>("ApplyForId")
                         .HasColumnType("tinyint");
@@ -808,7 +829,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -940,7 +961,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -956,7 +977,9 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("PcaId");
 
-                    b.ToTable("PCA");
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnPCA");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>
@@ -967,9 +990,6 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MappingId"));
 
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -979,12 +999,24 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("UnitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("MappingId");
 
-                    b.ToTable("UserMappings");
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("trnUserMappings");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.UserProfile", b =>
@@ -1000,25 +1032,30 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("ArmyNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MobileNo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isActive")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
 
                     b.Property<int>("rank")
                         .HasColumnType("int");
@@ -1031,6 +1068,12 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProfileId");
+
+                    b.HasIndex("ApptId");
+
+                    b.HasIndex("rank");
+
+                    b.HasIndex("regtCorps");
 
                     b.ToTable("UserProfiles");
                 });
@@ -1138,15 +1181,93 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.CarApplicationModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommonDataModels");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
                 {
+                    b.HasOne("DataTransferObject.Model.MArmyPostOffice", "MArmyPostOffices")
+                        .WithMany()
+                        .HasForeignKey("ArmyPostOffice")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DataTransferObject.Model.MArmyPrefix", "MArmyPrefix")
                         .WithMany()
                         .HasForeignKey("ArmyPrefix")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataTransferObject.Model.MRank", "MRank")
+                        .WithMany()
+                        .HasForeignKey("DdlRank")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MUnit", "MUnitsPresent")
+                        .WithMany()
+                        .HasForeignKey("MUnitsPresentUnitId");
+
+                    b.HasOne("DataTransferObject.Model.MUnit", "MUnitsParent")
+                        .WithMany()
+                        .HasForeignKey("ParentUnit")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MUnit", null)
+                        .WithMany()
+                        .HasForeignKey("PresentUnit")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_trnApplications_MUnits_PresentUnit");
+
+                    b.HasOne("DataTransferObject.Model.MRegtCorps", "MRegtCorps")
+                        .WithMany()
+                        .HasForeignKey("RegtCorps")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MArmyPostOffices");
+
                     b.Navigation("MArmyPrefix");
+
+                    b.Navigation("MRank");
+
+                    b.Navigation("MRegtCorps");
+
+                    b.Navigation("MUnitsParent");
+
+                    b.Navigation("MUnitsPresent");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.HBAApplicationModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommonDataModels");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.MLoanType", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.MApplicationType", "MApplicationTypes")
+                        .WithMany()
+                        .HasForeignKey("ApplicationType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MApplicationTypes");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MRank", b =>
@@ -1158,6 +1279,71 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("MApplyFor");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.PCAApplicationModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommonDataModels");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MUnit", "MUnit")
+                        .WithMany()
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Identitytable.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("MUnit");
+
+                    b.Navigation("UserProfile");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.UserProfile", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.MAppointment", "MAppointments")
+                        .WithMany()
+                        .HasForeignKey("ApptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MRank", "MRank")
+                        .WithMany()
+                        .HasForeignKey("rank")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MRegtCorps", "MRegtCorps")
+                        .WithMany()
+                        .HasForeignKey("regtCorps")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MAppointments");
+
+                    b.Navigation("MRank");
+
+                    b.Navigation("MRegtCorps");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

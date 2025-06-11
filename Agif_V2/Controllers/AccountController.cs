@@ -138,7 +138,7 @@ namespace Agif_V2.Controllers
 
                 UserMapping userMapping = new UserMapping
                 {
-                    UserID = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
+                    UserId = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
                     ProfileId = userProfile.ProfileId,
                     UnitId = signUpDto.UnitId,
                     UpdatedOn = DateTime.Now

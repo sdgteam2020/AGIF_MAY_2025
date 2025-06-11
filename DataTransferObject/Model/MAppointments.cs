@@ -14,5 +14,6 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage ="Appointment Name is Required")]
         public string AppointmentName { get; set; }=string.Empty;
 
+        public string? AppointmentAbbreviation { get; set; }
     }
 }
