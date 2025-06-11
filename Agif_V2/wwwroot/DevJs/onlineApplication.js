@@ -203,6 +203,45 @@ function SetSuffixLetter(obj) {
     }
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
+
+    //getApplicantDetalis();
+}
+
+
+function getApplicantDetalis() {
+
+    var armyNumber = $("#armyPrefix").val();
+    var Prefix = $("#armyNumber").val();
+    var Suffix = $("#txtSuffix").val();
+    var CombineArmyNo = Prefix + armyNumber + Suffix;
+    var appType = $("#loanType").val();
+    
+    $.ajax({
+        type: "get",
+        url: "/OnlineApplication/CkeckExistUser",
+        data: { armyNo: CombineArmyNo, AppType: appType },
+        success: function (data) {
+            if (data.length > 0) {
+                Swal.fire({
+                    title: "You Have Already applied for  Loan.",
+                    text: "Would you like to apply for a new loan !",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        DeleteConfirmation();
+                    }
+                });
+            }
+
+        },
+        error: function () {
+            alert("Data Not loaded!")
+        }
+    });
 }
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();

@@ -6,6 +6,8 @@
 
     // Fetch loantype from query string
     string loanType = Context.Request.Query["formtype"].ToString()?.ToUpper() ?? "CA";
+    var message = ViewBag.Message ?? string.Empty;
+
 }
 <style>
     .lblforprint {
@@ -399,15 +401,15 @@
                                     <i class="bi bi-file-earmark-pdf"></i> Document View
                                 </div>
                                 <div class="card-body">
-                                    @* Example: Show uploaded document links or previews *@
-                                    @*  @if (Model.OnlineApplicationResponse.Documents != null && Model.OnlineApplicationResponse.Documents.Any())
+                                     @*Example: Show uploaded document links or previews *@
+                                     @if (Model.Documents != null && Model.Documents.Any())
                             {
                             <ul class="list-group">
-                            @foreach (var doc in Model.OnlineApplicationResponse.Documents)
+                            @foreach (var doc in Model.Documents)
                             {
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-paperclip"></i> @doc.FileName</span>
-                            <a href="@doc.Url" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                            <a href="@doc.FilePath" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
                             </li>
                             }
                             </ul>
@@ -415,7 +417,7 @@
                             else
                             {
                             <span class="text-muted">No documents uploaded.</span>
-                            } *@
+                            } 
                                 </div>
                             </div>
                         </div>
@@ -434,3 +436,23 @@ else
     <div class="alert alert-warning">No application data found.</div>
 }
 
+<script>
+    $(document).ready(function () {        
+        var message = '@message'; 
+
+       if (message !== '') {
+            // Display SweetAlert with custom styles
+            Swal.fire({      
+                html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
+                icon: 'success', 
+                confirmButtonText: 'OK',  // Text on the confirm button
+                confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
+                customClass: {
+                    title: 'font-weight-bold',  // Optional: makes the title bold
+                    htmlContainer: 'text-dark'  // Optional: sets the message text color
+                },
+                padding: '25px'  // Adds padding to the alert for better spacing
+            });
+        }
+    });
+</script>

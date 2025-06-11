@@ -261,7 +261,7 @@ namespace DataTransferObject.Model
         [Range(0, double.MaxValue, ErrorMessage = "Salary After Deductions must be a positive number.")]
         public decimal? salary_After_Deductions { get; set; }
 
-        [Required]
-        public int ApplicationType { get; set; } 
+       // [Required]
+        //public int ApplicationType { get; set; } 
     }
 }
