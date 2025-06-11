@@ -1,4 +1,5 @@
 ﻿using DataTransferObject.Model;
+using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace DataAccessLayer.Interfaces
     public interface IUserProfile : IGenericRepositoryDL<UserProfile>
     {
         Task<UserProfile> GetByUserName(string userName);
-        Task<UserProfile> GetAllUser(bool status);
+        Task<List<DTOUserProfileResponse>> GetAllUser(bool status);
     }
 }

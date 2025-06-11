@@ -42,15 +42,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\GetAllUsers.cshtml" />
     <Content Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
-    <Content Remove="Views\Home\CORecords.cshtml" />
+    <Content Remove="Views\Home\UserApprovalLists.cshtml" />
     <Content Remove="wwwroot\DevJs\onlineApplication.js" />
     <Content Remove="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Account\GetAllUsers.cshtml" />
     <None Include="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
-    <None Include="Views\Home\CORecords.cshtml" />
+    <None Include="Views\Home\UserApprovalLists.cshtml" />
     <None Include="wwwroot\DevJs\onlineApplication.js" />
     <None Include="wwwroot\images\auth\.DS_Store" />
     <None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
@@ -98,12 +100,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Account\GetAllUsers.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Home\CORecords.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Home\CORecords.cshtml" />
+    <UpToDateCheckInput Remove="Views\Account\GetAllUsers.cshtml" />
   </ItemGroup>
 
 </Project>

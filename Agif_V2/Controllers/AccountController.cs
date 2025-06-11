@@ -156,6 +156,7 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetAllUsers()
         {
+            await _userProfile.GetAllUser(false);
             return View();
         }
     }

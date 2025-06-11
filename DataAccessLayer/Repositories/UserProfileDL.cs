@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
+using DataTransferObject.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,23 +24,29 @@ namespace DataAccessLayer.Repositories
             return await _context.UserProfiles.FirstOrDefaultAsync(x => x.userName == userName);
         }
 
-        public async Task<UserProfile?> GetAllUser(bool status)
+        public async Task<List<DTOUserProfileResponse?>> GetAllUser(bool status)
         {
             var users = await (from user in _context.Users
                         join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
                         join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
                         join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
                         join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
+                        join rank in _context.MRanks on profile.rank equals rank.RankId
                         where mapping.IsActive == status
-                               select new
+                        select new DTOUserProfileResponse
                         {
-                            Id = profile.ProfileId,
-                            UserId = user.Id,
-                            userName = user.UserName
-                          
+                            DomainId = user.DomainId,
+                            ProfileName = rank.RankName +" "+ profile.userName,
+                            AppointmentName = appt.AppointmentName,
+                            ArmyNo = profile.ArmyNo,
+                            EmailId = profile.Email,
+                            MobileNo = profile.MobileNo,
+                            UnitName = unit.UnitName,
+
                         }).ToListAsync();
                         
-            return null;
+            return users;
         }
+
     }
 }
