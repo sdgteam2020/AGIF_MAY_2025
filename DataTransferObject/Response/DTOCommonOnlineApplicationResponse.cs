@@ -13,5 +13,7 @@ namespace DataTransferObject.Response
         public DTOHbaApplicationresponse? HbaApplicationResponse { get; set; }
         public DTOPCAApplicationresponse? PcaApplicationResponse { get; set; }
         public CommonDataonlineResponse? OnlineApplicationResponse { get; set; }
+
+        public List<DTODocumentFileView>? Documents { get; set; }
     }
 }

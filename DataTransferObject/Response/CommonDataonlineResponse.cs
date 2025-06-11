@@ -185,6 +185,6 @@ namespace DataTransferObject.Response
 
         public decimal? salary_After_Deductions { get; set; }
 
-        public int ApplicationType { get; set; }
+       // public int ApplicationType { get; set; }
     }
 }

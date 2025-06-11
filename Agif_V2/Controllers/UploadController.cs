@@ -37,6 +37,8 @@ namespace Agif_V2.Controllers
                 return NotFound();
             }
 
+            ViewBag.Message = TempData["Message"];
+
             return View(application);
         }
 
@@ -89,6 +91,7 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
+           /*
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads");
             if (!Directory.Exists(tempFolder))
             {
@@ -145,7 +148,7 @@ namespace Agif_V2.Controllers
 
             await _IDocumentUpload.Add(fileUpload);
 
-
+            */
             TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId,formType = formType });
             //TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";

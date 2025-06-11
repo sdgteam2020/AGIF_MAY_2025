@@ -290,8 +290,8 @@ namespace Agif_V2.Controllers
                 // Preserve the loan type for the view
                 return View("OnlineApplication", model);
             }
-            
-            
+
+            /*
             else
             {
                 CommonDataModel common = new CommonDataModel();
@@ -337,20 +337,22 @@ namespace Agif_V2.Controllers
                     }
 
                 }
-
+            
                 catch(Exception ex)
                 {
 
                     ModelState.AddModelError("", "An error occurred while processing your application.");
                 }
-               // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+            */
+            // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
-                int Applicationid = common.ApplicationId;
-                TempData["applicationId"] = Applicationid;
+           // int Applicationid = common.ApplicationId;
+
+                TempData["applicationId"] = 1;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
                 return RedirectToAction("Upload", "Upload", new { formType });
 
-            }
+            
             
            
 

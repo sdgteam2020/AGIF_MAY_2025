@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
 using DataTransferObject.Response;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -186,9 +187,30 @@ namespace DataAccessLayer.Repositories
 
                     // Directly assign the DTO
                     data.PcaApplicationResponse = PcaModal;
+                }               
+
+                var DocumentModel= _context.DocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
+
+                if(DocumentModel!=null)
+                {
+                    string ArmyNo = $"{result.Number}";
+                    string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", $"{formtype}_{ArmyNo}_{applicationId}");
+
+                    // Get all files in the directory
+                    if (Directory.Exists(directoryPath))
+                    {
+                        // Get all files in the directory
+                        var fileNames = Directory.GetFiles(directoryPath);
+
+                        // Prepare documents for the view
+                        data.Documents = fileNames.Select(filePath => new DTODocumentFileView
+                        {
+                            FileName = Path.GetFileName(filePath),
+                            FilePath = Path.Combine("/TempUploads", formtype + "_" + ArmyNo + "_" + applicationId, Path.GetFileName(filePath))
+                        }).ToList();
+                    }
                 }
-                
-                    
+              
 
 
 
