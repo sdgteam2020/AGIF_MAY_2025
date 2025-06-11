@@ -68,7 +68,7 @@ namespace DataAccessLayer.Repositories
         {
             DTOCommonOnlineApplicationResponse data = new DTOCommonOnlineApplicationResponse();
 
-            var result = (from common in _context.trnApplications
+            var result = (from common in _context.Applications
                           join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
                           from prefix in prefixGroup.DefaultIfEmpty()
                           join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
@@ -128,7 +128,7 @@ namespace DataAccessLayer.Repositories
                 if(formtype=="HBA")
                 {
                    
-                    var Hbamodel = (from hba in _context.trnHBA
+                    var Hbamodel = (from hba in _context.HBA
                                      join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.Id into loanTypeGroup
                                      from loanType in loanTypeGroup.DefaultIfEmpty()
                                      where hba.ApplicationId == applicationId
@@ -149,7 +149,7 @@ namespace DataAccessLayer.Repositories
 
                 else if(formtype == "CA")
                  {
-                    var Carmodel = (from car in _context.trnCar
+                    var Carmodel = (from car in _context.Car
                                     join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
                                     where car.ApplicationId == applicationId
@@ -169,7 +169,7 @@ namespace DataAccessLayer.Repositories
 
                 else if(formtype == "PCA")
                 {
-                    var PcaModal = (from pca in _context.trnPCA
+                    var PcaModal = (from pca in _context.PCA
                                     join loanType in _context.MLoanTypes on pca.computer_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
                                     where pca.ApplicationId == applicationId

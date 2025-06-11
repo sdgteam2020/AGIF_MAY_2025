@@ -14,7 +14,7 @@ namespace DataTransferObject.Response
         public string? PCA_modelName { get; set; }
 
         public decimal? computerCost { get; set; }
-        public int? PCA_LoanFreq { get; set; }
+        public string? PCA_LoanFreq { get; set; }
 
         public decimal? PCA_Amt_Eligible_for_loan { get; set; }
         public decimal? PCA_EMI_Eligible { get; set; }

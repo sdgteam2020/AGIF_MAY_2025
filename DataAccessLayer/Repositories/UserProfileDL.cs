@@ -26,7 +26,7 @@ namespace DataAccessLayer.Repositories
         public async Task<UserProfile?> GetAllUser(bool status)
         {
             var users = await (from user in _context.Users
-                        join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
+                        join mapping in _context.UserMappings on user.Id equals mapping.UserID
                         join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
                         join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
                         join appt in _context.MAppointments on profile.ApptId equals appt.ApptId

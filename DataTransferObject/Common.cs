@@ -18,7 +18,7 @@ namespace DataTransferObject
 
         [Required]
         [DataType(DataType.Date)]
-        [Column(TypeName = "datetime2")]
-        public DateTime? UpdatedOn { get; set; } 
+        [Column(TypeName = "datetime")]
+        public DateTime? UpdatedOn { get; set; } = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("India Standard Time"));
     }
 }

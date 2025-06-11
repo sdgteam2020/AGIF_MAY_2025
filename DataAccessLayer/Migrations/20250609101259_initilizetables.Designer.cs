@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250611042926_Adding Foreign Key Relation")]
-    partial class AddingForeignKeyRelation
+    [Migration("20250609101259_initilizetables")]
+    partial class initilizetables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -201,7 +201,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -218,11 +218,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("CarId");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("CA_LoanFreq");
-
-                    b.ToTable("trnCar");
+                    b.ToTable("Car");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
@@ -241,12 +237,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<int>("ApplicantType")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ApplicationType")
-                        .HasColumnType("int");
 
                     b.Property<int>("ArmyPostOffice")
                         .HasColumnType("int");
@@ -327,9 +317,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<decimal?>("Lra")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("MUnitsPresentUnitId")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("MiscPay")
                         .HasColumnType("decimal(18,2)");
@@ -437,7 +424,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -478,25 +465,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("ApplicationId");
 
-                    b.HasIndex("ApplicantType");
-
-                    b.HasIndex("ApplicationType");
-
-                    b.HasIndex("ArmyPostOffice");
-
-                    b.HasIndex("ArmyPrefix");
-
-                    b.HasIndex("DdlRank");
-
-                    b.HasIndex("MUnitsPresentUnitId");
-
-                    b.HasIndex("ParentUnit");
-
-                    b.HasIndex("PresentUnit");
-
-                    b.HasIndex("RegtCorps");
-
-                    b.ToTable("trnApplications");
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.DocumentUpload", b =>
@@ -544,16 +513,14 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
 
                     b.HasKey("UploadId");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("trnDocumentUpload");
+                    b.ToTable("DocumentUpload");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ErrorLog", b =>
@@ -610,9 +577,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("HBA_EMI_Eligible")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("HBA_LoanFreq")
+                    b.Property<string>("HBA_LoanFreq")
+                        .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("HBA_approxDisbursementAmt")
                         .HasColumnType("decimal(18,2)");
@@ -641,18 +609,14 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
 
                     b.HasKey("HbaId");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("HBA_LoanFreq");
-
-                    b.ToTable("trnHBA");
+                    b.ToTable("HBA");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MApplicantType", b =>
@@ -708,13 +672,14 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("DataTransferObject.Model.MAppointment", b =>
                 {
-                    b.Property<int>("ApptId")
+                    b.Property<short>("ApptId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("smallint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApptId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("ApptId"));
 
                     b.Property<string>("AppointmentAbbreviation")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AppointmentName")
@@ -727,7 +692,7 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Updatedby")
+                    b.Property<int>("Updatedby")
                         .HasColumnType("int");
 
                     b.HasKey("ApptId");
@@ -744,7 +709,6 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ArmyPostOffice")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -808,18 +772,16 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationType");
-
                     b.ToTable("MLoanTypes");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MRank", b =>
                 {
-                    b.Property<int>("RankId")
+                    b.Property<short>("RankId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("smallint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RankId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("RankId"));
 
                     b.Property<byte>("ApplyForId")
                         .HasColumnType("tinyint");
@@ -844,7 +806,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -921,6 +883,30 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("MUnits");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.OnlineApplications", b =>
+                {
+                    b.Property<int>("Application_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Application_Id"));
+
+                    b.Property<string>("AadharNo")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("ApplicationType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PANNo")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("Application_Id");
+
+                    b.ToTable("OnlineApplications");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.PCAApplicationModel", b =>
                 {
                     b.Property<int>("PcaId")
@@ -947,8 +933,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("PCA_EMI_Eligible")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("PCA_LoanFreq")
-                        .HasColumnType("int");
+                    b.Property<string>("PCA_LoanFreq")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PCA_approxDisbursementAmt")
                         .HasColumnType("decimal(18,2)");
@@ -975,7 +962,7 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime");
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
@@ -991,11 +978,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("PcaId");
 
-                    b.HasIndex("ApplicationId");
-
-                    b.HasIndex("PCA_LoanFreq");
-
-                    b.ToTable("trnPCA");
+                    b.ToTable("PCA");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>
@@ -1006,8 +989,8 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MappingId"));
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ProfileId")
                         .HasColumnType("int");
@@ -1015,24 +998,13 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("UnitId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Updatedby")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MappingId");
 
-                    b.HasIndex("ProfileId");
-
-                    b.HasIndex("UnitId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("trnUserMappings");
+                    b.ToTable("UserMappings");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.UserProfile", b =>
@@ -1048,30 +1020,25 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("ArmyNo")
                         .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<string>("MobileNo")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Updatedby")
-                        .HasColumnType("int");
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
 
                     b.Property<int>("rank")
                         .HasColumnType("int");
@@ -1084,12 +1051,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProfileId");
-
-                    b.HasIndex("ApptId");
-
-                    b.HasIndex("rank");
-
-                    b.HasIndex("regtCorps");
 
                     b.ToTable("UserProfiles");
                 });
@@ -1197,138 +1158,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DataTransferObject.Model.CarApplicationModel", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MLoanFreq", "MLoanFreq")
-                        .WithMany()
-                        .HasForeignKey("CA_LoanFreq")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModels");
-
-                    b.Navigation("MLoanFreq");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MApplicantType", "MApplicantType")
-                        .WithMany()
-                        .HasForeignKey("ApplicantType")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MApplicationType", "MApplicationTypes")
-                        .WithMany()
-                        .HasForeignKey("ApplicationType")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MArmyPostOffice", "MArmyPostOffices")
-                        .WithMany()
-                        .HasForeignKey("ArmyPostOffice")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MArmyPrefix", "MArmyPrefix")
-                        .WithMany()
-                        .HasForeignKey("ArmyPrefix")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MRank", "MRank")
-                        .WithMany()
-                        .HasForeignKey("DdlRank")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MUnit", "MUnitsPresent")
-                        .WithMany()
-                        .HasForeignKey("MUnitsPresentUnitId");
-
-                    b.HasOne("DataTransferObject.Model.MUnit", "MUnitsParent")
-                        .WithMany()
-                        .HasForeignKey("ParentUnit")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MUnit", null)
-                        .WithMany()
-                        .HasForeignKey("PresentUnit")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired()
-                        .HasConstraintName("FK_trnApplications_MUnits_PresentUnit");
-
-                    b.HasOne("DataTransferObject.Model.MRegtCorps", "MRegtCorps")
-                        .WithMany()
-                        .HasForeignKey("RegtCorps")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MApplicantType");
-
-                    b.Navigation("MApplicationTypes");
-
-                    b.Navigation("MArmyPostOffices");
-
-                    b.Navigation("MArmyPrefix");
-
-                    b.Navigation("MRank");
-
-                    b.Navigation("MRegtCorps");
-
-                    b.Navigation("MUnitsParent");
-
-                    b.Navigation("MUnitsPresent");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.DocumentUpload", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModels");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.HBAApplicationModel", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MLoanFreq", "MLoanFreq")
-                        .WithMany()
-                        .HasForeignKey("HBA_LoanFreq")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModels");
-
-                    b.Navigation("MLoanFreq");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MLoanType", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MApplicationType", "MApplicationTypes")
-                        .WithMany()
-                        .HasForeignKey("ApplicationType")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MApplicationTypes");
-                });
-
             modelBuilder.Entity("DataTransferObject.Model.MRank", b =>
                 {
                     b.HasOne("DataTransferObject.Model.MApplyFor", "MApplyFor")
@@ -1338,79 +1167,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("MApplyFor");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.PCAApplicationModel", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MLoanFreq", "MLoanFreq")
-                        .WithMany()
-                        .HasForeignKey("PCA_LoanFreq")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModels");
-
-                    b.Navigation("MLoanFreq");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MUnit", "MUnit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Identitytable.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("MUnit");
-
-                    b.Navigation("UserProfile");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.UserProfile", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MAppointment", "MAppointments")
-                        .WithMany()
-                        .HasForeignKey("ApptId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MRank", "MRank")
-                        .WithMany()
-                        .HasForeignKey("rank")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MRegtCorps", "MRegtCorps")
-                        .WithMany()
-                        .HasForeignKey("regtCorps")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MAppointments");
-
-                    b.Navigation("MRank");
-
-                    b.Navigation("MRegtCorps");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

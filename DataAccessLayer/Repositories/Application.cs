@@ -18,7 +18,7 @@ namespace DataAccessLayer.Repositories
         }
         public async Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl)
         {
-            var query = _context.trnApplications;
+            var query = _context.Applications;
             if (dTOGetAppl.status > 0)
             {
                 query = query;

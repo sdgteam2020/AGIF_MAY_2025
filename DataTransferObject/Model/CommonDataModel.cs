@@ -247,13 +247,6 @@ namespace DataTransferObject.Model
         public decimal? salary_After_Deductions { get; set; }
 
         [Required]
-        public int ApplicationType { get; set; }
-        [ForeignKey("ApplicationType")]
-        public MApplicationType? MApplicationTypes { get; set; }
-
-        [Required]
-        public int ApplicantType { get ; set; }
-        [ForeignKey("ApplicantType")]
-        public MApplicantType? MApplicantType { get; set; }
+        public int ApplicationType { get; set; } 
     }
 }

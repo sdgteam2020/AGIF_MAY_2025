@@ -33,9 +33,7 @@ namespace DataTransferObject.Model
 
         [Required(ErrorMessage = "Loan Frequency is required.")]
         [StringLength(50, ErrorMessage = "Loan Frequency can't be longer than 50 characters.")]
-        public int? HBA_LoanFreq { get; set; }
-        [ForeignKey("HBA_LoanFreq")]
-        public MLoanFreq? MLoanFreq {  get; set; }
+        public string? HBA_LoanFreq { get; set; }
 
         [Required(ErrorMessage = "Repaying Capacity is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for repaying capacity.")]
