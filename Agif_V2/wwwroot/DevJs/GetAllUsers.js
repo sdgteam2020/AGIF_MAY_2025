@@ -1,0 +1,337 @@
+﻿$(document).ready(function () {
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get("status");
+
+    // Add CSS for toggle slider
+    $('<style>')
+        .prop('type', 'text/css')
+        .html(`
+            .toggle-switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 28px;
+            }
+
+            .toggle-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #dc3545;
+                transition: .4s;
+                border-radius: 28px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 20px;
+                width: 20px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked + .slider {
+                background-color: #198754;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(32px);
+            }
+
+            .status-text {
+                font-size: 0.8rem;
+                margin-left: 10px;
+                font-weight: 500;
+            }
+
+            .status-active {
+                color: #198754;
+            }
+
+            .status-inactive {
+                color: #dc3545;
+            }
+
+            .action-container {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+        `)
+        .appendTo('head');
+
+    BindUsersData(value);
+});
+
+function BindUsersData(status) {
+    // Destroy existing DataTable if it exists
+    if ($.fn.DataTable.isDataTable('#tblData')) {
+        $('#tblData').DataTable().destroy();
+    }
+
+    // Initialize DataTable with server-side processing
+    var table = $('#tblData').DataTable({
+        processing: true,
+        serverSide: true,
+        filter: true,
+        order: [[0, 'desc']], // Default sorting on the first column
+        ajax: {
+            url: "/Account/GetAllUsersListPaginated",
+            type: "POST",
+            contentType: "application/x-www-form-urlencoded",
+            data: function (data) {
+                console.log(data);
+                return {
+                    draw: data.draw,
+                    start: data.start,
+                    length: data.length,
+                    searchValue: data.search.value,
+                    sortColumn: data.order.length > 0 ? data.columns[data.order[0].column].data : '',
+                    sortDirection: data.order.length > 0 ? data.order[0].dir : '',
+                    status: status // Pass the status parameter
+                };
+                
+            },
+            error: function (xhr, error, code) {
+                console.error('Error loading data:', error);
+                alert('Error loading data. Please try again.');
+            }
+        },
+        columns: [
+            {
+                data: null,
+                name: "SerialNumber",
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                data: "profileName",
+                name: "ProfileName",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "emailId",
+                name: "EmailId",
+                render: function (data, type, row) {
+                    return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
+                }
+            },
+            {
+                data: "mobileNo",
+                name: "MobileNo",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "armyNo",
+                name: "ArmyNo",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "unitName",
+                name: "UnitName",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "appointmentName",
+                name: "AppointmentName",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "regtName",
+                name: "RegtName",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "isPrimary",
+                name: "IsPrimary",
+                render: function (data, type, row) {
+                    return data ? 'Primary' : 'Secondary';
+                }
+            },
+            {
+                data: null,
+                orderable: false,
+                className: 'noExport',
+                render: function (data, type, row) {
+                    const isActive = row.isActive || false; // Assuming your data has isActive field
+                    const statusText = isActive ? 'Active' : 'Inactive';
+                    const statusClass = isActive ? 'status-active' : 'status-inactive';
+
+                    return `
+                        <div class='action action-container'>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="cls-toggle-status" data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                            <span class="status-text ${statusClass}">${statusText}</span>
+                        </div>
+                    `;
+                }
+            }
+        ],
+        language: {
+            search: "",
+            searchPlaceholder: "Search users...",
+            processing: "Loading users...",
+            emptyTable: "No users found",
+            info: "Showing _START_ to _END_ of _TOTAL_ users",
+            infoEmpty: "Showing 0 to 0 of 0 users",
+            infoFiltered: "(filtered from _MAX_ total users)",
+            lengthMenu: "Show _MENU_ users per page",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        },
+        dom: 'lBfrtip',
+        buttons: [
+            //{
+            //    extend: 'excel',
+            //    title: 'Users List',
+            //    exportOptions: {
+            //        columns: "thead th:not(.noExport)"
+            //    }
+            //}
+        ],
+        drawCallback: function (settings) {
+            // Re-bind toggle switch events after each draw
+            $('#tblData tbody').off('change', '.cls-toggle-status').on('change', '.cls-toggle-status', function () {
+                const $toggle = $(this);
+                const domainId = $toggle.data('domain-id');
+                const isActive = $toggle.is(':checked');
+                const statusText = $toggle.closest('.action-container').find('.status-text');
+
+                // Revert the toggle immediately; will be set again on confirm
+                $toggle.prop('checked', !isActive);
+
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `Do you want to ${isActive ? 'activate' : 'deactivate'} this user?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Set back the correct toggle value
+                        $toggle.prop('checked', isActive);
+
+                        // Update status text immediately for better UX
+                        if (isActive) {
+                            statusText.text('Active').removeClass('status-inactive').addClass('status-active');
+                        } else {
+                            statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+                        }
+
+                        // Call function to update user status
+                        updateUserStatus(domainId, isActive, $toggle);
+                    }
+                });
+            });
+        }
+
+    });
+}
+
+// Function to handle user status update
+function updateUserStatus(domainId, isActive, toggleElement) {
+    $.ajax({
+        url: "/Account/UpdateUserStatus", 
+        type: "POST",
+        data: {
+            domainId: domainId,
+            isActive: isActive
+        },
+        success: function (response) {
+            if (response.success) {
+                console.log(`User ${domainId} status updated to: ${isActive ? 'Active' : 'Inactive'}`);
+                $('#tblData').DataTable().ajax.reload(null, false);
+                showSuccessMessage(`User status updated to: ${isActive ? 'Active' : 'Inactive'}`);
+            } else {
+                revertToggle(toggleElement, !isActive);
+                console.error('Failed to update user status:', response.message);
+                showErrorMessage('Failed to update user status: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            revertToggle(toggleElement, !isActive);
+            console.error('Error updating user status:', error);
+        }
+    });
+}
+
+function revertToggle(toggleElement, originalState) {
+    toggleElement.prop('checked', originalState);
+    const statusText = toggleElement.closest('.action-container').find('.status-text');
+
+    if (originalState) {
+        statusText.text('Active').removeClass('status-inactive').addClass('status-active');
+    } else {
+        statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+    }
+}
+
+function showSuccessMessage(message) {
+    // Using Bootstrap alert (if you have Bootstrap)
+    const alertHtml = `
+        <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+            <i class="lni lni-checkmark-circle"></i> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    $('body').append(alertHtml);
+
+    // Auto remove after 3 seconds
+    setTimeout(function () {
+        $('.alert-success').fadeOut(300, function () {
+            $(this).remove();
+        });
+    }, 2000);
+}
+
+function showErrorMessage(message) {
+    // Using Bootstrap alert (if you have Bootstrap)
+    const alertHtml = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+            <i class="lni lni-cross-circle"></i> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    $('body').append(alertHtml);
+
+    // Auto remove after 5 seconds
+    setTimeout(function () {
+        $('.alert-danger').fadeOut(300, function () {
+            $(this).remove();
+        });
+    }, 2000);
+}

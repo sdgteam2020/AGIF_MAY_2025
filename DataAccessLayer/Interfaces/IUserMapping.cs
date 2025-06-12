@@ -10,5 +10,11 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IUserMapping : IGenericRepositoryDL<UserMapping>
     {
+        Task<UserMapping> GetByUserName(string userName);
+        Task<List<UserMapping>> GetAllUser(bool status);
+        Task<List<UserMapping>> GetByProfileId(int profileId);
+        Task<List<UserMapping>> GetByUserId(int userId);
+        Task<List<UserMapping>> GetByProfileIdAndApplicationId(int profileId, int applicationId);
+        Task<List<UserMapping>> GetByProfileIdAndStatus(int profileId, int status);
     }
 }

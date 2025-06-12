@@ -6532,3 +6532,29 @@ h6,
         transform: rotate(360deg);
     }
 }
+
+.agi-title-font-size {
+    font-size: 45px;
+    font-weight: 600;
+}
+#headerText {
+    color: rgb(199, 0, 57);
+    font-weight: 800;
+    text-shadow: 1px 1px 2px yellow, 0 0 25px white, 0 0 5px yellow;
+    font-size: 40px;
+}
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 100%;
+    }
+}
+.table > thead {
+    vertical-align: bottom;
+    background-color: #310;
+}

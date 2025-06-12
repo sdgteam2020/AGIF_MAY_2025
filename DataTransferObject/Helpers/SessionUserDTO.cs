@@ -12,6 +12,8 @@ namespace DataTransferObject.Helpers
         public string UserName { get; set; } = string.Empty;
         public bool IsCO { get; set; }
         public string Role { get; set; } = string.Empty;
+        public int MappingId { get; set; }
+        public int UserId { get; set; }
 
     }
 }

@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewData["Title"] = "User Approval List";
+﻿@{
+    ViewData["Title"] = "Users Application List";
 }
 @using DataTransferObject.Helpers;
 @model SessionUserDTO;
@@ -8,13 +7,17 @@
 <div class="container">
     <div class="card mt-2">
         <div class="card-header">
-            @if (ViewBag.UserStatus != null && (bool)ViewBag.UserStatus)
+            @if (ViewBag.Status != null && ViewBag.Status == 1)
             {
-                <span>Active Users List</span>
+                <span>Pending Applications</span>
+            }
+            else if (ViewBag.Status != null && ViewBag.Status == 2)
+            {
+                <span>Approved Applications</span>
             }
             else
             {
-                <span>Inactive Users List</span>
+                <span>Rejected Applications</span>
             }
         </div>
         <div class="card-body">
@@ -25,14 +28,12 @@
                             <thead>
                                 <tr>
                                     <th><h6>Sr.No.</h6></th>
-                                    <th><h6>Profile Name</h6></th>
-                                    <th><h6>Email</h6></th>
-                                    <th><h6>Mobile No</h6></th>
                                     <th><h6>Army No</h6></th>
-                                    <th><h6>Unit Name</h6></th>
-                                    <th><h6>Appointment</h6></th>
-                                    <th><h6>Regiment</h6></th>
-                                    <th><h6>User Type</h6></th>
+                                    <th><h6>Applicant Name</h6></th>
+                                    <th><h6>Application Type</h6></th>
+                                    <th><h6>Date of Birth</h6></th>
+                                    <th><h6>Applied Date</h6></th>
+                                    <th><h6>Present Status</h6></th>
                                     <th class="noExport"><h6>Action</h6></th>
                                 </tr>
                             </thead>
@@ -57,7 +58,6 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.bootstrap5.min.js"></script>
     <!-- SweetAlert2 for better alerts (optional) -->
-
     <!-- Your custom script -->
     <script src="~/devjs/getallusers.js"></script>
 }

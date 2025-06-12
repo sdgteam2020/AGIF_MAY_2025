@@ -20,6 +20,7 @@ namespace DataTransferObject.Response
         public string? EmailId { get; set; }
         public bool IsPrimary { get; set; }
         public bool IsFmn { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

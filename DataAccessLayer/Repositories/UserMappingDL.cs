@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace DataAccessLayer.Repositories
 {
@@ -16,7 +18,46 @@ namespace DataAccessLayer.Repositories
         {
             _context = context;
         }
-        
-        // Additional methods specific to UserMapping can be added here
+
+        public Task<List<UserMapping>> GetAllUser(bool status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<UserMapping>> GetByApplicationId(int applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<UserMapping>> GetByProfileId(int profileId)
+        {
+            var userMappings = await _context.trnUserMappings
+                .Where(um => um.ProfileId == profileId)
+                .ToListAsync();
+            return userMappings;
+        }
+
+        public Task<List<UserMapping>> GetByProfileIdAndApplicationId(int profileId, int applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<UserMapping>> GetByProfileIdAndStatus(int profileId, int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<UserMapping>> GetByUserId(int userId)
+        {
+            var userMappings = await _context.trnUserMappings
+                .Where(um => um.UserId == userId)
+                .ToListAsync();
+            return userMappings;
+        }
+
+        public Task<UserMapping> GetByUserName(string userName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

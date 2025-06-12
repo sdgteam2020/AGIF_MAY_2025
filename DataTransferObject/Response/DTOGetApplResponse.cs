@@ -12,7 +12,7 @@ namespace DataTransferObject.Response
         public int ApplicationId { get; set; }
         public string ArmyNo { get; set; }
         public string Name { get; set; }
-        public string ApplicationType { get; set; }
+        public int ApplicationType { get; set; }
         public string DateOfBirth { get; set; }
         public string PresentStatus { get; set; }
         

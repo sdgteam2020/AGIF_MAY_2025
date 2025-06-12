@@ -255,5 +255,6 @@ namespace DataTransferObject.Model
         public int ApplicantType { get ; set; }
         [ForeignKey("ApplicantType")]
         public MApplicantType? MApplicantType { get; set; }
+        public int StatusCode { get; set; }
     }
 }

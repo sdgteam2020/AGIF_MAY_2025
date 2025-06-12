@@ -27,25 +27,30 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOUserProfileResponse?>> GetAllUser(bool status)
         {
             var users = await (from user in _context.Users
-                        join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
-                        join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
-                        join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
-                        join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
-                        join rank in _context.MRanks on profile.rank equals rank.RankId
-                        where mapping.IsActive == status
-                        select new DTOUserProfileResponse
-                        {
-                            DomainId = user.DomainId,
-                            ProfileName = rank.RankName +" "+ profile.userName,
-                            AppointmentName = appt.AppointmentName,
-                            ArmyNo = profile.ArmyNo,
-                            EmailId = profile.Email,
-                            MobileNo = profile.MobileNo,
-                            UnitName = unit.UnitName,
+                               join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
+                               join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
+                               join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+                               join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
+                               join rank in _context.MRanks on profile.rank equals rank.RankId
+                               join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
+                               where mapping.IsActive == status
+                               select new DTOUserProfileResponse
+                               {
+                                   DomainId = profile.userName,
+                                   ProfileName = rank.RankName + " " + profile.Name,
+                                   AppointmentName = appt.AppointmentName,
+                                   ArmyNo = profile.ArmyNo,
+                                   EmailId = profile.Email,
+                                   MobileNo = profile.MobileNo,
+                                   UnitName = unit.UnitName,
+                                   RankName = rank.RankName,
+                                   RegtName = regt.RegtName,
+                                   IsActive = status,
+                                   IsPrimary = mapping.IsPrimary,
+                                   IsFmn = mapping.IsFmn,
+                               }).ToListAsync();
 
-                        }).ToListAsync();
-                        
-            return users;
+            return users!;
         }
 
     }

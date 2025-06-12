@@ -5,6 +5,8 @@ using DataTransferObject.Helpers;
 using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using DataTransferObject.Response;
+using iText.Commons.Actions.Contexts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,15 +52,20 @@ namespace Agif_V2.Controllers
             if(result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
+                int userId = Convert.ToInt32(await _userManager.GetUserIdAsync(user));
+                var mappingId =  _userMapping.GetByUserId(userId).Result.FirstOrDefault();
                 var roles = await _userManager.GetRolesAsync(user);
                 string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
                 SessionUserDTO sessionUserDTO = new SessionUserDTO
                 {
                     UserName = user.UserName,
-                    Role = role
+                    UserId = userId,
+                    ProfileId = _userProfile.GetByUserName(model.UserName).Result.ProfileId,
+                    MappingId  = mappingId.MappingId,
+
                 };
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
-                SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+                //SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
                 
                 if(roles.Contains("Admin"))
@@ -67,8 +74,15 @@ namespace Agif_V2.Controllers
                 }
                 else
                 {
-                    var ActiveCO = await _userProfile.GetByUserName(model.UserName);
-                    bool isCOActive = ActiveCO.IsActive;
+                    //var ActiveCO = await _userProfile.GetByUserName(model.UserName);
+                    //bool isCOActive = ActiveCO.IsActive;
+                    int profileId = _userProfile.GetByUserName(model.UserName).Result.ProfileId;
+                    var userMapping = _userMapping.GetByProfileId(profileId).Result.FirstOrDefault();
+                    if (userMapping == null)
+                    {
+                        return Json(new { success = false, message = "User mapping not found." });
+                    }
+                    bool isCOActive = userMapping.IsActive;
                     if(!isCOActive)
                     {
                         HttpContext.Session.SetString("userActivate", "false");
@@ -139,6 +153,7 @@ namespace Agif_V2.Controllers
                 UserMapping userMapping = new UserMapping
                 {
                     UserId = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
+                    IsActive = false,
                     ProfileId = userProfile.ProfileId,
                     UnitId = signUpDto.UnitId,
                     UpdatedOn = DateTime.Now
@@ -154,10 +169,114 @@ namespace Agif_V2.Controllers
          
         }
 
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers(bool status)
         {
-            await _userProfile.GetAllUser(false);
+            ViewBag.UserStatus = status;
             return View();
         }
+
+        public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
+        {
+            try
+            {
+                bool userStatus = false;
+                if (!string.IsNullOrEmpty(status))
+                {
+                    userStatus = status.ToLower() == "true";
+                }
+
+                var queryableData = await _userProfile.GetAllUser(userStatus);
+
+                var totalRecords = queryableData.Count();
+
+                var query = queryableData.AsQueryable();
+
+                if (!string.IsNullOrEmpty(request.searchValue))
+                {
+                    string searchValue = request.searchValue.ToLower();
+                    query = query.Where(x =>
+                        x.ProfileName.ToLower().Contains(searchValue) ||
+                        x.EmailId.ToLower().Contains(searchValue) ||
+                        x.MobileNo.ToLower().Contains(searchValue) ||
+                        x.ArmyNo.ToLower().Contains(searchValue) ||
+                        x.UnitName.ToLower().Contains(searchValue) ||
+                        x.AppointmentName.ToLower().Contains(searchValue) ||
+                        x.RegtName.ToLower().Contains(searchValue)
+                    );
+                }
+
+                var filteredRecords = query.Count();
+
+                if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+                {
+                    bool ascending = request.sortDirection.ToLower() == "asc";
+
+                    query = request.sortColumn.ToLower() switch
+                    {
+                        "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
+                        "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
+                        "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
+                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                        "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
+                        "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
+                        "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
+                        "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
+                        "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
+                        "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
+                        _ => query 
+                    };
+                }
+
+                // Paginate the result
+                var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+                var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
+                {
+                    draw = request.Draw,
+                    recordsTotal = totalRecords,
+                    recordsFiltered = filteredRecords,
+                    data = paginatedData
+                };
+
+                return Json(responseData);
+            }
+            catch (Exception ex)
+            {
+                // _logger.LogError(1001, ex, "UserDB->GetAllUsersListPaginated");
+                var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
+                {
+                    draw = 0,
+                    recordsTotal = 0,
+                    recordsFiltered = 0,
+                    data = new List<DTOUserProfileResponse>()
+                };
+                return Json(responseData);
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateUserStatus(string domainId, bool isActive)
+        {
+            if(string.IsNullOrEmpty(domainId))
+            {
+                return Json(new { success = false, message = "Domain ID cannot be null or empty." });
+            }
+            var userProfile = _userProfile.GetByUserName(domainId).Result;
+            if(userProfile == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+            int profileId = userProfile.ProfileId;
+
+            var userMapping = _userMapping.GetByProfileId(userProfile.ProfileId).Result.FirstOrDefault();
+            if (userMapping == null)
+            {
+                return Json(new { success = false, message = "User mapping not found." });
+            }
+            userMapping.IsActive = isActive;
+            await _userMapping.Update(userMapping);
+            return Json(new { success = true });
+        }
+
     }
 }

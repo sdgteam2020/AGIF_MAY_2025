@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 appsettings.json
 /Agif_V2/appsettings.json
+/Agif_V2/Views/Home/UserApprovalLists.cshtml
