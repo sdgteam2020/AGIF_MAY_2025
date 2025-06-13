@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Interfaces;
+﻿using Agif_V2.Helpers;
+using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
@@ -9,9 +10,11 @@ namespace Agif_V2.Controllers
     public class ApplicationRequestController : Controller
     {
         private readonly IUsersApplications _userApplication;
-        public ApplicationRequestController(IUsersApplications usersApplications)
+        private readonly PdfGenerator _pdfGenerator;
+        public ApplicationRequestController(IUsersApplications usersApplications, PdfGenerator pdfGenerator)
         {
             _userApplication = usersApplications;
+            _pdfGenerator = pdfGenerator;
         }
         public IActionResult Index()
         {
@@ -20,74 +23,76 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> UserApplicationList(int status)
         {
             ViewBag.Status = status;
-            //SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-            //if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
-            //{
-            //    return Unauthorized("Session expired or invalid user session.");
-            //}
-            //var app = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, 1);
             return View();
         }
-        public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int Type)
+        public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {
 
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-            if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+            if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
             {
                 return Unauthorized("Session expired or invalid user session.");
             }
 
-            var queryableData = await _userApplication.GetUsersApplication(dTOTempSession.ProfileId, Type);
+            var queryableData = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, status);
 
             var totalRecords = queryableData.Count();
 
             var query = queryableData.AsQueryable();
 
-            //if (!string.IsNullOrEmpty(request.searchValue))
-            //{
-            //    string searchValue = request.searchValue.ToLower();
-            //    query = query.Where(x =>
-            //        x.ProfileName.ToLower().Contains(searchValue) ||
-            //        x.EmailId.ToLower().Contains(searchValue) ||
-            //        x.MobileNo.ToLower().Contains(searchValue) ||
-            //        x.ArmyNo.ToLower().Contains(searchValue) ||
-            //        x.UnitName.ToLower().Contains(searchValue) ||
-            //        x.AppointmentName.ToLower().Contains(searchValue) ||
-            //        x.RegtName.ToLower().Contains(searchValue)
-            //    );
-            //}
+            if (!string.IsNullOrEmpty(request.searchValue))
+            {
+                string searchValue = request.searchValue.ToLower();
+                query = query.Where(x =>
+                    x.Name.ToLower().Contains(searchValue) ||
+                    x.ArmyNo.ToLower().Contains(searchValue) ||
+                    x.DateOfBirth.ToLower().Contains(searchValue) ||
+                    x.AppliedDate.ToLower().Contains(searchValue)
+                );
+            }
 
             var filteredRecords = query.Count();
 
-            //if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-            //{
-            //    bool ascending = request.sortDirection.ToLower() == "asc";
+            if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+            {
+                bool ascending = request.sortDirection.ToLower() == "asc";
 
-            //    query = request.sortColumn.ToLower() switch
-            //    {
-            //        "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
-            //        "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
-            //        "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
-            //        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-            //        "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
-            //        "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
-            //        "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
-            //        _ => query // Default: no sorting if column not recognized
-            //    };
-            //}
+                query = request.sortColumn.ToLower() switch
+                {
+                    "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+                    "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                    "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
+                    "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+                    _ => query // Default: no sorting if column not recognized
+                };
+            }
 
             // Paginate the result
             var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
-            var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
+            var responseData = new DTODataTablesResponse<DTOGetApplResponse>
             {
                 draw = request.Draw,
                 recordsTotal = totalRecords,
-                recordsFiltered = filteredRecords
+                recordsFiltered = filteredRecords,
+                data = paginatedData
             };
 
             return Json(responseData);
 
+        }
+
+        public async Task<IActionResult> GetApplicationDetails(int applicationId)
+        {
+            return View();
+        }
+        
+        public async Task<JsonResult> MergePdf(int applicationId)
+        {
+            bool result = true;
+            string pdfName = "MergedPdf-"+applicationId;
+            var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId);
+            return Json(new { success = result });
         }
     }
 }

@@ -9,6 +9,6 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IUsersApplications
     {
-        Task<List<DTOGetApplResponse>> GetUsersApplication(int profileId,int status);
+        Task<List<DTOGetApplResponse>> GetUsersApplication(int MappingId,int status);
     }
 }

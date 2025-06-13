@@ -11,7 +11,7 @@ function GetApplicationList(status) {
     }
 
     // Initialize DataTable with server-side processing
-    var table = $('#tblData').DataTable({
+    var table = $('#tblApplications').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -38,109 +38,98 @@ function GetApplicationList(status) {
                 alert('Error loading data. Please try again.');
             }
         },
-        //columns: [
-        //    {
-        //        data: null,
-        //        name: "SerialNumber",
-        //        orderable: false,
-        //        render: function (data, type, row, meta) {
-        //            return meta.row + meta.settings._iDisplayStart + 1;
-        //        }
-        //    },
-        //    {
-        //        data: "profileName",
-        //        name: "ProfileName",
-        //        render: function (data, type, row) {
-        //            return data || 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "emailId",
-        //        name: "EmailId",
-        //        render: function (data, type, row) {
-        //            return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "mobileNo",
-        //        name: "MobileNo",
-        //        render: function (data, type, row) {
-        //            return data || 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "armyNo",
-        //        name: "ArmyNo",
-        //        render: function (data, type, row) {
-        //            return data || 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "unitName",
-        //        name: "UnitName",
-        //        render: function (data, type, row) {
-        //            return data || 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "appointmentName",
-        //        name: "AppointmentName",
-        //        render: function (data, type, row) {
-        //            return data || 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "regtName",
-        //        name: "RegtName",
-        //        render: function (data, type, row) {
-        //            return data || 'N/A';
-        //        }
-        //    },
-        //    {
-        //        data: "isPrimary",
-        //        name: "IsPrimary",
-        //        render: function (data, type, row) {
-        //            return data ? 'Primary' : 'Secondary';
-        //        }
-        //    },
-        //    {
-        //        data: null,
-        //        orderable: false,
-        //        className: 'noExport',
-        //        render: function (data, type, row) {
-        //            const isActive = row.isActive || false; // Assuming your data has isActive field
-        //            const statusText = isActive ? 'Active' : 'Inactive';
-        //            const statusClass = isActive ? 'status-active' : 'status-inactive';
-
-        //            return `
-        //                <div class='action action-container'>
-        //                    <label class="toggle-switch">
-        //                        <input type="checkbox" class="cls-toggle-status" data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
-        //                        <span class="slider"></span>
-        //                    </label>
-        //                    <span class="status-text ${statusClass}">${statusText}</span>
-        //                </div>
-        //            `;
-        //        }
-        //    }
-        //],
-        //language: {
-        //    search: "",
-        //    searchPlaceholder: "Search users...",
-        //    processing: "Loading users...",
-        //    emptyTable: "No users found",
-        //    info: "Showing _START_ to _END_ of _TOTAL_ users",
-        //    infoEmpty: "Showing 0 to 0 of 0 users",
-        //    infoFiltered: "(filtered from _MAX_ total users)",
-        //    lengthMenu: "Show _MENU_ users per page",
-        //    paginate: {
-        //        first: "First",
-        //        last: "Last",
-        //        next: "Next",
-        //        previous: "Previous"
-        //    }
-        //},
-        //dom: 'lBfrtip',
+        columns: [
+            {
+                data: null,
+                name: "SerialNumber",
+                orderable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {
+                data: "armyNo",
+                name: "ArmyNo",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "name",
+                name: "Name",
+                render: function (data, type, row) {
+                    return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
+                }
+            },
+            {
+                data: "applicationType",
+                name: "ApplicationType",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "dateOfBirth",
+                name: "DateOfBirth",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "appliedDate",
+                name: "AppliedDate",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: null,
+                orderable: false,
+                className: 'noExport',
+                render: function (data, type, row) {
+                    if (row.isMergePdf == false) {
+                        return `
+                        <div class='action action-container'>
+                            <button class='btn btn-sm btn-outline-primary d-flex align-items-center' onclick='mergePdf(${row.applicationId})'>
+                                <i class="bi bi-eye"></i>
+                                View
+                            </button>
+                        </div>
+                    `;
+                    }
+                    else {
+                        return `
+                        <div class='action action-container'>
+                            <button class='btn btn-sm btn-outline-primary d-flex align-items-center' onclick='viewDetails(${row.applicationId})'>
+                                <i class="bi bi-eye"></i>
+                                Views
+                            </button>
+                        </div>
+                    `;
+                    }
+                    
+                }
+            }
+        ],
+        language: {
+            search: "",
+            searchPlaceholder: "Search applications...",
+            processing: "Loading applications...",
+            emptyTable: "No applications found",
+            info: "Showing _START_ to _END_ of _TOTAL_ applications",
+            infoEmpty: "Showing 0 to 0 of 0 applications",
+            infoFiltered: "(filtered from _MAX_ total applications)",
+            lengthMenu: "Show _MENU_ applications per page",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        },
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        dom: 'lBfrtip',
         //buttons: [
         //    //{
         //    //    extend: 'excel',
@@ -190,106 +179,23 @@ function GetApplicationList(status) {
     });
 }
 
-
-//async function GetApplicationList(TypeId) {
-//        var listitem = "";
-//        debugger;
-//        try {
-//            const response = await fetch(`/CORole/GetAllUSerApplicationlist?TypeId=${TypeId}`, {
-//                method: 'GET',
-//                headers: {
-//                    'Content-Type': 'application/json'
-//                }
-//            });
-
-//            if (!response.ok) {
-//                throw new Error(`HTTP error! status: ${response.status}`);
-//            }
-
-//            const data = await response.json();
-
-//            if (data.length > 0) {
-//                console.log(data);
-
-//                // Clear existing DataTable if it exists
-//                if ($.fn.dataTable.isDataTable('#tblList')) {
-//                    $('#tblList').DataTable().clear().destroy();
-//                }
-
-//                // Add extra table headers for Rejected & Approved status
-//                var extraHeaders = "";
-//                if (TypeId == 2) { // Rejected
-//                    extraHeaders = "<th>Rejected Time</th><th>Remarks</th>";
-//                } else if (TypeId == 3) { // Approved
-//                    extraHeaders = "<th>Approved Time</th><th>Remarks</th><th>DownloadXML</th>";
-//                }
-
-//                $("#tblList thead tr").html(`
-//                <th>Sr.No.</th>
-//                <th>Army No</th>
-//                <th>Applicant Name</th>
-//                <th>Application Type</th>
-//                <th>Date of Birth</th>
-//                <th>Applied Date</th>
-//                <th>Present Status</th>
-//                ${extraHeaders} 
-//                <th>Action</th>
-//            `);
-
-//                data.forEach((item, index) => {
-//                    listitem += "<tr>";
-//                    listitem += "<td>" + (index + 1) + "</td>";
-//                    listitem += "<td>" + item.Army_No + "</td>";
-//                    listitem += "<td>" + item.Loanee_Name + "</td>";
-//                    listitem += "<td>" + item.ApplicationType + "</td>";
-//                    listitem += "<td>" + item.Date_Of_BirthString + "</td>";
-//                    listitem += "<td>" + item.DateTimeUpdatedString + "</td>";
-
-//                    if (TypeId == 2) { // Rejected Applications
-//                        listitem += "<td>Rejected</td>";
-//                        listitem += "<td>" + (item.RejectedTimeString || "N/A") + "</td>";
-//                        listitem += "<td>" + (item.RejectedApprovedRemarks || "No Remarks") + "</td>";
-//                    }
-//                    else if (TypeId == 3) { // Approved Applications
-//                        listitem += "<td>Approved</td>";
-//                        listitem += "<td>" + (item.ApprovedTimeString || "N/A") + "</td>";
-//                        listitem += "<td>" + (item.RejectedApprovedRemarks || "No Remarks") + "</td>";
-//                        if (item.IsXMLDownload === true) {
-//                            listitem += "<td> <button data-id='" + item.Application_Id + "' class='downloadXML'>Download XML</button></td>";
-//                        } else {
-//                            listitem += "<td></td>"; // Empty cell if no download available
-//                        }
-//                    }
-//                    else { // Pending Applications
-//                        listitem += "<td>Pending</td>";
-//                    }
-
-//                    // Add action column
-//                    if (item.IsMergePdf == true) {
-//                        listitem += "<td><a title='View Details' href='/CORole/ViewDetails/" + item.EnApplication_Id + "'><i class='fa fa-eye' style='color: #0080FF; font-size: 30px;'></i></a></td>";
-//                    } else {
-//                        listitem += "<td><a title='View Details' id='mergePdf' data-id='" + item.EnApplication_Id + "'><i class='fa fa-eye' style='color: #0080FF; font-size: 30px;'></i></a></td>";
-//                    }
-
-//                    listitem += "</tr>";
-//                });
-
-//                $("#DetailBody").html(listitem);
-
-//                $('#tblList').DataTable({
-//                    "paging": true,
-//                    "lengthChange": true,
-//                    "searching": true,
-//                    "info": true,
-//                    "autoWidth": false,
-//                    "responsive": true
-//                });
-//            } else {
-//                $('#DetailBody').html("<tr><td colspan='10' style='text-align:center;'>No applications found.</td></tr>");
-//            }
-//        } catch (error) {
-//            console.log("Error: " + error.message);
-//            $('#DetailBody').html("<tr><td colspan='10' style='text-align:center;'>An Error Occurred.</td></tr>");
-//        }
-//}
-    
+function mergePdf(applicationId) {
+    // Redirect to the merge PDF page with the application ID
+    alert(applicationId);
+    $.ajax({
+        type: "POST",
+        url: "/ApplicationRequest/MergePdf",
+        data: { applicationId: applicationId},
+        success: function (response) {
+            if (response.success) {
+                window.location.href = "/ApplicationRequest/GetApplicationDetails"; // Redirect to the generated PDF
+            } else {
+                alert('Error generating PDF: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error:', error);
+            alert('An error occurred while generating the PDF. Please try again.');
+        }
+    });
+}

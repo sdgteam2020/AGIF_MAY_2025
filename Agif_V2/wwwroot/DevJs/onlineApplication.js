@@ -612,7 +612,6 @@ function fetchPCDA_PAO() {
     
 }
 function setOutlineActive(id) {
-    debugger;
     $("#"+id).closest(".form-outline").addClass("active");
     if (typeof mdb !== 'undefined') {
         $("#"+id).closest(".form-outline").each(function () {
