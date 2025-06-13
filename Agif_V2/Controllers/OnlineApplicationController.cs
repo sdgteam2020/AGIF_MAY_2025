@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Agif_V2.Controllers
 {
@@ -94,6 +95,34 @@ namespace Agif_V2.Controllers
             else
             {
                 return Json("0");
+            }
+        }
+
+        public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+
+            if (existingUser != null) // Check if the user exists
+            {
+                return Json(new { exists = true }); // User exists
+            }
+            else
+            {
+                return Json(new { exists = false }); // User does not exist
+            }
+        }
+
+        public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
+
+            if (result == true) // Check if the user exists
+            {
+                return Json(new { exists = true }); // User exists
+            }
+            else
+            {
+                return Json(new { exists = false }); // User does not exist
             }
         }
 

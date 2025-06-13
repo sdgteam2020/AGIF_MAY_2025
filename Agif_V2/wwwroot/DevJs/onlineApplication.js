@@ -204,7 +204,7 @@ function SetSuffixLetter(obj) {
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
 
-    //getApplicantDetalis();
+    getApplicantDetalis();
 }
 
 
@@ -213,15 +213,14 @@ function getApplicantDetalis() {
     var armyNumber = $("#armyPrefix").val();
     var Prefix = $("#armyNumber").val();
     var Suffix = $("#txtSuffix").val();
-    var CombineArmyNo = Prefix + armyNumber + Suffix;
-    var appType = $("#loanType").val();
+    var appType = parseInt($("#loanType").val(), 10);
     
     $.ajax({
         type: "get",
-        url: "/OnlineApplication/CkeckExistUser",
+        url: "/OnlineApplication/CheckExistUser",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
         success: function (data) {
-            if (data.length > 0) {
+            if (data.exists) {
                 Swal.fire({
                     title: "You Have Already applied for  Loan.",
                     text: "Would you like to apply for a new loan !",
@@ -237,6 +236,48 @@ function getApplicantDetalis() {
                 });
             }
 
+        },
+        error: function () {
+            alert("Data Not loaded!")
+        }
+    });
+}
+
+function DeleteConfirmation() {
+    Swal.fire({
+        title: "Previous Loan data deleted !",
+        text: "your previous Loan data will be deleted permanently !",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            DeleteExistingLoan();
+        }
+    });
+}
+
+function DeleteExistingLoan() {
+    var armyNumber = $("#armyPrefix").val();
+    var Prefix = $("#armyNumber").val();
+    var Suffix = $("#txtSuffix").val();
+    var appType = parseInt($("#loanType").val(), 10);
+    $.ajax({
+        type: "get",
+        url: "/OnlineApplication/DeleteExistingLoan",
+        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+        success: function (data) {
+            if (data.exists) {
+                Swal.fire({
+                    position: "top-end",
+                    icon: "success",
+                    title: "Deleted! Please Apply Again!",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
         },
         error: function () {
             alert("Data Not loaded!")

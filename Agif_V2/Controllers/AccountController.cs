@@ -136,12 +136,20 @@ namespace Agif_V2.Controllers
                 };
                 await _userProfile.Add(userProfile);
 
+                UserMapping user = new UserMapping();
+
+                user = await _userMapping.GetUnitDetails(signUpDto.UnitId);
+
+                bool IsPrimary  = user == null;
+
                 UserMapping userMapping = new UserMapping
                 {
                     UserId = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
                     ProfileId = userProfile.ProfileId,
                     UnitId = signUpDto.UnitId,
-                    UpdatedOn = DateTime.Now
+                    UpdatedOn = DateTime.Now,
+                    IsFmn= signUpDto.DteFmn,
+                    IsPrimary = IsPrimary ? true : false
                 };
                 await _userMapping.Add(userMapping);
                 return RedirectToAction("COContactUs", "Default");

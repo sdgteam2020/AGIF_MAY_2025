@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccessLayer.Repositories
@@ -64,6 +65,67 @@ namespace DataAccessLayer.Repositories
                 return Task.FromResult(DateTime.MinValue);
             }
         }
+
+        public async Task<CommonDataonlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            var existingUser = await (from app in _context.trnApplications
+                                      join doc in _context.trnDocumentUpload on app.ApplicationId equals doc.ApplicationId into docGroup
+                                      from doc in docGroup.DefaultIfEmpty()
+                                      where app.ApplicationType == appType && (app.ArmyPrefix.ToString() + app.Number + app.Suffix) == (armyNumber + Prefix + Suffix)
+                                      select new CommonDataonlineResponse
+                                      {
+                                          ApplicationId = app.ApplicationId
+                                      }).FirstOrDefaultAsync();
+
+           
+            return existingUser;
+        }
+
+        public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            var existingUser = await GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+
+            if (existingUser != null)
+            {
+                var carLoan = await _context.trnCar
+                    .FirstOrDefaultAsync(c => c.ApplicationId == existingUser.ApplicationId);
+
+                var hbaLoan = await _context.trnHBA
+                    .FirstOrDefaultAsync(h => h.ApplicationId == existingUser.ApplicationId);
+
+                var pcaLoan = await _context.trnPCA
+                    .FirstOrDefaultAsync(p => p.ApplicationId == existingUser.ApplicationId);
+
+                var documents = await _context.trnDocumentUpload
+                    .Where(d => d.ApplicationId == existingUser.ApplicationId)
+                    .ToListAsync();
+
+                if (carLoan != null)
+                   _context.trnCar.Remove(carLoan);
+
+                if (hbaLoan != null)
+                    _context.trnHBA.Remove(hbaLoan);
+
+                if (pcaLoan != null)
+                   _context.trnPCA.Remove(pcaLoan);
+
+                if (documents.Any())
+                    _context.trnDocumentUpload.RemoveRange(documents);
+
+                var applicationEntity = await _context.trnApplications
+                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+                if (applicationEntity != null)
+                  _context.trnApplications.Remove(applicationEntity);
+
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+
+            return false;
+        }
+
 
         public Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId, string formtype)
         {
