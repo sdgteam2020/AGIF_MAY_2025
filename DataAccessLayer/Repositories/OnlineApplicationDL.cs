@@ -90,7 +90,7 @@ namespace DataAccessLayer.Repositories
                               ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
-                              //ApplicationType = common.ApplicationType,
+                              ApplicationType = common.ApplicationType,
                               ArmyPrefix = common.ArmyPrefix,
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
@@ -126,7 +126,7 @@ namespace DataAccessLayer.Repositories
             if (result != null)
             {
                 //if(result.ApplicationType==1)
-                if(formtype=="HBA")
+                if(result.ApplicationType == 1)
                 {
                    
                     var Hbamodel = (from hba in _context.trnHBA
@@ -148,7 +148,7 @@ namespace DataAccessLayer.Repositories
                     data.HbaApplicationResponse = Hbamodel;
                 }
 
-                else if(formtype == "CA")
+                else if(result.ApplicationType == 2)
                  {
                     var Carmodel = (from car in _context.trnCar
                                     join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
@@ -168,7 +168,7 @@ namespace DataAccessLayer.Repositories
                     data.CarApplicationResponse = Carmodel;
                 }
 
-                else if(formtype == "PCA")
+                else if(result.ApplicationType == 3)
                 {
                     var PcaModal = (from pca in _context.trnPCA
                                     join loanType in _context.MLoanTypes on pca.computer_Loan_Type equals loanType.Id into loanTypeGroup

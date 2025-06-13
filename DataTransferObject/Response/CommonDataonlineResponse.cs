@@ -8,6 +8,8 @@ namespace DataTransferObject.Response
 {
     public class CommonDataonlineResponse
     {
+        public int ApplicationType;
+
         public int ApplicationId { get; set; }
 
 

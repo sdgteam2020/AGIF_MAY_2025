@@ -256,5 +256,6 @@ namespace DataTransferObject.Model
         [ForeignKey("ApplicantType")]
         public MApplicantType? MApplicantType { get; set; }
         public int StatusCode { get; set; }
+        public bool IsMergePdf { get; set; } = false;
     }
 }

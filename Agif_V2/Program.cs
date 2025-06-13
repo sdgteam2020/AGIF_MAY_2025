@@ -1,3 +1,4 @@
+using Agif_V2.Helpers;
 using Agif_V2.Middleware;
 using DataAccessLayer;
 using DataAccessLayer.Interfaces;
@@ -34,6 +35,7 @@ builder.Services.AddTransient<IApplication, Application>();
 builder.Services.AddTransient<IUserProfile, UserProfileDL>();
 builder.Services.AddTransient<IUserMapping, UserMappingDL>();
 builder.Services.AddTransient<IUsersApplications, UsersApplicationDL>();
+builder.Services.AddTransient<PdfGenerator>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
