@@ -42,5 +42,7 @@ namespace DataTransferObject.Request
         [Required]
         public int UnitId { get; set; }
 
+        public bool DteFmn { get; set; }  // This will bind to the checkbox
+
     }
 }

@@ -1,5 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
+using DataTransferObject.Response;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,15 @@ namespace DataAccessLayer.Repositories
         public UserMappingDL(ApplicationDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        // Additional methods specific to UserMapping can be added here
+
+        public async Task<UserMapping> GetUnitDetails(int unitId)
+        {
+            return await _context.trnUserMappings.
+                          Where(um => um.UnitId == unitId && um.IsActive==true)
+                          .FirstOrDefaultAsync();
         }
 
         public Task<List<UserMapping>> GetAllUser(bool status)
