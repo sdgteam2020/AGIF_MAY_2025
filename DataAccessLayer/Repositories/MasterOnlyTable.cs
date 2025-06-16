@@ -220,5 +220,19 @@ namespace DataAccessLayer.Repositories
 
             return ret;
         }
+
+        public async Task<List<DTOMasterResponse>> GetALLByUnitName(string UnitName)
+        {
+            var units = await _context.MUnits.Where(u => u.UnitName.ToLower().Contains(UnitName.ToLower()))
+                        .Select(u => new DTOMasterResponse
+                         {
+                            Id = u.UnitId,
+                            Name = u.UnitName,
+                            Pcda_Pao=u.Suffix+""+ u.Sus_no
+                        })
+                         .ToListAsync();
+
+            return units;
+        }
     }
 }

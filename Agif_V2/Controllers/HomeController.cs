@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Agif_V2.Models;
 using DataTransferObject.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Agif_V2.Controllers
@@ -9,6 +10,7 @@ namespace Agif_V2.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;

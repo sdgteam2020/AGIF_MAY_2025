@@ -23,6 +23,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetLoanFreq();
         Task<List<DTOMasterResponse>> GetLoanType(int type);
         Task<List<DTOMasterResponse>> GetAppointment();
-        
+        Task<List<DTOMasterResponse>> GetALLByUnitName(string UnitName);
+
     }
 }

@@ -152,11 +152,16 @@ $('.isNumerictxt').on("keypress", function (e) {
     }
     else {
         $(this).val($(this).val().replace(e.key, ""));
-        toastr.warning('Only Numbers allowed');
+        showErrorMessage('Only Numbers allowed');
         return false;
 
     }
 });
+
+function isNumeric(key) {
+    // Allow only digits 0–9
+    return /^[0-9]$/.test(key);
+}
 function showSuccessMessage(message) {
     // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `

@@ -4,7 +4,8 @@
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
     string Username = Model?.userName ??TempData["UserName"]?.ToString() ?? "";
-}<style>
+}
+<style>
      .form-email {
          display: block;
          width: 100%;
@@ -26,6 +27,10 @@
              outline: 0;
              box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
          }
+
+    .ui-autocomplete {
+        z-index: 1050 !important; /* higher than your popup/modal */
+    }
 </style>
 
 <div class="container-fluid mt-2">
@@ -36,12 +41,12 @@
                     <div class="pagetitle text-center mb-4">
                         <h1>Sign Up</h1>
                     </div>
-                    <form asp-action="Register" method="post">
+                    <form asp-action="Register" method="post" id="signupForm">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="userName">Username:</label>
-                                    <input asp-for="userName" class="form-control" value="@Username" id="username" name="userName"  />
+                                    <input asp-for="userName" class="form-control" value="@Username" id="username" name="userName" readonly/>
 
                                 </div>
                             </div>
@@ -60,9 +65,9 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group form-space form-control-Alphabets">
+                                <div class="form-group form-control-Alphabets">
                                     <label asp-for="Name">Name:</label>
-                                    <input asp-for="Name" class="form-control" id="Name" name="Name" value="@Model?.Name" required />
+                                    <input asp-for="Name" class="form-control" id="Name" name="Name" value="@Model?.Name" maxlength="15" required />
                                     @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
 
                                 </div>
@@ -70,14 +75,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="Email">Email:</label>
-                                    <input type="email" asp-for="Email" class="form-email" id="Email" name="Email" value="@Model?.Email" required />
+                                    <input type="email" asp-for="Email" class="form-email" id="Email" name="Email" value="@Model?.Email" maxlength="100" required />
                                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group form-space">
+                                <div class="form-group">
                                     <label asp-for="MobileNo">Mobile No:</label>
-                                    <input type="text" asp-for="MobileNo" class="form-control" id="MobileNo" name="MobileNo" maxlength="10" value="@Model?.MobileNo" required />
+                                    <input type="text" asp-for="MobileNo" class="form-control isNumerictxt " id="MobileNo" name="MobileNo" maxlength="10" value="@Model?.MobileNo" required />
                                     @Html.ValidationMessageFor(m => m.MobileNo, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -92,9 +97,15 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="UnitId">Unit Name:</label>
-                                    <select class="form-select select" asp-for="UnitId" id="UnitId" name="UnitId" required data-unitid-prefix="@if (Model != null) {
+                                   @*  <select class="form-select select" asp-for="UnitId" id="UnitId" name="UnitId" required data-unitid-prefix="@if (Model != null) {
                                                 @Model.UnitId;}"></select>
-                                    @Html.ValidationMessageFor(m => m.UnitId, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(m => m.UnitId, "", new { @class = "text-danger" }) *@
+                                    <div>
+                                        @Html.EditorFor(model => model.UnitId, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "Unit's name" } })
+                                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
+                                        <span id="UnitId" class="d-none">@Model.UnitId</span>
+                                        <input type="text" class="form-control form-control-Alphabets" id="txtUnit" required />
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -103,7 +114,6 @@
                                     <select class="form-select select" asp-for="ApptId" id="ApptId" name="ApptId" required data-apptid-prefix="@if (Model != null) {
                                                 @Model.ApptId;}"></select>
                                     @Html.ValidationMessageFor(m => m.ApptId, "", new { @class = "text-danger" })
-
                                 </div>
                             </div>
 
@@ -113,9 +123,22 @@
                                     <label for="DteFmn" class="form-label">DTE/FMN</label>
                                 </div>
                             </div>
+
+                            <div class="col-md-4 mt-4">
+                                <div class="form-group">
+                                    <button type="button" id="btnTokenDetails" class="btn btn-primary w-50">
+                                        Get Token Details
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+
+
                         <div class="d-flex justify-content-center align-items-center">
-                            <button type ="submit" class="btn btn-success">Sign Up</button>
+                            <button type ="submit" class="btn btn-success d-none" id="btnsignup">Sign Up</button>
+                        </div>
+                        <div id="errormsg">
+
                         </div>
                     </form>
                 </div>
@@ -123,10 +146,12 @@
         </div>
     </div>
 </div>
+
 <script src="~/devjs/Validation.js"></script>
 <script src="~/devjs/register.js"></script>
 <script>
     $(document).ready(function () {
         loadDropdown();
+         
     })
 </script>
