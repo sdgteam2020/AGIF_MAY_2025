@@ -22,15 +22,16 @@ namespace Agif_V2.Controllers
         private readonly IUserMapping _userMapping;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IMasterOnlyTable _masterOnlyTable;
 
-
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping, IMasterOnlyTable _masterOnlyTable)
         {   
             _signInManager = signInManager;
             _userManager = userManager;
             _userProfile = userProfile;
             _userMapping = userMapping;
             _db = db;
+            this._masterOnlyTable = _masterOnlyTable;
         }
         public IActionResult Index()
         {
@@ -192,6 +193,7 @@ namespace Agif_V2.Controllers
             return View(dTOTempSession);
         }
 
+
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
             try
@@ -269,6 +271,14 @@ namespace Agif_V2.Controllers
                 };
                 return Json(responseData);
             }
+        }
+
+        public async Task<ActionResult> GetALLByUnitName(string UnitName)
+        {
+           
+                var ret = await _masterOnlyTable.GetALLByUnitName(UnitName);
+                return Json(ret);         
+           
         }
 
         [HttpPost]

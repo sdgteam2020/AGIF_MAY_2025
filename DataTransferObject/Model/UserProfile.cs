@@ -23,6 +23,7 @@ namespace DataTransferObject.Model
 
         [Required(ErrorMessage = "Name is required.")]
         [RegularExpression("([a-zA-Z ])", ErrorMessage = "Enter only alphabets")]
+        [StringLength(15, ErrorMessage = "Please enter no more than 15 characters.")]
         public string Name { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email is required.")]
