@@ -18,8 +18,9 @@ namespace DataTransferObject.Request
         [StringLength(11, ErrorMessage = "Please enter no more than 11 characters.")]
         public string ArmyNo { get; set; }
 
-        [Required]
-        public int rank { get; set; }
+        [Required(ErrorMessage = "Rank is required.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Please select a valid rank.")]
+        public int rank { get; set; } = 0;
 
         [Required(ErrorMessage = "Name is required.")]
         public string Name { get; set; }
@@ -42,7 +43,7 @@ namespace DataTransferObject.Request
         [Required]
         public int UnitId { get; set; }
 
-        public bool DteFmn { get; set; }  // This will bind to the checkbox
+        public bool DteFmn { get; set; } 
 
     }
 }

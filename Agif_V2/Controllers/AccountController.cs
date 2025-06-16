@@ -34,6 +34,7 @@ namespace Agif_V2.Controllers
         }
         public IActionResult Index()
         {
+           
             return View();
         }
         public IActionResult Login()
@@ -62,7 +63,7 @@ namespace Agif_V2.Controllers
                     UserId = userId,
                     ProfileId = _userProfile.GetByUserName(model.UserName).Result.ProfileId,
                     MappingId  = mappingId.MappingId,
-
+                    Role=role
                 };
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
                 //SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -99,7 +100,9 @@ namespace Agif_V2.Controllers
             }
             else
             {
-                return RedirectToAction("Register", "Account", new { userName = model.UserName});
+                TempData["UserName"] = model.UserName;
+                //return RedirectToAction("Register", "Account", new { userName = model.UserName});
+                return RedirectToAction("Register", "Account");
             }
             return View();
         }
@@ -107,7 +110,8 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Register(int id)
         {
             DTOuserProfile userProfileDTO = new DTOuserProfile();
-           ///////GetUserProfile
+            TempData.Keep("UserName");
+            ///////GetUserProfile
             return View(userProfileDTO);
         }
 
@@ -171,8 +175,8 @@ namespace Agif_V2.Controllers
             }
             else
             {
-                return Json(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));   
-
+                //return Json(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));   
+                return View(signUpDto);
             }
          
         }
@@ -180,7 +184,12 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> GetAllUsers(bool status)
         {
             ViewBag.UserStatus = status;
-            return View();
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+            {
+                return Unauthorized("Session expired or invalid user session.");
+            }
+            return View(dTOTempSession);
         }
 
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")

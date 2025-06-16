@@ -116,13 +116,13 @@ namespace Agif_V2.Controllers
         {
             bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
 
-            if (result == true) // Check if the user exists
+            if (result == true) 
             {
-                return Json(new { exists = true }); // User exists
+                return Json(new { exists = true }); 
             }
             else
             {
-                return Json(new { exists = false }); // User does not exist
+                return Json(new { exists = false }); 
             }
         }
 

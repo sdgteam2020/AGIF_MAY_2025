@@ -23,7 +23,13 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> UserApplicationList(int status)
         {
             ViewBag.Status = status;
-            return View();
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+            {
+                return Unauthorized("Session expired or invalid user session.");
+            }
+            //var app = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, 1);
+            return View(dTOTempSession);
         }
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {

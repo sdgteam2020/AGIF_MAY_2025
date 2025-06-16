@@ -1,5 +1,6 @@
 ﻿@using DataTransferObject.Helpers
 @model SessionUserDTO;
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,52 +38,58 @@
         </div>
         <nav class="sidebar-nav">
             <ul>
+                @if (Model?.Role == "CO")
+                {
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#ddmenu_1"
+                           aria-controls="ddmenu_1"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">Applications</span>
+                        </a>
+                        <ul id="ddmenu_1" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/ApplicationRequest/UserApplicationList?status=1" class="active"><i class="bi bi-hourglass"></i>Pending </a>
 
-                <li class="nav-item nav-item-has-children">
-                    <a href="#0"
-                       data-bs-toggle="collapse"
-                       data-bs-target="#ddmenu_1"
-                       aria-controls="ddmenu_1"
-                       aria-expanded="false"
-                       aria-label="Toggle navigation">
-                        <i class="bi bi-list-check"></i>
-                        <span class="text">Applications</span>
-                    </a>
-                    <ul id="ddmenu_1" class="collapse show dropdown-nav">
-                        <li>
-                            <a href="~/ApplicationRequest/UserApplicationList?status=1" class="active"><i class="bi bi-hourglass"></i>Pending </a>
-                         
-                        </li>
-                        <li>
-                          
-                            <a href="~/ApplicationRequest/UserApplicationList?status=2" class=""><i class="bi bi-check-circle-fill"></i>Approved </a>
-                            
-                        </li>
-                        <li>
-                            
-                            <a href="~/ApplicationRequest/UserApplicationList?status=3" class=""><i class="bi bi-x-circle-fill"></i>Rejected </a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="nav-item nav-item-has-children">
-                    <a href="#0"
-                       data-bs-toggle="collapse"
-                       data-bs-target="#ddmenu_2"
-                       aria-controls="ddmenu_2"
-                       aria-expanded="false"
-                       aria-label="Toggle navigation">
-                        <i class="bi bi-list-check"></i>
-                        <span class="text">User Approval List</span>
-                    </a>
-                    <ul id="ddmenu_2" class="collapse show dropdown-nav">
-                        <li>
-                            <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
-                        </li>
-                        <li>
-                            <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
-                        </li>
-                    </ul>
-                </li>
+                            </li>
+                            <li>
+
+                                <a href="~/ApplicationRequest/UserApplicationList?status=2" class=""><i class="bi bi-check-circle-fill"></i>Approved </a>
+
+                            </li>
+                            <li>
+
+                                <a href="~/ApplicationRequest/UserApplicationList?status=3" class=""><i class="bi bi-x-circle-fill"></i>Rejected </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#ddmenu_2"
+                           aria-controls="ddmenu_2"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">User Approval List</span>
+                        </a>
+                        <ul id="ddmenu_2" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
+                            </li>
+                            <li>
+                                <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                
                 
             </ul>
         </nav>
@@ -122,8 +129,8 @@
                                                 <img src="~/images/logo/User_Logo.png" alt="" />
                                             </div>
                                             <div>
-                                                <h6 class="fw-500">Admin</h6>
-                                                <p>Admin</p>
+                                                <h6 class="fw-500">@Model?.UserName</h6>
+                                                <p>@Model?.UserName</p>
                                             </div>
                                         </div>
                                     </div>
@@ -144,7 +151,7 @@
                                     </li>
                                     <li class="divider"></li>
                                     <li>
-                                        <a href="#0"> <i class="lni lni-exit"></i> Sign Out </a>
+                                        <a href="~/Account/login"> <i class="lni lni-exit"></i> Sign Out </a>
                                     </li>
                                 </ul>
                             </div>
