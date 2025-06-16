@@ -2,8 +2,13 @@
     const params = new URLSearchParams(window.location.search);
     const value = params.get("status");
     GetApplicationList(value);
-});
 
+    $('#btnProcess').on('click', function () {
+
+        $("#ApplicationAction").modal("show");
+
+    });
+});
 function GetApplicationList(status) {
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblData')) {
@@ -89,18 +94,23 @@ function GetApplicationList(status) {
                 render: function (data, type, row) {
                     if (row.isMergePdf == false) {
                         return `
-                        <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-primary d-flex align-items-center' onclick='mergePdf(${row.applicationId})'>
+                        <div class='action action-container d-flex'>
+                            <button class='btn btn-sm btn-outline-primary  align-items-center' onclick='mergePdf(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
                                 View
                             </button>
+                             <button class='btn btn-primary' onclick='OpenAction(${row.applicationId})'>
+                                Action
+                                
+                            </button>
                         </div>
+                       
                     `;
                     }
                     else {
                         return `
                         <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-primary d-flex align-items-center' onclick='viewDetails(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-primary d-flex align-items-center' onclick='mergePdf(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
                                 Views
                             </button>
@@ -179,23 +189,79 @@ function GetApplicationList(status) {
     });
 }
 
+//function mergePdf(applicationId) {
+//    debugger;
+//    $.ajax({
+//        type: "POST",
+//        url: "/OnlineApplication/MergePdf",
+//        data: { applicationId: applicationId},
+//        success: function (response) {
+//            if (response.success) {
+//                window.location.href = "/OnlineApplication/GetApplicationDetails"; // Redirect to the generated PDF
+//            } else {
+//                alert('Error generating PDF: ' + response.message);
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            console.error('Error:', error);
+//            alert('An error occurred while generating the PDF. Please try again.');
+//        }
+//    });
+//}
+function OpenAction(applicationId) {
+   
+    $("#ViewPdf").modal("show");
+}
 function mergePdf(applicationId) {
-    // Redirect to the merge PDF page with the application ID
-    alert(applicationId);
+    console.log('Starting PDF merge for application ID:', applicationId);
+
     $.ajax({
         type: "POST",
-        url: "/ApplicationRequest/MergePdf",
-        data: { applicationId: applicationId},
+        url: "/OnlineApplication/MergePdf",
+        data: { applicationId: applicationId },
+        dataType: 'json',
         success: function (response) {
+            console.log('Response received:', response);
+
             if (response.success) {
-                window.location.href = "/ApplicationRequest/GetApplicationDetails"; // Redirect to the generated PDF
+                alert('PDF merged successfully! Total files: ' + response.totalFiles);
+
+                // Option 1: Download the merged PDF
+                if (response.mergedFilePath) {
+                    var downloadLink = document.createElement('a');
+                    downloadLink.href = response.mergedFilePath;
+                    downloadLink.download = 'MergedPDF-' + applicationId + '.pdf';
+                    downloadLink.click();
+                }
+
+                // Option 2: Redirect (uncomment if needed)
+                // window.location.href = "/OnlineApplication/GetApplicationDetails";
+
             } else {
                 alert('Error generating PDF: ' + response.message);
+                console.error('PDF merge failed:', response.message);
             }
         },
         error: function (xhr, status, error) {
+            console.error('AJAX Error Details:');
+            console.error('Status:', status);
             console.error('Error:', error);
-            alert('An error occurred while generating the PDF. Please try again.');
+            console.error('Response Text:', xhr.responseText);
+            console.error('Status Code:', xhr.status);
+
+            var errorMessage = 'An error occurred while generating the PDF.';
+            if (xhr.responseText) {
+                try {
+                    var errorResponse = JSON.parse(xhr.responseText);
+                    if (errorResponse.message) {
+                        errorMessage += ' Details: ' + errorResponse.message;
+                    }
+                } catch (e) {
+                    errorMessage += ' Server response: ' + xhr.responseText;
+                }
+            }
+
+            alert(errorMessage);
         }
     });
 }

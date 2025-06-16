@@ -10,11 +10,9 @@ namespace Agif_V2.Controllers
     public class ApplicationRequestController : Controller
     {
         private readonly IUsersApplications _userApplication;
-        private readonly PdfGenerator _pdfGenerator;
-        public ApplicationRequestController(IUsersApplications usersApplications, PdfGenerator pdfGenerator)
+        public ApplicationRequestController(IUsersApplications usersApplications)
         {
             _userApplication = usersApplications;
-            _pdfGenerator = pdfGenerator;
         }
         public IActionResult Index()
         {
@@ -88,17 +86,9 @@ namespace Agif_V2.Controllers
 
         }
 
-        public async Task<IActionResult> GetApplicationDetails(int applicationId)
+        public async Task<IActionResult> ViewDetails(int applicationId)
         {
             return View();
-        }
-        
-        public async Task<JsonResult> MergePdf(int applicationId)
-        {
-            bool result = true;
-            string pdfName = "MergedPdf-"+applicationId;
-            var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId);
-            return Json(new { success = result });
         }
     }
 }

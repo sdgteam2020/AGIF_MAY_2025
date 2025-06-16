@@ -148,6 +148,7 @@ namespace Agif_V2.Controllers
 
             await _IDocumentUpload.Add(fileUpload);
 
+            await _IonlineApplication1.UpdateApplicationStatus(applicationId,1);
             
             TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId,formType = formType });

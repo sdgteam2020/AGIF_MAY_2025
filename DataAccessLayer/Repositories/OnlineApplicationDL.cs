@@ -280,6 +280,20 @@ namespace DataAccessLayer.Repositories
 
             return Task.FromResult(data);
         }
+
+        public async Task UpdateApplicationStatus(int applicationId, int status)
+        {
+            var application = await _context.trnApplications.FindAsync(applicationId);
+            if (application == null)
+            {
+                return; // Just exit the method if not found
+            }
+
+            application.StatusCode = status;
+            _context.trnApplications.Update(application);
+            await _context.SaveChangesAsync();
+        }
+
     }
 
 }

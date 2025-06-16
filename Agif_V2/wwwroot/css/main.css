@@ -2009,7 +2009,7 @@ h6,
         width: 100%;
     }
 
-.table .action {
+/*.table .action {
     display: flex;
     align-items: center;
 }
@@ -2041,7 +2041,7 @@ h6,
 
         .table .action .dropdown-menu li a {
             display: block;
-        }
+        }*/
 
 .top-selling-table tr th,
 .top-selling-table tr td {
@@ -6557,4 +6557,8 @@ h6,
 .table > thead {
     vertical-align: bottom;
     background-color: #310;
+}
+.modal-header {
+   
+    background-color: blue;
 }

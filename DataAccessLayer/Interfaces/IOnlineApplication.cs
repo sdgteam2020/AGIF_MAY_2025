@@ -18,5 +18,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
 
+        Task UpdateApplicationStatus(int applicationId, int status);
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataAccessLayer;
+﻿using Agif_V2.Helpers;
+using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
@@ -16,17 +17,23 @@ namespace Agif_V2.Controllers
     {
         private readonly IOnlineApplication _IonlineApplication1;
         private readonly IMasterOnlyTable _IMasterOnlyTable;
+        private readonly PdfGenerator _pdfGenerator;
+        private readonly MergePdf _mergePdf;
+        private readonly IWebHostEnvironment _env;
         private readonly ICar _car;
         private readonly IHba _Hba;
         private readonly IPca _Pca;
 
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca)
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
             this._car = _car;
             this._Hba = _Hba;
             this._Pca = _Pca;
+            _pdfGenerator = pdfGenerator;
+            _env = env;
+            _mergePdf = mergePdf;
         }
 
         public async Task<IActionResult> OnlineApplication()
@@ -393,6 +400,268 @@ namespace Agif_V2.Controllers
 
 
                 // Proceed to the next step
+            }
+        }
+
+        public async Task<IActionResult> GetApplicationDetails(int applicationId)
+        {
+            return View();
+        }
+
+        //public async Task<JsonResult> MergePdf(int applicationId)
+        //{
+        //    //var userData = await _IonlineApplication1.GetApplicationDetails(applicationId, "");
+        //    //if (userData == null)
+        //    //{
+        //    //    return Json(new { success = false, message = "Application not found." });
+        //    //}
+        //    //string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+        //    //string applicationTypeName = "";
+        //    //if (string.IsNullOrEmpty(applicationType))
+        //    //{
+        //    //    return Json(new { success = false, message = "Application type is not specified." });
+        //    //}
+        //    //else
+        //    //{
+        //    //    if (applicationType == "1")
+        //    //    {
+        //    //        applicationTypeName = "HBA";
+        //    //    }
+        //    //    else if (applicationType == "2") { 
+        //    //        applicationTypeName = "CA";
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        applicationTypeName = "PCA";
+        //    //    }
+        //    //}
+        //    //string armyNo = userData.OnlineApplicationResponse.Number;
+        //    //if (string.IsNullOrEmpty(armyNo))
+        //    //{
+        //    //    return Json(new { success = false, message = "Army number is not specified." });
+        //    //}
+        //    //string applicationIdStr = applicationId.ToString();
+        //    //if (string.IsNullOrEmpty(applicationIdStr))
+        //    //{
+        //    //    return Json(new { success = false, message = "Application ID is not specified." });
+        //    //}
+        //    //string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+        //    //bool result = true;
+
+        //    //string pdfName = "MergedPdf-" + applicationId;
+        //    //var generatedPdfPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".pdf");
+        //    //var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath);
+        //    //if(data == 1)
+        //    //{
+
+        //    //}
+        //    //return Json(new { success = result });
+        //    var userData = await _IonlineApplication1.GetApplicationDetails(applicationId, "");
+        //    if (userData == null)
+        //    {
+        //        return Json(new { success = false, message = "Application not found." });
+        //    }
+
+        //    string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+        //    string applicationTypeName = "";
+        //    if (string.IsNullOrEmpty(applicationType))
+        //    {
+        //        return Json(new { success = false, message = "Application type is not specified." });
+        //    }
+        //    else
+        //    {
+        //        if (applicationType == "1")
+        //        {
+        //            applicationTypeName = "HBA";
+        //        }
+        //        else if (applicationType == "2")
+        //        {
+        //            applicationTypeName = "CA";
+        //        }
+        //        else
+        //        {
+        //            applicationTypeName = "PCA";
+        //        }
+        //    }
+
+        //    string armyNo = userData.OnlineApplicationResponse.Number;
+        //    if (string.IsNullOrEmpty(armyNo))
+        //    {
+        //        return Json(new { success = false, message = "Army number is not specified." });
+        //    }
+
+        //    string applicationIdStr = applicationId.ToString();
+        //    if (string.IsNullOrEmpty(applicationIdStr))
+        //    {
+        //        return Json(new { success = false, message = "Application ID is not specified." });
+        //    }
+
+        //    string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+        //    string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+
+        //    // Check if source folder exists
+        //    if (!Directory.Exists(sourceFolderPath))
+        //    {
+        //        return Json(new { success = false, message = "Source folder not found." });
+        //    }
+
+        //    // Get all PDF files from the source folder
+        //    string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+
+        //    if (pdfFiles.Length == 0)
+        //    {
+        //        return Json(new { success = false, message = "No PDF files found in the specified folder." });
+        //    }
+
+        //    try
+        //    {
+        //        // Generate the new PDF first
+        //        string pdfName = "MergedPdf-" + applicationId;
+        //        var generatedPdfPath = Path.Combine(sourceFolderPath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".pdf");
+        //        var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath);
+
+        //        if (data == 1)
+        //        {
+        //            // Refresh the PDF files list to include the newly generated PDF
+        //            pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+        //        }
+
+        //        // Create merged PDF path in TempUploads root
+        //        string mergedPdfPath = Path.Combine(_env.WebRootPath, "TempUploads", $"{pdfName}_{DateTime.Now:yyyyMMddHHmmssfff}.pdf");
+
+        //        // Merge all PDFs using iText7
+        //        bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+        //        if (mergeResult)
+        //        {
+        //            return Json(new
+        //            {
+        //                success = true,
+        //                message = "PDFs merged successfully.",
+        //                mergedFilePath = mergedPdfPath,
+        //                totalFiles = pdfFiles.Length
+        //            });
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, message = "Failed to merge PDF files." });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
+        //    }
+        //}
+
+        public async Task<JsonResult> MergePdf(int applicationId)
+        {
+            try
+            {
+                var userData = await _IonlineApplication1.GetApplicationDetails(applicationId, "");
+                if (userData == null)
+                {
+                    return Json(new { success = false, message = "Application not found." });
+                }
+
+                string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+                string applicationTypeName = "";
+                if (string.IsNullOrEmpty(applicationType))
+                {
+                    return Json(new { success = false, message = "Application type is not specified." });
+                }
+                else
+                {
+                    if (applicationType == "1")
+                    {
+                        applicationTypeName = "HBA";
+                    }
+                    else if (applicationType == "2")
+                    {
+                        applicationTypeName = "CA";
+                    }
+                    else
+                    {
+                        applicationTypeName = "PCA";
+                    }
+                }
+
+                string armyNo = userData.OnlineApplicationResponse.Number;
+                if (string.IsNullOrEmpty(armyNo))
+                {
+                    return Json(new { success = false, message = "Army number is not specified." });
+                }
+
+                string applicationIdStr = applicationId.ToString();
+                string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+                string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+
+
+                // Check if source folder exists
+                if (!Directory.Exists(sourceFolderPath))
+                {
+                    return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
+                }
+
+                // Get all PDF files from the source folder
+                string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+
+                if (pdfFiles.Length == 0)
+                {
+                    return Json(new { success = false, message = "No PDF files found in the specified folder." });
+                }
+
+                // Generate the new PDF first (if needed)
+                string pdfName = "MergedPdf-" + applicationId;
+                var generatedPdfPath = Path.Combine(sourceFolderPath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".pdf");
+
+                try
+                {
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath);
+                    if (data == 1)
+                    {
+                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+                    }
+                }
+                catch (Exception pdfGenEx)
+                {
+                    Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
+                    // Continue with existing PDFs if generation fails
+                }
+
+                // Create merged PDF path in TempUploads root
+                string tempUploadsPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+                if (!Directory.Exists(tempUploadsPath))
+                {
+                    Directory.CreateDirectory(tempUploadsPath);
+                }
+
+                string mergedPdfPath = Path.Combine(tempUploadsPath, $"{pdfName}_{DateTime.Now:yyyyMMddHHmmssfff}.pdf");
+
+                // Merge all PDFs using iText7
+                bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+                if (mergeResult)
+                {
+                    // Get relative path for client
+                    string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "PDFs merged successfully.",
+                        mergedFilePath = relativePath,
+                        fullPath = mergedPdfPath,
+                        totalFiles = pdfFiles.Length
+                    });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to merge PDF files." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
             }
         }
     }
