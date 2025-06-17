@@ -79,6 +79,7 @@ namespace Agif_V2.Controllers
                     //var ActiveCO = await _userProfile.GetByUserName(model.UserName);
                     //bool isCOActive = ActiveCO.IsActive;
                     int profileId = _userProfile.GetByUserName(model.UserName).Result.ProfileId;
+                    var userArmyNo = _userProfile.GetByUserName(model.UserName).Result.ArmyNo;
                     var userMapping = _userMapping.GetByProfileId(profileId).Result.FirstOrDefault();
                     if (userMapping == null)
                     {
@@ -91,6 +92,11 @@ namespace Agif_V2.Controllers
                         return RedirectToAction("COContactUs", "Default");
                     }
                     HttpContext.Session.SetString("SAMLRole", "CO");
+                    SessionUserDTO sessionCO = new SessionUserDTO
+                    {
+                        ArmyNo = userArmyNo,
+                    };
+                    Helpers.SessionExtensions.SetObject(HttpContext.Session, "CO", sessionCO);
                 }
                 HttpContext.Session.SetString("UserGUID",_db.Users.FirstOrDefault(x=>x.UserName == model.UserName).Id.ToString());
                 return RedirectToAction("Index", "Home");

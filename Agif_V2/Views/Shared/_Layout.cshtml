@@ -30,13 +30,13 @@
     </div>
     <!-- ======== Preloader =========== -->
     <!-- ======== sidebar-nav start =========== -->
-    <aside class="sidebar-nav-wrapper">
+    <aside class="sidebar-nav-wrapper bg-gradient-custom-vertical ">
         <div class="navbar-logo">
-            <a>
+            <a href="/Home/Index">
                 <img src="~/images/logo/AGIF_Logo.png" alt="logo" />
             </a>
         </div>
-        <nav class="sidebar-nav">
+        <nav class="sidebar-nav ">
             <ul>
                 @if (Model?.Role == "CO")
                 {
@@ -89,15 +89,15 @@
                         </ul>
                     </li>
                 }
-                
-                
+
+
             </ul>
         </nav>
-       
+
     </aside>
     <div class="overlay"></div>
     <div class="main-wrapper">
-        <header class="header">
+        <header class="header bg-gradient-custom">
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-3">
@@ -111,7 +111,7 @@
                     </div>
 
                     <!-- Center section with Hello text -->
-                    <div class="col-lg-6 col-md-6 col-6 text-center">
+                    <div class="col-lg-6 col-md-6 col-6 text-center ">
                         <div class="header-center">
                             <span id="headerText" class="agi-title-font-size d-block">ARMY GROUP INSURANCE FUND 3.0</span>
                         </div>
@@ -166,8 +166,8 @@
 
         <section class="section">
             <div class="container-fluid">
-            @RenderBody()
-          </div>
+                @RenderBody()
+            </div>
         </section>
 
         <!-- ========== footer start =========== -->
@@ -178,8 +178,8 @@
                         <div class="copyright text-center text-md-start">
                             <p class="text-sm">
                                 Designed and Developed by
-                                <a href="https://plainadmin.com" rel="nofollow" target="_blank">
-                                    PlainAdmin
+                                <a href="#" rel="nofollow" target="_blank">
+                                    ASDC
                                 </a>
                             </p>
                         </div>
@@ -197,7 +197,7 @@
             <!-- end container -->
         </footer>
         <!-- ========== footer end =========== -->
-   </div>
+    </div>
     <!-- ======== main-wrapper end =========== -->
     <!-- ========= All Javascript files linkup ======== -->
     <script src="~/js/bootstrap.bundle.min.js"></script>
@@ -211,6 +211,6 @@
     <script src="~/js/main.js"></script>
     <script src="~/DevJs/GetAllUsers.js"></script>
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -4,15 +4,19 @@ using DataTransferObject.Helpers;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Agif_V2.Controllers
 {
     public class ApplicationRequestController : Controller
     {
         private readonly IUsersApplications _userApplication;
-        public ApplicationRequestController(IUsersApplications usersApplications)
+        private readonly IOnlineApplication _onlineApplication;
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication)
         {
             _userApplication = usersApplications;
+            this._onlineApplication = _onlineApplication;
         }
         public IActionResult Index()
         {
@@ -26,6 +30,8 @@ namespace Agif_V2.Controllers
             {
                 return Unauthorized("Session expired or invalid user session.");
             }
+            SessionUserDTO? coSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
+            ViewBag.ArmyNo = coSession.ArmyNo;
             //var app = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, 1);
             return View(dTOTempSession);
         }
@@ -90,5 +96,92 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+
+        public async Task<string> DataDigitalXmlSign(int applicationId)
+        {
+            var data = SignDocument(applicationId);
+            var jsonObject = new
+            {
+                applicationId = applicationId,
+                ApplicantName = data.Result.ApplicantName,
+                ArmyNo = data.Result.ArmyNo,
+                ApplicationType = data.Result.ApplicationType,
+                Unit = data.Result.UnitName,
+                Rank = data.Result.RankName,
+                DateOfCommission = data.Result.DateOfCommision,
+                PanCard = data.Result.PAN_No,
+                Account_No = data.Result.AccountNo
+            };
+            string jsonData = JsonConvert.SerializeObject(jsonObject);
+            var xml = JsonConvert.DeserializeXNode(jsonData, "Root");
+            return xml.ToString();
+        }
+
+        public async Task<DTODigitalSignDataResponse> SignDocument(int applicationId)
+        {
+            DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applicationId);
+            DTODigitalSignDataResponse digitalSignDTO = new DTODigitalSignDataResponse();
+
+
+            if (data.OnlineApplicationResponse != null)
+            {
+                digitalSignDTO.ApplicationId = data.OnlineApplicationResponse.ApplicationId;
+                digitalSignDTO.ArmyNo = data.OnlineApplicationResponse.Number;
+                digitalSignDTO.ApplicantName = data.OnlineApplicationResponse.ApplicantName;
+                //digitalSignDTO.IsRejectced = con.xmlSignModels.FirstOrDefault(x => x.ApplId == carPcModel.Application_Id)?.IsRejectced == true;
+                digitalSignDTO.PCDA_PAO = data.OnlineApplicationResponse.pcda_pao;
+                digitalSignDTO.Date_Of_Birth = data.OnlineApplicationResponse.DateOfBirth.ToString();
+                digitalSignDTO.Retirement_Date = data.OnlineApplicationResponse.DateOfRetirement.ToString();
+                digitalSignDTO.Mobile_No = data.OnlineApplicationResponse.MobileNo;
+                digitalSignDTO.ApplType = data.OnlineApplicationResponse.ApplicationType;
+                digitalSignDTO.DateOfCommision = data.OnlineApplicationResponse.DateOfCommission.ToString();
+                digitalSignDTO.AccountNo = data.OnlineApplicationResponse.SalaryAcctNo;
+                digitalSignDTO.RankName = data.OnlineApplicationResponse.DdlRank;
+                digitalSignDTO.UnitName = data.OnlineApplicationResponse.PresentUnit;
+                digitalSignDTO.PAN_No = data.OnlineApplicationResponse.PanCardNo;
+                return digitalSignDTO;
+
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public void SaveXML(string applId, string xmlResString)
+        {
+                
+                //string armyNo = Session["ArmyNo"].ToString();
+                ////string RankName = Session["RankName"].ToString();
+                //string RankName = Session["Name"].ToString();
+                //string Domain = Session["DomainId"].ToString();
+
+                //tbl_DigitalSignRecord model = new tbl_DigitalSignRecord();
+                //int NewId = Convert.ToInt32(EncryptDecrypt.Decryption(applId));
+                //CarPcModel carPcModel = con.carPcModel.Find(NewId);
+                //model.ApplId = NewId;
+                //model.XMLSignResponce = Uri.UnescapeDataString(smlResString);
+                //model.SignOn = DateTime.Now;
+                //model.Remarks = rem;
+                //model.IsSign = true;
+                ////model.DomainId = domain;
+                ////model.ArmyNo = armyNo;
+                ////model.RankName = RankName;
+                //carPcModel.Status = carPcModel.Status = (int)CommonEnum.AppStatus.ApprovedByCO;
+                //carPcModel.Remark = rem;
+                //carPcModel.IsCOApproved = true;
+                //con.Entry(carPcModel).State = EntityState.Modified;
+                //model.DomainId = Domain;
+                //model.ArmyNo = armyNo;
+                //model.RankName = RankName;
+                //con.xmlSignModels.Add(model);
+                //con.SaveChanges();
+
+                ////Merge approved PDF
+                //MergePdf(applId, false, true);
+            
+        }
+
     }
 }

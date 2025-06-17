@@ -8,6 +8,44 @@
         $("#ApplicationAction").modal("show");
 
     });
+
+    //const GlobalApplnId;
+    $('#acceptButton').on('click', function () {
+        var applnId = $("#spnapplicationId").html();
+        var icNo = $("#IcNo").data("id");
+        let value = true;
+
+        var remarkField = $("#txtremark");
+        var remarkValue = remarkField.val().trim();
+        if (remarkValue === "") {
+            remarkField.val("Accepted");
+        }
+
+        if (value == true) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to approve!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, approve it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    //GetTokenvalidatepersid2fa("A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448", id);
+                    GetTokenvalidatepersid2fa(icNo, applnId);
+                    //alert("Sweet");
+                }
+            });
+
+            ////verify pop
+
+            //GetTokenvalidatepersid2fa(icNo, id);
+            // SignXmlSendTOdatabase("<DigitalSignature1><Root>Kapoor</Root></DigitalSignature1>");
+
+        }
+    });
 });
 function GetApplicationList(status) {
     // Destroy existing DataTable if it exists
@@ -95,12 +133,11 @@ function GetApplicationList(status) {
                     if (row.isMergePdf == false) {
                         return `
                         <div class='action action-container d-flex'>
-                          
-                             <button class='btn btn-sm btn-outline-primary  align-items-center' onclick='mergePdf(${1012})'>
+                            <button class='btn btn-sm btn-outline-warning  align-items-center' onclick='mergePdf(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
-                                View
+                               
                             </button>
-                             <button class='btn btn-primary' onclick='OpenAction(${row.applicationId})'>
+                             <button class='btn btn-outline-primary' onclick='OpenAction(${row.applicationId})'>
                                 Action
                                 
                             </button>
@@ -111,14 +148,14 @@ function GetApplicationList(status) {
                     else {
                         return `
                         <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-primary d-flex align-items-center' onclick='mergePdf(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center' onclick='mergePdf(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
-                                Views
+                               
                             </button>
                         </div>
                     `;
                     }
-                    
+
                 }
             }
         ],
@@ -141,76 +178,12 @@ function GetApplicationList(status) {
         pageLength: 10,
         lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
         dom: 'lBfrtip',
-        //buttons: [
-        //    //{
-        //    //    extend: 'excel',
-        //    //    title: 'Users List',
-        //    //    exportOptions: {
-        //    //        columns: "thead th:not(.noExport)"
-        //    //    }
-        //    //}
-        //],
-        //drawCallback: function (settings) {
-        //    // Re-bind toggle switch events after each draw
-        //    $('#tblData tbody').off('change', '.cls-toggle-status').on('change', '.cls-toggle-status', function () {
-        //        const $toggle = $(this);
-        //        const domainId = $toggle.data('domain-id');
-        //        const isActive = $toggle.is(':checked');
-        //        const statusText = $toggle.closest('.action-container').find('.status-text');
-
-        //        // Revert the toggle immediately; will be set again on confirm
-        //        $toggle.prop('checked', !isActive);
-
-        //        Swal.fire({
-        //            title: `Are you sure?`,
-        //            text: `Do you want to ${isActive ? 'activate' : 'deactivate'} this user?`,
-        //            icon: 'warning',
-        //            showCancelButton: true,
-        //            confirmButtonText: 'Yes',
-        //            cancelButtonText: 'No'
-        //        }).then((result) => {
-        //            if (result.isConfirmed) {
-        //                // Set back the correct toggle value
-        //                $toggle.prop('checked', isActive);
-
-        //                // Update status text immediately for better UX
-        //                if (isActive) {
-        //                    statusText.text('Active').removeClass('status-inactive').addClass('status-active');
-        //                } else {
-        //                    statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
-        //                }
-
-        //                // Call function to update user status
-        //                updateUserStatus(domainId, isActive, $toggle);
-        //            }
-        //        });
-        //    });
-        //}
-
     });
 }
 
-//function mergePdf(applicationId) {
-//    debugger;
-//    $.ajax({
-//        type: "POST",
-//        url: "/OnlineApplication/MergePdf",
-//        data: { applicationId: applicationId},
-//        success: function (response) {
-//            if (response.success) {
-//                window.location.href = "/OnlineApplication/GetApplicationDetails"; // Redirect to the generated PDF
-//            } else {
-//                alert('Error generating PDF: ' + response.message);
-//            }
-//        },
-//        error: function (xhr, status, error) {
-//            console.error('Error:', error);
-//            alert('An error occurred while generating the PDF. Please try again.');
-//        }
-//    });
-//}
 function OpenAction(applicationId) {
-   
+
+    $("#spnapplicationId").html(applicationId);
     $("#ViewPdf").modal("show");
 }
 function mergePdf(applicationId) {
@@ -263,6 +236,134 @@ function mergePdf(applicationId) {
             }
 
             alert(errorMessage);
+        }
+    });
+}
+
+
+
+async function GetTokenvalidatepersid2fa(IcNo, applnId) {
+    $.ajax({
+
+        url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
+        type: "POST",
+        contentType: 'application/json', // Set content type to XML
+
+        data: JSON.stringify({
+            //"inputPersID": IcNo
+            "inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"
+            //"inputPersID": "9A4BEB14B87DE35D6BBA98E2B16AD4EB341D52BDA2BB3B7EADB064BAF676CBD3"
+        }),
+
+        success: function (response) {
+            if (response) {
+                const validationResult = response.ValidatePersID2FAResult;
+
+                if (validationResult === true) {
+
+                    DataSignDigitaly(applnId);
+
+                } else {
+                    Swal.fire({
+                        title: "Alert!",
+                        text: "Army No Not Matched Pl Insert Valid Token!",
+                        icon: "error"
+                    });
+
+                }
+            }
+        },
+        error: function () {
+            Swal.fire({
+                title: "Alert!",
+                text: "Download Dgis App For Digital Sign!",
+                icon: "error"
+            });
+        }
+    });
+
+
+
+}
+
+function DataSignDigitaly(applicationId) {
+    $.ajax({
+        type: "get",
+        url: "/ApplicationRequest/DataDigitalXmlSign",
+        data: { applicationId: applicationId },
+        type: 'POST',
+        success: function (data) {
+
+            if (data != null) {
+                GetTokenSignXml(data)
+            }
+        },
+        error: function () {
+            Swal.fire({
+                title: "Alert!",
+                text: "Download Dgis App For Digital Sign!",
+                icon: "error"
+            });
+            $("#tokenMessage").html(`<span class="m-lg-2 text-danger alert-danger tokenremarks"> DGIS App Not running</span> <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; font-size:12px">Download Dgis App For Digital Sign</a>`);
+
+        }
+    });
+
+}
+
+function GetTokenSignXml(xml) {
+    $.ajax({
+        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        type: "POST",
+        contentType: 'application/xml', // Set content type to XML
+        data: xml, // Set the XML data
+        success: function (response) {
+            if (response) {
+                var xmlContent = new XMLSerializer().serializeToString(response);
+
+                // No Token Found
+                if (xmlContent.indexOf("<Root>No Token Found</Root>") == -1) {
+                    SignXmlSendTOdatabase(xmlContent);
+
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: "No Token Found!",
+                        icon: "error"
+                    });
+                }
+            }
+        },
+        error: function (result) {
+            Swal.fire({
+                title: "Alert!",
+                text: "DGIS App Not running!",
+                icon: "error"
+            });
+        }
+    });
+}
+
+function SignXmlSendTOdatabase(xmlString) {
+    let encodedXml = encodeURIComponent(xmlString);
+    var applnId = $('#spnapplicationId').html();
+    $.ajax({
+        url: "/ApplicationRequest/SaveXML",
+        data: { applId: applnId, xmlResString: encodedXml },
+        type: 'POST',
+        success: function () {
+            Swal.fire({
+                title: "Approved!",
+                text: "Signed succesfull and Saved",
+                icon: "success"
+            });
+
+            setTimeout(function () {
+                window.location.href = "/ApplicationRequest/UserApplicationList";
+            }, 3000);
+        },
+        error: function () {
+            alert("Data Not Saved!")
         }
     });
 }

@@ -44,7 +44,6 @@ function validateAccountNo(input) {
 
     var inputValue = input.value.trim();
     if (inputValue.length < 11) {
-        alert("Please enter a valid Account No");
         setTimeout(function () { input.focus(); }, 100);
 
     }

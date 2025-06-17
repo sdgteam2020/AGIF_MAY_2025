@@ -3,8 +3,224 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+<div class="container">
+    <div class="container-fluid">
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="title">
+                        <h2>
+                            Dashboard
+                        </h2>
+                    </div>
+                </div>
+                <!-- end col -->
+                <div class="col-md-6">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="#0">Home</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Dashboard
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- ========== title-wrapper end ========== -->
+        <!-- ========== title-wrapper end ========== -->
+        <div class="row">
+            <div class="col-xl-2 col-lg-4 col-sm-6">
+                <div class="icon-card mb-30">
+                    <div class="icon orange">
+                        <i class="lni lni-users"></i>
+                    </div>
+                    <div class="content">
+                        <h6 class="mb-10">Pending User</h6>
+                        <h3 class="text-bold mb-10">$74,567</h3>
+                        @* <p class="text-sm text-success">
+                        <i class="lni lni-arrow-up"></i> +5.45%
+                        <span class="text-gray">Increased</span>
+                        </p> *@
+                    </div>
+                </div>
+                <!-- End Icon Cart -->
+            </div>
+            <!-- End Col -->
+            <div class="col-xl-2 col-lg-4 col-sm-6">
+                <div class="icon-card mb-30">
+                    <div class="icon success">
+                        <i class="lni lni-users"></i>
+                    </div>
+                    <div class="content">
+                        <h6 class="mb-10">Active Users</h6>
+                        <h3 class="text-bold mb-10">34567</h3>
+                        @*  <p class="text-sm text-success">
+                        <i class="lni lni-arrow-up"></i> +2.00%
+                        <span class="text-gray">(30 days)</span>
+                        </p> *@
+                    </div>
+                </div>
+                <!-- End Icon Cart -->
+            </div>
+            <!-- End Col -->
+            <div class="col-xl-2 col-lg-4 col-sm-6">
+                <div class="icon-card mb-30">
+                    <div class="icon red">
+                        <i class="lni lni-users"></i>
+                    </div>
+                    <div class="content">
+                        <h6 class="mb-10">DeActive Users</h6>
+                        <h3 class="text-bold mb-10">34567</h3>
+                        @*  <p class="text-sm text-success">
+                        <i class="lni lni-arrow-up"></i> +2.00%
+                        <span class="text-gray">(30 days)</span>
+                        </p> *@
+                    </div>
+                </div>
+                <!-- End Icon Cart -->
+            </div>
+            <!-- End Col -->
+            <div class="col-xl-2 col-lg-4 col-sm-6">
+                <div class="icon-card mb-30">
+                    <div class="icon orange">
+                        <i class="lni lni-credit-cards"></i>
+                    </div>
+                    <div class="content">
+                        <h6 class="mb-10">Pending Appl</h6>
+                        <h3 class="text-bold mb-10">$24,567</h3>
+                        @*  <p class="text-sm text-danger">
+                        <i class="lni lni-arrow-down"></i> -2.00%
+                        <span class="text-gray">Expense</span>
+                        </p> *@
+                    </div>
+                </div>
+                <!-- End Icon Cart -->
+            </div>
+            <!-- End Col -->
+            <div class="col-xl-2 col-lg-4 col-sm-6">
+                <div class="icon-card mb-30">
+                    <div class="icon success">
+                        <i class="lni lni-checkmark-circle"></i>
+                    </div>
+                    <div class="content">
+                        <h6 class="mb-10">Approved Appl</h6>
+                        <h3 class="text-bold mb-10">34567</h3>
+                        @*  <p class="text-sm text-danger">
+                        <i class="lni lni-arrow-down"></i> -25.00%
+                        <span class="text-gray"> Earning</span>
+                        </p> *@
+                    </div>
+                </div>
+                <!-- End Icon Cart -->
+            </div>
+            <!-- End Col -->
+            <div class="col-xl-2 col-lg-4 col-sm-6">
+                <div class="icon-card mb-30">
+                    <div class="icon red">
+                        <i class="lni lni-close"></i>
+                    </div>
+                    <div class="content">
+                        <h6 class="mb-10">Rejected Appl</h6>
+                        <h3 class="text-bold mb-10">34567</h3>
+                        @* <p class="text-sm text-danger">
+                        <i class="lni lni-arrow-down"></i> -25.00%
+                        <span class="text-gray"> Earning</span>
+                        </p> *@
+                    </div>
+                </div>
+                <!-- End Icon Cart -->
+            </div>
+            <!-- End Col -->
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card-style mb-30">
+                    <div class="title d-flex flex-wrap justify-content-between align-items-center">
+                        <div class="left">
+                            <h6 class="text-medium mb-30">User Status </h6>
+                        </div>
+                        <div class="right">
+                            <div class="select-style-1">
+                                <div class="select-position select-sm">
+                                    <select class="light-bg">
+                                        <option value="">Today</option>
+                                        <option value="">Weekly</option>
+                                        <option value="">Monthly</option>
 
-<div class="text-center">
-    <h1 class="display-4">@Model?.UserName</h1>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- end select -->
+                        </div>
+                    </div>
+                    <!-- End Title -->
+                    <div class="table-responsive">
+                        <table class="table top-selling-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col">Army No</th>
+                                    <th scope="col">Applicant Name</th>
+                                    <th scope="col">Application Type</th>
+                                    <th scope="col">Date of Birth</th>
+                                    <th scope="col">Applied Date</th>
 
+                                </tr>
+                            </thead>
+
+                        </table>
+                        <!-- End Table -->
+                    </div>
+                </div>
+            </div>
+            <!-- End Col -->
+
+            <div class="col-lg-6">
+                <div class="card-style mb-30">
+                    <div class="title d-flex flex-wrap align-items-center justify-content-between">
+                        <div class="left">
+                            <h6 class="text-medium mb-30">Submited Application</h6>
+                        </div>
+                        <div class="right">
+                            <div class="select-style-1">
+                                <div class="select-position select-sm">
+                                    <select class="light-bg">
+                                        <option value="">Today</option>
+                                        <option value="">Yesterday</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- end select -->
+                        </div>
+                    </div>
+                    <!-- End Title -->
+                    <div class="table-responsive">
+                        <table class="table top-selling-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr.No.</th>
+                                    <th>Army No</th>
+                                    <th>Applicant Name</th>
+                                    <th>Application Type</th>
+
+                                    <th>Applied Date</th>
+                                    <th class="noExport">Status</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                        <!-- End Table -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

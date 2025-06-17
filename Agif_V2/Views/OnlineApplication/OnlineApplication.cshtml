@@ -344,7 +344,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control readonly-blocked" id="dateOfRetirement" aria-label="Date of Retirement" value="@Model.CommonData?.DateOfRetirement?.ToString("yyyy-MM-dd")" name="CommonData.DateOfRetirement" readonly tabindex="-1">
+                                        <input type="date" class="form-control " id="dateOfRetirement" aria-label="Date of Retirement" value="@Model.CommonData?.DateOfRetirement?.ToString("yyyy-MM-dd")" name="CommonData.DateOfRetirement" tabindex="-1" readonly>
                                         <label class="form-label select-label ">Date of Retirement</label>
                                     </div>
                                 </div>
@@ -387,7 +387,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="email" id="emailId" name="CommonData.Email" class="form-control" maxlength="64" value="@Model.CommonData?.Email" required />
+                                        <input type="text" id="emailId" name="CommonData.Email" class="form-control" maxlength="64" value="@Model.CommonData?.Email" required />
                                         <label class="form-label select-label ">Email ID</label>
                                     </div>
                                 </div>
@@ -1429,20 +1429,21 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_approxDisbursementAmt, "", new { @class = "text-danger" })
                                     </div>
-                            <input type="hidden" id="totalResidualMonth" name="PCAApplication.totalResidualMonth" value="0" value="@Model.PCAApplication?.totalResidualMonth" />
+                                    
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 }
             }
-
+            <input type="hidden" id="totalResidualMonth" name="totalResidualMonth" value="0" />
             <div class="col-md-12">
                 <div class="mt-4 text-center">
                     <button class="btn btn-primary" id="btn-save" type="submit">Next</button>
-                    <a href="/Upload/Upload?formType=CA" class="btn btn-primary">CA Form</a>
+                    <!-- <a href="/Upload/Upload?formType=CA" class="btn btn-primary">CA Form</a>
                     <a href="/Upload/Upload?formType=PCA" class="btn btn-primary">PCA Form</a>
-                    <a href="/Upload/Upload?formType=HBA" class="btn btn-primary">HBA Form</a>
+                    <a href="/Upload/Upload?formType=HBA" class="btn btn-primary">HBA Form</a-->
                     <button type="button" class="btn btn-primary" id="fillDemoDataBtn">Fill Demo Data</button>
 
                 </div>

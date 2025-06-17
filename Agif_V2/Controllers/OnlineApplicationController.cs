@@ -248,7 +248,7 @@ namespace Agif_V2.Controllers
         }
         */
         public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
-        {
+            {
             string formType = string.Empty;
 
 

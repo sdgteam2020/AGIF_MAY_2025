@@ -1,5 +1,7 @@
 ﻿
 function expandAccordions() {
+
+    //$('#dateOfRetirement').val("2044-10-12");
     let $toggleButton = $('#toggleAll');
 
     $toggleButton.on('click', function () {
@@ -312,6 +314,7 @@ function calculateYearDifference() {
 }
 const globleRetirementDate = {};
 function SetRetDate() {
+    console.log("SetRetDate called");
     var Prefix = $('#armyPrefix').val();
     var ranks = $('#ddlrank').val();
     var rankId = parseInt(ranks);
@@ -344,7 +347,7 @@ function SetRetDate() {
     console.log(dateParts.length);
     if (dateParts.length === 3) {
         if (EnrollDate == "" || EnrollDate == undefined || dateOfBirthString == "" || dateOfBirthString == undefined) {
-
+            console.log('EnrollDate or dateOfBirthString is empty or undefined.')
         }
         else {
             $.ajax({
@@ -368,6 +371,7 @@ function SetRetDate() {
                             var dd = String(dob.getDate()).padStart(2, '0');
                             var formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
+                            setOutlineActive("dateOfRetirement");
                             globleRetirementDate.value = formattedDate;
                             calculateResidualService();
                         } else {
@@ -391,6 +395,7 @@ function SetRetDate() {
                             var dd = String(dob.getDate()).padStart(2, '0');
                             var formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
+                            setOutlineActive("dateOfRetirement");
                             globleRetirementDate.value = formattedDate;
                             calculateResidualService();
                         } else {
@@ -419,6 +424,7 @@ function SetRetDate() {
                                 var dd = String(dob.getDate()).padStart(2, '0');
                                 var formattedDate = `${yyyy}-${mm}-${dd}`;
                                 $('#dateOfRetirement').val(formattedDate);
+                                setOutlineActive("dateOfRetirement");
                                 globleRetirementDate.value = formattedDate;
                                 calculateResidualService();
                                 ExtensionOfServiceAccess();
@@ -442,6 +448,7 @@ function SetRetDate() {
                                 var dd = String(dob.getDate()).padStart(2, '0');
                                 var formattedDate = `${yyyy}-${mm}-${dd}`;
                                 $('#dateOfRetirement').val(formattedDate);
+                                setOutlineActive("dateOfRetirement")
                                 globleRetirementDate.value = formattedDate;
                                 calculateResidualService();
                                 ExtensionOfServiceAccess();
@@ -466,7 +473,6 @@ function SetRetDate() {
 function calculateResidualService() {
     var retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
     if (!retirementDateStr) {
-        alert("Please enter the retirement date.");
         return;
     }
 
@@ -478,7 +484,6 @@ function calculateResidualService() {
     currentDate.setHours(0, 0, 0, 0);
 
     if (retirementDate < currentDate) {
-        alert("Retirement date is in the past.");
         return;
     }
 
@@ -499,7 +504,6 @@ function calculateResidualService() {
     var totalmonths = years * 12 + months;
     $("#totalResidualMonth").val(totalmonths);
     $("#residualService").val(years);
-
     setOutlineActive("residualService");
     
 }
@@ -719,12 +723,20 @@ function textChange() {
 
 let formSubmitting = false;
 let formCancelled = false;
+function filterAmountText(loanType) {
+    if (loanType == 2) {
+        const VehicleCost = $('#vehicleCost');
+        const cleanedValue = VehicleCost.val().replace(/,/g, '');
+        VehicleCost.val(cleanedValue);
+        alert(cleanedValue);
+    }
+}
+
 function handleSubmitClick() {
     document.getElementById("btn-save").addEventListener("click", function (event) {
         event.preventDefault(); // Prevent form submission
         const form = document.getElementById("myForm");
         const inputs = form.querySelectorAll("input, select");
-
         // Clear previous error messages
         form.querySelectorAll(".error").forEach(span => span.textContent = "");
 
@@ -734,26 +746,35 @@ function handleSubmitClick() {
 
        const params = new URLSearchParams(window.location.search);
 
-        const loanType = params.get("loanType");
+        //const params = new URLSearchParams(window.location.search);
+        //const loanType = params.get("loanType");
+        const params = new URLSearchParams(window.location.search);
+
+        const loanTypeFromUrl = params.get("loanType");
+
+        const loanTypeFromInput = document.getElementById('loanType')?.value || null;
+
+        const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
 
         //const loanTypeFromInput = document.getElementById('loanType')?.value || null;
 
         //const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+        filterAmountText(loanType);
 
 
 
 
         inputs.forEach(input => {
 
-            if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
-                return;
-            }
-            else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-                return;
-            }
-            else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-                return;
-            }
+            //if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
+            //    return;
+            //}
+            //else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+            //    return;
+            //}
+            //else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+            //    return;
+            //}
 
             if (!input.checkValidity()) {
                 const errorSpan = input.parentElement.querySelector(".error");
@@ -1129,7 +1150,9 @@ function calculateEMIRepayingCapacity_PCA() {
 }
 function calculateMaxEMI_PCA() {
 
-    var Residual = parseInt($('#totalResidualMonth').val()) - 6;
+    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+    Residual -= 6;
+
     EMI = 48;
     if (EMI < Residual) {
         $("#PCA_EMI_Eligible").val(EMI);
@@ -1238,7 +1261,9 @@ function calculateEMIRepayingCapacity_CA() {
 }
 function calculateMaxEMI_CA(vehicalType) {
 
-    var Residual = parseInt($('#totalResidualMonth').val()) - 6;
+    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+    Residual -= 6;
+
     var EMI = 0;
     if (vehicalType == 2) {
         EMI = 96;
@@ -1398,7 +1423,9 @@ function calculateEMIRepayingCapacity_HBA() {
     setOutlineActive("HBA_repayingCapacity");
 }
 function calculateMaxEMI_HBA(propType) {
-    var Residual = parseInt($('#totalResidualMonth').val()) - 6;
+    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+    Residual -= 6;
+
     if (propType == 5) {
         EMI = 120;
         if (EMI < Residual) {
@@ -1409,6 +1436,7 @@ function calculateMaxEMI_HBA(propType) {
         }
     }
     else {
+        console.log($('#totalResidualMonth').val())
         EMI = 240;
         if (EMI < Residual) {
             $("#HBA_EMI_Eligible").val(EMI);

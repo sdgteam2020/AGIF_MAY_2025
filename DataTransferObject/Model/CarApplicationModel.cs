@@ -36,7 +36,8 @@ namespace DataTransferObject.Model
         public string? ModelName { get; set; }
 
         [Required(ErrorMessage = "Vehicle Cost is required.")]
-        [DataType(DataType.Currency, ErrorMessage = "Invalid format for vehicle cost.")]
+        //[DataType(DataType.Currency, ErrorMessage = "Invalid format for vehicle cost.")]
+        [Range(0, int.MaxValue, ErrorMessage = "Vehicle Cost must be a valid amount.")]
         public int? VehicleCost { get; set; }
 
         [Required(ErrorMessage = "Loan Frequency is required.")]

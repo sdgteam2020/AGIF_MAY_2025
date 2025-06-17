@@ -43,6 +43,7 @@ namespace DataAccessLayer
 
         public virtual DbSet<DocumentUpload> trnDocumentUpload { get; set; }
         public virtual DbSet<MStatusTable> StatusTable { get; set; }
+        public virtual DbSet<DigitalSignRecords> trnDigitalSignRecords { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

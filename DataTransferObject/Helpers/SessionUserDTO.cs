@@ -8,6 +8,7 @@ namespace DataTransferObject.Helpers
 {
     public class SessionUserDTO
     {
+        public string ArmyNo { get; set; } = string.Empty;
         public int ProfileId { get; set; }
         public string UserName { get; set; } = string.Empty;
         public bool IsCO { get; set; }

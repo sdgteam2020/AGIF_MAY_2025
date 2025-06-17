@@ -27,13 +27,13 @@
                         <table class="table table-striped border border-purple table-hover" id="tblApplications">
                             <thead>
                                 <tr>
-                                    <th><h6>Sr.No.</h6></th>
-                                    <th><h6>Army No</h6></th>
-                                    <th><h6>Applicant Name</h6></th>
-                                    <th><h6>Application Type</h6></th>
-                                    <th><h6>Date of Birth</h6></th>
-                                    <th><h6>Applied Date</h6></th>
-                                    <th class="noExport"><h6>Action</h6></th>
+                                    <th>Sr.No.</th>
+                                    <th>Army No</th>
+                                    <th>Applicant Name</th>
+                                    <th>Application Type</th>
+                                    <th>Date of Birth</th>
+                                    <th>Applied Date</th>
+                                    <th class="noExport">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,7 +58,7 @@
                     <i class="bi bi-file-earmark-pdf fs-4 me-3"></i>
                     <div>
                         <h5 class="modal-title fw-bold mb-0" id="ViewPdfLabel">View Application</h5>
-                        <small class="opacity-75">Application ID: 7</small>
+                        <span class="opacity-75" id="spnapplicationId"></span>
                     </div>
                 </div>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -254,10 +254,11 @@
                                                             <i class="bi bi-x-circle me-1"></i>
                                                             Reject
                                                         </button>
-                                                        <button type="button" class="btn btn-success btn-sm" id="acceptButton">
+                                                        <button type="button" class="btn btn-success btn-sm" id="acceptButton" >
                                                             <i class="bi bi-check-circle me-1"></i>
                                                             Recom & E-sign
                                                         </button>
+                                                        <span display="none" id="IcNo" data-id="@ViewBag.ArmyNo"></span>
                                                     </div>
                                                 </div>
                                                 
@@ -301,7 +302,7 @@
 
 <style>
     /* Custom styles for better appearance */
-    .dataTables_wrapper .dataTables_length select {
+ /*    .dataTables_wrapper .dataTables_length select {
         padding: 4px 18px;
         border: 1px solid #ddd;
         border-radius: 4px;
@@ -339,5 +340,5 @@
 
     .me-2 {
         margin-right: 0.5rem;
-    }
+    } */
 </style>

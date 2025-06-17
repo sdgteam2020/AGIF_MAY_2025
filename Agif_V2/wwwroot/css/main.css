@@ -96,7 +96,7 @@ p {
     font-weight: 400;
     line-height: 25px;
     margin: 0px;
-    color: #fff;
+    color: #000000;
 }
 
 .img-bg {
@@ -307,7 +307,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-    color: #fff;
+    color: #000000;
     margin: 0;
 }
 
@@ -1784,6 +1784,11 @@ h6,
 .icon-card .icon.purple {
     background: rgba(155, 81, 224, 0.1);
     color: #9b51e0;
+}
+
+.icon-card .icon.red {
+    background: rgba(155, 81, 224, 0.1);
+    color: #d50100;
 }
 
 .icon-card .icon.success {
@@ -4191,7 +4196,7 @@ h6,
 
 .sidebar-nav-wrapper .navbar-logo {
     padding: 0px 98px;
-    margin-bottom: 17px;
+    margin-bottom: 32px;
     margin-top: -5px;
 }
 
@@ -4211,7 +4216,7 @@ h6,
 
 .sidebar-nav-wrapper .sidebar-nav ul .nav-item {
     position: relative;
-    background: #37221c;
+    background: #b72a02;
 }
 
     .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children > a {
@@ -4260,7 +4265,7 @@ h6,
             }
 
     .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children ul {
-        padding: 10px 24px 40px 57px;
+        padding: 10px 0px 29px 23px;
     }
 
         .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children ul li {
@@ -4285,7 +4290,8 @@ h6,
                     font-weight: bold;
                     background: #fff;
                     padding: 6px;
-                    border-radius: 4px;
+                    /* border-radius: 4px;*/
+                    border-radius: 4px 0px 0px 4px;
                 }
 
                 .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children ul li a i {
@@ -6537,12 +6543,14 @@ h6,
     font-size: 45px;
     font-weight: 600;
 }
+
 #headerText {
     color: rgb(199, 0, 57);
     font-weight: 800;
     text-shadow: 1px 1px 2px yellow, 0 0 25px white, 0 0 5px yellow;
     font-size: 40px;
 }
+
 @media (min-width: 1400px) {
     .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
         max-width: 100%;
@@ -6554,11 +6562,33 @@ h6,
         max-width: 100%;
     }
 }
+
 .table > thead {
     vertical-align: bottom;
-    background-color: #310;
 }
+
 .modal-header {
-   
     background-color: blue;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    padding: 10px !important;
+}
+
+    thead tr {
+        background-color: #310 !important;
+        color: #fff;
+    }
+
+.bg-gradient-custom {
+    background-image: linear-gradient(to right, red 1%, white 30%, white 70%, red 100%);
+}
+
+.bg-gradient-custom-vertical {
+    background-image: linear-gradient(to bottom, red 1%, white 30%, white 70%, red 100%);
+}
+
+.card-header {
+    background-color: #310;
+    color: white;
 }
