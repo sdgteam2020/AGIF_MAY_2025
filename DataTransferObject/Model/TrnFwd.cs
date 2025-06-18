@@ -12,9 +12,9 @@ namespace DataTransferObject.Model
         [Key]
         public int FwdId { get; set; }
         public int ApplicationId { get; set; }
-        public string FromUserId { get; set; }
+        public int FromUserId { get; set; }
         public int FromProfileId { get; set; }
-        public string ToUserId { get; set; }
+        public int ToUserId { get; set; }
         public int ToProfileId { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
     }

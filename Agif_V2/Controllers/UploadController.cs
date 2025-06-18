@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Interfaces;
+using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using iText.Kernel.Pdf;
 using iText.Kernel.Utils;
@@ -149,6 +150,21 @@ namespace Agif_V2.Controllers
             await _IDocumentUpload.Add(fileUpload);
 
             await _IonlineApplication1.UpdateApplicationStatus(applicationId,1);
+
+            var ret = _IonlineApplication1.Get(applicationId);
+
+
+            TrnFwdCO trnFwdCO = new TrnFwdCO
+            {
+                ApplicationId = applicationId,
+                ArmyNo = ArmyNo,
+                COUserId = 1,
+                ProfileId = 1,
+                CreatedOn = DateTime.Now,
+                Status = 1 
+            };
+            await _IonlineApplication1.AddFwdCO(trnFwdCO);
+
             
             TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});

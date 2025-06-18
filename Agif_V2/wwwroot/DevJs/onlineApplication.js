@@ -1,4 +1,18 @@
 ﻿
+$(document).ready(function () {
+    expandAccordions();
+    confirmAccountNo();
+    loadDropdown();
+    enableDisablePromotionDate();
+    Inputmask().mask(document.querySelectorAll("input"));
+    EnableDisablePCDA();
+    EnableDisableCivilPostalAdd();
+    RefreshMaxAmt_PCA();
+    RefreshMaxAmt_CA();
+    RefreshMaxAmt_HBA();
+    handleSubmitClick();
+
+}); 
 function expandAccordions() {
 
     //$('#dateOfRetirement').val("2044-10-12");
@@ -728,12 +742,12 @@ function filterAmountText(loanType) {
         const VehicleCost = $('#vehicleCost');
         const cleanedValue = VehicleCost.val().replace(/,/g, '');
         VehicleCost.val(cleanedValue);
-        alert(cleanedValue);
+       
     }
 }
 
 function handleSubmitClick() {
-    document.getElementById("btn-save").addEventListener("click", function (event) {
+    document.getElementById("btn-save1").addEventListener("click", function (event) {
         event.preventDefault(); // Prevent form submission
         const form = document.getElementById("myForm");
         const inputs = form.querySelectorAll("input, select");
@@ -743,8 +757,7 @@ function handleSubmitClick() {
        // let errorlist = "";
         let errorlist = []; // Use an array to store individual error messages
         let hasError = false;
-
-       const params = new URLSearchParams(window.location.search);
+        
 
         //const params = new URLSearchParams(window.location.search);
         //const loanType = params.get("loanType");
@@ -777,6 +790,7 @@ function handleSubmitClick() {
             //}
 
             if (!input.checkValidity()) {
+                debugger;
                 const errorSpan = input.parentElement.querySelector(".error");
                 if (errorSpan) {
                     errorSpan.textContent = input.validationMessage;
@@ -800,11 +814,16 @@ function handleSubmitClick() {
 
 
         //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
-      //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
+        //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
+        if (errorlist.length > 0) {
+            var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
 
-        var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
-        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors +' </div>')
+            $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
 
+        }
+        else {
+            hasError = false;
+        }
         if (hasError) {
             return false;
         }
