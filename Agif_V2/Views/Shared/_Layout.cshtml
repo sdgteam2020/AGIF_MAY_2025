@@ -38,6 +38,13 @@
         </div>
         <nav class="sidebar-nav ">
             <ul>
+                <li class="nav-item ">
+                    <a href="/Home/index">
+                        <i class="lni lni-layout mr-2"></i>
+                        Dashboard
+                    </a>
+                </li>
+
                 @if (Model?.Role == "CO")
                 {
                     <li class="nav-item nav-item-has-children">
@@ -47,12 +54,12 @@
                            aria-controls="ddmenu_1"
                            aria-expanded="false"
                            aria-label="Toggle navigation">
-                            <i class="bi bi-list-check"></i>
+                            <i class="bi bi-list-check mr-2"></i>
                             <span class="text">Applications</span>
                         </a>
                         <ul id="ddmenu_1" class="collapse show dropdown-nav">
                             <li>
-                                <a href="~/ApplicationRequest/UserApplicationList?status=1" class="active"><i class="bi bi-hourglass"></i>Pending </a>
+                                <a href="~/ApplicationRequest/UserApplicationList?status=1"><i class="bi bi-hourglass"></i>Pending </a>
 
                             </li>
                             <li>
@@ -90,8 +97,8 @@
                     </li>
                 }
 
-
             </ul>
+
         </nav>
 
     </aside>
@@ -129,8 +136,8 @@
                                                 <img src="~/images/logo/User_Logo.png" alt="" />
                                             </div>
                                             <div>
-                                                <h6 class="fw-500">@Model?.UserName</h6>
-                                                <p>@Model?.UserName</p>
+                                                <h6 class="fw-500 text-white">Welcome  </h6>
+                                                <p class="text-white fw-400 fs-5">@Model?.UserName</p>
                                             </div>
                                         </div>
                                     </div>
@@ -209,7 +216,7 @@
     <script src="~/js/world-merc.js"></script>
     <script src="~/js/polyfill.js"></script>
     <script src="~/js/main.js"></script>
-    <script src="~/DevJs/GetAllUsers.js"></script>
+    @* <script src="~/DevJs/GetAllUsers.js"></script> *@
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

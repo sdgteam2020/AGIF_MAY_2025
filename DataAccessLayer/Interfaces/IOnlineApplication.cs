@@ -18,13 +18,15 @@ namespace DataAccessLayer.Interfaces
 
         Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
 
-        Task UpdateApplicationStatus(int applicationId, int status);
+        Task<bool> UpdateApplicationStatus(int applicationId, int status);
 
         Task<bool> CheckForCoRegister(string ArmyNo);
 
         Task<bool> CheckIsUnitRegister(string ArmyNo, int UnitId);
 
         Task<bool> CheckIsCoRegister(int UnitId);
+
+
 
     }
 }

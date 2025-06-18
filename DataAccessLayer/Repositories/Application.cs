@@ -1,4 +1,6 @@
-﻿using DataTransferObject.Request;
+﻿using DataAccessLayer.Interfaces;
+using DataTransferObject.Model;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,28 +11,17 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class Application : Interfaces.IApplication
+    public class Application : GenericRepositoryDL<DigitalSignRecords>, IApplication
     {
         private readonly ApplicationDbContext _context;
-        public Application(ApplicationDbContext context)
+        public Application(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
-        public async Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl)
+
+        public Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl)
         {
-            var query = _context.trnApplications;
-            if (dTOGetAppl.status > 0)
-            {
-                query = query;
-            }
-
-            var applications = await query.Select(app => new DTOGetApplResponse
-            {
-                ApplicationId = app.ApplicationId,
-                Name = app.ApplicantName,
-            }).ToListAsync();
-
-            return applications; // Ensure ToListAsync is available
+            throw new NotImplementedException();
         }
     }
 }

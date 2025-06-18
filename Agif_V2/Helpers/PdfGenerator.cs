@@ -19,7 +19,7 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath,bool isRejected,bool isApproved)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);

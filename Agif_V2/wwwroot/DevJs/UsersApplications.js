@@ -15,7 +15,7 @@
         var icNo = $("#IcNo").data("id");
         let value = true;
 
-        var remarkField = $("#txtremark");
+        var remarkField = $("#txtRemark");
         var remarkValue = remarkField.val().trim();
         if (remarkValue === "") {
             remarkField.val("Accepted");
@@ -192,7 +192,7 @@ function mergePdf(applicationId) {
     $.ajax({
         type: "POST",
         url: "/OnlineApplication/MergePdf",
-        data: { applicationId: applicationId },
+        data: { applicationId: applicationId ,isRejected:false,isApproved:false},
         dataType: 'json',
         success: function (response) {
             console.log('Response received:', response);
@@ -347,9 +347,10 @@ function GetTokenSignXml(xml) {
 function SignXmlSendTOdatabase(xmlString) {
     let encodedXml = encodeURIComponent(xmlString);
     var applnId = $('#spnapplicationId').html();
+    var remarks = $('#txtRemark').val();
     $.ajax({
         url: "/ApplicationRequest/SaveXML",
-        data: { applId: applnId, xmlResString: encodedXml },
+        data: { applId: applnId, xmlResString: encodedXml, remarks: remarks },
         type: 'POST',
         success: function () {
             Swal.fire({

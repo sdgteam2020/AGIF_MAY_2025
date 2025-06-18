@@ -571,7 +571,7 @@ namespace Agif_V2.Controllers
         //    }
         //}
 
-        public async Task<JsonResult> MergePdf(int applicationId)
+        public async Task<JsonResult> MergePdf(int applicationId,bool isRejected,bool isApproved)
         {
             try
             {
@@ -634,7 +634,7 @@ namespace Agif_V2.Controllers
 
                 try
                 {
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath);
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved);
                     if (data == 1)
                     {
                         pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");

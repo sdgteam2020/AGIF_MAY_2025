@@ -283,17 +283,19 @@ namespace DataAccessLayer.Repositories
             return Task.FromResult(data);
         }
 
-        public async Task UpdateApplicationStatus(int applicationId, int status)
+        public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
         {
-            var application = await _context.trnApplications.FindAsync(applicationId);
+            var application = await _context.trnApplications.Where(i=>i.ApplicationId==applicationId).SingleOrDefaultAsync();
             if (application == null)
             {
-                return; // Just exit the method if not found
+                return false; // Just exit the method if not found
             }
 
             application.StatusCode = status;
             _context.trnApplications.Update(application);
             await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> CheckForCoRegister(string ArmyNo)

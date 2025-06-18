@@ -1,11 +1,13 @@
 ﻿using Agif_V2.Helpers;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
+using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System;
 
 namespace Agif_V2.Controllers
 {
@@ -13,10 +15,15 @@ namespace Agif_V2.Controllers
     {
         private readonly IUsersApplications _userApplication;
         private readonly IOnlineApplication _onlineApplication;
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication)
+        private readonly IApplication _application;
+        private readonly OnlineApplicationController _onlineApplicationController;
+        
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,OnlineApplicationController _onlineApplicationController)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
+            this._application = _application;
+            this._onlineApplicationController = _onlineApplicationController;
         }
         public IActionResult Index()
         {
@@ -149,39 +156,40 @@ namespace Agif_V2.Controllers
 
         }
 
-        public void SaveXML(string applId, string xmlResString)
+        public async Task SaveXML(int applId, string xmlResString, string remarks)
         {
-                
-                //string armyNo = Session["ArmyNo"].ToString();
-                ////string RankName = Session["RankName"].ToString();
-                //string RankName = Session["Name"].ToString();
-                //string Domain = Session["DomainId"].ToString();
+            try
+            {
+                DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applId);
 
-                //tbl_DigitalSignRecord model = new tbl_DigitalSignRecord();
-                //int NewId = Convert.ToInt32(EncryptDecrypt.Decryption(applId));
-                //CarPcModel carPcModel = con.carPcModel.Find(NewId);
-                //model.ApplId = NewId;
-                //model.XMLSignResponce = Uri.UnescapeDataString(smlResString);
-                //model.SignOn = DateTime.Now;
-                //model.Remarks = rem;
-                //model.IsSign = true;
-                ////model.DomainId = domain;
-                ////model.ArmyNo = armyNo;
-                ////model.RankName = RankName;
-                //carPcModel.Status = carPcModel.Status = (int)CommonEnum.AppStatus.ApprovedByCO;
-                //carPcModel.Remark = rem;
-                //carPcModel.IsCOApproved = true;
-                //con.Entry(carPcModel).State = EntityState.Modified;
-                //model.DomainId = Domain;
-                //model.ArmyNo = armyNo;
-                //model.RankName = RankName;
-                //con.xmlSignModels.Add(model);
-                //con.SaveChanges();
+                var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
+                if (dTOTempSession == null)
+                    throw new Exception("Session expired or invalid user context.");
 
-                ////Merge approved PDF
-                //MergePdf(applId, false, true);
-            
+                var digitalSignRecords = new DigitalSignRecords
+                {
+                    ApplId = applId,
+                    XMLSignResponse = xmlResString,
+                    SignOn = DateTime.Now,
+                    Remarks = remarks,
+                    IsSign = true,
+                    DomainId = dTOTempSession.DomainId,
+                    ArmyNo = dTOTempSession.ArmyNo,
+                    RankName = dTOTempSession.RankName
+                };
+
+                await _onlineApplication.UpdateApplicationStatus(applId, 2); // This is the likely failing line
+                await _application.Add(digitalSignRecords);
+                _onlineApplicationController.MergePdf(applId, false, true);
+            }
+            catch (Exception ex)
+            {
+                // Log the error or return appropriate response
+                Console.WriteLine($"Error in SaveXML: {ex.Message}\n{ex.StackTrace}");
+                throw;
+            }
         }
+
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataTransferObject.Request;
+﻿using DataTransferObject.Model;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface IApplication
+    public interface IApplication : IGenericRepositoryDL<DigitalSignRecords>
     {
         Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl);
     }

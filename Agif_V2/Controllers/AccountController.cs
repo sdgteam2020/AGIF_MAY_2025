@@ -95,6 +95,8 @@ namespace Agif_V2.Controllers
                     SessionUserDTO sessionCO = new SessionUserDTO
                     {
                         ArmyNo = userArmyNo,
+                        RankName = "rankName",
+                        DomainId = "Test Domain"
                     };
                     Helpers.SessionExtensions.SetObject(HttpContext.Session, "CO", sessionCO);
                 }
