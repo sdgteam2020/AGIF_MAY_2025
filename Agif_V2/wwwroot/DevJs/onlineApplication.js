@@ -742,12 +742,12 @@ function filterAmountText(loanType) {
         const VehicleCost = $('#vehicleCost');
         const cleanedValue = VehicleCost.val().replace(/,/g, '');
         VehicleCost.val(cleanedValue);
-       
+        //alert(cleanedValue);
     }
 }
 
 function handleSubmitClick() {
-    document.getElementById("btn-save1").addEventListener("click", function (event) {
+    document.getElementById("btn-save").addEventListener("click", function (event) {
         event.preventDefault(); // Prevent form submission
         const form = document.getElementById("myForm");
         const inputs = form.querySelectorAll("input, select");
@@ -757,11 +757,12 @@ function handleSubmitClick() {
        // let errorlist = "";
         let errorlist = []; // Use an array to store individual error messages
         let hasError = false;
-        
+
+       const params = new URLSearchParams(window.location.search);
 
         //const params = new URLSearchParams(window.location.search);
         //const loanType = params.get("loanType");
-        const params = new URLSearchParams(window.location.search);
+       // const params = new URLSearchParams(window.location.search);
 
         const loanTypeFromUrl = params.get("loanType");
 
@@ -779,18 +780,17 @@ function handleSubmitClick() {
 
         inputs.forEach(input => {
 
-            //if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
-            //    return;
-            //}
-            //else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-            //    return;
-            //}
-            //else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-            //    return;
-            //}
+            if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
+                return;
+            }
+            else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+                return;
+            }
+            else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+                return;
+            }
 
             if (!input.checkValidity()) {
-                debugger;
                 const errorSpan = input.parentElement.querySelector(".error");
                 if (errorSpan) {
                     errorSpan.textContent = input.validationMessage;
@@ -814,21 +814,17 @@ function handleSubmitClick() {
 
 
         //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
-        //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
-        if (errorlist.length > 0) {
-            var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+      //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
 
-            $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
+        var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors +' </div>')
 
-        }
-        else {
-            hasError = false;
-        }
         if (hasError) {
             return false;
         }
         else {
             //form.submit();
+            $("#msgerror").html(''); // Clear error message
             if (formSubmitting) return; // Allow submission after confirmation
             if (formCancelled) {
                 formCancelled = false; // Reset flag
@@ -883,7 +879,7 @@ function checkCORegistration() {
                 } else if (result === false) {
                     // If not registered, set unit input back to required
                     formSubmitting = true;
-                    $('#myForm_CA').submit();
+                    $('#myForm').submit();
                     //document.getElementById("txtUnit").removeAttribute("disabled");
                     //document.getElementById("txtUnit").setAttribute("required", "required");
                 }

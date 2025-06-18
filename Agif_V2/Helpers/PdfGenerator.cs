@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using iText.IO.Font;
 using iText.IO.Font.Constants;
+using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
@@ -9,6 +10,8 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.Extensions.Hosting.Internal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using Path = System.IO.Path;
 
 namespace Agif_V2.Helpers
@@ -20,10 +23,11 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath,bool isRejected,bool isApproved)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath,bool isRejected,bool isApproved,string UserName,string IpAddress)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
+            var dated = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
@@ -120,46 +124,599 @@ namespace Agif_V2.Helpers
                         AddLoanRow("30. Loan Frequency", hba.HBA_LoanFreq.ToString(), "", "");
 
                         document.Add(hbaTable);
+                        PdfFont regularFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                        Paragraph para28 = new Paragraph("31.I have read the Terms & Conditions, Instructions and Rules regulating the grant of House Building Advance to AGIF members and agree to abide by them. I agree to pay the one time non-refundable insurance premium. I shall refund in one lump sum the full loan amount together with interest outstanding, in case, I wish to sell or transfer the house by way of gift deed.")
+                        .SetFont(regularFont)
+                        .SetFontSize(10)
+                        .SetMarginTop(10)
+                        .SetMarginBottom(5);
+                        document.Add(para28);
+                        document.Add(new Paragraph("\n"));
 
-                        document.Add(new Paragraph("31. I have read the Terms & Conditions, Instructions and Rules regulating the grant of House Building Advance to AGIF members and agree to abide by them. I agree to pay the one time non-refundable insurance premium. I shall refund in one lump sum the full loan amount together with interest outstanding, in case, I wish to sell or transfer the house by way of gift deed.")
-           .SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
+                        // Section 29
+                        Paragraph para29 = new Paragraph("32. I state and certify that:-")
+                            .SetFont(regularFont)
+                            .SetFontSize(10)
+                            .SetMarginTop(10)
+                            .SetMarginBottom(5);
+                        document.Add(para29);
 
-                        document.Add(new Paragraph("32. I state and certify that:")
-                            .SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
-
-                        List<string> checkPara = new List<string>
-                {
-             "(a) If, at any time, it is found that I have obtained loan from AGIF by misrepresentation, fraud,  misstatement or have committed a breach of the terms & conditions issued from time to time by AGIF, I shall without prejudice, be liable to legal, disciplinary or any other action and will become liable to repay in one lump sum the full loan amount together with interest outstanding, for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, to AGIF without any demur.",
-             "(b) I will maintain adequate credit in my IRLA to meet EMI payment during the duration and till complete repayment of loan. In case of any debit balance resulting in non-remittance of EMI by the CDA (O) / PAO (OR) to AGIF, I undertake to pay it directly along with interest for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, as levied by the AGIF for the delayed period.",
-             "(c) In the event of my becoming non-effective due to any reason like retirement / dismissal / premature retirement / death preceding retirement etc, the AGIF shall be entitled to recover through the PAO (OR) / CDA(O) and/or receive the balance of the loan with interest remaining unpaid and any other dues from the whole or any specified part of the gratuity, Insurance / Disability / Maturity / survival benefit of AGIF, death benefits, DSOP Fund, DCRG, Commuted value of pension, leave encashment, service pension, that may be payable to me, without any demur from any quarter.",
-             "(d) I hereby voluntarily authorize CDA(O) / PAO(OR) to deduct EMI on account of HBA taken from the AGIF from my pay and allowances on a monthly basis and remit the same to AGIF on my behalf. I hereby assign and transfer upto the AGIF the House by way of security for the said loan and the interest thereon.",
-             "(e) In case of any dispute arising with regards to the rules, agreements and deeds executed there under, I am bound to the jurisdiction of Delhi Courts only."
-                };
+                        List<string> checkPara = new List<string> {
+                             "(a) If, at any time, it is found that I have obtained loan from AGIF by misrepresentation, fraud,  misstatement or have committed a breach of the terms & conditions issued from time to time by AGIF, I shall without prejudice, be liable to legal, disciplinary or any other action and will become liable to repay in one lump sum the full loan amount together with interest outstanding, for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, to AGIF without any demur.",
+                     "(b) I will maintain adequate credit in my IRLA to meet EMI payment during the duration and till complete repayment of loan. In case of any debit balance resulting in non-remittance of EMI by the CDA (O) / PAO (OR) to AGIF, I undertake to pay it directly along with interest for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, as levied by the AGIF for the delayed period.",
+                     "(c) In the event of my becoming non-effective due to any reason like retirement / dismissal / premature retirement / death preceding retirement etc, the AGIF shall be entitled to recover through the PAO (OR) / CDA(O) and/or receive the balance of the loan with interest remaining unpaid and any other dues from the whole or any specified part of the gratuity, Insurance / Disability / Maturity / survival benefit of AGIF, death benefits, DSOP Fund, DCRG, Commuted value of pension, leave encashment, service pension, that may be payable to me, without any demur from any quarter.",
+                     "(d) I hereby voluntarily authorize CDA(O) / PAO(OR) to deduct EMI on account of HBA taken from the AGIF from my pay and allowances on a monthly basis and remit the same to AGIF on my behalf. I hereby assign and transfer upto the AGIF the House by way of security for the said loan and the interest thereon. ",
+                     "(e) In case of any dispute arising with regards to the rules, agreements and deeds executed there under, I am bound to the jurisdiction of Delhi Courts only.",
+                                };
 
                         foreach (var point in checkPara)
                         {
-                            document.Add(new Paragraph(point)
-                                .SetFont(normalFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(3).SetMarginLeft(20));
+                            Paragraph p = new Paragraph(point)
+                                .SetFont(regularFont)
+                                .SetFontSize(10)
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(3)
+                                .SetMarginLeft(20);
+                            document.Add(p);
                         }
 
-             document.Add(new Paragraph("33. I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.")
-              .SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
+                        // Section 30
+                        Paragraph para30 = new Paragraph("33.I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information. ")
+                            .SetFont(regularFont)
+                            .SetFontSize(10)
+                            .SetMarginTop(10)
+                            .SetMarginBottom(5);
+                        document.Add(para30);
+                        document.Add(new Paragraph("\n"));
 
-                        string domainInfo = $"Verified by - {""} IP Address – {""} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt} ";
+                        //string domainInfo = $"Verified by - {""} IP Address – {""} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+
+                        //Paragraph domainParagraph = new Paragraph(domainInfo)
+                        //    .SetFont(regularFont)
+                        //    .SetFontSize(11)
+                        //    .SetFontColor(ColorConstants.BLUE)
+                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
+                        //    .SetMarginBottom(10);
+                        //document.Add(domainParagraph);
+                        //document.Add(new Paragraph("\n"));
+
+                        string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
                         document.Add(new Paragraph(domainInfo)
-                            .SetFont(normalFont).SetFontSize(10).SetFontColor(ColorConstants.BLUE).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(10));
+                            .SetFont(normalFont)
+                            .SetFontColor(ColorConstants.BLUE)
+                            .SetFontSize(12)
+                            .SetTextAlignment(TextAlignment.JUSTIFIED)
+                            .SetMarginBottom(10));
 
-                        Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
-                       // signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated).SetFont(normalFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
-                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number.ToString()).SetFont(normalFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        document.Add(new Paragraph("\n"));
+
+                        //Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 50, 50 })).UseAllAvailableWidth();
+                        ////signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated).SetFont(regularFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
+                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number).SetFont(regularFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        //signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName).SetFont(regularFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        //document.Add(signatureTable);
+
+
+                        Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
+                        // signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
                         signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName).SetFont(normalFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
                         document.Add(signatureTable);
+
+                        if (isApproved)
+                        {
+                            document.Add(new Paragraph("This is an electronically generated PDF")
+                                .SetFont(boldFont)
+                                .SetFontSize(10)
+                                .SetFontColor(ColorConstants.BLUE)
+                                .SetMarginTop(10)
+                                .SetMarginBottom(5));
+
+                            document.Add(new Paragraph("\n"));
+
+                            document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
+                                .SetFont(boldFont)
+                                .SetFontSize(10)
+                                .SetTextAlignment(TextAlignment.CENTER)
+                                .SetUnderline()
+                                .SetMarginTop(10)
+                                .SetMarginBottom(5));
+
+                            Paragraph r1 = new Paragraph()
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(5);
+                            //r1.Add(new Text("1.     I certify that above ").SetFont(regularFont));
+                            //r1.Add(new Text(strAppType).SetFont(boldFont));
+                            r1.Add(new Text(" Application has been submitted by ").SetFont(regularFont));
+                            r1.Add(new Text(common.Number).SetFont(boldFont));
+                            r1.Add(new Text(" ").SetFont(regularFont));
+                            r1.Add(new Text(common.DdlRank).SetFont(boldFont));
+                            r1.Add(new Text(" ").SetFont(regularFont));
+                            r1.Add(new Text(common.ApplicantName).SetFont(boldFont));
+                            r1.Add(new Text(" of my Unit ").SetFont(regularFont));
+                            r1.Add(new Text(common.PresentUnit).SetFont(boldFont));
+                            r1.Add(new Text(". I identify his signature documents as attested by him and certify them to be correct.").SetFont(regularFont));
+                            document.Add(r1);
+
+                            document.Add(new Paragraph("2.     It's certified that I am the CO/OC Tps of " + common.Number + " " + common.DdlRank + " " + common.ApplicantName + " and I am authorised to countersign financial documents of this individual.")
+                                .SetFont(regularFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED));
+
+                            //document.Add(new Paragraph("3.     I have interviewed him on " + interviewDate + " and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only. ")
+                            // .SetFont(regularFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED));
+
+                            document.Add(new Paragraph("4.     It is certified that Bank A/c No " + common.SalaryAcctNo + " of Bank (" + common.NameOfBank + ") with IFSC " + common.IfsCode + " as given in the application...")
+                                .SetFont(regularFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED));
+
+                            document.Add(new Paragraph("5.     I have satisfied myself...")
+                                .SetFont(regularFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED));
+
+                            document.Add(new Paragraph("6.     Application is recommended for sanction and accordingly I countersign the same.")
+                                .SetFont(regularFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED));
+
+                            document.Add(new Paragraph("\n"));
+                        }
+
+                        if (isApproved || isRejected)
+                        {
+                            Table signatureTable2 = new Table(UnitValue.CreatePercentArray(new float[] { 50, 50 })).UseAllAvailableWidth();
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO").SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.DdlRank).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + common.MobileNo).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Sign On: " + dated).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            document.Add(signatureTable2);
+                        }
+
+                        if (isApproved)
+                        {
+                            document.Add(new Paragraph("\n\n"));
+
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
+                            document.Add(icon);
+                        }
+
+                        if (isRejected)
+                        {
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
+                            document.Add(icon);
+                        }
+
+
+                    }
+
+                    else if (data.CarApplicationResponse != null)
+                    {
+                        document.Add(new Paragraph("CAR Loan Details")
+                           .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
+
+                        var car = data.CarApplicationResponse;
+                        Table cartable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 5, 3, 5 })).UseAllAvailableWidth();
+
+                        void AddLoanRow(string label1, string val1, string label2, string val2)
+                        {
+                            cartable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(boldFont)).SetBorder(Border.NO_BORDER));
+                            cartable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            cartable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(boldFont)).SetBorder(Border.NO_BORDER));
+                            cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                        }
+
+                        AddLoanRow("26. Dealer Name", car.DealerName, "27. Model Name", car.ModelName);
+                        AddLoanRow("28. Vehcial Cost", car.VehicleCost.ToString(), "29. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString());
+                        AddLoanRow("30. Loan Frequency", car.CA_LoanFreq.ToString(), "", "");
+
+
+                        var normalFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                        var boldFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+
+                        // Section 29 title
+                        var titleParagraph = new Paragraph("31. I state and certify that:")
+                            .SetFont(normalFontforpara29)
+                            .SetFontSize(10)
+                            .SetMarginTop(10)
+                            .SetMarginBottom(5);
+                        document.Add(titleParagraph);
+
+                        // List of bullet points
+                        var points = new List<string>
+                        {
+                            "(a) I have read the instr / rules regulating the grant of loan to AGIF members for purchase of four / two wheeler and agree to abide by the terms and conditions stipulated therein from time to time. I agree to pay the one-time non-refundable insurance premium and abide by its terms and conditions. \n\n",
+                            "(b) I shall refund in one lump sum the full loan together with interest outstanding thereon, in case, I wish to sell the vehicle. The vehicle will be kept comprehensively insured from the date of its purchase till the loan together with interest, is fully repaid to AGIF. I will not use the vehicle for commercial purpose. \n\n",
+                            "(c) Attested copy of "
+                        };
+
+                        foreach (var point in points)
+                        {
+                            var bulletPoint = new Paragraph().SetFont(normalFontforpara29).SetFontSize(10).SetMarginBottom(3).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginLeft(20);
+                            bulletPoint.Add(point);
+
+                            if (point.StartsWith("(c)"))
+                            {
+                                bulletPoint.Add(new Text("RC, Insurance, Bill / Invoice and Cash Receipt from Dealer").SetFont(boldFontforpara29));
+                                bulletPoint.Add(new Text(" will be submitted within 180 days of sanction of loan. I shall refund the loan in one lump-sum with interest in the event of my failure to purchase the vehicle or to produce relevant documents of purchase within the stipulated time "));
+                                bulletPoint.Add(new Text("180 days").SetFont(boldFontforpara29));
+                                bulletPoint.Add(new Text(", failing which I authorise MD, AGIF to effect recovery of the entire outstanding amount together with additional interest of 2% for default period, through my IRLA."));
+                            }
+                            document.Add(bulletPoint);
+                        }
+
+                        document.Add(new Paragraph("\n\n\n"));
+                        // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+
+                        // Section 30 title
+                        var titleParagraph30 = new Paragraph("32. I further agree that:")
+                            .SetFont(normalFontforpara29)
+                            .SetFontSize(10)
+                            .SetMarginTop(10)
+                            .SetMarginBottom(5);
+                        document.Add(titleParagraph30);
+
+                        var points30 = new List<string>
+                            {
+                                "(a) If, at any time, it is found that I have obtained Car / Two Wheeler Loan from AGIF by misrepresentation, misstatement or fraud...",
+                                "(b) I will ensure that I will maintain adequate credit in my IRLA during the duration of repayment of complete loan instalments...",
+                                "(c) I will repay the loan amount with interest by monthly deductions from my salary...",
+                                "(d) In case the vehicle for which loan has been obtained meets with an accident...",
+                                "(e) In the event of my becoming non-effective / retirement / dismissal / premature retirement...",
+                                "(f) I will pay the sum of loan amount or the balance remaining unpaid..."
+                            };
+
+                        foreach (var point in points30)
+                        {
+                            var bulletPoint30 = new Paragraph(point)
+                                .SetFont(normalFontforpara29)
+                                .SetFontSize(10)
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(3)
+                                .SetMarginLeft(20);
+                            document.Add(bulletPoint30);
+                        }
+
+                        var titleParagraph31 = new Paragraph("33. I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.")
+                            .SetFont(normalFontforpara29)
+                            .SetFontSize(10)
+                            .SetMarginTop(10)
+                            .SetMarginBottom(5);
+                        document.Add(titleParagraph31);
+                        document.Add(new Paragraph("\n"));
+
+                        //var domainInfo = $"Verified by - {""} IP Address – {""} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                        //var domainParagraph = new Paragraph(domainInfo)
+                        //    .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                        //    .SetFontSize(11)
+                        //    .SetFontColor(ColorConstants.BLUE)
+                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
+                        //    .SetMarginBottom(10);
+                        //document.Add(domainParagraph);
+                        //document.Add(new Paragraph("\n"));
+
+                        string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                        document.Add(new Paragraph(domainInfo)
+                            .SetFont(normalFont)
+                            .SetFontColor(ColorConstants.BLUE)
+                            .SetFontSize(12)
+                            .SetTextAlignment(TextAlignment.JUSTIFIED)
+                            .SetMarginBottom(10));
+
+                        document.Add(new Paragraph("\n"));
+
+                        // Signature Table
+                        //var signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 50, 50 })).UseAllAvailableWidth();
+                        ////signatureTable.AddCell(new Cell().Add(new Paragraph($"Date: {carPcModel.DateTimeUpdated}").SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
+                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        //signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        //document.Add(signatureTable);
+
+
+                        Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
+                        // signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        document.Add(signatureTable);
+
+                        if (isApproved)
+                        {
+                            document.Add(new Paragraph("This is an electronically generated PDF")
+                        .SetFont(boldFont).SetFontSize(10).SetFontColor(DeviceRgb.BLUE).SetMarginTop(10).SetMarginBottom(5));
+
+                            document.Add(new Paragraph("\n\n"));
+
+                            document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
+                                .SetFont(boldFont).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(10).SetMarginBottom(5));
+
+                            string strAppType = "Loan"; // Example dynamic value
+                            var carPcDTO = data.OnlineApplicationResponse;
+                            var result = data.OnlineApplicationResponse;
+                            string interviewDate = DateTime.Now.ToString("dd-MM-yyyy");
+
+                            void AddRecParagraph(string text)
+                            {
+                                document.Add(new Paragraph(text)
+                                    .SetFont(normalFont)
+                                    .SetFontSize(10)
+                                    .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                    .SetMarginBottom(5));
+                            }
+
+                            Paragraph p1 = new Paragraph()
+                                .Add(new Text("1. I certify that above ").SetFont(normalFont))
+                                .Add(new Text(strAppType + " Application").SetFont(boldFont))
+                                .Add(new Text(" has been submitted by ").SetFont(normalFont))
+                                .Add(new Text(common.Number + " ").SetFont(boldFont))
+                                .Add(new Text(common.DdlRank + " ").SetFont(boldFont))
+                                .Add(new Text(common.ApplicantName).SetFont(boldFont))
+                                .Add(new Text(" of my Unit ").SetFont(normalFont))
+                                .Add(new Text(common.PresentUnit).SetFont(boldFont))
+                                .Add(new Text(". I identify his signature on supporting documents as attested by him and certify them to be correct. ").SetFont(normalFont))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetFontSize(10);
+
+                            document.Add(p1);
+
+                            Paragraph p2 = new Paragraph()
+                                .Add(new Text("2. It's certified that I am the CO/OC Tps of ").SetFont(normalFont))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont))
+                                .Add(new Text(" and I am authorised to countersign financial documents of this individual. ").SetFont(normalFont))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetFontSize(10);
+
+                            document.Add(p2);
+
+                            Paragraph p3 = new Paragraph()
+                                .Add(new Text("3. I have interviewed him on ").SetFont(normalFont))
+                                .Add(new Text(interviewDate).SetFont(boldFont))
+                                .Add(new Text(" and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.").SetFont(normalFont))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetFontSize(10);
+
+                            document.Add(p3);
+
+                            Paragraph p4 = new Paragraph()
+                                .Add(new Text("4.     It is certified that Bank A/c No ").SetFont(normalFont))
+                                .Add(new Text(common.ConfirmSalaryAcctNo).SetFont(boldFont))
+                                .Add(new Text(" of Bank (").SetFont(normalFont))
+                                .Add(new Text(common.NameOfBank).SetFont(boldFont))
+                                .Add(new Text(") with IFSC ").SetFont(normalFont))
+                                .Add(new Text(common.NameOfBankBranch).SetFont(boldFont))
+                                .Add(new Text(" as given in the application and cancelled cheque is of Salary account of ").SetFont(normalFont))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetFontSize(10);
+
+                            document.Add(p4);
+
+                            AddRecParagraph("5.I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.");
+                            AddRecParagraph("6.Application is recommended for sanction and accordingly I countersign the same.");
+                        }
+
+                        if (isApproved || isRejected)
+                        {
+                            Table signatureTable2 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO").SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.DdlRank).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + common.MobileNo).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Sign On: " + dated).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+
+                            document.Add(signatureTable2);
+                        }
+
+                        if (isApproved)
+                        {
+                            document.Add(new Paragraph("\n\n"));
+
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
+                            document.Add(icon);
+                        }
+
+                        if (isRejected)
+                        {
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
+                            document.Add(icon);
+                        }
+
+
+                    }
+                    else if (data.PcaApplicationResponse != null)
+                    {
+                        document.Add(new Paragraph("PCA Loan Details")
+                            .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
+                        var pca = data.PcaApplicationResponse;
+                        Table pcatable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 5, 3, 5 })).UseAllAvailableWidth();
+                        void AddLoanRow(string label1, string val1, string label2, string val2)
+                        {
+                            pcatable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(boldFont)).SetBorder(Border.NO_BORDER));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(boldFont)).SetBorder(Border.NO_BORDER));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                        }
+                        AddLoanRow("26. Computer Name", pca.computer_Loan_Type, "27. Model Name", pca.PCA_modelName);
+                        AddLoanRow("28. Est Cost:", pca.computerCost.ToString(), "29. Loan Amt Reqd:", pca.PCA_Amount_Applied_For_Loan.ToString());
+                        AddLoanRow("30. Loan Frequency", pca.PCA_LoanFreq.ToString(), "", "");
+                        document.Add(pcatable);
+
+
+                       
+                        // Section 29 Title
+                        document.Add(new Paragraph("29. I state and certify that:")
+                            .SetFont(normalFont)
+                            .SetFontSize(10)
+                            .SetMarginTop(10).SetMarginBottom(5));
+
+                        // Section 29 Bullet Points
+                        string[] points = new string[]
+                        {
+                      "(a) I have read the rules regulating the grant of loan to AGIF members for purchase of personal computer and agree to abide by the terms and conditions stipulated therein from time to time. \r\n ",
+                     "(b) I will maintain adequate credit in my IRLA during the duration of repayment of complete loan instalments. In case of any debit balance resulting in non-remittance of EMI (instalment) by the CDA (O) / PAO(OR) to AGIF, I undertake to pay it directly alongwith interest for period of default. I shall refund in one lump sum the full loan together with interest outstanding thereon, in case, I wish to sell the computer prior to liquidation of Loan. \r\n \r",
+                     "(c) Loan Amount being taken as PCA loan will be used for purchasing of Computers / Laptops only. The said amount will not be used for any other purposes. I will repay the loan amount with interest by monthly deductions from my salary and I hereby authorise the AGIF to make such deductions. \r\n \r",
+                     "(d) In the event of my becoming non-effective / retirement / dismissal / premature retirement and death preceding retirement, the AGIF shall be entitled to recover through the PAO (OR) / CDA(O) and / or receive the balance of the loan with interest remaining unpaid and any other dues from the whole or any specified part of the gratuity that may be sanctioned to me, Insurance / Disability / Maturity / survival benefit of AGIF, death benefits, DSOP Fund, DCRG, Commuted value of pension, leave encashment, Service pension, payable to the Applicant, without any demur from any quarter. \r\n "
+                        };
+
+                        foreach (var pt in points)
+                        {
+                            document.Add(new Paragraph(pt).SetFont(normalFont).SetFontSize(11).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(3).SetMarginLeft(20));
+                        }
+
+                        // (e) Clause
+                        string ePoint = "I will pay the sum of loan amount or the balance remaining unpaid at the date of retirement / dismissal / premature retirement from service by equal payments on the first day of every month and will pay interest on the sum remaining due as calculated according to the rules.  I authorise the PAO (OR) / CDA (O) to deduct the amount as conveyed by AGIF from my salary. ";
+                        document.Add(new Paragraph(ePoint).SetFont(normalFont).SetFontSize(11).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(3).SetMarginLeft(20));
+
+                        // Section 30
+                        string section30 = "30.  I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.";
+                        document.Add(new Paragraph(section30).SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
+
+                        string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                        document.Add(new Paragraph(domainInfo)
+                            .SetFont(normalFont)
+                            .SetFontColor(ColorConstants.BLUE)
+                            .SetFontSize(12)
+                            .SetTextAlignment(TextAlignment.JUSTIFIED)
+                            .SetMarginBottom(10));
+
+                        document.Add(new Paragraph("\n"));
+
+                        // Signature Table
+                        Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
+                       // signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                        document.Add(signatureTable);
+
+                        if (isApproved)
+                        {
+                            document.Add(new Paragraph("This is an electronially generated PDF")
+                                .SetFont(boldFont).SetFontColor(ColorConstants.BLUE).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
+
+                            document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
+                                .SetFont(boldFont).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(10).SetMarginBottom(5));
+
+                            Paragraph para = new Paragraph()
+                                .Add(new Text("1.  I certify that above ").SetFont(normalFont))
+                                .Add(new Text("PCA").SetFont(boldFont))
+                                .Add(new Text(" Application has been submitted by ").SetFont(normalFont))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont))
+                                .Add(new Text(" of my Unit ").SetFont(normalFont))
+                                .Add(new Text(common.PresentUnit).SetFont(boldFont))
+                                .Add(new Text(". I identify his signature on supporting documents as attested by him and certify them to be correct.  ").SetFont(normalFont));
+                            document.Add(para);
+
+
+                            Paragraph para2 = new Paragraph()
+                                .Add(new Text("2.     It's certified that I am the CO/OC Tps of ").SetFont(normalFont))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont))
+                                .Add(new Text(". and I am authorised to countersign financial documents of this individual.").SetFont(normalFont));
+                            document.Add(para2);
+
+                            Paragraph para3 = new Paragraph()
+                               .Add(new Text("3.     I have interviewed him on ").SetFont(normalFont))
+                               .Add(new Text(dated).SetFont(boldFont))//interviewDate added in this
+                               .Add(new Text(". and verified his financial condition  and established need for taking this loan. Applicant will be using loan amount for intended purpose only.").SetFont(normalFont));
+                            document.Add(para3);
+
+                            Paragraph para4 = new Paragraph()
+                              .Add(new Text("4.     It is certified that Bank A/c No").SetFont(normalFont))
+                              .Add(new Text(common.SalaryAcctNo).SetFont(boldFont))
+                              .Add(new Text("  of Bank ").SetFont(normalFont))
+                              .Add(new Text(common.NameOfBank).SetFont(boldFont))
+                              .Add(new Text("with IFSC").SetFont(normalFont))
+                              .Add(new Text(common.IfsCode).SetFont(boldFont))
+                              .Add(new Text(" as given in the application and cancelled cheque is of Salary account of. ").SetFont(normalFont))
+                              .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont));
+                            document.Add(para4);
+
+                            float fontSize = 10;
+
+                            // Paragraph 5 in iText7
+                            Paragraph recommendationText5 = new Paragraph()
+                                .Add("5.     I have satisfied myself of the correctness of personal details given in application. ")
+                                .Add("I have perused the supporting documents and checked their correctness. ")
+                                .Add("Supporting documents uploaded are readable and latest.")
+                                .SetFont(normalFont)
+                                .SetFontSize(fontSize)
+                                .SetTextAlignment(iText.Layout.Properties.TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(10f);
+
+                            document.Add(recommendationText5);
+
+                            // Additional paragraphs like above... (repeating logic for paras 2 to 6)
+
+                            document.Add(new Paragraph("Application is recommended for sanction and accordingly I countersign the same.").SetFont(normalFont).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(5));
+                        }
+
+                        if (isApproved || isRejected)
+                        {
+                            Table signatureTable2 = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.DdlRank)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph($"Mobile No: {common.MobileNo}")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+
+                            signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph($"Digital Sign On: {dated}")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            document.Add(signatureTable2);
+                        }
+
+                        if (isApproved)
+                        {
+                            document.Add(new Paragraph("\n\n"));
+
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
+                            document.Add(icon);
+                        }
+
+                        if (isRejected)
+                        {
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
+                            document.Add(icon);
+                        }
                     }
 
 
-                    document.Close();
+
+                        document.Close();
                 }
             }
             return 1;

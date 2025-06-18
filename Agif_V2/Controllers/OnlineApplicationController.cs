@@ -575,6 +575,11 @@ namespace Agif_V2.Controllers
         {
             try
             {
+                string ip = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                if (string.IsNullOrEmpty(ip))
+                {
+                    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+                }
                 var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
                 if (userData == null)
                 {
@@ -634,7 +639,8 @@ namespace Agif_V2.Controllers
 
                 try
                 {
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved);
+                    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip);
                     if (data == 1)
                     {
                         pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
