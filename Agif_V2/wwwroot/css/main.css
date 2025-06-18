@@ -3073,6 +3073,8 @@ h6,
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: transparent;
+        color: white;
     }
 
     .header .header-left .header-search form {
@@ -4217,6 +4219,7 @@ h6,
 .sidebar-nav-wrapper .sidebar-nav ul .nav-item {
     position: relative;
     background: #b72a02;
+    margin-bottom: 2px;
 }
 
     .sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children > a {
@@ -4321,7 +4324,7 @@ h6,
         display: flex;
         align-items: center;
         color: #fff;
-        font-size: 14px;
+        font-size: 16px;
         font-weight: 500;
         width: 100%;
         position: relative;
@@ -4474,7 +4477,7 @@ h6,
 }
 
 .main-wrapper .footer {
-    padding: 25px 0;
+    padding: 10px 0;
     justify-items: flex-end;
     position: absolute;
     bottom: 0;
@@ -6575,7 +6578,8 @@ h6,
 }
 
 .modal-header {
-    background-color: blue;
+    background-color: #d95a5a;
+    color:#fff;
 }
 
 tbody, td, tfoot, th, thead, tr {
@@ -6589,6 +6593,9 @@ tbody, td, tfoot, th, thead, tr {
 
 .bg-gradient-custom {
     background-image: linear-gradient(to right, red 1%, white 30%, white 70%, red 100%);
+}
+.bg-gradient-custom-footer {
+    background-image: linear-gradient(to right, #ff9d9d 1%, white 30%, white 70%, #ff9d9d 100%);
 }
 
 .bg-gradient-custom-vertical {
