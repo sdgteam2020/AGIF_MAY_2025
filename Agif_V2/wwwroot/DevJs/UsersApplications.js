@@ -46,8 +46,51 @@
 
         }
     });
+    $("#RejectButton").on('click',function () {
+        var applnId = $("#spnapplicationId").html();
+        var icNo = $("#IcNo").data("id");
+
+        var remarkField = $("#txtRemark");
+        var remarkValue = remarkField.val().trim();
+        if (remarkValue === "") {
+            remarkField.val("Rejected");
+        }
+        //$("#tokenMessage").html("");
+        //if ($("#txtremark").val().trim() === "") {
+        //    $("#tokenMessage").html(`<span class="m-lg-2 text-danger tokenremarks">Enter Remarks!</span>`);
+
+        //    return;
+        //}
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to reject!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, reject it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                rejectedApplication(applnId);
+            }
+        });
+
+    });
 });
 function GetApplicationList(status) {
+
+
+    if (status == 1) {
+        $("#DigitalSignatureforaction").html(`
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg me-2"></i>
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-primary" id="btnProcess">
+                            <i class="bi bi-gear-fill me-2"></i>
+                            Process Application
+                        </button>`);
+    }
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblData')) {
         $('#tblData').DataTable().destroy();
@@ -348,12 +391,11 @@ function GetTokenSignXml(xml) {
 }
 
 function SignXmlSendTOdatabase(xmlString) {
-    let encodedXml = encodeURIComponent(xmlString);
     var applnId = $('#spnapplicationId').html();
     var remarks = $('#txtRemark').val();
     $.ajax({
         url: "/ApplicationRequest/SaveXML",
-        data: { applId: applnId, xmlResString: encodedXml, remarks: remarks },
+        data: { applId: applnId, xmlResString: xmlString, remarks: remarks },
         type: 'POST',
         success: function () {
             Swal.fire({
@@ -368,6 +410,32 @@ function SignXmlSendTOdatabase(xmlString) {
         },
         error: function () {
             alert("Data Not Saved!")
+        }
+    });
+}
+
+function rejectedApplication(applicationId) {
+    let remarks = $("#txtRemark").val();
+    $.ajax({
+        url: "/ApplicationRequest/RejectXML",
+        data: { applId: applicationId, rem: remarks },
+        type: 'POST',
+        success: function (data) {
+            swal.fire({
+                title: "Rejected!",
+                text: "Application rejected successfully.",
+                type: "success",
+                timer: 3000, // Auto close after 3 seconds
+                showConfirmButton: false
+            });
+
+            // Redirect after 3 seconds (when the swal closes)
+            setTimeout(function () {
+                window.location.href = "/ApplicationRequest/UserApplicationList";
+            }, 3000);
+        },
+        error: function () {
+            swal.fire("Error!", "Something went wrong. Please try again.", "error");
         }
     });
 }

@@ -1,4 +1,18 @@
 ﻿
+$(document).ready(function () {
+    expandAccordions();
+    confirmAccountNo();
+    loadDropdown();
+    enableDisablePromotionDate();
+    Inputmask().mask(document.querySelectorAll("input"));
+    EnableDisablePCDA();
+    EnableDisableCivilPostalAdd();
+    RefreshMaxAmt_PCA();
+    RefreshMaxAmt_CA();
+    RefreshMaxAmt_HBA();
+    handleSubmitClick();
+
+}); 
 function expandAccordions() {
 
     //$('#dateOfRetirement').val("2044-10-12");
@@ -728,7 +742,7 @@ function filterAmountText(loanType) {
         const VehicleCost = $('#vehicleCost');
         const cleanedValue = VehicleCost.val().replace(/,/g, '');
         VehicleCost.val(cleanedValue);
-        alert(cleanedValue);
+        //alert(cleanedValue);
     }
 }
 
@@ -748,7 +762,7 @@ function handleSubmitClick() {
 
         //const params = new URLSearchParams(window.location.search);
         //const loanType = params.get("loanType");
-        const params = new URLSearchParams(window.location.search);
+       // const params = new URLSearchParams(window.location.search);
 
         const loanTypeFromUrl = params.get("loanType");
 
@@ -766,15 +780,15 @@ function handleSubmitClick() {
 
         inputs.forEach(input => {
 
-            //if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
-            //    return;
-            //}
-            //else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-            //    return;
-            //}
-            //else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-            //    return;
-            //}
+            if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
+                return;
+            }
+            else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+                return;
+            }
+            else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+                return;
+            }
 
             if (!input.checkValidity()) {
                 const errorSpan = input.parentElement.querySelector(".error");
@@ -810,6 +824,7 @@ function handleSubmitClick() {
         }
         else {
             //form.submit();
+            $("#msgerror").html(''); // Clear error message
             if (formSubmitting) return; // Allow submission after confirmation
             if (formCancelled) {
                 formCancelled = false; // Reset flag
@@ -864,7 +879,7 @@ function checkCORegistration() {
                 } else if (result === false) {
                     // If not registered, set unit input back to required
                     formSubmitting = true;
-                    $('#myForm_CA').submit();
+                    $('#myForm').submit();
                     //document.getElementById("txtUnit").removeAttribute("disabled");
                     //document.getElementById("txtUnit").setAttribute("required", "required");
                 }

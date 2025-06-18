@@ -212,7 +212,7 @@ namespace DataAccessLayer.Repositories
 
                 else if (result.ApplicationType == 2)
                 {
-                    formtype = "CAR";
+                    formtype = "CA";
                     var Carmodel = (from car in _context.trnCar
                                     join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
@@ -339,6 +339,13 @@ namespace DataAccessLayer.Repositories
         {
             var user = await _context.trnUserMappings.Where(i => i.UnitId == UnitId && i.IsActive == true).FirstOrDefaultAsync();
             return user != null;
+        }
+
+        public async Task<bool> AddFwdCO(TrnFwdCO trnFwdCO)
+        {
+            await _context.TrnFwdCO.AddAsync(trnFwdCO);
+            await SaveAsync();
+            return false;
         }
     }
 }

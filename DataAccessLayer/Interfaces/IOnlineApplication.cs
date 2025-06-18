@@ -25,6 +25,7 @@ namespace DataAccessLayer.Interfaces
         Task<bool> CheckIsUnitRegister(string ArmyNo, int UnitId);
 
         Task<bool> CheckIsCoRegister(int UnitId);
+        Task<bool> AddFwdCO(TrnFwdCO trnFwdCO);
 
 
 
