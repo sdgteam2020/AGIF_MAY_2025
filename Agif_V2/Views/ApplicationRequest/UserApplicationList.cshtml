@@ -3,23 +3,54 @@
 }
 @using DataTransferObject.Helpers;
 @model SessionUserDTO;
-
+@{
+    string Page = "";
+}
+@if (ViewBag.Status != null && ViewBag.Status == 1)
+{
+    Page = "Pending Applications";
+}
+else if (ViewBag.Status != null && ViewBag.Status == 2)
+{
+    Page = "Approved Applications";
+}
+else
+{
+    Page = "Rejected Applications";
+}
 <div class="container">
-    <div class="card mt-2">
-        <div class="card-header">
-            @if (ViewBag.Status != null && ViewBag.Status == 1)
-            {
-                <span>Pending Applications</span>
-            }
-            else if (ViewBag.Status != null && ViewBag.Status == 2)
-            {
-                <span>Approved Applications</span>
-            }
-            else
-            {
-                <span>Rejected Applications</span>
-            }
+    <div class="container-fluid">
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="title">
+                        <h2>
+                            @Page
+                        </h2>
+                    </div>
+                </div>
+                <!-- end col -->
+                <div class="col-md-6">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="#0">Applications</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @Page
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
         </div>
+    <div class="card mt-2">
+       
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-12">
@@ -284,6 +315,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 @section Scripts {
     <!-- DataTables CSS and JS -->

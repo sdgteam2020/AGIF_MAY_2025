@@ -133,11 +133,11 @@ function GetApplicationList(status) {
                     if (row.isMergePdf == false) {
                         return `
                         <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-warning  align-items-center' onclick='mergePdf(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
                                
                             </button>
-                             <button class='btn btn-outline-primary' onclick='OpenAction(${row.applicationId})'>
+                             <button class='btn btn-outline-primary mx-2' onclick='OpenAction(${row.applicationId})'>
                                 Action
                                 
                             </button>
@@ -148,7 +148,7 @@ function GetApplicationList(status) {
                     else {
                         return `
                         <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center' onclick='mergePdf(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center  mx-2' onclick='mergePdf(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
                                
                             </button>
@@ -175,9 +175,12 @@ function GetApplicationList(status) {
                 previous: "Previous"
             }
         },
+       
+
         pageLength: 10,
         lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-        dom: 'lBfrtip',
+        //dom: 'lBfrtip',
+        dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
     });
 }
 

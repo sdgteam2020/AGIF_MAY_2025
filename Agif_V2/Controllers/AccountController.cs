@@ -312,6 +312,12 @@ namespace Agif_V2.Controllers
             await _userMapping.Update(userMapping);
             return Json(new { success = true });
         }
+        public async Task<IActionResult> FinalLogout()
+        {
+            await _signInManager.SignOutAsync();
+            HttpContext.Session.Clear();
+            return View();
+        }
 
     }
 }

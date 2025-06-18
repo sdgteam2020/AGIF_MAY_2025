@@ -4,19 +4,51 @@
 }
 @using DataTransferObject.Helpers;
 @model SessionUserDTO;
-
+@{
+    string Page = "";
+}
+@if (ViewBag.UserStatus != null && (bool)ViewBag.UserStatus)
+{
+    Page = "Active Users List";
+     
+}
+else
+{
+    Page = "Inactive Users List";
+   
+}
 <div class="container">
-    <div class="card mt-2">
-        <div class="card-header">
-            @if (ViewBag.UserStatus != null && (bool)ViewBag.UserStatus)
-            {
-                <span>Active Users List</span>
-            }
-            else
-            {
-                <span>Inactive Users List</span>
-            }
+    <div class="container-fluid">
+    <div class="title-wrapper pt-30">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="title">
+                    <h2>
+                        @Page
+                    </h2>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+                <div class="breadcrumb-wrapper">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="#0">Applications</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                @Page
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
         </div>
+        <!-- end row -->
+    </div>
+    <div class="card mt-2">
+       
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-12">
@@ -24,16 +56,16 @@
                         <table class="table table-striped border border-purple table-hover" id="tblData">
                             <thead>
                                 <tr>
-                                    <th><h6>Sr.No.</h6></th>
-                                    <th><h6>Profile Name</h6></th>
-                                    <th><h6>Email</h6></th>
-                                    <th><h6>Mobile No</h6></th>
-                                    <th><h6>Army No</h6></th>
-                                    <th><h6>Unit Name</h6></th>
-                                    <th><h6>Appointment</h6></th>
-                                    <th><h6>Regiment</h6></th>
-                                    <th><h6>User Type</h6></th>
-                                    <th class="noExport"><h6>Action</h6></th>
+                                    <th>Sr.No.</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile No</th>
+                                    <th>Army No</th>
+                                    <th>Unit Name</th>
+                                    <th>Appt</th>
+                                    <th>Regiment</th>
+                                    <th>User Type</th>
+                                    <th class="noExport">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -45,6 +77,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @section Scripts {
@@ -62,7 +95,7 @@
     <script src="~/devjs/getallusers.js"></script>
 }
 
-<style>
+@* <style>
     /* Custom styles for better appearance */
     .dataTables_wrapper .dataTables_length select {
         padding: 4px 8px;
@@ -103,4 +136,4 @@
     .me-2 {
         margin-right: 0.5rem;
     }
-</style>
+</style> *@

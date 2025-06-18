@@ -198,13 +198,13 @@ function BindUsersData(status) {
         ],
         language: {
             search: "",
-            searchPlaceholder: "Search users...",
-            processing: "Loading users...",
-            emptyTable: "No users found",
-            info: "Showing _START_ to _END_ of _TOTAL_ users",
-            infoEmpty: "Showing 0 to 0 of 0 users",
-            infoFiltered: "(filtered from _MAX_ total users)",
-            lengthMenu: "Show _MENU_ users per page",
+            searchPlaceholder: "Search applications...",
+            processing: "Loading applications...",
+            emptyTable: "No applications found",
+            info: "Showing _START_ to _END_ of _TOTAL_ applications",
+            infoEmpty: "Showing 0 to 0 of 0 applications",
+            infoFiltered: "(filtered from _MAX_ total applications)",
+            lengthMenu: "Show _MENU_ applications per page",
             paginate: {
                 first: "First",
                 last: "Last",
@@ -212,7 +212,7 @@ function BindUsersData(status) {
                 previous: "Previous"
             }
         },
-        dom: 'lBfrtip',
+        dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
             //{
             //    extend: 'excel',

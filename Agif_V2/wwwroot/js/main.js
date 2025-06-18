@@ -51,3 +51,16 @@
     mainWrapper.classList.remove("active");
   });
 })();
+// Get the current path
+var path = window.location.href;
+
+// Iterate through each anchor link in the navigation
+$("nav ul li a").each(function () {
+    // Check if the anchor's href matches the current path
+    $(this).removeClass("active");
+    if (this.href === path) {
+        // Add 'active' class to both the anchor and its parent <li> element
+        $(this).addClass("active");
+        $(this).parent("li").addClass("active");
+    }
+});
