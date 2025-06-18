@@ -146,6 +146,24 @@ namespace Agif_V2.Controllers
             return RedirectToAction("OnlineApplication");
         }
 
+
+        public async Task<JsonResult> CheckForCoRegister(string ArmyNo)
+        {
+           return Json(await _IonlineApplication1.CheckForCoRegister(ArmyNo));
+        }
+
+        public async Task<JsonResult> CheckIsUnitRegister(string ArmyNo, int UnitId)
+        {
+            return Json(await _IonlineApplication1.CheckIsUnitRegister(ArmyNo,UnitId));
+        }
+
+        public async Task<JsonResult> CheckIsCoRegister(int UnitId)
+        {
+            return Json(await _IonlineApplication1.CheckIsCoRegister(UnitId));
+        }
+
+
+
         /*
         public IActionResult SubmitApplication(DTOOnlineApplication model)
         {
@@ -342,7 +360,7 @@ namespace Agif_V2.Controllers
                     {
                         model.CommonData.ApplicationType = int.Parse(model.loantype);
                         model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
-
+                        model.CommonData.IOUnit= model.CommonData.IOUnit == 0 ? (int?)null : model.CommonData.IOUnit;
                         common = await _IonlineApplication1.AddWithReturn(model.CommonData);
                     }
 
@@ -557,7 +575,7 @@ namespace Agif_V2.Controllers
         {
             try
             {
-                var userData = await _IonlineApplication1.GetApplicationDetails(applicationId, "");
+                var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
                 if (userData == null)
                 {
                     return Json(new { success = false, message = "Application not found." });

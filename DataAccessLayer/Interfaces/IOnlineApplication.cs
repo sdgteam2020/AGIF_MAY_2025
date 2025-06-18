@@ -12,13 +12,19 @@ namespace DataAccessLayer.Interfaces
     {
         //Task<bool> IsUser(string AadharNo);
         Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);
-        Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId,string formtype);
+        Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId);
 
         Task<CommonDataonlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType);
 
         Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
 
         Task UpdateApplicationStatus(int applicationId, int status);
+
+        Task<bool> CheckForCoRegister(string ArmyNo);
+
+        Task<bool> CheckIsUnitRegister(string ArmyNo, int UnitId);
+
+        Task<bool> CheckIsCoRegister(int UnitId);
 
     }
 }

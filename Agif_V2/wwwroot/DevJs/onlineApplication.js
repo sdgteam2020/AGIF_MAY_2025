@@ -204,7 +204,9 @@ function SetSuffixLetter(obj) {
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
 
-    getApplicantDetalis();
+    var oldArmyNo = $('#oldArmyNo').val();
+    if (oldArmyNo =="")
+        getApplicantDetalis();
 }
 
 
@@ -714,6 +716,9 @@ function textChange() {
     setOutlineActive("totalCredit");
     setOutlineActive("salary_After_Deductions");
 }
+
+let formSubmitting = false;
+let formCancelled = false;
 function handleSubmitClick() {
     document.getElementById("btn-save").addEventListener("click", function (event) {
         event.preventDefault(); // Prevent form submission
@@ -727,8 +732,14 @@ function handleSubmitClick() {
         let errorlist = []; // Use an array to store individual error messages
         let hasError = false;
 
-        const params = new URLSearchParams(window.location.search);
+       const params = new URLSearchParams(window.location.search);
+
         const loanType = params.get("loanType");
+
+        //const loanTypeFromInput = document.getElementById('loanType')?.value || null;
+
+        //const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+
 
 
 
@@ -777,17 +788,277 @@ function handleSubmitClick() {
             return false;
         }
         else {
-            form.submit();
+            //form.submit();
+            if (formSubmitting) return; // Allow submission after confirmation
+            if (formCancelled) {
+                formCancelled = false; // Reset flag
+                e.preventDefault();
+                return;
+            }
+
+            let unitVal = $('#PresenttxtUnit').val().trim();
+            if (unitVal != '') {
+                event.preventDefault(); // Stop form submission
+                checkCORegistration(); // First check CO registration
+            }
         }
 
-        //if (!form.reportValidity()) {
-        //    console.log("Invalid fields found.");
-        //} else if (!hasError) {
-        //    alert("Form is valid!");
-        //    // You can now submit or process the form
-        //}
+       
     });
 
+}
+
+function checkCORegistration() {
+    // Get Prefix, Number, and Suffix
+    var armyNumber = $("#armyPrefix option:selected").text();
+    var Prefix = $("#armyNumber").val();
+    var Suffix = $("#txtSuffix").val();
+
+    const ArmyNo = `${armyNumber}${Prefix}${Suffix}`.toUpperCase();
+
+    const unitValidation = document.querySelector("span[data-valmsg-for='Unit']");
+
+    if (Prefix === "0" || armyNumber === "" || Suffix === "") {
+        // Warn if Army No is incomplete
+        console.warn("Incomplete Army No");
+        return;
+    }
+
+    try {
+        $.ajax({
+            url: '/OnlineApplication/CheckForCoRegister',
+            type: 'POST',
+            data: { ArmyNo: ArmyNo },
+            success: function (result) {
+                if (result === true) {
+                    // If already registered, allow editing of unit
+                    //document.querySelector("input[name='Unit']").removeAttribute("required");
+                    //if (unitValidation) {
+                    //    unitValidation.innerHTML = "";  // Clear error message
+                    //    unitValidation.classList.remove("field-validation-error");
+                    //    unitValidation.classList.add("field-validation-valid");
+                    //}
+                    // Open unit search popup
+                    $('#unitSearchDialog').show();
+                } else if (result === false) {
+                    // If not registered, set unit input back to required
+                    formSubmitting = true;
+                    $('#myForm_CA').submit();
+                    //document.getElementById("txtUnit").removeAttribute("disabled");
+                    //document.getElementById("txtUnit").setAttribute("required", "required");
+                }
+            },
+            error: function () {
+                console.error("Failed to check CO registration");
+            }
+        });
+    } catch (err) {
+        console.error("AJAX error", err);
+    }
+}
+
+$("#unitSearchInput").autocomplete({
+    source: function (request, response) {
+        //alert(1);
+        // $("#Unit").val(0);
+
+        if (request.term.length > 2) {
+            var param = { "UnitName": request.term };
+            $("#CommonData_IOUnit").val(0);
+            $.ajax({
+                url: '/Account/GetALLByUnitName',
+                contentType: 'application/x-www-form-urlencoded',
+                data: param,
+                type: 'POST',
+                success: function (data) {
+                    if (data.length != 0) {
+
+                        response($.map(data, function (item) {
+
+                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
+
+                        }))
+                    }
+                    else {
+                        $("#CommonData_IOUnit").val(0);
+                        $("#unitSearchInput").val("");
+
+                        //alert("Unit not found.")
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Unit not found',
+                            text: 'Please check the unit name and try again.',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    },
+    select: function (e, i) {
+        e.preventDefault();
+
+        $("#unitSearchInput").val(i.item.label);
+        //$("#IOUnit").val(i.item.value);
+
+        //$("#PresenttxtUnit").val(i.item.label);
+        $("#CommonData_IOUnit").val(i.item.value);
+       // $("input[name='CommonData.PresentUnit']").val(i.item.value);
+
+
+        $("#unitSearchConfirmBtn").prop("disabled", false);
+    },
+    appendTo: '#suggesstion-box'
+});
+
+$("#unitSearchConfirmBtn").click(function (e) {
+    //const $message = $('#unitSearchMessage');
+    //if ($message.length) {
+    //    $message.hide();
+    //}
+    e.preventDefault();
+    e.stopPropagation();
+    var value = $("#CommonData_IOUnit").val()
+    //console.log($("#PresentUnitId").val());
+
+    if (value != 0) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do You want to Submit!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, Submit it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                checkUnitSameOrNot(value)
+            }
+        });
+    }
+    else {
+        alert("Please select unit");
+    }
+});
+
+$("#unitSearchCancelBtn").click(function (e) {
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    $('#unitSearchDialog').hide();
+  
+    formSubmitting = false;
+    formCancelled = true;
+
+    // Hide the message when Cancel is clicked
+    const $message = $('#unitSearchMessage');
+    if ($message.length) {
+        $message.text('');
+    }
+
+    $(unitSearchInput).val('');
+
+    // Also clear any previous search results and reset form stat
+
+    $('#unitSearchConfirmBtn').prop('disabled', true);
+});
+
+
+ function checkUnitSameOrNot(unitId) {
+    var armyNumber = $("#armyPrefix option:selected").text();
+    var Prefix = $("#armyNumber").val();
+    var Suffix = $("#txtSuffix").val();
+
+    $.ajax({
+        url: '/OnlineApplication/CheckIsUnitRegister',
+        method: 'GET',
+        data: { ArmyNo: (armyNumber + Prefix + Suffix).toUpperCase(), UnitId: unitId },
+        success: function (response) {
+            if (response === true) {
+
+                $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
+
+                // Clear input and reopen dialog
+                $("#unitSearchInput").val("");
+                $("#CommonData_IOUnit").val(0)
+            }
+
+            else {
+
+
+                checkUnitRegistration(unitId);
+
+
+            }
+        },
+        error: function () {
+            alert('Could not verify unit registration. Please try again.');
+        }
+    });
+
+
+}
+
+function checkUnitRegistration(selectedUnitId) {
+    $.ajax({
+        url: '/OnlineApplication/CheckIsCoRegister',
+        method: 'GET',
+        data: { UnitId: selectedUnitId },
+        success: function (response) {
+            if (response === true) {
+                //alert('Unit Available. You can proceed with this unit.');
+                $("#CommonData_IOUnit").val(selectedUnitId);
+                //$('#txtUnit').val(selectedUnitName);
+                formSubmitting = true;
+                $('#myForm').submit();
+            } else {
+                //if (confirm('Unit registration pending/not activated. Please approach your Unit IO.\nGo to Create page?')) {
+                //    window.location.href = '/Car_PC_Advance_Application/Create';
+                //} else {
+                //    openUnitSearchPopup();
+                //}
+                $('#unitSearchMessage').text('');
+
+
+                Swal.fire({
+                    icon: 'info',
+                    title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
+                    html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel', // Cancel button text
+                    showCancelButton: true, // Enable cancel button
+                    reverseButtons: true,  // Make Cancel button appear on the left
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to Create page
+                        //var appType = $('#ApplicationType').val();
+                        //if (appType == "9") {
+                        //    window.location.href = `/HBA_Application/Create`;
+                        //}
+                        //else {
+                        //    window.location.href = `/Car_PC_Advance_Application/Create`;
+                        //}
+                        $('#unitSearchDialog').hide();
+                    } else if (result.isDismissed) {
+                        // If Cancel is clicked, reopen the unit search popup
+                        //$('#txtUnit').val('');
+                        $("unitSearchDialog").show();
+                    }
+                });
+            }
+        },
+        error: function () {
+            alert('Could not verify unit registration. Please try again.');
+        }
+    });
 }
 
 
@@ -1195,3 +1466,115 @@ function calculateEMI_HBA() {
 
     setOutlineActive("HBA_approxEMIAmount");
 }
+
+
+$("#ParenttxtUnit").autocomplete({
+    source: function (request, response) {
+        //alert(1);
+        $("input[name='ParentUnit']").val(0);
+
+        if (request.term.length > 2) {
+            var param = { "UnitName": request.term };
+            $("#ParentUnitId").val(0);
+            $.ajax({
+                url: '/Account/GetALLByUnitName',
+                contentType: 'application/x-www-form-urlencoded',
+                data: param,
+                type: 'POST',
+                success: function (data) {
+                    if (data.length != 0) {
+                        response($.map(data, function (item) {
+
+                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
+
+                        }))
+                    }
+                    else {
+                        $("#ParentUnitId").val(0);
+                        $("#ParenttxtUnit").val("");
+
+                        showErrorMessage("Unit Not found.")
+                    }
+
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    },
+    select: function (e, i) {
+        e.preventDefault();
+        $("#ParenttxtUnit").val(i.item.label);
+        $("#ParentUnitId").val(i.item.value);
+        $("input[name='CommonData.ParentUnit']").val(i.item.value);
+        // $("#spnUnitMapId").html(i.item.value);
+        //alert(i.item.value)
+
+    },
+    appendTo: '#suggesstion-box'
+});
+
+$("#PresenttxtUnit").autocomplete({
+    source: function (request, response) {
+        //alert(1);
+        $("input[name='PresentUnit']").val(0);
+
+        if (request.term.length > 2) {
+            var param = { "UnitName": request.term };
+            $("#ParentUnitId").val(0);
+            $.ajax({
+                url: '/Account/GetALLByUnitName',
+                contentType: 'application/x-www-form-urlencoded',
+                data: param,
+                type: 'POST',
+                success: function (data) {
+                    if (data.length != 0) {
+                        response($.map(data, function (item) {
+
+                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
+
+                        }))
+                    }
+                    else {
+                        $("#PresentUnitId").val(0);
+                        $("#PresenttxtUnit").val("");
+
+                        showErrorMessage("Unit Not found.")
+                    }
+
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                }
+            });
+        }
+    },
+    select: function (e, i) {
+        e.preventDefault();
+        $("#PresenttxtUnit").val(i.item.label);
+        $("#PresentUnitId").val(i.item.value);
+        $("input[name='CommonData.PresentUnit']").val(i.item.value);
+
+        // $("#spnUnitMapId").html(i.item.value);
+        //alert(i.item.value)
+
+    },
+    appendTo: '#suggesstion-box'
+});
+
+$('#oldArmyNo').on('focus', function () {
+    $(this).off('focus');
+    Swal.fire({
+        title: "Enter Present 'Army No'",
+        text: "If old 'Army No' is not applicable for you.",
+        icon: "warning",
+        confirmButtonText: "OK"
+    });
+});

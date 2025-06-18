@@ -21,7 +21,7 @@ namespace Agif_V2.Helpers
         }
         public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath)
         {
-            var data = await _usersApplications.GetApplicationDetails(applicationId, "");
+            var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
             if (!Directory.Exists(directory))
             {

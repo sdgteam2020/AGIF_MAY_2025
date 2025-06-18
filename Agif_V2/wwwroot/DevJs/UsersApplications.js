@@ -95,7 +95,8 @@ function GetApplicationList(status) {
                     if (row.isMergePdf == false) {
                         return `
                         <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-primary  align-items-center' onclick='mergePdf(${row.applicationId})'>
+                          
+                             <button class='btn btn-sm btn-outline-primary  align-items-center' onclick='mergePdf(${1012})'>
                                 <i class="bi bi-eye"></i>
                                 View
                             </button>

@@ -21,7 +21,7 @@ namespace DataAccessLayer.Repositories
         public OnlineApplicationDL(ApplicationDbContext context) : base(context)
         {
             _context = context;
-           
+
         }
 
         //public Task<bool> IsUser(string AadharNo)
@@ -77,7 +77,7 @@ namespace DataAccessLayer.Repositories
                                           ApplicationId = app.ApplicationId
                                       }).FirstOrDefaultAsync();
 
-           
+
             return existingUser;
         }
 
@@ -101,13 +101,13 @@ namespace DataAccessLayer.Repositories
                     .ToListAsync();
 
                 if (carLoan != null)
-                   _context.trnCar.Remove(carLoan);
+                    _context.trnCar.Remove(carLoan);
 
                 if (hbaLoan != null)
                     _context.trnHBA.Remove(hbaLoan);
 
                 if (pcaLoan != null)
-                   _context.trnPCA.Remove(pcaLoan);
+                    _context.trnPCA.Remove(pcaLoan);
 
                 if (documents.Any())
                     _context.trnDocumentUpload.RemoveRange(documents);
@@ -116,7 +116,7 @@ namespace DataAccessLayer.Repositories
                     .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
 
                 if (applicationEntity != null)
-                  _context.trnApplications.Remove(applicationEntity);
+                    _context.trnApplications.Remove(applicationEntity);
 
                 await _context.SaveChangesAsync();
                 return true;
@@ -127,7 +127,7 @@ namespace DataAccessLayer.Repositories
         }
 
 
-        public Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId, string formtype)
+        public Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId)
         {
             DTOCommonOnlineApplicationResponse data = new DTOCommonOnlineApplicationResponse();
 
@@ -184,25 +184,25 @@ namespace DataAccessLayer.Repositories
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                           }).FirstOrDefault();
-
+            string formtype = string.Empty;
             if (result != null)
             {
                 //if(result.ApplicationType==1)
-                if(result.ApplicationType == 1)
+                if (result.ApplicationType == 1)
                 {
-                   
+                    formtype= "HBA";
                     var Hbamodel = (from hba in _context.trnHBA
-                                     join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.Id into loanTypeGroup
-                                     from loanType in loanTypeGroup.DefaultIfEmpty()
-                                     where hba.ApplicationId == applicationId
-                                     select new DTOHbaApplicationresponse
-                                     {
-                                         PropertyType = loanType != null ? loanType.LoanType : string.Empty, // Getting LoanType from MLoanTypes
-                                         PropertySeller = hba.PropertySeller.ToString(),
-                                         PropertyAddress = hba.PropertyAddress,
-                                         PropertyCost = hba.PropertyCost,
-                                         HBA_LoanFreq = hba.HBA_LoanFreq
-                                     }).FirstOrDefault();
+                                    join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.Id into loanTypeGroup
+                                    from loanType in loanTypeGroup.DefaultIfEmpty()
+                                    where hba.ApplicationId == applicationId
+                                    select new DTOHbaApplicationresponse
+                                    {
+                                        PropertyType = loanType != null ? loanType.LoanType : string.Empty, // Getting LoanType from MLoanTypes
+                                        PropertySeller = hba.PropertySeller.ToString(),
+                                        PropertyAddress = hba.PropertyAddress,
+                                        PropertyCost = hba.PropertyCost,
+                                        HBA_LoanFreq = hba.HBA_LoanFreq
+                                    }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
@@ -210,8 +210,9 @@ namespace DataAccessLayer.Repositories
                     data.HbaApplicationResponse = Hbamodel;
                 }
 
-                else if(result.ApplicationType == 2)
-                 {
+                else if (result.ApplicationType == 2)
+                {
+                    formtype = "CAR";
                     var Carmodel = (from car in _context.trnCar
                                     join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
@@ -230,8 +231,9 @@ namespace DataAccessLayer.Repositories
                     data.CarApplicationResponse = Carmodel;
                 }
 
-                else if(result.ApplicationType == 3)
+                else if (result.ApplicationType == 3)
                 {
+                    formtype = "PCA";
                     var PcaModal = (from pca in _context.trnPCA
                                     join loanType in _context.MLoanTypes on pca.computer_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
@@ -249,11 +251,11 @@ namespace DataAccessLayer.Repositories
 
                     // Directly assign the DTO
                     data.PcaApplicationResponse = PcaModal;
-                }               
+                }
 
-                var DocumentModel= _context.trnDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
+                var DocumentModel = _context.trnDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
 
-                if(DocumentModel!=null)
+                if (DocumentModel != null)
                 {
                     string ArmyNo = $"{result.Number}";
                     string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", $"{formtype}_{ArmyNo}_{applicationId}");
@@ -272,7 +274,7 @@ namespace DataAccessLayer.Repositories
                         }).ToList();
                     }
                 }
-              
+
 
 
 
@@ -294,6 +296,47 @@ namespace DataAccessLayer.Repositories
             await _context.SaveChangesAsync();
         }
 
-    }
+        public async Task<bool> CheckForCoRegister(string ArmyNo)
+        {
+            // Step 1: Get UserProfile by ArmyNo
+            var userProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
 
+            if (userProfile == null)
+                return false;
+
+            // Step 2: Get UserMapping by ProfileId
+            var userMapping = await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+
+            // Step 3: Return true if mapping exists, else false
+            return userMapping != null;
+        }
+
+        public async Task<bool> CheckIsUnitRegister(string ArmyNo, int UnitId)
+        {
+            var userProfile = await _context.UserProfiles
+               .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
+
+            if (userProfile == null)
+                return false;
+
+            // Step 2: Get UserMapping by ProfileId
+            var userMapping = await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+
+            // Step 3: Return true if mapping exists, else false
+            if (userMapping.UnitId == UnitId)
+                return true;
+            else
+                return false;
+
+        }
+
+        public async Task<bool> CheckIsCoRegister(int UnitId)
+        {
+            var user = await _context.trnUserMappings.Where(i => i.UnitId == UnitId && i.IsActive == true).FirstOrDefaultAsync();
+            return user != null;
+        }
+    }
 }

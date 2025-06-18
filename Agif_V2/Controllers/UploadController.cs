@@ -24,14 +24,14 @@ namespace Agif_V2.Controllers
             return View(fileUploadViewModel);
         }
 
-        public async Task<IActionResult> ApplicationDetails(int applicationId,string formtype)
+        public async Task<IActionResult> ApplicationDetails(int applicationId)
         {
             if (applicationId == 0)
             {
                 return NotFound();
             }
 
-            var application = await _IonlineApplication1.GetApplicationDetails(applicationId, formtype);
+            var application = await _IonlineApplication1.GetApplicationDetails(applicationId);
             if (application == null)
             {
                 return NotFound();
@@ -151,7 +151,7 @@ namespace Agif_V2.Controllers
             await _IonlineApplication1.UpdateApplicationStatus(applicationId,1);
             
             TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
-            return RedirectToAction("ApplicationDetails", new { applicationId = applicationId,formType = formType });
+            return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
             //TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
             //return View("Upload", model);
         }

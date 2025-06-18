@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Agif_V2.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -19,6 +20,10 @@ namespace Agif_V2.Controllers
         public IActionResult Index()
         {
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (sessionUser == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View(sessionUser);
         }
 
