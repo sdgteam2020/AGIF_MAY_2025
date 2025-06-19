@@ -6,6 +6,7 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Threading.Tasks;
@@ -575,7 +576,7 @@ namespace Agif_V2.Controllers
         {
             try
             {
-                string ip = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+                string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
                 if (string.IsNullOrEmpty(ip))
                 {
                     ip = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -634,8 +635,8 @@ namespace Agif_V2.Controllers
                 }
 
                 // Generate the new PDF first (if needed)
-                string pdfName = "MergedPdf-" + applicationId;
-                var generatedPdfPath = Path.Combine(sourceFolderPath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".pdf");
+                string pdfName = folderPath + "_Application";
+                var generatedPdfPath = Path.Combine(sourceFolderPath, pdfName + ".pdf");
 
                 try
                 {
@@ -659,8 +660,8 @@ namespace Agif_V2.Controllers
                     Directory.CreateDirectory(tempUploadsPath);
                 }
 
-                string mergedPdfPath = Path.Combine(tempUploadsPath, $"{pdfName}_{DateTime.Now:yyyyMMddHHmmssfff}.pdf");
-
+                string mergedPdfPath = Path.Combine(tempUploadsPath, folderPath + "_Merged.pdf");
+                ViewBag.MergedPdfPath = mergedPdfPath;
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
@@ -669,6 +670,7 @@ namespace Agif_V2.Controllers
                     // Get relative path for client
                     string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
 
+                    await _IonlineApplication1.UpdateMergePdfStatus(applicationId, true);
                     return Json(new
                     {
                         success = true,
@@ -687,6 +689,50 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
             }
+        }
+
+        public async Task<JsonResult> GetPdfFilePath(int applicationId)
+        {
+            var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
+            if (userData == null)
+            {
+                return Json(new { success = false, message = "Application not found." });
+            }
+            string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+            string applicationTypeName = "";
+            if (string.IsNullOrEmpty(applicationType))
+            {
+                return Json(new { success = false, message = "Application type is not specified." });
+            }
+            else
+            {
+                if (applicationType == "1")
+                {
+                    applicationTypeName = "HBA";
+                }
+                else if (applicationType == "2")
+                {
+                    applicationTypeName = "CA";
+                }
+                else
+                {
+                    applicationTypeName = "PCA";
+                }
+            }
+            string armyNo = userData.OnlineApplicationResponse.Number;
+            if (string.IsNullOrEmpty(armyNo))
+            {
+                return Json(new { success = false, message = "Army number is not specified." });
+            }
+            string applicationIdStr = applicationId.ToString();
+            if (string.IsNullOrEmpty(applicationIdStr))
+            {
+                return Json(new { success = false, message = "Application ID is not specified." });
+            }
+            string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+            string pdfFilePath = $"/TempUploads/{folderPath}/{folderPath}_Merged.pdf";
+            
+            return Json(pdfFilePath);
         }
     }
 

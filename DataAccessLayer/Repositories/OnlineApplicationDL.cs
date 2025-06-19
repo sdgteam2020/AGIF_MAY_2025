@@ -146,6 +146,7 @@ namespace DataAccessLayer.Repositories
                           from parentUnit in parentUnitGroup.DefaultIfEmpty()
                           join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                          join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId 
                           where common.ApplicationId == applicationId
                           select new CommonDataonlineResponse
                           {
@@ -153,6 +154,7 @@ namespace DataAccessLayer.Repositories
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.ApplicationType,
+                              ApplicationTypeName= applicationType.ApplicationTypeName,
                               ArmyPrefix = common.ArmyPrefix,
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
@@ -257,22 +259,43 @@ namespace DataAccessLayer.Repositories
 
                 if (DocumentModel != null)
                 {
-                    string ArmyNo = $"{result.Number}";
-                    string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", $"{formtype}_{ArmyNo}_{applicationId}");
-
-                    // Get all files in the directory
-                    if (Directory.Exists(directoryPath))
+                    string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", $"{formtype}_{result.Number}_{applicationId}");
+                    List<DTODocumentFileView> lstdoc = new List<DTODocumentFileView>();
+                    DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                    if (DocumentModel.IsCancelledCheque)
                     {
-                        // Get all files in the directory
-                        var fileNames = Directory.GetFiles(directoryPath);
-
-                        // Prepare documents for the view
-                        data.Documents = fileNames.Select(filePath => new DTODocumentFileView
-                        {
-                            FileName = Path.GetFileName(filePath),
-                            FilePath = Path.Combine("/TempUploads", formtype + "_" + ArmyNo + "_" + applicationId, Path.GetFileName(filePath))
-                        }).ToList();
+                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
                     }
+                    if (DocumentModel.IsSeviceExtnPdf)
+                    {
+                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsPaySlipPdf)
+                    {
+                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsQuotationPdf)
+                    {
+                        dTODocumentFileView.FileName = DocumentModel.QuotationPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsDrivingLicensePdf)
+                    {
+                        dTODocumentFileView.FileName = DocumentModel.DrivingLicensePdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+
+                    data.Documents = lstdoc; // Assign the list of documents to the response object
+                    // Get all files in the directory
+
                 }
 
 
@@ -292,6 +315,21 @@ namespace DataAccessLayer.Repositories
             }
 
             application.StatusCode = status;
+            _context.trnApplications.Update(application);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UpdateMergePdfStatus(int applicationId, bool status)
+        {
+            var application = await _context.trnApplications.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
+            if (application == null)
+            {
+                return false; // Just exit the method if not found
+            }
+
+            application.IsMergePdf = status;
             _context.trnApplications.Update(application);
             await _context.SaveChangesAsync();
 

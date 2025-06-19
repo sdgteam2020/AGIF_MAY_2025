@@ -27,7 +27,6 @@ namespace DataAccessLayer.Interfaces
         Task<bool> CheckIsCoRegister(int UnitId);
         Task<bool> AddFwdCO(TrnFwdCO trnFwdCO);
 
-
-
+        Task<bool> UpdateMergePdfStatus(int applicationId, bool status);
     }
 }

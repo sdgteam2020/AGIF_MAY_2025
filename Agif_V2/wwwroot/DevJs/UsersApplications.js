@@ -176,14 +176,8 @@ function GetApplicationList(status) {
                     if (row.isMergePdf == false) {
                         return `
                         <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId},0,0)'>
                                 <i class="bi bi-eye"></i>
-                               
-                            </button>
-                             <button class='btn btn-outline-primary mx-2' onclick='OpenAction(${row.applicationId})'>
-                                Action
-                                
-                            </button>
                         </div>
                        
                     `;
@@ -191,7 +185,7 @@ function GetApplicationList(status) {
                     else {
                         return `
                         <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center  mx-2' onclick='mergePdf(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center  mx-2' onclick='OpenAction(${row.applicationId})'>
                                 <i class="bi bi-eye"></i>
                                
                             </button>
@@ -228,38 +222,60 @@ function GetApplicationList(status) {
 }
 
 function OpenAction(applicationId) {
-
+    //HBA_SL12345671Y_1007_Merged
     $("#spnapplicationId").html(applicationId);
-    $("#ViewPdf").modal("show");
+    
+
+    $.ajax({
+        type: "POST",
+        url: "/OnlineApplication/GetPdfFilePath",
+        data: { applicationId: applicationId },
+        dataType: 'json',
+        success: function (response) {
+            console.log('Response received:', response);
+
+            if (response!=null) {
+                console.log('PDF file path:', response);
+                $("#ViewPdf").modal("show");
+                $("#PdfViwerFOrDigital").attr("data", response);
+                
+
+            } else {
+                alert('Error retrieving PDF file path: ' + response.message);
+                console.error('Error:', response.message);
+            }
+        },
+    });
 }
-function mergePdf(applicationId) {
+function mergePdf(applicationId, isRejected, isApproved) {
     console.log('Starting PDF merge for application ID:', applicationId);
 
     $.ajax({
         type: "POST",
         url: "/OnlineApplication/MergePdf",
-        data: { applicationId: applicationId ,isRejected:false,isApproved:false},
+        data: { applicationId: applicationId, isRejected: isRejected, isApproved: isApproved },
         dataType: 'json',
         success: function (response) {
             console.log('Response received:', response);
-
-            if (response.success) {
-                alert('PDF merged successfully! Total files: ' + response.totalFiles);
-
-                // Option 1: Download the merged PDF
-                if (response.mergedFilePath) {
-                    var downloadLink = document.createElement('a');
-                    downloadLink.href = response.mergedFilePath;
-                    downloadLink.download = 'MergedPDF-' + applicationId + '.pdf';
-                    downloadLink.click();
-                }
-
-                // Option 2: Redirect (uncomment if needed)
-                // window.location.href = "/OnlineApplication/GetApplicationDetails";
-
+            if (isApproved) {
+                Swal.fire({
+                    title: "Approved!",
+                    text: "Signed succesfull and Saved",
+                    icon: "success"
+                });
+            } else if (isRejected) {
+                Swal.fire({
+                    title: "Rejected!",
+                    text: "Application Rejected!",
+                    icon: "warning"
+                });
             } else {
-                alert('Error generating PDF: ' + response.message);
-                console.error('PDF merge failed:', response.message);
+                if (response.success) {
+                    OpenAction(applicationId);
+                } else {
+                    alert('Error generating PDF: ' + response.message);
+                    console.error('PDF merge failed:', response.message);
+                }
             }
         },
         error: function (xhr, status, error) {
@@ -398,15 +414,9 @@ function SignXmlSendTOdatabase(xmlString) {
         data: { applId: applnId, xmlResString: xmlString, remarks: remarks },
         type: 'POST',
         success: function () {
-            Swal.fire({
-                title: "Approved!",
-                text: "Signed succesfull and Saved",
-                icon: "success"
-            });
 
-            setTimeout(function () {
-                window.location.href = "/ApplicationRequest/UserApplicationList";
-            }, 3000);
+            mergePdf(applnId, false, true)
+           
         },
         error: function () {
             alert("Data Not Saved!")
@@ -421,18 +431,7 @@ function rejectedApplication(applicationId) {
         data: { applId: applicationId, rem: remarks },
         type: 'POST',
         success: function (data) {
-            swal.fire({
-                title: "Rejected!",
-                text: "Application rejected successfully.",
-                type: "success",
-                timer: 3000, // Auto close after 3 seconds
-                showConfirmButton: false
-            });
-
-            // Redirect after 3 seconds (when the swal closes)
-            setTimeout(function () {
-                window.location.href = "/ApplicationRequest/UserApplicationList";
-            }, 3000);
+            mergePdf(applicationId, true, false)
         },
         error: function () {
             swal.fire("Error!", "Something went wrong. Please try again.", "error");

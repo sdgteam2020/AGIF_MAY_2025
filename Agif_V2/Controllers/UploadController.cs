@@ -148,7 +148,6 @@ namespace Agif_V2.Controllers
             }
 
             await _IDocumentUpload.Add(fileUpload);
-
             await _IonlineApplication1.UpdateApplicationStatus(applicationId,1);
 
             var ret = _IonlineApplication1.Get(applicationId);

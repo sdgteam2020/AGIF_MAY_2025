@@ -180,7 +180,7 @@ namespace Agif_V2.Controllers
 
                 await _onlineApplication.UpdateApplicationStatus(applId, 2); // This is the likely failing line
                 await _application.Add(digitalSignRecords);
-                await _onlineApplicationController.MergePdf(applId, false, true);
+               // await _onlineApplicationController.MergePdf(applId, false, true);
             }
             catch (Exception ex)
             {
@@ -201,7 +201,7 @@ namespace Agif_V2.Controllers
             };
             await _application.Add(digitalSignRecords);
             await _onlineApplication.UpdateApplicationStatus(applId, 3);
-            await _onlineApplicationController.MergePdf(applId, true, false);
+            //await _onlineApplicationController.MergePdf(applId, true, false);
             return Json(new { success = true, message = "Application rejected." });
 
         }

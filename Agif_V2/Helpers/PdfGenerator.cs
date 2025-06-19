@@ -712,11 +712,12 @@ namespace Agif_V2.Helpers
                             icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
                             document.Add(icon);
                         }
+                       
                     }
+                    pdf.Close();
+                    writer.Close();
 
-
-
-                        document.Close();
+                    document.Close();
                 }
             }
             return 1;
