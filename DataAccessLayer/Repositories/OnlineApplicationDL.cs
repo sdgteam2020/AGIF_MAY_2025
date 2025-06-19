@@ -192,7 +192,7 @@ namespace DataAccessLayer.Repositories
                 //if(result.ApplicationType==1)
                 if (result.ApplicationType == 1)
                 {
-                    formtype= "HBA";
+                    formtype = "HBA";
                     var Hbamodel = (from hba in _context.trnHBA
                                     join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
@@ -308,7 +308,7 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
         {
-            var application = await _context.trnApplications.Where(i=>i.ApplicationId==applicationId).SingleOrDefaultAsync();
+            var application = await _context.trnApplications.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
             if (application == null)
             {
                 return false; // Just exit the method if not found
@@ -353,23 +353,24 @@ namespace DataAccessLayer.Repositories
             return userMapping != null;
         }
 
-        public async Task<bool> CheckIsUnitRegister(string ArmyNo, int UnitId)
+        public async Task<bool> CheckIsUnitRegister(string ArmyNo)
         {
             var userProfile = await _context.UserProfiles
                .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
 
             if (userProfile == null)
                 return false;
-
-            // Step 2: Get UserMapping by ProfileId
-            var userMapping = await _context.trnUserMappings
-                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
-
-            // Step 3: Return true if mapping exists, else false
-            if (userMapping.UnitId == UnitId)
-                return true;
             else
-                return false;
+                return true;
+            // Step 2: Get UserMapping by ProfileId
+            //var userMapping = await _context.trnUserMappings
+            //    .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+
+            //// Step 3: Return true if mapping exists, else false
+            //if (userMapping.UnitId == UnitId)
+            //    return true;
+            //else
+            //    return false;
 
         }
 
@@ -384,6 +385,20 @@ namespace DataAccessLayer.Repositories
             await _context.TrnFwdCO.AddAsync(trnFwdCO);
             await SaveAsync();
             return false;
+        }
+
+        public async Task<UserMapping?> GetUserDetails(string CoArmyNumber)
+        {
+            var userProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(u => u.ArmyNo == CoArmyNumber);
+
+            if (userProfile == null)
+                return null;
+
+            var userMapping = await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+
+            return userMapping;
         }
     }
 }

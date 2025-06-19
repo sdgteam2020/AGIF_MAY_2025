@@ -220,9 +220,9 @@ function SetSuffixLetter(obj) {
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
 
-    var oldArmyNo = $('#oldArmyNo').val();
-    if (oldArmyNo =="")
-        getApplicantDetalis();
+    //var oldArmyNo = $('#oldArmyNo').val();
+    //if (oldArmyNo =="")
+    //    getApplicantDetalis();
 }
 
 
@@ -893,65 +893,70 @@ function checkCORegistration() {
     }
 }
 
-$("#unitSearchInput").autocomplete({
-    source: function (request, response) {
-        //alert(1);
-        // $("#Unit").val(0);
+//$("#unitSearchInput").autocomplete({
+//    source: function (request, response) {
+//        //alert(1);
+//        // $("#Unit").val(0);
 
-        if (request.term.length > 2) {
-            var param = { "UnitName": request.term };
-            $("#CommonData_IOUnit").val(0);
-            $.ajax({
-                url: '/Account/GetALLByUnitName',
-                contentType: 'application/x-www-form-urlencoded',
-                data: param,
-                type: 'POST',
-                success: function (data) {
-                    if (data.length != 0) {
+//        if (request.term.length > 2) {
+//            var param = { "UnitName": request.term };
+//            $("#CommonData_IOUnit").val(0);
+//            $.ajax({
+//                url: '/Account/GetALLByUnitName',
+//                contentType: 'application/x-www-form-urlencoded',
+//                data: param,
+//                type: 'POST',
+//                success: function (data) {
+//                    if (data.length != 0) {
 
-                        response($.map(data, function (item) {
+//                        response($.map(data, function (item) {
 
-                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
+//                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
 
-                        }))
-                    }
-                    else {
-                        $("#CommonData_IOUnit").val(0);
-                        $("#unitSearchInput").val("");
+//                        }))
+//                    }
+//                    else {
+//                        $("#CommonData_IOUnit").val(0);
+//                        $("#unitSearchInput").val("");
 
-                        //alert("Unit not found.")
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Unit not found',
-                            text: 'Please check the unit name and try again.',
-                            confirmButtonText: 'OK'
-                        });
-                    }
+//                        //alert("Unit not found.")
+//                        Swal.fire({
+//                            icon: 'warning',
+//                            title: 'Unit not found',
+//                            text: 'Please check the unit name and try again.',
+//                            confirmButtonText: 'OK'
+//                        });
+//                    }
 
-                },
-                error: function (response) {
-                    alert(response.responseText);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
-                }
-            });
-        }
-    },
-    select: function (e, i) {
-        e.preventDefault();
+//                },
+//                error: function (response) {
+//                    alert(response.responseText);
+//                },
+//                failure: function (response) {
+//                    alert(response.responseText);
+//                }
+//            });
+//        }
+//    },
+//    select: function (e, i) {
+//        e.preventDefault();
 
-        $("#unitSearchInput").val(i.item.label);
-        //$("#IOUnit").val(i.item.value);
+//        $("#unitSearchInput").val(i.item.label);
+//        //$("#IOUnit").val(i.item.value);
 
-        //$("#PresenttxtUnit").val(i.item.label);
-        $("#CommonData_IOUnit").val(i.item.value);
-       // $("input[name='CommonData.PresentUnit']").val(i.item.value);
+//        //$("#PresenttxtUnit").val(i.item.label);
+//        $("#CommonData_IOUnit").val(i.item.value);
+//       // $("input[name='CommonData.PresentUnit']").val(i.item.value);
 
 
-        $("#unitSearchConfirmBtn").prop("disabled", false);
-    },
-    appendTo: '#suggesstion-box'
+//        $("#unitSearchConfirmBtn").prop("disabled", false);
+//    },
+//    appendTo: '#suggesstion-box'
+//});
+
+$('#unitSearchInput').on('input', function () {
+    const inputValue = $(this).val().trim();
+    $('#unitSearchConfirmBtn').prop('disabled', inputValue === '');
 });
 
 $("#unitSearchConfirmBtn").click(function (e) {
@@ -961,7 +966,8 @@ $("#unitSearchConfirmBtn").click(function (e) {
     //}
     e.preventDefault();
     e.stopPropagation();
-    var value = $("#CommonData_IOUnit").val()
+    //var value = $("#CommonData_IOUnit").val()
+    var value = $("#unitSearchInput").val()
     //console.log($("#PresentUnitId").val());
 
     if (value != 0) {
@@ -1008,94 +1014,183 @@ $("#unitSearchCancelBtn").click(function (e) {
 });
 
 
- function checkUnitSameOrNot(unitId) {
+ function checkUnitSameOrNot(ArmyNo) {
     var armyNumber = $("#armyPrefix option:selected").text();
     var Prefix = $("#armyNumber").val();
     var Suffix = $("#txtSuffix").val();
 
-    $.ajax({
-        url: '/OnlineApplication/CheckIsUnitRegister',
-        method: 'GET',
-        data: { ArmyNo: (armyNumber + Prefix + Suffix).toUpperCase(), UnitId: unitId },
-        success: function (response) {
-            if (response === true) {
+     var Value = armyNumber + Prefix + Suffix;
 
-                $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
+    //$.ajax({
+    //    url: '/OnlineApplication/CheckIsUnitRegister',
+    //    method: 'GET',
+    //    data: { ArmyNo: (ArmyNo).toUpperCase()},
+    //    success: function (response) {
+    //        if (response === true) {
 
-                // Clear input and reopen dialog
-                $("#unitSearchInput").val("");
-                $("#CommonData_IOUnit").val(0)
-            }
+    //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
 
-            else {
+    //            // Clear input and reopen dialog
+    //            $("#unitSearchInput").val("");
+    //            $("#CommonData_IOUnit").val(0)
+    //        }
+
+    //        else {
 
 
-                checkUnitRegistration(unitId);
+    //            checkUnitRegistration(unitId);
 
 
-            }
-        },
-        error: function () {
-            alert('Could not verify unit registration. Please try again.');
-        }
-    });
+    //        }
+    //    },
+    //    error: function () {
+    //        alert('Could not verify unit registration. Please try again.');
+    //    }
+    //});
+
+     if (ArmyNo == Value.toUpperCase()) {
+         //console.log("Unit is same as Army No");
+         $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
+     }
+
+     // else {
+     //$.ajax({
+     //    url: '/OnlineApplication/CheckIsUnitRegister',
+     //    method: 'GET',
+     //    data: { ArmyNo: (ArmyNo).toUpperCase()},
+     //    success: function (response) {
+     //        if (response === true) {
+
+     //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
+
+     //            // Clear input and reopen dialog
+     //            $("#unitSearchInput").val("");
+     //            $("#CommonData_IOUnit").val(0)
+     //        }
+
+     //        else {
+
+
+     //            checkUnitRegistration(unitId);
+
+
+     //        }
+     //    },
+     //    error: function () {
+     //        alert('Could not verify unit registration. Please try again.');
+     //    }
+     //});
+     //checkUnitRegistration(ArmyNo);
+     //}
+
+     else {
+         try {
+             $.ajax({
+                 url: '/OnlineApplication/CheckForCoRegister',
+                 type: 'POST',
+                 data: { ArmyNo: ArmyNo },
+                 success: function (result) {
+                     if (result === true) {
+                         $('#COArmyNo').val(ArmyNo);
+                         formSubmitting = true;
+                         $('#myForm').submit();
+                     } else if (result === false) {
+                         // If not registered, set unit input back to required
+                         $('#unitSearchMessage').text();
+                         formSubmitting = false;
+                         //$('#myForm').submit();
+                         Swal.fire({
+                             icon: 'info',
+                             title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
+                             html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
+                             confirmButtonText: 'OK',
+                             cancelButtonText: 'Cancel', // Cancel button text
+                             showCancelButton: true, // Enable cancel button
+                             reverseButtons: true,  // Make Cancel button appear on the left
+                         }).then((result) => {
+                             if (result.isConfirmed) {
+                                 // Redirect to Create page
+                                 //var appType = $('#ApplicationType').val();
+                                 //if (appType == "9") {
+                                 //    window.location.href = `/HBA_Application/Create`;
+                                 //}
+                                 //else {
+                                 //    window.location.href = `/Car_PC_Advance_Application/Create`;
+                                 //}
+                                 $('#unitSearchDialog').hide();
+                             } else if (result.isDismissed) {
+                                 // If Cancel is clicked, reopen the unit search popup
+                                 //$('#txtUnit').val('');
+                                 $("unitSearchDialog").show();
+                             }
+                         });
+                     }
+                 },
+                 error: function () {
+                     console.error("Failed to check CO registration");
+                 }
+             });
+         } catch (err) {
+             console.error("AJAX error", err);
+         }
+     }
 
 
 }
 
-function checkUnitRegistration(selectedUnitId) {
-    $.ajax({
-        url: '/OnlineApplication/CheckIsCoRegister',
-        method: 'GET',
-        data: { UnitId: selectedUnitId },
-        success: function (response) {
-            if (response === true) {
-                //alert('Unit Available. You can proceed with this unit.');
-                $("#CommonData_IOUnit").val(selectedUnitId);
-                //$('#txtUnit').val(selectedUnitName);
-                formSubmitting = true;
-                $('#myForm').submit();
-            } else {
-                //if (confirm('Unit registration pending/not activated. Please approach your Unit IO.\nGo to Create page?')) {
-                //    window.location.href = '/Car_PC_Advance_Application/Create';
-                //} else {
-                //    openUnitSearchPopup();
-                //}
-                $('#unitSearchMessage').text('');
+//function checkUnitRegistration(selectedUnitId) {
+//    $.ajax({
+//        url: '/OnlineApplication/CheckIsCoRegister',
+//        method: 'GET',
+//        data: { UnitId: selectedUnitId },
+//        success: function (response) {
+//            if (response === true) {
+//                //alert('Unit Available. You can proceed with this unit.');
+//                $("#CommonData_IOUnit").val(selectedUnitId);
+//                //$('#txtUnit').val(selectedUnitName);
+//                formSubmitting = true;
+//                $('#myForm').submit();
+//            } else {
+//                //if (confirm('Unit registration pending/not activated. Please approach your Unit IO.\nGo to Create page?')) {
+//                //    window.location.href = '/Car_PC_Advance_Application/Create';
+//                //} else {
+//                //    openUnitSearchPopup();
+//                //}
+//                $('#unitSearchMessage').text('');
 
 
-                Swal.fire({
-                    icon: 'info',
-                    title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
-                    html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel', // Cancel button text
-                    showCancelButton: true, // Enable cancel button
-                    reverseButtons: true,  // Make Cancel button appear on the left
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to Create page
-                        //var appType = $('#ApplicationType').val();
-                        //if (appType == "9") {
-                        //    window.location.href = `/HBA_Application/Create`;
-                        //}
-                        //else {
-                        //    window.location.href = `/Car_PC_Advance_Application/Create`;
-                        //}
-                        $('#unitSearchDialog').hide();
-                    } else if (result.isDismissed) {
-                        // If Cancel is clicked, reopen the unit search popup
-                        //$('#txtUnit').val('');
-                        $("unitSearchDialog").show();
-                    }
-                });
-            }
-        },
-        error: function () {
-            alert('Could not verify unit registration. Please try again.');
-        }
-    });
-}
+//                Swal.fire({
+//                    icon: 'info',
+//                    title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
+//                    html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
+//                    confirmButtonText: 'OK',
+//                    cancelButtonText: 'Cancel', // Cancel button text
+//                    showCancelButton: true, // Enable cancel button
+//                    reverseButtons: true,  // Make Cancel button appear on the left
+//                }).then((result) => {
+//                    if (result.isConfirmed) {
+//                        // Redirect to Create page
+//                        //var appType = $('#ApplicationType').val();
+//                        //if (appType == "9") {
+//                        //    window.location.href = `/HBA_Application/Create`;
+//                        //}
+//                        //else {
+//                        //    window.location.href = `/Car_PC_Advance_Application/Create`;
+//                        //}
+//                        $('#unitSearchDialog').hide();
+//                    } else if (result.isDismissed) {
+//                        // If Cancel is clicked, reopen the unit search popup
+//                        //$('#txtUnit').val('');
+//                        $("unitSearchDialog").show();
+//                    }
+//                });
+//            }
+//        },
+//        error: function () {
+//            alert('Could not verify unit registration. Please try again.');
+//        }
+//    });
+//}
 
 
 function formatIndianNumber(input) {

@@ -153,9 +153,9 @@ namespace Agif_V2.Controllers
            return Json(await _IonlineApplication1.CheckForCoRegister(ArmyNo));
         }
 
-        public async Task<JsonResult> CheckIsUnitRegister(string ArmyNo, int UnitId)
+        public async Task<JsonResult> CheckIsUnitRegister(string ArmyNo)
         {
-            return Json(await _IonlineApplication1.CheckIsUnitRegister(ArmyNo,UnitId));
+            return Json(await _IonlineApplication1.CheckIsUnitRegister(ArmyNo));
         }
 
         public async Task<JsonResult> CheckIsCoRegister(int UnitId)
@@ -361,7 +361,7 @@ namespace Agif_V2.Controllers
                     {
                         model.CommonData.ApplicationType = int.Parse(model.loantype);
                         model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
-                        model.CommonData.IOUnit= model.CommonData.IOUnit == 0 ? (int?)null : model.CommonData.IOUnit;
+                        model.CommonData.IOUnit = model.CommonData.IOUnit == 0 ? (int?)null : model.CommonData.IOUnit;
                         common = await _IonlineApplication1.AddWithReturn(model.CommonData);
                     }
 
@@ -384,7 +384,7 @@ namespace Agif_V2.Controllers
 
                         Car.ApplicationId = common.ApplicationId;
 
-                        await _car.Add(Car);
+                       await _car.Add(Car);
                     }
 
                     else if (formType == "PCA" && model.PCAApplication != null)
@@ -408,10 +408,12 @@ namespace Agif_V2.Controllers
 
                 // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
-                 int Applicationid = common.ApplicationId;
+                //int Applicationid = common.ApplicationId;
 
-                TempData["applicationId"] = Applicationid;
+                TempData["applicationId"] = common.ApplicationId;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+
+                TempData["COArmyNumber"] = model.COArmyNo;
                 return RedirectToAction("Upload", "Upload", new { formType });
 
 
@@ -420,6 +422,7 @@ namespace Agif_V2.Controllers
 
                 // Proceed to the next step
             }
+
         }
 
         public async Task<IActionResult> GetApplicationDetails(int applicationId)

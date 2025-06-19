@@ -22,11 +22,13 @@ namespace DataAccessLayer.Interfaces
 
         Task<bool> CheckForCoRegister(string ArmyNo);
 
-        Task<bool> CheckIsUnitRegister(string ArmyNo, int UnitId);
+        Task<bool> CheckIsUnitRegister(string ArmyNo);
 
         Task<bool> CheckIsCoRegister(int UnitId);
         Task<bool> AddFwdCO(TrnFwdCO trnFwdCO);
 
         Task<bool> UpdateMergePdfStatus(int applicationId, bool status);
+        Task<UserMapping?> GetUserDetails(string CoArmyNumber);
+
     }
 }

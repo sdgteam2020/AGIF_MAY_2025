@@ -17,5 +17,7 @@ namespace DataTransferObject.Request
         public string? loantype { get; set; }
 
         public string? applicantCategory { get; set; }
+
+        public string? COArmyNo { get; set; }
     }
 }

@@ -51,6 +51,8 @@ namespace Agif_V2.Controllers
             MArmyPrefix mArmyPrefix = new MArmyPrefix();
             string ArmyNo = string.Empty;
 
+            string CoArmyNumber= TempData["COArmyNumber"] as string ?? string.Empty;
+
             if (applicationId != 0)
             {
                 commonDataModel = await _IonlineApplication1.Get(applicationId);
@@ -92,7 +94,7 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
-           
+
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads");
             if (!Directory.Exists(tempFolder))
             {
@@ -107,7 +109,7 @@ namespace Agif_V2.Controllers
             }
 
             var fileUpload = new DocumentUpload();
-            fileUpload.ApplicationId= applicationId;
+            fileUpload.ApplicationId = applicationId;
 
             foreach (var file in files)
             {
@@ -148,22 +150,29 @@ namespace Agif_V2.Controllers
             }
 
             await _IDocumentUpload.Add(fileUpload);
-            await _IonlineApplication1.UpdateApplicationStatus(applicationId,1);
 
-            var ret = _IonlineApplication1.Get(applicationId);
+            await _IonlineApplication1.UpdateApplicationStatus(applicationId, 1);
 
+           // var ret = _IonlineApplication1.Get(applicationId);
 
-            TrnFwdCO trnFwdCO = new TrnFwdCO
+            if (!string.IsNullOrEmpty(CoArmyNumber))
             {
-                ApplicationId = applicationId,
-                ArmyNo = ArmyNo,
-                COUserId = 1,
-                ProfileId = 1,
-                CreatedOn = DateTime.Now,
-                Status = 1 
-            };
-            await _IonlineApplication1.AddFwdCO(trnFwdCO);
+                var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
+                if (CoDetails != null)
+                {
+                    TrnFwdCO trnFwdCO = new TrnFwdCO
+                    {
+                        ApplicationId = applicationId,
+                        ArmyNo = ArmyNo,
+                        COUserId = CoDetails.UnitId,
+                        ProfileId = CoDetails.ProfileId,
+                        CreatedOn = DateTime.Now,
+                        Status = 1
+                    };
+                    await _IonlineApplication1.AddFwdCO(trnFwdCO);
+                }
 
+            }
             
             TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
