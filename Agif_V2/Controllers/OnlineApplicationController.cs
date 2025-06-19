@@ -502,7 +502,9 @@ namespace Agif_V2.Controllers
                     var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip);
                     if (data == 1)
                     {
-                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
+                                 .ToArray(); ;
+                       // pdfFiles.OrderByDescending().ToArray(); // Ensure the latest PDF is included
                     }
                 }
                 catch (Exception pdfGenEx)

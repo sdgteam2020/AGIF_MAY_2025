@@ -259,35 +259,40 @@ namespace DataAccessLayer.Repositories
 
                 if (DocumentModel != null)
                 {
-                    string directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", $"{formtype}_{result.Number}_{applicationId}");
+                    string directoryPath = Path.Combine("/TempUploads", $"{formtype}_{result.Number}_{applicationId}");
                     List<DTODocumentFileView> lstdoc = new List<DTODocumentFileView>();
-                    DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                   
                     if (DocumentModel.IsCancelledCheque)
                     {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.CancelledCheque;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSeviceExtnPdf)
                     {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsPaySlipPdf)
                     {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.PaySlipPdf;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsQuotationPdf)
                     {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.QuotationPdf;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsDrivingLicensePdf)
                     {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.DrivingLicensePdf;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
