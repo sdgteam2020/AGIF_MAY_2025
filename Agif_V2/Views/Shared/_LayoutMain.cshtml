@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+@using Microsoft.AspNetCore.Identity;
+@using DataTransferObject.Identitytable;
+@inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> signInManager;
+@inject SignInManager<ApplicationUser> _signInManager;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -137,12 +142,32 @@
                             </ul>
                             
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" href="/Default/ContactUs">Contact Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link fw-bold" href="~/Account/Login">Login</a>
-                        </li>
+                     
+                                
+                                <!-- ... other code ... -->
+                                 @{
+                                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                                 }
+                                
+                                    @if (userId!=null)
+                                    {
+                            <li class="nav-item">
+                                <a class="nav-link fw-bold" href="~/Home/Index" style="background-color: #dd0000;">DashBoard</a>
+                            </li>
+                            <li>
+                                <a class="nav-link fw-bold"  href="~/Account/FinalLogout" > Sign Out </a>
+                            </li>
+                                    }
+                                    else
+                                    { 
+                                    <li class="nav-item">
+                                        <a class="nav-link fw-bold" href="~/Account/Login">Login</a>
+                                    </li>
+                                    }
+                               
+                       
+                                <!-- ... other code ... -->
+                       
                     </ul>
                 </div>
             </div>

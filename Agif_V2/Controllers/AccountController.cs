@@ -101,7 +101,7 @@ namespace Agif_V2.Controllers
                     Helpers.SessionExtensions.SetObject(HttpContext.Session, "CO", sessionCO);
                 }
                 HttpContext.Session.SetString("UserGUID",_db.Users.FirstOrDefault(x=>x.UserName == model.UserName).Id.ToString());
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Default");
             }
             else if(result.IsLockedOut)
             {
