@@ -262,12 +262,16 @@ function mergePdf(applicationId, isRejected, isApproved) {
                     title: "Approved!",
                     text: "Signed succesfull and Saved",
                     icon: "success"
+                }).then(() => {
+                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1"; 
                 });
             } else if (isRejected) {
                 Swal.fire({
                     title: "Rejected!",
                     text: "Application Rejected!",
                     icon: "warning"
+                }).then(() => {
+                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1"; 
                 });
             } else {
                 if (response.success) {
@@ -366,7 +370,7 @@ function DataSignDigitaly(applicationId) {
                 text: "Download Dgis App For Digital Sign!",
                 icon: "error"
             });
-            $("#tokenMessage").html(`<span class="m-lg-2 text-danger alert-danger tokenremarks"> DGIS App Not running</span> <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; font-size:12px">Download Dgis App For Digital Sign</a>`);
+            //$("#tokenMessage").html(`<span class="m-lg-2 text-danger alert-danger tokenremarks"> DGIS App Not running</span> <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; font-size:12px">Download Dgis App For Digital Sign</a>`);
 
         }
     });

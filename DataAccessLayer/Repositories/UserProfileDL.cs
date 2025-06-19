@@ -33,7 +33,9 @@ namespace DataAccessLayer.Repositories
                                join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
                                join rank in _context.MRanks on profile.rank equals rank.RankId
                                join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
-                               where mapping.IsActive == status
+                               join role in _context.UserRoles on user.Id equals role.UserId
+                               where mapping.IsActive == status && role.RoleId == 2
+                               orderby user.UpdatedOn
                                select new DTOUserProfileResponse
                                {
                                    DomainId = profile.userName,

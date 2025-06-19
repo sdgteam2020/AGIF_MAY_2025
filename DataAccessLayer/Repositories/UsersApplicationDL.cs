@@ -27,7 +27,8 @@ namespace DataAccessLayer.Repositories
                                    join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
                                    join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                    join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                   where user.MappingId == Mapping && appl.StatusCode == status
+                                   where user.MappingId == Mapping && appl.StatusCode == status && user.IsPrimary == true
+                                   orderby appl.UpdatedOn descending
                                    select new DTOGetApplResponse
                                    {
                                        ApplicationId = appl.ApplicationId,
