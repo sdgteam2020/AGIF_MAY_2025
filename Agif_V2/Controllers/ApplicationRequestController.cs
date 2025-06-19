@@ -4,6 +4,7 @@ using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -37,8 +38,9 @@ namespace Agif_V2.Controllers
             {
                 return Unauthorized("Session expired or invalid user session.");
             }
-            SessionUserDTO? coSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
-            ViewBag.ArmyNo = coSession.ArmyNo;
+            ViewBag.ArmyNo = dTOTempSession.ArmyNo;
+            //SessionUserDTO? coSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
+
             //var app = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, 1);
             return View(dTOTempSession);
         }

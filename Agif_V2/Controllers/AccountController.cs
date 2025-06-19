@@ -54,21 +54,20 @@ namespace Agif_V2.Controllers
             if(result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
-                int userId = Convert.ToInt32(await _userManager.GetUserIdAsync(user));
-                var mappingId =  _userMapping.GetByUserId(userId).Result.FirstOrDefault();
                 var roles = await _userManager.GetRolesAsync(user);
+                var profile = _userProfile.GetUserAllDetails(model.UserName).Result;
+               
                 string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
                 SessionUserDTO sessionUserDTO = new SessionUserDTO
                 {
                     UserName = user.UserName,
-                    UserId = userId,
-                    ProfileId = _userProfile.GetByUserName(model.UserName).Result.ProfileId,
-                    MappingId  = mappingId.MappingId,
-                    Role=role
+                    UserId = user.Id,
+                    ProfileId = profile.ProfileId,
+                    MappingId  = profile.MappingId,
+                    Role=role,
+
                 };
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
-                //SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-
                 
                 if(roles.Contains("Admin"))
                 {
@@ -76,29 +75,18 @@ namespace Agif_V2.Controllers
                 }
                 else
                 {
-                    //var ActiveCO = await _userProfile.GetByUserName(model.UserName);
-                    //bool isCOActive = ActiveCO.IsActive;
-                    int profileId = _userProfile.GetByUserName(model.UserName).Result.ProfileId;
-                    var userArmyNo = _userProfile.GetByUserName(model.UserName).Result.ArmyNo;
-                    var userMapping = _userMapping.GetByProfileId(profileId).Result.FirstOrDefault();
-                    if (userMapping == null)
+                
+                    if (profile == null)
                     {
                         return Json(new { success = false, message = "User mapping not found." });
                     }
-                    bool isCOActive = userMapping.IsActive;
+                    bool isCOActive = profile.IsCOActive;
                     if(!isCOActive)
                     {
-                        HttpContext.Session.SetString("userActivate", "false");
+                       
                         return RedirectToAction("COContactUs", "Default");
                     }
-                    HttpContext.Session.SetString("SAMLRole", "CO");
-                    SessionUserDTO sessionCO = new SessionUserDTO
-                    {
-                        ArmyNo = userArmyNo,
-                        RankName = "rankName",
-                        DomainId = "Test Domain"
-                    };
-                    Helpers.SessionExtensions.SetObject(HttpContext.Session, "CO", sessionCO);
+
                 }
                 HttpContext.Session.SetString("UserGUID",_db.Users.FirstOrDefault(x=>x.UserName == model.UserName).Id.ToString());
                 return RedirectToAction("Index", "Default");
@@ -110,7 +98,7 @@ namespace Agif_V2.Controllers
             else
             {
                 TempData["UserName"] = model.UserName;
-                //return RedirectToAction("Register", "Account", new { userName = model.UserName});
+
                 return RedirectToAction("Register", "Account");
             }
             return View();

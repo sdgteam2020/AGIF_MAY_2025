@@ -21,6 +21,7 @@ namespace Agif_V2.Controllers
         }
         public IActionResult Upload()
         {
+           
             FileUploadViewModel fileUploadViewModel = new FileUploadViewModel();
             return View(fileUploadViewModel);
         }

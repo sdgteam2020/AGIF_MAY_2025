@@ -280,7 +280,7 @@
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
                                     <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onkeydown="return false;"onchange="SetRetDate()">
+                                    onchange="SetRetDate()">
                                     <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
@@ -292,7 +292,7 @@
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="date" class="form-control" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"  style="caret-color: transparent;"
-                                          onkeydown="return false;" required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" onchange="calculateYearDifference();SetRetDate()">
+                                           required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" onchange="calculateYearDifference();SetRetDate()">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>

@@ -55,5 +55,37 @@ namespace DataAccessLayer.Repositories
             return users!;
         }
 
+        public async Task<DTOUserProfileResponse> GetUserAllDetails(string userName)
+        {
+            var users = await (from user in _context.Users
+                               join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
+                               join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
+                               join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+                               join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
+                               join rank in _context.MRanks on profile.rank equals rank.RankId
+                               join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
+                               join role in _context.UserRoles on user.Id equals role.UserId
+                               where user.UserName == userName 
+                               orderby user.UpdatedOn
+                               select new DTOUserProfileResponse
+                               {
+                                   DomainId = profile.userName,
+                                   MappingId=mapping.MappingId,
+                                   IsCOActive = mapping.IsActive,
+                                   ProfileId = profile.ProfileId,
+                                   ProfileName = rank.RankName + " " + profile.Name,
+                                   AppointmentName = appt.AppointmentName,
+                                   ArmyNo = profile.ArmyNo,
+                                   EmailId = profile.Email,
+                                   MobileNo = profile.MobileNo,
+                                   UnitName = unit.UnitName,
+                                   RankName = rank.RankName,
+                                   RegtName = regt.RegtName,
+                                   IsPrimary = mapping.IsPrimary,
+                                   IsFmn = mapping.IsFmn,
+                               }).FirstOrDefaultAsync(); // Use FirstOrDefaultAsync to return a single object
+
+            return users;
+        }
     }
 }
