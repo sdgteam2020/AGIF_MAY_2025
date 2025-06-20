@@ -1,62 +1,62 @@
-﻿function calculateEMI() {
-    const loanAmount = parseFloat(document.getElementById('loanAmount').value.replace(/[^0-9.]/g, ''));
-    const annualRate = parseFloat(document.getElementById('interestRate').value);
-    const maxEmi = parseInt(document.getElementById('maxEmi').value);
+﻿$(document).ready(function () {
 
+    $('#loanAmount, #interestRate, #maxEmi').on('input', function () {
+        CheckEmiCalculater();
+    });
+
+
+});
+function CheckEmiCalculater() {
+
+    const loanAmount = parseFloat($("#loanAmount").val().replace(/,/g, '')); // Remove commas and convert to number
+    const interestRate = parseFloat($("#interestRate").val()); // Convert to number
+    const maxEmi = parseFloat($("#maxEmi").val()); // Convert to number
+
+    if (loanAmount > 0 && interestRate > 0 && maxEmi > 0) {
+        calculateEMI(loanAmount, interestRate, maxEmi);
+    }
+    else {
+        $('#emiAmount').text("");
+        $('#emiResult').addClass('d-none');  // hide the result
+    }
+}
+
+function calculateEMI(loanAmount, annualRate, maxEmi) {
+   
     if (!loanAmount || !annualRate || !maxEmi) {
         alert('Please fill in all required fields');
         return;
     }
-    
+
     const monthlyRate = (annualRate / 100) / 12;
-    
+
     const emi = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, maxEmi)) /
         (Math.pow(1 + monthlyRate, maxEmi) - 1);
 
-    // Display result
-    const emiResult = document.getElementById('emiResult');
-    const emiAmount = document.getElementById('emiAmount');
+    // Round the EMI to 2 decimal places
+    const roundedEmi = emi.toFixed(2);
 
-    emiAmount.textContent = '₹ ' + emi.toLocaleString('en-IN', {
-        minimumFractionDigits: 2,
+    // Display result using jQuery
+    $('#emiAmount').text(Number(roundedEmi).toLocaleString('en-IN', {
+        style: 'currency',
+        currency: 'INR',
         maximumFractionDigits: 2
-    });
+    }));
 
-    emiResult.style.display = 'block';
-    emiResult.scrollIntoView({ behavior: 'smooth' });
+    $('#emiResult').removeClass('d-none');  // Show the result
+    $('html, body').animate({
+        scrollTop: $('#emiResult').offset().top  // Scroll to the result
+    }, 1000);  // Smooth scrolling with a duration of 1 second
+
 }
 
 
-// Allow Enter key to calculate EMI
-document.addEventListener('keypress', function (e) {
-    if (e.key === 'Enter') {
-        calculateEMI();
-    }
-});
 
 function formatIndianNumber(input) {
 
-    let num = input.value.replace(/[^0-9]/g, '');
-
-    if (num === "") {
-        input.value = "";
-        return;
-    }
-
-    let parsedInteger = parseInt(num, 10);
-    if (isNaN(parsedInteger)) {
-        input.value = "";
-        return;
-    }
-
-    let integerPart = parsedInteger.toString();
-
-    let lastThree = integerPart.slice(-3);
-    let otherNumbers = integerPart.slice(0, -3);
-
-    if (otherNumbers !== '') {
-        otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-    }
-
-    input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
+    let value = input.value.replace(/,/g, ''); // Remove any existing commas
+    let formattedValue = parseFloat(value).toLocaleString('en-IN', {
+        maximumFractionDigits: 2,
+    });
+    input.value = formattedValue;
 }

@@ -14,7 +14,7 @@
     <div class="row">
         <!-- Calculator Form -->
         <div class="col-lg-4 col-md-6">
-            <div class="calculator-container">
+            <div class="calculator-container h-100">
                 <h4 class="text-center mb-4" style="color: #495057;">Calculate Your EMI</h4>
 
                 <form id="emiForm">
@@ -38,11 +38,11 @@
                         <input type="number" class="form-control" id="maxEmi"  min="1" max="360">
                     </div>
 
-                    <button type="button" class="btn btn-calculate btn-primary w-100" onclick="calculateEMI()">
+                    <button type="button" class="btn btn-calculate btn-primary w-100 d-none" onclick="calculateEMI()">
                         <i class="fas fa-calculator me-2"></i>Calculate EMI
                     </button>
 
-                    <div id="emiResult" class="emi-result" style="display: none;">
+                    <div id="emiResult" class="emi-result d-none">
                         <h5><i class="fas fa-money-bill-wave me-2"></i>Monthly EMI</h5>
                         <h3 id="emiAmount">₹ 0</h3>
                     </div>
@@ -52,7 +52,7 @@
 
         <!-- Loan Information Table -->
         <div class="col-lg-8 col-md-6">
-            <div class="table-container">
+            <div class="table-container h-100">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0 table-bordered">
                         <thead>

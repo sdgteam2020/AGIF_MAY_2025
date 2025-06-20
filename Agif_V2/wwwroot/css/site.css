@@ -725,3 +725,9 @@ h1 {
     pointer-events: none;
     background-color: #e9ecef;
 }
+.renderbody {
+    margin-top: 13rem !important
+}
+.navbar {
+    --mdb-navbar-padding-x: -1;
+}
