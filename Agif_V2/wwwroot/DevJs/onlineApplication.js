@@ -11,8 +11,14 @@ $(document).ready(function () {
     RefreshMaxAmt_CA();
     RefreshMaxAmt_HBA();
     handleSubmitClick();
-
-}); 
+    ExtensionOfServiceAccess();
+    resetCivilPostalAddress();
+});
+function resetCivilPostalAddress() {
+    $('#armyPostOffice').on('change', function () {
+        $('#civilPostalAddress').val("");
+    });
+}
 function expandAccordions() {
 
     //$('#dateOfRetirement').val("2044-10-12");
@@ -72,7 +78,7 @@ function loadDropdown() {
     const applicantCategory = applicantCategoryFromUrl ? applicantCategoryFromUrl : applicantCategoryFromInput;
 
     var armyPrefixValue = $('#armyPrefix').data('army-prefix');  // Access the data-attribute value
-    var OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix'); 
+    var OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');
     var Rank = $('#ddlrank').data('rank-prefix');
     var regtcorps = $('#regtCorps').data('regt-prefix');
     var parentunit = $('#parentUnit').data('parent-prefix');
@@ -87,17 +93,14 @@ function loadDropdown() {
 
     if (applicantCategory == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
-        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 9, 0);
         mMsater(Rank, "ddlrank", 3, 0);
     }
     else if (applicantCategory == 2) {
         mMsater(armyPrefixValue, "armyPrefix", 10, 0);
-        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 10, 0);
         mMsater(Rank, "ddlrank", 4, 0);
     }
     else if (applicantCategory == 3) {
         mMsater(armyPrefixValue, "armyPrefix", 11, 0);
-        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
         mMsater(Rank, "ddlrank", 13, 0);
     }
     if (loanType == 1) {
@@ -116,22 +119,22 @@ function loadDropdown() {
     mMsater(Cavehicleloanfreq, "CA_LoanFreq", 15, 0);
     mMsater(Pcaloanfreq, "PCA_LoanFreq", 15, 0);
     mMsater(hbaloanfreq, "HBA_LoanFreq", 15, 0);
-
-
-
+    mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
 }
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
         var accountNo = $('#salaryAcctNo').val();
         var reEnterAccountNo = $('#confirmSalaryAcctNo').val();
         if (accountNo !== reEnterAccountNo) {
-            $('#confirmSalaryAcctNo').val('').css('border', '2px solid red');
-            setTimeout(() => {
-                $(this).focus();
-            }, 10);
-            setTimeout(() => {
-                $(this).css('border', '');
-            }, 2000);
+            Swal.fire({
+                title: "Not Matched",
+                text: "Salary Account No. not matched",
+                icon: "warning"
+            }).then(() => {
+
+                $('#confirmSalaryAcctNo').val("");
+                $('#confirmSalaryAcctNo').focus();
+            });
         }
 
     });
@@ -232,7 +235,7 @@ function getApplicantDetalis() {
     var Prefix = $("#armyNumber").val();
     var Suffix = $("#txtSuffix").val();
     var appType = parseInt($("#loanType").val(), 10);
-    
+
     $.ajax({
         type: "get",
         url: "/OnlineApplication/CheckExistUser",
@@ -302,6 +305,31 @@ function DeleteExistingLoan() {
         }
     });
 }
+function calculateDifferenceBetweenDOBAndDOC(doc) {
+    const dob = $('#dateOfBirth').val();
+    if (!dob) {
+        alert("Please select a Date of Birth.");
+        return;
+    }
+    const dateOfBirth = new Date(dob);
+    const dateOfCommission = new Date(doc);
+    if (dateOfCommission < dateOfBirth) {
+        alert("Date of Commission cannot be earlier than Date of Birth.");
+        return;
+    }
+    const ageInMilliseconds = dateOfCommission - dateOfBirth;
+    const ageInYears = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)); // Account for leap years
+    if (ageInYears < 15) {
+        Swal.fire({
+            title: 'Warning!',
+            text: 'Atleast 15 years of age is required for commission. Please check the Date of Birth and Date of Commission.',
+            icon: 'warning'
+        }).then(() => {
+            $('#dateOfCommission').val("");
+        });
+    }
+}
+
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();
 
@@ -309,7 +337,7 @@ function calculateYearDifference() {
         alert("Please select a Date of Commission.");
         return;
     }
-
+    calculateDifferenceBetweenDOBAndDOC(value);
     const commissionDate = new Date(value);
     const today = new Date();
 
@@ -328,7 +356,6 @@ function calculateYearDifference() {
 }
 const globleRetirementDate = {};
 function SetRetDate() {
-    console.log("SetRetDate called");
     var Prefix = $('#armyPrefix').val();
     var ranks = $('#ddlrank').val();
     var rankId = parseInt(ranks);
@@ -358,7 +385,6 @@ function SetRetDate() {
 
     var dateOfBirthString = $('#dateOfBirth').val();
     var dateParts = dateOfBirthString.split('-');
-    console.log(dateParts.length);
     if (dateParts.length === 3) {
         if (EnrollDate == "" || EnrollDate == undefined || dateOfBirthString == "" || dateOfBirthString == undefined) {
             console.log('EnrollDate or dateOfBirthString is empty or undefined.')
@@ -519,17 +545,25 @@ function calculateResidualService() {
     $("#totalResidualMonth").val(totalmonths);
     $("#residualService").val(years);
     setOutlineActive("residualService");
-    
+
 }
 function enableDisablePromotionDate() {
     $('#ddlrank').on('change', function () {
-        if ($(this).val() === '31' || $(this).val() === '1') {
-            $('#dateOfPromotion').prop('disabled', false);
-        } else {
-            $('#dateOfPromotion').prop('disabled', true);
-        }
+        togglePromotionDate($(this).val());
     });
+
+    // Run once on load
+    togglePromotionDate($('#ddlrank').val());
 }
+
+function togglePromotionDate(rankValue) {
+    if (rankValue === '31' || rankValue === '1') {
+        $('#dateOfPromotion').prop('disabled', false).addClass('bg-white text-dark');
+    } else {
+        $('#dateOfPromotion').prop('disabled', true).removeClass('bg-white text-dark');
+    }
+}
+
 function updateRetDateOnPromotionDateSelection() {
     var promotionDate = $('#dateOfPromotion').val();
     if (!promotionDate) {
@@ -557,39 +591,118 @@ function updateRetDateOnPromotionDateSelection() {
 function extensionOfService() {
     var prefix = $('#armyPrefix').val();
     var extension = $('#ExtnOfService').val();
+    var dop = $('#dateOfPromotion').val();
+
+    // Debug log
+    console.log('DoP value:', dop);
+
+    // Validate prefix selection
     if (!prefix) {
-        alert("Please select Prefix.");
-        return;
+        Swal.fire({
+            title: 'Warning!',
+            html: '<p style="font-size: 18px;">Please select Prefix.</p>',
+            icon: 'warning',
+        });
+        return; // Exit early if no prefix selected
     }
+
+    // Check if prefix qualifies for extension (13 or 14)
     if (prefix == 13 || prefix == 14) {
         if (extension == "Yes") {
-            var currentRetDate = $('#dateOfRetirement').val();
-            var currentResidualService = parseInt($('#residualService').val());
+            // If DoP is not set (empty, null, or undefined), calculate extension
+            if (!dop || dop.trim() === "") {
+                console.log('DoP not set, calculating service extension...');
 
-            var dateParts = currentRetDate.split('-');
-            if (dateParts.length === 3) {
-                var year = dateParts[0];
-                var month = dateParts[1] - 1;
-                var day = dateParts[2];
+                var currentRetDate = $('#dateOfRetirement').val();
+                var currentResidualService = parseInt($('#residualService').val());
 
-                var dateOfRetirement = new Date(year, month, day);
-                dateOfRetirement.setFullYear(dateOfRetirement.getFullYear() + 2);
-                var yyyy = dateOfRetirement.getFullYear();
-                var mm = String(dateOfRetirement.getMonth() + 1).padStart(2, '0');
-                var dd = String(dateOfRetirement.getDate()).padStart(2, '0');
-                var formattedDate = `${yyyy}-${mm}-${dd}`;
-                $('#dateOfRetirement').val(formattedDate);
-                calculateResidualService();
+                // Validate current retirement date exists
+                if (!currentRetDate) {
+                    Swal.fire({
+                        title: 'Error!',
+                        html: '<p style="font-size: 18px;">Current retirement date is required for extension calculation.</p>',
+                        icon: 'error',
+                    });
+                    return;
+                }
+
+                var dateParts = currentRetDate.split('-');
+                if (dateParts.length === 3) {
+                    var year = parseInt(dateParts[0]);
+                    var month = parseInt(dateParts[1]) - 1; // JavaScript months are 0-indexed
+                    var day = parseInt(dateParts[2]);
+
+                    // Create date object and add 2 years for extension
+                    var dateOfRetirement = new Date(year, month, day);
+                    dateOfRetirement.setFullYear(dateOfRetirement.getFullYear() + 2);
+
+                    // Format the new retirement date
+                    var yyyy = dateOfRetirement.getFullYear();
+                    var mm = String(dateOfRetirement.getMonth() + 1).padStart(2, '0');
+                    var dd = String(dateOfRetirement.getDate()).padStart(2, '0');
+                    var formattedDate = `${yyyy}-${mm}-${dd}`;
+
+                    // Update the retirement date field
+                    $('#dateOfRetirement').val(formattedDate);
+
+                    // Recalculate residual service
+                    calculateResidualService();
+
+                    console.log('Service extended by 2 years. New retirement date:', formattedDate);
+                } else {
+                    $('#dateOfRetirement').val('');
+                    console.error("Invalid retirement date format. Expected YYYY-MM-DD format.");
+
+                    Swal.fire({
+                        title: 'Error!',
+                        html: '<p style="font-size: 18px;">Invalid retirement date format.</p>',
+                        icon: 'error',
+                    });
+                }
             } else {
-                $('#dateOfRetirement').val('');
-                console.warn("Invalid retirement age or date of birth.");
+                // DoP is set, handle accordingly
+                console.log('DoP is set:', dop);
+                // Add logic here for when DoP is available
+                // This might involve different calculation based on promotion date
             }
+        } else {
+            if (!dop || dop.trim() === "") {
+                // Extension not selected, revert to original retirement date
+                if (typeof globleRetirementDate !== 'undefined' && globleRetirementDate.value) {
+                    $('#dateOfRetirement').val(globleRetirementDate.value);
+                    calculateResidualService();
+                    console.log('Extension not selected, reverted to original retirement date');
+                } else {
+                    console.error('Global retirement date not available');
+                }
+            } else {
+                // DoP is set, handle accordingly
+                console.log('DoP is set:', dop);
+                // Add logic here for when DoP is available
+                // This might involve different calculation based on promotion date
+            }
+
+
         }
-        else {
-            $('#dateOfRetirement').val(globleRetirementDate.value);
-            calculateResidualService();
-        }
+    } else {
+        console.log('Prefix does not qualify for extension (not 13 or 14)');
     }
+}
+
+// Helper function to validate date format
+function isValidDate(dateString) {
+    if (!dateString) return false;
+    var regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!regex.test(dateString)) return false;
+
+    var date = new Date(dateString);
+    var timestamp = date.getTime();
+
+    if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
+        return false;
+    }
+
+    return dateString === date.toISOString().split('T')[0];
 }
 function ExtensionOfServiceAccess() {
     var prefix = $('#armyPrefix').val();
@@ -629,12 +742,12 @@ function fetchPCDA_PAO() {
             console.error('Fetch error:', error);
         });
 
-    
+
 }
 function setOutlineActive(id) {
-    $("#"+id).closest(".form-outline").addClass("active");
+    $("#" + id).closest(".form-outline").addClass("active");
     if (typeof mdb !== 'undefined') {
-        $("#"+id).closest(".form-outline").each(function () {
+        $("#" + id).closest(".form-outline").each(function () {
             new mdb.Input(this).init();
         });
     }
@@ -754,15 +867,15 @@ function handleSubmitClick() {
         // Clear previous error messages
         form.querySelectorAll(".error").forEach(span => span.textContent = "");
 
-       // let errorlist = "";
+        // let errorlist = "";
         let errorlist = []; // Use an array to store individual error messages
         let hasError = false;
 
-       const params = new URLSearchParams(window.location.search);
+        const params = new URLSearchParams(window.location.search);
 
         //const params = new URLSearchParams(window.location.search);
         //const loanType = params.get("loanType");
-       // const params = new URLSearchParams(window.location.search);
+        // const params = new URLSearchParams(window.location.search);
 
         const loanTypeFromUrl = params.get("loanType");
 
@@ -801,7 +914,7 @@ function handleSubmitClick() {
                 prefixes.forEach(prefix => {
                     if (errorText.includes(prefix)) {
                         errorText = errorText.replace(prefix, "");
-                    }   
+                    }
                 });
                 errorlist.push(errorText);
                 hasError = true;
@@ -814,10 +927,10 @@ function handleSubmitClick() {
 
 
         //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
-      //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
+        //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
 
         var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
-        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors +' </div>')
+        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
 
         if (hasError) {
             return false;
@@ -839,7 +952,7 @@ function handleSubmitClick() {
             }
         }
 
-       
+
     });
 
 }
@@ -996,7 +1109,7 @@ $("#unitSearchCancelBtn").click(function (e) {
     e.stopPropagation();
 
     $('#unitSearchDialog').hide();
-  
+
     formSubmitting = false;
     formCancelled = true;
 
@@ -1014,12 +1127,12 @@ $("#unitSearchCancelBtn").click(function (e) {
 });
 
 
- function checkUnitSameOrNot(ArmyNo) {
+function checkUnitSameOrNot(ArmyNo) {
     var armyNumber = $("#armyPrefix option:selected").text();
     var Prefix = $("#armyNumber").val();
     var Suffix = $("#txtSuffix").val();
 
-     var Value = armyNumber + Prefix + Suffix;
+    var Value = armyNumber + Prefix + Suffix;
 
     //$.ajax({
     //    url: '/OnlineApplication/CheckIsUnitRegister',
@@ -1048,92 +1161,92 @@ $("#unitSearchCancelBtn").click(function (e) {
     //    }
     //});
 
-     if (ArmyNo == Value.toUpperCase()) {
-         //console.log("Unit is same as Army No");
-         $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
-     }
+    if (ArmyNo == Value.toUpperCase()) {
+        //console.log("Unit is same as Army No");
+        $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
+    }
 
-     // else {
-     //$.ajax({
-     //    url: '/OnlineApplication/CheckIsUnitRegister',
-     //    method: 'GET',
-     //    data: { ArmyNo: (ArmyNo).toUpperCase()},
-     //    success: function (response) {
-     //        if (response === true) {
+    // else {
+    //$.ajax({
+    //    url: '/OnlineApplication/CheckIsUnitRegister',
+    //    method: 'GET',
+    //    data: { ArmyNo: (ArmyNo).toUpperCase()},
+    //    success: function (response) {
+    //        if (response === true) {
 
-     //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
+    //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
 
-     //            // Clear input and reopen dialog
-     //            $("#unitSearchInput").val("");
-     //            $("#CommonData_IOUnit").val(0)
-     //        }
+    //            // Clear input and reopen dialog
+    //            $("#unitSearchInput").val("");
+    //            $("#CommonData_IOUnit").val(0)
+    //        }
 
-     //        else {
-
-
-     //            checkUnitRegistration(unitId);
+    //        else {
 
 
-     //        }
-     //    },
-     //    error: function () {
-     //        alert('Could not verify unit registration. Please try again.');
-     //    }
-     //});
-     //checkUnitRegistration(ArmyNo);
-     //}
+    //            checkUnitRegistration(unitId);
 
-     else {
-         try {
-             $.ajax({
-                 url: '/OnlineApplication/CheckForCoRegister',
-                 type: 'POST',
-                 data: { ArmyNo: ArmyNo },
-                 success: function (result) {
-                     if (result === true) {
-                         $('#COArmyNo').val(ArmyNo);
-                         formSubmitting = true;
-                         $('#myForm').submit();
-                     } else if (result === false) {
-                         // If not registered, set unit input back to required
-                         $('#unitSearchMessage').text();
-                         formSubmitting = false;
-                         //$('#myForm').submit();
-                         Swal.fire({
-                             icon: 'info',
-                             title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
-                             html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
-                             confirmButtonText: 'OK',
-                             cancelButtonText: 'Cancel', // Cancel button text
-                             showCancelButton: true, // Enable cancel button
-                             reverseButtons: true,  // Make Cancel button appear on the left
-                         }).then((result) => {
-                             if (result.isConfirmed) {
-                                 // Redirect to Create page
-                                 //var appType = $('#ApplicationType').val();
-                                 //if (appType == "9") {
-                                 //    window.location.href = `/HBA_Application/Create`;
-                                 //}
-                                 //else {
-                                 //    window.location.href = `/Car_PC_Advance_Application/Create`;
-                                 //}
-                                 $('#unitSearchDialog').hide();
-                             } else if (result.isDismissed) {
-                                 // If Cancel is clicked, reopen the unit search popup
-                                 //$('#txtUnit').val('');
-                                 $("unitSearchDialog").show();
-                             }
-                         });
-                     }
-                 },
-                 error: function () {
-                     console.error("Failed to check CO registration");
-                 }
-             });
-         } catch (err) {
-             console.error("AJAX error", err);
-         }
-     }
+
+    //        }
+    //    },
+    //    error: function () {
+    //        alert('Could not verify unit registration. Please try again.');
+    //    }
+    //});
+    //checkUnitRegistration(ArmyNo);
+    //}
+
+    else {
+        try {
+            $.ajax({
+                url: '/OnlineApplication/CheckForCoRegister',
+                type: 'POST',
+                data: { ArmyNo: ArmyNo },
+                success: function (result) {
+                    if (result === true) {
+                        $('#COArmyNo').val(ArmyNo);
+                        formSubmitting = true;
+                        $('#myForm').submit();
+                    } else if (result === false) {
+                        // If not registered, set unit input back to required
+                        $('#unitSearchMessage').text();
+                        formSubmitting = false;
+                        //$('#myForm').submit();
+                        Swal.fire({
+                            icon: 'info',
+                            title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
+                            html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
+                            confirmButtonText: 'OK',
+                            cancelButtonText: 'Cancel', // Cancel button text
+                            showCancelButton: true, // Enable cancel button
+                            reverseButtons: true,  // Make Cancel button appear on the left
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Redirect to Create page
+                                //var appType = $('#ApplicationType').val();
+                                //if (appType == "9") {
+                                //    window.location.href = `/HBA_Application/Create`;
+                                //}
+                                //else {
+                                //    window.location.href = `/Car_PC_Advance_Application/Create`;
+                                //}
+                                $('#unitSearchDialog').hide();
+                            } else if (result.isDismissed) {
+                                // If Cancel is clicked, reopen the unit search popup
+                                //$('#txtUnit').val('');
+                                $("unitSearchDialog").show();
+                            }
+                        });
+                    }
+                },
+                error: function () {
+                    console.error("Failed to check CO registration");
+                }
+            });
+        } catch (err) {
+            console.error("AJAX error", err);
+        }
+    }
 
 
 }
@@ -1191,7 +1304,6 @@ $("#unitSearchCancelBtn").click(function (e) {
 //        }
 //    });
 //}
-
 
 function formatIndianNumber(input) {
 
@@ -1263,7 +1375,7 @@ function calculateMaxEMI_PCA() {
     var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
     Residual -= 6;
 
-    EMI = 48;
+    var EMI = 48;
     if (EMI < Residual) {
         $("#PCA_EMI_Eligible").val(EMI);
     }
@@ -1341,7 +1453,7 @@ function RefreshMaxAmt_CA() {
         else {
             Amount = (prefix == 13 || prefix == 14) ? 200000 : 1000000;
         }
-        
+
         if (Amount > carCost) {
             $('#CA_Amt_Eligible_for_loan').val(carCost.toLocaleString('en-IN'));
         }
@@ -1373,10 +1485,13 @@ function calculateMaxEMI_CA(vehicalType) {
 
     var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
     Residual -= 6;
-
+    var freqOfLoan = parseInt($('#CA_LoanFreq').val().trim()) || 0;
     var EMI = 0;
     if (vehicalType == 2) {
         EMI = 96;
+        if (freqOfLoan == 2) {
+            EMI = 72;
+        }
         if (EMI < Residual) {
             $("#CA_EMI_Eligible").val(EMI);
         }
@@ -1404,7 +1519,7 @@ function calculateMaxEMI_CA(vehicalType) {
     }
 
     setOutlineActive("CA_EMI_Eligible");
-    
+
 }
 function validateAmount_CA(input) {
     var $input = $(input);
@@ -1546,7 +1661,6 @@ function calculateMaxEMI_HBA(propType) {
         }
     }
     else {
-        console.log($('#totalResidualMonth').val())
         EMI = 240;
         if (EMI < Residual) {
             $("#HBA_EMI_Eligible").val(EMI);
@@ -1605,6 +1719,26 @@ function calculateEMI_HBA() {
     setOutlineActive("HBA_approxEMIAmount");
 }
 
+function validateEMIHba() {
+    var hbaApproxEmi = parseFloat($("#HBA_approxEMIAmount").val().replace(/,/g, ''));
+    var hbaEmiRepayingCapacity = parseFloat($("#HBA_repayingCapacity").val().replace(/,/g, ''));
+    if (isNaN(hbaApproxEmi) || isNaN(hbaEmiRepayingCapacity)) {
+        alert("Please ensure all fields are filled correctly.");
+        return false;
+    }
+    if (hbaApproxEmi > hbaEmiRepayingCapacity) {
+        Swal.fire({
+            title: "EMI Exceeds Repaying Capacity",
+            text: "The calculated EMI exceeds your repaying capacity. Please adjust the loan amount or EMI.",
+            icon: "warning",
+        }).then(() => {
+            $('#HBA_Amount_Applied_For_Loan').val("");
+            $('#HBA_EMI_Applied').val("");
+            $('#HBA_approxEMIAmount').val("");
+            $('#HBA_approxDisbursementAmt').val("");
+        })
+    }
+}
 
 $("#ParenttxtUnit").autocomplete({
     source: function (request, response) {

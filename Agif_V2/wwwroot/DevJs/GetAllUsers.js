@@ -93,7 +93,6 @@ function BindUsersData(status) {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: function (data) {
-                console.log(data);
                 return {
                     draw: data.draw,
                     start: data.start,
@@ -168,11 +167,32 @@ function BindUsersData(status) {
                     return data || 'N/A';
                 }
             },
+            //{
+            //    data: "isPrimary",
+            //    name: "IsPrimary",
+            //    render: function (data, type, row) {
+            //        return data ? 'Primary' : 'Secondary';
+            //    }
+            //},
             {
                 data: "isPrimary",
                 name: "IsPrimary",
+                orderable: false,
+                className: 'noExport',
                 render: function (data, type, row) {
-                    return data ? 'Primary' : 'Secondary';
+                    const isPrimary = row.isPrimary || false;
+                    const statusText = isPrimary ? 'Primary' : 'Secondary';
+                    const statusClass = isPrimary ? 'status-active' : 'status-inactive';
+
+                    return `
+                        <div class='action action-container'>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="cls-toggle-primary" data-domain-id='${row.domainId || ''}' ${isPrimary ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                            <span class="status-text ${statusClass}">${statusText}</span>
+                        </div>
+                    `;
                 }
             },
             {
@@ -257,6 +277,39 @@ function BindUsersData(status) {
                     }
                 });
             });
+            $('#tblData tbody').off('change', '.cls-toggle-primary').on('change', '.cls-toggle-primary', function () {
+                const $toggle = $(this);
+                const domainId = $toggle.data('domain-id');
+                const isPrimary = $toggle.is(':checked');
+                const statusText = $toggle.closest('.action-container').find('.status-text');
+
+                // Revert the toggle immediately; will be set again on confirm
+                $toggle.prop('checked', !isPrimary);
+
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `Do you want to set this user as ${isPrimary ? 'Primary' : 'Secondary'}?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Set back the correct toggle value
+                        $toggle.prop('checked', isPrimary);
+
+                        // Update status text immediately for better UX
+                        if (isPrimary) {
+                            statusText.text('Primary').removeClass('status-inactive').addClass('status-active');
+                        } else {
+                            statusText.text('Secondary').removeClass('status-active').addClass('status-inactive');
+                        }
+
+                        // Call function to update user primary status
+                        updateUserPrimary(domainId, isPrimary, $toggle);
+                    }
+                });
+            });
         }
 
     });
@@ -273,7 +326,6 @@ function updateUserStatus(domainId, isActive, toggleElement) {
         },
         success: function (response) {
             if (response.success) {
-                console.log(`User ${domainId} status updated to: ${isActive ? 'Active' : 'Inactive'}`);
                 $('#tblData').DataTable().ajax.reload(null, false);
                 showSuccessMessage(`User status updated to: ${isActive ? 'Active' : 'Inactive'}`);
             } else {
@@ -289,14 +341,48 @@ function updateUserStatus(domainId, isActive, toggleElement) {
     });
 }
 
-function revertToggle(toggleElement, originalState) {
+function updateUserPrimary(domainId, isPrimary, toggleElement) {
+    $.ajax({
+        url: "/Account/UpdateUserPrimary", // You'll need to create this endpoint
+        type: "POST",
+        data: {
+            domainId: domainId,
+            isPrimary: isPrimary
+        },
+        success: function (response) {
+            if (response.success) {
+                $('#tblData').DataTable().ajax.reload(null, false);
+                showSuccessMessage(`User role updated to: ${isPrimary ? 'Primary' : 'Secondary'}`);
+            } else {
+                revertToggle(toggleElement, !isPrimary, 'primary');
+                console.error('Failed to update user primary status:', response.message);
+                showErrorMessage('Failed to update user role: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            revertToggle(toggleElement, !isPrimary, 'primary');
+            console.error('Error updating user primary status:', error);
+            showErrorMessage('Error updating user role. Please try again.');
+        }
+    });
+}
+
+function revertToggle(toggleElement, originalState, toggleType) {
     toggleElement.prop('checked', originalState);
     const statusText = toggleElement.closest('.action-container').find('.status-text');
 
-    if (originalState) {
-        statusText.text('Active').removeClass('status-inactive').addClass('status-active');
-    } else {
-        statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+    if (toggleType === 'status') {
+        if (originalState) {
+            statusText.text('Active').removeClass('status-inactive').addClass('status-active');
+        } else {
+            statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+        }
+    } else if (toggleType === 'primary') {
+        if (originalState) {
+            statusText.text('Primary').removeClass('status-inactive').addClass('status-active');
+        } else {
+            statusText.text('Secondary').removeClass('status-active').addClass('status-inactive');
+        }
     }
 }
 

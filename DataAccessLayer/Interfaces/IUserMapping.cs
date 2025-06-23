@@ -17,6 +17,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<UserMapping>> GetAllUser(bool status);
         Task<List<UserMapping>> GetByProfileId(int profileId);
         Task<List<UserMapping>> GetByUserId(int userId);
+        Task<List<UserMapping>> GetByUnitId(int userId);
         Task<List<UserMapping>> GetByProfileIdAndApplicationId(int profileId, int applicationId);
         Task<List<UserMapping>> GetByProfileIdAndStatus(int profileId, int status);
     }

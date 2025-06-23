@@ -48,6 +48,7 @@ namespace DataAccessLayer
         public virtual DbSet<TrnFwdCO> TrnFwdCO { get; set; }
 
         public virtual DbSet<WithdrawalPurpose> WithdrawalPurpose { get; set; }
+        public virtual DbSet<MAgeMapping> MAgeMapping { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 

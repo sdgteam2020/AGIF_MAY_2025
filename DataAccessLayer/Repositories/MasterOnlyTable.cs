@@ -22,6 +22,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAllPreFix()
         {
             var ret = await (from pre in _context.MArmyPrefixes
+                             orderby pre.UserType,pre.Id
                              select new DTOMasterResponse
                              {
                                  Id = pre.Id,
@@ -102,6 +103,7 @@ namespace DataAccessLayer.Repositories
         {
             var ret = await (from rank in _context.MRanks
                              where rank.ApplyForId == type
+                             orderby rank.Orderby
                              select new DTOMasterResponse
                              {
                                  Id = rank.RankId,
