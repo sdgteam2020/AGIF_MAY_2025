@@ -273,3 +273,140 @@ input:invalid {
 #computer_Loan_Type{
     width:100%;
 }
+input[disabled] {
+    background-color: #e9ecef !important;
+    color: #6c757d !important;
+    cursor: not-allowed;
+}
+
+
+.ui-autocomplete {
+    z-index: 1050 !important; /* higher than your popup/modal */
+}
+
+#unitSearchDialog input {
+    text-align: left !important;
+    font-size: 20px;
+}
+
+.uploadDialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050; /* Make sure it's on top of other elements */
+    padding: 10px;
+}
+
+/* Styling for the dialog box */
+.dialog-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 80vh;
+    width: 60%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px; /* Add space between elements */
+    transition: all 0.3s ease-in-out;
+}
+
+    /* Heading style */
+    .dialog-box h4 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+/* Input field styling */
+#unitSearchDialog input {
+    font-size: 1.2rem;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s;
+}
+
+    #unitSearchDialog input:focus {
+        border-color: #007bff; /* Blue color on focus */
+        outline: none;
+    }
+
+/* Error message styling */
+#unitSearchMessage {
+    font-size: 18px;
+    font-weight: normal;
+    color: red;
+    margin-top: -8px;
+}
+
+/* Button styles */
+
+#unitSearchDialog .dialog-box {
+    width: 600px; /* keep your width */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* center children horizontally */
+}
+
+#unitSearchDialog h4 {
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+#unitSearchInput {
+    width: 100%; /* full width inside dialog */
+    font-weight: bold;
+    font-size: 20px; /* larger font size */
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    text-align: center; /* center the text */
+    outline-offset: 2px;
+    transition: border-color 0.3s;
+}
+
+    #unitSearchInput:focus {
+        border-color: #4292f4;
+        box-shadow: 0 0 8px rgba(66,146,244,0.5);
+    }
+
+#unitSearchMessage {
+    margin-top: 8px;
+    min-height: 1.2em;
+    font-size: 18px;
+    color: #d9534f;
+    text-align: center;
+    width: 100%;
+}
+
+#unitSearchDialog .d-flex.justify-content-end.mt-3 {
+    justify-content: center !important; /* center the buttons container */
+    gap: 15px; /* spacing between buttons */
+    margin-top: 25px !important;
+    width: 100%;
+}
+
+#unitSearchCancelBtn,
+#unitSearchConfirmBtn {
+    min-width: 120px;
+    font-weight: 600;
+    padding: 12px 25px;
+    border-radius: 8px;
+}
