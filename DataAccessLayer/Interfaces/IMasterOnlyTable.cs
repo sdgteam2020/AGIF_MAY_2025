@@ -24,6 +24,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetLoanType(int type);
         Task<List<DTOMasterResponse>> GetAppointment();
         Task<List<DTOMasterResponse>> GetALLByUnitName(string UnitName);
+        Task<List<DTOMasterResponse>> GetPurposeOfWithdrawal();
 
     }
 }

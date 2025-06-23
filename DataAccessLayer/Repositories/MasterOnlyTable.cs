@@ -234,5 +234,18 @@ namespace DataAccessLayer.Repositories
 
             return units;
         }
+
+        public async Task<List<DTOMasterResponse>> GetPurposeOfWithdrawal()
+        {
+            var ret = await (from WithdrawalPurpose in _context.WithdrawalPurpose
+                             select new DTOMasterResponse
+                             {
+                                 Id = WithdrawalPurpose.Id,
+                                 Name = Convert.ToString(WithdrawalPurpose.Name),
+
+                             }).ToListAsync();
+
+            return ret;
+        }
     }
 }

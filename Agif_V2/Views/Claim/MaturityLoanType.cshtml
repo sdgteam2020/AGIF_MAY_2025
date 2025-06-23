@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Loan type";
+    ViewData["Title"] = "Maturity Loan type";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
@@ -11,28 +11,24 @@
                     Apply Loan
                 </h1>
             </div>
-            <form id="loanForm" action="/OnlineApplication/Redirection" method="post">
-               
-
-                <div class="mb-3">
-                    <div class="form-group">
-                        <label for="loanType">Loan Type :</label>
-                        <select id="loanType" name="loanType" class="form-select" required>
-                        </select>
-                    </div>
-
-                </div>
-
-
+            <form id="loanForm" action="/Claim/Redirection" method="post">
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="applicantCategory">Applicant Category:</label>
                         <select id="applicantCategory" name="applicantCategory" class="form-select" required>
                         </select>
                     </div>
+
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label for="PurposeOfWithdrwal">Purpose Of Withdrawal:</label>
+                        <select id="PurposeOfWithdrwal" name="PurposeOfWithdrwal" class="form-select" required>
+                        </select>
+                    </div>
                 </div>
                 <!-- Terms -->
-                <div class="mb-3">
+               @*  <div class="mb-3">
 
                     <span>
                         I have read the Gen Instruction of HBA/CA/PCA loan
@@ -40,7 +36,7 @@
                         conditions for grant of loan. These rules are acceptable to me.
                     </span>
 
-                </div>
+                </div> *@
 
                 <!-- Buttons -->
                 <div class="errormessage">
@@ -50,17 +46,17 @@
                 <div class="form-buttons text-center">
 
                     <a class="btn btn-outline-warning mt-2 " href="Home/Index">Do Not Agree</a>
-                     <button type="button" id="btnAgree"   class="btn btn-primary mr-2 mt-2">Agree</button>
+                    <button type="button" id="btnAgree" class="btn btn-primary mr-2 mt-2">Agree</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script src="~/devjs/loantype.js"></script>
+<script src="~/devjs/Maturityloantype.js"></script>
 <script>
 
     $(document).ready(function () {
-        mMsater(0, "loanType", 5, 0);
-        mMsater(0, "applicantCategory", 6, 0);      
+        mMsater(0, "applicantCategory", 6, 0);
+         mMsater(0, "PurposeOfWithdrwal", 19, 0);
     });
 </script>

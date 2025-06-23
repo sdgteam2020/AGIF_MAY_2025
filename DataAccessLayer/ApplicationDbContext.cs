@@ -46,6 +46,8 @@ namespace DataAccessLayer
         public virtual DbSet<DigitalSignRecords> trnDigitalSignRecords { get; set; }
         public virtual DbSet<TrnFwd> TrnFwd { get; set; }
         public virtual DbSet<TrnFwdCO> TrnFwdCO { get; set; }
+
+        public virtual DbSet<WithdrawalPurpose> WithdrawalPurpose { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
