@@ -107,7 +107,6 @@ function GetApplicationList(status) {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: function (data) {
-                console.log(data);
                 return {
                     draw: data.draw,
                     start: data.start,
@@ -232,10 +231,8 @@ function OpenAction(applicationId) {
         data: { applicationId: applicationId },
         dataType: 'json',
         success: function (response) {
-            console.log('Response received:', response);
 
             if (response!=null) {
-                console.log('PDF file path:', response);
                 $("#ViewPdf").modal("show");
                 $("#PdfViwerFOrDigital").attr("data", response);
                 
@@ -248,7 +245,6 @@ function OpenAction(applicationId) {
     });
 }
 function mergePdf(applicationId, isRejected, isApproved) {
-    console.log('Starting PDF merge for application ID:', applicationId);
 
     $.ajax({
         type: "POST",
@@ -256,7 +252,6 @@ function mergePdf(applicationId, isRejected, isApproved) {
         data: { applicationId: applicationId, isRejected: isRejected, isApproved: isApproved },
         dataType: 'json',
         success: function (response) {
-            console.log('Response received:', response);
             if (isApproved) {
                 Swal.fire({
                     title: "Approved!",

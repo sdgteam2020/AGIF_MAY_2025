@@ -22,6 +22,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAllPreFix()
         {
             var ret = await (from pre in _context.MArmyPrefixes
+                             orderby pre.UserType,pre.Id
                              select new DTOMasterResponse
                              {
                                  Id = pre.Id,
@@ -77,6 +78,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAllRegtCorps()
         {
             var ret = await (from regt in _context.MRegtCorps
+                             orderby regt.RegtName
                              select new DTOMasterResponse
                              {
                                  Id = regt.Id,
@@ -102,6 +104,7 @@ namespace DataAccessLayer.Repositories
         {
             var ret = await (from rank in _context.MRanks
                              where rank.ApplyForId == type
+                             orderby rank.Orderby
                              select new DTOMasterResponse
                              {
                                  Id = rank.RankId,
@@ -135,10 +138,10 @@ namespace DataAccessLayer.Repositories
 
             return ret;
         }
-        public async Task<List<DTOMasterResponse>> GetRetirementAge(int rankId)
+        public async Task<List<DTOMasterResponse>> GetRetirementAge(int rankId, int regtId)
         {
-            var ret = await (from rank in _context.MRanks
-                             where rankId == rank.RankId
+            var ret = await (from rank in _context.MAgeMapping
+                             where rankId == rank.RankId && regtId == rank.RegtId
                              select new DTOMasterResponse
                              {
                                  RetirementAge = Convert.ToInt16(rank.RetirementAge)
@@ -233,6 +236,19 @@ namespace DataAccessLayer.Repositories
                          .ToListAsync();
 
             return units;
+        }
+
+        public async Task<List<DTOMasterResponse>> GetPurposeOfWithdrawal()
+        {
+            var ret = await (from WithdrawalPurpose in _context.WithdrawalPurpose
+                             select new DTOMasterResponse
+                             {
+                                 Id = WithdrawalPurpose.Id,
+                                 Name = Convert.ToString(WithdrawalPurpose.Name),
+
+                             }).ToListAsync();
+
+            return ret;
         }
     }
 }

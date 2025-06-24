@@ -70,5 +70,13 @@ namespace DataAccessLayer.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<UserMapping>> GetByUnitId(int unitId)
+        {
+            var userMappings = await _context.trnUserMappings
+                .Where(um => um.UnitId == unitId)
+                .ToListAsync();
+            return userMappings;
+        }
     }
 }

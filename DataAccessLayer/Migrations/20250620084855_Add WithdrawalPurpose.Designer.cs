@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250620084855_Add WithdrawalPurpose")]
+    partial class AddWithdrawalPurpose
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -703,32 +706,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("HBA_LoanFreq");
 
                     b.ToTable("trnHBA");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MAgeMapping", b =>
-                {
-                    b.Property<int>("AgeMappingId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AgeMappingId"));
-
-                    b.Property<int>("RankId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegtId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RetirementAge")
-                        .HasColumnType("int");
-
-                    b.HasKey("AgeMappingId");
-
-                    b.HasIndex("RankId");
-
-                    b.HasIndex("RegtId");
-
-                    b.ToTable("MAgeMapping");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MApplicantType", b =>
@@ -1504,25 +1481,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("CommonDataModels");
 
                     b.Navigation("MLoanFreq");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MAgeMapping", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MRank", "MRank")
-                        .WithMany()
-                        .HasForeignKey("RankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MRegtCorps", "MRegtCorps")
-                        .WithMany()
-                        .HasForeignKey("RegtId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MRank");
-
-                    b.Navigation("MRegtCorps");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MLoanType", b =>

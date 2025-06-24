@@ -31,6 +31,48 @@
         "js/datatable.min.js",
         "css/datatable.min.css"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "select2@4.1.0-rc.0",
+      "destination": "wwwroot/lib/select2/",
+      "files": [
+        "dist/css/select2.min.css",
+        "dist/js/select2.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-buttons-bs5@2.3.6",
+      "destination": "wwwroot/lib/datatables.net-buttons-bs5/",
+      "files": [
+        "css/buttons.bootstrap5.min.css",
+        "js/buttons.bootstrap5.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net@1.13.4",
+      "destination": "wwwroot/lib/datatables.net/",
+      "files": [
+        "js/jquery.dataTables.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-bs5@1.13.4",
+      "destination": "wwwroot/lib/datatables.net-bs5/",
+      "files": [
+        "js/dataTables.bootstrap5.min.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-buttons@2.3.6",
+      "destination": "wwwroot/lib/datatables.net-buttons/",
+      "files": [
+        "js/dataTables.buttons.min.js"
+      ]
     }
   ]
 }

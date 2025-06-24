@@ -306,6 +306,41 @@ namespace Agif_V2.Controllers
             HttpContext.Session.Clear();
             return View();
         }
+        [HttpPost]
+        public async Task<JsonResult> UpdateUserPrimary(string domainId, bool isPrimary)
+        {
+            if(string.IsNullOrEmpty(domainId))
+            {
+                return Json(new { success = false, message = "Domain ID cannot be null or empty." });
+            }
+            var userProfile = _userProfile.GetByUserName(domainId).Result;
+            if(userProfile == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+            int profileId = userProfile.ProfileId;
 
+            var userMapping = _userMapping.GetByProfileId(userProfile.ProfileId).Result.FirstOrDefault();
+            if (userMapping == null)
+            {
+                return Json(new { success = false, message = "User mapping not found." });
+            }
+            var unitId = userMapping.UnitId;
+            if (isPrimary)
+            {
+                var allUserMappings = _userMapping.GetByUnitId(unitId).Result;
+                foreach (var mapping in allUserMappings)
+                {
+                    if (mapping.MappingId != userMapping.MappingId)
+                    {
+                        mapping.IsPrimary = false; // Set other mappings to non-primary
+                        await _userMapping.Update(mapping);
+                    }
+                }
+            }
+            userMapping.IsPrimary = isPrimary;
+            await _userMapping.Update(userMapping);
+            return Json(new { success = true });
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace DataTransferObject.Helpers
         public const string LoanTypeHBA = "16";
         public const string LoanTypeCA = "17";
         public const string LoanTypePCA = "18";
-
+        public const string PurposeOfWithdrawal = "19";
 
 
         #region Return To Front End

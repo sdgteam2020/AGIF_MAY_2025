@@ -124,6 +124,11 @@ namespace DataAccessLayer.Repositories
                 var Ret = await MasterOnlyTable.GetLoanType(3);
                 lst = Ret;
             }
+            else if (Data.id == Convert.ToInt16(Constants.PurposeOfWithdrawal))
+            {
+                var Ret = await MasterOnlyTable.GetPurposeOfWithdrawal();
+                lst = Ret;
+            }
             return lst;
         }
     }
