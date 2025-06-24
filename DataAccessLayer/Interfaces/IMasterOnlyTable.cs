@@ -16,7 +16,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetAllRankByType(int type);
         Task<List<DTOMasterResponse>> GetApplicationType();
         Task<List<DTOMasterResponse>> GetApplicantType();
-        Task<List<DTOMasterResponse>> GetRetirementAge(int rankId);
+        Task<List<DTOMasterResponse>> GetRetirementAge(int rankId,int regtId);
         Task<List<DTOMasterResponse>> GetUserType(int Prefix);
         Task<List<DTOMasterResponse>> GetPCDA_PAO(int regt);
         Task<List<DTOMasterResponse>> GetArmyPostOffice();

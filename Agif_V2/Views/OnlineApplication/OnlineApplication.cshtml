@@ -4,11 +4,21 @@
     ViewData["Title"] = "Application Form";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-    // string loanType = Model?.loantype ?? Context.Request.Query["loanType"].ToString() ?? "CA";
-    // string applicantCategory = Model?.applicantCategory ?? Context.Request.Query["applicantCategory"].ToString() ?? "CA";
-
     string loanType = Model?.loantype ?? TempData["loantypeNew"] as string ?? "CA";
     string applicantCategory = Model?.applicantCategory ?? TempData["applicantcategoryNew"] as string ?? "Officer";
+    string loanTypeText = "";
+    if(loanType == "1")
+    {
+        loanTypeText = "House Loan (HBA)";
+    }
+    else if (loanType == "1")
+    {
+        loanTypeText = "Car/Two Wheeler Loan (CA)";
+    }
+    else
+    {
+        loanTypeText = "Computer Loan (PCA)";
+    }
 }
 
 
@@ -19,7 +29,7 @@
 <div class="container-fluid mt-2">
 
     <div class="pagetitletwo position-relative text-center mb-3">
-        <h1>Application Form <span id="loanTypeSpan">@loanType</span></h1>
+        <h1>Application Form <span id="loanTypeSpan">@loanTypeText</span></h1>
         <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y" style=" margin-top:-29px" id="toggleAll">Expand All</button>
     </div>
 
@@ -131,13 +141,30 @@
                                             @Model.CommonData.DdlRank
                                             ;
                                         }">
+
                                         </select>
                                         <label class="form-label select-label ">Rank & Trade</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.DdlRank, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">💼</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="CommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.CommonData != null)
+                                        {
+                                            @Model.CommonData.RegtCorps
+                                            ;
+                                        }">
+                                        </select>
+                                        <label class="form-label select-label ">Regt/Corps</label>
+                                        @Html.ValidationMessageFor(m => m.CommonData.RegtCorps, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
@@ -292,12 +319,14 @@
                                 </div>
                             </div>
 
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="residualService" name="CommonData.ResidualService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.ResidualService" required />
                                         <label class="form-label select-label ">Residual Service(Years)</label>
+                                        <span class="error text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
@@ -316,23 +345,7 @@
                 <div id="regt_Unit" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">💼</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="CommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.CommonData != null)
-                                        {
-                                            @Model.CommonData.RegtCorps
-                                            ;
-                                        }">
-                                        </select>
-                                        <label class="form-label select-label ">Regt/Corps</label>
-                                        @Html.ValidationMessageFor(m => m.CommonData.RegtCorps, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💼</span>
@@ -612,7 +625,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="basicPay" name="CommonData.BasicPay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.BasicPay" />
-                                        <label class="form-label select-label ">Basic Pay</label>
+                                        <label class="form-label select-label ">Basic Pay<span style="color:red">*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.BasicPay, "", new { @class = "text-danger" })
@@ -622,7 +635,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="dsop_afpp" name="CommonData.dsop_afpp" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.dsop_afpp" />
-                                        <label class="form-label select-label ">DSOP/AFPP Subs</label>
+                                        <label class="form-label select-label ">DSOP/AFPP Subs<span style="color:red">*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.dsop_afpp, "", new { @class = "text-danger" })
@@ -643,7 +656,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="agif_Subs" name="CommonData.agif_Subs" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.agif_Subs" />
-                                        <label class="form-label select-label ">AGIF Subs</label>
+                                        <label class="form-label select-label ">AGIF Subs<span style="color:red">*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.agif_Subs, "", new { @class = "text-danger" })
@@ -655,7 +668,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="msp" name="CommonData.Msp" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.Msp" />
-                                        <label class="form-label select-label ">MSP</label>
+                                        <label class="form-label select-label ">MSP<span style="color:red">*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Msp, "", new { @class = "text-danger" })
@@ -736,7 +749,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="da" name="CommonData.Da" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.Da" />
-                                        <label class="form-label select-label ">DA</label>
+                                        <label class="form-label select-label ">DA<span style="color:red">*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Da, "", new { @class = "text-danger" })

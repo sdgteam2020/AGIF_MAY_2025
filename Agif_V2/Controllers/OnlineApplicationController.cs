@@ -75,10 +75,10 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
-        public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix)
+        public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix,int regtId)
         {
             var userType = await _IMasterOnlyTable.GetUserType(Prefix);
-            var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId);
+            var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
             var retirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0;
             var userTypeId = userType.FirstOrDefault()?.UserType ?? 0;
             if (retirementAge > 0 && userTypeId != 0)

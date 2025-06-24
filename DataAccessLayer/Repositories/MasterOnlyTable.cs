@@ -78,6 +78,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAllRegtCorps()
         {
             var ret = await (from regt in _context.MRegtCorps
+                             orderby regt.RegtName
                              select new DTOMasterResponse
                              {
                                  Id = regt.Id,
@@ -137,10 +138,10 @@ namespace DataAccessLayer.Repositories
 
             return ret;
         }
-        public async Task<List<DTOMasterResponse>> GetRetirementAge(int rankId)
+        public async Task<List<DTOMasterResponse>> GetRetirementAge(int rankId, int regtId)
         {
-            var ret = await (from rank in _context.MRanks
-                             where rankId == rank.RankId
+            var ret = await (from rank in _context.MAgeMapping
+                             where rankId == rank.RankId && regtId == rank.RegtId
                              select new DTOMasterResponse
                              {
                                  RetirementAge = Convert.ToInt16(rank.RetirementAge)

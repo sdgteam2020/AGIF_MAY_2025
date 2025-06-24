@@ -17,6 +17,10 @@ $(document).ready(function () {
     $('#genInstr').on('click', function (e) {
         e.preventDefault();
         const loanType = $('#loanType').val();
+        if (loanType == "") {
+            $('.errormessage').html('<div class="alert alert-danger" role="alert">⚠️ Please Select Loan Type!</div>');
+            return;
+        }
         let url = '';
         if (loanType == 1) {
             url = `/PdfViewer/InstrHBA`;

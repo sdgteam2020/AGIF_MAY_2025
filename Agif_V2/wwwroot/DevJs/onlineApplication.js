@@ -13,7 +13,59 @@ $(document).ready(function () {
     handleSubmitClick();
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
+    resetFieldsOnRankRegtChange();
+    checkMinAmtApplied();
+    resetFieldsOnPropertyTypeChange();
+    resetFieldsOnVehicleTypeChange();
 });
+
+function resetFieldsOnVehicleTypeChange() {
+    $('#veh_Loan_Type').on('change', function () {
+        $('#CA_LoanFreq,#vehicleCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_repayingCapacity,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt').val('');
+    });
+}
+
+function resetFieldsOnPropertyTypeChange() {
+    $('#propertyType').on('change', function () {
+        $('#propertyCost,#HBA_LoanFreq,#HBA_repayingCapacity,#HBA_Amt_Eligible_for_loan,#HBA_EMI_Eligible,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt').val('');
+    });
+}
+
+function checkMinAmtApplied() {
+    const minAmountMap = {
+        '#HBA_Amount_Applied_For_Loan': 500000,
+        '#PCA_Amount_Applied_For_Loan': 50000,
+        '#CA_Amount_Applied_For_Loan': 200000
+    };
+
+    Object.entries(minAmountMap).forEach(([selector, minAmount]) => {
+        const $input = $(selector);
+
+        $input.on('change', function () {
+            const rawValue = $(this).val();
+            const numericValue = parseFloat(rawValue.replace(/,/g, '')) || 0;
+
+            if (numericValue < minAmount) {
+                Swal.fire({
+                    title: 'Warning!',
+                    text: `Minimum amount is ₹${minAmount.toLocaleString('en-IN')}. Please enter a valid amount.`,
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                });
+
+                $(this).val('');
+                $(this).focus();
+            }
+        });
+    });
+}
+
+
+function resetFieldsOnRankRegtChange() {
+    $('#ddlrank, #regtCorps').on('change', function () {
+            $('#dateOfPromotion,#dateOfRetirement, #dateOfBirth,#dateOfCommission, #totalService, #residualService, #totalResidualMonth, #HBA_EMI_Eligible,#HBA_Amt_Eligible_for_loan,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt,#propertyCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt,#vehicleCost,#PCA_Amt_Eligible_for_loan,#PCA_EMI_Eligible,#PCA_Amount_Applied_For_Loan,#PCA_EMI_Applied,#PCA_approxEMIAmount,#PCA_approxDisbursementAmt,#computerCost').val('');
+        });
+}
 function resetCivilPostalAddress() {
     $('#armyPostOffice').on('change', function () {
         $('#civilPostalAddress').val("");
@@ -360,6 +412,18 @@ function SetRetDate() {
     var ranks = $('#ddlrank').val();
     var rankId = parseInt(ranks);
     var EnrollDate = $('#dateOfCommission').val();
+    var regtCorps = $('#regtCorps').val();
+    var regtId = parseInt(regtCorps);
+    if (!regtCorps) {
+        Swal.fire({
+            title: 'Warning!',
+            html: '<p style="font-size: 18px;">Regt/Corps value is empty.Please enter a valid regiment.</p>',
+            confirmButtonText: 'OK',
+            width: '500px'
+        });
+        $('#dateOfBirth').val('');
+        return;
+    }
     if (!rankId) {
         Swal.fire({
             title: 'Warning!',
@@ -393,7 +457,7 @@ function SetRetDate() {
             $.ajax({
                 type: "get",
                 url: "/OnlineApplication/GetRetirementDate",
-                data: { rankId: rankId, Prefix: Prefix },
+                data: { rankId: rankId, Prefix: Prefix, regtId: regtId },
                 success: function (data) {
                     if (data.userTypeId == 1) {
                         //userTypeId == 1 => Officers
@@ -858,14 +922,15 @@ function filterAmountText(loanType) {
         //alert(cleanedValue);
     }
 }
-
 function handleSubmitClick() {
-    document.getElementById("btn-save").addEventListener("click", function (event) {
+    $("#btn-save").on("click", function (event) {
         event.preventDefault(); // Prevent form submission
-        const form = document.getElementById("myForm");
-        const inputs = form.querySelectorAll("input, select");
+        const form = $("#myForm");
+        const inputs = form.find("input, select");
         // Clear previous error messages
-        form.querySelectorAll(".error").forEach(span => span.textContent = "");
+        form.find(".error").each(function () {
+            $(this).text("");
+        });
 
         // let errorlist = "";
         let errorlist = []; // Use an array to store individual error messages
@@ -873,43 +938,48 @@ function handleSubmitClick() {
 
         const params = new URLSearchParams(window.location.search);
 
-        //const params = new URLSearchParams(window.location.search);
-        //const loanType = params.get("loanType");
-        // const params = new URLSearchParams(window.location.search);
-
         const loanTypeFromUrl = params.get("loanType");
 
-        const loanTypeFromInput = document.getElementById('loanType')?.value || null;
+        const loanTypeFromInput = $('#loanType').val() || null;
 
         const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
 
-        //const loanTypeFromInput = document.getElementById('loanType')?.value || null;
-
-        //const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
         filterAmountText(loanType);
 
+        const residualServiceInput = $("#residualService");
+        if (residualServiceInput.length) {
+            const residualServiceValue = residualServiceInput.val();
+            if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 2) {
+                const errorSpan = residualServiceInput.parent().find(".error");
+                if (errorSpan.length) {
+                    errorSpan.text("Residual service must be at least 2 yrs");
+                }
+                errorlist.push("Residual Service");
+                hasError = true;
+            }
+        }
 
+        inputs.each(function () {
+            const input = $(this);
+            const inputElement = this; // Get the DOM element for checkValidity()
 
-
-        inputs.forEach(input => {
-
-            if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
+            if (loanType === "1" && ($("#pcaAccordianWrapper").find(input).length || $("#caAccordianWrapper").find(input).length)) {
                 return;
             }
-            else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+            else if (loanType === "2" && ($("#pcaAccordianWrapper").find(input).length || $("#hbaAccordianWrapper").find(input).length)) {
                 return;
             }
-            else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+            else if (loanType === "3" && ($("#caAccordianWrapper").find(input).length || $("#hbaAccordianWrapper").find(input).length)) {
                 return;
             }
 
-            if (!input.checkValidity()) {
-                const errorSpan = input.parentElement.querySelector(".error");
-                if (errorSpan) {
-                    errorSpan.textContent = input.validationMessage;
+            if (!inputElement.checkValidity()) {
+                const errorSpan = input.parent().find(".error");
+                if (errorSpan.length) {
+                    errorSpan.text(inputElement.validationMessage);
                 }
                 // errorlist += input.name + ", ";
-                let errorText = input.name;
+                let errorText = input.attr("name");
                 const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication."];
                 prefixes.forEach(prefix => {
                     if (errorText.includes(prefix)) {
@@ -918,16 +988,14 @@ function handleSubmitClick() {
                 });
                 errorlist.push(errorText);
                 hasError = true;
-                if (input.value.trim() !== "") {
-                    input.removeAttribute("required");
+                if (input.val() && input.val().trim() !== "") {
+                    input.removeAttr("required");
                 }
-
             }
         });
 
-
-        //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
-        //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
+        //$("#msgerror").text(hasError ? "Error in: " + errorlist : "");
+        //  $("#msgerror").text(hasError ? "Error in: " + errorlist.join(", ") : "");
 
         var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
         $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
@@ -945,16 +1013,13 @@ function handleSubmitClick() {
                 return;
             }
 
-            let unitVal = $('#PresenttxtUnit').val().trim();
-            if (unitVal != '') {
+            let unitVal = $('#PresenttxtUnit').val();
+            if (unitVal && unitVal.trim() !== '') {
                 event.preventDefault(); // Stop form submission
                 checkCORegistration(); // First check CO registration
             }
         }
-
-
     });
-
 }
 
 function checkCORegistration() {
