@@ -69,5 +69,9 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        public IActionResult CheckApplicationStatus()
+        {
+            return View();
+        }
     }
 }
