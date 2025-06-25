@@ -1,4 +1,6 @@
-﻿function ValInDataAddress(input) {
+﻿
+
+function ValInDataAddress(input) {
     var regex = /[^a-zA-Z0-9 ()/ ]/g;
     input.value = input.value.replace(regex, "");
 }
@@ -25,26 +27,41 @@ function ValInAadhar(input) {
 function verifyMobileNo(input) {
     var inputValue = input.value.trim();
     if (inputValue.length !== 10 || !/^\d{10}$/.test(inputValue)) {
-       // alert("Please enter a valid 10-digit mobile number");
-        setTimeout(function () {
+        // alert("Please enter a valid 10-digit mobile number");
+        swal.fire({
+            title: "Invalid Mobile No",
+            text: "Please enter a valid 10-digit mobile number",
+            icon: "warning"
+        }).then(() => {
             input.focus();
-        }, 0);
+        })
     }
 }
 function validateUnitPin(input) {
 
     var inputValue = input.value.trim();
     if (inputValue.length !== 6 || !/^\d{6}$/.test(inputValue)) {
-        alert("Please enter a valid 6-digit PIN code");
-        setTimeout(function () { input.focus(); }, 100);
-
+        swal.fire({
+            title: "Invalid Pin code",
+            text: "Please enter a valid 6-digit PIN code",
+            icon: "warning"
+        }).then(() => {
+            input.focus();
+        })
     }
 }
 function validateAccountNo(input) {
 
     var inputValue = input.value.trim();
-    if (inputValue.length < 11) {
-        setTimeout(function () { input.focus(); }, 100);
+    if (inputValue.length < 10) {
+        swal.fire({
+            title: "Invalid Account No",
+            text: "Please Enter atleast 10 digits",
+            icon: "warning"
+        }).then(() => {
+            input.focus();
+        })
+        //setTimeout(function () { input.focus(); }, 100);
 
     }
 }
@@ -57,9 +74,11 @@ function validateDateFormat(input) {
             icon: "error",
             title: "Invalid date",
             text: "Invalid date format. Please select a valid date.",
-        });
-        input.focus();
-        input.value = "";
+        }).then(() => {
+            input.focus();
+            input.value = "";
+        })
+        
     }
 }
 

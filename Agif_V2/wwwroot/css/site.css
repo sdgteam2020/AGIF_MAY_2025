@@ -728,6 +728,12 @@ h1 {
 .renderbody {
     margin-top: 13rem !important
 }
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .renderbody {
+        margin-top: 25rem !important; /* Adjust this value as needed */
+    }
+}
 .navbar {
     --mdb-navbar-padding-x: -1;
 }
