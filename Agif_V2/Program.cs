@@ -25,6 +25,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddTransient<IOnlineApplication, OnlineApplicationDL>();
+builder.Services.AddScoped<IClaimOnlineApplication, ClaimOnlineApplicationDL>();
 builder.Services.AddTransient<IAppointment, AppointmentDL>();
 builder.Services.AddTransient<IMasterOnlyTable, MasterOnlyTable>();
 builder.Services.AddTransient<ICar, CarDL>();
