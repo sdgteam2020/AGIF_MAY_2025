@@ -29,6 +29,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<bool> UpdateMergePdfStatus(int applicationId, bool status);
         Task<UserMapping?> GetUserDetails(string CoArmyNumber);
+        Task<DTOCommonOnlineApplicationResponse> GetUnitByApplicationId(int applicationId);
 
     }
 }

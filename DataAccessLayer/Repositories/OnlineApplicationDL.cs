@@ -126,6 +126,28 @@ namespace DataAccessLayer.Repositories
             return false;
         }
 
+        public Task<DTOCommonOnlineApplicationResponse> GetUnitByApplicationId(int applicationId)
+        {
+            DTOCommonOnlineApplicationResponse data = new DTOCommonOnlineApplicationResponse();
+            var result = (from appl in _context.trnApplications
+                          where appl.ApplicationId == applicationId
+                          join unit in _context.MUnits on appl.PresentUnit equals unit.UnitId
+                          join mapping in _context.trnUserMappings on unit.UnitId equals mapping.UnitId
+                          join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+                          where mapping.IsActive == true && mapping.IsPrimary == true
+                          join Rank in _context.MRanks on profile.rank equals Rank.RankId
+                          select new CommonDataonlineResponse
+                          {
+                              PresentUnit = unit.UnitName,
+                              ApplicationId = appl.ApplicationId,
+                              Number = profile.ArmyNo,
+                              CoName = profile.Name,
+                              DdlRank = Rank.RankName,
+                          }).FirstOrDefault();
+            data.OnlineApplicationResponse = result;
+            return Task.FromResult(data);
+        }
+
 
         public Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId)
         {

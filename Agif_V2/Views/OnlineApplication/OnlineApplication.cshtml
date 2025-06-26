@@ -22,6 +22,7 @@
 }
 
 
+
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -60,7 +61,7 @@
                                                     ;
                                                 }">
                                                 </select>
-                                                <label class="form-label select-label ">Army No</label>
+                                                <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -71,7 +72,7 @@
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="armyNumber" name="CommonData.Number" value="@Model.CommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control" onblur="getApplicantDetalis(this)" oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="armyNumber">Number</label>
+                                                <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CommonData.Number, "", new { @class = "text-danger" })
@@ -102,7 +103,7 @@
                                                     ;
                                                 }">
                                                 </select>
-                                                <label class="form-label select-label ">Old Army No</label>
+                                                <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.OldArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -112,7 +113,7 @@
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="oldArmyNo" name="CommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.CommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)" required pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="txtOldNumber">Number</label>
+                                                <label class="form-label" for="txtOldNumber">Old Army No.</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CommonData.OldNumber, "", new { @class = "text-danger" })
@@ -148,6 +149,20 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">👮</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
+                                        <label class="form-label" for="armyNumber">Applicant Name</label>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.CommonData.ApplicantName, "", new { @class = "text-danger" })
+                            </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <div class="col-md-2">
@@ -164,19 +179,6 @@
                                         @Html.ValidationMessageFor(m => m.CommonData.RegtCorps, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">👮</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
-                                        <label class="form-label" for="armyNumber">Applicant Name</label>
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
-                                        </div>
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.ApplicantName, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
@@ -891,16 +893,6 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
-                                            <span class="input-group-text">💰</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.HBAApplication?.PropertyCost" />
-                                                <label class="form-label select-label ">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
-                                            </div>
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.HBAApplication.PropertyCost, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">🔁</span>
                                             </div>
@@ -916,6 +908,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💰</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.HBAApplication?.PropertyCost" />
+                                                <label class="form-label select-label ">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.HBAApplication.PropertyCost, "", new { @class = "text-danger" })
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
