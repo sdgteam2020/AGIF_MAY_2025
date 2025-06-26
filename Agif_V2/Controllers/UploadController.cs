@@ -175,7 +175,7 @@ namespace Agif_V2.Controllers
 
             }
             
-            TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
+            TempData["Message"] = "Application will be forwarder to your Unit Cdr IC12345A COL AB Singh, Army Software developer.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
             //TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
             //return View("Upload", model);

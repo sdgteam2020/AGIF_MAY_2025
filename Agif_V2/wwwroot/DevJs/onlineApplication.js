@@ -14,43 +14,144 @@ $(document).ready(function () {
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
     resetFieldsOnRankRegtChange();
-    checkMinAmtApplied();
-    resetFieldsOnPropertyTypeChange();
-    resetFieldsOnVehicleTypeChange();
+    bindMinAmountValidation();
+    resetFieldsOnChange();
+    filterPCALoanFreqOptions();
+    filterHBALoanFreqOptions();
+    filterCALoanFreqOptions();
 });
+function filterPCALoanFreqOptions() {
+    $('#computer_Loan_Type').on('change', function () {
+        const $dropdown = $('#PCA_LoanFreq');
 
-function resetFieldsOnVehicleTypeChange() {
-    $('#veh_Loan_Type').on('change', function () {
-        $('#CA_LoanFreq,#vehicleCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_repayingCapacity,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt').val('');
+        $dropdown.find('option').each(function () {
+            const val = $(this).val();
+            if (val != '1' && val != '2' && val !== '') {
+                $(this).remove(); // Instead of hide
+            }
+        });
+
+
     });
 }
 
-function resetFieldsOnPropertyTypeChange() {
+function filterHBALoanFreqOptions() {
     $('#propertyType').on('change', function () {
-        $('#propertyCost,#HBA_LoanFreq,#HBA_repayingCapacity,#HBA_Amt_Eligible_for_loan,#HBA_EMI_Eligible,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt').val('');
+        const $dropdown = $('#HBA_LoanFreq');
+        const propType = $('#propertyType').val();
+        
+        $dropdown.find('option').prop('disabled', false); 
+
+        if (propType == 5) {
+            $dropdown.find('option').each(function () {
+                const val = $(this).val();
+                if (val != '1' && val !== '') {
+                    $(this).prop('disabled', true);
+                }
+            });
+        } else {    
+            $dropdown.find('option').each(function () {
+                const val = $(this).val();
+                if (val != '1' && val != '2' && val !== '') {
+                    $(this).prop('disabled', true);
+                }
+            });
+        }
     });
 }
 
-function checkMinAmtApplied() {
-    const minAmountMap = {
-        '#HBA_Amount_Applied_For_Loan': 500000,
-        '#PCA_Amount_Applied_For_Loan': 50000,
-        '#CA_Amount_Applied_For_Loan': 200000
-    };
+function filterCALoanFreqOptions() {
+    $('#veh_Loan_Type').on('change', function () {
+        const $dropdown = $('#CA_LoanFreq');
+        const propType = $('#veh_Loan_Type').val();
 
-    Object.entries(minAmountMap).forEach(([selector, minAmount]) => {
-        const $input = $(selector);
+        $dropdown.find('option').prop('disabled', false);
 
-        $input.on('change', function () {
+        if (propType == 4) {
+            $dropdown.find('option').each(function () {
+                const val = $(this).val();
+                if (val != '1' && val != '2' && val != '3' && val !== '') {
+                    $(this).prop('disabled', true);
+                }
+            });
+        } else {
+            $dropdown.find('option').each(function () {
+                const val = $(this).val();
+                if (val != '1' && val != '2' && val !== '') {
+                    $(this).prop('disabled', true);
+                }
+            });
+        }
+    });
+}
+
+
+
+function resetFieldsOnChange(dropdownSelector, fieldSelectors) {
+    $(dropdownSelector).on('change', function () {
+        $(fieldSelectors.join(',')).val('');
+    });
+}
+resetFieldsOnChange('#HBA_LoanFreq,#PCA_LoanFreq,#CA_LoanFreq', [
+    '#HBA_EMI_Eligible', '#CA_EMI_Eligible', '#PCA_EMI_Eligible', '#vehicleCost', '#propertyCost', '#computerCost'
+]);
+
+// Usage
+resetFieldsOnChange('#veh_Loan_Type', [
+    '#CA_LoanFreq', '#vehicleCost', '#CA_Amt_Eligible_for_loan',
+    '#CA_EMI_Eligible', '#CA_repayingCapacity', '#CA_Amount_Applied_For_Loan',
+    '#CA_EMI_Applied', '#CA_approxEMIAmount', '#CA_approxDisbursementAmt'
+]);
+
+resetFieldsOnChange('#propertyType', [
+    '#propertyCost', '#HBA_LoanFreq', '#HBA_repayingCapacity',
+    '#HBA_Amt_Eligible_for_loan', '#HBA_EMI_Eligible', '#HBA_Amount_Applied_For_Loan',
+    '#HBA_EMI_Applied', '#HBA_approxEMIAmount', '#HBA_approxDisbursementAmt'
+]);
+
+resetFieldsOnChange('#dateOfBirth,#dateOfCommission', [
+    '#CA_LoanFreq', '#vehicleCost', '#CA_Amt_Eligible_for_loan',
+    '#CA_EMI_Eligible', '#CA_repayingCapacity', '#CA_Amount_Applied_For_Loan',
+    '#CA_EMI_Applied', '#CA_approxEMIAmount', '#CA_approxDisbursementAmt',
+    '#propertyCost', '#HBA_LoanFreq', '#HBA_repayingCapacity',
+    '#HBA_Amt_Eligible_for_loan', '#HBA_EMI_Eligible', '#HBA_Amount_Applied_For_Loan',
+    '#HBA_EMI_Applied', '#HBA_approxEMIAmount', '#HBA_approxDisbursementAmt',
+    '#PCA_LoanFreq', '#computerCost', '#PCA_Amt_Eligible_for_loan',
+    '#PCA_EMI_Eligible', '#PCA_repayingCapacity', '#PCA_Amount_Applied_For_Loan',
+    '#PCA_EMI_Applied', '#PCA_approxEMIAmount', '#PCA_approxDisbursementAmt'
+]);
+// Bind once when DOM is ready
+
+
+function bindMinAmountValidation() {
+    const selectors = [
+        '#HBA_Amount_Applied_For_Loan',
+        '#PCA_Amount_Applied_For_Loan',
+        '#CA_Amount_Applied_For_Loan'
+    ];
+
+    selectors.forEach(selector => {
+        $(selector).on('change', function () {
             const rawValue = $(this).val();
             const numericValue = parseFloat(rawValue.replace(/,/g, '')) || 0;
+            const vehType = $('#veh_Loan_Type').val();
+
+            let minAmount = 0;
+
+            if (selector === '#HBA_Amount_Applied_For_Loan') {
+                minAmount = 500000;
+            } else if (selector === '#PCA_Amount_Applied_For_Loan') {
+                minAmount = 25000;
+            } else if (selector === '#CA_Amount_Applied_For_Loan') {
+                minAmount = (vehType == 4) ? 50000 : 200000;
+            }
 
             if (numericValue < minAmount) {
                 Swal.fire({
                     title: 'Warning!',
                     text: `Minimum amount is ₹${minAmount.toLocaleString('en-IN')}. Please enter a valid amount.`,
                     icon: 'warning',
-                    confirmButtonText: 'OK',
+                    confirmButtonText: 'OK'
                 });
 
                 $(this).val('');
@@ -62,7 +163,7 @@ function checkMinAmtApplied() {
 
 
 function resetFieldsOnRankRegtChange() {
-    $('#ddlrank, #regtCorps').on('change', function () {
+    $('#ddlrank, #regtCorps,#armyPrefix').on('change', function () {
             $('#dateOfPromotion,#dateOfRetirement, #dateOfBirth,#dateOfCommission, #totalService, #residualService, #totalResidualMonth, #HBA_EMI_Eligible,#HBA_Amt_Eligible_for_loan,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt,#propertyCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt,#vehicleCost,#PCA_Amt_Eligible_for_loan,#PCA_EMI_Eligible,#PCA_Amount_Applied_For_Loan,#PCA_EMI_Applied,#PCA_approxEMIAmount,#PCA_approxDisbursementAmt,#computerCost').val('');
         });
 }
@@ -587,17 +688,13 @@ function calculateResidualService() {
     retirementDate.setHours(0, 0, 0, 0);
     currentDate.setHours(0, 0, 0, 0);
 
-    if (retirementDate < currentDate) {
-        return;
-    }
-
     var years = retirementDate.getFullYear() - currentDate.getFullYear();
     var months = retirementDate.getMonth() - currentDate.getMonth();
     var days = retirementDate.getDate() - currentDate.getDate();
 
     if (days < 0) {
         months -= 1;
-        var prevMonth = new Date(retirementDate.getFullYear(), retirementDate.getMonth(), 0);
+        var prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
         days += prevMonth.getDate(); // Add days of the previous month
     }
 
@@ -605,12 +702,25 @@ function calculateResidualService() {
         years -= 1;
         months += 12;
     }
-    var totalmonths = years * 12 + months;
-    $("#totalResidualMonth").val(totalmonths);
-    $("#residualService").val(years);
-    setOutlineActive("residualService");
 
+    // Calculate total months (can be negative)
+    var totalMonths = years * 12 + months;
+    var totalYears = years;
+
+    // If retirement is before current date, show negative values
+    if (retirementDate < currentDate) {
+        // Recalculate in reverse to maintain negative residual
+        var diffInMs = retirementDate - currentDate;
+        var diffDate = new Date(Math.abs(diffInMs));
+        totalYears = -Math.abs(years);
+        totalMonths = -Math.abs(totalMonths);
+    }
+
+    $("#totalResidualMonth").val(totalMonths);
+    $("#residualService").val(totalYears);
+    setOutlineActive("residualService");
 }
+
 function enableDisablePromotionDate() {
     $('#ddlrank').on('change', function () {
         togglePromotionDate($(this).val());
@@ -1915,3 +2025,29 @@ $('#oldArmyNo').on('focus', function () {
         confirmButtonText: "OK"
     });
 });
+
+function validateEMIForRepayingCapacity(prefix) {
+    var approxEmi = parseFloat($(`#${prefix}_approxEMIAmount`).val().replace(/,/g, ''));
+    var repayingCapacity = parseFloat($(`#${prefix}_repayingCapacity`).val().replace(/,/g, ''));
+
+    if (isNaN(approxEmi) || isNaN(repayingCapacity)) {
+        alert("Please ensure all fields are filled correctly.");
+        return false;
+    }
+
+    if (approxEmi > repayingCapacity) {
+        Swal.fire({
+            title: "EMI Exceeds Repaying Capacity",
+            text: "The calculated EMI exceeds your repaying capacity. Please adjust the loan amount or EMI.",
+            icon: "warning",
+        }).then(() => {
+            $(`#${prefix}_Amount_Applied_For_Loan`).val("");
+            $(`#${prefix}_EMI_Applied`).val("");
+            $(`#${prefix}_approxEMIAmount`).val("");
+            $(`#${prefix}_approxDisbursementAmt`).val("");
+        });
+        return false;
+    }
+
+    return true;
+}

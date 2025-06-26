@@ -298,7 +298,7 @@
                                     <select id="emailDomain" name="CommonData.EmailDomain" class="form-select" required>
                                         <option value="gmail.com">gmail.com</option>
                                         <option value="yahoo.com">yahoo.com</option>
-                                        <option value="yahoo.com.in">yahoo.com.in</option>
+                                        <option value="yahoo.co.in">yahoo.co.in</option>
                                         <option value="rediffmail.com">rediffmail.com</option>
                                         <option value="outlook.com">outlook.com</option>
                                         <option value="protonmail.com">protonmail.com</option>
@@ -510,7 +510,7 @@
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="Code" name="CommonData.Code" class="form-control" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.Code" />
-                                        <label class="form-label" for="Code">Zip Code</label>
+                                        <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Code, "", new { @class = "text-danger" })
@@ -966,7 +966,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" onchange="validateEMIHba()" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
+                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('HBA')" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -1120,7 +1120,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control" oninput="validateEMI_CA(this);calculateEMI_CA()" required value="@Model.CarApplication?.CA_EMI_Applied" />
+                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control"  onchange="validateEMIForRepayingCapacity('CA')" oninput="validateEMI_CA(this);calculateEMI_CA()" required value="@Model.CarApplication?.CA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -1244,16 +1244,6 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
-                                            <span class="input-group-text">🗺️</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.PCAApplication?.computerCost" />
-                                                <label class="form-label select-label ">Total Price of Computer</label>
-                                            </div>
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.PCAApplication.computerCost, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">👮</span>
                                             </div>
@@ -1271,6 +1261,17 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_LoanFreq, "", new { @class = "text-danger" })
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.PCAApplication?.computerCost" />
+                                                <label class="form-label select-label ">Total Price of Computer</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.PCAApplication.computerCost, "", new { @class = "text-danger" })
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
@@ -1305,7 +1306,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
+                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan"  class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
                                                 <label class="form-label select-label ">Amount Applied For Loan</label>
                                             </div>
                                         </div>
@@ -1315,7 +1316,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control" oninput="validateEMI_PCA(this);calculateEMI_PCA()" required value="@Model.PCAApplication?.PCA_EMI_Applied" />
+                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('PCA')" oninput="validateEMI_PCA(this);calculateEMI_PCA()" required value="@Model.PCAApplication?.PCA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>
