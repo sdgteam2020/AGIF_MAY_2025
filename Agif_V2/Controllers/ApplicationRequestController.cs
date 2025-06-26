@@ -17,14 +17,16 @@ namespace Agif_V2.Controllers
         private readonly IUsersApplications _userApplication;
         private readonly IOnlineApplication _onlineApplication;
         private readonly IApplication _application;
+        private readonly IUserProfile _userProfile;
         private readonly OnlineApplicationController _onlineApplicationController;
         
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,OnlineApplicationController _onlineApplicationController)
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,OnlineApplicationController _onlineApplicationController,IUserProfile _userProfile)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
             this._application = _application;
             this._onlineApplicationController = _onlineApplicationController;
+            this._userProfile = _userProfile;
         }
         public IActionResult Index()
         {
@@ -39,9 +41,6 @@ namespace Agif_V2.Controllers
                 return Unauthorized("Session expired or invalid user session.");
             }
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
-            //SessionUserDTO? coSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
-
-            //var app = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, 1);
             return View(dTOTempSession);
         }
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
@@ -126,36 +125,32 @@ namespace Agif_V2.Controllers
             return xml.ToString();
         }
 
-        public async Task<DTODigitalSignDataResponse> SignDocument(int applicationId)
+        public async Task<DTODigitalSignDataResponse?> SignDocument(int applicationId)
         {
             DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applicationId);
             DTODigitalSignDataResponse digitalSignDTO = new DTODigitalSignDataResponse();
 
-
             if (data.OnlineApplicationResponse != null)
             {
-                digitalSignDTO.ApplicationId = data.OnlineApplicationResponse.ApplicationId;
-                digitalSignDTO.ArmyNo = data.OnlineApplicationResponse.Number;
-                digitalSignDTO.ApplicantName = data.OnlineApplicationResponse.ApplicantName;
-                //digitalSignDTO.IsRejectced = con.xmlSignModels.FirstOrDefault(x => x.ApplId == carPcModel.Application_Id)?.IsRejectced == true;
-                digitalSignDTO.PCDA_PAO = data.OnlineApplicationResponse.pcda_pao;
-                digitalSignDTO.Date_Of_Birth = data.OnlineApplicationResponse.DateOfBirth.ToString();
-                digitalSignDTO.Retirement_Date = data.OnlineApplicationResponse.DateOfRetirement.ToString();
-                digitalSignDTO.Mobile_No = data.OnlineApplicationResponse.MobileNo;
-                digitalSignDTO.ApplType = data.OnlineApplicationResponse.ApplicationType;
-                digitalSignDTO.DateOfCommision = data.OnlineApplicationResponse.DateOfCommission.ToString();
-                digitalSignDTO.AccountNo = data.OnlineApplicationResponse.SalaryAcctNo;
-                digitalSignDTO.RankName = data.OnlineApplicationResponse.DdlRank;
-                digitalSignDTO.UnitName = data.OnlineApplicationResponse.PresentUnit;
-                digitalSignDTO.PAN_No = data.OnlineApplicationResponse.PanCardNo;
+                var onlineResponse = data.OnlineApplicationResponse;
+
+                digitalSignDTO.ApplicationId = onlineResponse.ApplicationId;
+                digitalSignDTO.ArmyNo = onlineResponse.Number ?? string.Empty;
+                digitalSignDTO.ApplicantName = onlineResponse.ApplicantName ?? string.Empty;
+                digitalSignDTO.PCDA_PAO = onlineResponse.pcda_pao ?? string.Empty;
+                digitalSignDTO.Date_Of_Birth = onlineResponse.DateOfBirth?.ToString() ?? string.Empty;
+                digitalSignDTO.Retirement_Date = onlineResponse.DateOfRetirement?.ToString() ?? string.Empty;
+                digitalSignDTO.Mobile_No = onlineResponse.MobileNo ?? string.Empty;
+                digitalSignDTO.ApplType = onlineResponse.ApplicationType;
+                digitalSignDTO.DateOfCommision = onlineResponse.DateOfCommission?.ToString() ?? string.Empty;
+                digitalSignDTO.AccountNo = onlineResponse.SalaryAcctNo ?? string.Empty;
+                digitalSignDTO.RankName = onlineResponse.DdlRank ?? string.Empty;
+                digitalSignDTO.UnitName = onlineResponse.PresentUnit ?? string.Empty;
+                digitalSignDTO.PAN_No = onlineResponse.PanCardNo ?? string.Empty;
+
                 return digitalSignDTO;
-
             }
-            else
-            {
-                return null;
-            }
-
+            return null;
         }
 
         public async Task SaveXML(int applId, string xmlResString, string remarks)
@@ -164,9 +159,11 @@ namespace Agif_V2.Controllers
             {
                 DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applId);
 
-                var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
+                var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
                 if (dTOTempSession == null)
                     throw new Exception("Session expired or invalid user context.");
+
+
 
                 var digitalSignRecords = new DigitalSignRecords
                 {
@@ -180,9 +177,22 @@ namespace Agif_V2.Controllers
                     RankName = dTOTempSession.RankName
                 };
 
-                await _onlineApplication.UpdateApplicationStatus(applId, 2); // This is the likely failing line
+                await _onlineApplication.UpdateApplicationStatus(applId, 2); 
                 await _application.Add(digitalSignRecords);
-               // await _onlineApplicationController.MergePdf(applId, false, true);
+
+                DTOUserProfileResponse adminDetails = await _userProfile.GetAdminDetails();
+                var TrnFwd = new TrnFwd
+                {
+                    ApplicationId = applId,
+                    FromUserId = dTOTempSession.UserId,
+                    FromProfileId = dTOTempSession.ProfileId,
+                    ToUserId = adminDetails.UserId,
+                    ToProfileId = adminDetails.ProfileId,
+                    CreatedOn = DateTime.Now
+                };
+
+
+
             }
             catch (Exception ex)
             {
@@ -206,6 +216,10 @@ namespace Agif_V2.Controllers
             //await _onlineApplicationController.MergePdf(applId, true, false);
             return Json(new { success = true, message = "Application rejected." });
 
+        }
+        public async Task<IActionResult> GetAllApprovedApplications()
+        {
+            return View();
         }
 
     }

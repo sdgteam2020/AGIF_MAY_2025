@@ -11,6 +11,7 @@ namespace DataTransferObject.Response
         public string? DomainId { get; set; }
         public int MappingId { get; set; }
         public int ProfileId { get; set; }
+        public int UserId { get; set; }
         public string? ProfileName { get; set; }
         public string? AppointmentName { get; set; }
         public string? ArmyNo { get; set; }

@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="~/images/favicon.svg" type="image/x-icon" />
-    <title>Blank Page | PlainAdmin Demo</title>
+    <title>ARMY GROUP INSURANCE FUND 3.0</title>
 
     <!-- ========== All CSS files linkup ========= -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
@@ -76,6 +76,23 @@
                 }
                 else
                 {
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#receivedApplicationToAdmin"
+                           aria-controls="receivedApplicationToAdmin"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">Received Application</span>
+                        </a>
+                        <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/ApplicationRequest/GetAllApprovedApplications" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
                            data-bs-toggle="collapse"
