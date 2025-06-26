@@ -217,6 +217,10 @@ namespace Agif_V2.Controllers
             return Json(new { success = true, message = "Application rejected." });
 
         }
+        public async Task<IActionResult> GetAllApprovedApplications()
+        {
+            return View();
+        }
 
     }
 }

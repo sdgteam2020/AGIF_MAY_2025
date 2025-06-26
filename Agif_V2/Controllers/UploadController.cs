@@ -184,5 +184,32 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        public JsonResult InfoBeforeUpload(string applicationId)
+        {
+            if (string.IsNullOrWhiteSpace(applicationId) || applicationId == "0")
+            {
+                return Json(new { success = false, message = "Application ID is required." });
+            }
+
+            var coDetails = _IonlineApplication1.GetUnitByApplicationId(int.Parse(applicationId));
+            var data = coDetails.Result?.OnlineApplicationResponse;
+
+            if (data == null)
+            {
+                return Json(new { success = false, message = "No data found for the provided Application ID." });
+            }
+
+            string CoArmyNumber = data.Number ?? string.Empty;
+            string CoRank = data.DdlRank ?? string.Empty;
+            string CoUnit = data.PresentUnit ?? string.Empty;
+            string CoName = data.CoName ?? string.Empty;
+
+            var message = $"Application will be forwarded to your Unit Commander {CoArmyNumber} {CoRank} {CoName}, {CoUnit}";
+            return Json(new { success = true, message = message });
+        }
+
+
     }
 }

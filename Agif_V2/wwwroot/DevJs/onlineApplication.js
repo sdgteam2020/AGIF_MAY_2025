@@ -85,7 +85,11 @@ function filterCALoanFreqOptions() {
     });
 }
 
-
+resetFieldsOnChange('#propertyCost,#vehicleCost,#computerCost', [
+    '#HBA_Amount_Applied_For_Loan', '#HBA_EMI_Applied', '#CA_Amount_Applied_For_Loan',
+    '#CA_EMI_Applied', '#PCA_Amount_Applied_For_Loan',
+    '#PCA_EMI_Applied'
+]);
 
 function resetFieldsOnChange(dropdownSelector, fieldSelectors) {
     $(dropdownSelector).on('change', function () {
@@ -1020,6 +1024,9 @@ function textChange() {
     setOutlineActive("totalDeductions");
     setOutlineActive("totalCredit");
     setOutlineActive("salary_After_Deductions");
+    calculateEMIRepayingCapacity_CA();
+    calculateEMIRepayingCapacity_HBA();
+    calculateEMIRepayingCapacity_PCA();
 }
 
 let formSubmitting = false;
