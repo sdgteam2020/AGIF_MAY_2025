@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class SplWaiverModel
+    public class SplWaiverModel : Common
     {
 
         [Key]

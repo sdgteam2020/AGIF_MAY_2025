@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class MarriagewardModel
+    public class MarriagewardModel : Common
     {
 
         [Key]
@@ -37,6 +37,7 @@ namespace DataTransferObject.Model
         public DateTime? DoPartIIDate { get; set; }
 
         // Attach Part-II Order
+        [NotMapped]
         [Required]
         public IFormFile AttachPartIIOrder { get; set; }
 
@@ -49,10 +50,13 @@ namespace DataTransferObject.Model
         [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
         public DateTime? DateofMarriage { get; set; }
 
+        [NotMapped]
         [Required]
         public IFormFile AttachInvitationcard { get; set; }
 
+        public bool IsAttachPartIIOrderPdf { get; set; }
 
+        public bool IsAttachInvitationcardPdf { get;set; }
 
     }
 }

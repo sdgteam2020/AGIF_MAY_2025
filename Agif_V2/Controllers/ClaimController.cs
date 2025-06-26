@@ -3,6 +3,7 @@ using Agif_V2.Helpers;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
+using DataTransferObject.Model;
 using DataTransferObject.Request;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -269,13 +270,43 @@ namespace Agif_V2.Controllers
                 }
             }
 
-            // int Applicationtype = int.Parse(model.loantype);
-            //int ApplicantType = int.Parse(model.applicantCategory);
-            // Check ModelState validity after all validations
             if (!ModelState.IsValid)
                 return View("OnlineApplication", model);            
             else
+            {
+                ClaimCommonModel claimCommonModel = new ClaimCommonModel();
+                if (model.ClaimCommonData != null)
+                {
+                    model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
+                    model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
+
+                    claimCommonModel = await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
+                }
+
+                if(model.EducationDetails != null)
+                {
+                    bool result = await _IClaimonlineApplication1.submitApplication(model, "ED", claimCommonModel.ApplicationId);
+                }
+                else if(model.Marriageward!=null)
+                {
+                    bool result = await _IClaimonlineApplication1.submitApplication(model, "MW", claimCommonModel.ApplicationId);
+                }
+                else if(model.PropertyRenovation!=null)
+                {
+                    bool result = await _IClaimonlineApplication1.submitApplication(model, "PR", claimCommonModel.ApplicationId);
+                }
+                else
+                {
+                    bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", claimCommonModel.ApplicationId);
+
+                }
+
+
                 return View("OnlineApplication");
+
+            }
+
+
 
         }
 

@@ -361,7 +361,7 @@ namespace Agif_V2.Controllers
                     {
                         model.CommonData.ApplicationType = int.Parse(model.loantype);
                         model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
-                        model.CommonData.IOUnit = model.CommonData.IOUnit == 0 ? (int?)null : model.CommonData.IOUnit;
+                        model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
                         common = await _IonlineApplication1.AddWithReturn(model.CommonData);
                     }
 

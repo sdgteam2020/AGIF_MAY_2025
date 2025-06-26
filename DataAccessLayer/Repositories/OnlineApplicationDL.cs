@@ -185,6 +185,7 @@ namespace DataAccessLayer.Repositories
                               NameOfBank = common.NameOfBank ?? string.Empty,
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
+                              pcda_AcctNo=common.pcda_AcctNo ?? string.Empty,
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
@@ -203,7 +204,8 @@ namespace DataAccessLayer.Repositories
                                         PropertySeller = hba.PropertySeller.ToString(),
                                         PropertyAddress = hba.PropertyAddress,
                                         PropertyCost = hba.PropertyCost,
-                                        HBA_LoanFreq = hba.HBA_LoanFreq
+                                        HBA_LoanFreq = hba.HBA_LoanFreq,
+                                        HBA_Amount_Applied_For_Loan = hba.HBA_Amount_Applied_For_Loan,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined

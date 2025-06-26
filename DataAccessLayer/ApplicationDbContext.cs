@@ -3,6 +3,7 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,17 @@ namespace DataAccessLayer
         public virtual DbSet<TrnFwdCO> TrnFwdCO { get; set; }
 
         public virtual DbSet<WithdrawalPurpose> WithdrawalPurpose { get; set; }
+
+        public virtual DbSet<ClaimCommonModel> trnClaim { get; set; }
+
+        public virtual DbSet<EducationDetailsModel> trnEducationDetails { get; set; }
+
+        public virtual DbSet<MarriagewardModel> trnMarriageward { get; set; }
+
+        public virtual DbSet<PropertyRenovationModel> trnPropertyRenovation { get; set; }
+
+        public virtual DbSet<SplWaiverModel> trnSplWaiver { get; set; }
+
         public virtual DbSet<MAgeMapping> MAgeMapping { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -60,6 +72,15 @@ namespace DataAccessLayer
                 .HasPrincipalKey(u => u.UnitId)
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasConstraintName("FK_trnApplications_MUnits_PresentUnit");
+
+
+            builder.Entity<ClaimCommonModel>()
+                .HasOne<MUnit>()
+                .WithMany()
+                .HasForeignKey(a => a.PresentUnit)
+                .HasPrincipalKey(u => u.UnitId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_trnClaim_MUnits_PresentUnit");
 
             base.OnModelCreating(builder);
         }

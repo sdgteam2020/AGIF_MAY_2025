@@ -85,6 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\ClaimTempUploads\" />
     <Folder Include="wwwroot\images\cards\" />
     <Folder Include="wwwroot\images\clients\" />
     <Folder Include="wwwroot\images\projects\" />

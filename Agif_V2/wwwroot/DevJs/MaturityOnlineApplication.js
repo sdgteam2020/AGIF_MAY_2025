@@ -283,11 +283,11 @@ function updateLoanTypeDropdown() {
             if (addedLoanTypes.includes(optionValue)) {
                 // Disable and mark as already added
                 $(this).prop('disabled', true).text(originalTexts[optionValue] + ' (Already Added)');
-                $('#' + optionValue + '_Loan').val('true');
+                $('#' + optionValue + '_Loan').val(true);
             } else {
                 // Enable and restore original text
                 $(this).prop('disabled', false).text(originalTexts[optionValue]);
-                $('#' + optionValue + '_Loan').val('false');
+                $('#' + optionValue + '_Loan').val(false);
             }
         }
     });
@@ -1994,3 +1994,47 @@ $('#oldArmyNo').on('focus', function () {
         confirmButtonText: "OK"
     });
 });
+
+
+$('#Attach_Part_II_Order').change(function () {
+    previewFile(this, '#Attach_Part_II_Order');
+}); 
+
+$('#Attach_Bonafide_letter').change(function () {
+    previewFile(this, '#Attach_Bonafide_letter');
+}); 
+
+$('#Attach_invitation_card').change(function () {
+    previewFile(this, '#Attach_invitation_card');
+}); 
+
+$('#TotalexpenditureFile').change(function () {
+    previewFile(this, '#TotalexpenditureFile');
+}); 
+
+
+function previewFile(input, previewSelector) {
+    const file = input.files[0];
+    const preview = $(previewSelector);
+    const errorContainer = $(input).closest('.col-md-4').find('.file-error-message'); // Find the error container below the input
+    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+    errorContainer.text('');
+
+    if (file) {
+        // Check if the file is a PDF
+        if (file.type !== 'application/pdf') {
+            errorContainer.text('Only PDF files are allowed').css('color', 'red');
+            input.value = ''; // Clear the input field
+            return;
+        }
+
+        // Check the file size (must not exceed 1MB)
+        if (file.size > maxFileSize) {
+            errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
+            input.value = ''; // Clear the input field
+        }
+
+    } else {
+        preview.html('<p>No file selected</p>');
+    }
+}

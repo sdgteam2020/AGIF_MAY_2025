@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class EducationDetailsModel
+    public class EducationDetailsModel : Common
     {
         [Key]
         public int EDId { get; set; }
@@ -63,7 +63,8 @@ namespace DataTransferObject.Model
         [Range(0, double.MaxValue, ErrorMessage = "Total Expenditure should be a positive number")]
         public double TotalExpenditure { get; set; }
 
-        // Extra fields based on your requirements
-        public string ExtnOfService { get; set; } // Extension of Service
+        public bool IsAttachPartIIOrderPdf { get; set; } // Flag to check if Part-II Order is attached
+
+        public bool IsAttachBonafideLetterPdf { get; set; } // Flag to check if Bonafide Letter is attached
     }
 }
