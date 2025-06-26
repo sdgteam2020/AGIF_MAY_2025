@@ -14,5 +14,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOUserProfileResponse>> GetAllUser(bool status);
 
         Task<DTOUserProfileResponse> GetUserAllDetails(string userName);
+
+        Task<DTOUserProfileResponse> GetAdminDetails();
     }
 }
