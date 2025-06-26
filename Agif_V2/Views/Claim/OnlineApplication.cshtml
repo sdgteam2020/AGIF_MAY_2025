@@ -380,7 +380,7 @@
                                         </select>*@
                                          @Html.DropDownListFor(m => m.ClaimCommonData.ExtnOfService, 
                                                                             new SelectList(new[] {
-                                                                                new { Value = "", Text = "Select one" },
+                                                                                new { Value = " ", Text = "Select one" },
                                                                                 new { Value = "Yes", Text = "Yes" },
                                                                                 new { Value = "No", Text = "No" }
                                                                             }, "Value", "Text"), 
@@ -393,6 +393,9 @@
                                         <label class="form-label select-label ">Extn of Service in Present Rank</label>
                                         @* @Html.ValidationMessageFor(m => m.ClaimCommonData.ExtnOfService, "", new { @class = "text-danger" }) *@
                                     </div>
+
+                                  
+
                                 </div>
                             </div>
 
@@ -781,7 +784,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="hraDate" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.House_Repair_Advance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")"  style="caret-color: transparent;">
+                                          <input type="date" class="form-control" id="hraDate" aria-label="Date of Birth" name="ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")"  style="caret-color: transparent;">
                                     <label class="form-label select-label" for="hraDate">House Repair Date of Loan taken</label>
                                     </div>
                                   
@@ -793,7 +796,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hraDuration" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control"   oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control"   oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
                                                 <label class="form-label" for="hraDuration">House Repair Duration of Loan</label>
                                     </div>
 
@@ -806,7 +809,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hraAmount" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
                                                 <label class="form-label" for="hraAmount">House Repair Amount Taken</label>
                                     </div>
 
@@ -950,14 +953,14 @@
 
                                          @Html.DropDownListFor(m => m.ClaimCommonData.Noofwithdrawal, 
                                                                             new SelectList(new[] {
-                                                                                new { Value = "", Text = "Select one" },
+                                                                                new { Value = " ", Text = "Select one" },
                                                                                 new { Value = "First", Text = "First" },
                                                                                 new { Value = "Second", Text = "Second" }
                                                                             }, "Value", "Text"), 
                                                                             new { 
                                                                                 @class = "select form-select", 
                                                                                 id = "ExtnOfService"
-                                                                               
+                                                                                 
                                                                             })
                                         <label class="form-label select-label ">No of withdrawal(Maximum two withdrawals permitted in entire service)</label>
                                         @* @Html.ValidationMessageFor(m => m.ClaimCommonData.ExtnOfService, "", new { @class = "text-danger" }) *@
@@ -1039,6 +1042,8 @@
                         <div class="mb-2">
                                  <div class="form-outline" data-mdb-input-init>
                         <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf"  />
+                         <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+
                   @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
                          </div>
                              </div>
@@ -1070,8 +1075,8 @@
                                         </select>*@
                                          @Html.DropDownListFor(m => m.EducationDetails.CourseForWithdrawal, 
                                                                             new SelectList(new[] {
-                                                                                new { Value = "", Text = "Select one" },
-                                                                                new { Value = "12th", Text = "Yes" },
+                                                                                new { Value = " ", Text = "Select one" },
+                                                                                new { Value = "12th", Text = "12th" },
                                                                                 new { Value = "UG", Text = "UG" },                                                                                
                                                                                 new { Value = "PG", Text = "PG" }
                                                                             }, "Value", "Text"), 
@@ -1105,6 +1110,7 @@
                          <div class="form-outline" data-mdb-input-init>
                       <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text" data-text="
 Attach Bonafide cert/admission letter" required accept=".pdf"/>
+                      <p class="file-error-message" style="color:red;"></p>
                   @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
                   </div>
                     </div>
@@ -1197,7 +1203,9 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                         <div class="mb-2">
                                  <div class="form-outline" data-mdb-input-init>
                         <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
-                  @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
+                              <p class="file-error-message" style="color:red;"></p> 
+
+                        @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
                          </div>
                              </div>
                              </div>
@@ -1235,7 +1243,8 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                         <div class="mb-2">
                                  <div class="form-outline" data-mdb-input-init>
                         <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text" required data-text="Attach invitation card" accept=".pdf" />
-                  @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
+                        <p class="file-error-message" style="color:red;"></p>
+                        @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
                          </div>
                              </div>
                              </div>
@@ -1311,8 +1320,9 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                  <div class="col-md-4">
                         <div class="mb-2">
                                  <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="Totalexpenditure " name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
-                  @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
+                        <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
+                            <p class="file-error-message" style="color:red;"></p>
+                        @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
                          </div>
                              </div>
                              </div>
@@ -1357,7 +1367,6 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                     </div> 
                 }
             }
-            <input type="hidden" id="totalResidualMonth" name="totalResidualMonth" value="0" />
             <div class="col-md-12">
                 <div class="mt-4 text-center">
                     <button class="btn btn-primary" id="btn-save" type="submit">Next</button>

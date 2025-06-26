@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class ClaimCommonModel
+    public class ClaimCommonModel : Common
     {
         [Key]
         public int ApplicationId { get; set; }
@@ -149,10 +149,10 @@ namespace DataTransferObject.Model
         public string? NameOfBankBranch { get; set; }
 
 
-        public bool House_Building_Advance_Loan { get; set; }
-        public bool House_Repair_Advance_Loan { get; set; }
-        public bool Conveyance_Advance_Loan { get; set; }
-        public bool Computer_Advance_Loan { get; set; }
+        public bool? House_Building_Advance_Loan { get; set; }
+        public bool? House_Repair_Advance_Loan { get; set; }
+        public bool? Conveyance_Advance_Loan { get; set; }
+        public bool? Computer_Advance_Loan { get; set; }
 
 
 
@@ -177,13 +177,19 @@ namespace DataTransferObject.Model
 
         public int? AmountOfWithdrawalRequired { get; set; } 
 
-        public int? Noofwithdrawal { get; set; }
+        public string? Noofwithdrawal { get; set; }
 
 
         [Required]
         public int ApplicantType { get; set; }
         [ForeignKey("ApplicantType")]
         public MApplicantType? MApplicantType { get; set; }
+
+        [Required]
+        public int WithdrawPurpose { get; set; }
+        [ForeignKey("WithdrawPurpose")]
+        public WithdrawalPurpose? WithdrawalPurposetype { get; set; }
+
         public int StatusCode { get; set; }
     }
 }

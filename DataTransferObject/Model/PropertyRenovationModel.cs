@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class PropertyRenovationModel
+    public class PropertyRenovationModel : Common
     {
         [Key]
         public int PrId { get; set; }
@@ -31,7 +31,11 @@ namespace DataTransferObject.Model
         public double EstimatedCost { get; set; }
 
         // Total expenditure file upload
+        [NotMapped]
         [Required]
         public IFormFile TotalExpenditureFile { get; set; }
+
+
+        public bool IsTotalExpenditureFilePdf { get; set; }
     }
 }
