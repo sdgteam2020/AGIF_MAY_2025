@@ -35,5 +35,10 @@ namespace DataAccessLayer.Interfaces
         Task<string?> GetIOArmyNoAsync(int applicationId);
 
         Task<DTOCommonOnlineApplicationResponseList> GetApplicationDetailsForExport(DTOExportRequest dTOExport);
+        Task<bool> CheckDocumentUploaded(int ApplicationID);
+
+        Task<string> GetCOName(int mappingId);
+
+        Task<bool> CheckExtensionofservice(int applicationid);
     }
 }

@@ -5,6 +5,7 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Utils;
 using iText.StyledXmlParser.Node;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Agif_V2.Controllers
@@ -20,9 +21,24 @@ namespace Agif_V2.Controllers
             this._IArmyPrefixes = _IArmyPrefixes;
             this._IDocumentUpload = _IDocumentUpload;
         }
-        public IActionResult Upload()
+        public async Task<IActionResult> Upload()
         {
-           
+            int applicationId = Convert.ToInt32(TempData["applicationId"]);
+
+            bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
+
+            TempData.Keep("applicationId");
+
+            if (application)
+            {
+                TempData["Message"] = "You have already uploaded the Documents for this Application.";
+                return RedirectToAction("ApplicationDetails", new { applicationId = applicationId });
+            }
+
+            bool IsextensionOfService = await _IonlineApplication1.CheckExtensionofservice(applicationId);
+
+            TempData["IsextensionOfService"] = IsextensionOfService;
+
             FileUploadViewModel fileUploadViewModel = new FileUploadViewModel();
             return View(fileUploadViewModel);
         }
