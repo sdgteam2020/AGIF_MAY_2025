@@ -384,7 +384,7 @@ namespace Agif_V2.Controllers
 
                         Car.ApplicationId = common.ApplicationId;
 
-                       await _car.Add(Car);
+                        await _car.Add(Car);
                     }
 
                     else if (formType == "PCA" && model.PCAApplication != null)
@@ -410,7 +410,7 @@ namespace Agif_V2.Controllers
 
                 //int Applicationid = common.ApplicationId;
 
-                TempData["applicationId"] = common.ApplicationId;
+               TempData["applicationId"] = common.ApplicationId;
                 //TempData["applicationId"] = 2039; // For testing purposes, replace with actual ApplicationId from common.ApplicationId
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 

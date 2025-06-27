@@ -465,8 +465,12 @@ namespace DataAccessLayer.Repositories
 
             if(string.IsNullOrEmpty(application.ExtnOfService))
                 return false;
-            else
+            else if(application.ExtnOfService=="Yes")
                 return true;
+            else if (application.ExtnOfService == "No")
+                return false;
+            else
+                return false;
 
         }
 

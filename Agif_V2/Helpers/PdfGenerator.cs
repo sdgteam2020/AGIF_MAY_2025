@@ -174,7 +174,7 @@ namespace Agif_V2.Helpers
 
                         AddLoanRow("24. Property Address", hba.PropertyAddress, "25.Property Type", hba.PropertyType);
 
-                        AddLoanRow("26. Property Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
+                        AddLoanRow("26. Est Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
 
 
                         AddLoanRow("28. No of EMI (In Months)", hba.HBA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
