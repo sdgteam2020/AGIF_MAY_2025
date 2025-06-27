@@ -16,4 +16,13 @@ namespace DataTransferObject.Response
 
         public List<DTODocumentFileView>? Documents { get; set; }
     }
+    public class DTOCommonOnlineApplicationResponseList
+    {
+        public List<DTOCarApplicationresponse>? CarApplicationResponse { get; set; }
+        public List<DTOHbaApplicationresponse>? HbaApplicationResponse { get; set; }
+        public List<DTOPCAApplicationresponse>? PcaApplicationResponse { get; set; }
+        public List<CommonDataonlineResponse>? OnlineApplicationResponse { get; set; }
+
+        public List<DTODocumentFileView>? Documents { get; set; }
+    }
 }

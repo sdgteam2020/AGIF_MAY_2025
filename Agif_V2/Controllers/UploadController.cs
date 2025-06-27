@@ -5,6 +5,7 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Utils;
 using iText.StyledXmlParser.Node;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Agif_V2.Controllers
 {
@@ -154,31 +155,71 @@ namespace Agif_V2.Controllers
 
             await _IonlineApplication1.UpdateApplicationStatus(applicationId, 1);
 
-           // var ret = _IonlineApplication1.Get(applicationId);
-
-            if (!string.IsNullOrEmpty(CoArmyNumber))
+            var IOArmyNo = await _IonlineApplication1.GetIOArmyNoAsync(applicationId);
+            if (IOArmyNo == null)
             {
-                var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
-                if (CoDetails != null)
+                if (!string.IsNullOrEmpty(CoArmyNumber))
                 {
-                    TrnFwdCO trnFwdCO = new TrnFwdCO
+                    var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
+                    if (CoDetails != null)
                     {
-                        ApplicationId = applicationId,
-                        ArmyNo = ArmyNo,
-                        COUserId = CoDetails.UnitId,
-                        ProfileId = CoDetails.ProfileId,
-                        CreatedOn = DateTime.Now,
-                        Status = 1
-                    };
-                    await _IonlineApplication1.AddFwdCO(trnFwdCO);
-                }
+                        TrnFwdCO trnFwdCO = new TrnFwdCO
+                        {
+                            ApplicationId = applicationId,
+                            ArmyNo = ArmyNo,
+                            COUserId = CoDetails.UserId,
+                            ProfileId = CoDetails.ProfileId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+                        await _IonlineApplication1.AddFwdCO(trnFwdCO);
+                    }
 
+                }
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(IOArmyNo))
+                {
+                    var IoDetails = await _IonlineApplication1.GetUserDetails(IOArmyNo);
+                    if (IoDetails != null)
+                    {
+                        TrnFwdCO trnFwdCO = new TrnFwdCO
+                        {
+                            ApplicationId = applicationId,
+                            ArmyNo = ArmyNo,
+                            COUserId = IoDetails.UserId,
+                            ProfileId = IoDetails.ProfileId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+                        await _IonlineApplication1.AddFwdCO(trnFwdCO);
+                    }
+
+                }
+            }
+
+            //if (!string.IsNullOrEmpty(CoArmyNumber))
+            //{
+            //    var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
+            //    if (CoDetails != null)
+            //    {
+            //        TrnFwdCO trnFwdCO = new TrnFwdCO
+            //        {
+            //            ApplicationId = applicationId,
+            //            ArmyNo = ArmyNo,
+            //            COUserId = CoDetails.UserId,
+            //            ProfileId = CoDetails.ProfileId,
+            //            CreatedOn = DateTime.Now,
+            //            Status = 1
+            //        };
+            //        await _IonlineApplication1.AddFwdCO(trnFwdCO);
+            //    }
+
+            //}
             
-            TempData["Message"] = "Application will be forwarder to your Unit Cdr IC12345A COL AB Singh, Army Software developer.";
+            TempData["Message"] = "Application is forwarded to your Unit Cdr.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
-            //TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
-            //return View("Upload", model);
         }
         public IActionResult UploadSuccess()
         {

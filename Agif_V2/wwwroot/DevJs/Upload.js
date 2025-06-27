@@ -73,36 +73,11 @@
                 };
 
                 reader.readAsDataURL(file);
-            }
+            }   
         } else {
             preview.html('<p>No file selected</p>');
         }
     }
-
-    //$('#uploadBtn').on('click', function (event) {
-    //    event.preventDefault(); // Prevent the form from submitting immediately
-    //    let applId = $('#hiddenApplicationId').val();
-    //    if (!applId) {
-    //        alert("Application ID is missing.");
-    //        return;
-    //    }
-
-    //    // Show SweetAlert confirmation dialog
-    //    Swal.fire({
-    //        text: "Do you want to upload the files?",
-    //        icon: 'warning',
-    //        showCancelButton: true,
-    //        confirmButtonColor: '#3085d6',
-    //        cancelButtonColor: '#d33',
-    //        confirmButtonText: 'Yes, upload it!',
-    //        cancelButtonText: 'No, cancel!'
-    //    }).then((result) => {
-    //        if (result.isConfirmed) {
-    //            // Submit the form after confirmation
-    //            $('#uploadForm').submit();
-    //        }
-    //    });
-    //});
     $('#uploadBtn').on('click', function (e) {
         e.preventDefault();
 

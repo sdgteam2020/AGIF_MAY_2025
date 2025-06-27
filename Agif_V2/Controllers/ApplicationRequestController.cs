@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
+using System.IO.Compression;
 
 namespace Agif_V2.Controllers
 {
@@ -18,14 +19,13 @@ namespace Agif_V2.Controllers
         private readonly IOnlineApplication _onlineApplication;
         private readonly IApplication _application;
         private readonly IUserProfile _userProfile;
-        private readonly OnlineApplicationController _onlineApplicationController;
         
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,OnlineApplicationController _onlineApplicationController,IUserProfile _userProfile)
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,IUserProfile _userProfile)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
             this._application = _application;
-            this._onlineApplicationController = _onlineApplicationController;
+            
             this._userProfile = _userProfile;
         }
         public IActionResult Index()
@@ -217,10 +217,142 @@ namespace Agif_V2.Controllers
             return Json(new { success = true, message = "Application rejected." });
 
         }
-        public async Task<IActionResult> GetAllApprovedApplications()
+        public async Task<IActionResult> UsersApplicationListAdmin()
         {
             return View();
         }
 
+        public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
+        {
+            try
+            {
+                var queryableData = await _userApplication.GetUsersApplicationForAdmin(status);
+                var totalRecords = queryableData.Count();
+                var query = queryableData.AsQueryable();
+
+                // Apply search filter - fixed to match actual DTO properties
+                if (!string.IsNullOrEmpty(request.searchValue))
+                {
+                    string searchValue = request.searchValue.ToLower();
+                    query = query.Where(x =>
+                        (x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
+                        (x.ArmyNo != null && x.ArmyNo.ToLower().Contains(searchValue)) ||
+                        (x.RegtCorps != null && x.RegtCorps.ToLower().Contains(searchValue)) ||
+                        (x.PresentUnit != null && x.PresentUnit.ToLower().Contains(searchValue)) ||
+                        (x.AppliedDate != null && x.AppliedDate.ToLower().Contains(searchValue))
+                    );
+                }
+
+                var filteredRecords = query.Count();
+
+                // Apply sorting - fixed to match JavaScript column names
+                if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+                {
+                    bool ascending = request.sortDirection.ToLower() == "asc";
+                    query = request.sortColumn.ToLower() switch
+                    {
+                        "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                        "regtname" => ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps),
+                        "presentunit" => ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit),
+                        "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+                        _ => query.OrderByDescending(x => x.UpdatedOn) // Default sorting
+                    };
+                }
+                else
+                {
+                    // Default sorting by UpdatedOn descending
+                    query = query.OrderByDescending(x => x.UpdatedOn);
+                }
+
+                // Paginate the result
+                var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+                var responseData = new DTODataTablesResponse<DTOGetApplResponse>
+                {
+                    draw = request.Draw,
+                    recordsTotal = totalRecords,
+                    recordsFiltered = filteredRecords,
+                    data = paginatedData
+                };
+
+                return Json(responseData);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { error = "An error occurred while loading data: " + ex.Message });
+            }
+        }
+        
+        public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        {
+
+
+            DTOExportRequest dTOExport = new DTOExportRequest
+            {
+                Id = id,
+                
+            };
+            var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+
+            foreach (var data in ret.OnlineApplicationResponse)
+            {
+                
+               
+                //string ArmyNO = data.ArmyPrefix + data.Number + data.Suffix;
+                var folderName = $"HBA_{data.Number}_{data.ApplicationId}";
+                var fileName = $"HBA_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+                string basePath = Path.Combine("wwwroot", "TempUploads");
+                string newFolderPath = CreateFolder(basePath);
+                string newFolderPathUri = Path.Combine(basePath, newFolderPath);
+                string destinationFilePath = Path.Combine(newFolderPathUri, fileName); // Corrected to use newFolderPathUri
+
+                // Copy the file to the new folder
+                System.IO.File.Copy(filePath, destinationFilePath, overwrite: true); // Corrected to use destinationFilePath
+                string zipFileName = $"{newFolderPathUri}.zip";
+                createZip(newFolderPathUri, zipFileName);
+
+                return Json(newFolderPath);
+            }
+
+
+
+
+
+
+
+            return Json(0);
+        }
+        public void createZip(string sourceFolderPath,string destinationFilePath)
+        {
+            
+            // If zip already exists, delete it
+            if (System.IO.File.Exists(destinationFilePath))
+            {
+                System.IO.File.Delete(destinationFilePath);
+            }
+
+            // Create the zip
+            ZipFile.CreateFromDirectory(sourceFolderPath, destinationFilePath, CompressionLevel.Optimal, includeBaseDirectory: false);
+
+        }
+        public string CreateFolder(string basePath)
+        {
+           
+
+            // Timestamp-based folder name
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string folderPath = Path.Combine(basePath, timestamp);
+
+            // Create the directory
+            Directory.CreateDirectory(folderPath);
+
+            return timestamp;
+
+        }
     }
 }

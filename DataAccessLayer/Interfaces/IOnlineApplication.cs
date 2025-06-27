@@ -1,4 +1,5 @@
 ﻿using DataTransferObject.Model;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
@@ -31,5 +32,8 @@ namespace DataAccessLayer.Interfaces
         Task<UserMapping?> GetUserDetails(string CoArmyNumber);
         Task<DTOCommonOnlineApplicationResponse> GetUnitByApplicationId(int applicationId);
 
+        Task<string?> GetIOArmyNoAsync(int applicationId);
+
+        Task<DTOCommonOnlineApplicationResponseList> GetApplicationDetailsForExport(DTOExportRequest dTOExport);
     }
 }

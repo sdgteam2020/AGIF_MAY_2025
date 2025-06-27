@@ -124,6 +124,10 @@ resetFieldsOnChange('#dateOfBirth,#dateOfCommission', [
     '#PCA_EMI_Eligible', '#PCA_repayingCapacity', '#PCA_Amount_Applied_For_Loan',
     '#PCA_EMI_Applied', '#PCA_approxEMIAmount', '#PCA_approxDisbursementAmt'
 ]);
+
+resetFieldsOnChange('#dateOfBirth', [
+    '#dateOfCommission'
+]);
 // Bind once when DOM is ready
 
 
