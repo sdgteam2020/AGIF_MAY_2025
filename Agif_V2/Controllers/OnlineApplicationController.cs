@@ -411,6 +411,7 @@ namespace Agif_V2.Controllers
                 //int Applicationid = common.ApplicationId;
 
                 TempData["applicationId"] = common.ApplicationId;
+                //TempData["applicationId"] = 2039; // For testing purposes, replace with actual ApplicationId from common.ApplicationId
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
                 TempData["COArmyNumber"] = model.COArmyNo;
@@ -499,7 +500,16 @@ namespace Agif_V2.Controllers
                 try
                 {
                     SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip);
+                    
+                    if (dTOTempSession == null)
+                    {
+                        return Json(new { success = false, message = "Session expired or invalid user context." });
+                    }
+
+                    string Name = await _IonlineApplication1.GetCOName(dTOTempSession.ProfileId);
+
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip, Name);
+
                     if (data == 1)
                     {
                         pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))

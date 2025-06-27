@@ -31,5 +31,10 @@ namespace DataAccessLayer.Interfaces
         Task<UserMapping?> GetUserDetails(string CoArmyNumber);
         Task<DTOCommonOnlineApplicationResponse> GetUnitByApplicationId(int applicationId);
 
+        Task<bool> CheckDocumentUploaded(int ApplicationID);
+
+        Task<string> GetCOName(int mappingId);
+
+        Task<bool> CheckExtensionofservice(int applicationid);
     }
 }

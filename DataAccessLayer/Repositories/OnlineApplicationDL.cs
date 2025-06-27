@@ -2,6 +2,7 @@
 using DataTransferObject.Model;
 using DataTransferObject.Response;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.ObjectPool;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
@@ -168,7 +169,7 @@ namespace DataAccessLayer.Repositories
                           from parentUnit in parentUnitGroup.DefaultIfEmpty()
                           join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
-                          join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId 
+                          join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
                           where common.ApplicationId == applicationId
                           select new CommonDataonlineResponse
                           {
@@ -176,7 +177,7 @@ namespace DataAccessLayer.Repositories
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.ApplicationType,
-                              ApplicationTypeName= applicationType.ApplicationTypeName,
+                              ApplicationTypeName = applicationType.ApplicationTypeName,
                               ArmyPrefix = common.ArmyPrefix,
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
@@ -207,7 +208,8 @@ namespace DataAccessLayer.Repositories
                               NameOfBank = common.NameOfBank ?? string.Empty,
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
-                              pcda_AcctNo=common.pcda_AcctNo ?? string.Empty,
+                              pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                              CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
@@ -285,7 +287,7 @@ namespace DataAccessLayer.Repositories
                 {
                     string directoryPath = Path.Combine("/TempUploads", $"{formtype}_{result.Number}_{applicationId}");
                     List<DTODocumentFileView> lstdoc = new List<DTODocumentFileView>();
-                   
+
                     if (DocumentModel.IsCancelledCheque)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
@@ -429,5 +431,53 @@ namespace DataAccessLayer.Repositories
 
             return userMapping;
         }
+
+        public async Task<string> GetCOName(int mappingId)
+        {
+            // Get the UserMapping by MappingId
+            var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
+
+            
+            if (userMapping == null)
+                return string.Empty;
+
+            // Get the UserProfile by ProfileId from UserMapping
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
+            if (userProfile == null)
+                return string.Empty;
+
+            // Get the RankName from MRanks using rank id from UserProfile
+            var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
+            string rankName = rank != null ? rank.RankName : string.Empty;
+
+            // Concatenate rankName and userName
+            return $"{rankName} {userProfile.userName}".Trim();
+        }
+
+        public async Task<bool> CheckExtensionofservice(int applicationid)
+        {
+            // Fetch the application record by applicationid
+            var application = await _context.trnApplications
+                .Where(a => a.ApplicationId == applicationid).FirstOrDefaultAsync();
+
+            if (application == null)
+                return false;
+
+            if(string.IsNullOrEmpty(application.ExtnOfService))
+                return false;
+            else
+                return true;
+
+        }
+
+
+        public async Task<bool> CheckDocumentUploaded(int ApplicationID)
+        {
+            var document = await _context.trnDocumentUpload
+                .FirstOrDefaultAsync(d => d.ApplicationId == ApplicationID);
+            return document != null;
+        }
+
+
     }
 }

@@ -11,6 +11,7 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.Extensions.Hosting.Internal;
+using System.Net.NetworkInformation;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Path = System.IO.Path;
 
@@ -23,7 +24,7 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath,bool isRejected,bool isApproved,string UserName,string IpAddress)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath,bool isRejected,bool isApproved,string UserName,string IpAddress,string Name)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
@@ -82,7 +83,7 @@ namespace Agif_V2.Helpers
 
                     document.Add(new Paragraph($"APPLICATION FORM :{formType}")
                         .SetFont(boldFont)
-                        .SetFontSize(12)
+                        .SetFontSize(12).SetMarginTop(5)
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetMarginBottom(20)
                         .SetUnderline());
@@ -126,19 +127,14 @@ namespace Agif_V2.Helpers
                     AddRow("3.Old Army No",common.OldNumber, "4.Rank", common.DdlRank);
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
-                    AddRow("9. Mobile No", common.MobileNo, "10. Email", common.Email);
+                    AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email);
                     AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.pcda_pao);
-                    AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN CARD", common.PanCardNo);
-                    AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. PRESENT UNIT", common.PresentUnit);
-                    AddRow("17. Unit PIN", common.PresentUnitPin, "18. UNIT Address", common.ArmyPostOffice);
-
-                    AddRow("15. District", common.Distt, "16. State", common.State);
-
-                    AddRow("17. Village/Town", common.Vill_Town, "18. Regt/Corps", common.RegtCorps);
-
-                    AddRow("19. Fmn HQ", common.NextFmnHQ, "20. Date Of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
-
-                    AddRow("21. Permt Home Address", common.Vill_Town, common.PostOffice, common.Distt + " " + common.State + " " + common.Code);
+                    AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN Card", common.PanCardNo);
+                    AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);
+                    AddRow("17. Present Unit", common.PresentUnit, "18.Unit Pin", common.PresentUnitPin);
+                    AddRow("19. UNIT Address", common.ArmyPostOffice,"20. Civil Postal Address", common.CivilPostalAddress);
+                    AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date Of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
+                    AddRow("23.Permt Home Address", common.Vill_Town +", "+common.PostOffice+", "+common.Distt+", "+common.State+", "+common.Code,"","");
 
 
 
@@ -176,30 +172,30 @@ namespace Agif_V2.Helpers
                             hbaTable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
                         }
 
-                        AddLoanRow("22. Property Address", hba.PropertyAddress, "", "");
+                        AddLoanRow("24. Property Address", hba.PropertyAddress, "25.Property Type", hba.PropertyType);
 
-                        AddLoanRow("23. Property Cost", hba.PropertyCost.ToString(), "24. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
-
-
-                        AddLoanRow("25. No Of EMI (In Months)", hba.HBA_LoanFreq.ToString(), "26.Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("26. Property Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
 
 
-                        AddLoanRow("27. Bank IFSC Code", common.IfsCode, "28.Property Type", hba.PropertyType);
+                        AddLoanRow("28. No of EMI (In Months)", hba.HBA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
+
+
+                        AddLoanRow("30. Bank IFSC Code", common.IfsCode,"","");
 
                       
 
                         document.Add(hbaTable);
                         PdfFont regularFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-                        Paragraph para28 = new Paragraph("29.I have read the Terms & Conditions, Instructions and Rules regulating the grant of House Building Advance to AGIF members and agree to abide by them. I agree to pay the one time non-refundable insurance premium. I shall refund in one lump sum the full loan amount together with interest outstanding, in case, I wish to sell the house/flat or transfer the house/flat by way of gift deed.")
+                        Paragraph para28 = new Paragraph("31.  I have read the Terms & Conditions, Instructions and Rules regulating the grant of House Building Advance to AGIF members and agree to abide by them. I agree to pay the one time non-refundable insurance premium. I shall refund in one lump sum the full loan amount together with interest outstanding, in case, I wish to sell the house/flat or transfer the house/flat by way of gift deed.")
                         .SetFont(regularFont)
                         .SetFontSize(10)
-                        .SetMarginTop(10)
+                        .SetMarginTop(10).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetMarginBottom(5);
                         document.Add(para28);
                         document.Add(new Paragraph("\n"));
 
                         // Section 29
-                        Paragraph para29 = new Paragraph("30. I state and certify that:-")
+                        Paragraph para29 = new Paragraph("32. I state and certify that:-")
                             .SetFont(regularFont)
                             .SetFontSize(10)
                             .SetMarginTop(10)
@@ -211,12 +207,15 @@ namespace Agif_V2.Helpers
                      "(b) I will maintain adequate credit in my IRLA to meet EMI payment during the duration and till complete repayment of loan. In case of any debit balance resulting in non-remittance of EMI by the CDA (O) / PAO (OR) to AGIF, I undertake to pay it directly along with interest for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, as levied by the AGIF for the delayed period.",
                      "(c) In the event of my becoming non-effective due to any reason like retirement / dismissal / premature retirement / death preceding retirement etc, the AGIF shall be entitled to recover through the PAO (OR) / CDA(O) and/or receive the balance of the loan with interest remaining unpaid and any other dues from the whole or any specified part of the gratuity, Insurance / Disability / Maturity / survival benefit of AGIF, death benefits,AFPP Fund, DSOP Fund, DCRG, Commuted value of pension, leave encashment, service pension, that may be payable to me, without any demur from any quarter.",
                      "(d) I hereby voluntarily authorize CDA(O) / PAO(OR) to deduct EMI on account of HBA taken from the AGIF from my pay and allowances on a monthly basis and remit the same to AGIF on my behalf. I hereby assign and transfer upto the AGIF the House by way of security for the said loan and the interest thereon. ",                     
-                     "(e) I will inform AGIF about any change in mu present as well as permanent address/change in employement/release/disacharge/premature retirement and change in mobile number/Email.",
-                     "(f) I will allow any person/agency authorised by Agif to have free access to the property for the purpose of inspecting the progress of construction and the accounts of consturuction to ensure utillisation of the AGIF loan.",
-                     "(g) I will depost the Title-dead/Sale deed/Conveyance Deed/Gift Deed/Partition Deed/Settlement Deed/Relinquish Deed/Transfer Deed with AGIF within 60 days from date of purchase(Date of possession in case of construction linked plan) of house/Flat being purchased by me with an intent to create an intent to create an equitable mortgage. In case, if I fail to deposit title deed by date mentioned above. I will be liable to pay additional 2% interest.",
-                     "(h) I understand and confirm that equitable mortage deed(EMD) will be created over the said property in favour of AGIF as security for the due repayment of all advances by AGIF to me in the loan account and for all my indebtedness and liablities whatsover to AGIF together with interest, costs, charges and expeneses thereon.I hereby agress to execute at my own costs in favour of tehe AGIF whenever requested by the AGIF to do, a registred mortgage over the said property in such form and with such powers of sale etc, as the AGIF may require for securing the above loan accounts.",
-                     "(i) In case of any dispute arising with regards to the rules, agreements and deeds executed there under, I am bound to the jurisdiction of Delhi Courts only.",
-                                };
+                     "(e) I will inform AGIF about any change in my present as well as permanent address/change in employement/release/disacharge/premature retirement and change in mobile number/Email.",
+                     "(f) I will allow any person/agency authorised by AGIF to have free access to the property for the purpose of inspecting the progress of construction and the accounts of consturuction to ensure utilisation of the AGIF loan.",
+                     "(g) I will depost the Title-Deed/Sale Deed/Conveyance Deed/Gift Deed/Partition Deed/Settlement Deed/Relinquish Deed/Transfer Deed with AGIF within 60 days from date of purchase(Date of possession in case of construction linked plan) of house/Flat being purchased by me with an intent to create an equitable mortgage. In case, if I fail to deposit title deed by date mentioned above. I will be liable to pay additional 2% interest.",
+                     "(h) I understand and confirm that equitable mortage deed(EMD) will be created over the said property in favour of AGIF as security for the due repayment of all advances by AGIF to me in the loan account and for all my indebtedness and liablities whatsover to AGIF together with interest, costs, charges and expeneses thereon.I hereby agress to execute at my own costs in favour of the AGIF whenever requested by the AGIF to do, a registred mortgage over the said property in such form and with such powers of sale etc, as the AGIF may require for securing the above loan accounts.",
+                     "(j) In case of any dispute arising with regards to the rules, agreements and deeds executed there under, I am bound to the jurisdiction of Delhi Courts only.",
+                                
+                        
+                        
+                        };
 
                         foreach (var point in checkPara)
                         {
@@ -592,7 +591,7 @@ namespace Agif_V2.Helpers
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.DdlRank).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(Name).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + common.MobileNo).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
@@ -610,7 +609,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 225);
                             document.Add(icon);
                         }
 
@@ -619,7 +618,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 500, 475);
                             document.Add(icon);
                         }
 

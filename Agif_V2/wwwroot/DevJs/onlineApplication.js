@@ -2058,3 +2058,92 @@ function validateEMIForRepayingCapacity(prefix) {
 
     return true;
 }
+//$("#dateOfBirth").datepicker({
+//    dateFormat: "dd-mm-yy",
+//    showAnim: "clip",
+//    duration: 400,
+//    changeMonth: true,
+//    changeYear: true,
+//    yearRange: "1900:" + new Date().getFullYear(),
+//    maxDate: new Date(), // Can't select future dates for DOB
+//    onSelect: function (dateText, inst) {
+//        // Convert to YYYY-MM-DD format for your backend
+//        var dateParts = dateText.split('-');
+//        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+
+//        // Store both formats
+//        $(this).data('formatted-date', formattedDate);
+
+//        // Trigger the original onchange event
+//        SetRetDate();
+//    },
+//    beforeShow: function (input, inst) {
+//        // Add clip animation class
+//        setTimeout(function () {
+//            $('#ui-datepicker-div').addClass('clip-animation');
+//        }, 10);
+//    }
+//});
+
+//// Handle manual typing with format validation and conversion
+//$("#dateOfBirth").on('blur keyup', function (e) {
+//    var inputValue = $(this).val().trim();
+//    if (inputValue === '') return;
+
+//    var isValidDate = false;
+//    var formattedDate = '';
+
+//    // Check different date formats
+//    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+//        // DD/MM/YYYY format
+//        var parts = inputValue.split('-');
+//        if (isValidDateParts(parts[0], parts[1], parts[2])) {
+//            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+//            isValidDate = true;
+//        }
+//    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+//        // YYYY-MM-DD format
+//        var parts = inputValue.split('-');
+//        if (isValidDateParts(parts[2], parts[1], parts[0])) {
+//            formattedDate = inputValue;
+//            // Convert display to DD/MM/YYYY
+//            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
+//            isValidDate = true;
+//        }
+//    } else if (inputValue.match(/^\d{8}$/)) {
+//        // DDMMYYYY format
+//        var day = inputValue.substr(0, 2);
+//        var month = inputValue.substr(2, 2);
+//        var year = inputValue.substr(4, 4);
+//        if (isValidDateParts(day, month, year)) {
+//            $(this).val(day + '-' + month + '-' + year);
+//            formattedDate = year + '-' + month + '-' + day;
+//            isValidDate = true;
+//        }
+//    }
+
+//    if (isValidDate) {
+//        $(this).data('formatted-date', formattedDate);
+//        $('#dobValidation').text('');
+//        $(this).removeClass('is-invalid').addClass('is-valid');
+
+//        // Trigger SetRetDate if Enter key or blur
+//        if (e.type === 'blur' || e.keyCode === 13) {
+//            SetRetDate();
+//        }
+//    } else if (inputValue !== '') {
+//        $('#dobValidation').text('Please enter a valid date (DD/MM/YYYY)');
+//        $(this).removeClass('is-valid').addClass('is-invalid');
+//    }
+//});
+        
+
+//function isValidDateParts(day, month, year) {
+//    var date = new Date(year, month - 1, day);
+//    return date.getFullYear() == year &&
+//        date.getMonth() == month - 1 &&
+//        date.getDate() == day &&
+//        year >= 1900 &&
+//        year <= new Date().getFullYear() &&
+//        date <= new Date(); // Can't be future date for DOB
+//}

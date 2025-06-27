@@ -7,6 +7,7 @@
     string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "CA";
     int applicationId = Convert.ToInt32(TempData["applicationId"]);
     var message = TempData["Message"] ?? string.Empty;
+    var IsExtension = TempData["IsextensionOfService"] ?? false;
 }
 
 <div class="container mt-5">
@@ -427,6 +428,9 @@
             </div>
         </div>
     </div>
+
+    <input type="hidden" id="isExtension" value="@IsExtension.ToString().ToLower()" />
+
 </div>
 
 <style>

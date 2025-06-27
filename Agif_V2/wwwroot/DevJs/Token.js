@@ -4,7 +4,7 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid,btntoshow) {
 
     try {
         //const response = await fetch("https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
-        const response = await fetch("http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
+       const response = await fetch("http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
             method: "GET",
             cache: "no-cache",
             headers: {

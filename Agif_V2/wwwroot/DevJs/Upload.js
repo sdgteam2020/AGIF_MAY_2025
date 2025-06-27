@@ -151,10 +151,50 @@
 });
 
 
+//function checkUploadFiles() {
+//    const formType = $('#hiddenFormType').val();
+//    const $uploadBtn = $('#uploadBtn');
+
+//    const requiredFields = {
+//        'CA': ['CancelledCheque', 'PaySlipPdf', 'QuotationPdf', 'DrivingLicensePdf'],
+//        'PCA': ['CancelledCheque', 'PaySlipPdf', 'QuotationPdf'],
+//        'HBA': ['CancelledCheque', 'PaySlipPdf']
+//    };
+
+//    function checkAllRequiredFiles() {
+//        const required = requiredFields[formType] || [];
+//        let allFilled = true;
+//        let IsExtension = $('#isExtension').val();
+
+//        required.forEach(function (fieldId) {
+//            const $fileInput = $('#' + fieldId);
+//            if ($fileInput.length && (!$fileInput[0].files || $fileInput[0].files.length === 0)) {
+//                allFilled = false;
+//            }
+//        });
+
+//        if (IsExtension === 'true') {
+//            const $serviceExtnField = $('#SeviceExtnPdf');
+//            if ($serviceExtnField.length && (!$serviceExtnField[0].files || $serviceExtnField[0].files.length === 0)) {
+//                allFilled = false;
+//            }
+//        }
+//        $uploadBtn.prop('disabled', !allFilled);
+//        if (allFilled) {
+//            $uploadBtn.removeClass('btn-secondary').addClass('btn-success');
+//        } else {
+//            $uploadBtn.removeClass('btn-success').addClass('btn-secondary');
+//        }
+//    }
+//    $('input[type="file"]').on('change', checkAllRequiredFiles);
+
+//    // Initial check
+//    checkAllRequiredFiles();
+//}
+
 function checkUploadFiles() {
     const formType = $('#hiddenFormType').val();
     const $uploadBtn = $('#uploadBtn');
-
     const requiredFields = {
         'CA': ['CancelledCheque', 'PaySlipPdf', 'QuotationPdf', 'DrivingLicensePdf'],
         'PCA': ['CancelledCheque', 'PaySlipPdf', 'QuotationPdf'],
@@ -164,12 +204,36 @@ function checkUploadFiles() {
     function checkAllRequiredFiles() {
         const required = requiredFields[formType] || [];
         let allFilled = true;
+        let IsExtension = $('#isExtension').val() === 'true';
+
         required.forEach(function (fieldId) {
             const $fileInput = $('#' + fieldId);
             if ($fileInput.length && (!$fileInput[0].files || $fileInput[0].files.length === 0)) {
                 allFilled = false;
             }
         });
+
+        // Handle Service Extension field based on IsExtension
+        const $serviceExtnField = $('#SeviceExtnPdf');
+
+        if (IsExtension) {
+            // If extension is true: enable field and make it mandatory
+            $serviceExtnField.prop('disabled', false);
+            $serviceExtnField.prop('required', true);
+
+            // Check if Service Extension file is uploaded
+            if ($serviceExtnField.length && (!$serviceExtnField[0].files || $serviceExtnField[0].files.length === 0)) {
+                allFilled = false;
+            }
+        } else {
+            // If extension is false: disable field and make it not required
+            $serviceExtnField.prop('disabled', true);
+            $serviceExtnField.prop('required', false);
+            // Clear the file input if disabled
+            $serviceExtnField.val('');
+        }
+
+        // Update upload button state
         $uploadBtn.prop('disabled', !allFilled);
         if (allFilled) {
             $uploadBtn.removeClass('btn-secondary').addClass('btn-success');
@@ -177,9 +241,10 @@ function checkUploadFiles() {
             $uploadBtn.removeClass('btn-success').addClass('btn-secondary');
         }
     }
+
+    // Bind change event to all file inputs
     $('input[type="file"]').on('change', checkAllRequiredFiles);
 
     // Initial check
     checkAllRequiredFiles();
 }
-
