@@ -166,26 +166,23 @@
     }
 
     @@keyframes clipIn {
-        0%
+        0% {
+            clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+            opacity: 0;
+            transform: scale(0.8);
+        }
 
-    {
-        clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
-        opacity: 0;
-        transform: scale(0.8);
-    }
+        50% {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            opacity: 0.7;
+            transform: scale(0.9);
+        }
 
-    50% {
-        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-        opacity: 0.7;
-        transform: scale(0.9);
-    }
-
-    100% {
-        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-        opacity: 1;
-        transform: scale(1);
-    }
-
+        100% {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            opacity: 1;
+            transform: scale(1);
+        }
     }
 </style>
 
@@ -351,8 +348,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("yyyy-MM-dd")"
-                                               required style="caret-color: transparent;" onchange="SetRetDate()">
+                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("yyyy-MM-dd")"
+                                               required oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
@@ -363,8 +360,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission" style="caret-color: transparent;"
-                                               required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" onchange="calculateYearDifference();SetRetDate()">
+                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"
+                                               required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>
@@ -402,8 +399,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled style="caret-color: transparent;"
-                                               onchange="updateRetDateOnPromotionDateSelection()">
+                                        <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled"
+                                               oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
@@ -772,7 +769,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗓️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" onchange="Validate_Salary_Slip_date(this)">
+                                        <input type="text" class="form-control Payslippicker" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="Validate_Salary_Slip_date(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Monthly Pay Slip</label>
                                     </div>
                                 </div>
@@ -1319,7 +1316,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📆</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control" required value="@Model.CarApplication?.Validity_Date_DL" />
+                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control LicencePicker" required value="@Model.CarApplication?.Validity_Date_DL" oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off" />
                                                 <label class="form-label select-label ">Validity Date of Driving License No</label>
                                             </div>
                                         </div>
@@ -1606,8 +1603,6 @@
             { id: 'ifsCode', value: 'HDFC0001234' },
             { id: 'nameOfBank', value: 'HDFC Bank' },
             { id: 'nameOfBankBranch', value: 'HDFC Main Branch' },
-            { id: 'monthlyPaySlip', value: '2025-06-01' },
-
             { id: 'basicPay', value: '50000' },
             { id: 'dsop_afpp', value: '1500' },
             { id: 'rank_gradePay', value: '2000' },
@@ -1699,7 +1694,6 @@
                 { id: 'CA_approxEMIAmount', value: '14000' },
                 { id: 'CA_approxDisbursementAmt', value: '480000' },
                 { id: 'drivingLicenseNo', value: 'DL1234567890' },
-                { id: 'validity_Date_DL', value: '2030-12-31' },
                 { id: 'DL_IssuingAuth', value: 'RTO City' }
             ];
 

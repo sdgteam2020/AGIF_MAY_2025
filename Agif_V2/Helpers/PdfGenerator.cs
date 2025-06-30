@@ -83,7 +83,7 @@ namespace Agif_V2.Helpers
 
                     document.Add(new Paragraph($"APPLICATION FORM :{formType}")
                         .SetFont(boldFont)
-                        .SetFontSize(12).SetMarginTop(5)
+                        .SetFontSize(12).SetMarginTop(0)
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetMarginBottom(20)
                         .SetUnderline());
@@ -131,12 +131,14 @@ namespace Agif_V2.Helpers
                     AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.pcda_pao);
                     AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN Card", common.PanCardNo);
                     AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);
-                    AddRow("17. Present Unit", common.PresentUnit, "18.Unit Pin", common.PresentUnitPin);
-                    AddRow("19. UNIT Address", common.ArmyPostOffice,"20. Civil Postal Address", common.CivilPostalAddress);
-                    AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date Of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
-                    AddRow("23.Permt Home Address", common.Vill_Town +", "+common.PostOffice+", "+common.Distt+", "+common.State+", "+common.Code,"","");
+                    AddRow("17. Present Unit", common.PresentUnit, "18.Unit PIN", common.PresentUnitPin);
+                    AddRow("19. Unit Address", common.ArmyPostOffice,"20. Civil Postal Address", common.CivilPostalAddress);
+                    AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
+                   // AddRow("23.Permt Home Address", common.Vill_Town +", "+common.PostOffice+", "+common.Distt+", "+common.State+", "+common.Code,"","");
 
-
+                    table.AddCell(new Cell(1, 4).Add(new Paragraph("23. Permt Home Address: "+(common.Vill_Town ?? "") + ", " +(common.PostOffice ?? "") + ", " +(common.Distt ?? "") + ", " +
+                       (common.State ?? "") + ", " +
+                       (common.Code ?? "")).SetFont(normalFont).SetFontSize(smallFontSize)).SetBorderTop(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER));
 
                     //AddRow("22. Property Address", common.NextFmnHQ, "20. Date Of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
 
@@ -174,7 +176,7 @@ namespace Agif_V2.Helpers
 
                         AddLoanRow("24. Property Address", hba.PropertyAddress, "25.Property Type", hba.PropertyType);
 
-                        AddLoanRow("26. Est Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
+                        AddLoanRow("26. Estimated Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
 
 
                         AddLoanRow("28. No of EMI (In Months)", hba.HBA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
@@ -198,7 +200,7 @@ namespace Agif_V2.Helpers
                         Paragraph para29 = new Paragraph("32. I state and certify that:-")
                             .SetFont(regularFont)
                             .SetFontSize(10)
-                            .SetMarginTop(10)
+                            .SetMarginTop(4)
                             .SetMarginBottom(5);
                         document.Add(para29);
 

@@ -516,6 +516,322 @@ function calculateYearDifference() {
     return years;
 }
 const globleRetirementDate = {};
+
+$('.monthPicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'dd/mm/yy',
+    maxDate: 0, // This restricts to today and past dates only (no future dates)
+    yearRange: "1900:+0", // Allow years from 1900 to current year only
+    defaultDate: null, // Default to today
+    //onClose: function (dateText, inst) {
+    //    // Check if the element and required properties exist before proceeding
+    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
+    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //        $(this).val(formattedDate);
+    //    }
+    //},
+    //onSelect: function (dateText, inst) {
+    //    // Format the selected date properly
+    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //    $(this).val(formattedDate);
+
+
+    //},
+    //onSelect: function () {
+    //    var dt = $('#dateOfBirth').val();
+    //    var newdt = new Date(my_date(dt));
+    //    newdt.setFullYear(newdt.getFullYear() + 18);
+    //},
+    onSelect: function (dateText, inst) {
+        // Get the selected date from the input field
+        var dt = $('#dateOfBirth').val();
+
+        // Call the custom functions on select
+        formatDate(this); // Ensure the function formats the date
+        validateDateFormat(this); // Ensure validation is handled 
+
+        // Calculate new date by adding 18 years
+        var newdt = new Date(my_date(dt));
+        newdt.setFullYear(newdt.getFullYear() + 18);
+
+        // Optional: Set the calculated date back to the field or use as needed
+
+    },
+    beforeShowDay: function (date) {
+        // Additional check to disable future dates
+        var today = new Date();
+        today.setHours(23, 59, 59, 999); // Set to end of today
+        return [date <= today];
+    }
+});
+
+$('.DocPicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'dd/mm/yy',
+    maxDate: 0, // This restricts to today and past dates only (no future dates)
+    yearRange: "1900:+0", // Allow years from 1900 to current year only
+    defaultDate: null, // Default to today
+    //onClose: function (dateText, inst) {
+    //    // Check if the element and required properties exist before proceeding
+    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
+    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //        $(this).val(formattedDate);
+    //    }
+    //},
+    //onSelect: function (dateText, inst) {
+    //    // Format the selected date properly
+    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //    $(this).val(formattedDate);
+
+
+    //},
+    //onSelect: function () {
+    //    var dt = $('#dateOfCommission').val();
+    //    var newdt = new Date(my_date(dt));
+    //    newdt.setFullYear(newdt.getFullYear() + 18);
+    //}
+
+
+       onSelect: function (dateText, inst) {
+        // Get the selected date from the input field
+        var dt = $('#dateOfCommission').val();
+
+        // Call the custom functions on select
+        formatDate(this); // Ensure the function formats the date
+        validateDateFormat(this); // Ensure validation is handled
+        calculateYearDifference(); // Calculate the year difference (if needed)
+
+        // Calculate new date by adding 18 years
+        var newdt = new Date(my_date(dt));
+        newdt.setFullYear(newdt.getFullYear() + 18);
+
+        // Optional: Set the calculated date back to the field or use as needed
+      
+    }
+    //beforeShowDay: function (date) {
+    //    // Additional check to disable future dates
+    //    var today = new Date();
+    //    today.setHours(23, 59, 59, 999); // Set to end of today
+    //    return [date <= today];
+    //}
+});
+
+$('.DopPicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'dd/mm/yy',
+    yearRange: "1900:2100", // Allow years from 1900 to current year only
+    defaultDate: null, // Default to today
+    //onClose: function (dateText, inst) {
+    //    // Check if the element and required properties exist before proceeding
+    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
+    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //        $(this).val(formattedDate);
+    //    }
+    //},
+    //onSelect: function (dateText, inst) {
+    //    // Format the selected date properly
+    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //    $(this).val(formattedDate);
+
+
+    //},
+    //onSelect: function () {
+    //    var dt = $('#dateOfPromotion').val();
+    //    var newdt = new Date(my_date(dt));
+    //    newdt.setFullYear(newdt.getFullYear() + 18);
+    //}
+    onSelect: function (dateText, inst) {
+        // Get the selected date from the input field
+        var dt = $('#dateOfPromotion').val();
+
+        // Call the custom functions on select
+        formatDate(this); // Ensure the function formats the date
+        updateRetDateOnPromotionDateSelection(); // Calculate the year difference (if needed)
+
+        // Calculate new date by adding 18 years
+        var newdt = new Date(my_date(dt));
+        newdt.setFullYear(newdt.getFullYear() + 18);
+
+        // Optional: Set the calculated date back to the field or use as needed
+
+    }
+    //beforeShowDay: function (date) {
+    //    // Additional check to disable future dates
+    //    var today = new Date();
+    //    today.setHours(23, 59, 59, 999); // Set to end of today
+    //    return [date <= today];
+    //}
+});
+
+$('.Payslippicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'dd/mm/yy',
+    yearRange: "1900:2100", // Allow years from 1900 to current year only
+    defaultDate: null, // Default to today
+    //onClose: function (dateText, inst) {
+    //    // Check if the element and required properties exist before proceeding
+    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
+    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //        $(this).val(formattedDate);
+    //    }
+    //},
+    //onSelect: function (dateText, inst) {
+    //    // Format the selected date properly
+    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
+    //    $(this).val(formattedDate);
+
+
+    //},
+    //onSelect: function () {
+    //    var dt = $('#dateOfPromotion').val();
+    //    var newdt = new Date(my_date(dt));
+    //    newdt.setFullYear(newdt.getFullYear() + 18);
+    //}
+    onSelect: function (dateText, inst) {
+        // Get the selected date from the input field
+        var dt = $('#monthlyPaySlip').val();
+
+        // Call the custom functions on select
+        formatDate(this); // Ensure the function formats the date
+        Validate_Salary_Slip_date(this); // Calculate the year difference (if needed)
+
+        // Calculate new date by adding 18 years
+        var newdt = new Date(my_date(dt));
+        newdt.setFullYear(newdt.getFullYear() + 18);
+
+        // Optional: Set the calculated date back to the field or use as needed
+
+    }
+    //beforeShowDay: function (date) {
+    //    // Additional check to disable future dates
+    //    var today = new Date();
+    //    today.setHours(23, 59, 59, 999); // Set to end of today
+    //    return [date <= today];
+    //}
+});
+
+$('.LicencePicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showButtonPanel: true,
+    dateFormat: 'dd/mm/yy',
+    yearRange: "1900:2100", 
+    defaultDate: null, // Default to today
+    
+    onSelect: function (dateText, inst) {
+        // Get the selected date from the input field
+        var dt = $('#validity_Date_DL').val();
+
+        // Call the custom functions on select
+        formatDate(this); // Ensure the function formats the date
+
+        // Calculate new date by adding 18 years
+        var newdt = new Date(my_date(dt));
+        newdt.setFullYear(newdt.getFullYear() + 18);
+
+    }
+
+});
+function formatDate(input) {
+    // Get the current value and remove any non-numeric characters except existing slashes
+    let value = input.value.replace(/[^\d]/g, '');
+
+    // Store cursor position
+    let cursorPosition = input.selectionStart;
+    let oldLength = input.value.length;
+
+    // Format the value with slashes
+    if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2);
+    }
+    if (value.length >= 5) {
+        value = value.substring(0, 5) + '/' + value.substring(5);
+    }
+
+    // Limit to 10 characters (dd/mm/yyyy)
+    if (value.length > 10) {
+        value = value.substring(0, 10);
+    }
+
+    // Update the input value
+    input.value = value;
+
+    // Adjust cursor position
+    let newLength = input.value.length;
+    if (newLength > oldLength) {
+        cursorPosition++;
+    }
+
+    // Set cursor position
+    input.setSelectionRange(cursorPosition, cursorPosition);
+}
+
+function formatDateToString(date) {
+    var day = ("0" + date.getDate()).slice(-2);
+    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+    var year = date.getFullYear();
+    return day + "/" + month + "/" + year;
+}
+
+function validateDateFormat(input) {
+    const value = input.value;
+    const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
+
+    // Check if the value matches the date format
+    if (value && !datePattern.test(value)) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid date",
+            text: "Invalid date format. Please select a valid date.",
+        });
+        input.focus();
+        input.value = ""; // Clear the invalid input
+        return;
+    }
+
+    // Additional validation to check date validity and reasonable year range
+    if (value && datePattern.test(value)) {
+        const parts = value.split('/');
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+        const year = parseInt(parts[2], 10);
+
+        // Check for reasonable year range (e.g., 1900 to current year)
+        const currentYear = new Date().getFullYear();
+        if (year < 1900 || year > currentYear) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid year",
+                text: `Please enter a year between 1900 and ${currentYear}.`,
+            });
+            input.focus();
+            input.value = ""; // Clear the invalid input
+            return;
+        }
+
+        // Check if it's a valid date
+       
+    }
+
+    SetRetDate();
+}
+
+function my_date(date_string) {
+    var date_components = date_string.split("/");
+    var day = date_components[0];
+    var month = date_components[1];
+    var year = date_components[2];
+    return new Date(year, month - 1, day);
+}
+
 function SetRetDate() {
     var Prefix = $('#armyPrefix').val();
     var ranks = $('#ddlrank').val();
@@ -557,7 +873,7 @@ function SetRetDate() {
     }
 
     var dateOfBirthString = $('#dateOfBirth').val();
-    var dateParts = dateOfBirthString.split('-');
+    var dateParts = dateOfBirthString.split('/');
     if (dateParts.length === 3) {
         if (EnrollDate == "" || EnrollDate == undefined || dateOfBirthString == "" || dateOfBirthString == undefined) {
             console.log('EnrollDate or dateOfBirthString is empty or undefined.')
@@ -571,7 +887,7 @@ function SetRetDate() {
                     if (data.userTypeId == 1) {
                         //userTypeId == 1 => Officers
                         var dateOfBirth = $('#dateOfBirth').val();
-                        var dateParts = dateOfBirth.split('-');
+                        var dateParts = dateOfBirth.split('/');
                         if (data != 0 && dateParts.length == 3) {
                             var year = dateParts[2];
                             var month = dateParts[1] - 1;
@@ -595,7 +911,7 @@ function SetRetDate() {
                     else if (data.userTypeId == 2) {
                         //userTypeId == 2 => Short Service Officers
                         var dateOfCommission = $('#dateOfCommission').val();
-                        var dateParts = dateOfCommission.split('-');
+                        var dateParts = dateOfCommission.split('/');
                         if (data != 0 && dateParts.length == 3) {
                             var year = dateParts[2];
                             var month = dateParts[1] - 1;
@@ -624,7 +940,7 @@ function SetRetDate() {
                         }
                         if (rankType == 31 || rankType == 32 || rankType == 33) {
                             var dateOfBirth = $('#dateOfBirth').val();
-                            var dateParts = dateOfBirth.split('-');
+                            var dateParts = dateOfBirth.split('/');
                             if (data != 0 && dateParts.length == 3) {
                                 var year = dateParts[2];
                                 var month = dateParts[1] - 1;
@@ -648,7 +964,7 @@ function SetRetDate() {
                         }
                         else {
                             var dateOfCommission = $('#dateOfCommission').val();
-                            var dateParts = dateOfCommission.split('-');
+                            var dateParts = dateOfCommission.split('/');
                             if (data != 0 && dateParts.length == 3) {
                                 var year = dateParts[2];
                                 var month = dateParts[1] - 1;
@@ -752,11 +1068,11 @@ function updateRetDateOnPromotionDateSelection() {
         alert("Please select the Date of Promotion.");
         return;
     }
-    var dateParts = promotionDate.split('-');
+    var dateParts = promotionDate.split('/');
     if (dateParts.length === 3) {
-        var year = dateParts[0];
+        var year = dateParts[2];
         var month = dateParts[1] - 1;
-        var day = dateParts[2];
+        var day = dateParts[0];
 
         var dob = new Date(year, month, day);
         dob.setFullYear(dob.getFullYear() + 4);
@@ -2062,172 +2378,172 @@ function validateEMIForRepayingCapacity(prefix) {
 
     return true;
 }
-$("#dateOfBirth").datepicker({
-    dateFormat: "dd-mm-yy",
-    showAnim: "clip",
-    duration: 400,
-    changeMonth: true,
-    changeYear: true,
-    yearRange: "1900:" + new Date().getFullYear(),
-    maxDate: new Date(), // Can't select future dates for DOB
-    onSelect: function (dateText, inst) {
-        // Convert to YYYY-MM-DD format for your backend
-        var dateParts = dateText.split('-');
-        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
+//$("#dateOfBirth").datepicker({
+//    dateFormat: "dd-mm-yy",
+//    showAnim: "clip",
+//    duration: 400,
+//    changeMonth: true,
+//    changeYear: true,
+//    yearRange: "1900:" + new Date().getFullYear(),
+//    maxDate: new Date(), // Can't select future dates for DOB
+//    onSelect: function (dateText, inst) {
+//        // Convert to YYYY-MM-DD format for your backend
+//        var dateParts = dateText.split('-');
+//        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
 
-        // Store both formats
-        $(this).data('formatted-date', formattedDate);
+//        // Store both formats
+//        $(this).data('formatted-date', formattedDate);
 
-        // Trigger the original onchange event
-        SetRetDate();
-    },
-    beforeShow: function (input, inst) {
-        // Add clip animation class
-        setTimeout(function () {
-            $('#ui-datepicker-div').addClass('clip-animation');
-        }, 10);
-    }
-});
-
-
-$("#dateOfCommission").datepicker({
-    dateFormat: "dd-mm-yy",
-    showAnim: "clip",
-    duration: 400,
-    changeMonth: true,
-    changeYear: true,
-    yearRange: "1900:" + new Date().getFullYear(),
-    maxDate: new Date(), // Can't select future dates for DOB
-    onSelect: function (dateText, inst) {
-        // Convert to YYYY-MM-DD format for your backend
-        var dateParts = dateText.split('-');
-        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-
-        // Store both formats
-        $(this).data('formatted-date', formattedDate);
-
-        // Trigger the original onchange event
-        SetRetDate();
-    },
-    beforeShow: function (input, inst) {
-        // Add clip animation class
-        setTimeout(function () {
-            $('#ui-datepicker-div').addClass('clip-animation');
-        }, 10);
-    }
-});
-
-$("#dateOfCommission").on('blur keyup', function (e) {
-    var inputValue = $(this).val().trim();
-    if (inputValue === '') return;
-
-    var isValidDate = false;
-    var formattedDate = '';
-
-    // Check different date formats
-    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
-        // DD/MM/YYYY format
-        var parts = inputValue.split('-');
-        if (isValidDateParts(parts[0], parts[1], parts[2])) {
-            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
-            isValidDate = true;
-        }
-    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        // YYYY-MM-DD format
-        var parts = inputValue.split('-');
-        if (isValidDateParts(parts[2], parts[1], parts[0])) {
-            formattedDate = inputValue;
-            // Convert display to DD/MM/YYYY
-            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
-            isValidDate = true;
-        }
-    } else if (inputValue.match(/^\d{8}$/)) {
-        // DDMMYYYY format
-        var day = inputValue.substr(0, 2);
-        var month = inputValue.substr(2, 2);
-        var year = inputValue.substr(4, 4);
-        if (isValidDateParts(day, month, year)) {
-            $(this).val(day + '-' + month + '-' + year);
-            formattedDate = year + '-' + month + '-' + day;
-            isValidDate = true;
-        }
-    }
-
-    if (isValidDate) {
-        $(this).data('formatted-date', formattedDate);
-        $('#DocValidation').text('');
-        $(this).removeClass('is-invalid').addClass('is-valid');
-
-        // Trigger SetRetDate if Enter key or blur
-        if (e.type === 'blur' || e.keyCode === 13) {
-            SetRetDate();
-        }
-    } else if (inputValue !== '') {
-        $('#DocValidation').text('Please enter a valid date (DD/MM/YYYY)');
-        $(this).removeClass('is-valid').addClass('is-invalid');
-    }
-});
+//        // Trigger the original onchange event
+//        SetRetDate();
+//    },
+//    beforeShow: function (input, inst) {
+//        // Add clip animation class
+//        setTimeout(function () {
+//            $('#ui-datepicker-div').addClass('clip-animation');
+//        }, 10);
+//    }
+//});
 
 
-// Handle manual typing with format validation and conversion
-$("#dateOfBirth").on('blur keyup', function (e) {
-    var inputValue = $(this).val().trim();
-    if (inputValue === '') return;
+//$("#dateOfCommission").datepicker({
+//    dateFormat: "dd-mm-yy",
+//    showAnim: "clip",
+//    duration: 400,
+//    changeMonth: true,
+//    changeYear: true,
+//    yearRange: "1900:" + new Date().getFullYear(),
+//    maxDate: new Date(), // Can't select future dates for DOB
+//    onSelect: function (dateText, inst) {
+//        // Convert to YYYY-MM-DD format for your backend
+//        var dateParts = dateText.split('-');
+//        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
 
-    var isValidDate = false;
-    var formattedDate = '';
+//        // Store both formats
+//        $(this).data('formatted-date', formattedDate);
 
-    // Check different date formats
-    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
-        // DD/MM/YYYY format
-        var parts = inputValue.split('-');
-        if (isValidDateParts(parts[0], parts[1], parts[2])) {
-            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
-            isValidDate = true;
-        }
-    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
-        // YYYY-MM-DD format
-        var parts = inputValue.split('-');
-        if (isValidDateParts(parts[2], parts[1], parts[0])) {
-            formattedDate = inputValue;
-            // Convert display to DD/MM/YYYY
-            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
-            isValidDate = true;
-        }
-    } else if (inputValue.match(/^\d{8}$/)) {
-        // DDMMYYYY format
-        var day = inputValue.substr(0, 2);
-        var month = inputValue.substr(2, 2);
-        var year = inputValue.substr(4, 4);
-        if (isValidDateParts(day, month, year)) {
-            $(this).val(day + '-' + month + '-' + year);
-            formattedDate = year + '-' + month + '-' + day;
-            isValidDate = true;
-        }
-    }
+//        // Trigger the original onchange event
+//        SetRetDate();
+//    },
+//    beforeShow: function (input, inst) {
+//        // Add clip animation class
+//        setTimeout(function () {
+//            $('#ui-datepicker-div').addClass('clip-animation');
+//        }, 10);
+//    }
+//});
 
-    if (isValidDate) {
-        $(this).data('formatted-date', formattedDate);
-        $('#dobValidation').text('');
-        $(this).removeClass('is-invalid').addClass('is-valid');
+//$("#dateOfCommission").on('blur keyup', function (e) {
+//    var inputValue = $(this).val().trim();
+//    if (inputValue === '') return;
 
-        // Trigger SetRetDate if Enter key or blur
-        if (e.type === 'blur' || e.keyCode === 13) {
-            SetRetDate();
-        }
-    } else if (inputValue !== '') {
-        $('#dobValidation').text('Please enter a valid date (DD/MM/YYYY)');
-        $(this).removeClass('is-valid').addClass('is-invalid');
-    }
-});
+//    var isValidDate = false;
+//    var formattedDate = '';
+
+//    // Check different date formats
+//    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+//        // DD/MM/YYYY format
+//        var parts = inputValue.split('-');
+//        if (isValidDateParts(parts[0], parts[1], parts[2])) {
+//            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+//            isValidDate = true;
+//        }
+//    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+//        // YYYY-MM-DD format
+//        var parts = inputValue.split('-');
+//        if (isValidDateParts(parts[2], parts[1], parts[0])) {
+//            formattedDate = inputValue;
+//            // Convert display to DD/MM/YYYY
+//            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
+//            isValidDate = true;
+//        }
+//    } else if (inputValue.match(/^\d{8}$/)) {
+//        // DDMMYYYY format
+//        var day = inputValue.substr(0, 2);
+//        var month = inputValue.substr(2, 2);
+//        var year = inputValue.substr(4, 4);
+//        if (isValidDateParts(day, month, year)) {
+//            $(this).val(day + '-' + month + '-' + year);
+//            formattedDate = year + '-' + month + '-' + day;
+//            isValidDate = true;
+//        }
+//    }
+
+//    if (isValidDate) {
+//        $(this).data('formatted-date', formattedDate);
+//        $('#DocValidation').text('');
+//        $(this).removeClass('is-invalid').addClass('is-valid');
+
+//        // Trigger SetRetDate if Enter key or blur
+//        if (e.type === 'blur' || e.keyCode === 13) {
+//            SetRetDate();
+//        }
+//    } else if (inputValue !== '') {
+//        $('#DocValidation').text('Please enter a valid date (DD/MM/YYYY)');
+//        $(this).removeClass('is-valid').addClass('is-invalid');
+//    }
+//});
+
+
+//// Handle manual typing with format validation and conversion
+//$("#dateOfBirth").on('blur keyup', function (e) {
+//    var inputValue = $(this).val().trim();
+//    if (inputValue === '') return;
+
+//    var isValidDate = false;
+//    var formattedDate = '';
+
+//    // Check different date formats
+//    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+//        // DD/MM/YYYY format
+//        var parts = inputValue.split('-');
+//        if (isValidDateParts(parts[0], parts[1], parts[2])) {
+//            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+//            isValidDate = true;
+//        }
+//    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+//        // YYYY-MM-DD format
+//        var parts = inputValue.split('-');
+//        if (isValidDateParts(parts[2], parts[1], parts[0])) {
+//            formattedDate = inputValue;
+//            // Convert display to DD/MM/YYYY
+//            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
+//            isValidDate = true;
+//        }
+//    } else if (inputValue.match(/^\d{8}$/)) {
+//        // DDMMYYYY format
+//        var day = inputValue.substr(0, 2);
+//        var month = inputValue.substr(2, 2);
+//        var year = inputValue.substr(4, 4);
+//        if (isValidDateParts(day, month, year)) {
+//            $(this).val(day + '-' + month + '-' + year);
+//            formattedDate = year + '-' + month + '-' + day;
+//            isValidDate = true;
+//        }
+//    }
+
+//    if (isValidDate) {
+//        $(this).data('formatted-date', formattedDate);
+//        $('#dobValidation').text('');
+//        $(this).removeClass('is-invalid').addClass('is-valid');
+
+//        // Trigger SetRetDate if Enter key or blur
+//        if (e.type === 'blur' || e.keyCode === 13) {
+//            SetRetDate();
+//        }
+//    } else if (inputValue !== '') {
+//        $('#dobValidation').text('Please enter a valid date (DD/MM/YYYY)');
+//        $(this).removeClass('is-valid').addClass('is-invalid');
+//    }
+//});
         
 
-function isValidDateParts(day, month, year) {
-    var date = new Date(year, month - 1, day);
-    return date.getFullYear() == year &&
-        date.getMonth() == month - 1 &&
-        date.getDate() == day &&
-        year >= 1900 &&
-        year <= new Date().getFullYear() &&
-        date <= new Date(); // Can't be future date for DOB
-}
+//function isValidDateParts(day, month, year) {
+//    var date = new Date(year, month - 1, day);
+//    return date.getFullYear() == year &&
+//        date.getMonth() == month - 1 &&
+//        date.getDate() == day &&
+//        year >= 1900 &&
+//        year <= new Date().getFullYear() &&
+//        date <= new Date(); // Can't be future date for DOB
+//}
