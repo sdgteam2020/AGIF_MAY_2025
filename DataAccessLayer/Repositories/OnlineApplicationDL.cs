@@ -531,6 +531,7 @@ namespace DataAccessLayer.Repositories
                           join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
                           join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
+
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new CommonDataonlineResponse
                           {
@@ -539,6 +540,7 @@ namespace DataAccessLayer.Repositories
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.ApplicationType,
                               ApplicationTypeName = applicationType.ApplicationTypeName,
+                              ApplicationTypeAbbr = applicationType.ApplicationTypeAbbr ?? string.Empty,
                               ArmyPrefix = common.ArmyPrefix,
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,

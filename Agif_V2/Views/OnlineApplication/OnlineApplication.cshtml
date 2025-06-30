@@ -11,7 +11,7 @@
     {
         loanTypeText = "House Loan (HBA)";
     }
-    else if (loanType == "1")
+    else if (loanType == "2")
     {
         loanTypeText = "Car/Two Wheeler Loan (CA)";
     }
@@ -481,6 +481,7 @@
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="totalService" name="CommonData.TotalService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.TotalService" required />
                                         <label class="form-label select-label ">Total Service(Years)</label>
+                                        <span class="error text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
@@ -1198,6 +1199,16 @@
                                         }">
                                         </select>
                                         <label class="form-label select-label ">Vehicle Loan Type</label>
+                                    </div>
+                                    <div class="col-md-2">
+                                        @* <span class="input-group-text">🚗</span> *@
+                                        <select class="form-select select" id="VehTypeId" name="CarApplication.VehTypeId" aria-label="Vehicle Type" required data-vehicletypeId-prefix="@if (Model.CarApplication != null)
+                                        {
+                                            @Model.CarApplication.VehTypeId
+                                            ;
+                                        }">
+                                        </select>
+                                        <label class="form-label select-label ">Vehicle Type</label>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="input-group mb-2">

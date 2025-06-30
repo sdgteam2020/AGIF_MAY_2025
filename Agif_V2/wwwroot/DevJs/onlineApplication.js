@@ -39,8 +39,8 @@ function filterHBALoanFreqOptions() {
     $('#propertyType').on('change', function () {
         const $dropdown = $('#HBA_LoanFreq');
         const propType = $('#propertyType').val();
-        
-        $dropdown.find('option').prop('disabled', false); 
+
+        $dropdown.find('option').prop('disabled', false);
 
         if (propType == 5) {
             $dropdown.find('option').each(function () {
@@ -49,7 +49,7 @@ function filterHBALoanFreqOptions() {
                     $(this).prop('disabled', true);
                 }
             });
-        } else {    
+        } else {
             $dropdown.find('option').each(function () {
                 const val = $(this).val();
                 if (val != '1' && val != '2' && val !== '') {
@@ -101,7 +101,7 @@ resetFieldsOnChange('#HBA_LoanFreq,#PCA_LoanFreq,#CA_LoanFreq', [
 ]);
 
 // Usage
-resetFieldsOnChange('#veh_Loan_Type', [
+resetFieldsOnChange('#veh_Loan_Type,#VehTypeId', [
     '#CA_LoanFreq', '#vehicleCost', '#CA_Amt_Eligible_for_loan',
     '#CA_EMI_Eligible', '#CA_repayingCapacity', '#CA_Amount_Applied_For_Loan',
     '#CA_EMI_Applied', '#CA_approxEMIAmount', '#CA_approxDisbursementAmt'
@@ -172,8 +172,8 @@ function bindMinAmountValidation() {
 
 function resetFieldsOnRankRegtChange() {
     $('#ddlrank, #regtCorps,#armyPrefix').on('change', function () {
-            $('#dateOfPromotion,#dateOfRetirement, #dateOfBirth,#dateOfCommission, #totalService, #residualService, #totalResidualMonth, #HBA_EMI_Eligible,#HBA_Amt_Eligible_for_loan,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt,#propertyCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt,#vehicleCost,#PCA_Amt_Eligible_for_loan,#PCA_EMI_Eligible,#PCA_Amount_Applied_For_Loan,#PCA_EMI_Applied,#PCA_approxEMIAmount,#PCA_approxDisbursementAmt,#computerCost').val('');
-        });
+        $('#dateOfPromotion,#dateOfRetirement, #dateOfBirth,#dateOfCommission, #totalService, #residualService, #totalResidualMonth, #HBA_EMI_Eligible,#HBA_Amt_Eligible_for_loan,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt,#propertyCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt,#vehicleCost,#PCA_Amt_Eligible_for_loan,#PCA_EMI_Eligible,#PCA_Amount_Applied_For_Loan,#PCA_EMI_Applied,#PCA_approxEMIAmount,#PCA_approxDisbursementAmt,#computerCost').val('');
+    });
 }
 function resetCivilPostalAddress() {
     $('#armyPostOffice').on('change', function () {
@@ -251,6 +251,7 @@ function loadDropdown() {
     var Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
     var computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
     var Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
+    var VehType = $('#VehTypeId').data('vehicletypeId-prefix');
 
     if (applicantCategory == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -281,6 +282,7 @@ function loadDropdown() {
     mMsater(Pcaloanfreq, "PCA_LoanFreq", 15, 0);
     mMsater(hbaloanfreq, "HBA_LoanFreq", 15, 0);
     mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
+    mMsater(VehType, "VehTypeId", 20, 0);
 }
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
@@ -889,9 +891,9 @@ function SetRetDate() {
                         var dateOfBirth = $('#dateOfBirth').val();
                         var dateParts = dateOfBirth.split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[2];
+                            var year = dateParts[0];
                             var month = dateParts[1] - 1;
-                            var day = dateParts[0];
+                            var day = dateParts[2];
 
                             var dob = new Date(year, month, day);
                             dob.setFullYear(dob.getFullYear() + data.retirementAge);
@@ -913,9 +915,9 @@ function SetRetDate() {
                         var dateOfCommission = $('#dateOfCommission').val();
                         var dateParts = dateOfCommission.split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[2];
+                            var year = dateParts[0];
                             var month = dateParts[1] - 1;
-                            var day = dateParts[0];
+                            var day = dateParts[2];
 
                             var dob = new Date(year, month, day);
                             dob.setFullYear(dob.getFullYear() + 10);
@@ -942,9 +944,9 @@ function SetRetDate() {
                             var dateOfBirth = $('#dateOfBirth').val();
                             var dateParts = dateOfBirth.split('/');
                             if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[2];
+                                var year = dateParts[0];
                                 var month = dateParts[1] - 1;
-                                var day = dateParts[0];
+                                var day = dateParts[2];
 
                                 var dob = new Date(year, month, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
@@ -966,9 +968,9 @@ function SetRetDate() {
                             var dateOfCommission = $('#dateOfCommission').val();
                             var dateParts = dateOfCommission.split('/');
                             if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[2];
+                                var year = dateParts[0];
                                 var month = dateParts[1] - 1;
-                                var day = dateParts[0];
+                                var day = dateParts[2];
 
                                 var dob = new Date(year, month, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
@@ -1380,8 +1382,32 @@ function handleSubmitClick() {
         const loanTypeFromInput = $('#loanType').val() || null;
 
         const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+        const applicantCategory = $('#applicantCategory').val() || null;
 
         filterAmountText(loanType);
+        const serviceYearInput = $("#totalService");
+        if (serviceYearInput.length) {
+            const serviceYearValue = serviceYearInput.val();
+            if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 1 && loanType == 1) {
+                const errorSpan = serviceYearInput.parent().find(".error");
+                if (errorSpan.length) {
+                    errorSpan.text("Total service must be at least 1 yrs");
+                }
+                errorlist.push("Total Service");
+                hasError = true;
+            }
+            else if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 2 && (loanType == 2 || loanType == 3)) {
+                if (applicantCategory == 2 || applicantCategory == 3) {
+                    const errorSpan = serviceYearInput.parent().find(".error");
+                    if (errorSpan.length) {
+                        errorSpan.text("Total service must be at least 1 yrs");
+                    }
+                    errorlist.push("Total Service");
+                    hasError = true;
+                }
+               
+            }
+        }
 
         const residualServiceInput = $("#residualService");
         if (residualServiceInput.length) {
@@ -1937,6 +1963,7 @@ function calculateEMI_PCA() {
 function RefreshMaxAmt_CA() {
     $("#vehicleCost").on('change', function () {
         var vehicalType = $('#veh_Loan_Type').val();
+        var CarEngineType = $('#VehTypeId').val();
         var rawValue = $('#vehicleCost').val().replace(/,/g, '');
         var carCost = parseFloat(rawValue);
         var prefix = $('#armyPrefix').val();
@@ -1947,7 +1974,10 @@ function RefreshMaxAmt_CA() {
             return;
         }
         if (vehicalType == 2) {
-            Amount = (prefix == 13 || prefix == 14) ? 1000000 : 2000000;
+            if (CarEngineType == 4)
+                Amount = (prefix == 13 || prefix == 14) ? 1500000 : 2500000;
+            else
+                Amount = (prefix == 13 || prefix == 14) ? 1000000 : 2000000;
         }
         else if (vehicalType == 3) {
             Amount = (prefix == 13 || prefix == 14) ? 500000 : 1000000;
@@ -2378,172 +2408,3 @@ function validateEMIForRepayingCapacity(prefix) {
 
     return true;
 }
-//$("#dateOfBirth").datepicker({
-//    dateFormat: "dd-mm-yy",
-//    showAnim: "clip",
-//    duration: 400,
-//    changeMonth: true,
-//    changeYear: true,
-//    yearRange: "1900:" + new Date().getFullYear(),
-//    maxDate: new Date(), // Can't select future dates for DOB
-//    onSelect: function (dateText, inst) {
-//        // Convert to YYYY-MM-DD format for your backend
-//        var dateParts = dateText.split('-');
-//        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-
-//        // Store both formats
-//        $(this).data('formatted-date', formattedDate);
-
-//        // Trigger the original onchange event
-//        SetRetDate();
-//    },
-//    beforeShow: function (input, inst) {
-//        // Add clip animation class
-//        setTimeout(function () {
-//            $('#ui-datepicker-div').addClass('clip-animation');
-//        }, 10);
-//    }
-//});
-
-
-//$("#dateOfCommission").datepicker({
-//    dateFormat: "dd-mm-yy",
-//    showAnim: "clip",
-//    duration: 400,
-//    changeMonth: true,
-//    changeYear: true,
-//    yearRange: "1900:" + new Date().getFullYear(),
-//    maxDate: new Date(), // Can't select future dates for DOB
-//    onSelect: function (dateText, inst) {
-//        // Convert to YYYY-MM-DD format for your backend
-//        var dateParts = dateText.split('-');
-//        var formattedDate = dateParts[2] + '-' + dateParts[1] + '-' + dateParts[0];
-
-//        // Store both formats
-//        $(this).data('formatted-date', formattedDate);
-
-//        // Trigger the original onchange event
-//        SetRetDate();
-//    },
-//    beforeShow: function (input, inst) {
-//        // Add clip animation class
-//        setTimeout(function () {
-//            $('#ui-datepicker-div').addClass('clip-animation');
-//        }, 10);
-//    }
-//});
-
-//$("#dateOfCommission").on('blur keyup', function (e) {
-//    var inputValue = $(this).val().trim();
-//    if (inputValue === '') return;
-
-//    var isValidDate = false;
-//    var formattedDate = '';
-
-//    // Check different date formats
-//    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
-//        // DD/MM/YYYY format
-//        var parts = inputValue.split('-');
-//        if (isValidDateParts(parts[0], parts[1], parts[2])) {
-//            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
-//            isValidDate = true;
-//        }
-//    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
-//        // YYYY-MM-DD format
-//        var parts = inputValue.split('-');
-//        if (isValidDateParts(parts[2], parts[1], parts[0])) {
-//            formattedDate = inputValue;
-//            // Convert display to DD/MM/YYYY
-//            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
-//            isValidDate = true;
-//        }
-//    } else if (inputValue.match(/^\d{8}$/)) {
-//        // DDMMYYYY format
-//        var day = inputValue.substr(0, 2);
-//        var month = inputValue.substr(2, 2);
-//        var year = inputValue.substr(4, 4);
-//        if (isValidDateParts(day, month, year)) {
-//            $(this).val(day + '-' + month + '-' + year);
-//            formattedDate = year + '-' + month + '-' + day;
-//            isValidDate = true;
-//        }
-//    }
-
-//    if (isValidDate) {
-//        $(this).data('formatted-date', formattedDate);
-//        $('#DocValidation').text('');
-//        $(this).removeClass('is-invalid').addClass('is-valid');
-
-//        // Trigger SetRetDate if Enter key or blur
-//        if (e.type === 'blur' || e.keyCode === 13) {
-//            SetRetDate();
-//        }
-//    } else if (inputValue !== '') {
-//        $('#DocValidation').text('Please enter a valid date (DD/MM/YYYY)');
-//        $(this).removeClass('is-valid').addClass('is-invalid');
-//    }
-//});
-
-
-//// Handle manual typing with format validation and conversion
-//$("#dateOfBirth").on('blur keyup', function (e) {
-//    var inputValue = $(this).val().trim();
-//    if (inputValue === '') return;
-
-//    var isValidDate = false;
-//    var formattedDate = '';
-
-//    // Check different date formats
-//    if (inputValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
-//        // DD/MM/YYYY format
-//        var parts = inputValue.split('-');
-//        if (isValidDateParts(parts[0], parts[1], parts[2])) {
-//            formattedDate = parts[2] + '-' + parts[1] + '-' + parts[0];
-//            isValidDate = true;
-//        }
-//    } else if (inputValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
-//        // YYYY-MM-DD format
-//        var parts = inputValue.split('-');
-//        if (isValidDateParts(parts[2], parts[1], parts[0])) {
-//            formattedDate = inputValue;
-//            // Convert display to DD/MM/YYYY
-//            $(this).val(parts[2] + '-' + parts[1] + '-' + parts[0]);
-//            isValidDate = true;
-//        }
-//    } else if (inputValue.match(/^\d{8}$/)) {
-//        // DDMMYYYY format
-//        var day = inputValue.substr(0, 2);
-//        var month = inputValue.substr(2, 2);
-//        var year = inputValue.substr(4, 4);
-//        if (isValidDateParts(day, month, year)) {
-//            $(this).val(day + '-' + month + '-' + year);
-//            formattedDate = year + '-' + month + '-' + day;
-//            isValidDate = true;
-//        }
-//    }
-
-//    if (isValidDate) {
-//        $(this).data('formatted-date', formattedDate);
-//        $('#dobValidation').text('');
-//        $(this).removeClass('is-invalid').addClass('is-valid');
-
-//        // Trigger SetRetDate if Enter key or blur
-//        if (e.type === 'blur' || e.keyCode === 13) {
-//            SetRetDate();
-//        }
-//    } else if (inputValue !== '') {
-//        $('#dobValidation').text('Please enter a valid date (DD/MM/YYYY)');
-//        $(this).removeClass('is-valid').addClass('is-invalid');
-//    }
-//});
-        
-
-//function isValidDateParts(day, month, year) {
-//    var date = new Date(year, month - 1, day);
-//    return date.getFullYear() == year &&
-//        date.getMonth() == month - 1 &&
-//        date.getDate() == day &&
-//        year >= 1900 &&
-//        year <= new Date().getFullYear() &&
-//        date <= new Date(); // Can't be future date for DOB
-//}

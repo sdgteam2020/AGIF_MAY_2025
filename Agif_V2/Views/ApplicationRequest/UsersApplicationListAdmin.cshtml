@@ -38,6 +38,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
+                        <input class="form-control" type="date" id="toDate" name="toDate">
+                        <button type="submit" name="action" value="Download" id="btnAllDownload" class="btn btn-primary" onclick="getAllApplicationByDateWise()">Download PDF</button>
+                        
                         <div class="table-wrapper table-responsive">
                             <table class="table table-striped border border-purple table-hover" id="tblReceivedApplications">
                                 <thead>
@@ -67,13 +70,20 @@
 
 </div>
 @section Scripts {
-    <link href="~/lib/datatables.net-bs5/css/datatables.bootstrap5.min.css" rel="stylesheet" />
+    <!-- CSS: Bootstrap 5 and DataTables -->
+    <link href="~/lib/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="~/lib/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
 
+    <!-- JS: jQuery (must come before DataTables) -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- JS: DataTables core -->
+    <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- JS: DataTables Buttons extension -->
+    <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
-    <script src="~/lib/datatables.net/js/jquery.datatables.min.js"></script>
-    <script src="~/lib/datatables.net-buttons/js/datatables.buttons.min.js"></script>
-    <script src="~/lib/datatables.net-bs5/js/datatables.bootstrap5.min.js"></script>
 
     <script src="~/devjs/usersapplicationlistadmin.js"></script>
 }

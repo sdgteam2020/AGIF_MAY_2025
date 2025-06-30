@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250630041140_New Column Added in MApplicant")]
+    partial class NewColumnAddedinMApplicant
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,9 +209,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Validity_Date_DL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("VehTypeId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Veh_Loan_Type")
                         .HasColumnType("int");
@@ -1327,23 +1327,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("UnitId");
 
                     b.ToTable("MUnits");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MVehType", b =>
-                {
-                    b.Property<int>("VehTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehTypeId"));
-
-                    b.Property<string>("VehTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("VehTypeId");
-
-                    b.ToTable("MVehType");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MarriagewardModel", b =>

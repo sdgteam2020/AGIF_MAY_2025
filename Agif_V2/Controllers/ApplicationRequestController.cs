@@ -284,49 +284,123 @@ namespace Agif_V2.Controllers
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
         }
-        
+
+        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        //{
+
+
+        //    DTOExportRequest dTOExport = new DTOExportRequest
+        //    {
+        //        Id = id,
+
+        //    };
+        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+
+        //    foreach (var data in ret.OnlineApplicationResponse)
+        //    {
+
+
+
+        //        //string ArmyNO = data.ArmyPrefix + data.Number + data.Suffix;
+        //        var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+        //        var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+
+        //        //Create Folder and GetFolder NAme
+        //        string basePath = Path.Combine("wwwroot", "PdfDownloaded");//Change Filder
+        //        if (Directory.Exists(basePath))
+        //        {
+        //            DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+        //            foreach (var dir in dirInfo.GetDirectories())
+        //            {
+        //                dir.Delete(true); // true to delete all subdirectories and files
+        //            }
+
+        //            foreach (var file in dirInfo.GetFiles())
+        //            {
+        //                file.Delete();
+        //            }
+        //        }
+
+
+        //        string newFolderPath = CreateFolder(basePath);
+        //        //new Folder Url
+        //        string newFolderPathUri = Path.Combine(basePath, newFolderPath);
+        //        // Ensure the new folder exists
+        //        string destinationFilePath = Path.Combine(newFolderPathUri, fileName); // Corrected to use newFolderPathUri
+
+        //        // Copy the file to the new folder
+        //        System.IO.File.Copy(filePath, destinationFilePath, overwrite: true); // Corrected to use destinationFilePath
+        //        string zipFileName = $"{newFolderPathUri}.zip";
+        //        createZip(newFolderPathUri, zipFileName);
+
+
+
+        //        //////////////////Create Excel File Witlh Application Details/////////////////////
+
+
+        //        return Json(newFolderPath);
+        //    }
+
+        //    return Json(0);
+        //}
+
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
-
-
             DTOExportRequest dTOExport = new DTOExportRequest
             {
                 Id = id,
-                
             };
+
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
 
+            // Base path to clean and create new folder
+            string basePath = Path.Combine("wwwroot", "PdfDownloaded");
+
+            // Clean old folders/files
+            if (Directory.Exists(basePath))
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+                foreach (var dir in dirInfo.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+                foreach (var file in dirInfo.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+
+            // Create new folder
+            string newFolderName = CreateFolder(basePath);
+            string newFolderPath = Path.Combine(basePath, newFolderName);
 
             foreach (var data in ret.OnlineApplicationResponse)
             {
-                
-               
-                //string ArmyNO = data.ArmyPrefix + data.Number + data.Suffix;
-                var folderName = $"HBA_{data.Number}_{data.ApplicationId}";
-                var fileName = $"HBA_{data.Number}_{data.ApplicationId}_Merged.pdf";
+                var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+                var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
 
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
-                string basePath = Path.Combine("wwwroot", "TempUploads");
-                string newFolderPath = CreateFolder(basePath);
-                string newFolderPathUri = Path.Combine(basePath, newFolderPath);
-                string destinationFilePath = Path.Combine(newFolderPathUri, fileName); // Corrected to use newFolderPathUri
 
-                // Copy the file to the new folder
-                System.IO.File.Copy(filePath, destinationFilePath, overwrite: true); // Corrected to use destinationFilePath
-                string zipFileName = $"{newFolderPathUri}.zip";
-                createZip(newFolderPathUri, zipFileName);
-
-                return Json(newFolderPath);
+                // Ensure file exists before copying
+                if (System.IO.File.Exists(filePath))
+                {
+                    var destinationFilePath = Path.Combine(newFolderPath, fileName);
+                    System.IO.File.Copy(filePath, destinationFilePath, overwrite: true);
+                }
             }
 
+            // Zip the final folder
+            string zipFileName = $"{newFolderPath}.zip";
+            createZip(newFolderPath, zipFileName);
 
-
-
-
-
-
-            return Json(0);
+            return Json(newFolderName); // return only after everything is complete
         }
+
+
         public void createZip(string sourceFolderPath,string destinationFilePath)
         {
             
@@ -340,10 +414,10 @@ namespace Agif_V2.Controllers
             ZipFile.CreateFromDirectory(sourceFolderPath, destinationFilePath, CompressionLevel.Optimal, includeBaseDirectory: false);
 
         }
+        // This method creates a folder with a timestamp in the specified base path.
+        // It returns the name of the created folder.
         public string CreateFolder(string basePath)
         {
-           
-
             // Timestamp-based folder name
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string folderPath = Path.Combine(basePath, timestamp);
@@ -352,7 +426,13 @@ namespace Agif_V2.Controllers
             Directory.CreateDirectory(folderPath);
 
             return timestamp;
+        }
 
+        public async Task<IActionResult> GetApplicationByDate(string date)
+        {
+            DateTime exportDate = Convert.ToDateTime(date);
+            var result = await _userApplication.GetApplicationByDate(exportDate);
+            return Json(result);
         }
     }
 }

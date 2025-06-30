@@ -92,6 +92,7 @@
     <Folder Include="wwwroot\images\cards\" />
     <Folder Include="wwwroot\images\clients\" />
     <Folder Include="wwwroot\images\projects\" />
+    <Folder Include="wwwroot\PdfDownloaded\" />
   </ItemGroup>
 
   <ItemGroup>

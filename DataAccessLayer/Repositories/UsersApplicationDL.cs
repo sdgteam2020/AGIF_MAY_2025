@@ -20,6 +20,19 @@ namespace DataAccessLayer.Repositories
             _db = db;
         }
 
+        public async Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date)
+        {
+            var result = await (from appl in _db.trnApplications
+                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && appl.StatusCode == 2
+                                select new DTOGetApplResponse
+                                {
+                                    ApplicationId = appl.ApplicationId,
+                                }).ToListAsync();
+
+            return result;
+        }
+
+
         public async Task<List<DTOGetApplResponse>> GetUsersApplication(int Mapping, int status)
         {
             var UsersApplicationList = await (from appl in _db.trnApplications

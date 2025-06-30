@@ -1,11 +1,12 @@
-﻿$(document).ready(function () {
+﻿/*import { forEach } from "angular";*/
+
+$(document).ready(function () {
     // Check if DataTables is loaded
     if (typeof $.fn.DataTable === 'undefined') {
         console.error('DataTables library is not loaded!');
         alert('DataTables library is not loaded. Please check your script references.');
         return;
     }
-
 
 
     BindUsersData(2);
@@ -225,7 +226,7 @@ function downloadApplication(applicationId, armyNo, applicationType) {
                 alert("Error")
             }
             else {
-                window.location.href = '/TempUploads/' + response+".zip";
+                window.location.href = '/PdfDownloaded/' + response+".zip";
              
             }
             // Handle success
@@ -240,3 +241,57 @@ function downloadApplication(applicationId, armyNo, applicationType) {
 }
 
 
+function getAllApplicationByDateWise() {
+    var date = $('#toDate').val();
+    if (!date) {
+        alert('Please select a date to filter applications.');
+        return;
+    }
+
+    $.ajax({
+        url: '/ApplicationRequest/GetApplicationByDate',
+        type: 'GET',
+        data: { date: date },
+        success: function (response) {
+            if (!response || response.length === 0) {
+                alert("No applications found for the selected date.");
+                return;
+            }
+
+            var applicationIds = [];
+            response.forEach(function (item) {
+                applicationIds.push(item.applicationId);
+            });
+            downloadApplications(applicationIds);
+            console.log('Applications retrieved:', applicationIds);
+        },
+        error: function (xhr, status, error) {
+            console.error('Request failed:', error);
+            alert('Failed to retrieve applications. Please try again.');
+        }
+    });
+}
+
+
+function downloadApplications(applicationIds) {
+    $.ajax({
+        url: '/ApplicationRequest/DownloadApplication',
+        type: 'GET',
+        traditional: true, // ensures array is passed correctly
+        data: { id: applicationIds },
+        success: function (folderName) {
+            if (!folderName || folderName === 0) {
+                alert('Download failed or no files found.');
+                return;
+            }
+
+            // Automatically trigger download of the zip file
+            var downloadUrl = `/PdfDownloaded/${folderName}.zip`;
+            window.location.href = downloadUrl; // triggers file download
+        },
+        error: function (xhr, status, error) {
+            console.error('Download failed:', error);
+            alert('Download failed. Please try again.');
+        }
+    });
+}
