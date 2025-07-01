@@ -25,6 +25,8 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetAppointment();
         Task<List<DTOMasterResponse>> GetALLByUnitName(string UnitName);
         Task<List<DTOMasterResponse>> GetPurposeOfWithdrawal();
+        Task<List<DTOMasterResponse>> GetVehType();
+
 
     }
 }

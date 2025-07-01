@@ -3,7 +3,7 @@
 
 $('#btnAgree').click(function () {
     const PurposeOfWithdrwal = $('#PurposeOfWithdrwal').val();
-    const applicantCategory = $('#applicantCategory').val();
+    const applicantCategory = $('#Category').val();
 
     //if (loanType == null || applicantCategory == null) {
     //    $(".errormessage").html(`<div class="alert alert-danger" role="alert">Please select loan type and applicant category</div>`);

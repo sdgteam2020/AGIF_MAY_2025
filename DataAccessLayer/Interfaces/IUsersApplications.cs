@@ -10,5 +10,9 @@ namespace DataAccessLayer.Interfaces
     public interface IUsersApplications
     {
         Task<List<DTOGetApplResponse>> GetUsersApplication(int MappingId,int status);
+
+        Task<List<DTOGetApplResponse>> GetUsersApplicationForAdmin(int status);
+
+        Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date);
     }
 }

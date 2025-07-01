@@ -207,6 +207,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("VehTypeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Veh_Loan_Type")
                         .HasColumnType("int");
 
@@ -220,6 +223,246 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("CA_LoanFreq");
 
                     b.ToTable("trnCar");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.ClaimCommonModel", b =>
+                {
+                    b.Property<int>("ApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+
+                    b.Property<string>("AadharCardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("AmountOfWithdrawalRequired")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ApplicantName")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("ApplicantType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ArmyPostOffice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ArmyPrefix")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CivilPostalAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Computer_Advance_Loan")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Computer_Amount_Taken")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("Computer_Date_of_Loan_taken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Computer_Duration_of_Loan")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConfirmSalaryAcctNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool?>("Conveyance_Advance_Loan")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Conveyance_Amount_Taken")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("Conveyance_Date_of_Loan_taken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Conveyance_Duration_of_Loan")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfCommission")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfPromotion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateOfRetirement")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DdlRank")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailDomain")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ExtnOfService")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("House_Building_Advance_Loan")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("House_Building_Amount_Taken")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("House_Building_Date_of_Loan_taken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("House_Building_Duration_of_Loan")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("House_Repair_Advance_Amount_Taken")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("House_Repair_Advance_Date_of_Loan_taken")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("House_Repair_Advance_Duration_of_Loan")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("House_Repair_Advance_Loan")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("IfsCode")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MUnitsPresentUnitId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MobileNo")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("NameOfBank")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameOfBankBranch")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NextFmnHQ")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Noofwithdrawal")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OldArmyPrefix")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OldNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("OldSuffix")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("PanCardNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ParentUnit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PresentUnit")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PresentUnitPin")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<int>("RegtCorps")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ResidualService")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SalaryAcctNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Suffix")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<int?>("TotalService")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WithdrawPurpose")
+                        .HasColumnType("int");
+
+                    b.Property<string>("pcda_AcctNo")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("pcda_pao")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("ApplicationId");
+
+                    b.HasIndex("ApplicantType");
+
+                    b.HasIndex("ArmyPostOffice");
+
+                    b.HasIndex("ArmyPrefix");
+
+                    b.HasIndex("DdlRank");
+
+                    b.HasIndex("MUnitsPresentUnitId");
+
+                    b.HasIndex("ParentUnit");
+
+                    b.HasIndex("PresentUnit");
+
+                    b.HasIndex("RegtCorps");
+
+                    b.HasIndex("WithdrawPurpose");
+
+                    b.ToTable("trnClaim");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
@@ -308,8 +551,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("ExtnOfService")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("IOUnit")
-                        .HasColumnType("int");
+                    b.Property<string>("IOArmyNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IfsCode")
                         .IsRequired()
@@ -607,6 +850,68 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("trnDocumentUpload");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.EducationDetailsModel", b =>
+                {
+                    b.Property<int>("EDId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EDId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ChildName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CollegeInstitution")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CourseForWithdrawal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DOPartIINo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DoPartIIDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachBonafideLetterPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachPartIIOrderPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PresentlyStudyingIn")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalExpenditure")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("EDId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnEducationDetails");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.ErrorLog", b =>
                 {
                     b.Property<int>("Id")
@@ -755,6 +1060,10 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationTypeId"));
+
+                    b.Property<string>("ApplicationTypeAbbr")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ApplicationTypeName")
                         .IsRequired()
@@ -1020,6 +1329,76 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("MUnits");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.MVehType", b =>
+                {
+                    b.Property<int>("VehTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VehTypeId"));
+
+                    b.Property<string>("VehTypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("VehTypeId");
+
+                    b.ToTable("MVehType");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.MarriagewardModel", b =>
+                {
+                    b.Property<int>("MWId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MWId"));
+
+                    b.Property<int>("AgeOfWard")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DOPartIINo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateofMarriage")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DoPartIIDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachInvitationcardPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachPartIIOrderPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameOfChild")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("MWId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnMarriageward");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.PCAApplicationModel", b =>
                 {
                     b.Property<int>("PcaId")
@@ -1095,6 +1474,78 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("PCA_LoanFreq");
 
                     b.ToTable("trnPCA");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.PropertyRenovationModel", b =>
+                {
+                    b.Property<int>("PrId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrId"));
+
+                    b.Property<string>("AddressOfProperty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("EstimatedCost")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTotalExpenditureFilePdf")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PropertyHolderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("PrId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnPropertyRenovation");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.SplWaiverModel", b =>
+                {
+                    b.Property<int>("SWId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SWId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OtherReasons")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("SWId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnSplWaiver");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.TrnFwd", b =>
@@ -1404,6 +1855,78 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MLoanFreq");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.ClaimCommonModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.MApplicantType", "MApplicantType")
+                        .WithMany()
+                        .HasForeignKey("ApplicantType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MArmyPostOffice", "MArmyPostOffices")
+                        .WithMany()
+                        .HasForeignKey("ArmyPostOffice")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MArmyPrefix", "MArmyPrefix")
+                        .WithMany()
+                        .HasForeignKey("ArmyPrefix")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MRank", "MRank")
+                        .WithMany()
+                        .HasForeignKey("DdlRank")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MUnit", "MUnitsPresent")
+                        .WithMany()
+                        .HasForeignKey("MUnitsPresentUnitId");
+
+                    b.HasOne("DataTransferObject.Model.MUnit", "MUnitsParent")
+                        .WithMany()
+                        .HasForeignKey("ParentUnit")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.MUnit", null)
+                        .WithMany()
+                        .HasForeignKey("PresentUnit")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired()
+                        .HasConstraintName("FK_trnClaim_MUnits_PresentUnit");
+
+                    b.HasOne("DataTransferObject.Model.MRegtCorps", "MRegtCorps")
+                        .WithMany()
+                        .HasForeignKey("RegtCorps")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataTransferObject.Model.WithdrawalPurpose", "WithdrawalPurposetype")
+                        .WithMany()
+                        .HasForeignKey("WithdrawPurpose")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MApplicantType");
+
+                    b.Navigation("MArmyPostOffices");
+
+                    b.Navigation("MArmyPrefix");
+
+                    b.Navigation("MRank");
+
+                    b.Navigation("MRegtCorps");
+
+                    b.Navigation("MUnitsParent");
+
+                    b.Navigation("MUnitsPresent");
+
+                    b.Navigation("WithdrawalPurposetype");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
                 {
                     b.HasOne("DataTransferObject.Model.MApplicantType", "MApplicantType")
@@ -1487,6 +2010,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("CommonDataModels");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.EducationDetailsModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClaimCommonModel");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.HBAApplicationModel", b =>
                 {
                     b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
@@ -1547,6 +2081,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MApplyFor");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.MarriagewardModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClaimCommonModel");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.PCAApplicationModel", b =>
                 {
                     b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
@@ -1564,6 +2109,28 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("CommonDataModels");
 
                     b.Navigation("MLoanFreq");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.PropertyRenovationModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClaimCommonModel");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.SplWaiverModel", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClaimCommonModel");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>

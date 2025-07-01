@@ -129,6 +129,11 @@ namespace DataAccessLayer.Repositories
                 var Ret = await MasterOnlyTable.GetPurposeOfWithdrawal();
                 lst = Ret;
             }
+            else if (Data.id == Convert.ToInt16(Constants.VehType))
+            {
+                var Ret = await MasterOnlyTable.GetVehType();
+                lst = Ret;
+            }
             return lst;
         }
     }

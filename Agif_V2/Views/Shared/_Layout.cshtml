@@ -18,10 +18,11 @@
     <link rel="stylesheet" href="~/css/materialdesignicons.min.css" />
     <link rel="stylesheet" href="~/css/fullcalendar.css" />
     <link rel="stylesheet" href="~/css/main.css" />
-    <script src="~/lib/jquery/jquery.min.js"></script>
     <link href="~/lib/datatable/css/datatable.min.css" rel="stylesheet" />
-    <script src="~/lib/datatable/js/datatable.min.js"></script>
     <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.min.js"></script>
+
+    <script src="~/lib/datatable/js/datatable.min.js"></script>
 </head>
 <body>
     <!-- ======== Preloader =========== -->
@@ -76,6 +77,23 @@
                 }
                 else
                 {
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#receivedApplicationToAdmin"
+                           aria-controls="receivedApplicationToAdmin"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">Received Application</span>
+                        </a>
+                        <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/ApplicationRequest/UsersApplicationListAdmin" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
+                            </li>
+                        </ul>
+                    </li>
+
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
                            data-bs-toggle="collapse"
@@ -202,6 +220,7 @@
     </div>
     <!-- ======== main-wrapper end =========== -->
     <!-- ========= All Javascript files linkup ======== -->
+
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/Chart.min.js"></script>
     <script src="~/js/dynamic-pie-chart.js"></script>
@@ -212,7 +231,6 @@
     <script src="~/js/polyfill.js"></script>
     <script src="~/js/main.js"></script>
     <script src="~/devjs/comman.js"></script>
-    @* <script src="~/DevJs/GetAllUsers.js"></script> *@
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

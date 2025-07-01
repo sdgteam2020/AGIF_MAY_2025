@@ -13,6 +13,7 @@ namespace DataTransferObject.Model
         public int ApplicationTypeId { get; set; }
         [Required(ErrorMessage = "ApplicationTypeName is Required")]
         public string ApplicationTypeName { get; set; } = string.Empty;
+        public string ApplicationTypeAbbr { get; set; }
         
     }
 }
