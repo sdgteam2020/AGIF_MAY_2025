@@ -501,7 +501,7 @@ function calculateYearDifference() {
         return;
     }
     calculateDifferenceBetweenDOBAndDOC(value);
-    const commissionDate = new Date(value);
+    const commissionDate = new Date(my_date(value));
     const today = new Date();
 
     let years = today.getFullYear() - commissionDate.getFullYear();
