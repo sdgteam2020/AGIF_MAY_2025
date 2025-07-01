@@ -447,6 +447,22 @@ namespace DataAccessLayer.Repositories
             return userMapping;
         }
 
+        public async Task<UserMapping?> GetCoDetails(int applicationId)
+        {
+            // Step 1: Get the application by applicationId
+            var application = await _context.trnApplications
+                .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);
+
+            if (application == null)
+                return null;
+
+            // Step 3: Get the UserMapping for the PresentUnit where IsPrimary and IsActive are true
+            var userMapping = await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.UnitId == application.PresentUnit && m.IsPrimary);
+
+            return userMapping;
+        }
+
         public async Task<string> GetCOName(int mappingId)
         {
             // Get the UserMapping by MappingId

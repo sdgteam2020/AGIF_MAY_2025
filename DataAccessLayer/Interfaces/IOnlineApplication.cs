@@ -40,5 +40,7 @@ namespace DataAccessLayer.Interfaces
         Task<string> GetCOName(int mappingId);
 
         Task<bool> CheckExtensionofservice(int applicationid);
+
+        Task<UserMapping?> GetCoDetails(int applicationId);
     }
 }

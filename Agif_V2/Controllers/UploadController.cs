@@ -174,9 +174,7 @@ namespace Agif_V2.Controllers
             var IOArmyNo = await _IonlineApplication1.GetIOArmyNoAsync(applicationId);
             if (IOArmyNo == null)
             {
-                if (!string.IsNullOrEmpty(CoArmyNumber))
-                {
-                    var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
+                    var CoDetails = await _IonlineApplication1.GetCoDetails(applicationId);
                     if (CoDetails != null)
                     {
                         TrnFwdCO trnFwdCO = new TrnFwdCO
@@ -191,7 +189,6 @@ namespace Agif_V2.Controllers
                         await _IonlineApplication1.AddFwdCO(trnFwdCO);
                     }
 
-                }
             }
             else
             {
