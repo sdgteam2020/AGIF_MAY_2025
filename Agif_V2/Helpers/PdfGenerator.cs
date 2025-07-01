@@ -101,7 +101,7 @@ namespace Agif_V2.Helpers
                         table.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont).SetFontSize(smallFontSize))
                             .SetBorderTop(topBorder)
                             .SetBorderBottom(new SolidBorder(1))
-                            .SetBorderLeft(Border.NO_BORDER)
+                            .SetBorderLeft(Border.NO_BORDER) 
                             .SetBorderRight(Border.NO_BORDER));
                         table.AddCell(new Cell().Add(new Paragraph(value1 ?? "").SetFont(normalFont).SetFontSize(smallFontSize))
                             .SetBorderTop(topBorder)
@@ -390,12 +390,30 @@ namespace Agif_V2.Helpers
                         Table cartable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
 
 
+
                         void AddLoanRow(string label1, string val1, string label2, string val2)
                         {
-                            cartable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
-                            cartable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
-                            cartable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
-                            cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            // Add first cell (label1, val1) pair
+                            cartable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont))
+                                .SetFontSize(smallFontSize)
+                                .SetBorder(Border.NO_BORDER)  // No border on all sides
+                                .SetBorderBottom(new SolidBorder(1))); // Bottom border
+
+                            cartable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont))  // Handle null values
+                                .SetFontSize(smallFontSize)
+                                .SetBorder(Border.NO_BORDER)
+                                .SetBorderBottom(new SolidBorder(1)));
+
+                            // Add second cell (label2, val2) pair
+                            cartable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(normalFont))
+                                .SetFontSize(smallFontSize)
+                                .SetBorder(Border.NO_BORDER)
+                                .SetBorderBottom(new SolidBorder(1)));
+
+                            cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)) // Handle null values
+                                .SetFontSize(smallFontSize)
+                                .SetBorder(Border.NO_BORDER)
+                                .SetBorderBottom(new SolidBorder(1)));
                         }
 
                         //void AddLoanRow(string label1, string val1, string label2, string val2)
@@ -406,10 +424,12 @@ namespace Agif_V2.Helpers
                         //    cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
                         //}
 
+                        // Adding rows with car details and null checks
                         AddLoanRow("22. Dealer Name", car.DealerName, "23. Model Name", car.ModelName);
-                        AddLoanRow("24. Vehcial Cost", car.VehicleCost.ToString(), "25. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString());
-                        AddLoanRow("26. Loan Frequency", car.CA_LoanFreq.ToString(), "27.Salary Acct No", common.SalaryAcctNo.ToString());
-                        AddLoanRow("28. Bank IFSC Code", common.IfsCode,"","");
+                        AddLoanRow("24. Vehicle Cost", car.VehicleCost.ToString(), "25. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString());
+                        AddLoanRow("26. Loan Frequency", car.CA_LoanFreq.ToString(), "27. Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("28. Bank IFSC Code", common.IfsCode, "", "");  // Last cell intentionally empty
+                        document.Add(cartable);
 
                         var normalFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                         var boldFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
@@ -624,7 +644,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 225);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 500, 200);
                             document.Add(icon);
                         }
 

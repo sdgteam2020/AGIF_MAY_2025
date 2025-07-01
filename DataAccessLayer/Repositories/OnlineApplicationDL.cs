@@ -225,6 +225,7 @@ namespace DataAccessLayer.Repositories
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
+                              ConfirmSalaryAcctNo=common.ConfirmSalaryAcctNo
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
