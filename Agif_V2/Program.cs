@@ -71,6 +71,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+// Add our custom session check middleware before routing
+app.UseMiddleware<SessionCheckMiddleware>();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
