@@ -1,4 +1,5 @@
-﻿using DataTransferObject.Response;
+﻿using DataTransferObject.Request;
+using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,8 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOGetApplResponse>> GetUsersApplicationForAdmin(int status);
 
         Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date);
+
+        Task<bool> UpdateStatus(DTOExportRequest dtoExport);
+
     }
 }

@@ -123,7 +123,7 @@ namespace Agif_V2.Helpers
                     var common = data.OnlineApplicationResponse;
 
                     // Populate rows
-                    AddRow("1. Type Of Loan", formType, "2. Army Number", common.Number);
+                    AddRow("1. Type of Loan", formType, "2. Army Number", common.Number);
                     AddRow("3.Old Army No",common.OldNumber, "4.Rank", common.DdlRank);
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
@@ -134,11 +134,26 @@ namespace Agif_V2.Helpers
                     AddRow("17. Present Unit", common.PresentUnit, "18.Unit PIN", common.PresentUnitPin);
                     AddRow("19. Unit Address", common.ArmyPostOffice,"20. Civil Postal Address", common.CivilPostalAddress);
                     AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
-                   // AddRow("23.Permt Home Address", common.Vill_Town +", "+common.PostOffice+", "+common.Distt+", "+common.State+", "+common.Code,"","");
 
-                    table.AddCell(new Cell(1, 4).Add(new Paragraph("23. Permt Home Address: "+(common.Vill_Town ?? "") + ", " +(common.PostOffice ?? "") + ", " +(common.Distt ?? "") + ", " +
-                       (common.State ?? "") + ", " +
-                       (common.Code ?? "")).SetFont(normalFont).SetFontSize(smallFontSize)).SetBorderTop(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER));
+                    table.AddCell(new Cell(1, 1).Add(new Paragraph("23. Permt Home Address").SetFont(normalFont).SetFontSize(smallFontSize))
+                         .SetBorderTop(new SolidBorder(1))
+                         .SetBorderBottom(new SolidBorder(1))
+                         .SetBorderLeft(Border.NO_BORDER)
+                         .SetBorderRight(Border.NO_BORDER)); // This is the heading cell
+
+                    // The address will span 3 columns
+                    table.AddCell(new Cell(1, 3).Add(new Paragraph((common.Vill_Town ?? "") + ", " + (common.PostOffice ?? "") + ", " +
+                        (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""))
+                        .SetFont(normalFont)
+                        .SetFontSize(smallFontSize))
+                        .SetBorderTop(new SolidBorder(1))
+                        .SetBorderBottom(new SolidBorder(1))
+                        .SetBorderLeft(Border.NO_BORDER)
+                        .SetBorderRight(Border.NO_BORDER));
+
+                    //table.AddCell(new Cell(1, 4).Add(new Paragraph("23. Permt Home Address: "+(common.Vill_Town ?? "") + ", " +(common.PostOffice ?? "") + ", " +(common.Distt ?? "") + ", " +
+                    //   (common.State ?? "") + ", " +
+                    //   (common.Code ?? "")).SetFont(normalFont).SetFontSize(smallFontSize)).SetBorderTop(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER));
 
                     //AddRow("22. Property Address", common.NextFmnHQ, "20. Date Of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
 
@@ -257,8 +272,6 @@ namespace Agif_V2.Helpers
                             .SetFontSize(12)
                             .SetTextAlignment(TextAlignment.JUSTIFIED)
                             .SetMarginBottom(10));
-
-                        document.Add(new Paragraph("\n"));
 
                         //Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 50, 50 })).UseAllAvailableWidth();
                         ////signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated).SetFont(regularFont).SetFontSize(10)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
@@ -396,7 +409,7 @@ namespace Agif_V2.Helpers
                         AddLoanRow("22. Dealer Name", car.DealerName, "23. Model Name", car.ModelName);
                         AddLoanRow("24. Vehcial Cost", car.VehicleCost.ToString(), "25. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString());
                         AddLoanRow("26. Loan Frequency", car.CA_LoanFreq.ToString(), "27.Salary Acct No", common.SalaryAcctNo.ToString());
-                        AddLoanRow("28.Bank IFSC Code", common.IfsCode,"","");
+                        AddLoanRow("28. Bank IFSC Code", common.IfsCode,"","");
 
                         var normalFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                         var boldFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);

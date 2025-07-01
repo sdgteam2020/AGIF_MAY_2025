@@ -598,7 +598,7 @@ $('.DocPicker').datepicker({
     //}
 
 
-       onSelect: function (dateText, inst) {
+    onSelect: function (dateText, inst) {
         // Get the selected date from the input field
         var dt = $('#dateOfCommission').val();
 
@@ -612,7 +612,7 @@ $('.DocPicker').datepicker({
         newdt.setFullYear(newdt.getFullYear() + 18);
 
         // Optional: Set the calculated date back to the field or use as needed
-      
+
     }
     //beforeShowDay: function (date) {
     //    // Additional check to disable future dates
@@ -725,9 +725,9 @@ $('.LicencePicker').datepicker({
     changeYear: true,
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
-    yearRange: "1900:2100", 
+    yearRange: "1900:2100",
     defaultDate: null, // Default to today
-    
+
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
         var dt = $('#validity_Date_DL').val();
@@ -820,7 +820,7 @@ function validateDateFormat(input) {
         }
 
         // Check if it's a valid date
-       
+
     }
 
     SetRetDate();
@@ -861,7 +861,7 @@ function SetRetDate() {
         $('#dateOfBirth').val('');
         return;
     }
-    if (Prefix == "0") {
+    if (Prefix == "0" || Prefix == "") {
         Swal.fire({
             title: 'Warning!',
             html: '<p style="font-size: 18px;">Please select Prefix.</p>',
@@ -891,9 +891,9 @@ function SetRetDate() {
                         var dateOfBirth = $('#dateOfBirth').val();
                         var dateParts = dateOfBirth.split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[0];
+                            var year = dateParts[2];
                             var month = dateParts[1] - 1;
-                            var day = dateParts[2];
+                            var day = dateParts[0];
 
                             var dob = new Date(year, month, day);
                             dob.setFullYear(dob.getFullYear() + data.retirementAge);
@@ -915,9 +915,9 @@ function SetRetDate() {
                         var dateOfCommission = $('#dateOfCommission').val();
                         var dateParts = dateOfCommission.split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[0];
+                            var year = dateParts[2];
                             var month = dateParts[1] - 1;
-                            var day = dateParts[2];
+                            var day = dateParts[0];
 
                             var dob = new Date(year, month, day);
                             dob.setFullYear(dob.getFullYear() + 10);
@@ -944,9 +944,9 @@ function SetRetDate() {
                             var dateOfBirth = $('#dateOfBirth').val();
                             var dateParts = dateOfBirth.split('/');
                             if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[0];
+                                var year = dateParts[2];
                                 var month = dateParts[1] - 1;
-                                var day = dateParts[2];
+                                var day = dateParts[0];
 
                                 var dob = new Date(year, month, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
@@ -968,9 +968,9 @@ function SetRetDate() {
                             var dateOfCommission = $('#dateOfCommission').val();
                             var dateParts = dateOfCommission.split('/');
                             if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[0];
+                                var year = dateParts[2];
                                 var month = dateParts[1] - 1;
-                                var day = dateParts[2];
+                                var day = dateParts[0];
 
                                 var dob = new Date(year, month, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
@@ -1405,7 +1405,7 @@ function handleSubmitClick() {
                     errorlist.push("Total Service");
                     hasError = true;
                 }
-               
+
             }
         }
 

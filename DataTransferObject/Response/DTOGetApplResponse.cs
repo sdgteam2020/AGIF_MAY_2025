@@ -22,6 +22,8 @@ namespace DataTransferObject.Response
         public string PresentStatus { get; set; }
         public bool IsMergePdf { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public DateTime? DownloadedOn { get; set; }
+        public int? DownloadCount { get; set; }
         
     }
 }

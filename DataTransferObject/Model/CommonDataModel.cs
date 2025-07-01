@@ -258,5 +258,7 @@ namespace DataTransferObject.Model
         public int StatusCode { get; set; }
         public bool IsMergePdf { get; set; } = false;
         public string? IOArmyNo { get; set; }
+        public DateTime? DownloadedOn { get; set; }
+        public int  DownloadCount { get; set; }
     }
 }

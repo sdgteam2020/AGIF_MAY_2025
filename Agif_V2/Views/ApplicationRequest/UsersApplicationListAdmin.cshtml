@@ -1,5 +1,19 @@
-﻿@{
+﻿@using DataTransferObject.Helpers
+@{
     ViewData["Title"] = "Received Applications";
+    
+}
+
+@{
+    string Page = "";
+}
+@if (ViewBag.Status != null && ViewBag.Status == "2")
+{
+    Page = "CA/PCA/HBA Received Applications";
+}
+else if (ViewBag.Status != null && ViewBag.Status == "4")
+{
+    Page = "CA/PCA/HBA Downloaded Applications";
 }
 
 <div class="container">
@@ -10,7 +24,7 @@
                 <div class="col-md-6">
                     <div class="title">
                         <h2>
-                            CA/PCA/HBA Received Applications
+                            @Page
                         </h2>
                     </div>
                 </div>
@@ -23,7 +37,7 @@
                                     <a href="#0">Applications</a>
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
-                                    CA/PCA/HBA Received Applications
+                                   @Page
                                 </li>
                             </ol>
                         </nav>
@@ -36,11 +50,22 @@
         <div class="card mt-2">
 
             <div class="card-body">
+                <div class="text-center">
+                    <div class="row justify-content-center mb-2">
+                        <div class="col-auto">
+                            <input class="form-control" type="date" id="toDate" name="toDate" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary" id="btnAllDownload" onclick="getAllApplicationByDateWise()">
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-lg-12">
-                        <input class="form-control" type="date" id="toDate" name="toDate">
-                        <button type="submit" name="action" value="Download" id="btnAllDownload" class="btn btn-primary" onclick="getAllApplicationByDateWise()">Download PDF</button>
-                        
+                       
                         <div class="table-wrapper table-responsive">
                             <table class="table table-striped border border-purple table-hover" id="tblReceivedApplications">
                                 <thead>
@@ -54,6 +79,11 @@
                                         <th>Present Unit</th>
                                         <th>PCDA(O)/PAO(OR)</th>
                                         <th>Applied Date</th>
+                                        @if(ViewBag.Status != null && ViewBag.Status == "4")
+                                        {
+                                            <th>Download Count</th>
+                                            <th>DownloadedOn</th>
+                                        }
                                         <th>Download</th>
                                     </tr>
                                 </thead>
@@ -69,6 +99,8 @@
     </div>
 
 </div>
+
+
 @section Scripts {
     <!-- CSS: Bootstrap 5 and DataTables -->
     <link href="~/lib/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
@@ -84,6 +116,13 @@
     <!-- JS: DataTables Buttons extension -->
     <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
-
     <script src="~/devjs/usersapplicationlistadmin.js"></script>
+    
 }
+
+@* <script>
+        $(document).ready(function () {
+            const decryptedStatus = '@decryptedStatus';
+            BindUsersData(decryptedStatus);
+        });
+</script> *@
