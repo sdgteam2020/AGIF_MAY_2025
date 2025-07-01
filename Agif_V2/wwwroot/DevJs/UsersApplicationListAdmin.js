@@ -318,8 +318,6 @@ function downloadApplication(applicationId, armyNo, applicationType) {
 
     var applicationIds = [];
     applicationIds.push(applicationId);
-
-    alert(applicationIds[0])
     //console.log(applicationId + armyNo + applicationType);
 
     // Option 2: Using AJAX if you need to handle response differently

@@ -219,6 +219,7 @@ namespace DataAccessLayer.Repositories
                               Email = common.Email ?? string.Empty,
                               Code = common.Code ?? string.Empty,
                               SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
+                              ConfirmSalaryAcctNo= common.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = common.IfsCode ?? string.Empty,
                               NameOfBank = common.NameOfBank ?? string.Empty,
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
@@ -269,6 +270,7 @@ namespace DataAccessLayer.Repositories
                                         ModelName = car.ModelName,
                                         CA_LoanFreq = car.CA_LoanFreq,
                                         CA_Amount_Applied_For_Loan = car.CA_Amount_Applied_For_Loan,
+                                        VehicleCost=car.VehicleCost,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result;
