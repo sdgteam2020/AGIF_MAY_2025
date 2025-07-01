@@ -106,8 +106,9 @@ namespace Agif_V2.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Register(int id)
+        public IActionResult Register()
         {
+
             DTOuserProfile userProfileDTO = new DTOuserProfile();
             TempData.Keep("UserName");
             ///////GetUserProfile
@@ -180,7 +181,7 @@ namespace Agif_V2.Controllers
          
         }
 
-        public async Task<IActionResult> GetAllUsers(bool status)
+        public IActionResult GetAllUsers(bool status)
         {
             ViewBag.UserStatus = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -194,6 +195,7 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
+           
             try
             {
                 bool userStatus = false;
