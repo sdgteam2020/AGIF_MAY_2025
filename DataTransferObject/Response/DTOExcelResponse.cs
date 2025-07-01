@@ -8,9 +8,30 @@ namespace DataTransferObject.Response
 {
     public class DTOExcelResponse
     {
+
+        public string? ApplicantName { get; set; }
+        public string Rank { get; set; }//change in name
+        public string RegtCorps { get; set; }
+        public string PresentUnit { get; set; }
+        public string ParentUnit { get; set; }
+        public string? pcda_pao { get; set; }
+        public string? pcda_AcctNo { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public DateTime? DateOfCommission { get; set; }
+        public DateTime? DateOfPromotion { get; set; }
+        public DateTime? DateOfRetirement { get; set; }
+        public int? TotalService { get; set; }
+        public int? ResidualService { get; set; }
+        public string ApplicationTypeAbbr { get; set; }
+
+
+
+
+
+
         public int ApplicationType;
         public string ApplicationTypeName { get; set; }
-        public string ApplicationTypeAbbr { get; set; }
+        
 
         public int ApplicationId { get; set; }
 
@@ -34,24 +55,22 @@ namespace DataTransferObject.Response
 
 
 
-        public string DdlRank { get; set; }
-
-        public string? ApplicantName { get; set; }
+        
 
 
-        public DateTime? DateOfBirth { get; set; }
+
+        
 
 
-        public DateTime? DateOfCommission { get; set; }
+       
 
 
         public string? ExtnOfService { get; set; }
 
-        public DateTime? DateOfPromotion { get; set; }
+        
 
 
-        public DateTime? DateOfRetirement { get; set; }
-
+        
 
         public string? AadharCardNo { get; set; }
 
@@ -67,23 +86,19 @@ namespace DataTransferObject.Response
 
         public string? EmailDomain { get; set; }
 
-        public int? TotalService { get; set; }
+        
 
-        public int? ResidualService { get; set; }
-
-
-        public string RegtCorps { get; set; }
+       
 
 
-        public string? pcda_pao { get; set; }
-
-        public string? pcda_AcctNo { get; set; }
+        
 
 
-        public string ParentUnit { get; set; }
+        
 
+        
 
-        public string PresentUnit { get; set; }
+       
 
 
 
