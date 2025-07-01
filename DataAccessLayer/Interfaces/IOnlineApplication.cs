@@ -43,5 +43,7 @@ namespace DataAccessLayer.Interfaces
         Task<bool> CheckExtensionofservice(int applicationid);
 
         Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport);
+
+        Task<UserMapping?> GetCoDetails(int applicationId);
     }
 }

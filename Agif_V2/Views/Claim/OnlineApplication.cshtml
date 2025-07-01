@@ -9,6 +9,22 @@
 
     string Category = Model?.Category ?? TempData["CategoryNew"] as string ?? "1";
     string Purpose =  Model?.Purpose ?? TempData["WithdrwalPurposeNew"] as string ?? "1";
+    string PurposeTypeText = "";
+    if (Purpose == "1")
+    {
+        PurposeTypeText = "Education of Ward";
+    }
+    else if (Purpose == "2")
+    {
+        PurposeTypeText = "Marriage of Ward";
+    }
+    else if (Purpose == "3")
+    {
+        PurposeTypeText = "Renovation-Repair of House";
+    }
+    else
+        PurposeTypeText = "Special Waiver";
+
 }
 <style>
  .ui-autocomplete {
@@ -204,6 +220,169 @@
             display: block;
         }
 
+        .ui-datepicker {
+        background: white;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        width: 280px;
+        z-index: 9999;
+    }
+
+    .ui-datepicker-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .ui-datepicker-title {
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .ui-datepicker-prev,
+    .ui-datepicker-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.2);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .ui-datepicker-prev {
+        left: 10px;
+    }
+
+    .ui-datepicker-next {
+        right: 10px;
+    }
+
+        .ui-datepicker-prev:hover,
+        .ui-datepicker-next:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .ui-datepicker-prev span,
+        .ui-datepicker-next span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-indent: -9999px;
+            position: relative;
+        }
+
+            .ui-datepicker-prev span:before {
+                content: "❮";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                text-indent: 0;
+                color: white;
+                font-size: 12px;
+            }
+
+            .ui-datepicker-next span:before {
+                content: "❯";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                text-indent: 0;
+                color: white;
+                font-size: 12px;
+            }
+
+    .ui-datepicker-calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .ui-datepicker-calendar th {
+            padding: 10px 5px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .ui-datepicker-calendar td {
+            padding: 2px;
+            text-align: center;
+        }
+
+            .ui-datepicker-calendar td a {
+                display: block;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                text-decoration: none;
+                color: #333;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+                font-size: 14px;
+            }
+
+                .ui-datepicker-calendar td a:hover {
+                    background: #667eea;
+                    color: white;
+                    transform: scale(1.1);
+                }
+
+        .ui-datepicker-calendar .ui-datepicker-today a {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            font-weight: bold;
+        }
+
+        .ui-datepicker-calendar .ui-datepicker-current-day a,
+        .ui-datepicker-calendar .ui-state-active {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .ui-datepicker-calendar .ui-datepicker-other-month a {
+            color: #ccc;
+        }
+
+    /* Clip Effect Animation */
+    .ui-datepicker {
+        animation: clipIn 0.4s ease-out;
+    }
+
+    @@keyframes clipIn {
+        0% {
+            clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        50% {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            opacity: 0.7;
+            transform: scale(0.9);
+        }
+
+        100% {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
         
 </style>
 
@@ -214,7 +393,7 @@
 <div class="container-fluid mt-2">
 
     <div class="pagetitletwo position-relative text-center mb-3">
-        <h1>Application Form <span id="loanTypeSpan">Loan Type</span></h1>
+        <h1>Application Form <span id="loanTypeSpan">@PurposeTypeText</span></h1>
         <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y" style=" margin-top:-29px" id="toggleAll">Expand All</button>
     </div>
 
@@ -244,7 +423,7 @@
                                                 @Model.ClaimCommonData.ArmyPrefix; }">
                                                     
                                                 </select>
-                                                <label class="form-label select-label ">Army No</label>
+                                                <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -255,7 +434,7 @@
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="armyNumber">Number</label>
+                                                <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.Number, "", new { @class = "text-danger" })
@@ -285,7 +464,7 @@
                                                 <select class="select form-select" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix"  data-oldarmy-prefix="@if (Model.ClaimCommonData != null) {
                                                 @Model.ClaimCommonData.OldArmyPrefix; }">
                                                 </select>
-                                                <label class="form-label select-label ">Old Army No</label>
+                                                <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -295,7 +474,7 @@
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="oldArmyNo" name="ClaimCommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.ClaimCommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)"  pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="txtOldNumber">Number</label>
+                                                <label class="form-label" for="txtOldNumber">Old Army No.</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.OldNumber, "", new { @class = "text-danger" })
@@ -342,12 +521,28 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.ApplicantName, "", new { @class = "text-danger" })
                             </div>
+
+                             <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">💼</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null) {
+                                                @Model.ClaimCommonData.RegtCorps; }">
+                                        </select>
+                                        <label class="form-label select-label ">Regt/Corps</label>
+                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                    <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onchange="SetRetDate()">
+                                    <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
@@ -358,8 +553,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission"  style="caret-color: transparent;"
-                                           required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" onchange="calculateYearDifference();SetRetDate()">
+                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission"  style="caret-color: transparent;"
+                                           required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")"  oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>
@@ -403,8 +598,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfPromotion" aria-label="Date of Promotion" name="ClaimCommonData.DateOfPromotion" value="@Model.ClaimCommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled style="caret-color: transparent;"
-                                    onkeydown="return false;" onchange="updateRetDateOnPromotionDateSelection()">
+                                        <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="ClaimCommonData.DateOfPromotion" value="@Model.ClaimCommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled
+                                     oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
@@ -508,7 +703,7 @@
                 <div id="regt_Unit" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-2">
+                            @* <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <div class="col-md-2">
                                         <span class="input-group-text">💼</span>
@@ -521,7 +716,7 @@
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                            </div>
+                            </div> *@
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💼</span>
@@ -548,11 +743,13 @@
                                         <div class="col-md-2">
                                             <span class="input-group-text">🪖</span>
                                         </div>
-                                        <div class="col-md-10">
+                                        <div class="form-outline" data-mdb-input-init">
                                             @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
                                             @Html.ValidationMessageFor(m => m.ClaimCommonData.ParentUnit, "", new { @class = "text-danger" })
                                             <span id="ParentUnitId" class="d-none">@Model.ClaimCommonData?.ParentUnit</span>
-                                            <input type="text" class="form-control form-control-Alphabets" id="ParenttxtUnit" placeholder="Search Parent Unit..."   />                 
+                                            <input type="text" class="form-control form-control-Alphabets" id="ParenttxtUnit" placeholder="Search Parent Unit..."   />   
+                                             <label class="form-label" for="ParentUnit">Parent Unit</label>
+
                                             </div>
                                 </div>
                             </div>
@@ -562,11 +759,12 @@
                                     <div class="col-md-2">
                                          <span class="input-group-text">🪖</span>
                                 </div>
-                                      <div class="col-md-10">
+                                      <div class="form-outline" data-mdb-input-init>
                                          @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
                                          @Html.ValidationMessageFor(model => model.ClaimCommonData.PresentUnit, "", new { @class = "text-danger" })
                                           <span id="PresentUnitId" class="d-none">@Model.ClaimCommonData?.PresentUnit</span>
                                           <input type="text" class="form-control form-control-Alphabets" id="PresenttxtUnit"  placeholder="Search Present Unit..."  />
+                                          <label class="form-label" for="PresentUnit">Present Unit</label>
                                       </div>
                                    </div>
                             @* <span class="input-group-text">🪖</span> *@
@@ -604,7 +802,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="civilPostalAddress" name="ClaimCommonData.CivilPostalAddress" class="form-control readonly-blocked" required readonly />
+                                        <input type="text" id="civilPostalAddress" name="ClaimCommonData.CivilPostalAddress" class="form-control readonly-blocked" value="@Model.ClaimCommonData?.CivilPostalAddress" required readonly />
                                         <label class="form-label select-label ">Civ Postal Address</label>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.CivilPostalAddress, "", new { @class = "text-danger" })
                                     </div>
@@ -1007,8 +1205,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onchange="SetRetDate()">
+                                          <input type="text" class="form-control monthPicker" id="EducationdateOfBirth" aria-label="Date of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required"
+                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label ">DOB</label>
                                     </div>
                                   
@@ -1030,8 +1228,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onchange="SetRetDate()">
+                                       <input type="text" class="form-control DOPartIIPicker" id="DOPartIIDate" aria-label="Date of Birth" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
+                                    oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label">DO Part-II Date</label>
                                     </div>
                                 </div>

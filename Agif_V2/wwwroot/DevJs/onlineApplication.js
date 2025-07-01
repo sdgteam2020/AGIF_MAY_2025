@@ -861,7 +861,7 @@ function SetRetDate() {
         $('#dateOfBirth').val('');
         return;
     }
-    if (Prefix == "0") {
+    if (Prefix == "0" || Prefix == "") {
         Swal.fire({
             title: 'Warning!',
             html: '<p style="font-size: 18px;">Please select Prefix.</p>',
