@@ -7,6 +7,8 @@ using Microsoft.Extensions.ObjectPool;
 using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,31 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccessLayer.Repositories
 {
+    public static class ListExtensions
+    {
+        public static DataTable ToDataTable<T>(this IList<T> data)
+        {
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(T));
+            DataTable table = new DataTable();
+
+            foreach (PropertyDescriptor prop in properties)
+                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+
+            foreach (T item in data)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                {
+                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                }
+
+                table.Rows.Add(row); // ✅ Add the fully populated DataRow
+            }
+
+            return table;
+        }
+
+    }
     public class OnlineApplicationDL : GenericRepositoryDL<CommonDataModel>, IOnlineApplication
     {
         protected new readonly ApplicationDbContext _context;
@@ -26,19 +53,6 @@ namespace DataAccessLayer.Repositories
 
         }
 
-        //public Task<bool> IsUser(string AadharNo)
-        //{
-        //   _context.OnlineApplications.ToList();
-        //    var user = _context.OnlineApplications.FirstOrDefault(x => x.AadharNo == AadharNo);
-        //    if (user != null)
-        //    {
-        //        return Task.FromResult(true);
-        //    }
-        //    else
-        //    {
-        //        return Task.FromResult(false);
-        //    }
-        //}
         public Task<DateTime> GetRetirementDate(int rankId, int Prefix, DateTime dateTime)
         {
             var userType = _context.MArmyPrefixes.FirstOrDefault(x => x.Id == Prefix);
@@ -578,5 +592,71 @@ namespace DataAccessLayer.Repositories
             return Task.FromResult(data);
         }
 
+
+        public Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport)
+        {
+            DataTable dataTable = new DataTable();
+            var query = (from common in _context.trnApplications
+                                    join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                                    from prefix in prefixGroup.DefaultIfEmpty()
+                                    join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                                    from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                                    join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                                    from rank in rankGroup.DefaultIfEmpty()
+                                    join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                                    from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                                    join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                                    from regCorps in regCorpsGroup.DefaultIfEmpty()
+                                    join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                                    from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                                    join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                                    from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                                    join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
+
+                                    where dTOExport.Id.Contains(common.ApplicationId)
+                                    select new DTOExcelResponse
+                                    {
+                                        ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                                        PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                                        ApplicationId = common.ApplicationId,
+                                        ApplicationType = common.ApplicationType,
+                                        ApplicationTypeName = applicationType.ApplicationTypeName,
+                                        ApplicationTypeAbbr = applicationType.ApplicationTypeAbbr ?? string.Empty,
+                                        ArmyPrefix = common.ArmyPrefix,
+                                        Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                                        AadharCardNo = common.AadharCardNo ?? string.Empty,
+                                        Suffix = common.Suffix ?? string.Empty,
+                                        OldArmyPrefix = common.OldArmyPrefix,
+                                        OldNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                                        OldSuffix = common.OldSuffix ?? string.Empty,
+                                        DdlRank = rank != null ? rank.RankName : string.Empty,
+                                        ApplicantName = common.ApplicantName ?? string.Empty,
+                                        DateOfBirth = common.DateOfBirth,
+                                        DateOfCommission = common.DateOfCommission,
+                                        NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                                        ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                                        RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                                        PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                                        Vill_Town = common.Vill_Town ?? string.Empty,
+                                        PostOffice = common.PostOffice ?? string.Empty,
+                                        Distt = common.Distt ?? string.Empty,
+                                        State = common.State ?? string.Empty,
+                                        DateOfPromotion = common.DateOfPromotion,
+                                        DateOfRetirement = common.DateOfRetirement,
+                                        PanCardNo = common.PanCardNo ?? string.Empty,
+                                        MobileNo = common.MobileNo ?? string.Empty,
+                                        Email = common.Email ?? string.Empty,
+                                        Code = common.Code ?? string.Empty,
+                                        SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
+                                        IfsCode = common.IfsCode ?? string.Empty,
+                                        NameOfBank = common.NameOfBank ?? string.Empty,
+                                        NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                                        pcda_pao = common.pcda_pao ?? string.Empty,
+                                        pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+            }).ToList();
+
+            dataTable = query.ToDataTable();
+            return Task.FromResult(dataTable);
+        }
     }
 }

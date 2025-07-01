@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -101,9 +102,39 @@ namespace DataAccessLayer.Repositories
                                                  PcdaPao = appl.pcda_pao,
                                                  AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                  ApplicationType = appl.ApplicationType.ToString(),
-                                                 UpdatedOn = appl.UpdatedOn
+                                                 UpdatedOn = appl.UpdatedOn,
+                                                 DownloadedOn = appl.DownloadedOn,
+                                                 DownloadCount = appl.DownloadCount,
                                              }).ToListAsync();
             return UsersApplicationListToAdmin!;
         }
+
+        public async Task<bool> UpdateStatus(DTOExportRequest dtoExport)
+        {
+            // Fetch applications based on IDs
+            var applications = _db.trnApplications
+                .Where(a => dtoExport.Id.Contains(a.ApplicationId))
+                .ToList();
+
+            // Return false if nothing found
+            if (applications == null || applications.Count == 0)
+                return false;
+
+            // Update fields for each application
+            foreach (var app in applications)
+            {
+                app.DownloadCount += 1;
+                app.StatusCode = 4;
+                app.DownloadedOn = DateTime.Now;
+            }
+
+            _db.trnApplications.UpdateRange(applications);
+
+            // Save changes asynchronously
+            int result = await _db.SaveChangesAsync();
+
+            return result > 0;
+        }
+
     }
 }

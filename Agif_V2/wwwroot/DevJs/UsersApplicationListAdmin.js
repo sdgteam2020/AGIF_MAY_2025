@@ -7,9 +7,9 @@ $(document).ready(function () {
         alert('DataTables library is not loaded. Please check your script references.');
         return;
     }
-
-
-    BindUsersData(2);
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get("status");
+    BindUsersData(value);
 });
 
 $(document).on('click', '.download-btn', function () {
@@ -21,6 +21,7 @@ $(document).on('click', '.download-btn', function () {
 
 function BindUsersData(status) {
     // Check if DataTables is available
+
     if (typeof $.fn.DataTable === 'undefined') {
         console.error('DataTables is not available');
         return;
@@ -30,6 +31,113 @@ function BindUsersData(status) {
     if ($.fn.DataTable.isDataTable('#tblReceivedApplications')) {
         $('#tblReceivedApplications').DataTable().destroy();
     }
+
+    var columns = [
+        {
+            data: 1,
+            name: "SerialNumber",
+            orderable: false,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            data: "presentStatus",
+            name: "PresentStatus",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "armyNo",
+            name: "ArmyNo",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "name",
+            name: "Name",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "oldArmyNo",
+            name: "OldArmyNo",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "regtCorps",
+            name: "RegtCorps",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "presentUnit",
+            name: "PresentUnit",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "pcdaPao",
+            name: "PcdaPao",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "appliedDate",
+            name: "AppliedDate",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        }
+    ];
+
+    // Add conditional columns for status = 4
+    if (status === '4') {
+        columns.push(
+            {
+                data: "downloadCount",
+                name: "DownloadCount",
+                render: function (data, type, row) {
+                    return data || '0';
+                }
+            },
+            {
+                data: "downloadedOn",
+                name: "DownloadedOn",
+                render: function (data, type, row) {
+                    if (data) {
+                        // Format the date if needed
+                        var date = new Date(data);
+                        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                    }
+                    return 'N/A';
+                }
+            }
+        );
+    }
+
+    // Add download button column (always last)
+    columns.push({
+        data: null,
+        name: "Download",
+        orderable: false,
+        render: function (data, type, row) {
+            return `<button class="btn btn-primary btn-sm download-btn"
+                data-id="${row.applicationId}"
+                data-army="${row.armyNo}"
+                data-type="${row.applicationType}">
+                <i class="bi bi-download"></i>
+            </button>`;
+        }
+    });
 
     // Initialize DataTable with server-side processing
     var table = $('#tblReceivedApplications').DataTable({
@@ -49,7 +157,7 @@ function BindUsersData(status) {
                     'request.searchValue': data.search.value,
                     'request.sortColumn': data.order.length > 0 ? data.columns[data.order[0].column].data : '',
                     'request.sortDirection': data.order.length > 0 ? data.order[0].dir : '',
-                    'status': status // Pass the status parameter
+                    'status': status// Pass the status parameter
                 };
             },
             error: function (xhr, error, code) {
@@ -59,89 +167,90 @@ function BindUsersData(status) {
                 alert('Error loading data. Please try again.');
             }
         },
-        columns: [
-            {
-                data: 1,
-                name: "SerialNumber",
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            {
-                data: "presentStatus",
-                name: "PresentStatus",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "armyNo",
-                name: "ArmyNo",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "name",
-                name: "Name",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "oldArmyNo",
-                name: "OldArmyNo",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "regtCorps", // Fixed: Changed from "regtCorps" to match your DTO
-                name: "RegtCorps",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "presentUnit",
-                name: "PresentUnit",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "pcdaPao",
-                name: "PcdaPao",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "appliedDate",
-                name: "AppliedDate",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: null,
-                name: "Download",
-                orderable: false,
-                render: function (data, type, row) {
-                    return `<button class="btn btn-primary btn-sm download-btn"
-        data-id="${row.applicationId}"
-        data-army="${row.armyNo}"
-        data-type="${row.applicationType}">
-    <i class="bi bi-download"></i>
-</button>`;
-                }
+        columns: columns,
+//            [
+//            {
+//                data: 1,
+//                name: "SerialNumber",
+//                orderable: false,
+//                render: function (data, type, row, meta) {
+//                    return meta.row + meta.settings._iDisplayStart + 1;
+//                }
+//            },
+//            {
+//                data: "presentStatus",
+//                name: "PresentStatus",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "armyNo",
+//                name: "ArmyNo",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "name",
+//                name: "Name",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "oldArmyNo",
+//                name: "OldArmyNo",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "regtCorps", // Fixed: Changed from "regtCorps" to match your DTO
+//                name: "RegtCorps",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "presentUnit",
+//                name: "PresentUnit",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "pcdaPao",
+//                name: "PcdaPao",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "appliedDate",
+//                name: "AppliedDate",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: null,
+//                name: "Download",
+//                orderable: false,
+//                render: function (data, type, row) {
+//                    return `<button class="btn btn-primary btn-sm download-btn"
+//        data-id="${row.applicationId}"
+//        data-army="${row.armyNo}"
+//        data-type="${row.applicationType}">
+//    <i class="bi bi-download"></i>
+//</button>`;
+//                }
 
-            }
+//            }
 
 
-            // Removed duplicate "presentUnit" column
-        ],
+//            // Removed duplicate "presentUnit" column
+//        ],
         language: {
             search: "",
             searchPlaceholder: "Search applications...",

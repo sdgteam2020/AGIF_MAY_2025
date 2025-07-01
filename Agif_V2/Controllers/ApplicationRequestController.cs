@@ -1,4 +1,5 @@
 ﻿using Agif_V2.Helpers;
+using ClosedXML.Excel;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
@@ -8,7 +9,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
+using System.Data;
+using System.Drawing;
 using System.IO.Compression;
 
 namespace Agif_V2.Controllers
@@ -217,8 +222,9 @@ namespace Agif_V2.Controllers
             return Json(new { success = true, message = "Application rejected." });
 
         }
-        public async Task<IActionResult> UsersApplicationListAdmin()
+        public async Task<IActionResult> UsersApplicationListAdmin(string status)
         {
+            ViewBag.Status = status;
             return View();
         }
 
@@ -347,6 +353,59 @@ namespace Agif_V2.Controllers
         //    return Json(0);
         //}
 
+        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        //{
+        //    DTOExportRequest dTOExport = new DTOExportRequest
+        //    {
+        //        Id = id,
+        //    };
+
+        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+        //    // Base path to clean and create new folder
+        //    string basePath = Path.Combine("wwwroot", "PdfDownloaded");
+
+        //    // Clean old folders/files
+        //    if (Directory.Exists(basePath))
+        //    {
+        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+        //        foreach (var dir in dirInfo.GetDirectories())
+        //        {
+        //            dir.Delete(true);
+        //        }
+
+        //        foreach (var file in dirInfo.GetFiles())
+        //        {
+        //            file.Delete();
+        //        }
+        //    }
+
+        //    // Create new folder
+        //    string newFolderName = CreateFolder(basePath);
+        //    string newFolderPath = Path.Combine(basePath, newFolderName);
+
+        //    foreach (var data in ret.OnlineApplicationResponse)
+        //    {
+        //        var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+        //        var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+
+        //        // Ensure file exists before copying
+        //        if (System.IO.File.Exists(filePath))
+        //        {
+        //            var destinationFilePath = Path.Combine(newFolderPath, fileName);
+        //            System.IO.File.Copy(filePath, destinationFilePath, overwrite: true);
+        //        }
+        //    }
+
+        //    // Zip the final folder
+        //    string zipFileName = $"{newFolderPath}.zip";
+        //    createZip(newFolderPath, zipFileName);
+
+        //    return Json(newFolderName); // return only after everything is complete
+        //}
+
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
             DTOExportRequest dTOExport = new DTOExportRequest
@@ -374,48 +433,129 @@ namespace Agif_V2.Controllers
                 }
             }
 
-            // Create new folder
+            // Create new time-based folder
             string newFolderName = CreateFolder(basePath);
             string newFolderPath = Path.Combine(basePath, newFolderName);
+            Directory.CreateDirectory(newFolderPath);
+
+            // Create subfolders HBA, CA, PCA inside new folder
+            string hbaFolder = Path.Combine(newFolderPath, "HBA");
+            string caFolder = Path.Combine(newFolderPath, "CA");
+            string pcaFolder = Path.Combine(newFolderPath, "PCA");
+
+           
+           
 
             foreach (var data in ret.OnlineApplicationResponse)
             {
                 var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
                 var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
 
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
 
-                // Ensure file exists before copying
-                if (System.IO.File.Exists(filePath))
+                if (System.IO.File.Exists(sourceFilePath))
                 {
-                    var destinationFilePath = Path.Combine(newFolderPath, fileName);
-                    System.IO.File.Copy(filePath, destinationFilePath, overwrite: true);
+                    // Choose target subfolder based on ApplicationTypeAbbr
+                    string destinationFolder = data.ApplicationTypeAbbr switch
+                    {
+                        "HBA" => hbaFolder,
+                        "CA" => caFolder,
+                        "PCA" => pcaFolder,
+                        _ => newFolderPath // fallback if unknown
+                    };
+
+                    if(data.ApplicationTypeAbbr== "HBA")
+                    Directory.CreateDirectory(hbaFolder);
+                    if (data.ApplicationTypeAbbr == "CA")
+                        Directory.CreateDirectory(caFolder);
+                    if (data.ApplicationTypeAbbr == "PCA")
+                        Directory.CreateDirectory(pcaFolder);
+
+                    var destinationFilePath = Path.Combine(destinationFolder, fileName);
+                    System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
                 }
             }
 
-            // Zip the final folder
-            string zipFileName = $"{newFolderPath}.zip";
-            createZip(newFolderPath, zipFileName);
+            // Generate Excel file and save to timestamp folder
+           bool retexcel= await ExportToExcelInFolder(dTOExport, newFolderPath);
+            if (!retexcel)
+            {
+                return Json(Constants.DataNotExport);
+            }
+            else
+            {
+                string zipFileName = $"{newFolderPath}.zip";
+                createZip(newFolderPath, zipFileName);
+                bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
+                if (!updateStatus) 
+                { 
+                    return Json(Constants.DataNotExport);
+                }
+                return Json(newFolderName);
 
-            return Json(newFolderName); // return only after everything is complete
+            }
+          
         }
 
+        // Modified method to save Excel file to specific folder instead of returning File result
+        public async Task<bool> ExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
+        {
+            DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("ExportedData");
+                if (dataTable.Rows.Count > 0)
+                {
+                    worksheet.Cell(1, 1).InsertTable(dataTable);
+                    string excelFilePath = Path.Combine(folderPath, "loanDetails.xlsx");
+                    workbook.SaveAs(excelFilePath);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
+
+              
+            }
+        }
+
+        // Keep the original method if you need it for direct download
+        public async Task<IActionResult> ExportToExcel(DTOExportRequest dTOExport)
+        {
+            DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("ExportedData");
+                worksheet.Cell(1, 1).InsertTable(dataTable);
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    workbook.SaveAs(memoryStream);
+                    memoryStream.Position = 0;
+
+                    return File(memoryStream.ToArray(),
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "loanDetails.xlsx");
+                }
+            }
+        }
 
         public void createZip(string sourceFolderPath,string destinationFilePath)
         {
             
-            // If zip already exists, delete it
             if (System.IO.File.Exists(destinationFilePath))
             {
                 System.IO.File.Delete(destinationFilePath);
             }
 
             // Create the zip
-            ZipFile.CreateFromDirectory(sourceFolderPath, destinationFilePath, CompressionLevel.Optimal, includeBaseDirectory: false);
+            ZipFile.CreateFromDirectory(sourceFolderPath, destinationFilePath, System.IO.Compression.CompressionLevel.Optimal, includeBaseDirectory: false);
 
         }
-        // This method creates a folder with a timestamp in the specified base path.
-        // It returns the name of the created folder.
         public string CreateFolder(string basePath)
         {
             // Timestamp-based folder name

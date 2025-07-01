@@ -1,5 +1,9 @@
 ﻿@using DataTransferObject.Helpers
 @model SessionUserDTO;
+@{
+    string status2Encrypted = EncryptDecrypt.EncryptionData("2");
+    string status4Encrypted = EncryptDecrypt.EncryptionData("4");
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -89,7 +93,10 @@
                         </a>
                         <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
                             <li>
-                                <a href="~/ApplicationRequest/UsersApplicationListAdmin" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
+                                <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
+                            </li>
+                            <li>
+                                <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>CA/PCA/HBA Downloaded Application </a>
                             </li>
                         </ul>
                     </li>
