@@ -500,6 +500,9 @@ function calculateYearDifference() {
         return;
     }
     calculateDifferenceBetweenDOBAndDOC(value);
+
+  // Convert to yyyy-mm-dd format
+
     const commissionDate = new Date(my_date(value));
     const today = new Date();
 
@@ -1289,7 +1292,7 @@ function Validate_Salary_Slip_date(inputElement) {
         });
         return;
     }
-
+        
     const selectedDate = new Date(my_date(value));
     const currentDate = new Date();
     const threeMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, 1);

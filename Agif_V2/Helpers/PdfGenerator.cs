@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Interfaces;
+using DocumentFormat.OpenXml.Office2013.Excel;
 using iText.IO.Font;
 using iText.IO.Font.Constants;
 using iText.IO.Image;
@@ -364,7 +365,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 650);
                             document.Add(icon);
                         }
 
@@ -373,7 +374,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 650);
                             document.Add(icon);
                         }
 
@@ -410,6 +411,9 @@ namespace Agif_V2.Helpers
                         AddLoanRow("24. Vehcial Cost", car.VehicleCost.ToString(), "25. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString());
                         AddLoanRow("26. Loan Frequency", car.CA_LoanFreq.ToString(), "27.Salary Acct No", common.SalaryAcctNo.ToString());
                         AddLoanRow("28. Bank IFSC Code", common.IfsCode,"","");
+
+                        document.Add(cartable);
+
 
                         var normalFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                         var boldFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
@@ -624,7 +628,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 225);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
                             document.Add(icon);
                         }
 
@@ -633,7 +637,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 500, 475);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
                             document.Add(icon);
                         }
 
