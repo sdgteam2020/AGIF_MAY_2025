@@ -27,7 +27,7 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath,bool isRejected,bool isApproved,string UserName,string IpAddress,string Name)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
@@ -45,7 +45,7 @@ namespace Agif_V2.Helpers
             {
                 formType = "PCA";
             }
-            else if (data.HbaApplicationResponse != null )
+            else if (data.HbaApplicationResponse != null)
             {
                 formType = "HBA";
             }
@@ -97,14 +97,14 @@ namespace Agif_V2.Helpers
 
                     Table table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
                     // Helper method
-                    void AddRow(string label1, string value1, string label2, string value2 ,bool isFirstRow = false)
+                    void AddRow(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                     {
                         Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
                         Border bottomBorder = new SolidBorder(1); // Always apply bottom border
                         table.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont).SetFontSize(smallFontSize))
                             .SetBorderTop(topBorder)
                             .SetBorderBottom(new SolidBorder(1))
-                            .SetBorderLeft(Border.NO_BORDER) 
+                            .SetBorderLeft(Border.NO_BORDER)
                             .SetBorderRight(Border.NO_BORDER));
                         table.AddCell(new Cell().Add(new Paragraph(value1 ?? "").SetFont(normalFont).SetFontSize(smallFontSize))
                             .SetBorderTop(topBorder)
@@ -127,7 +127,7 @@ namespace Agif_V2.Helpers
 
                     // Populate rows
                     AddRow("1. Type of Loan", formType, "2. Army Number", common.Number);
-                    AddRow("3.Old Army No",common.OldNumber, "4.Rank", common.DdlRank);
+                    AddRow("3.Old Army No", common.OldNumber, "4.Rank", common.DdlRank);
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
                     AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email);
@@ -135,7 +135,7 @@ namespace Agif_V2.Helpers
                     AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN Card", common.PanCardNo);
                     AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);
                     AddRow("17. Present Unit", common.PresentUnit, "18.Unit PIN", common.PresentUnitPin);
-                    AddRow("19. Unit Address", common.ArmyPostOffice,"20. Civil Postal Address", common.CivilPostalAddress);
+                    AddRow("19. Unit Address", common.ArmyPostOffice, "20. Civil Postal Address", common.CivilPostalAddress);
                     AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
 
                     table.AddCell(new Cell(1, 1).Add(new Paragraph("23. Permt Home Address").SetFont(normalFont).SetFontSize(smallFontSize))
@@ -200,9 +200,9 @@ namespace Agif_V2.Helpers
                         AddLoanRow("28. No of EMI (In Months)", hba.HBA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
 
 
-                        AddLoanRow("30. Bank IFSC Code", common.IfsCode,"","");
+                        AddLoanRow("30. Bank IFSC Code", common.IfsCode, "", "");
 
-                      
+
 
                         document.Add(hbaTable);
                         PdfFont regularFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
@@ -226,15 +226,15 @@ namespace Agif_V2.Helpers
                      "(a) If, at any time, it is found that I have obtained loan from AGIF by misrepresentation, fraud,  misstatement or have committed a breach of the terms & conditions issued from time to time by AGIF, I shall without prejudice, be liable to legal, disciplinary or any other action and will become liable to repay in one lump sum the full loan amount together with interest outstanding, for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, to AGIF without any demur.",
                      "(b) I will maintain adequate credit in my IRLA to meet EMI payment during the duration and till complete repayment of loan. In case of any debit balance resulting in non-remittance of EMI by the CDA (O) / PAO (OR) to AGIF, I undertake to pay it directly along with interest for period of default at a rate 2 % higher than the rate of interest at which the loan was sanctioned, as levied by the AGIF for the delayed period.",
                      "(c) In the event of my becoming non-effective due to any reason like retirement / dismissal / premature retirement / death preceding retirement etc, the AGIF shall be entitled to recover through the PAO (OR) / CDA(O) and/or receive the balance of the loan with interest remaining unpaid and any other dues from the whole or any specified part of the gratuity, Insurance / Disability / Maturity / survival benefit of AGIF, death benefits,AFPP Fund, DSOP Fund, DCRG, Commuted value of pension, leave encashment, service pension, that may be payable to me, without any demur from any quarter.",
-                     "(d) I hereby voluntarily authorize CDA(O) / PAO(OR) to deduct EMI on account of HBA taken from the AGIF from my pay and allowances on a monthly basis and remit the same to AGIF on my behalf. I hereby assign and transfer upto the AGIF the House by way of security for the said loan and the interest thereon. ",                     
+                     "(d) I hereby voluntarily authorize CDA(O) / PAO(OR) to deduct EMI on account of HBA taken from the AGIF from my pay and allowances on a monthly basis and remit the same to AGIF on my behalf. I hereby assign and transfer upto the AGIF the House by way of security for the said loan and the interest thereon. ",
                      "(e) I will inform AGIF about any change in my present as well as permanent address/change in employement/release/disacharge/premature retirement and change in mobile number/Email.",
                      "(f) I will allow any person/agency authorised by AGIF to have free access to the property for the purpose of inspecting the progress of construction and the accounts of consturuction to ensure utilisation of the AGIF loan.",
                      "(g) I will depost the Title-Deed/Sale Deed/Conveyance Deed/Gift Deed/Partition Deed/Settlement Deed/Relinquish Deed/Transfer Deed with AGIF within 60 days from date of purchase(Date of possession in case of construction linked plan) of house/Flat being purchased by me with an intent to create an equitable mortgage. In case, if I fail to deposit title deed by date mentioned above. I will be liable to pay additional 2% interest.",
                      "(h) I understand and confirm that equitable mortage deed(EMD) will be created over the said property in favour of AGIF as security for the due repayment of all advances by AGIF to me in the loan account and for all my indebtedness and liablities whatsover to AGIF together with interest, costs, charges and expeneses thereon.I hereby agress to execute at my own costs in favour of the AGIF whenever requested by the AGIF to do, a registred mortgage over the said property in such form and with such powers of sale etc, as the AGIF may require for securing the above loan accounts.",
                      "(j) In case of any dispute arising with regards to the rules, agreements and deeds executed there under, I am bound to the jurisdiction of Delhi Courts only.",
-                                
-                        
-                        
+
+
+
                         };
 
                         foreach (var point in checkPara)
@@ -393,30 +393,12 @@ namespace Agif_V2.Helpers
                         Table cartable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
 
 
-
                         void AddLoanRow(string label1, string val1, string label2, string val2)
                         {
-                            // Add first cell (label1, val1) pair
-                            cartable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont))
-                                .SetFontSize(smallFontSize)
-                                .SetBorder(Border.NO_BORDER)  // No border on all sides
-                                .SetBorderBottom(new SolidBorder(1))); // Bottom border
-
-                            cartable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont))  // Handle null values
-                                .SetFontSize(smallFontSize)
-                                .SetBorder(Border.NO_BORDER)
-                                .SetBorderBottom(new SolidBorder(1)));
-
-                            // Add second cell (label2, val2) pair
-                            cartable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(normalFont))
-                                .SetFontSize(smallFontSize)
-                                .SetBorder(Border.NO_BORDER)
-                                .SetBorderBottom(new SolidBorder(1)));
-
-                            cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)) // Handle null values
-                                .SetFontSize(smallFontSize)
-                                .SetBorder(Border.NO_BORDER)
-                                .SetBorderBottom(new SolidBorder(1)));
+                            cartable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            cartable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            cartable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
                         }
 
                         //void AddLoanRow(string label1, string val1, string label2, string val2)
@@ -427,13 +409,10 @@ namespace Agif_V2.Helpers
                         //    cartable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
                         //}
 
-                        // Adding rows with car details and null checks
                         AddLoanRow("22. Dealer Name", car.DealerName, "23. Model Name", car.ModelName);
-                        AddLoanRow("24. Vehicle Cost", car.VehicleCost.ToString(), "25. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString());
-                        AddLoanRow("26. Loan Frequency", car.CA_LoanFreq.ToString(), "27. Salary Acct No", common.SalaryAcctNo.ToString());
-                        AddLoanRow("28. Bank IFSC Code", common.IfsCode, "", "");  // Last cell intentionally empty
-                        document.Add(cartable);
-
+                        AddLoanRow("24.Vehical Cost", car.VehicleCost.ToString(), "25. Vehical Type", car.Veh_Loan_Type.ToString());
+                        AddLoanRow("26. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString(), "27. Loan Frequency", car.CA_LoanFreq.ToString());
+                        AddLoanRow("28.Salary Acct No", common.SalaryAcctNo.ToString(), "29. Bank IFSC Code", common.IfsCode);
                         document.Add(cartable);
 
 
@@ -650,7 +629,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 500, 200);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
                             document.Add(icon);
                         }
 
@@ -688,7 +667,7 @@ namespace Agif_V2.Helpers
                         document.Add(pcatable);
 
 
-                       
+
                         // Section 29 Title
                         document.Add(new Paragraph("31. I state and certify that:")
                             .SetFont(normalFont)
@@ -729,7 +708,7 @@ namespace Agif_V2.Helpers
 
                         // Signature Table
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
-                       // signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
+                        // signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
                         signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
@@ -835,7 +814,7 @@ namespace Agif_V2.Helpers
                             icon.SetFixedPosition(pdf.GetNumberOfPages(), 515, 110);
                             document.Add(icon);
                         }
-                       
+
                     }
                     pdf.Close();
                     writer.Close();

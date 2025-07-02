@@ -225,8 +225,7 @@ namespace DataAccessLayer.Repositories
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
-                              CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
-                              ConfirmSalaryAcctNo=common.ConfirmSalaryAcctNo
+                              CivilPostalAddress = common.CivilPostalAddress ?? string.Empty
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
