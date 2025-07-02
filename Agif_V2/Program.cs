@@ -13,7 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configration = builder.Configuration;
 builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(configration.GetConnectionString("AgifConnection")));
-
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "en-GB", "en-US" }; // Use en-GB for dd-MM-yyyy format
+    options.SetDefaultCulture(supportedCultures[0])
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+});
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
     option.Password.RequireNonAlphanumeric = true;
@@ -67,7 +73,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Make the session cookie essential
 });
 var app = builder.Build();
-
+app.UseRequestLocalization();
 app.UseSession();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

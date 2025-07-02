@@ -16,5 +16,7 @@ namespace DataAccessLayer.Interfaces
         Task<DTOUserProfileResponse> GetUserAllDetails(string userName);
 
         Task<DTOUserProfileResponse> GetAdminDetails();
+
+        Task<bool> SaveTrnFwdRecords(TrnFwd trnFwd);
     }
 }

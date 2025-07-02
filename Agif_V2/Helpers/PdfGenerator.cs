@@ -358,6 +358,9 @@ namespace Agif_V2.Helpers
                             signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Sign On: " + dated).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
                             document.Add(signatureTable2);
+
+                            // Add space for icon placement
+                            document.Add(new Paragraph("\n\n\n"));
                         }
 
                         if (isApproved)
@@ -367,7 +370,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 650);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 720);
                             document.Add(icon);
                         }
 
@@ -376,7 +379,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 650);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 250);
                             document.Add(icon);
                         }
 
@@ -802,7 +805,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 500);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 520, 400);
                             document.Add(icon);
                         }
 

@@ -426,10 +426,10 @@ namespace Agif_V2.Controllers
 
         }
 
-        public async Task<IActionResult> GetApplicationDetails(int applicationId)
-        {
-            return View();
-        }
+        //public async Task<IActionResult> GetApplicationDetails(int applicationId)
+        //{
+        //    return View();
+        //}
 
         public async Task<JsonResult> MergePdf(int applicationId,bool isRejected,bool isApproved)
         {
@@ -605,7 +605,46 @@ namespace Agif_V2.Controllers
             return Json(pdfFilePath);
         }
 
-        
+        [HttpPost]
+        public async Task<JsonResult> GetApplicationDetails(int applicationId)
+        {
+            try
+            {
+                var applicationDetails = await _IonlineApplication1.GetApplicationDetails(applicationId);
+
+                if (applicationDetails == null)
+                {
+                    return Json(new { success = false, message = "Application not found" });
+                }
+
+                // Create a response object with the required fields for the modal
+                var response = new
+                {
+                    success = true,
+                    data = new
+                    {
+                        applicationId = applicationDetails.OnlineApplicationResponse.ApplicationId,
+                        name = applicationDetails.OnlineApplicationResponse.ApplicantName,
+                        armyNo = applicationDetails.OnlineApplicationResponse.ArmyPrefix+ applicationDetails.OnlineApplicationResponse.Number+ applicationDetails.OnlineApplicationResponse.Suffix,
+                        unitName = applicationDetails.OnlineApplicationResponse.PresentUnit,
+                        applicationType = applicationDetails.OnlineApplicationResponse.ApplicationTypeName,
+                        accountNumber = applicationDetails.OnlineApplicationResponse.SalaryAcctNo,
+                        ifscCode = applicationDetails.OnlineApplicationResponse.IfsCode,
+                        appliedDate = applicationDetails.OnlineApplicationResponse.UpdatedOn,
+                        // Add any other fields your application model has
+                    }
+                };
+
+                return Json(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if you have logging setup
+                return Json(new { success = false, message = "An error occurred while fetching application details" });
+            }
+        }
+
+
     }
 
 }

@@ -33,28 +33,26 @@
                         <div class="col-md-4 ">
                             <div class="p-3 d-flex align-items-center">
                                 <strong class="me-2 lblforprint">Army Number:</strong>
-                                <span class="text-break flex-grow-1">(@Model.OnlineApplicationResponse.DdlRank) @Model.OnlineApplicationResponse.Number</span>
+                                <span class="text-break flex-grow-1">@Model.OnlineApplicationResponse.Number</span>
+                            </div>
+                        </div>
+                      <div class="col-md-4 ">
+                            <div class="p-3 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Rank:</strong>
+                                <span class="text-break flex-grow-1">@Model.OnlineApplicationResponse.DdlRank</span>
                             </div>
                         </div>
                       
-                         <div class="col-md-4 ">
-                            <div class="p-3 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Old Army Number:</strong>
-                                <span class="text-break flex-grow-1">@Model.OnlineApplicationResponse.OldNumber</span>
-                            </div>
-                        </div>
-
-                   
                           <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Applicant Name:</strong>
+                                <strong class="me-2 lblforprint">Name:</strong>
                                 <span>@Model.OnlineApplicationResponse.ApplicantName</span>
                             </div>
                         </div>
 
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Date of Birth:</strong>
+                                <strong class="me-2 lblforprint">DOB:</strong>
                                 <span>@Model.OnlineApplicationResponse.DateOfBirth?.ToString("dd-MM-yyyy")</span>
                             </div>
                         </div>
@@ -64,14 +62,14 @@
 
                            <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Date of Commission:</strong>
+                                <strong class="me-2 lblforprint">DOC/DOE:</strong>
                                 <span>@Model.OnlineApplicationResponse.DateOfCommission?.ToString("dd-MM-yyyy")</span>
                             </div>
                         </div>
 
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Date of Retirement:</strong>
+                                <strong class="me-2 lblforprint">DOR:</strong>
                                 <span>@Model.OnlineApplicationResponse.DateOfRetirement?.ToString("dd-MM-yyyy")</span>
                             </div>
                         </div>
@@ -101,18 +99,25 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4 ">
+                        <div class="col-md-4">
                             <div class="p-3 h-100 d-flex align-items-center">
                                 <strong class="me-2 lblforprint">Email:</strong>
-                                <span>@Model.OnlineApplicationResponse.Email</span>
+                                <span>@($"{Model.OnlineApplicationResponse.Email}@{Model.OnlineApplicationResponse.EmailDomain}")</span>
                             </div>
                         </div>
+
                        
                    
                          <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
                                 <strong class="me-2 lblforprint">Regt/Corps:</strong>
                                 <span>@Model.OnlineApplicationResponse.RegtCorps</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Present Unit:</strong>
+                                <span>@Model.OnlineApplicationResponse.PresentUnit</span>
                             </div>
                         </div>
 
@@ -125,12 +130,7 @@
 
                        
                    
-                         <div class="col-md-4 ">
-                            <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Present Unit:</strong>
-                                <span>@Model.OnlineApplicationResponse.PresentUnit</span>
-                            </div>
-                        </div>
+                         
 
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
@@ -159,42 +159,12 @@
                     
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Village/Town:</strong>
-                                <span>@Model.OnlineApplicationResponse.Vill_Town</span>
+                                <strong class="me-2 lblforprint">Perm Home Address:</strong>
+                                <span>@Model.OnlineApplicationResponse.Vill_Town, @Model.OnlineApplicationResponse.PostOffice, @Model.OnlineApplicationResponse.Distt, @Model.OnlineApplicationResponse.State,, @Model.OnlineApplicationResponse.Code</span>
                             </div>
                         </div>
 
-                        <div class="col-md-4 ">
-                            <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Post Office:</strong>
-                                <span>@Model.OnlineApplicationResponse.PostOffice</span>
-                            </div>
-                        </div>
-
-                   
-                        
-                        <div class="col-md-4 ">
-                            <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">District:</strong>
-                                <span>@Model.OnlineApplicationResponse.Distt</span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4 ">
-                            <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">State:</strong>
-                                <span>@Model.OnlineApplicationResponse.State</span>
-                            </div>
-                        </div>
-
-                      
-                   
-                          <div class="col-md-4 ">
-                            <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Zip Code:</strong>
-                                <span>@Model.OnlineApplicationResponse.Code</span>
-                            </div>
-                        </div>
+                       
 
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
@@ -224,7 +194,7 @@
                    
 
                     @* Conditional fields based on loantype *@
-                    @if (loanType == "HBA")
+                    @if (Model.OnlineApplicationResponse.ApplicationType == 1)
                     {
                        
                             <div class="col-md-4 ">
@@ -233,7 +203,7 @@
                                     <span>HBA</span>
                                 </div>
                             </div>
-                            <div class="col-md-4 ">
+                            @* <div class="col-md-4 ">
                                 <div class="p-3 h-100 d-flex align-items-center">
                                     <strong class="me-2 lblforprint">Property Type:</strong>
                                     <span>@Model.HbaApplicationResponse.PropertyType</span>
@@ -251,23 +221,35 @@
                                     <strong class="me-2 lblforprint">Property Address:</strong>
                                     <span>@Model.HbaApplicationResponse.PropertyAddress</span>
                                 </div>
-                            </div>
+                            </div> *@
                        
                             <div class="col-md-4 ">
                                 <div class="p-3 h-100 d-flex align-items-center">
-                                    <strong class="me-2 lblforprint">Property Cost:</strong>
+                                    <strong class="me-2 lblforprint">Estimated Cost:</strong>
                                     <span>@Model.HbaApplicationResponse.PropertyCost</span>
                                 </div>
                             </div>
                             <div class="col-md-4 ">
                                 <div class="p-3 h-100 d-flex align-items-center">
-                                    <strong class="me-2 lblforprint">Loan Frequency::</strong>
-                                    <span>@Model.HbaApplicationResponse.HBA_LoanFreq</span>
+                                    <strong class="me-2 lblforprint">Loan Required:</strong>
+                                    <span>@Model.HbaApplicationResponse.HBA_Amount_Applied_For_Loan</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">EMI:</strong>
+                                    <span>@Model.HbaApplicationResponse.HBA_EMI_Applied</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">EMI Amount:</strong>
+                                    <span>@Model.HbaApplicationResponse.HBA_approxEMIAmount</span>
                                 </div>
                             </div>
                        
                     }
-                    else if (loanType == "CA")
+                        else if (Model.OnlineApplicationResponse.ApplicationType == 2)
                     {
                        
                             <div class="col-md-4 ">
@@ -322,7 +304,7 @@
 
                        
                     }
-                    else if(loanType == "PCA")
+                        else if (Model.OnlineApplicationResponse.ApplicationType == 3)
                     {
                      
                             <div class="col-md-4 ">
