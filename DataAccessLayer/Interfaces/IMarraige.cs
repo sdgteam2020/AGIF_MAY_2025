@@ -9,6 +9,7 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IMarraige : IGenericRepositoryDL<MarriagewardModel>
     {
+        Task<MarriagewardModel?> GetByApplicationId(int ApplicationId);
 
     }
 }

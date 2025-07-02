@@ -9,6 +9,7 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IProperty : IGenericRepositoryDL<PropertyRenovationModel>
     {
+        Task<PropertyRenovationModel?> GetByApplicationId(int ApplicationId);
 
     }
 }

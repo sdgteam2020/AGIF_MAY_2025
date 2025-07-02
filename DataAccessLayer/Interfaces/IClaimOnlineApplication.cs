@@ -14,5 +14,7 @@ namespace DataAccessLayer.Interfaces
         bool ValidateFileUpload(IFormFile file, out string errorMessage);
 
        Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId);
+
+       Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId);
     }
 }

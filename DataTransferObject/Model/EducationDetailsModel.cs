@@ -42,8 +42,6 @@ namespace DataTransferObject.Model
         public IFormFile AttachPartIIOrder { get; set; }
 
         // Presently studying in (School or College)
-        [Required]
-        public string PresentlyStudyingIn { get; set; }
 
         // Course/Class for Withdrawal Required
         [Required]
@@ -57,6 +55,10 @@ namespace DataTransferObject.Model
         [NotMapped]
         [Required]
         public IFormFile AttachBonafideLetter { get; set; }
+
+        public string? AttachBonafideLetterPdf { get; set; } 
+
+        public string? AttachPartIIOrderPdf { get; set; } 
 
         // Total Expenditure
         [Required]

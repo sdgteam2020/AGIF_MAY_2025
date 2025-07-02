@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Office2013.Excel;
 using iText.IO.Font;
 using iText.IO.Font.Constants;
+using iText.IO.Font.Otf;
 using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
@@ -11,6 +12,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using System.Net.NetworkInformation;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -439,7 +441,7 @@ namespace Agif_V2.Helpers
                         var boldFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
                         // Section 29 title
-                        var titleParagraph = new Paragraph("31. I state and certify that:")
+                        var titleParagraph = new Paragraph("30. I state and certify that:")
                             .SetFont(normalFontforpara29)
                             .SetFontSize(10)
                             .SetMarginTop(10)
@@ -473,7 +475,7 @@ namespace Agif_V2.Helpers
                         // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                         // Section 30 title
-                        var titleParagraph30 = new Paragraph("29. I further agree that:")
+                        var titleParagraph30 = new Paragraph("31. I further agree that:")
                             .SetFont(normalFontforpara29)
                             .SetFontSize(10)
                             .SetMarginTop(10)
@@ -501,7 +503,7 @@ namespace Agif_V2.Helpers
                             document.Add(bulletPoint30);
                         }
 
-                        var titleParagraph31 = new Paragraph("30. I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.")
+                        var titleParagraph31 = new Paragraph("32. I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.")
                             .SetFont(normalFontforpara29)
                             .SetFontSize(10)
                             .SetMarginTop(10)
@@ -665,26 +667,30 @@ namespace Agif_V2.Helpers
                     }
                     else if (data.PcaApplicationResponse != null)
                     {
-                        document.Add(new Paragraph("PCA Loan Details")
-                            .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
+                        //document.Add(new Paragraph("PCA Loan Details")
+                        //    .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
                         var pca = data.PcaApplicationResponse;
-                        Table pcatable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 5, 3, 5 })).UseAllAvailableWidth();
+                        Table pcatable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
+
                         void AddLoanRow(string label1, string val1, string label2, string val2)
                         {
-                            pcatable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(boldFont)).SetBorder(Border.NO_BORDER));
-                            pcatable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
-                            pcatable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(boldFont)).SetBorder(Border.NO_BORDER));
-                            pcatable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(val1 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(label2).SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
+                            pcatable.AddCell(new Cell().Add(new Paragraph(val2 ?? "").SetFont(normalFont)).SetFontSize(smallFontSize).SetBorder(Border.NO_BORDER).SetBorderBottom(new SolidBorder(1)));
                         }
-                        AddLoanRow("26. Computer Name", pca.computer_Loan_Type, "27. Model Name", pca.PCA_modelName);
-                        AddLoanRow("28. Est Cost:", pca.computerCost.ToString(), "29. Loan Amt Reqd:", pca.PCA_Amount_Applied_For_Loan.ToString());
-                        AddLoanRow("30. Loan Frequency", pca.PCA_LoanFreq.ToString(), "", "");
+
+                        AddLoanRow("24. Dealer Name", pca.PCA_dealerName, "25. Model Name", pca.PCA_modelName);
+                        AddLoanRow("26. Est Cost:", pca.computerCost.ToString(), "27. Loan Amt Reqd:", pca.PCA_Amount_Applied_For_Loan.ToString());
+                        AddLoanRow("28. Loan Frequency", pca.PCA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("30. Bank IFSC Code", common.IfsCode, "", "");
+
                         document.Add(pcatable);
 
 
                        
                         // Section 29 Title
-                        document.Add(new Paragraph("29. I state and certify that:")
+                        document.Add(new Paragraph("31. I state and certify that:")
                             .SetFont(normalFont)
                             .SetFontSize(10)
                             .SetMarginTop(10).SetMarginBottom(5));
@@ -708,7 +714,7 @@ namespace Agif_V2.Helpers
                         document.Add(new Paragraph(ePoint).SetFont(normalFont).SetFontSize(11).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(3).SetMarginLeft(20));
 
                         // Section 30
-                        string section30 = "30.  I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.";
+                        string section30 = "32.  I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.";
                         document.Add(new Paragraph(section30).SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
 
                         string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";

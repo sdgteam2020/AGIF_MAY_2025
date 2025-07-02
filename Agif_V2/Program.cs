@@ -37,6 +37,7 @@ builder.Services.AddTransient<IProperty, PropertyDL>();
 builder.Services.AddTransient<ISpecial, SpecialDL>();
 builder.Services.AddTransient<IArmyPrefixes, ArmyPrefixesDL>();
 builder.Services.AddTransient<IDoucmentupload, DocumentUploadDL>();
+builder.Services.AddTransient<IClaimDocumentUpload, ClaimDocumentUploadDL>();
 builder.Services.AddTransient<IApplication, Application>();
 builder.Services.AddTransient<IUserProfile, UserProfileDL>();
 builder.Services.AddTransient<IUserMapping, UserMappingDL>();

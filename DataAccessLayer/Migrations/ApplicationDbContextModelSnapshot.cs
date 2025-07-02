@@ -465,6 +465,87 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("trnClaim");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.ClaimDocumentUpload", b =>
+                {
+                    b.Property<int>("UploadId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UploadId"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AttachBonafideLetterPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachInvitationcardPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachPartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attach_PartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CancelledCheque")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachBonafideLetterPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachInvitationcardPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttachPartIIOrderPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAttach_PartIIOrderPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsCancelledChequePdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOtherReasonPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaySlipPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSplWaiverPdf")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTotalExpenditureFilePdf")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("OtherReasonsPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaySlipPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SplWaiverPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalExpenditureFile")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Updatedby")
+                        .HasColumnType("int");
+
+                    b.HasKey("UploadId");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.ToTable("trnClaimDocumentUpload");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>
                 {
                     b.Property<int>("ApplicationId")
@@ -867,6 +948,12 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AttachBonafideLetterPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachPartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ChildName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -897,10 +984,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsAttachPartIIOrderPdf")
                         .HasColumnType("bit");
-
-                    b.Property<string>("PresentlyStudyingIn")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("TotalExpenditure")
                         .HasColumnType("float");
@@ -1366,6 +1449,12 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AttachInvitationcardPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachPartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DOPartIINo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1510,6 +1599,9 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TotalExpenditureFilePdf")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
 
@@ -1537,8 +1629,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsOtherReasonPdf")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OtherReasons")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OtherReasonsPdf")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
@@ -1931,6 +2029,17 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MUnitsPresent");
 
                     b.Navigation("WithdrawalPurposetype");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.ClaimDocumentUpload", b =>
+                {
+                    b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ClaimCommonModel");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.CommonDataModel", b =>

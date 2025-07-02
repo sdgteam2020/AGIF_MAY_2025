@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,11 @@ namespace DataAccessLayer.Repositories
         {
             _context = context;
 
+        }
+
+        public async Task<MarriagewardModel?> GetByApplicationId(int ApplicationId)
+        {
+            return await _context.trnMarriageward.FirstOrDefaultAsync(x => x.ApplicationId == ApplicationId);
         }
     }
 }

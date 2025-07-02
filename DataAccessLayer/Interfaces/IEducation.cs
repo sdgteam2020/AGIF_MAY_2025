@@ -9,6 +9,6 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IEducation : IGenericRepositoryDL<EducationDetailsModel>
     {
-
+        Task<EducationDetailsModel?> GetByApplicationId(int ApplicationId);
     }
 }

@@ -988,6 +988,8 @@ function SetRetDate() {
 }
 function calculateResidualService() {
     var retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
+    var purposetype = $('#Purpose').val();
+
     if (!retirementDateStr) {
         return;
     }
@@ -1020,6 +1022,27 @@ function calculateResidualService() {
     var totalmonths = years * 12 + months;
     $("#totalResidualMonth").val(totalmonths);
     $("#residualService").val(years);
+
+    if (purposetype == "3") {
+
+        if (years > 2) {
+            Swal.fire({
+                title: 'Residual Service Calculated',
+                text: 'Your residual service is not valid',
+                icon: 'info',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to claim/online application page
+                    window.location.href = '/Claim/MaturityLoanType';  // Adjust URL if necessary
+                }
+            });
+        }
+        // Show SweetAlert and redirect on "OK"
+      
+    }
+        
+    
     setOutlineActive("residualService");
 
 }
@@ -2244,6 +2267,10 @@ $('#TotalexpenditureFile').change(function () {
     previewFile(this, '#TotalexpenditureFile');
 }); 
 
+$('#OtherReasonPdf').change(function () {
+    previewFile(this, '#OtherReasonPdf');
+}); 
+
 
 function previewFile(input, previewSelector) {
     const file = input.files[0];
@@ -2268,5 +2295,30 @@ function previewFile(input, previewSelector) {
 
     } else {
         preview.html('<p>No file selected</p>');
+    }
+}
+$('#OtherReasons').on('input', function () {
+    var maxWords = 50;
+    var currentValue = $(this).val();
+
+    // Split the value into words by whitespace
+    var words = currentValue.trim().split(/\s+/);
+
+    // If the number of words exceeds the limit, truncate the string
+    if (words.length > maxWords) {
+        words = words.slice(0, maxWords); // Take only the first 50 words
+        $(this).val(words.join(' ')); // Join them back into a string and update the input
+    }
+});
+
+function formatIndianNumber(input) {
+    let value = input.value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+    if (value.length <= 3) {
+        input.value = value;  // No formatting for less than or equal to 3 digits
+    } else {
+        let lastThree = value.slice(-3);
+        let otherNumbers = value.slice(0, value.length - 3);
+        otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");  // Add commas in pairs for the Indian system
+        input.value = otherNumbers + "," + lastThree;
     }
 }

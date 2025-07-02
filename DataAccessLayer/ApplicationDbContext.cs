@@ -60,6 +60,8 @@ namespace DataAccessLayer
 
         public virtual DbSet<SplWaiverModel> trnSplWaiver { get; set; }
 
+        public virtual DbSet<ClaimDocumentUpload> trnClaimDocumentUpload { get; set; }
+
         public virtual DbSet<MAgeMapping> MAgeMapping { get; set; }
         public virtual DbSet<MVehType> MVehType { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)

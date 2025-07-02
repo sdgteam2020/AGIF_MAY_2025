@@ -290,7 +290,9 @@ namespace DataAccessLayer.Repositories
                                         PCA_dealerName = pca.PCA_dealerName,
                                         PCA_companyName = pca.PCA_companyName,
                                         computerCost = pca.computerCost,
-                                        PCA_LoanFreq = pca.PCA_LoanFreq
+                                        PCA_LoanFreq = pca.PCA_LoanFreq,
+                                        PCA_modelName=pca.PCA_modelName,
+                                        PCA_Amount_Applied_For_Loan=pca.PCA_Amount_Applied_For_Loan,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
@@ -648,7 +650,7 @@ namespace DataAccessLayer.Repositories
                                         OldArmyPrefix = common.OldArmyPrefix,
                                         OldNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
                                         OldSuffix = common.OldSuffix ?? string.Empty,
-                                        DdlRank = rank != null ? rank.RankName : string.Empty,
+                                        Rank = rank != null ? rank.RankName : string.Empty,
                                         ApplicantName = common.ApplicantName ?? string.Empty,
                                         DateOfBirth = common.DateOfBirth,
                                         DateOfCommission = common.DateOfCommission,
