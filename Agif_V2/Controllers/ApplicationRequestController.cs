@@ -1,4 +1,5 @@
 ﻿using Agif_V2.Helpers;
+using ClosedXML.Excel;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
@@ -8,7 +9,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
+using System.Data;
+using System.Drawing;
+using System.IO.Compression;
 
 namespace Agif_V2.Controllers
 {
@@ -17,14 +23,15 @@ namespace Agif_V2.Controllers
         private readonly IUsersApplications _userApplication;
         private readonly IOnlineApplication _onlineApplication;
         private readonly IApplication _application;
-        private readonly OnlineApplicationController _onlineApplicationController;
+        private readonly IUserProfile _userProfile;
         
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,OnlineApplicationController _onlineApplicationController)
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,IUserProfile _userProfile)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
             this._application = _application;
-            this._onlineApplicationController = _onlineApplicationController;
+            
+            this._userProfile = _userProfile;
         }
         public IActionResult Index()
         {
@@ -39,9 +46,6 @@ namespace Agif_V2.Controllers
                 return Unauthorized("Session expired or invalid user session.");
             }
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
-            //SessionUserDTO? coSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
-
-            //var app = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, 1);
             return View(dTOTempSession);
         }
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
@@ -126,36 +130,32 @@ namespace Agif_V2.Controllers
             return xml.ToString();
         }
 
-        public async Task<DTODigitalSignDataResponse> SignDocument(int applicationId)
+        public async Task<DTODigitalSignDataResponse?> SignDocument(int applicationId)
         {
             DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applicationId);
             DTODigitalSignDataResponse digitalSignDTO = new DTODigitalSignDataResponse();
 
-
             if (data.OnlineApplicationResponse != null)
             {
-                digitalSignDTO.ApplicationId = data.OnlineApplicationResponse.ApplicationId;
-                digitalSignDTO.ArmyNo = data.OnlineApplicationResponse.Number;
-                digitalSignDTO.ApplicantName = data.OnlineApplicationResponse.ApplicantName;
-                //digitalSignDTO.IsRejectced = con.xmlSignModels.FirstOrDefault(x => x.ApplId == carPcModel.Application_Id)?.IsRejectced == true;
-                digitalSignDTO.PCDA_PAO = data.OnlineApplicationResponse.pcda_pao;
-                digitalSignDTO.Date_Of_Birth = data.OnlineApplicationResponse.DateOfBirth.ToString();
-                digitalSignDTO.Retirement_Date = data.OnlineApplicationResponse.DateOfRetirement.ToString();
-                digitalSignDTO.Mobile_No = data.OnlineApplicationResponse.MobileNo;
-                digitalSignDTO.ApplType = data.OnlineApplicationResponse.ApplicationType;
-                digitalSignDTO.DateOfCommision = data.OnlineApplicationResponse.DateOfCommission.ToString();
-                digitalSignDTO.AccountNo = data.OnlineApplicationResponse.SalaryAcctNo;
-                digitalSignDTO.RankName = data.OnlineApplicationResponse.DdlRank;
-                digitalSignDTO.UnitName = data.OnlineApplicationResponse.PresentUnit;
-                digitalSignDTO.PAN_No = data.OnlineApplicationResponse.PanCardNo;
+                var onlineResponse = data.OnlineApplicationResponse;
+
+                digitalSignDTO.ApplicationId = onlineResponse.ApplicationId;
+                digitalSignDTO.ArmyNo = onlineResponse.Number ?? string.Empty;
+                digitalSignDTO.ApplicantName = onlineResponse.ApplicantName ?? string.Empty;
+                digitalSignDTO.PCDA_PAO = onlineResponse.pcda_pao ?? string.Empty;
+                digitalSignDTO.Date_Of_Birth = onlineResponse.DateOfBirth?.ToString() ?? string.Empty;
+                digitalSignDTO.Retirement_Date = onlineResponse.DateOfRetirement?.ToString() ?? string.Empty;
+                digitalSignDTO.Mobile_No = onlineResponse.MobileNo ?? string.Empty;
+                digitalSignDTO.ApplType = onlineResponse.ApplicationType;
+                digitalSignDTO.DateOfCommision = onlineResponse.DateOfCommission?.ToString() ?? string.Empty;
+                digitalSignDTO.AccountNo = onlineResponse.SalaryAcctNo ?? string.Empty;
+                digitalSignDTO.RankName = onlineResponse.DdlRank ?? string.Empty;
+                digitalSignDTO.UnitName = onlineResponse.PresentUnit ?? string.Empty;
+                digitalSignDTO.PAN_No = onlineResponse.PanCardNo ?? string.Empty;
+
                 return digitalSignDTO;
-
             }
-            else
-            {
-                return null;
-            }
-
+            return null;
         }
 
         public async Task SaveXML(int applId, string xmlResString, string remarks)
@@ -164,9 +164,11 @@ namespace Agif_V2.Controllers
             {
                 DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applId);
 
-                var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "CO");
+                var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
                 if (dTOTempSession == null)
                     throw new Exception("Session expired or invalid user context.");
+
+
 
                 var digitalSignRecords = new DigitalSignRecords
                 {
@@ -180,9 +182,22 @@ namespace Agif_V2.Controllers
                     RankName = dTOTempSession.RankName
                 };
 
-                await _onlineApplication.UpdateApplicationStatus(applId, 2); // This is the likely failing line
+                await _onlineApplication.UpdateApplicationStatus(applId, 2); 
                 await _application.Add(digitalSignRecords);
-               // await _onlineApplicationController.MergePdf(applId, false, true);
+
+                DTOUserProfileResponse adminDetails = await _userProfile.GetAdminDetails();
+                var TrnFwd = new TrnFwd
+                {
+                    ApplicationId = applId,
+                    FromUserId = dTOTempSession.UserId,
+                    FromProfileId = dTOTempSession.ProfileId,
+                    ToUserId = adminDetails.UserId,
+                    ToProfileId = adminDetails.ProfileId,
+                    CreatedOn = DateTime.Now
+                };
+
+
+
             }
             catch (Exception ex)
             {
@@ -207,6 +222,357 @@ namespace Agif_V2.Controllers
             return Json(new { success = true, message = "Application rejected." });
 
         }
+        public async Task<IActionResult> UsersApplicationListAdmin(string status)
+        {
+            ViewBag.Status = status;
+            return View();
+        }
 
+        public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
+        {
+            try
+            {
+                var queryableData = await _userApplication.GetUsersApplicationForAdmin(status);
+                var totalRecords = queryableData.Count();
+                var query = queryableData.AsQueryable();
+
+                // Apply search filter - fixed to match actual DTO properties
+                if (!string.IsNullOrEmpty(request.searchValue))
+                {
+                    string searchValue = request.searchValue.ToLower();
+                    query = query.Where(x =>
+                        (x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
+                        (x.ArmyNo != null && x.ArmyNo.ToLower().Contains(searchValue)) ||
+                        (x.RegtCorps != null && x.RegtCorps.ToLower().Contains(searchValue)) ||
+                        (x.PresentUnit != null && x.PresentUnit.ToLower().Contains(searchValue)) ||
+                        (x.AppliedDate != null && x.AppliedDate.ToLower().Contains(searchValue))
+                    );
+                }
+
+                var filteredRecords = query.Count();
+
+                // Apply sorting - fixed to match JavaScript column names
+                if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+                {
+                    bool ascending = request.sortDirection.ToLower() == "asc";
+                    query = request.sortColumn.ToLower() switch
+                    {
+                        "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                        "regtname" => ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps),
+                        "presentunit" => ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit),
+                        "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+                        _ => query.OrderByDescending(x => x.UpdatedOn) // Default sorting
+                    };
+                }
+                else
+                {
+                    // Default sorting by UpdatedOn descending
+                    query = query.OrderByDescending(x => x.UpdatedOn);
+                }
+
+                // Paginate the result
+                var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+                var responseData = new DTODataTablesResponse<DTOGetApplResponse>
+                {
+                    draw = request.Draw,
+                    recordsTotal = totalRecords,
+                    recordsFiltered = filteredRecords,
+                    data = paginatedData
+                };
+
+                return Json(responseData);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { error = "An error occurred while loading data: " + ex.Message });
+            }
+        }
+
+        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        //{
+
+
+        //    DTOExportRequest dTOExport = new DTOExportRequest
+        //    {
+        //        Id = id,
+
+        //    };
+        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+
+        //    foreach (var data in ret.OnlineApplicationResponse)
+        //    {
+
+
+
+        //        //string ArmyNO = data.ArmyPrefix + data.Number + data.Suffix;
+        //        var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+        //        var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+
+        //        //Create Folder and GetFolder NAme
+        //        string basePath = Path.Combine("wwwroot", "PdfDownloaded");//Change Filder
+        //        if (Directory.Exists(basePath))
+        //        {
+        //            DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+        //            foreach (var dir in dirInfo.GetDirectories())
+        //            {
+        //                dir.Delete(true); // true to delete all subdirectories and files
+        //            }
+
+        //            foreach (var file in dirInfo.GetFiles())
+        //            {
+        //                file.Delete();
+        //            }
+        //        }
+
+
+        //        string newFolderPath = CreateFolder(basePath);
+        //        //new Folder Url
+        //        string newFolderPathUri = Path.Combine(basePath, newFolderPath);
+        //        // Ensure the new folder exists
+        //        string destinationFilePath = Path.Combine(newFolderPathUri, fileName); // Corrected to use newFolderPathUri
+
+        //        // Copy the file to the new folder
+        //        System.IO.File.Copy(filePath, destinationFilePath, overwrite: true); // Corrected to use destinationFilePath
+        //        string zipFileName = $"{newFolderPathUri}.zip";
+        //        createZip(newFolderPathUri, zipFileName);
+
+
+
+        //        //////////////////Create Excel File Witlh Application Details/////////////////////
+
+
+        //        return Json(newFolderPath);
+        //    }
+
+        //    return Json(0);
+        //}
+
+        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        //{
+        //    DTOExportRequest dTOExport = new DTOExportRequest
+        //    {
+        //        Id = id,
+        //    };
+
+        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+        //    // Base path to clean and create new folder
+        //    string basePath = Path.Combine("wwwroot", "PdfDownloaded");
+
+        //    // Clean old folders/files
+        //    if (Directory.Exists(basePath))
+        //    {
+        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+        //        foreach (var dir in dirInfo.GetDirectories())
+        //        {
+        //            dir.Delete(true);
+        //        }
+
+        //        foreach (var file in dirInfo.GetFiles())
+        //        {
+        //            file.Delete();
+        //        }
+        //    }
+
+        //    // Create new folder
+        //    string newFolderName = CreateFolder(basePath);
+        //    string newFolderPath = Path.Combine(basePath, newFolderName);
+
+        //    foreach (var data in ret.OnlineApplicationResponse)
+        //    {
+        //        var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+        //        var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+
+        //        // Ensure file exists before copying
+        //        if (System.IO.File.Exists(filePath))
+        //        {
+        //            var destinationFilePath = Path.Combine(newFolderPath, fileName);
+        //            System.IO.File.Copy(filePath, destinationFilePath, overwrite: true);
+        //        }
+        //    }
+
+        //    // Zip the final folder
+        //    string zipFileName = $"{newFolderPath}.zip";
+        //    createZip(newFolderPath, zipFileName);
+
+        //    return Json(newFolderName); // return only after everything is complete
+        //}
+
+        public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        {
+            DTOExportRequest dTOExport = new DTOExportRequest
+            {
+                Id = id,
+            };
+
+            var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+            // Base path to clean and create new folder
+            string basePath = Path.Combine("wwwroot", "PdfDownloaded");
+
+            // Clean old folders/files
+            if (Directory.Exists(basePath))
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+                foreach (var dir in dirInfo.GetDirectories())
+                {
+                    dir.Delete(true);
+                }
+
+                foreach (var file in dirInfo.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+
+            // Create new time-based folder
+            string newFolderName = CreateFolder(basePath);
+            string newFolderPath = Path.Combine(basePath, newFolderName);
+            Directory.CreateDirectory(newFolderPath);
+
+            // Create subfolders HBA, CA, PCA inside new folder
+            string hbaFolder = Path.Combine(newFolderPath, "HBA");
+            string caFolder = Path.Combine(newFolderPath, "CA");
+            string pcaFolder = Path.Combine(newFolderPath, "PCA");
+
+           
+           
+
+            foreach (var data in ret.OnlineApplicationResponse)
+            {
+                var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+                var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+
+                if (System.IO.File.Exists(sourceFilePath))
+                {
+                    // Choose target subfolder based on ApplicationTypeAbbr
+                    string destinationFolder = data.ApplicationTypeAbbr switch
+                    {
+                        "HBA" => hbaFolder,
+                        "CA" => caFolder,
+                        "PCA" => pcaFolder,
+                        _ => newFolderPath // fallback if unknown
+                    };
+
+                    if(data.ApplicationTypeAbbr== "HBA")
+                    Directory.CreateDirectory(hbaFolder);
+                    if (data.ApplicationTypeAbbr == "CA")
+                        Directory.CreateDirectory(caFolder);
+                    if (data.ApplicationTypeAbbr == "PCA")
+                        Directory.CreateDirectory(pcaFolder);
+
+                    var destinationFilePath = Path.Combine(destinationFolder, fileName);
+                    System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+                }
+            }
+
+            // Generate Excel file and save to timestamp folder
+           bool retexcel= await ExportToExcelInFolder(dTOExport, newFolderPath);
+            if (!retexcel)
+            {
+                return Json(Constants.DataNotExport);
+            }
+            else
+            {
+                string zipFileName = $"{newFolderPath}.zip";
+                createZip(newFolderPath, zipFileName);
+                bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
+                if (!updateStatus) 
+                { 
+                    return Json(Constants.DataNotExport);
+                }
+                return Json(newFolderName);
+
+            }
+          
+        }
+
+        // Modified method to save Excel file to specific folder instead of returning File result
+        public async Task<bool> ExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
+        {
+            DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("ExportedData");
+                if (dataTable.Rows.Count > 0)
+                {
+                    worksheet.Cell(1, 1).InsertTable(dataTable);
+                    string excelFilePath = Path.Combine(folderPath, "loanDetails.xlsx");
+                    workbook.SaveAs(excelFilePath);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                
+
+              
+            }
+        }
+
+        // Keep the original method if you need it for direct download
+        public async Task<IActionResult> ExportToExcel(DTOExportRequest dTOExport)
+        {
+            DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
+
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("ExportedData");
+                worksheet.Cell(1, 1).InsertTable(dataTable);
+
+                using (var memoryStream = new MemoryStream())
+                {
+                    workbook.SaveAs(memoryStream);
+                    memoryStream.Position = 0;
+
+                    return File(memoryStream.ToArray(),
+                                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                "loanDetails.xlsx");
+                }
+            }
+        }
+
+        public void createZip(string sourceFolderPath,string destinationFilePath)
+        {
+            
+            if (System.IO.File.Exists(destinationFilePath))
+            {
+                System.IO.File.Delete(destinationFilePath);
+            }
+
+            // Create the zip
+            ZipFile.CreateFromDirectory(sourceFolderPath, destinationFilePath, System.IO.Compression.CompressionLevel.Optimal, includeBaseDirectory: false);
+
+        }
+        public string CreateFolder(string basePath)
+        {
+            // Timestamp-based folder name
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string folderPath = Path.Combine(basePath, timestamp);
+
+            // Create the directory
+            Directory.CreateDirectory(folderPath);
+
+            return timestamp;
+        }
+
+        public async Task<IActionResult> GetApplicationByDate(string date)
+        {
+            DateTime exportDate = Convert.ToDateTime(date);
+            var result = await _userApplication.GetApplicationByDate(exportDate);
+            return Json(result);
+        }
     }
 }

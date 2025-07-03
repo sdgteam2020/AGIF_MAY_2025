@@ -11,7 +11,7 @@
     {
         loanTypeText = "House Loan (HBA)";
     }
-    else if (loanType == "1")
+    else if (loanType == "2")
     {
         loanTypeText = "Car/Two Wheeler Loan (CA)";
     }
@@ -20,6 +20,171 @@
         loanTypeText = "Computer Loan (PCA)";
     }
 }
+<style>
+    .ui-datepicker {
+        background: white;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        width: 280px;
+        z-index: 9999;
+    }
+
+    .ui-datepicker-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    .ui-datepicker-title {
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .ui-datepicker-prev,
+    .ui-datepicker-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.2);
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .ui-datepicker-prev {
+        left: 10px;
+    }
+
+    .ui-datepicker-next {
+        right: 10px;
+    }
+
+        .ui-datepicker-prev:hover,
+        .ui-datepicker-next:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .ui-datepicker-prev span,
+        .ui-datepicker-next span {
+            display: block;
+            width: 100%;
+            height: 100%;
+            text-indent: -9999px;
+            position: relative;
+        }
+
+            .ui-datepicker-prev span:before {
+                content: "❮";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                text-indent: 0;
+                color: white;
+                font-size: 12px;
+            }
+
+            .ui-datepicker-next span:before {
+                content: "❯";
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                text-indent: 0;
+                color: white;
+                font-size: 12px;
+            }
+
+    .ui-datepicker-calendar {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .ui-datepicker-calendar th {
+            padding: 10px 5px;
+            text-align: center;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .ui-datepicker-calendar td {
+            padding: 2px;
+            text-align: center;
+        }
+
+            .ui-datepicker-calendar td a {
+                display: block;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+                text-decoration: none;
+                color: #333;
+                border-radius: 6px;
+                transition: all 0.3s ease;
+                font-size: 14px;
+            }
+
+                .ui-datepicker-calendar td a:hover {
+                    background: #667eea;
+                    color: white;
+                    transform: scale(1.1);
+                }
+
+        .ui-datepicker-calendar .ui-datepicker-today a {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            font-weight: bold;
+        }
+
+        .ui-datepicker-calendar .ui-datepicker-current-day a,
+        .ui-datepicker-calendar .ui-state-active {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+
+        .ui-datepicker-calendar .ui-datepicker-other-month a {
+            color: #ccc;
+        }
+
+    /* Clip Effect Animation */
+    .ui-datepicker {
+        animation: clipIn 0.4s ease-out;
+    }
+
+    @@keyframes clipIn {
+        0% {
+            clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        50% {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            opacity: 0.7;
+            transform: scale(0.9);
+        }
+
+        100% {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+</style>
 
 
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
@@ -60,7 +225,7 @@
                                                     ;
                                                 }">
                                                 </select>
-                                                <label class="form-label select-label ">Army No</label>
+                                                <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -71,7 +236,7 @@
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="armyNumber" name="CommonData.Number" value="@Model.CommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control" onblur="getApplicantDetalis(this)" oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="armyNumber">Number</label>
+                                                <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CommonData.Number, "", new { @class = "text-danger" })
@@ -102,7 +267,7 @@
                                                     ;
                                                 }">
                                                 </select>
-                                                <label class="form-label select-label ">Old Army No</label>
+                                                <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.OldArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -112,7 +277,7 @@
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="oldArmyNo" name="CommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.CommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)" required pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="txtOldNumber">Number</label>
+                                                <label class="form-label" for="txtOldNumber">Old Army No.</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CommonData.OldNumber, "", new { @class = "text-danger" })
@@ -148,6 +313,20 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">👮</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
+                                        <label class="form-label" for="armyNumber">Applicant Name</label>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.CommonData.ApplicantName, "", new { @class = "text-danger" })
+                            </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <div class="col-md-2">
@@ -167,23 +346,10 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
-                                    <span class="input-group-text">👮</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
-                                        <label class="form-label" for="armyNumber">Applicant Name</label>
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
-                                        </div>
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.ApplicantName, "", new { @class = "text-danger" })
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                               onchange="SetRetDate()">
+                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("yyyy-MM-dd")"
+                                               required oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
@@ -194,8 +360,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission" style="caret-color: transparent;"
-                                               required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" onchange="calculateYearDifference();SetRetDate()">
+                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"
+                                               required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>
@@ -233,8 +399,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled style="caret-color: transparent;"
-                                               onchange="updateRetDateOnPromotionDateSelection()">
+                                        <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled"
+                                               oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
@@ -298,7 +464,7 @@
                                     <select id="emailDomain" name="CommonData.EmailDomain" class="form-select" required>
                                         <option value="gmail.com">gmail.com</option>
                                         <option value="yahoo.com">yahoo.com</option>
-                                        <option value="yahoo.com.in">yahoo.com.in</option>
+                                        <option value="yahoo.co.in">yahoo.co.in</option>
                                         <option value="rediffmail.com">rediffmail.com</option>
                                         <option value="outlook.com">outlook.com</option>
                                         <option value="protonmail.com">protonmail.com</option>
@@ -315,6 +481,7 @@
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="totalService" name="CommonData.TotalService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.TotalService" required />
                                         <label class="form-label select-label ">Total Service(Years)</label>
+                                        <span class="error text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
@@ -372,11 +539,12 @@
                                     <div class="col-md-2">
                                         <span class="input-group-text">🪖</span>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="form-outline" data-mdb-input-init>
                                         @Html.EditorFor(m => m.CommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
                                         @Html.ValidationMessageFor(m => m.CommonData.ParentUnit, "", new { @class = "text-danger" })
                                         <span id="ParentUnitId" class="d-none">@Model.CommonData?.ParentUnit</span>
                                         <input type="text" class="form-control form-control-Alphabets" id="ParenttxtUnit" placeholder="Search Parent Unit..." />
+                                        <label class="form-label" for="ParentUnit">Parent Unit</label>
                                     </div>
                                 </div>
                             </div>
@@ -386,25 +554,26 @@
                                     <div class="col-md-2">
                                         <span class="input-group-text">🪖</span>
                                     </div>
-                                    <div class="col-md-10">
+                                    <div class="form-outline" data-mdb-input-init>
                                         @Html.EditorFor(model => model.CommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
                                         @Html.ValidationMessageFor(model => model.CommonData.PresentUnit, "", new { @class = "text-danger" })
                                         <span id="PresentUnitId" class="d-none">@Model.CommonData?.PresentUnit</span>
                                         <input type="text" class="form-control form-control-Alphabets" id="PresenttxtUnit" placeholder="Search Present Unit..." />
+                                        <label class="form-label" for="PresentUnit">Present Unit</label>
+
                                     </div>
                                 </div>
                                 @* <span class="input-group-text">🪖</span> *@
 
                             </div>
 
-                            @Html.HiddenFor(model => model.CommonData.IOUnit)
 
 
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="presentUnitPin" name="CommonData.PresentUnitPin" class="form-control" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.PresentUnitPin" />
+                                        <input type="text" id="presentUnitPin" name="CommonData.PresentUnitPin" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.PresentUnitPin" />
                                         <label class="form-label select-label ">Present Unit PIN</label>
                                     </div>
                                 </div>
@@ -467,7 +636,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Vill_Town" name="CommonData.Vill_Town" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.Vill_Town" />
+                                        <input type="text" id="Vill_Town" name="CommonData.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.Vill_Town" />
                                         <label class="form-label" for="Vill_Town">Village/Town</label>
                                     </div>
 
@@ -479,7 +648,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="postOffice" name="CommonData.PostOffice" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.PostOffice" />
+                                        <input type="text" id="postOffice" name="CommonData.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.PostOffice" />
                                         <label class="form-label" for="postOffice">Post Office</label>
                                     </div>
                                 </div>
@@ -489,7 +658,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="distt" name="CommonData.Distt" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.Distt" />
+                                        <input type="text" id="distt" name="CommonData.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.Distt" />
                                         <label class="form-label" for="distt">Enter Dist</label>
                                     </div>
                                 </div>
@@ -499,7 +668,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="state" name="CommonData.State" class="form-control" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.State" />
+                                        <input type="text" id="state" name="CommonData.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.State" />
                                         <label class="form-label" for="state">Enter State</label>
                                     </div>
                                 </div>
@@ -509,8 +678,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="CommonData.Code" class="form-control" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.Code" />
-                                        <label class="form-label" for="Code">Zip Code</label>
+                                        <input type="text" id="Code" name="CommonData.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.Code" />
+                                        <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Code, "", new { @class = "text-danger" })
@@ -568,7 +737,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="CommonData.NameOfBank" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.CommonData?.NameOfBank" required />
+                                        <input type="text" id="nameOfBank" name="CommonData.NameOfBank" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.CommonData?.NameOfBank" required />
                                         <label class="form-label select-label ">Name of Bank</label>
                                     </div>
                                 </div>
@@ -578,7 +747,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="CommonData.NameOfBankBranch" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.CommonData?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="CommonData.NameOfBankBranch" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.CommonData?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
@@ -604,7 +773,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗓️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" onchange="Validate_Salary_Slip_date(this)">
+                                        <input type="text" class="form-control Payslippicker" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="Validate_Salary_Slip_date(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Monthly Pay Slip</label>
                                     </div>
                                 </div>
@@ -891,16 +1060,6 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
-                                            <span class="input-group-text">💰</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.HBAApplication?.PropertyCost" />
-                                                <label class="form-label select-label ">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
-                                            </div>
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.HBAApplication.PropertyCost, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">🔁</span>
                                             </div>
@@ -916,6 +1075,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💰</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.HBAApplication?.PropertyCost" />
+                                                <label class="form-label select-label ">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.HBAApplication.PropertyCost, "", new { @class = "text-danger" })
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
@@ -966,7 +1136,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" onchange="validateEMIHba()" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
+                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('HBA')" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -1034,10 +1204,20 @@
                                         <label class="form-label select-label ">Vehicle Loan Type</label>
                                     </div>
                                     <div class="col-md-2">
+                                        @* <span class="input-group-text">🚗</span> *@
+                                        <select class="form-select select" id="VehTypeId" name="CarApplication.VehTypeId" aria-label="Vehicle Type" required data-vehicletypeId-prefix="@if (Model.CarApplication != null)
+                                        {
+                                            @Model.CarApplication.VehTypeId
+                                            ;
+                                        }">
+                                        </select>
+                                        <label class="form-label select-label ">Vehicle Type</label>
+                                    </div>
+                                    <div class="col-md-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏢</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="companyName" name="CarApplication.CompanyName" class="form-control" required value="@Model.CarApplication?.CompanyName" />
+                                                <input type="text" id="companyName" name="CarApplication.CompanyName" class="form-control form-control-Alphabets" required value="@Model.CarApplication?.CompanyName" />
                                                 <label class="form-label select-label ">Company Name</label>
                                             </div>
                                         </div>
@@ -1120,7 +1300,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control" oninput="validateEMI_CA(this);calculateEMI_CA()" required value="@Model.CarApplication?.CA_EMI_Applied" />
+                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control"  onchange="validateEMIForRepayingCapacity('CA')" oninput="validateEMI_CA(this);calculateEMI_CA()" required value="@Model.CarApplication?.CA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -1150,7 +1330,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📆</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control" required value="@Model.CarApplication?.Validity_Date_DL" />
+                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control LicencePicker" required value="@Model.CarApplication?.Validity_Date_DL" oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off" />
                                                 <label class="form-label select-label ">Validity Date of Driving License No</label>
                                             </div>
                                         </div>
@@ -1160,7 +1340,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🪪</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="DL_IssuingAuth" name="CarApplication.DL_IssuingAuth" class="form-control" required value="@Model.CarApplication?.DL_IssuingAuth" />
+                                                <input type="text" id="DL_IssuingAuth" name="CarApplication.DL_IssuingAuth" class="form-control form-control-Alphabets" required value="@Model.CarApplication?.DL_IssuingAuth" />
                                                 <label class="form-label select-label ">Driving License Issuing Auth</label>
                                             </div>
                                         </div>
@@ -1244,16 +1424,6 @@
                                     </div>
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
-                                            <span class="input-group-text">🗺️</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.PCAApplication?.computerCost" />
-                                                <label class="form-label select-label ">Total Price of Computer</label>
-                                            </div>
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.PCAApplication.computerCost, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">👮</span>
                                             </div>
@@ -1271,6 +1441,17 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_LoanFreq, "", new { @class = "text-danger" })
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🗺️</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.PCAApplication?.computerCost" />
+                                                <label class="form-label select-label ">Total Price of Computer</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.PCAApplication.computerCost, "", new { @class = "text-danger" })
+                                    </div>
+                                    
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
@@ -1305,7 +1486,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
+                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan"  class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
                                                 <label class="form-label select-label ">Amount Applied For Loan</label>
                                             </div>
                                         </div>
@@ -1315,7 +1496,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control" oninput="validateEMI_PCA(this);calculateEMI_PCA()" required value="@Model.PCAApplication?.PCA_EMI_Applied" />
+                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('PCA')" oninput="validateEMI_PCA(this);calculateEMI_PCA()" required value="@Model.PCAApplication?.PCA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -1436,8 +1617,6 @@
             { id: 'ifsCode', value: 'HDFC0001234' },
             { id: 'nameOfBank', value: 'HDFC Bank' },
             { id: 'nameOfBankBranch', value: 'HDFC Main Branch' },
-            { id: 'monthlyPaySlip', value: '2025-06-01' },
-
             { id: 'basicPay', value: '50000' },
             { id: 'dsop_afpp', value: '1500' },
             { id: 'rank_gradePay', value: '2000' },
@@ -1529,7 +1708,6 @@
                 { id: 'CA_approxEMIAmount', value: '14000' },
                 { id: 'CA_approxDisbursementAmt', value: '480000' },
                 { id: 'drivingLicenseNo', value: 'DL1234567890' },
-                { id: 'validity_Date_DL', value: '2030-12-31' },
                 { id: 'DL_IssuingAuth', value: 'RTO City' }
             ];
 

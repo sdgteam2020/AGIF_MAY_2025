@@ -1,4 +1,5 @@
-﻿using DataTransferObject.Response;
+﻿using DataTransferObject.Request;
+using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,12 @@ namespace DataAccessLayer.Interfaces
     public interface IUsersApplications
     {
         Task<List<DTOGetApplResponse>> GetUsersApplication(int MappingId,int status);
+
+        Task<List<DTOGetApplResponse>> GetUsersApplicationForAdmin(int status);
+
+        Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date);
+
+        Task<bool> UpdateStatus(DTOExportRequest dtoExport);
+
     }
 }

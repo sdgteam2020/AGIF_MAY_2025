@@ -250,5 +250,18 @@ namespace DataAccessLayer.Repositories
 
             return ret;
         }
+
+        public async Task<List<DTOMasterResponse>> GetVehType()
+        {
+           var ret = await (from vehType in _context.MVehType
+                             select new DTOMasterResponse
+                             {
+                                 Id = vehType.VehTypeId,
+                                 Name = Convert.ToString(vehType.VehTypeName)
+
+                             }).ToListAsync();
+
+            return ret;
+        }
     }
 }

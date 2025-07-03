@@ -9,7 +9,8 @@ namespace DataTransferObject.Response
     public class CommonDataonlineResponse
     {
         public int ApplicationType;
-        public string ApplicationTypeName;
+        public string ApplicationTypeName { get; set; }
+        public string ApplicationTypeAbbr { get; set; }
 
         public int ApplicationId { get; set; }
 
@@ -187,5 +188,7 @@ namespace DataTransferObject.Response
 
 
         public decimal? salary_After_Deductions { get; set; }
+
+        public string? CoName {get; set; }
     }
 }

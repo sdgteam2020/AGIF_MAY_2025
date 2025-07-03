@@ -14,8 +14,8 @@
             <form id="loanForm" action="/Claim/Redirection" method="post">
                 <div class="mb-3">
                     <div class="form-group">
-                        <label for="applicantCategory">Applicant Category:</label>
-                        <select id="applicantCategory" name="applicantCategory" class="form-select" required>
+                        <label for="Category">Applicant Category:</label>
+                        <select id="Category" name="Category" class="form-select" required>
                         </select>
                     </div>
 
@@ -56,7 +56,7 @@
 <script>
 
     $(document).ready(function () {
-        mMsater(0, "applicantCategory", 6, 0);
+        mMsater(0, "Category", 6, 0);
          mMsater(0, "PurposeOfWithdrwal", 19, 0);
     });
 </script>

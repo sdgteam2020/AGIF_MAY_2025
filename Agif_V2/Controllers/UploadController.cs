@@ -5,6 +5,8 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Utils;
 using iText.StyledXmlParser.Node;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Agif_V2.Controllers
 {
@@ -19,9 +21,24 @@ namespace Agif_V2.Controllers
             this._IArmyPrefixes = _IArmyPrefixes;
             this._IDocumentUpload = _IDocumentUpload;
         }
-        public IActionResult Upload()
+        public async Task<IActionResult> Upload()
         {
-           
+            int applicationId = Convert.ToInt32(TempData["applicationId"]);
+
+            bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
+
+            TempData.Keep("applicationId");
+
+            if (application)
+            {
+                TempData["Message"] = "You have already uploaded the Documents for this Application.";
+                return RedirectToAction("ApplicationDetails", new { applicationId = applicationId });
+            }
+
+            bool IsextensionOfService = await _IonlineApplication1.CheckExtensionofservice(applicationId);
+
+            TempData["IsextensionOfService"] = IsextensionOfService;
+
             FileUploadViewModel fileUploadViewModel = new FileUploadViewModel();
             return View(fileUploadViewModel);
         }
@@ -154,35 +171,99 @@ namespace Agif_V2.Controllers
 
             await _IonlineApplication1.UpdateApplicationStatus(applicationId, 1);
 
-           // var ret = _IonlineApplication1.Get(applicationId);
-
-            if (!string.IsNullOrEmpty(CoArmyNumber))
+            var IOArmyNo = await _IonlineApplication1.GetIOArmyNoAsync(applicationId);
+            if (IOArmyNo == null)
             {
-                var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
-                if (CoDetails != null)
-                {
-                    TrnFwdCO trnFwdCO = new TrnFwdCO
+                    var CoDetails = await _IonlineApplication1.GetCoDetails(applicationId);
+                    if (CoDetails != null)
                     {
-                        ApplicationId = applicationId,
-                        ArmyNo = ArmyNo,
-                        COUserId = CoDetails.UnitId,
-                        ProfileId = CoDetails.ProfileId,
-                        CreatedOn = DateTime.Now,
-                        Status = 1
-                    };
-                    await _IonlineApplication1.AddFwdCO(trnFwdCO);
-                }
+                        TrnFwdCO trnFwdCO = new TrnFwdCO
+                        {
+                            ApplicationId = applicationId,
+                            ArmyNo = ArmyNo,
+                            COUserId = CoDetails.UserId,
+                            ProfileId = CoDetails.ProfileId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+                        await _IonlineApplication1.AddFwdCO(trnFwdCO);
+                    }
 
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(IOArmyNo))
+                {
+                    var IoDetails = await _IonlineApplication1.GetUserDetails(IOArmyNo);
+                    if (IoDetails != null)
+                    {
+                        TrnFwdCO trnFwdCO = new TrnFwdCO
+                        {
+                            ApplicationId = applicationId,
+                            ArmyNo = ArmyNo,
+                            COUserId = IoDetails.UserId,
+                            ProfileId = IoDetails.ProfileId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+                        await _IonlineApplication1.AddFwdCO(trnFwdCO);
+                    }
+
+                }
+            }
+
+            //if (!string.IsNullOrEmpty(CoArmyNumber))
+            //{
+            //    var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
+            //    if (CoDetails != null)
+            //    {
+            //        TrnFwdCO trnFwdCO = new TrnFwdCO
+            //        {
+            //            ApplicationId = applicationId,
+            //            ArmyNo = ArmyNo,
+            //            COUserId = CoDetails.UserId,
+            //            ProfileId = CoDetails.ProfileId,
+            //            CreatedOn = DateTime.Now,
+            //            Status = 1
+            //        };
+            //        await _IonlineApplication1.AddFwdCO(trnFwdCO);
+            //    }
+
+            //}
             
-            TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
+            TempData["Message"] = "Application is forwarded to your Unit Cdr.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
-            //TempData["Message"] = "Document Uploaded Successfully and forwarded to Unit Commander.";
-            //return View("Upload", model);
         }
         public IActionResult UploadSuccess()
         {
             return View();
         }
+
+        [HttpPost]
+        public JsonResult InfoBeforeUpload(string applicationId)
+        {
+            if (string.IsNullOrWhiteSpace(applicationId) || applicationId == "0")
+            {
+                return Json(new { success = false, message = "Application ID is required." });
+            }
+
+            var coDetails = _IonlineApplication1.GetUnitByApplicationId(int.Parse(applicationId));
+            var data = coDetails.Result?.OnlineApplicationResponse;
+
+            if (data == null)
+            {
+                return Json(new { success = false, message = "No data found for the provided Application ID." });
+            }
+
+            string CoArmyNumber = data.Number ?? string.Empty;
+            string CoRank = data.DdlRank ?? string.Empty;
+            string CoUnit = data.PresentUnit ?? string.Empty;
+            string CoName = data.CoName ?? string.Empty;
+
+            var message = $"Application will be forwarded to your Unit Commander {CoArmyNumber} {CoRank} {CoName}, {CoUnit}";
+            return Json(new { success = true, message = message });
+        }
+
+
     }
 }

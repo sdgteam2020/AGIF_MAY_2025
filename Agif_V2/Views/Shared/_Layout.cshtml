@@ -1,5 +1,9 @@
 ﻿@using DataTransferObject.Helpers
 @model SessionUserDTO;
+@{
+    string status2Encrypted = EncryptDecrypt.EncryptionData("2");
+    string status4Encrypted = EncryptDecrypt.EncryptionData("4");
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="~/images/favicon.svg" type="image/x-icon" />
-    <title>Blank Page | PlainAdmin Demo</title>
+    <title>ARMY GROUP INSURANCE FUND 3.0</title>
 
     <!-- ========== All CSS files linkup ========= -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
@@ -18,10 +22,11 @@
     <link rel="stylesheet" href="~/css/materialdesignicons.min.css" />
     <link rel="stylesheet" href="~/css/fullcalendar.css" />
     <link rel="stylesheet" href="~/css/main.css" />
-    <script src="~/lib/jquery/jquery.min.js"></script>
     <link href="~/lib/datatable/css/datatable.min.css" rel="stylesheet" />
-    <script src="~/lib/datatable/js/datatable.min.js"></script>
     <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+    <script src="~/lib/jquery/jquery.min.js"></script>
+
+    <script src="~/lib/datatable/js/datatable.min.js"></script>
 </head>
 <body>
     <!-- ======== Preloader =========== -->
@@ -79,6 +84,26 @@
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
                            data-bs-toggle="collapse"
+                           data-bs-target="#receivedApplicationToAdmin"
+                           aria-controls="receivedApplicationToAdmin"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">Received Application</span>
+                        </a>
+                        <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
+                            </li>
+                            <li>
+                                <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>CA/PCA/HBA Downloaded Application </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
                            data-bs-target="#ddmenu_2"
                            aria-controls="ddmenu_2"
                            aria-expanded="false"
@@ -107,7 +132,7 @@
         <header class="header bg-gradient-custom">
             <div class="container-fluid">
                 <div class="row align-items-center">
-                    <div class="col-lg-3 col-md-3 col-3">
+                    <div class="col-lg-2 col-md-2 col-2">
                         <div class="header-left d-flex align-items-center">
                             <div class="menu-toggle-btn mr-15">
                                 <button id="menu-toggle" class="main-btn  btn-hover">
@@ -118,13 +143,13 @@
                     </div>
 
                     <!-- Center section with Hello text -->
-                    <div class="col-lg-6 col-md-6 col-6 text-center ">
+                    <div class="col-lg-8 col-md-8 col-8 text-center ">
                         <div class="header-center">
                             <span id="headerText" class="agi-title-font-size d-block">ARMY GROUP INSURANCE FUND 3.0</span>
                         </div>
                     </div>
 
-                    <div class="col-lg-3 col-md-3 col-3">
+                    <div class="col-lg-2 col-md-2 col-2">
                         <div class="header-right d-flex justify-content-end">
                             <!-- profile start -->
                             <div class="profile-box ml-15">
@@ -202,6 +227,7 @@
     </div>
     <!-- ======== main-wrapper end =========== -->
     <!-- ========= All Javascript files linkup ======== -->
+
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/Chart.min.js"></script>
     <script src="~/js/dynamic-pie-chart.js"></script>
@@ -212,7 +238,6 @@
     <script src="~/js/polyfill.js"></script>
     <script src="~/js/main.js"></script>
     <script src="~/devjs/comman.js"></script>
-    @* <script src="~/DevJs/GetAllUsers.js"></script> *@
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
