@@ -453,7 +453,7 @@ namespace Agif_V2.Helpers
                             document.Add(bulletPoint);
                         }
 
-                        document.Add(new Paragraph("\n\n\n"));
+                        document.Add(new Paragraph("\n"));
                         // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                         // Section 30 title
@@ -534,7 +534,7 @@ namespace Agif_V2.Helpers
                             document.Add(new Paragraph("This is an electronically generated PDF")
                         .SetFont(boldFont).SetFontSize(10).SetFontColor(DeviceRgb.BLUE).SetMarginTop(10).SetMarginBottom(5));
 
-                            document.Add(new Paragraph("\n\n"));
+                            document.Add(new Paragraph("\n"));
 
                             document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
                                 .SetFont(boldFont).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(10).SetMarginBottom(5));
@@ -743,9 +743,9 @@ namespace Agif_V2.Helpers
                             document.Add(para2);
 
                             Paragraph para3 = new Paragraph()
-                               .Add(new Text("3.     I have interviewed him on ").SetFont(normalFont))
-                               .Add(new Text(dated).SetFont(boldFont))//interviewDate added in this
-                               .Add(new Text(". and verified his financial condition  and established need for taking this loan. Applicant will be using loan amount for intended purpose only.").SetFont(normalFont));
+                               .Add(new Text("3.     I have interviewed him").SetFont(normalFont))
+                               
+                               .Add(new Text(" and verified his financial condition  and established need for taking this loan. Applicant will be using loan amount for intended purpose only.").SetFont(normalFont));
                             document.Add(para3);
 
                             Paragraph para4 = new Paragraph()

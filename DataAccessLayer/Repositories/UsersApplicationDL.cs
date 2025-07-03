@@ -36,11 +36,12 @@ namespace DataAccessLayer.Repositories
 
         public async Task<List<DTOGetApplResponse>> GetUsersApplication(int Mapping, int status)
         {
+            int actualStatus = (status == 2 || status > 3) ? 2 : status;
             var UsersApplicationList = await (from appl in _db.trnApplications
                                    join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
                                    join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                    join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                   where user.MappingId == Mapping && appl.StatusCode == status && user.IsPrimary == true
+                                   where user.MappingId == Mapping && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3)) && user.IsPrimary == true
                                    orderby appl.UpdatedOn descending
                                    select new DTOGetApplResponse
                                    {
@@ -58,8 +59,8 @@ namespace DataAccessLayer.Repositories
                                    join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
                                    join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                    join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                   where appl.StatusCode == status
-                                   orderby appl.UpdatedOn descending
+                                           where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
+                                           orderby appl.UpdatedOn descending
                                    select new DTOGetApplResponse
                                    {
                                        ApplicationId = appl.ApplicationId,
