@@ -113,5 +113,18 @@ namespace DataAccessLayer.Repositories
             return admin;
         }
 
+        public async Task<bool> SaveTrnFwdRecords(TrnFwd trnFwd)
+        {
+            try
+            {
+                await _context.TrnFwd.AddAsync(trnFwd);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

@@ -1,0 +1,210 @@
+﻿@model DataTransferObject.Model.ClaimFileUploadViewModel
+
+@{
+    ViewData["Title"] = "Upload";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "ED";
+    //int applicationId = Convert.ToInt32(TempData["applicationId"]);
+    int applicationId = Convert.ToInt32(TempData["applicationId"]);
+    var IsExtension = TempData["IsextensionOfService"] ?? false;
+
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        Document Upload
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Instructions Section -->
+                    <div class="alert alert-info mb-4">
+                        @* <h6 class="alert-heading mb-3">
+                        <strong>UPLOAD PDF OF SUPPORTING DOCUMENTS</strong>
+                        </h6> *@
+
+
+
+                        
+                            <div>
+                                <strong>
+                                UPLOAD SELF ATTESTED SUPPORTING DOCUMENTS 
+                                IN A SINGLE PDF AS PER FOLLOWING SEQUENCE
+                                </strong>
+                                <ul class="mt-2 mb-2">
+                                    <li>Page 1 - Cancelled cheque or first page of passbook duly authenticated by bank.</li>
+                                    <li>Page 2 - Latest pay slip.</li>
+                                    <li>
+                                        Page 3 - Personal application & sp docus (for seeking of spl waiver).
+                                    </li>
+                                    
+                                </ul>
+                            </div>
+                        
+                       
+
+                        <div class="alert alert-warning mt-3 mb-0">
+                            <strong>Note:</strong> Total file size of file after merging pdf including application should not be more than <strong>1 MB</strong>.
+                        </div>
+                    </div>
+                    <form id="uploadForm" action="@Url.Action("SubmitDocuments", "Claim")" method="post" enctype="multipart/form-data">
+                        <!-- Hidden field to pass form type to controller -->
+                        <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
+                        <input type="hidden" id="hiddenApplicationId" name="applicationId" value="@applicationId" />
+                        
+                            <!-- CA Form Upload Fields -->
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- Cancelled Cheque -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <label for="CancelledCheque" class="form-label fw-bold">
+                                                    1. Cancelled Cheque
+                                                </label>
+                                                <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold"></label>
+                                                <div id="cancelledChequePreview" class="file-preview-container">
+                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <!-- Pay Slip -->
+                                    <div class="col-md-6 mb-3">
+
+
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <label for="PaySlipPdf" class="form-label fw-bold">
+                                                    2. First Page of Pay Slip
+                                                </label>
+                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold"></label>
+                                                <div id="paySlipPreview" class="file-preview-container">
+                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <!-- Preview for Pay Slip -->
+
+
+                                </div>
+
+
+
+                             
+
+
+                                <div class="row">
+                                    <!-- Service Extn -->
+                                    <div class="col-md-6 mb-3">
+
+
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                            <label for="SpdocusPdf" class="form-label fw-bold">
+                                                3. sp docus (for seeking of spl waiver)
+                                                </label>
+                                            <input class="form-control" type="file" id="SpdocusPdf" name="SpdocusPdf" accept=".pdf" required>
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.Spdocus, "", new { @class = "text-danger" })
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label class="form-label fw-bold"></label>
+                                            <div id="SpdocusPre" class="file-preview-container">
+                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        
+                       
+                        
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success" id="uploadBtn" disabled>Upload Documents</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="isExtension" value="@IsExtension.ToString().ToLower()" />
+
+</div>
+
+<style>
+    .file-preview-container {
+        margin-top: 6px;
+        overflow: hidden;
+    }
+
+        .file-preview-container embed {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .file-preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .file-preview-container p {
+            color: #888;
+            font-style: italic;
+        }
+</style>
+<script src="~/devjs/ClaimUpload.js"></script>
+
+@* <script>
+    $(document).ready(function () {
+        var message = '@message';
+
+        if (message !== '') {
+            // Display SweetAlert with custom styles
+            Swal.fire({
+                html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
+                icon: 'success',
+                confirmButtonText: 'OK',  // Text on the confirm button
+                confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
+                customClass: {
+                    title: 'font-weight-bold',  // Optional: makes the title bold
+                    htmlContainer: 'text-dark'  // Optional: sets the message text color
+                },
+                padding: '25px'  // Adds padding to the alert for better spacing
+            });
+        }
+    });
+</script> *@

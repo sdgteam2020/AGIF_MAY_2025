@@ -13,7 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configration = builder.Configuration;
 builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(configration.GetConnectionString("AgifConnection")));
-
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "en-GB", "en-US" }; // Use en-GB for dd-MM-yyyy format
+    options.SetDefaultCulture(supportedCultures[0])
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+});
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
     option.Password.RequireNonAlphanumeric = true;
@@ -37,6 +43,7 @@ builder.Services.AddTransient<IProperty, PropertyDL>();
 builder.Services.AddTransient<ISpecial, SpecialDL>();
 builder.Services.AddTransient<IArmyPrefixes, ArmyPrefixesDL>();
 builder.Services.AddTransient<IDoucmentupload, DocumentUploadDL>();
+builder.Services.AddTransient<IClaimDocumentUpload, ClaimDocumentUploadDL>();
 builder.Services.AddTransient<IApplication, Application>();
 builder.Services.AddTransient<IUserProfile, UserProfileDL>();
 builder.Services.AddTransient<IUserMapping, UserMappingDL>();
@@ -66,7 +73,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Make the session cookie essential
 });
 var app = builder.Build();
-
+app.UseRequestLocalization();
 app.UseSession();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

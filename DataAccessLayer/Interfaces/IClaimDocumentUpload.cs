@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Interfaces
 {
-    public interface IEducation : IGenericRepositoryDL<EducationDetailsModel>
+    public interface IClaimDocumentUpload : IGenericRepositoryDL<ClaimDocumentUpload>
     {
-        Task<EducationDetailsModel?> GetByApplicationId(int ApplicationId);
     }
 }

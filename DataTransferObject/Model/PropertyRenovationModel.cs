@@ -35,6 +35,7 @@ namespace DataTransferObject.Model
         [Required]
         public IFormFile TotalExpenditureFile { get; set; }
 
+        public string? TotalExpenditureFilePdf { get; set; }
 
         public bool IsTotalExpenditureFilePdf { get; set; }
     }

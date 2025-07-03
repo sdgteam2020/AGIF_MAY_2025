@@ -219,14 +219,18 @@ namespace DataAccessLayer.Repositories
                               Email = common.Email ?? string.Empty,
                               Code = common.Code ?? string.Empty,
                               SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                              ConfirmSalaryAcctNo= common.ConfirmSalaryAcctNo ?? string.Empty,
+                              //ConfirmSalaryAcctNo= common.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = common.IfsCode ?? string.Empty,
                               NameOfBank = common.NameOfBank ?? string.Empty,
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
-                              ConfirmSalaryAcctNo=common.ConfirmSalaryAcctNo
+                              ConfirmSalaryAcctNo=common.ConfirmSalaryAcctNo,
+                              UpdatedOn = common.UpdatedOn.ToString(),
+                              EmailDomain = common.EmailDomain ?? string.Empty,
+                              
+                              
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
@@ -247,6 +251,8 @@ namespace DataAccessLayer.Repositories
                                         PropertyCost = hba.PropertyCost,
                                         HBA_LoanFreq = hba.HBA_LoanFreq,
                                         HBA_Amount_Applied_For_Loan = hba.HBA_Amount_Applied_For_Loan,
+                                        HBA_EMI_Applied = hba.HBA_EMI_Applied,
+                                        HBA_approxEMIAmount = hba.HBA_approxEMIAmount,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
@@ -290,7 +296,9 @@ namespace DataAccessLayer.Repositories
                                         PCA_dealerName = pca.PCA_dealerName,
                                         PCA_companyName = pca.PCA_companyName,
                                         computerCost = pca.computerCost,
-                                        PCA_LoanFreq = pca.PCA_LoanFreq
+                                        PCA_LoanFreq = pca.PCA_LoanFreq,
+                                        PCA_modelName=pca.PCA_modelName,
+                                        PCA_Amount_Applied_For_Loan=pca.PCA_Amount_Applied_For_Loan,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
@@ -635,43 +643,58 @@ namespace DataAccessLayer.Repositories
                                     where dTOExport.Id.Contains(common.ApplicationId)
                                     select new DTOExcelResponse
                                     {
-                                        ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
-                                        PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                                        Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                                         ApplicationId = common.ApplicationId,
-                                        ApplicationType = common.ApplicationType,
-                                        ApplicationTypeName = applicationType.ApplicationTypeName,
-                                        ApplicationTypeAbbr = applicationType.ApplicationTypeAbbr ?? string.Empty,
-                                        ArmyPrefix = common.ArmyPrefix,
-                                        Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
-                                        AadharCardNo = common.AadharCardNo ?? string.Empty,
-                                        Suffix = common.Suffix ?? string.Empty,
-                                        OldArmyPrefix = common.OldArmyPrefix,
-                                        OldNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
-                                        OldSuffix = common.OldSuffix ?? string.Empty,
-                                        DdlRank = rank != null ? rank.RankName : string.Empty,
-                                        ApplicantName = common.ApplicantName ?? string.Empty,
-                                        DateOfBirth = common.DateOfBirth,
-                                        DateOfCommission = common.DateOfCommission,
-                                        NextFmnHQ = common.NextFmnHQ ?? string.Empty,
-                                        ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
-                                        RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
-                                        PresentUnitPin = common.PresentUnitPin ?? string.Empty,
-                                        Vill_Town = common.Vill_Town ?? string.Empty,
-                                        PostOffice = common.PostOffice ?? string.Empty,
-                                        Distt = common.Distt ?? string.Empty,
-                                        State = common.State ?? string.Empty,
-                                        DateOfPromotion = common.DateOfPromotion,
-                                        DateOfRetirement = common.DateOfRetirement,
-                                        PanCardNo = common.PanCardNo ?? string.Empty,
-                                        MobileNo = common.MobileNo ?? string.Empty,
-                                        Email = common.Email ?? string.Empty,
-                                        Code = common.Code ?? string.Empty,
-                                        SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                                        IfsCode = common.IfsCode ?? string.Empty,
-                                        NameOfBank = common.NameOfBank ?? string.Empty,
-                                        NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
-                                        pcda_pao = common.pcda_pao ?? string.Empty,
-                                        pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                                        apfx = prefix.Prefix,
+                                        ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                                        AadharNo = common.AadharCardNo ?? string.Empty,
+                                        asfx = common.Suffix ?? string.Empty,
+                                        opfx = prefix.Prefix,
+                                        ono = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                                        osfx = common.OldSuffix ?? string.Empty,
+                                        Rank = rank != null ? rank.RankName : string.Empty,
+                                        Loanee_Name = common.ApplicantName ?? string.Empty,
+                                        Date_Of_Birth = common.DateOfBirth,
+                                        Enrollment_Date = common.DateOfCommission,
+                                        Regt_Corps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                                        Pers_Address_Line1 = common.Vill_Town ?? string.Empty,
+                                        Pers_Address_Line2 = common.PostOffice ?? string.Empty,
+                                        Pers_Address_Line3 = common.Distt ?? string.Empty,
+                                        Pers_Address_Line4 = common.State ?? string.Empty,
+                                        Promotion_Date = common.DateOfPromotion,
+                                        Retirement_Date = common.DateOfRetirement,
+                                        PANNo = common.PanCardNo ?? string.Empty,
+                                        Mobile_No = common.MobileNo ?? string.Empty,
+                                        Payee_Account_No = common.SalaryAcctNo ?? string.Empty,
+                                        IFSC_Code = common.IfsCode ?? string.Empty,
+                                        CDA_PAO = common.pcda_pao ?? string.Empty,
+                                        CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
+                                        Year_Of_Service = common.TotalService,
+                                        Residual_Service = common.ResidualService,
+                                        ApplicationType = common.ApplicationType.ToString(),
+                                        LoanType = applicationType.ApplicationTypeName ?? string.Empty,
+                                        Salary_Slip_Month_Year = common.MonthlyPaySlip.ToString(),
+                                        Basic_Salary = common.BasicPay,
+                                        Rank_Grade_Pay = common.rank_gradePay,
+                                        MSP = common.Msp,
+                                        NPA_X_Pay = common.npax_Pay,
+                                        //Tech_Pay = common.TechPay,
+                                        DA = common.Da,
+                                        MISC_Pay = common.MiscPay,
+                                        PLI = common.Pli,
+                                        AGIF = common.agif_Subs,
+                                        Income_Tax_Monthly = common.IncomeTaxMonthly,
+                                        DSOP_AFPP = common.dsop_afpp,
+                                        MISC = common.misc_Deduction,
+                                        Total = common.TotalCredit,
+                                        Salary_After_Deduction = common.salary_After_Deductions,
+                                        Pin_Code = common.Code ?? string.Empty,
+                                        E_Mail_Id = common.Email ?? string.Empty,
+                                        
+                                       
+
+                                        
+
             }).ToList();
 
             dataTable = query.ToDataTable();

@@ -1134,8 +1134,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="armyNumber" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired"  class="form-control"  oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="armyNumber">Amount of withdrawal required (Withdrawal will be limited to actual expenditure or 90% of Maturity Benefit Whichever is less)</label>
+                                       <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired"  class="form-control"  oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                                <label class="form-label" for="AmountOfWithdrawalRequired">Amount of withdrawal required (Withdrawal will be limited to actual expenditure or 90% of Maturity Benefit Whichever is less)</label>
                                     </div>
 
                                 </div>
@@ -1157,7 +1157,7 @@
                                                                             }, "Value", "Text"), 
                                                                             new { 
                                                                                 @class = "select form-select", 
-                                                                                id = "ExtnOfService"
+                                                                                id = "Noofwithdrawal"
                                                                                  
                                                                             })
                                         <label class="form-label select-label ">No of withdrawal(Maximum two withdrawals permitted in entire service)</label>
@@ -1247,17 +1247,6 @@
                              </div>
                              </div>
 
-                        <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🏫</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="PresentlyStudyingIn" name="EducationDetails.PresentlyStudyingIn" value="@Model.EducationDetails?.PresentlyStudyingIn"  class="form-control"   oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="PresentlyStudyingIn">Presently studying in</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.PresentlyStudyingIn, "", new { @class = "text-danger" })
-                            </div>
                             
                             
                             <div class="col-md-4">
@@ -1321,13 +1310,15 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"   oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"    oninput="formatIndianNumber(this)"  required maxlength="10"  />
                                                 <label class="form-label" for="TotalExpenditure">Total Expenditure</label>
                                     </div>
 
                                 </div>
                                 @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditure, "", new { @class = "text-danger" })
                             </div>
+
+                            <input type="hidden" id="PresentlyStudyingIn" name="EducationDetails.PresentlyStudyingIn" value="0" />
 
                         </div>
                         
@@ -1338,7 +1329,7 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                 }
                 else if (Purpose == "2")
                 {
-                    <!-- CA Application -->
+                    <!-- Marriage Purpose -->
                   <div class="accordion-item">
         <h2 class="accordion-header" id="headingTwo">
             <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
@@ -1543,11 +1534,11 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
         <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
             <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💬</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control" value="@Model.SplWaiver?.OtherReasons" required oninput="ValInDataLetter(this)" />
+                                        <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control" value="@Model.SplWaiver?.OtherReasons" required  oninput="ValInDataLetter(this)" />
                                         <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
                                         <div class="invalid-feedback">
                                             Please type other reason.
@@ -1557,6 +1548,16 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
 
                             </div>
+
+                            <div class="col-md-4">
+                        <div class="mb-2">
+                                 <div class="form-outline" data-mdb-input-init>
+                        <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons"  accept=".pdf"/>
+                            <p class="file-error-message" style="color:red;"></p>
+                        @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
+                         </div>
+                             </div>
+                             </div>
 
                         </div>
                         

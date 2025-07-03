@@ -196,6 +196,7 @@ namespace Agif_V2.Controllers
                     CreatedOn = DateTime.Now
                 };
 
+                await _userProfile.SaveTrnFwdRecords(TrnFwd);// Save TrnFwd to database
 
 
             }

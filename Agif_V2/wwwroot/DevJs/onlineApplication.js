@@ -2379,7 +2379,7 @@ $('#oldArmyNo').on('focus', function () {
     $(this).off('focus');
     Swal.fire({
         title: "Enter Present 'Army No'",
-        text: "If old 'Army No' is not applicable for you.",
+        text: "If 'Old Army No' is not applicable for you.",
         icon: "warning",
         confirmButtonText: "OK"
     });

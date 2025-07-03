@@ -3,11 +3,7 @@
     const value = params.get("status");
     GetApplicationList(value);
 
-    $('#btnProcess').on('click', function () {
-
-        $("#ApplicationAction").modal("show");
-
-    });
+   
 
     //const GlobalApplnId;
     $('#acceptButton').on('click', function () {
@@ -46,7 +42,7 @@
 
         }
     });
-    $("#RejectButton").on('click',function () {
+    $("#RejectButton").on('click', function () {
         var applnId = $("#spnapplicationId").html();
         var icNo = $("#IcNo").data("id");
 
@@ -76,7 +72,100 @@
         });
 
     });
+
+    function updateButtonState() {
+        var allChecked = $('input[name="instr"]').length === $('input[name="instr"]:checked').length;
+        $('#acceptButton, #RejectButton').prop('disabled', !allChecked);
+    }
+    updateButtonState();
+    $('input[name="instr"]').on('change', function () {
+        updateButtonState();
+    });
+
+    $('#btnProcess').on('click', function () {
+        $("#ApplicationAction").modal("show");
+        populateRecommendationModal(currentApplicationData);
+    });
 });
+var currentApplicationData = {};
+
+
+
+//function populateRecommendationModal(applicationData) {
+//    if (!applicationData || Object.keys(applicationData).length === 0) {
+//        console.warn('No application data available for binding');
+//        return;
+//    }
+
+//    // Update all placeholders in the modal
+//    $('#ApplicationAction').find('label').each(function () {
+//        let labelText = $(this).html();
+
+//        // Replace [Applicant Name] with actual name
+//        if (labelText.includes('[Applicant Name]')) {
+//            labelText = labelText.replace(/\[Applicant Name\]/g,
+//                `<strong class="text-primary">${applicationData.name || 'N/A'}</strong>`);
+//        }
+
+//        // Replace [Application Type] with actual name
+//        if (labelText.includes('[Application type]')) {
+//            labelText = labelText.replace(/\[Application type\]/g,
+//                `<strong class="text-primary">${applicationData.applicationType || 'N/A'}</strong>`);
+//        }
+
+//        // Replace [Unit Name] with actual unit name
+//        if (labelText.includes('[Unit Name]')) {
+//            labelText = labelText.replace(/\[Unit Name\]/g,
+//                `<strong class="text-primary">${applicationData.unitName || 'N/A'}</strong>`);
+//        }
+
+//        // Replace [Account Number] with actual account number
+//        if (labelText.includes('[Account Number]')) {
+//            labelText = labelText.replace(/\[Account Number\]/g,
+//                `<strong class="text-primary">${applicationData.accountNumber || 'N/A'}</strong>`);
+//        }
+
+//        // Replace [IFSC Code] with actual IFSC code
+//        if (labelText.includes('[IFSC Code]')) {
+//            labelText = labelText.replace(/\[IFSC Code\]/g,
+//                `<strong class="text-primary">${applicationData.ifscCode || 'N/A'}</strong>`);
+//        }
+
+//        $(this).html(labelText);
+//    });
+
+//    // Update modal title with applicant name
+//    $('#ApplicationActionLabel').html(`
+//            <i class="bi bi-file-earmark-check me-2"></i>
+//            Application Review & Approval - ${applicationData.name || 'Unknown Applicant'}
+//        `);
+//}
+function populateRecommendationModal(applicationData) {
+    if (!applicationData || Object.keys(applicationData).length === 0) {
+        console.warn('No application data available for binding');
+        return;
+    }
+
+    $('#ApplicationAction').find('label').each(function () {
+        let template = $(this).attr('data-template');
+        if (!template) return;
+
+        let updatedText = template
+            .replace(/\[Applicant Name\]/g, `<strong class="text-primary">${applicationData.name || 'N/A'}</strong>`)
+            .replace(/\[Application type\]/g, `<strong class="text-primary">${applicationData.applicationType || 'N/A'}</strong>`)
+            .replace(/\[Unit Name\]/g, `<strong class="text-primary">${applicationData.unitName || 'N/A'}</strong>`)
+            .replace(/\[Account Number\]/g, `<strong class="text-primary">${applicationData.accountNumber || 'N/A'}</strong>`)
+            .replace(/\[IFSC Code\]/g, `<strong class="text-primary">${applicationData.ifscCode || 'N/A'}</strong>`);
+
+        $(this).html(updatedText);
+    });
+
+    $('#ApplicationActionLabel').html(`
+        <i class="bi bi-file-earmark-check me-2"></i>
+        Application Review & Approval - ${applicationData.name || 'Unknown Applicant'}
+    `);
+}
+
 function GetApplicationList(status) {
 
 
@@ -211,7 +300,7 @@ function GetApplicationList(status) {
                 previous: "Previous"
             }
         },
-       
+
 
         pageLength: 10,
         lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
@@ -223,7 +312,7 @@ function GetApplicationList(status) {
 function OpenAction(applicationId) {
     //HBA_SL12345671Y_1007_Merged
     $("#spnapplicationId").html(applicationId);
-    
+
 
     $.ajax({
         type: "POST",
@@ -232,10 +321,10 @@ function OpenAction(applicationId) {
         dataType: 'json',
         success: function (response) {
 
-            if (response!=null) {
+            if (response != null) {
                 $("#ViewPdf").modal("show");
                 $("#PdfViwerFOrDigital").attr("data", response);
-                
+
 
             } else {
                 alert('Error retrieving PDF file path: ' + response.message);
@@ -243,6 +332,46 @@ function OpenAction(applicationId) {
             }
         },
     });
+    fetchApplicationDetails(applicationId);
+}
+
+// Function to fetch application details from server
+function fetchApplicationDetails(applicationId) {
+    currentApplicationData = {};// Clear previous application data
+    $.ajax({
+        url: '/OnlineApplication/GetApplicationDetails', // Adjust URL as per your controller
+        type: 'POST',
+        data: { applicationId: applicationId },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                // Store the application data globally
+                currentApplicationData = response.data;
+
+                // Update PDF viewer with application info if needed
+                updatePdfViewerInfo(response.data);
+            } else {
+                console.error('Failed to fetch application details:', response.message);
+                // Don't show error popup as PDF is still loading successfully
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching application details:', error);
+            // Don't show error popup as PDF functionality should still work
+        }
+    });
+}
+
+// Function to update PDF viewer with application information (optional)
+function updatePdfViewerInfo(applicationData) {
+    // Update applicant name in the PDF modal if you want
+    $('#ViewPdf .text-muted strong').text(applicationData.name || 'Unknown Applicant');
+
+    // Update date in the PDF modal if you want
+    $('#ViewPdf .badge.bg-info').html(`
+        <i class="bi bi-calendar3 me-1"></i>
+        ${applicationData.appliedDate || new Date().toLocaleDateString()}
+    `);
 }
 function mergePdf(applicationId, isRejected, isApproved) {
 
@@ -258,7 +387,7 @@ function mergePdf(applicationId, isRejected, isApproved) {
                     text: "Signed succesfull and Saved",
                     icon: "success"
                 }).then(() => {
-                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1"; 
+                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1";
                 });
             } else if (isRejected) {
                 Swal.fire({
@@ -266,7 +395,7 @@ function mergePdf(applicationId, isRejected, isApproved) {
                     text: "Application Rejected!",
                     icon: "warning"
                 }).then(() => {
-                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1"; 
+                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1";
                 });
             } else {
                 if (response.success) {
@@ -306,7 +435,7 @@ function mergePdf(applicationId, isRejected, isApproved) {
 async function GetTokenvalidatepersid2fa(IcNo, applnId) {
     $.ajax({
 
-        url: "https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
+        url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
         contentType: 'application/json', // Set content type to XML
 
@@ -374,7 +503,8 @@ function DataSignDigitaly(applicationId) {
 
 function GetTokenSignXml(xml) {
     $.ajax({
-        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
+        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        //url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
         data: xml, // Set the XML data
@@ -415,7 +545,7 @@ function SignXmlSendTOdatabase(xmlString) {
         success: function () {
 
             mergePdf(applnId, false, true)
-           
+
         },
         error: function () {
             alert("Data Not Saved!")

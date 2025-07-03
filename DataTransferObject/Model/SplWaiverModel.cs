@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,5 +22,13 @@ namespace DataTransferObject.Model
 
         [Required]
         public string? OtherReasons { get; set; }
+
+        [NotMapped]
+        [Required]
+        public IFormFile OtherReasonPdf { get; set; }
+
+        public string? OtherReasonsPdf { get; set; }
+
+        public bool IsOtherReasonPdf { get; set; }
     }
 }

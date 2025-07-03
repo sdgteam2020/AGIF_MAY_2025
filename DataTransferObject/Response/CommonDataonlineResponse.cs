@@ -190,5 +190,7 @@ namespace DataTransferObject.Response
         public decimal? salary_After_Deductions { get; set; }
 
         public string? CoName {get; set; }
+
+        public string? UpdatedOn { get; set; }
     }
 }

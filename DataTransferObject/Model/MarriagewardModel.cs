@@ -54,6 +54,9 @@ namespace DataTransferObject.Model
         [Required]
         public IFormFile AttachInvitationcard { get; set; }
 
+        public string? AttachPartIIOrderPdf { get; set; }
+
+        public string? AttachInvitationcardPdf { get; set; }
         public bool IsAttachPartIIOrderPdf { get; set; }
 
         public bool IsAttachInvitationcardPdf { get;set; }

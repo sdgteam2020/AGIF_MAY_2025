@@ -21,7 +21,8 @@ namespace DataAccessLayer.Repositories
         private readonly IMarraige _Marraige;
         private readonly IProperty _Property;
         private readonly ISpecial _Special;
-        public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special) : base(context)
+        private readonly IClaimDocumentUpload _DocumentUpload;
+        public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special, IClaimDocumentUpload documentUpload) : base(context)
         {
             _context = context;
             _IArmyPrefixes = iArmyPrefixes;
@@ -29,6 +30,7 @@ namespace DataAccessLayer.Repositories
             _Marraige = marraige;
             _Property = property;
             _Special = special;
+            _DocumentUpload = documentUpload;
         }
 
         public bool ValidateFileUpload(IFormFile file, out string errorMessage)
@@ -66,15 +68,6 @@ namespace DataAccessLayer.Repositories
             MArmyPrefix mArmyPrefix = new MArmyPrefix();
             string ArmyNo = string.Empty;
 
-            if(PurposeType== "SP")
-            {
-                SplWaiverModel splWaiver = new SplWaiverModel();
-                splWaiver = model.SplWaiver;
-                splWaiver.ApplicationId = commonDataModel.ApplicationId;
-                await _Special.Add(model.SplWaiver);
-            }
-            else
-            {
                 if (ApplicationId != 0)
                 {
                     commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId); ;
@@ -117,7 +110,9 @@ namespace DataAccessLayer.Repositories
                 foreach (var file in files)
                 {
                     string fileExtension = Path.GetExtension(file.FileName);
-                    string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
+                    string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
+                    string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
+                    string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension}";
                     string outputFile = Path.Combine(folderPath, fileName);
 
                     using (var fileStream = new FileStream(outputFile, FileMode.Create))
@@ -125,24 +120,30 @@ namespace DataAccessLayer.Repositories
                         await file.CopyToAsync(fileStream);
                     }
 
-
-                    if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
+                    if (model.EducationDetails != null)
                     {
-                        model.EducationDetails.IsAttachBonafideLetterPdf = true;
-                    }
-                    else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
-                    {
-                        model.EducationDetails.IsAttachPartIIOrderPdf = true;
+                        if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
+                        {
+                            model.EducationDetails.AttachBonafideLetterPdf = fileName;
+                            model.EducationDetails.IsAttachBonafideLetterPdf = true;
+                        }
+                        else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
+                        {
+                            model.EducationDetails.AttachPartIIOrderPdf = fileName;
+                            model.EducationDetails.IsAttachPartIIOrderPdf = true;
+                        }
                     }
 
                     if (model.Marriageward != null)
                     {
                         if (file.Name.Equals(model.Marriageward.AttachInvitationcard.Name))
                         {
+                            model.Marriageward.AttachInvitationcardPdf = fileName;
                             model.Marriageward.IsAttachInvitationcardPdf = true;
                         }
                         else if (file.Name.Equals(model.Marriageward.AttachPartIIOrder.Name))
                         {
+                            model.Marriageward.AttachPartIIOrderPdf = fileName;
                             model.Marriageward.IsAttachPartIIOrderPdf = true;
                         }
 
@@ -151,7 +152,17 @@ namespace DataAccessLayer.Repositories
                     {
                         if (file.Name.Equals(model.PropertyRenovation.TotalExpenditureFile.Name))
                         {
+                            model.PropertyRenovation.TotalExpenditureFilePdf = fileName;
                             model.PropertyRenovation.IsTotalExpenditureFilePdf = true;
+                        }
+                    }
+
+                    if(model.SplWaiver!=null)
+                    {
+                        if (file.Name.Equals(model.SplWaiver.OtherReasonPdf.Name))
+                        {
+                            model.SplWaiver.OtherReasonsPdf = fileName;
+                            model.SplWaiver.IsOtherReasonPdf = true;
                         }
                     }
 
@@ -178,11 +189,119 @@ namespace DataAccessLayer.Repositories
                     propertyRenovation.ApplicationId = commonDataModel.ApplicationId;
                     await _Property.Add(model.PropertyRenovation);
                 }
-            }
-            
+
+                else if (PurposeType == "SP")
+                {
+                    SplWaiverModel splWaiver = new SplWaiverModel();
+                    splWaiver = model.SplWaiver;
+                    splWaiver.ApplicationId = commonDataModel.ApplicationId;
+                    await _Special.Add(model.SplWaiver);
+                }
+           
+
 
 
                 return true;
         }
+
+        public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
+        {
+            ClaimCommonModel commonDataModel = new ClaimCommonModel();
+            MArmyPrefix mArmyPrefix = new MArmyPrefix();
+            string ArmyNo = string.Empty;
+
+            if (ApplicationId != 0)
+            {
+                commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId);
+                int id = commonDataModel.ArmyPrefix;
+                mArmyPrefix = await _IArmyPrefixes.Get(id);
+                ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
+                ArmyNo = ArmyNo.Trim();
+            }
+
+            string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
+            string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
+            string folderPath = Path.Combine(tempFolder, folderName);
+
+            // Check if the folder exists
+            if (!Directory.Exists(folderPath))
+            {
+                // Folder not found, return false or handle as needed
+                return false;
+            }
+
+            var fileUpload = new ClaimDocumentUpload();
+            fileUpload.ApplicationId = ApplicationId;
+            // Add PDFs to the folder
+            foreach (var file in files)
+            {
+                if (file != null)
+                {
+                    // Generate a file name based on PurposeType, ArmyNo, ApplicationId, and the file name
+                    string fileExtension = Path.GetExtension(file.FileName);
+                    string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
+                    string outputFile = Path.Combine(folderPath, fileName);
+
+                    // Save the file to the folder
+                    using (var fileStream = new FileStream(outputFile, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    if (file.Name.Contains("CancelledCheque"))
+                    {
+                        fileUpload.IsCancelledChequePdf = true;
+                        fileUpload.CancelledCheque = fileName; // Update with the dynamic file name
+                    }
+                    else if (file.Name.Contains("PaySlip"))
+                    {
+                        fileUpload.IsPaySlipPdf = true;
+                        fileUpload.PaySlipPdf = fileName; // Update with the dynamic file name
+                    }
+                    else if (file.Name.Contains("SplWaiver"))
+                    {
+                        fileUpload.IsSplWaiverPdf = true;
+                        fileUpload.SplWaiverPdf = fileName; // Update with the dynamic file name
+                    }
+                }
+            }
+
+            if (PurposeType == "ED")
+            {
+                var Eddetails= await _Education.GetByApplicationId(ApplicationId);
+                fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
+                fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
+                fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
+                fileUpload.IsAttachPartIIOrderPdf = Eddetails.IsAttachPartIIOrderPdf;
+            }
+            else if (PurposeType == "MW")
+            {
+                var MWdetails = await _Marraige.GetByApplicationId(ApplicationId);
+                fileUpload.Attach_PartIIOrderPdf = MWdetails.AttachPartIIOrderPdf;
+                fileUpload.IsAttach_PartIIOrderPdf = MWdetails.IsAttachPartIIOrderPdf;
+                fileUpload.AttachInvitationcardPdf = MWdetails.AttachInvitationcardPdf;
+                fileUpload.IsAttachInvitationcardPdf = MWdetails.IsAttachInvitationcardPdf;
+            }
+            else if (PurposeType == "PR")
+            {
+                // Process Property Renovation Details
+                var PRdetails = await _Property.GetByApplicationId(ApplicationId); 
+                fileUpload.Attach_PartIIOrderPdf = PRdetails.TotalExpenditureFilePdf;
+                fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
+            }
+            else if (PurposeType == "SP")
+            {
+                // Process Special Waiver Details
+                var SPdetails = await _Special.GetByApplicationId(ApplicationId);
+                fileUpload.OtherReasonsPdf = SPdetails.OtherReasonsPdf;
+                fileUpload.IsOtherReasonPdf = SPdetails.IsOtherReasonPdf;
+            }
+
+            await _DocumentUpload.Add(fileUpload);
+
+                return true;
+        }
+
+
     }
 }
