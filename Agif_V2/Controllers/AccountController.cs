@@ -65,9 +65,9 @@ namespace Agif_V2.Controllers
                     ProfileId = profile.ProfileId,
                     MappingId  = profile.MappingId,
                     Role=role,
-                    DomainId = "Test Domain",
-                    RankName = "RankName",
-                    ArmyNo = profile.ArmyNo
+                    DomainId = user.DomainId,
+                    RankName = profile.RankName,
+                    ArmyNo =   profile.ArmyNo
                 };
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
                 
