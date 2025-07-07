@@ -1,0 +1,411 @@
+﻿@model DataTransferObject.Response.DTOClaimCommonOnlineResponse
+
+@{
+    ViewData["Title"] = "Application Deatils";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    // Fetch loantype from query string
+    string loanType = Context.Request.Query["formtype"].ToString()?.ToUpper() ?? "CA";
+    var message = ViewBag.Message ?? string.Empty;
+
+}
+<style>
+    .lblforprint {
+        min-width: 200px;
+        font-weight: 600;
+    }
+</style>
+
+@if (Model != null)
+{
+
+
+    <div class="container mt-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-primary text-white text-center">
+                <h3 class="mb-0"><i class="bi bi-file-earmark-text"></i> ARMY GROUP INSURANCE FUND APPLICATION FORM:@loanType</h3>
+            </div>
+            <div class="card-body">
+                <div class="row ">
+                @if (Model != null)
+                {
+                   
+                        <div class="col-md-4 ">
+                            <div class="p-3 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Army Number:</strong>
+                                <span class="text-break flex-grow-1">@Model.OnlineApplicationResponse.Number</span>
+                            </div>
+                        </div>
+                      <div class="col-md-4 ">
+                            <div class="p-3 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Rank:</strong>
+                                <span class="text-break flex-grow-1">@Model.OnlineApplicationResponse.DdlRank</span>
+                            </div>
+                        </div>
+                      
+                          <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Name:</strong>
+                                <span>@Model.OnlineApplicationResponse.ApplicantName</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">DOB:</strong>
+                                <span>@Model.OnlineApplicationResponse.DateOfBirth?.ToString("dd-MM-yyyy")</span>
+                            </div>
+                        </div>
+                     
+                   
+                    
+
+                           <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">DOC/DOE:</strong>
+                                <span>@Model.OnlineApplicationResponse.DateOfCommission?.ToString("dd-MM-yyyy")</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">DOR:</strong>
+                                <span>@Model.OnlineApplicationResponse.DateOfRetirement?.ToString("dd-MM-yyyy")</span>
+                            </div>
+                        </div>
+                       
+                   
+                         <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Aadhar Card No:</strong>
+                                <span>@Model.OnlineApplicationResponse.AadharCardNo</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">PAN Card No:</strong>
+                                <span>@Model.OnlineApplicationResponse.PanCardNo</span>
+                            </div>
+                        </div>
+
+                   
+
+                        
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Mobile No:</strong>
+                                <span>@Model.OnlineApplicationResponse.MobileNo</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Email:</strong>
+                                <span>@($"{Model.OnlineApplicationResponse.Email}@{Model.OnlineApplicationResponse.EmailDomain}")</span>
+                            </div>
+                        </div>
+
+                       
+                   
+                         <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Regt/Corps:</strong>
+                                <span>@Model.OnlineApplicationResponse.RegtCorps</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Present Unit:</strong>
+                                <span>@Model.OnlineApplicationResponse.PresentUnit</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Parent Unit:</strong>
+                                <span>@Model.OnlineApplicationResponse.ParentUnit</span>
+                            </div>
+                        </div>
+
+                       
+                   
+                         
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Present Unit Pin:</strong>
+                                <span>@Model.OnlineApplicationResponse.PresentUnitPin</span>
+                            </div>
+                        </div>
+
+                       
+                   
+                         <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Army Post Office:</strong>
+                                <span>@Model.OnlineApplicationResponse.ArmyPostOffice</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Next Fmn HQ:</strong>
+                                <span>@Model.OnlineApplicationResponse.NextFmnHQ</span>
+                            </div>
+                        </div>
+
+                        
+                    @* 
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Perm Home Address:</strong>
+                                <span>@Model.OnlineApplicationResponse.Vill_Town, @Model.OnlineApplicationResponse.PostOffice, @Model.OnlineApplicationResponse.Distt, @Model.OnlineApplicationResponse.State,, @Model.OnlineApplicationResponse.Code</span>
+                            </div>
+                        </div> *@
+
+                       
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Salary Account No:</strong>
+                                <span>@Model.OnlineApplicationResponse.SalaryAcctNo</span>
+                            </div>
+                        </div>
+
+                      
+                   
+
+                          <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">IFSC Code:</strong>
+                                <span>@Model.OnlineApplicationResponse.IfsCode</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <div class="p-3 h-100 d-flex align-items-center">
+                                <strong class="me-2 lblforprint">Bank Name:</strong>
+                                <span>@Model.OnlineApplicationResponse.NameOfBank</span>
+                            </div>
+                        </div>
+
+                       @if (Model.OnlineApplicationResponse.ApplicationType == 1)
+                    {
+                       
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Type:</strong>
+                                    <span>Education of Ward</span>
+                                </div>
+                            </div>
+                           
+                       
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Child Name:</strong>
+                                    <span>@Model.EducationDetailsResponse.ChildName</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Date Of Birth:</strong>
+                                    <span>@Model.EducationDetailsResponse.DateOfBirth?.ToString("dd-MM-yyyy")</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">DO Part II No:</strong>
+                                    <span>@Model.EducationDetailsResponse.DOPartIINo</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">DO Part II Date:</strong>
+                                    <span>@Model.EducationDetailsResponse.DoPartIIDate?.ToString("dd-MM-yyyy")</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Course:</strong>
+                                    <span>@Model.EducationDetailsResponse.CourseForWithdrawal</span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Institution:</strong>
+                                    <span>@Model.EducationDetailsResponse.CollegeInstitution</span>
+                                </div>
+
+                             </div>
+
+                              <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Total Expenditure:</strong>
+                                    <span>@Model.EducationDetailsResponse.TotalExpenditure</span>
+                                </div>
+
+                             </div>
+                       
+                    }
+                    else if (Model.OnlineApplicationResponse.ApplicationType == 2)
+                    {
+                       
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Type:</strong>
+                                    <span>Marriage of Ward</span>
+                                </div>
+                            </div>
+                            
+                       
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Child Name:</strong>
+                                    <span>@Model.MarraigeWardResponse.NameOfChild</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Date Of Birth:</strong>
+                                    <span>@Model.MarraigeWardResponse.DateOfBirth?.ToString("dd-MM-yyyy")</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">DO Part II No:</strong>
+                                    <span>@Model.MarraigeWardResponse.DOPartIINo</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">DO Part II Date:</strong>
+                                    <span>@Model.MarraigeWardResponse.DoPartIIDate?.ToString("dd-MM-yyyy")</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Age of Ward:</strong>
+                                    <span>@Model.MarraigeWardResponse.AgeOfWard</span>
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Date Of Marraige:</strong>
+                                    <span>@Model.MarraigeWardResponse.DateofMarriage?.ToString("dd-MM-yyyy")</span>
+                                </div>
+
+                             </div>
+                       
+                    }
+                    else if (Model.OnlineApplicationResponse.ApplicationType == 3)
+                    {
+                       
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Type:</strong>
+                                    <span>Renovation-Repair of House</span>
+                                </div>
+                            </div>
+                           
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Property Holder Name:</strong>
+                                    <span>@Model.PropertyRenovationResponse.PropertyHolderName</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Property Address:</strong>
+                                    <span>@Model.PropertyRenovationResponse.AddressOfProperty</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Estimated Cost:</strong>
+                                    <span>@Model.PropertyRenovationResponse.EstimatedCost</span>
+                                </div>
+                            </div>
+                          
+                       
+                    }
+
+                    @* Conditional fields based on loantype *@
+                   
+
+                    @* Add more loan type conditions as needed *@
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card border-info">
+                                <div class="card-header bg-info text-white">
+                                    <i class="bi bi-file-earmark-pdf"></i> Document View
+                                </div>
+                                <div class="card-body">
+                                     @*Example: Show uploaded document links or previews *@
+                            @if (Model.Documents != null && Model.Documents.Any())
+                            {
+                            <ul class="list-group">
+                            @foreach (var doc in Model.Documents)
+                            {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-paperclip"></i> @doc.FileName.Split("_")[3]</span>
+                            <a href='@doc.FilePath/@doc.FileName' target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                            </li>
+                            }
+                            </ul>
+                            }
+                            else
+                            {
+                            <span class="text-muted">No documents uploaded.</span>
+                            } 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning text-center">No application data found.</div>
+                }
+
+            </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">No application data found.</div>
+}
+
+<script>
+    $(document).ready(function () {        
+        var message = '@message'; 
+
+       if (message !== '') {
+            // Display SweetAlert with custom styles
+            Swal.fire({      
+                html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
+                icon: 'success', 
+                confirmButtonText: 'OK',  // Text on the confirm button
+                confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
+                customClass: {
+                    title: 'font-weight-bold',  // Optional: makes the title bold
+                    htmlContainer: 'text-dark'  // Optional: sets the message text color
+                },
+                padding: '25px'  // Adds padding to the alert for better spacing
+            });
+        }
+    });
+</script>

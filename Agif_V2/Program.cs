@@ -49,6 +49,7 @@ builder.Services.AddTransient<IUserProfile, UserProfileDL>();
 builder.Services.AddTransient<IUserMapping, UserMappingDL>();
 builder.Services.AddTransient<IUsersApplications, UsersApplicationDL>();
 builder.Services.AddTransient<PdfGenerator>();
+builder.Services.AddTransient<ClaimPdfGenerator>();
 builder.Services.AddTransient<MergePdf>();
 builder.Services.AddTransient<OnlineApplicationController>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();

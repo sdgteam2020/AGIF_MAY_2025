@@ -18,5 +18,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<bool> UpdateStatus(DTOExportRequest dtoExport);
 
+        Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status);
+
     }
 }

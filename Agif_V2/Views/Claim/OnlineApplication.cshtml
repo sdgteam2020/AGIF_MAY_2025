@@ -747,7 +747,7 @@
                                             @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
                                             @Html.ValidationMessageFor(m => m.ClaimCommonData.ParentUnit, "", new { @class = "text-danger" })
                                             <span id="ParentUnitId" class="d-none">@Model.ClaimCommonData?.ParentUnit</span>
-                                            <input type="text" class="form-control form-control-Alphabets" id="ParenttxtUnit" placeholder="Search Parent Unit..."   />   
+                                            <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..."   />   
                                              <label class="form-label" for="ParentUnit">Parent Unit</label>
 
                                             </div>
@@ -763,7 +763,7 @@
                                          @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
                                          @Html.ValidationMessageFor(model => model.ClaimCommonData.PresentUnit, "", new { @class = "text-danger" })
                                           <span id="PresentUnitId" class="d-none">@Model.ClaimCommonData?.PresentUnit</span>
-                                          <input type="text" class="form-control form-control-Alphabets" id="PresenttxtUnit"  placeholder="Search Present Unit..."  />
+                                          <input type="text" class="form-control" id="PresenttxtUnit"  placeholder="Search Present Unit..."  />
                                           <label class="form-label" for="PresentUnit">Present Unit</label>
                                       </div>
                                    </div>
@@ -1357,8 +1357,8 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onchange="SetRetDate()">
+                                          <input type="text" class="form-control monthPicker" id="MarriagewarddateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label ">DOB</label>
                                     </div>
                                   
@@ -1380,8 +1380,8 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onchange="SetRetDate()">
+                                       <input type="text" class="form-control DOPartIIPicker" id="MarriagewardDOPartIIDate" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required 
+                                    oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label ">DO Part-II Date</label>
                                     </div>
                                 </div>
@@ -1415,8 +1415,8 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="date" class="form-control" id="dateOfBirth" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required style="caret-color: transparent;"
-                                    onchange="SetRetDate()">
+                                       <input type="text" class="form-control DOPartIIPicker" id="DateOfMarriage" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required 
+                                    oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label ">Date of Marriage</label>
                                     </div>
                                 </div>
@@ -1494,7 +1494,7 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="EstimatedCost" name="PropertyRenovation.EstimatedCost" value="@Model.PropertyRenovation?.EstimatedCost"  class="form-control"  oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="EstimatedCost" name="PropertyRenovation.EstimatedCost" value="@Model.PropertyRenovation?.EstimatedCost"  class="form-control"  required oninput="formatIndianNumber(this)"  maxlength="10" />
                                                 <label class="form-label" for="EstimatedCost">Estimated cost of expenditure</label>
                                     </div>
 
@@ -1581,6 +1581,7 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
 
             <input type="hidden" id="Category" name="Category" value=@Category />
             <input type="hidden" id="Purpose" name="Purpose" value=@Purpose />
+            <input type="hidden" id="COArmyNo" name="COArmyNo" value=@Model.COArmyNo />
             <input type="hidden" id="hba_Loan" name="ClaimCommonData.House_Building_Advance_Loan" value=@Model.ClaimCommonData?.House_Building_Advance_Loan />
             <input type="hidden" id="hra_Loan" name="ClaimCommonData.House_Repair_Advance_Loan" value=@Model.ClaimCommonData?.House_Repair_Advance_Loan />
             <input type="hidden" id="ca_Loan" name="ClaimCommonData.Conveyance_Advance_Loan" value=@Model.ClaimCommonData?.Conveyance_Advance_Loan />

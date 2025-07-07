@@ -14,14 +14,14 @@ namespace Agif_V2.Controllers
     {
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
         private readonly IMasterOnlyTable _IMasterOnlyTable;
-        private readonly PdfGenerator _pdfGenerator;
+        private readonly ClaimPdfGenerator _pdfGenerator;
         private readonly MergePdf _mergePdf;
         private readonly IWebHostEnvironment _env;
         private readonly ICar _car;
         private readonly IHba _Hba;
         private readonly IPca _Pca;
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf)
         {
             _IClaimonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -37,7 +37,29 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> Upload()
+        {
+            ClaimFileUploadViewModel ClaimfileUploadViewModel = new ClaimFileUploadViewModel();
+            return View(ClaimfileUploadViewModel);
+        }
 
+        public async Task<IActionResult> ApplicationDetails(int applicationId)
+        {
+            if (applicationId == 0)
+            {
+                return NotFound();
+            }
+
+            var application = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
+            if (application == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Message = TempData["Message"];
+
+            return View(application);
+        }
         public async Task<IActionResult> OnlineApplication()
         {
             var Category = TempData["Category"] as string;
@@ -214,8 +236,8 @@ namespace Agif_V2.Controllers
                 {
                     model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
                     model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
-
-                    //claimCommonModel = await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
+                    model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
+                    claimCommonModel = await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
                 }
 
                 if (model.EducationDetails != null)
@@ -243,7 +265,7 @@ namespace Agif_V2.Controllers
                 }
 
                 TempData["applicationId"] = claimCommonModel.ApplicationId;
-
+                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
                 return RedirectToAction("Upload", "Claim", new { formType });
 
             }
@@ -252,11 +274,7 @@ namespace Agif_V2.Controllers
 
         }
 
-        public async Task<IActionResult> Upload()
-        {
-            ClaimFileUploadViewModel ClaimfileUploadViewModel = new ClaimFileUploadViewModel();
-            return View(ClaimfileUploadViewModel);
-        }
+    
 
         [HttpPost]
         public async Task<IActionResult> SubmitDocuments(ClaimFileUploadViewModel model, string formType, int applicationId)
@@ -289,6 +307,8 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
+
+
             bool success = await _IClaimonlineApplication1.ProcessFileUploads(files, formType, applicationId);
 
 
@@ -299,7 +319,226 @@ namespace Agif_V2.Controllers
             }
 
             // Return a success message or redirect after successful upload
-            return RedirectToAction("Upload");
+            return RedirectToAction("ApplicationDetails", "Claim", new { applicationId = applicationId });
         }
+
+        [HttpPost]
+        public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
+        {
+            try
+            {
+                string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+                if (string.IsNullOrEmpty(ip))
+                {
+                    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+                }
+                var userData = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
+                if (userData == null)
+                {
+                    return Json(new { success = false, message = "Application not found." });
+                }
+
+                string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+                string applicationTypeName = "";
+                if (string.IsNullOrEmpty(applicationType))
+                {
+                    return Json(new { success = false, message = "Application type is not specified." });
+                }
+                else
+                {
+                    if (applicationType == "1")
+                    {
+                        applicationTypeName = "ED";
+                    }
+                    else if (applicationType == "2")
+                    {
+                        applicationTypeName = "MW";
+                    }
+                    else if (applicationType == "3")
+                    {
+                        applicationTypeName = "PR";
+                    }
+                    else if(applicationType == "4")
+                        applicationTypeName = "SP";
+                }
+
+                string armyNo = userData.OnlineApplicationResponse.Number;
+                if (string.IsNullOrEmpty(armyNo))
+                {
+                    return Json(new { success = false, message = "Army number is not specified." });
+                }
+
+                string applicationIdStr = applicationId.ToString();
+                string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+                string sourceFolderPath = Path.Combine(_env.WebRootPath, "ClaimTempUploads", folderPath);
+
+
+                // Check if source folder exists
+                if (!Directory.Exists(sourceFolderPath))
+                {
+                    return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
+                }
+
+                // Get all PDF files from the source folder
+                string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+
+                if (pdfFiles.Length == 0)
+                {
+                    return Json(new { success = false, message = "No PDF files found in the specified folder." });
+                }
+
+                // Generate the new PDF first (if needed)
+                string pdfName = folderPath + "_Application";
+                var generatedPdfPath = Path.Combine(sourceFolderPath, pdfName + ".pdf");
+
+                try
+                {
+                    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+                    if (dTOTempSession == null)
+                    {
+                        return Json(new { success = false, message = "Session expired or invalid user context." });
+                    }
+
+                    string Name = await _IClaimonlineApplication1.GetCOName(dTOTempSession.ProfileId);
+
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, Name);
+
+                    if (data == 1)
+                    {
+                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
+                                 .ToArray(); ;
+                        // pdfFiles.OrderByDescending().ToArray(); // Ensure the latest PDF is included
+                    }
+                }
+                catch (Exception pdfGenEx)
+                {
+                    Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
+                    // Continue with existing PDFs if generation fails
+                }
+
+                // Create merged PDF path in TempUploads root
+                string tempUploadsPath = Path.Combine(_env.WebRootPath, "ClaimTempUploads", folderPath);
+                if (!Directory.Exists(tempUploadsPath))
+                {
+                    Directory.CreateDirectory(tempUploadsPath);
+                }
+
+                string mergedPdfPath = Path.Combine(tempUploadsPath, folderPath + "_Merged.pdf");
+                ViewBag.MergedPdfPath = mergedPdfPath;
+                // Merge all PDFs using iText7
+                bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+                if (mergeResult)
+                {
+                    // Get relative path for client
+                    string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
+
+                    await _IClaimonlineApplication1.UpdateMergePdfStatus(applicationId, true);
+                    return Json(new
+                    {
+                        success = true,
+                        message = "PDFs merged successfully.",
+                        mergedFilePath = relativePath,
+                        fullPath = mergedPdfPath,
+                        totalFiles = pdfFiles.Length
+                    });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to merge PDF files." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
+            }
+        }
+
+        public async Task<JsonResult> GetPdfFilePath(int applicationId)
+        {
+            var userData = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
+            if (userData == null)
+            {
+                return Json(new { success = false, message = "Application not found." });
+            }
+            string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+            string applicationTypeName = "";
+            if (string.IsNullOrEmpty(applicationType))
+            {
+                return Json(new { success = false, message = "Application type is not specified." });
+            }
+            else
+            {
+                if (applicationType == "1")
+                {
+                    applicationTypeName = "ED";
+                }
+                else if (applicationType == "2")
+                {
+                    applicationTypeName = "MW";
+                }
+                else if (applicationType == "3")
+                {
+                    applicationTypeName = "PR";
+                }
+                else if (applicationType == "4")
+                    applicationTypeName = "SP";
+            }
+            string armyNo = userData.OnlineApplicationResponse.Number;
+            if (string.IsNullOrEmpty(armyNo))
+            {
+                return Json(new { success = false, message = "Army number is not specified." });
+            }
+            string applicationIdStr = applicationId.ToString();
+            if (string.IsNullOrEmpty(applicationIdStr))
+            {
+                return Json(new { success = false, message = "Application ID is not specified." });
+            }
+            string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+            string pdfFilePath = $"/ClaimTempUploads/{folderPath}/{folderPath}_Merged.pdf";
+
+            return Json(pdfFilePath);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetApplicationDetails(int applicationId)
+        {
+            try
+            {
+                var applicationDetails = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
+
+                if (applicationDetails == null)
+                {
+                    return Json(new { success = false, message = "Application not found" });
+                }
+
+                // Create a response object with the required fields for the modal
+                var response = new
+                {
+                    success = true,
+                    data = new
+                    {
+                        applicationId = applicationDetails.OnlineApplicationResponse.ApplicationId,
+                        name = applicationDetails.OnlineApplicationResponse.ApplicantName,
+                        armyNo = applicationDetails.OnlineApplicationResponse.ArmyPrefix + applicationDetails.OnlineApplicationResponse.Number + applicationDetails.OnlineApplicationResponse.Suffix,
+                        unitName = applicationDetails.OnlineApplicationResponse.PresentUnit,
+                        applicationType = applicationDetails.OnlineApplicationResponse.ApplicationTypeName,
+                        accountNumber = applicationDetails.OnlineApplicationResponse.SalaryAcctNo,
+                        ifscCode = applicationDetails.OnlineApplicationResponse.IfsCode,
+                        appliedDate = applicationDetails.OnlineApplicationResponse.UpdatedOn,
+                        // Add any other fields your application model has
+                    }
+                };
+
+                return Json(response);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception if you have logging setup
+                return Json(new { success = false, message = "An error occurred while fetching application details" });
+            }
+        }
+
     }
 }

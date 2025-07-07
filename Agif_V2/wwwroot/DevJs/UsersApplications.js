@@ -1,16 +1,28 @@
 ﻿$(document).ready(function () {
     const params = new URLSearchParams(window.location.search);
     const value = params.get("status");
-    GetApplicationList(value);
+    GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
 
-   
+    $('#Loan').click(function () {
+        $("#UserType").val('Loan');
+        $("#PdfViwerFOrDigital").attr("data", "");
+        GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
+    });
+
+    $('#Maturity').click(function () {
+        $("#UserType").val('Maturity');
+        $("#PdfViwerFOrDigital").attr("data", "");
+
+        GetApplicationList(value, "/ApplicationRequest/GetMaturityUsersApplicationList");
+    });
+
 
     //const GlobalApplnId;
     $('#acceptButton').on('click', function () {
         var applnId = $("#spnapplicationId").html();
         var icNo = $("#IcNo").data("id");
         let value = true;
-
+        let type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
         var remarkField = $("#txtRemark");
         var remarkValue = remarkField.val().trim();
         if (remarkValue === "") {
@@ -30,7 +42,7 @@
                 if (result.isConfirmed) {
 
                     //GetTokenvalidatepersid2fa("A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448", id);
-                    GetTokenvalidatepersid2fa(icNo, applnId);
+                    GetTokenvalidatepersid2fa(icNo, applnId, type);
                     //alert("Sweet");
                 }
             });
@@ -45,7 +57,7 @@
     $("#RejectButton").on('click', function () {
         var applnId = $("#spnapplicationId").html();
         var icNo = $("#IcNo").data("id");
-
+        let type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
         var remarkField = $("#txtRemark");
         var remarkValue = remarkField.val().trim();
         if (remarkValue === "") {
@@ -67,7 +79,7 @@
             confirmButtonText: "Yes, reject it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                rejectedApplication(applnId);
+                rejectedApplication(applnId, type);
             }
         });
 
@@ -82,11 +94,13 @@
         updateButtonState();
     });
 
-    $('#btnProcess').on('click', function () {
+    $(document).on('click', '#btnProcess', function () {
         $("#ApplicationAction").modal("show");
         populateRecommendationModal(currentApplicationData);
     });
 });
+
+
 var currentApplicationData = {};
 
 
@@ -166,7 +180,7 @@ function populateRecommendationModal(applicationData) {
     `);
 }
 
-function GetApplicationList(status) {
+function GetApplicationList(status,endpoint) {
 
 
     if (status == 1) {
@@ -181,8 +195,8 @@ function GetApplicationList(status) {
                         </button>`);
     }
     // Destroy existing DataTable if it exists
-    if ($.fn.DataTable.isDataTable('#tblData')) {
-        $('#tblData').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#tblApplications')) {
+        $('#tblApplications').DataTable().clear().destroy();
     }
 
     // Initialize DataTable with server-side processing
@@ -192,7 +206,7 @@ function GetApplicationList(status) {
         filter: true,
         order: [[0, 'desc']], // Default sorting on the first column
         ajax: {
-            url: "/ApplicationRequest/GetUsersApplicationList",
+            url: endpoint,
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: function (data) {
@@ -264,16 +278,18 @@ function GetApplicationList(status) {
                     if (row.isMergePdf == false) {
                         return `
                         <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId},0,0)'>
+                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${category === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${category})'>
                                 <i class="bi bi-eye"></i>
                         </div>
                        
                     `;
                     }
                     else {
+                        var category = $("#UserType").val() || "Loan"; 
+
                         return `
                         <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center  mx-2' onclick='OpenAction(${row.applicationId})'>
+                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center  mx-2' onclick='OpenAction(${row.applicationId}, "${category === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${category})'>
                                 <i class="bi bi-eye"></i>
                                
                             </button>
@@ -309,22 +325,42 @@ function GetApplicationList(status) {
     });
 }
 
-function OpenAction(applicationId) {
+function OpenAction(applicationId, endpoint, category) {
     //HBA_SL12345671Y_1007_Merged
     $("#spnapplicationId").html(applicationId);
 
+    var val = $("#UserType").val() || "Loan";
 
     $.ajax({
         type: "POST",
-        url: "/OnlineApplication/GetPdfFilePath",
+        url: endpoint,
         data: { applicationId: applicationId },
         dataType: 'json',
         success: function (response) {
-
+          
             if (response != null) {
-                $("#ViewPdf").modal("show");
-                $("#PdfViwerFOrDigital").attr("data", response);
+                $("#pdfContainer").empty();
 
+                // Create a new object element dynamically
+                var objectElement = document.createElement('object');
+                objectElement.id = 'PdfViwerFOrDigital'; // Optional: Set ID for the object
+                objectElement.type = 'application/pdf';
+                objectElement.classList.add('w-100', 'h-100', 'border-0', 'rounded'); // Add your styling classes
+
+                // Set the 'data' attribute to load the PDF
+                objectElement.setAttribute('data', response);
+
+                // Append the object element to the container
+                document.getElementById('pdfContainer').appendChild(objectElement);
+
+                // Show the modal with the PDF viewer
+                $("#ViewPdf").modal("show");
+
+
+                if (val === "Loan")
+                    fetchApplicationDetails(applicationId, "/OnlineApplication/GetApplicationDetails");
+                else if (val === "Maturity")
+                    fetchApplicationDetails(applicationId, "/Claim/GetApplicationDetails");
 
             } else {
                 alert('Error retrieving PDF file path: ' + response.message);
@@ -332,14 +368,15 @@ function OpenAction(applicationId) {
             }
         },
     });
-    fetchApplicationDetails(applicationId);
+   
+ 
 }
 
 // Function to fetch application details from server
-function fetchApplicationDetails(applicationId) {
+function fetchApplicationDetails(applicationId,endpoint) {
     currentApplicationData = {};// Clear previous application data
     $.ajax({
-        url: '/OnlineApplication/GetApplicationDetails', // Adjust URL as per your controller
+        url: endpoint, // Adjust URL as per your controller
         type: 'POST',
         data: { applicationId: applicationId },
         dataType: 'json',
@@ -373,11 +410,13 @@ function updatePdfViewerInfo(applicationData) {
         ${applicationData.appliedDate || new Date().toLocaleDateString()}
     `);
 }
-function mergePdf(applicationId, isRejected, isApproved) {
+function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
+    var val = $("#UserType").val() || "Loan";
+
 
     $.ajax({
         type: "POST",
-        url: "/OnlineApplication/MergePdf",
+        url: endpoint,
         data: { applicationId: applicationId, isRejected: isRejected, isApproved: isApproved },
         dataType: 'json',
         success: function (response) {
@@ -399,7 +438,13 @@ function mergePdf(applicationId, isRejected, isApproved) {
                 });
             } else {
                 if (response.success) {
-                    OpenAction(applicationId);
+
+                    if (val === "Maturity")
+                        url = "/Claim/GetPdfFilePath";
+                    else if (val === "Loan")
+                        url = "/OnlineApplication/GetPdfFilePath";
+                    OpenAction(applicationId, url, val);
+                    //OpenAction(applicationId);
                 } else {
                     alert('Error generating PDF: ' + response.message);
                     console.error('PDF merge failed:', response.message);
@@ -432,10 +477,12 @@ function mergePdf(applicationId, isRejected, isApproved) {
 
 
 
-async function GetTokenvalidatepersid2fa(IcNo, applnId) {
+async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
+    var URL = '';
     $.ajax({
 
-        url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
+        //url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
+        url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
         contentType: 'application/json', // Set content type to XML
 
@@ -451,7 +498,12 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId) {
 
                 if (validationResult === true) {
 
-                    DataSignDigitaly(applnId);
+                    if (type === "Loan")
+                        URL = "/ApplicationRequest/DataDigitalXmlSign";
+                    else if (type === "Maturity")
+                        URL = "/ApplicationRequest/ClaimDataDigitalXmlSign";
+
+                    DataSignDigitaly(applnId, URL,type);
 
                 } else {
                     Swal.fire({
@@ -476,16 +528,16 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId) {
 
 }
 
-function DataSignDigitaly(applicationId) {
+function DataSignDigitaly(applicationId, endpoint,Usertype) {
     $.ajax({
         type: "get",
-        url: "/ApplicationRequest/DataDigitalXmlSign",
+        url: endpoint,
         data: { applicationId: applicationId },
         type: 'POST',
         success: function (data) {
 
             if (data != null) {
-                GetTokenSignXml(data)
+                GetTokenSignXml(data,Usertype)
             }
         },
         error: function () {
@@ -501,10 +553,12 @@ function DataSignDigitaly(applicationId) {
 
 }
 
-function GetTokenSignXml(xml) {
+function GetTokenSignXml(xml, Usertype) {
+    var URL = '';
+
     $.ajax({
-        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
-        //url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
+        //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
         data: xml, // Set the XML data
@@ -514,7 +568,14 @@ function GetTokenSignXml(xml) {
 
                 // No Token Found
                 if (xmlContent.indexOf("<Root>No Token Found</Root>") == -1) {
-                    SignXmlSendTOdatabase(xmlContent);
+
+                    if (Usertype === "Loan")
+                        URL = "/ApplicationRequest/SaveXML";
+                    else if (Usertype === "Maturity")
+                        URL = "/ApplicationRequest/SaveClaimXML";
+
+
+                    SignXmlSendTOdatabase(xmlContent, URL, Usertype);
 
                 } else {
                     Swal.fire({
@@ -535,16 +596,22 @@ function GetTokenSignXml(xml) {
     });
 }
 
-function SignXmlSendTOdatabase(xmlString) {
+function SignXmlSendTOdatabase(xmlString, endpoint, Usertype) {
     var applnId = $('#spnapplicationId').html();
     var remarks = $('#txtRemark').val();
+    var URL = '';
     $.ajax({
-        url: "/ApplicationRequest/SaveXML",
+        url: endpoint,
         data: { applId: applnId, xmlResString: xmlString, remarks: remarks },
         type: 'POST',
         success: function () {
+            if (Usertype === 'Loan')
+                URL = "/OnlineApplication/MergePdf";
+            else if (Usertype === 'Maturity')
+                URL = "/Claim/MergePdf";
 
-            mergePdf(applnId, false, true)
+
+            mergePdf(applnId, false, true,URL,Usertype)
 
         },
         error: function () {
@@ -553,14 +620,28 @@ function SignXmlSendTOdatabase(xmlString) {
     });
 }
 
-function rejectedApplication(applicationId) {
+function rejectedApplication(applicationId, type) {
+    var URL = '';
     let remarks = $("#txtRemark").val();
+    if (type === 'Loan') {
+        URL = "/ApplicationRequest/RejectXML";
+    }
+    else if(type === 'Maturity') {
+        URL = "/ApplicationRequest/ClaimRejectXML";
+    }
+
     $.ajax({
-        url: "/ApplicationRequest/RejectXML",
+        url: URL,
         data: { applId: applicationId, rem: remarks },
         type: 'POST',
         success: function (data) {
-            mergePdf(applicationId, true, false)
+
+            if (type === 'Loan')
+                URL = "/OnlineApplication/MergePdf";
+            else if (type === 'Maturity')
+                URL = "/Claim/MergePdf";
+
+            mergePdf(applicationId, true, false, URL, type)
         },
         error: function () {
             swal.fire("Error!", "Something went wrong. Please try again.", "error");
