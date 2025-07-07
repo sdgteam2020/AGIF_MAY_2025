@@ -24,14 +24,15 @@ namespace Agif_V2.Controllers
         private readonly IOnlineApplication _onlineApplication;
         private readonly IApplication _application;
         private readonly IUserProfile _userProfile;
-        
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,IUserProfile _userProfile)
+        private readonly IClaimOnlineApplication _IClaimonlineApplication1;
+
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,IUserProfile _userProfile,IClaimOnlineApplication claimOnlineApplication)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
-            this._application = _application;
-            
+            this._application = _application;            
             this._userProfile = _userProfile;
+            this._IClaimonlineApplication1 = claimOnlineApplication;
         }
         public IActionResult Index()
         {
@@ -105,6 +106,63 @@ namespace Agif_V2.Controllers
 
         }
 
+        public async Task<IActionResult> GetMaturityUsersApplicationList(DTODataTableRequest request, int status)
+        {
+
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
+            {
+                return Unauthorized("Session expired or invalid user session.");
+            }
+
+            var queryableData = await _userApplication.GetMaturityUsersApplication(dTOTempSession.MappingId, status);
+
+            var totalRecords = queryableData.Count();
+
+            var query = queryableData.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.searchValue))
+            {
+                string searchValue = request.searchValue.ToLower();
+                query = query.Where(x =>
+                    x.Name.ToLower().Contains(searchValue) ||
+                    x.ArmyNo.ToLower().Contains(searchValue) ||
+                    x.DateOfBirth.ToLower().Contains(searchValue) ||
+                    x.AppliedDate.ToLower().Contains(searchValue)
+                );
+            }
+
+            var filteredRecords = query.Count();
+
+            if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+            {
+                bool ascending = request.sortDirection.ToLower() == "asc";
+
+                query = request.sortColumn.ToLower() switch
+                {
+                    "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+                    "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                    "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
+                    "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+                    _ => query // Default: no sorting if column not recognized
+                };
+            }
+
+            // Paginate the result
+            var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+            var responseData = new DTODataTablesResponse<DTOGetApplResponse>
+            {
+                draw = request.Draw,
+                recordsTotal = totalRecords,
+                recordsFiltered = filteredRecords,
+                data = paginatedData
+            };
+
+            return Json(responseData);
+
+        }
+
         public async Task<IActionResult> ViewDetails(int applicationId)
         {
             return View();
@@ -129,6 +187,57 @@ namespace Agif_V2.Controllers
             var xml = JsonConvert.DeserializeXNode(jsonData, "Root");
             return xml.ToString();
         }
+        public async Task<string> ClaimDataDigitalXmlSign(int applicationId)
+        {
+            var data = ClaimSignDocument(applicationId);
+            var jsonObject = new
+            {
+                applicationId = applicationId,
+                ApplicantName = data.Result.ApplicantName,
+                ArmyNo = data.Result.ArmyNo,
+                ApplicationType = data.Result.ApplicationType,
+                Unit = data.Result.UnitName,
+                Rank = data.Result.RankName,
+                DateOfCommission = data.Result.DateOfCommision,
+                PanCard = data.Result.PAN_No,
+                Account_No = data.Result.AccountNo
+            };
+            string jsonData = JsonConvert.SerializeObject(jsonObject);
+            var xml = JsonConvert.DeserializeXNode(jsonData, "Root");
+            return xml.ToString();
+        }
+
+
+        public async Task<DTODigitalSignDataResponse?> ClaimSignDocument(int applicationId)
+        {
+            DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
+            DTODigitalSignDataResponse digitalSignDTO = new DTODigitalSignDataResponse();
+
+            if (data.OnlineApplicationResponse != null)
+            {
+                var onlineResponse = data.OnlineApplicationResponse;
+
+                digitalSignDTO.ApplicationId = onlineResponse.ApplicationId;
+                digitalSignDTO.ArmyNo = onlineResponse.Number ?? string.Empty;
+                digitalSignDTO.ApplicantName = onlineResponse.ApplicantName ?? string.Empty;
+                digitalSignDTO.PCDA_PAO = onlineResponse.pcda_pao ?? string.Empty;
+                digitalSignDTO.Date_Of_Birth = onlineResponse.DateOfBirth?.ToString() ?? string.Empty;
+                digitalSignDTO.Retirement_Date = onlineResponse.DateOfRetirement?.ToString() ?? string.Empty;
+                digitalSignDTO.Mobile_No = onlineResponse.MobileNo ?? string.Empty;
+                digitalSignDTO.ApplType = onlineResponse.ApplicationType;
+                digitalSignDTO.DateOfCommision = onlineResponse.DateOfCommission?.ToString() ?? string.Empty;
+                digitalSignDTO.AccountNo = onlineResponse.SalaryAcctNo ?? string.Empty;
+                digitalSignDTO.RankName = onlineResponse.DdlRank ?? string.Empty;
+                digitalSignDTO.UnitName = onlineResponse.PresentUnit ?? string.Empty;
+                digitalSignDTO.PAN_No = onlineResponse.PanCardNo ?? string.Empty;
+
+                return digitalSignDTO;
+            }
+            return null;
+        }
+
+
+
 
         public async Task<DTODigitalSignDataResponse?> SignDocument(int applicationId)
         {
@@ -216,6 +325,56 @@ namespace Agif_V2.Controllers
                 throw;
             }
         }
+
+        public async Task SaveClaimXML(int applId, string xmlResString, string remarks)
+        {
+            try
+            {
+            DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetails(applId);
+
+                var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+                if (dTOTempSession == null)
+                    throw new Exception("Session expired or invalid user context.");
+
+
+
+                var digitalSignRecords = new DigitalSignRecords
+                {
+                    ApplId = applId,
+                    XMLSignResponse = xmlResString,
+                    SignOn = DateTime.Now,
+                    Remarks = remarks,
+                    IsSign = true,
+                    DomainId = dTOTempSession.DomainId,
+                    ArmyNo = dTOTempSession.ArmyNo,
+                    RankName = dTOTempSession.RankName
+                };
+
+                await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 2);
+                await _application.Add(digitalSignRecords);
+
+                DTOUserProfileResponse adminDetails = await _userProfile.GetAdminDetails();
+                var TrnFwd = new TrnFwd
+                {
+                    ApplicationId = applId,
+                    FromUserId = dTOTempSession.UserId,
+                    FromProfileId = dTOTempSession.ProfileId,
+                    ToUserId = adminDetails.UserId,
+                    ToProfileId = adminDetails.ProfileId,
+                    CreatedOn = DateTime.Now
+                };
+
+               // await _userProfile.SaveTrnFwdRecords(TrnFwd);// Save TrnFwd to database
+
+
+            }
+            catch (Exception ex)
+            {
+                // Log the error or return appropriate response
+                Console.WriteLine($"Error in SaveXML: {ex.Message}\n{ex.StackTrace}");
+                throw;
+            }
+        }
         public async Task<JsonResult> RejectXML(int applId, string rem)
         {
             var digitalSignRecords = new DigitalSignRecords
@@ -237,6 +396,22 @@ namespace Agif_V2.Controllers
             await _onlineApplication.InsertStatusCounter(trnStatusCounter);
             return Json(new { success = true, message = "Application rejected." });
 
+        }
+
+        public async Task<JsonResult> ClaimRejectXML(int applId, string rem)
+        {
+            var digitalSignRecords = new DigitalSignRecords
+            {
+                ApplId = applId,
+                SignOn = DateTime.Now,
+                Remarks = rem,
+                IsSign = false,
+                IsRejectced = true,
+            };
+            await _application.Add(digitalSignRecords);
+            await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 3);
+            //await _onlineApplicationController.MergePdf(applId, true, false);
+            return Json(new { success = true, message = "Application rejected." });
         }
         public async Task<IActionResult> UsersApplicationListAdmin(string status)
         {

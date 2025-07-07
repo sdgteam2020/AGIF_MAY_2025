@@ -18,6 +18,21 @@ else
 {
     Page = "Rejected Applications";
 }
+@* <style>
+    #pdfCanvas {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        object-fit: contain;
+    }
+
+    #pdfContainer {
+        overflow: hidden;
+    }
+
+    .bg-opacity-75 {
+        background-color: rgba(255, 255, 255, 0.75) !important;
+    }
+</style>
+ *@
 <div class="container">
     <div class="container-fluid">
         <!-- ========== title-wrapper start ========== -->
@@ -49,6 +64,15 @@ else
             </div>
             <!-- end row -->
         </div>
+
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="btn-group">
+                <button type="button" id="Loan" class="btn btn-primary me-2" value="Loan">Loan</button>
+                <button type="button" id="Maturity" class="btn btn-secondary" value="Maturity">Maturity</button>
+            </div>
+        </div>
+
+
     <div class="card mt-2">
        
         <div class="card-body">
@@ -120,14 +144,17 @@ else
                     <div class="bg-white shadow-lg rounded" style="width: 95%; height: 95%;">
                         <div id="pdfContainer" class="w-100 h-100 d-flex justify-content-center align-items-center position-relative">
                             <!-- PDF Object -->
-                                <object id="PdfViwerFOrDigital"
+                              @*   <object id="PdfViwerFOrDigital"
                                     type="application/pdf"
-                                    class="w-100 h-100 border-0 rounded">
-                            </object>
-
+                                    class="w-100 h-100 border-0 rounded" 
+                                       >
+                                    
+                            </object> *@
+@*                                 <canvas id="pdfCanvas" class="border-0 rounded" style="max-width: 100%; max-height: 100%; display: block; margin: 0 auto;"></canvas>
+ *@
                             <!-- Loading overlay -->
-                            <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center bg-white bg-opacity-75 d-none">
-                                <div class="text-center">
+                                <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center d-none" style="background-color: rgba(255, 255, 255, 0.9);">
+                                    <div class="text-center">
                                     <div class="spinner-border text-primary mb-3" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
@@ -299,6 +326,7 @@ else
         </div>
     </div>
 </div>
+    <input type="hidden" id="UserType" value="Loan" />
 </div>
 @section Scripts {
 
@@ -318,4 +346,7 @@ else
     <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
 
 }
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+
 <script src="~/devjs/usersapplications.js"></script>

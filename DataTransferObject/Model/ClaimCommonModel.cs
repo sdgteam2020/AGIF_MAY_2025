@@ -191,5 +191,8 @@ namespace DataTransferObject.Model
         public WithdrawalPurpose? WithdrawalPurposetype { get; set; }
 
         public int StatusCode { get; set; }
+
+        public bool IsMergePdf { get; set; } = false;
+        public string? IOArmyNo { get; set; }
     }
 }

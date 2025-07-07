@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Response
 {
-    public class CommonDataonlineResponse
+    public class ClaimCommonDataOnlineResponse
     {
-        public int ApplicationType;
         public string ApplicationTypeName { get; set; }
-        public string ApplicationTypeAbbr { get; set; }
+
+        public int ApplicationType;
 
         public int ApplicationId { get; set; }
 
@@ -97,21 +97,6 @@ namespace DataTransferObject.Response
 
         public string? NextFmnHQ { get; set; }
 
-        public string? Vill_Town { get; set; }
-
-
-        public string? PostOffice { get; set; }
-
-
-        public string? Distt { get; set; }
-
-
-
-        public string? State { get; set; }
-
-
-        public string? Code { get; set; }
-
 
         public string? SalaryAcctNo { get; set; }
 
@@ -127,71 +112,39 @@ namespace DataTransferObject.Response
 
         public string? NameOfBankBranch { get; set; }
 
-        // Financial information
-
-
-
-        public DateTime? MonthlyPaySlip { get; set; }
-
-
-        public decimal? BasicPay { get; set; }
-
-        public decimal? dsop_afpp { get; set; }
-
-        public decimal? rank_gradePay { get; set; }
-
-
-        public decimal? agif_Subs { get; set; }
-
-
-        public decimal? Msp { get; set; }
-
-        public decimal? IncomeTaxMonthly { get; set; }
-
-        public decimal? CI_Pay { get; set; }
-
-
-        public decimal? EducationCess { get; set; }
-
-
-        public decimal? npax_Pay { get; set; }
-
-
-        public decimal? Pli { get; set; }
-
-        public string? TechPay { get; set; }
-
-
-        public decimal? misc_Deduction { get; set; }
-
-
-
-        public decimal? Da { get; set; }
-
-        public decimal? loanEMI_Outside { get; set; }
-
-
-        public decimal? Pmha { get; set; }
-
-
-        public decimal? LoanEmi { get; set; }
-
-
-        public decimal? Lra { get; set; }
-
-        public decimal? MiscPay { get; set; }
-
-
-        public decimal? TotalCredit { get; set; }
-
-        public decimal? TotalDeductions { get; set; }
-
-
-        public decimal? salary_After_Deductions { get; set; }
-
-        public string? CoName {get; set; }
-
+        public decimal? AmountwithdrwalRequired { get; set; }
         public string? NoOfwithdrwal { get; set; }
+
+
+        public bool House_Building_Advance_Loan { get; set; }
+        public bool House_Repair_Advance_Loan { get; set; }
+        public bool Conveyance_Advance_Loan { get; set; }
+        public bool Computer_Advance_Loan { get; set; }
+
+
+
+        public DateTime? House_Building_Date_of_Loan_taken { get; set; }
+        public int? House_Building_Duration_of_Loan { get; set; }
+        public decimal? House_Building_Amount_Taken { get; set; }
+
+
+        public DateTime? House_Repair_Advance_Date_of_Loan_taken { get; set; }
+        public int? House_Repair_Advance_Duration_of_Loan { get; set; }
+        public decimal? House_Repair_Advance_Amount_Taken { get; set; }
+
+
+        public DateTime? Conveyance_Date_of_Loan_taken { get; set; }
+        public int? Conveyance_Duration_of_Loan { get; set; }
+        public decimal? Conveyance_Amount_Taken { get; set; }
+
+
+        public DateTime? Computer_Date_of_Loan_taken { get; set; }
+        public int? Computer_Duration_of_Loan { get; set; }
+        public decimal? Computer_Amount_Taken { get; set; }
+
+
+
+
         public string? UpdatedOn { get; set; }
     }
 }

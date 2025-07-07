@@ -152,6 +152,54 @@ namespace DataAccessLayer.Repositories
             return result > 0;
         }
 
+        public async Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status)
+        {
+            int actualStatus = (status == 2 || status > 3) ? 2 : status;
+            var UsersApplicationList = await (from appl in _db.trnClaim
+                                              join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
+                                              join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+                                              //join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+                                              join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+                                              where user.MappingId == Mapping && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3)) && user.IsPrimary == true
+                                              orderby appl.UpdatedOn descending
+                                              select new DTOGetApplResponse
+                                              {
+                                                  ApplicationId = appl.ApplicationId,
+                                                  ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+                                                  Name = appl.ApplicantName,
+                                                  ApplicationType = applType.Name,
+                                                  DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                                  AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                                  IsMergePdf = appl.IsMergePdf,
+                                                  UpdatedOn = appl.UpdatedOn
+                                              }).ToListAsync();
+
+            var COApplicationList = await (from appl in _db.trnClaim
+                                           join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
+                                           join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+                                           //join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+                                           join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+                                           where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
+                                           orderby appl.UpdatedOn descending
+                                           select new DTOGetApplResponse
+                                           {
+                                               ApplicationId = appl.ApplicationId,
+                                               ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+                                               Name = appl.ApplicantName,
+                                               ApplicationType = applType.Name,
+                                               DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                               AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                               IsMergePdf = appl.IsMergePdf,
+                                               UpdatedOn = appl.UpdatedOn
+                                           }).ToListAsync();
+            var applicationList = UsersApplicationList
+                          .Union(COApplicationList)
+                          .OrderByDescending(a => a.UpdatedOn)
+                          .ToList();
+            return applicationList!;
+            //throw new NotImplementedException();
+        }
+
 
     }
 }

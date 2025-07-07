@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -204,6 +205,73 @@ namespace DataAccessLayer.Repositories
                 return true;
         }
 
+
+        public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
+        {
+            var application = await _context.trnClaim.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
+            if (application == null)
+            {
+                return false; // Just exit the method if not found
+            }
+
+            application.StatusCode = status;
+            _context.trnClaim.Update(application);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public Task<string?> GetIOArmyNoAsync(int applicationId)
+        {
+            var application = _context.trnClaim
+                .FirstOrDefault(i => i.ApplicationId == applicationId);
+
+            if (application == null || string.IsNullOrWhiteSpace(application.IOArmyNo))
+            {
+                return Task.FromResult<string?>(null);
+            }
+
+            return Task.FromResult(application.IOArmyNo);
+        }
+
+        public async Task<UserMapping?> GetCoDetails(int applicationId)
+        {
+            // Step 1: Get the application by applicationId
+            var application = await _context.trnClaim
+                .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);
+
+            if (application == null)
+                return null;
+
+            // Step 3: Get the UserMapping for the PresentUnit where IsPrimary and IsActive are true
+            var userMapping = await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.UnitId == application.PresentUnit && m.IsPrimary);
+
+            return userMapping;
+        }
+
+        public async Task<bool> AddFwdCO(TrnFwdCO trnFwdCO)
+        {
+            await _context.TrnFwdCO.AddAsync(trnFwdCO);
+            await SaveAsync();
+            return false;
+        }
+
+
+        public async Task<UserMapping?> GetUserDetails(string CoArmyNumber)
+        {
+            var userProfile = await _context.UserProfiles
+                .FirstOrDefaultAsync(u => u.ArmyNo == CoArmyNumber);
+
+            if (userProfile == null)
+                return null;
+
+            var userMapping = await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+
+            return userMapping;
+        }
+
         public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
@@ -223,7 +291,7 @@ namespace DataAccessLayer.Repositories
             string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
             string folderPath = Path.Combine(tempFolder, folderName);
 
-            // Check if the folder exists
+          //  Check if the folder exists
             if (!Directory.Exists(folderPath))
             {
                 // Folder not found, return false or handle as needed
@@ -268,7 +336,7 @@ namespace DataAccessLayer.Repositories
 
             if (PurposeType == "ED")
             {
-                var Eddetails= await _Education.GetByApplicationId(ApplicationId);
+                var Eddetails = await _Education.GetByApplicationId(ApplicationId);
                 fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
                 fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
                 fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
@@ -285,8 +353,8 @@ namespace DataAccessLayer.Repositories
             else if (PurposeType == "PR")
             {
                 // Process Property Renovation Details
-                var PRdetails = await _Property.GetByApplicationId(ApplicationId); 
-                fileUpload.Attach_PartIIOrderPdf = PRdetails.TotalExpenditureFilePdf;
+                var PRdetails = await _Property.GetByApplicationId(ApplicationId);
+                fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
             }
             else if (PurposeType == "SP")
@@ -299,9 +367,318 @@ namespace DataAccessLayer.Repositories
 
             await _DocumentUpload.Add(fileUpload);
 
-                return true;
+
+            await UpdateApplicationStatus(ApplicationId, 1);
+
+            var IOArmyNo = await GetIOArmyNoAsync(ApplicationId);
+            if (IOArmyNo == null)
+            {
+                var CoDetails = await GetCoDetails(ApplicationId);
+                if (CoDetails != null)
+                {
+                    TrnFwdCO trnFwdCO = new TrnFwdCO
+                    {
+                        ApplicationId = ApplicationId,
+                        ArmyNo = ArmyNo,
+                        COUserId = CoDetails.UserId,
+                        ProfileId = CoDetails.ProfileId,
+                        CreatedOn = DateTime.Now,
+                        Status = 1
+                    };
+                    await AddFwdCO(trnFwdCO);
+                }
+
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(IOArmyNo))
+                {
+                    var IoDetails = await GetUserDetails(IOArmyNo);
+                    if (IoDetails != null)
+                    {
+                        TrnFwdCO trnFwdCO = new TrnFwdCO
+                        {
+                            ApplicationId = ApplicationId,
+                            ArmyNo = ArmyNo,
+                            COUserId = IoDetails.UserId,
+                            ProfileId = IoDetails.ProfileId,
+                            CreatedOn = DateTime.Now,
+                            Status = 1
+                        };
+                        await AddFwdCO(trnFwdCO);
+                    }
+
+                }
+            }
+
+            return true;
         }
 
 
+        public Task<DTOClaimCommonOnlineResponse> GetApplicationDetails(int applicationId)
+        {
+            DTOClaimCommonOnlineResponse data = new DTOClaimCommonOnlineResponse();
+
+            var result = (from common in _context.trnClaim
+                          join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                          from prefix in prefixGroup.DefaultIfEmpty()
+                          join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                          from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                          join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                          from rank in rankGroup.DefaultIfEmpty()
+                          join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                          from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                          join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                          from regCorps in regCorpsGroup.DefaultIfEmpty()
+                          join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                          from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                          join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                          from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                          join applicationType in _context.WithdrawalPurpose on common.WithdrawPurpose equals applicationType.Id
+                          where common.ApplicationId == applicationId
+                          select new ClaimCommonDataOnlineResponse
+                          {
+                              ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                              PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                              ApplicationId = common.ApplicationId,
+                              ApplicationType = common.WithdrawPurpose,
+                              //ApplicationTypeName = applicationType.ApplicationTypeName,
+                              ArmyPrefix = common.ArmyPrefix,
+                              Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                              AadharCardNo = common.AadharCardNo ?? string.Empty,
+                              Suffix = common.Suffix ?? string.Empty,
+                              OldArmyPrefix = common.OldArmyPrefix,
+                              OldNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              DdlRank = rank != null ? rank.RankName : string.Empty,
+                              ApplicantName = common.ApplicantName ?? string.Empty,
+                              DateOfBirth = common.DateOfBirth,
+                              DateOfCommission = common.DateOfCommission,
+                              NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                              ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                              RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                              PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                              DateOfPromotion = common.DateOfPromotion,
+                              DateOfRetirement = common.DateOfRetirement,
+                              PanCardNo = common.PanCardNo ?? string.Empty,
+                              MobileNo = common.MobileNo ?? string.Empty,
+                              Email = common.Email ?? string.Empty,
+                              EmailDomain = common.EmailDomain ?? string.Empty,
+                              SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
+                              ConfirmSalaryAcctNo = common.ConfirmSalaryAcctNo ?? string.Empty,
+                              IfsCode = common.IfsCode ?? string.Empty,
+                              NameOfBank = common.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                              pcda_pao = common.pcda_pao ?? string.Empty,
+                              pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                              CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
+                              AmountwithdrwalRequired = common.AmountOfWithdrawalRequired ?? 0,
+                              TotalService= common.TotalService ?? 0,
+                              NoOfwithdrwal=common.Noofwithdrawal ?? string.Empty,
+
+                              House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
+                              
+                              House_Repair_Advance_Loan = common.Computer_Advance_Loan ?? false,
+                              
+                              Conveyance_Advance_Loan= common.Conveyance_Advance_Loan ?? false,
+                              
+                              Computer_Advance_Loan= common.Computer_Advance_Loan ?? false,
+
+                              House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
+                              House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
+                              House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
+
+                              Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
+                              Conveyance_Date_of_Loan_taken= common.Conveyance_Date_of_Loan_taken,
+                              Conveyance_Duration_of_Loan= common.Conveyance_Duration_of_Loan ?? 0,
+
+                              House_Repair_Advance_Amount_Taken= common.House_Repair_Advance_Amount_Taken ?? 0,
+                              House_Repair_Advance_Date_of_Loan_taken=common.House_Repair_Advance_Date_of_Loan_taken,
+                              House_Repair_Advance_Duration_of_Loan= common.House_Repair_Advance_Duration_of_Loan ?? 0,
+
+                              Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
+                              Computer_Date_of_Loan_taken= common.Computer_Date_of_Loan_taken,
+                              Computer_Duration_of_Loan= common.Computer_Duration_of_Loan ?? 0,
+
+
+                          }).FirstOrDefault();
+            string formtype = string.Empty;
+            if (result != null)
+            {
+                //if(result.ApplicationType==1)
+                if (result.ApplicationType == 1)
+                {
+                    formtype = "ED";
+                    var EDmodel = (from ED in _context.trnEducationDetails
+                                    where ED.ApplicationId == applicationId
+                                    select new DTOEducationDetailsResponse
+                                    {
+                                        ChildName = ED.ChildName,
+                                        DateOfBirth = ED.DateOfBirth,
+                                        DOPartIINo = ED.DOPartIINo,
+                                        DoPartIIDate = ED.DoPartIIDate,
+                                        CourseForWithdrawal = ED.CourseForWithdrawal,
+                                        CollegeInstitution = ED.CollegeInstitution,
+                                        TotalExpenditure = ED.TotalExpenditure
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.EducationDetailsResponse = EDmodel;
+                }
+
+                else if (result.ApplicationType == 2)
+                {
+                    formtype = "MW";
+                    var MWmodel = (from MW in _context.trnMarriageward
+                                    where MW.ApplicationId == applicationId
+                                    select new DTOMarraigeWardResponse
+                                    {
+                                        NameOfChild = MW.NameOfChild,
+                                        DateOfBirth = MW.DateOfBirth,
+                                        DOPartIINo = MW.DOPartIINo,
+                                        DoPartIIDate = MW.DoPartIIDate,
+                                        AgeOfWard = MW.AgeOfWard,
+                                        DateofMarriage = MW.DateofMarriage,
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result;
+
+                    data.MarraigeWardResponse = MWmodel;
+                }
+
+                else if (result.ApplicationType == 3)
+                {
+                    formtype = "PR";
+                    var PcaModal = (from PR in _context.trnPropertyRenovation
+                                    where PR.ApplicationId == applicationId
+                                    select new DTOPropertyRenovationResponse
+                                    {
+                                        PropertyHolderName = PR.PropertyHolderName,
+                                        AddressOfProperty = PR.AddressOfProperty,
+                                        EstimatedCost= PR.EstimatedCost,
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.PropertyRenovationResponse = PcaModal;
+                }
+
+                //var DocumentModel = _context.trnDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
+                var DocumentModel = _context.trnClaimDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
+
+                if (DocumentModel != null)
+                {
+                    string directoryPath = Path.Combine("/ClaimTempUploads", $"{formtype}_{result.Number}_{applicationId}");
+                    List<DTODocumentFileView> lstdoc = new List<DTODocumentFileView>();
+
+                    if (DocumentModel.IsAttachBonafideLetterPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.AttachBonafideLetterPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsAttachPartIIOrderPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.AttachPartIIOrderPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsAttachInvitationcardPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.AttachInvitationcardPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsAttach_PartIIOrderPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.Attach_PartIIOrderPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsTotalExpenditureFilePdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.TotalExpenditureFile;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsCancelledChequePdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsPaySlipPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                    if (DocumentModel.IsSplWaiverPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.SplWaiverPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+
+                    data.Documents = lstdoc; // Assign the list of documents to the response object
+                    // Get all files in the directory
+
+                }
+
+
+
+
+            }
+
+            return Task.FromResult(data);
+        }
+
+        public async Task<string> GetCOName(int mappingId)
+        {
+            // Get the UserMapping by MappingId
+            var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
+
+
+            if (userMapping == null)
+                return string.Empty;
+
+            // Get the UserProfile by ProfileId from UserMapping
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
+            if (userProfile == null)
+                return string.Empty;
+
+            // Get the RankName from MRanks using rank id from UserProfile
+            var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
+            string rankName = rank != null ? rank.RankName : string.Empty;
+
+            // Concatenate rankName and userName
+            return $"{rankName} {userProfile.userName}".Trim();
+        }
+
+        public async Task<bool> UpdateMergePdfStatus(int applicationId, bool status)
+        {
+            var application = await _context.trnClaim.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
+            if (application == null)
+            {
+                return false; // Just exit the method if not found
+            }
+
+            application.IsMergePdf = status;
+            _context.trnClaim.Update(application);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

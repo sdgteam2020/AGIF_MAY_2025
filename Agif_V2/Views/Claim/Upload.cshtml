@@ -6,7 +6,10 @@
 
     string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "ED";
     //int applicationId = Convert.ToInt32(TempData["applicationId"]);
+    var message = TempData["Message"] ?? string.Empty;
     int applicationId = Convert.ToInt32(TempData["applicationId"]);
+
+    //int applicationId = 1002;
     var IsExtension = TempData["IsextensionOfService"] ?? false;
 
 }
@@ -188,7 +191,7 @@
 </style>
 <script src="~/devjs/ClaimUpload.js"></script>
 
-@* <script>
+<script>
     $(document).ready(function () {
         var message = '@message';
 
@@ -207,4 +210,4 @@
             });
         }
     });
-</script> *@
+</script>

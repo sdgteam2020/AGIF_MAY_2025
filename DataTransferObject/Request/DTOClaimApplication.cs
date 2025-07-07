@@ -19,5 +19,8 @@ namespace DataTransferObject.Request
         public string? Category { get; set; }
 
         public string? Purpose { get; set; }
+
+        public string? COArmyNo { get; set; }
+
     }
 }

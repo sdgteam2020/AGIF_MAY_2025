@@ -1354,24 +1354,24 @@ function handleSubmitClick() {
         if (hasError) {
             return false;
         }
-        //else {
-        //    //form.submit();
-        //    $("#msgerror").html(''); // Clear error message
-        //    if (formSubmitting) return; // Allow submission after confirmation
-        //    if (formCancelled) {
-        //        formCancelled = false; // Reset flag
-        //        e.preventDefault();
-        //        return;
-        //    }
+        else {
+            //form.submit();
+            $("#msgerror").html(''); // Clear error message
+            if (formSubmitting) return; // Allow submission after confirmation
+            if (formCancelled) {
+                formCancelled = false; // Reset flag
+                e.preventDefault();
+                return;
+            }
 
-        //    let unitVal = $('#PresenttxtUnit').val().trim();
-        //    if (unitVal != '') {
-        //        event.preventDefault(); // Stop form submission
-        //        checkCORegistration(); // First check CO registration
-        //    }
-        //}
-        else
-            form.submit();
+            let unitVal = $('#PresenttxtUnit').val().trim();
+            if (unitVal != '') {
+                event.preventDefault(); // Stop form submission
+                checkCORegistration(); // First check CO registration
+            }
+        }
+        //else
+        //    form.submit();
 
     });
 
@@ -1412,7 +1412,7 @@ function checkCORegistration() {
                 } else if (result === false) {
                     // If not registered, set unit input back to required
                     formSubmitting = true;
-                    $('#myForm').submit();
+                    $('#myMaturityForm').submit();
                     //document.getElementById("txtUnit").removeAttribute("disabled");
                     //document.getElementById("txtUnit").setAttribute("required", "required");
                 }
@@ -1626,12 +1626,12 @@ function checkUnitSameOrNot(ArmyNo) {
                     if (result === true) {
                         $('#COArmyNo').val(ArmyNo);
                         formSubmitting = true;
-                        $('#myForm').submit();
+                        $('#myMaturityForm').submit();
                     } else if (result === false) {
                         // If not registered, set unit input back to required
                         $('#unitSearchMessage').text();
                         formSubmitting = false;
-                        //$('#myForm').submit();
+                        //$('#myMaturityForm').submit();
                         Swal.fire({
                             icon: 'info',
                             title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
@@ -1682,7 +1682,7 @@ function checkUnitSameOrNot(ArmyNo) {
 //                $("#CommonData_IOUnit").val(selectedUnitId);
 //                //$('#txtUnit').val(selectedUnitName);
 //                formSubmitting = true;
-//                $('#myForm').submit();
+//                $('#myMaturityForm').submit();
 //            } else {
 //                //if (confirm('Unit registration pending/not activated. Please approach your Unit IO.\nGo to Create page?')) {
 //                //    window.location.href = '/Car_PC_Advance_Application/Create';
