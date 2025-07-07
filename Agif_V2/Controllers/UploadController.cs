@@ -170,6 +170,14 @@ namespace Agif_V2.Controllers
             await _IDocumentUpload.Add(fileUpload);
 
             await _IonlineApplication1.UpdateApplicationStatus(applicationId, 1);
+            TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+            {
+                StatusId = 1,
+                ApplicationId = applicationId,
+                ActionOn = DateTime.Now,
+            };
+            await _IonlineApplication1.InsertStatusCounter(trnStatusCounter);
+
 
             var IOArmyNo = await _IonlineApplication1.GetIOArmyNoAsync(applicationId);
             if (IOArmyNo == null)
@@ -211,27 +219,8 @@ namespace Agif_V2.Controllers
 
                 }
             }
-
-            //if (!string.IsNullOrEmpty(CoArmyNumber))
-            //{
-            //    var CoDetails = await _IonlineApplication1.GetUserDetails(CoArmyNumber);
-            //    if (CoDetails != null)
-            //    {
-            //        TrnFwdCO trnFwdCO = new TrnFwdCO
-            //        {
-            //            ApplicationId = applicationId,
-            //            ArmyNo = ArmyNo,
-            //            COUserId = CoDetails.UserId,
-            //            ProfileId = CoDetails.ProfileId,
-            //            CreatedOn = DateTime.Now,
-            //            Status = 1
-            //        };
-            //        await _IonlineApplication1.AddFwdCO(trnFwdCO);
-            //    }
-
-            //}
             
-            TempData["Message"] = "Application is forwarded to your Unit Cdr.";
+            TempData["Message"] = "Application is forwarded to your Unit Cdr/IO/Superior countersigning Auth.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
         }
         public IActionResult UploadSuccess()
@@ -249,6 +238,7 @@ namespace Agif_V2.Controllers
 
             var coDetails = _IonlineApplication1.GetUnitByApplicationId(int.Parse(applicationId));
             var data = coDetails.Result?.OnlineApplicationResponse;
+
 
             if (data == null)
             {

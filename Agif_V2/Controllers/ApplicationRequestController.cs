@@ -182,7 +182,16 @@ namespace Agif_V2.Controllers
                     RankName = dTOTempSession.RankName
                 };
 
-                await _onlineApplication.UpdateApplicationStatus(applId, 2); 
+                await _onlineApplication.UpdateApplicationStatus(applId, 2);
+
+                TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+                {
+                    StatusId = 2,
+                    ApplicationId = applId,
+                    ActionOn = DateTime.Now,
+                };
+                await _onlineApplication.InsertStatusCounter(trnStatusCounter);
+
                 await _application.Add(digitalSignRecords);
 
                 DTOUserProfileResponse adminDetails = await _userProfile.GetAdminDetails();
@@ -219,7 +228,13 @@ namespace Agif_V2.Controllers
             };
             await _application.Add(digitalSignRecords);
             await _onlineApplication.UpdateApplicationStatus(applId, 3);
-            //await _onlineApplicationController.MergePdf(applId, true, false);
+            TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+            {
+                StatusId = 3,
+                ApplicationId = applId,
+                ActionOn = DateTime.Now,
+            };
+            await _onlineApplication.InsertStatusCounter(trnStatusCounter);
             return Json(new { success = true, message = "Application rejected." });
 
         }

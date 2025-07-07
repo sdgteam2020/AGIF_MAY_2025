@@ -290,8 +290,8 @@ function confirmAccountNo() {
         var reEnterAccountNo = $('#confirmSalaryAcctNo').val();
         if (accountNo !== reEnterAccountNo) {
             Swal.fire({
-                title: "Not Matched",
-                text: "Salary Account No. not matched",
+                title: "Alert",
+                text: "You Salary Account No is mismatch",
                 icon: "warning"
             }).then(() => {
 
@@ -529,25 +529,7 @@ $('.monthPicker').datepicker({
     maxDate: 0, // This restricts to today and past dates only (no future dates)
     yearRange: "1900:+0", // Allow years from 1900 to current year only
     defaultDate: null, // Default to today
-    //onClose: function (dateText, inst) {
-    //    // Check if the element and required properties exist before proceeding
-    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
-    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //        $(this).val(formattedDate);
-    //    }
-    //},
-    //onSelect: function (dateText, inst) {
-    //    // Format the selected date properly
-    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //    $(this).val(formattedDate);
-
-
-    //},
-    //onSelect: function () {
-    //    var dt = $('#dateOfBirth').val();
-    //    var newdt = new Date(my_date(dt));
-    //    newdt.setFullYear(newdt.getFullYear() + 18);
-    //},
+    
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
         var dt = $('#dateOfBirth').val();
@@ -579,25 +561,7 @@ $('.DocPicker').datepicker({
     maxDate: 0, // This restricts to today and past dates only (no future dates)
     yearRange: "1900:+0", // Allow years from 1900 to current year only
     defaultDate: null, // Default to today
-    //onClose: function (dateText, inst) {
-    //    // Check if the element and required properties exist before proceeding
-    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
-    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //        $(this).val(formattedDate);
-    //    }
-    //},
-    //onSelect: function (dateText, inst) {
-    //    // Format the selected date properly
-    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //    $(this).val(formattedDate);
-
-
-    //},
-    //onSelect: function () {
-    //    var dt = $('#dateOfCommission').val();
-    //    var newdt = new Date(my_date(dt));
-    //    newdt.setFullYear(newdt.getFullYear() + 18);
-    //}
+    
 
 
     onSelect: function (dateText, inst) {
@@ -616,12 +580,6 @@ $('.DocPicker').datepicker({
         // Optional: Set the calculated date back to the field or use as needed
 
     }
-    //beforeShowDay: function (date) {
-    //    // Additional check to disable future dates
-    //    var today = new Date();
-    //    today.setHours(23, 59, 59, 999); // Set to end of today
-    //    return [date <= today];
-    //}
 });
 
 $('.DopPicker').datepicker({
@@ -631,25 +589,7 @@ $('.DopPicker').datepicker({
     dateFormat: 'dd/mm/yy',
     yearRange: "1900:2100", // Allow years from 1900 to current year only
     defaultDate: null, // Default to today
-    //onClose: function (dateText, inst) {
-    //    // Check if the element and required properties exist before proceeding
-    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
-    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //        $(this).val(formattedDate);
-    //    }
-    //},
-    //onSelect: function (dateText, inst) {
-    //    // Format the selected date properly
-    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //    $(this).val(formattedDate);
-
-
-    //},
-    //onSelect: function () {
-    //    var dt = $('#dateOfPromotion').val();
-    //    var newdt = new Date(my_date(dt));
-    //    newdt.setFullYear(newdt.getFullYear() + 18);
-    //}
+    
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
         var dt = $('#dateOfPromotion').val();
@@ -680,25 +620,7 @@ $('.Payslippicker').datepicker({
     dateFormat: 'dd/mm/yy',
     yearRange: "1900:2100", // Allow years from 1900 to current year only
     defaultDate: null, // Default to today
-    //onClose: function (dateText, inst) {
-    //    // Check if the element and required properties exist before proceeding
-    //    if (inst && inst.selectedYear && inst.selectedMonth !== undefined && inst.selectedDay) {
-    //        var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //        $(this).val(formattedDate);
-    //    }
-    //},
-    //onSelect: function (dateText, inst) {
-    //    // Format the selected date properly
-    //    var formattedDate = formatDateToString(new Date(inst.selectedYear, inst.selectedMonth, inst.selectedDay));
-    //    $(this).val(formattedDate);
-
-
-    //},
-    //onSelect: function () {
-    //    var dt = $('#dateOfPromotion').val();
-    //    var newdt = new Date(my_date(dt));
-    //    newdt.setFullYear(newdt.getFullYear() + 18);
-    //}
+    
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
         var dt = $('#monthlyPaySlip').val();
@@ -714,12 +636,6 @@ $('.Payslippicker').datepicker({
         // Optional: Set the calculated date back to the field or use as needed
 
     }
-    //beforeShowDay: function (date) {
-    //    // Additional check to disable future dates
-    //    var today = new Date();
-    //    today.setHours(23, 59, 59, 999); // Set to end of today
-    //    return [date <= today];
-    //}
 });
 
 $('.LicencePicker').datepicker({
@@ -728,21 +644,48 @@ $('.LicencePicker').datepicker({
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
     yearRange: "1900:2100",
+    minDate:1,
     defaultDate: null, // Default to today
 
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
         var dt = $('#validity_Date_DL').val();
-
-        // Call the custom functions on select
+        
         formatDate(this); // Ensure the function formats the date
-
-        // Calculate new date by adding 18 years
+        
         var newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
     }
 
+});
+$('.LicencePicker').on('blur change', function () {
+    var inputDate = $(this).val();
+
+    if (inputDate) {
+        // Parse the date (assuming dd/mm/yyyy format)
+        var parts = inputDate.split('/');
+        if (parts.length === 3) {
+            var day = parseInt(parts[0], 10);
+            var month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+            var year = parseInt(parts[2], 10);
+
+            var selectedDate = new Date(year, month, day);
+            var today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+
+            // If selected date is in the past, clear the field and show alert
+            if (selectedDate < today) {
+                $(this).val('');
+                Swal.fire({
+                    title: "Alert",
+                    text: "Your Driving Licence has been Expired!",
+                    icon:"warning"
+                })
+                $(this).focus();
+            }
+        }
+    }
 });
 function formatDate(input) {
     // Get the current value and remove any non-numeric characters except existing slashes
@@ -1351,6 +1294,10 @@ function textChange() {
     calculateEMIRepayingCapacity_CA();
     calculateEMIRepayingCapacity_HBA();
     calculateEMIRepayingCapacity_PCA();
+    resetLoanFields();
+}
+function resetLoanFields() {
+    $('#CA_approxDisbursementAmt,#HBA_approxDisbursementAmt,#PCA_approxDisbursementAmt,#computerCost,#propertyCost,#vehicleCost,#PCA_EMI_Eligible,#HBA_EMI_Eligible,#CA_EMI_Eligible,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#PCA_Amount_Applied_For_Loan,#PCA_EMI_Applied,#PCA_approxEMIAmount,#CA_approxEMIAmount,#HBA_approxEMIAmount,#CA_Amt_Eligible_for_loan,#PCA_Amt_Eligible_for_loan,#HBA_Amt_Eligible_for_loan').val(0);
 }
 
 let formSubmitting = false;
@@ -1695,37 +1642,7 @@ function checkUnitSameOrNot(ArmyNo) {
         //console.log("Unit is same as Army No");
         $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
     }
-
-    // else {
-    //$.ajax({
-    //    url: '/OnlineApplication/CheckIsUnitRegister',
-    //    method: 'GET',
-    //    data: { ArmyNo: (ArmyNo).toUpperCase()},
-    //    success: function (response) {
-    //        if (response === true) {
-
-    //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
-
-    //            // Clear input and reopen dialog
-    //            $("#unitSearchInput").val("");
-    //            $("#CommonData_IOUnit").val(0)
-    //        }
-
-    //        else {
-
-
-    //            checkUnitRegistration(unitId);
-
-
-    //        }
-    //    },
-    //    error: function () {
-    //        alert('Could not verify unit registration. Please try again.');
-    //    }
-    //});
-    //checkUnitRegistration(ArmyNo);
-    //}
-
+    
     else {
         try {
             $.ajax({
@@ -1738,32 +1655,21 @@ function checkUnitSameOrNot(ArmyNo) {
                         formSubmitting = true;
                         $('#myForm').submit();
                     } else if (result === false) {
-                        // If not registered, set unit input back to required
                         $('#unitSearchMessage').text();
                         formSubmitting = false;
                         //$('#myForm').submit();
                         Swal.fire({
                             icon: 'info',
                             title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
-                            html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
+                            html: '<span style="font-size: 18px;">Please approach your IO/Superior ath for Regn or contact AGIF.</span>',
                             confirmButtonText: 'OK',
                             cancelButtonText: 'Cancel', // Cancel button text
                             showCancelButton: true, // Enable cancel button
                             reverseButtons: true,  // Make Cancel button appear on the left
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Redirect to Create page
-                                //var appType = $('#ApplicationType').val();
-                                //if (appType == "9") {
-                                //    window.location.href = `/HBA_Application/Create`;
-                                //}
-                                //else {
-                                //    window.location.href = `/Car_PC_Advance_Application/Create`;
-                                //}
                                 $('#unitSearchDialog').hide();
                             } else if (result.isDismissed) {
-                                // If Cancel is clicked, reopen the unit search popup
-                                //$('#txtUnit').val('');
                                 $("unitSearchDialog").show();
                             }
                         });
@@ -1780,61 +1686,6 @@ function checkUnitSameOrNot(ArmyNo) {
 
 
 }
-
-//function checkUnitRegistration(selectedUnitId) {
-//    $.ajax({
-//        url: '/OnlineApplication/CheckIsCoRegister',
-//        method: 'GET',
-//        data: { UnitId: selectedUnitId },
-//        success: function (response) {
-//            if (response === true) {
-//                //alert('Unit Available. You can proceed with this unit.');
-//                $("#CommonData_IOUnit").val(selectedUnitId);
-//                //$('#txtUnit').val(selectedUnitName);
-//                formSubmitting = true;
-//                $('#myForm').submit();
-//            } else {
-//                //if (confirm('Unit registration pending/not activated. Please approach your Unit IO.\nGo to Create page?')) {
-//                //    window.location.href = '/Car_PC_Advance_Application/Create';
-//                //} else {
-//                //    openUnitSearchPopup();
-//                //}
-//                $('#unitSearchMessage').text('');
-
-
-//                Swal.fire({
-//                    icon: 'info',
-//                    title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
-//                    html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
-//                    confirmButtonText: 'OK',
-//                    cancelButtonText: 'Cancel', // Cancel button text
-//                    showCancelButton: true, // Enable cancel button
-//                    reverseButtons: true,  // Make Cancel button appear on the left
-//                }).then((result) => {
-//                    if (result.isConfirmed) {
-//                        // Redirect to Create page
-//                        //var appType = $('#ApplicationType').val();
-//                        //if (appType == "9") {
-//                        //    window.location.href = `/HBA_Application/Create`;
-//                        //}
-//                        //else {
-//                        //    window.location.href = `/Car_PC_Advance_Application/Create`;
-//                        //}
-//                        $('#unitSearchDialog').hide();
-//                    } else if (result.isDismissed) {
-//                        // If Cancel is clicked, reopen the unit search popup
-//                        //$('#txtUnit').val('');
-//                        $("unitSearchDialog").show();
-//                    }
-//                });
-//            }
-//        },
-//        error: function () {
-//            alert('Could not verify unit registration. Please try again.');
-//        }
-//    });
-//}
-
 function formatIndianNumber(input) {
 
     let num = input.value.replace(/[^0-9]/g, '');

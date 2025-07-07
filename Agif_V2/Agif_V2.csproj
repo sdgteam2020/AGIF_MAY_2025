@@ -46,18 +46,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Account\GetAllUsers.cshtml" />
-    <Content Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
     <Content Remove="Views\Home\UserApprovalLists.cshtml" />
-    <Content Remove="wwwroot\DevJs\onlineApplication.js" />
     <Content Remove="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Account\GetAllUsers.cshtml" />
-    <None Include="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
     <None Include="Views\Home\UserApprovalLists.cshtml" />
-    <None Include="wwwroot\DevJs\onlineApplication.js" />
     <None Include="wwwroot\images\auth\.DS_Store" />
     <None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
     <None Include="wwwroot\ImportantPdfFiles\AGIF Loan  Inward Payment Using NEFT.pdf" />

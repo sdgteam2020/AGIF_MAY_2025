@@ -34,18 +34,11 @@ function BindUsersData(status) {
 
     var columns = [
         {
-            data: 1,
+            data: null,
             name: "SerialNumber",
             orderable: false,
             render: function (data, type, row, meta) {
                 return meta.row + meta.settings._iDisplayStart + 1;
-            }
-        },
-        {
-            data: "presentStatus",
-            name: "PresentStatus",
-            render: function (data, type, row) {
-                return data || 'N/A';
             }
         },
         {
@@ -63,13 +56,6 @@ function BindUsersData(status) {
             }
         },
         {
-            data: "oldArmyNo",
-            name: "OldArmyNo",
-            render: function (data, type, row) {
-                return data || 'N/A';
-            }
-        },
-        {
             data: "regtCorps",
             name: "RegtCorps",
             render: function (data, type, row) {
@@ -79,13 +65,6 @@ function BindUsersData(status) {
         {
             data: "presentUnit",
             name: "PresentUnit",
-            render: function (data, type, row) {
-                return data || 'N/A';
-            }
-        },
-        {
-            data: "pcdaPao",
-            name: "PcdaPao",
             render: function (data, type, row) {
                 return data || 'N/A';
             }
@@ -168,89 +147,6 @@ function BindUsersData(status) {
             }
         },
         columns: columns,
-//            [
-//            {
-//                data: 1,
-//                name: "SerialNumber",
-//                orderable: false,
-//                render: function (data, type, row, meta) {
-//                    return meta.row + meta.settings._iDisplayStart + 1;
-//                }
-//            },
-//            {
-//                data: "presentStatus",
-//                name: "PresentStatus",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "armyNo",
-//                name: "ArmyNo",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "name",
-//                name: "Name",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "oldArmyNo",
-//                name: "OldArmyNo",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "regtCorps", // Fixed: Changed from "regtCorps" to match your DTO
-//                name: "RegtCorps",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "presentUnit",
-//                name: "PresentUnit",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "pcdaPao",
-//                name: "PcdaPao",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: "appliedDate",
-//                name: "AppliedDate",
-//                render: function (data, type, row) {
-//                    return data || 'N/A';
-//                }
-//            },
-//            {
-//                data: null,
-//                name: "Download",
-//                orderable: false,
-//                render: function (data, type, row) {
-//                    return `<button class="btn btn-primary btn-sm download-btn"
-//        data-id="${row.applicationId}"
-//        data-army="${row.armyNo}"
-//        data-type="${row.applicationType}">
-//    <i class="bi bi-download"></i>
-//</button>`;
-//                }
-
-//            }
-
-
-//            // Removed duplicate "presentUnit" column
-//        ],
         language: {
             search: "",
             searchPlaceholder: "Search applications...",
@@ -269,46 +165,12 @@ function BindUsersData(status) {
         },
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
         buttons: [
-            // Uncomment and configure as needed
-            //{
-            //    extend: 'excel',
-            //    title: 'Users List',
-            //    exportOptions: {
-            //        columns: "thead th:not(.noExport)"
-            //    }
-            //}
         ],
         drawCallback: function (settings) {
             // Add any custom logic here after table is drawn
         }
     });
 }
-
-// Function to handle user status update
-//function updateUserStatus(domainId, isActive, toggleElement) {
-//    $.ajax({
-//        url: "/Account/UpdateUserStatus",
-//        type: "POST",
-//        data: {
-//            domainId: domainId,
-//            isActive: isActive
-//        },
-//        success: function (response) {
-//            if (response.success) {
-//                $('#tblData').DataTable().ajax.reload(null, false);
-//                showSuccessMessage(`User status updated to: ${isActive ? 'Active' : 'Inactive'}`);
-//            } else {
-//                revertToggle(toggleElement, !isActive);
-//                console.error('Failed to update user status:', response.message);
-//                showErrorMessage('Failed to update user status: ' + response.message);
-//            }
-//        },
-//        error: function (xhr, status, error) {
-//            revertToggle(toggleElement, !isActive);
-//            console.error('Error updating user status:', error);
-//        }
-//    });
-//}
 
 function downloadApplication(applicationId, armyNo, applicationType) {
     if (!applicationId) {
@@ -318,7 +180,6 @@ function downloadApplication(applicationId, armyNo, applicationType) {
 
     var applicationIds = [];
     applicationIds.push(applicationId);
-    //console.log(applicationId + armyNo + applicationType);
 
     // Option 2: Using AJAX if you need to handle response differently
 

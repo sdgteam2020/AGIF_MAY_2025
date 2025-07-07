@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting.Server;
+﻿using DataAccessLayer.Interfaces;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.PortableExecutable;
 
@@ -7,8 +8,10 @@ namespace Agif_V2.Controllers
     public class DefaultController : Controller
     {
         private readonly IWebHostEnvironment _env;
-        public DefaultController(IWebHostEnvironment env)
+        private readonly IDefault _default;
+        public DefaultController(IWebHostEnvironment env, IDefault _default)
         {
+            this._default = _default;
             _env = env;
         }
         public IActionResult Index()
@@ -73,5 +76,17 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> SearchByArmyNo(string armyNo)
+        {
+            var data = await _default.GetUserApplicationStatusByArmyNo(armyNo);
+            return Json(data);
+        }
+
+        public async Task<IActionResult> GetTimeline(int ApplicationId)
+        {
+            var data = await _default.GetTimeLine(ApplicationId);
+            return Json(data);
+        }
+
     }
 }

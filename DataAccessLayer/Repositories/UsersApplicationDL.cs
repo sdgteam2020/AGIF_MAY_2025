@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
+using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
@@ -112,16 +113,13 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> UpdateStatus(DTOExportRequest dtoExport)
         {
-            // Fetch applications based on IDs
             var applications = _db.trnApplications
                 .Where(a => dtoExport.Id.Contains(a.ApplicationId))
                 .ToList();
 
-            // Return false if nothing found
             if (applications == null || applications.Count == 0)
                 return false;
 
-            // Update fields for each application
             foreach (var app in applications)
             {
                 app.DownloadCount += 1;
@@ -131,11 +129,29 @@ namespace DataAccessLayer.Repositories
 
             _db.trnApplications.UpdateRange(applications);
 
-            // Save changes asynchronously
             int result = await _db.SaveChangesAsync();
 
             return result > 0;
         }
+
+        public async Task<bool> InsertStatusCounter(DTOExportRequest dtoExport)
+        {
+            if (dtoExport == null || dtoExport.Id == null || !dtoExport.Id.Any())
+                return false;
+
+            var statusCounters = dtoExport.Id.Select(appId => new TrnStatusCounter
+            {
+                StatusId = 5, // Assuming status 4 means "Downloaded"
+                ApplicationId = appId,
+                ActionOn = DateTime.Now
+            }).ToList();
+
+            await _db.TrnStatusCounter.AddRangeAsync(statusCounters);
+            int result = await _db.SaveChangesAsync();
+
+            return result > 0;
+        }
+
 
     }
 }

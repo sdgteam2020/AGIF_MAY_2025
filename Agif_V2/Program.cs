@@ -48,6 +48,8 @@ builder.Services.AddTransient<IApplication, Application>();
 builder.Services.AddTransient<IUserProfile, UserProfileDL>();
 builder.Services.AddTransient<IUserMapping, UserMappingDL>();
 builder.Services.AddTransient<IUsersApplications, UsersApplicationDL>();
+builder.Services.AddTransient<IDefault, DefaultDL>();
+builder.Services.AddTransient<IHome, HomeDL>();
 builder.Services.AddTransient<PdfGenerator>();
 builder.Services.AddTransient<MergePdf>();
 builder.Services.AddTransient<OnlineApplicationController>();

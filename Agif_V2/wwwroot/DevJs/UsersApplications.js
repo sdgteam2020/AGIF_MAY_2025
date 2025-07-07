@@ -91,55 +91,6 @@ var currentApplicationData = {};
 
 
 
-//function populateRecommendationModal(applicationData) {
-//    if (!applicationData || Object.keys(applicationData).length === 0) {
-//        console.warn('No application data available for binding');
-//        return;
-//    }
-
-//    // Update all placeholders in the modal
-//    $('#ApplicationAction').find('label').each(function () {
-//        let labelText = $(this).html();
-
-//        // Replace [Applicant Name] with actual name
-//        if (labelText.includes('[Applicant Name]')) {
-//            labelText = labelText.replace(/\[Applicant Name\]/g,
-//                `<strong class="text-primary">${applicationData.name || 'N/A'}</strong>`);
-//        }
-
-//        // Replace [Application Type] with actual name
-//        if (labelText.includes('[Application type]')) {
-//            labelText = labelText.replace(/\[Application type\]/g,
-//                `<strong class="text-primary">${applicationData.applicationType || 'N/A'}</strong>`);
-//        }
-
-//        // Replace [Unit Name] with actual unit name
-//        if (labelText.includes('[Unit Name]')) {
-//            labelText = labelText.replace(/\[Unit Name\]/g,
-//                `<strong class="text-primary">${applicationData.unitName || 'N/A'}</strong>`);
-//        }
-
-//        // Replace [Account Number] with actual account number
-//        if (labelText.includes('[Account Number]')) {
-//            labelText = labelText.replace(/\[Account Number\]/g,
-//                `<strong class="text-primary">${applicationData.accountNumber || 'N/A'}</strong>`);
-//        }
-
-//        // Replace [IFSC Code] with actual IFSC code
-//        if (labelText.includes('[IFSC Code]')) {
-//            labelText = labelText.replace(/\[IFSC Code\]/g,
-//                `<strong class="text-primary">${applicationData.ifscCode || 'N/A'}</strong>`);
-//        }
-
-//        $(this).html(labelText);
-//    });
-
-//    // Update modal title with applicant name
-//    $('#ApplicationActionLabel').html(`
-//            <i class="bi bi-file-earmark-check me-2"></i>
-//            Application Review & Approval - ${applicationData.name || 'Unknown Applicant'}
-//        `);
-//}
 function populateRecommendationModal(applicationData) {
     if (!applicationData || Object.keys(applicationData).length === 0) {
         console.warn('No application data available for binding');
@@ -151,11 +102,12 @@ function populateRecommendationModal(applicationData) {
         if (!template) return;
 
         let updatedText = template
-            .replace(/\[Applicant Name\]/g, `<strong class="text-primary">${applicationData.name || 'N/A'}</strong>`)
+            .replace(/\[Applicant Name\]/g, `<strong class="text-primary">${applicationData.armyNo || 'N/A'} ${applicationData.rank || 'N/A'} ${applicationData.name || 'N/A'}</strong >`)
             .replace(/\[Application type\]/g, `<strong class="text-primary">${applicationData.applicationType || 'N/A'}</strong>`)
             .replace(/\[Unit Name\]/g, `<strong class="text-primary">${applicationData.unitName || 'N/A'}</strong>`)
             .replace(/\[Account Number\]/g, `<strong class="text-primary">${applicationData.accountNumber || 'N/A'}</strong>`)
-            .replace(/\[IFSC Code\]/g, `<strong class="text-primary">${applicationData.ifscCode || 'N/A'}</strong>`);
+            .replace(/\[IFSC Code\]/g, `<strong class="text-primary">${applicationData.ifscCode || 'N/A'}</strong>`)
+            .replace(/\[Bank\]/g, `<strong class="text-primary">${applicationData.bank || 'N/A'}</strong>`);
 
         $(this).html(updatedText);
     });
@@ -466,7 +418,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId) {
         error: function () {
             Swal.fire({
                 title: "Alert!",
-                text: "Download Dgis App For Digital Sign!",
+                text: "Install DGIS App for Digital Sign!",
                 icon: "error"
             });
         }
@@ -491,10 +443,10 @@ function DataSignDigitaly(applicationId) {
         error: function () {
             Swal.fire({
                 title: "Alert!",
-                text: "Download Dgis App For Digital Sign!",
+                text: "Please Ensure that DGIS App has been installed and running at the time of Digital Signature.",
                 icon: "error"
             });
-            //$("#tokenMessage").html(`<span class="m-lg-2 text-danger alert-danger tokenremarks"> DGIS App Not running</span> <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; font-size:12px">Download Dgis App For Digital Sign</a>`);
+            //$("#tokenMessage").html(`<span class="m-lg-2 text-danger alert-danger tokenremarks"> DGIS App Not running</span> <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; font-size:12px">Install DGIS App for Digital Sign!</a>`);
 
         }
     });

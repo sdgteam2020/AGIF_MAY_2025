@@ -2,6 +2,7 @@
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.Identity.Client;
@@ -145,22 +146,55 @@ namespace DataAccessLayer.Repositories
         public Task<DTOCommonOnlineApplicationResponse> GetUnitByApplicationId(int applicationId)
         {
             DTOCommonOnlineApplicationResponse data = new DTOCommonOnlineApplicationResponse();
-            var result = (from appl in _context.trnApplications
-                          where appl.ApplicationId == applicationId
-                          join unit in _context.MUnits on appl.PresentUnit equals unit.UnitId
-                          join mapping in _context.trnUserMappings on unit.UnitId equals mapping.UnitId
-                          join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
-                          where mapping.IsActive == true && mapping.IsPrimary == true
-                          join Rank in _context.MRanks on profile.rank equals Rank.RankId
-                          select new CommonDataonlineResponse
-                          {
-                              PresentUnit = unit.UnitName,
-                              ApplicationId = appl.ApplicationId,
-                              Number = profile.ArmyNo,
-                              CoName = profile.Name,
-                              DdlRank = Rank.RankName,
-                          }).FirstOrDefault();
-            data.OnlineApplicationResponse = result;
+
+            var application = _context.trnApplications
+                .Where(x=>x.ApplicationId == applicationId)
+                .Select(x=>new { x.ApplicationId, x.IOArmyNo })
+                .FirstOrDefault();
+
+            if(application == null)
+            {
+                return Task.FromResult(data); // return empty if not found
+            }
+
+            if(string.IsNullOrEmpty(application.IOArmyNo))
+            {
+                var result = (from appl in _context.trnApplications
+                              where appl.ApplicationId == applicationId
+                              join unit in _context.MUnits on appl.PresentUnit equals unit.UnitId
+                              join mapping in _context.trnUserMappings on unit.UnitId equals mapping.UnitId
+                              join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+                              where mapping.IsActive == true && mapping.IsPrimary == true
+                              join Rank in _context.MRanks on profile.rank equals Rank.RankId
+                              select new CommonDataonlineResponse
+                              {
+                                  PresentUnit = unit.UnitName,
+                                  ApplicationId = appl.ApplicationId,
+                                  Number = profile.ArmyNo,
+                                  CoName = profile.Name,
+                                  DdlRank = Rank.RankName,
+                              }).FirstOrDefault();
+                data.OnlineApplicationResponse = result;
+            }
+            else
+            {
+                var ioResult = (from appl in _context.trnApplications
+                                where appl.ApplicationId == applicationId
+                                join profile in _context.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
+                                join mapping in _context.trnUserMappings on profile.ProfileId equals mapping.ProfileId
+                                join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
+                                where mapping.IsActive == true
+                                join rank in _context.MRanks on profile.rank equals rank.RankId
+                                select new CommonDataonlineResponse
+                                {
+                                    PresentUnit = unit.UnitName,
+                                    ApplicationId = appl.ApplicationId,
+                                    Number = profile.ArmyNo,
+                                    CoName = profile.Name,
+                                    DdlRank = rank.RankName,
+                                }).FirstOrDefault();
+                data.OnlineApplicationResponse = ioResult;
+            }
             return Task.FromResult(data);
         }
 
@@ -639,12 +673,17 @@ namespace DataAccessLayer.Repositories
                                     join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
                                     from presentUnit in presentUnitGroup.DefaultIfEmpty()
                                     join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
-
+                                    join car in _context.trnCar on common.ApplicationId equals car.ApplicationId into carGroup
+                                    from car in carGroup.DefaultIfEmpty()
+                                    join pca in _context.trnPCA on common.ApplicationId equals pca.ApplicationId into pcaGroup
+                                    from pca in pcaGroup.DefaultIfEmpty()
+                                    join hba in _context.trnHBA on common.ApplicationId equals hba.ApplicationId into hbaGroup
+                                    from hba in hbaGroup.DefaultIfEmpty()
                                     where dTOExport.Id.Contains(common.ApplicationId)
                                     select new DTOExcelResponse
                                     {
                                         Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
-                                        ApplicationId = common.ApplicationId,
+                                       
                                         apfx = prefix.Prefix,
                                         ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                                         AadharNo = common.AadharCardNo ?? string.Empty,
@@ -671,8 +710,8 @@ namespace DataAccessLayer.Repositories
                                         CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
                                         Year_Of_Service = common.TotalService,
                                         Residual_Service = common.ResidualService,
-                                        ApplicationType = common.ApplicationType.ToString(),
-                                        LoanType = applicationType.ApplicationTypeName ?? string.Empty,
+                                        ApplicationType = common.ApplicationType == 1 ? hba.PropertyType : common.ApplicationType == 2 ? car.Veh_Loan_Type : pca.computer_Loan_Type,
+                                        
                                         Salary_Slip_Month_Year = common.MonthlyPaySlip.ToString(),
                                         Basic_Salary = common.BasicPay,
                                         Rank_Grade_Pay = common.rank_gradePay,
@@ -690,15 +729,40 @@ namespace DataAccessLayer.Repositories
                                         Salary_After_Deduction = common.salary_After_Deductions,
                                         Pin_Code = common.Code ?? string.Empty,
                                         E_Mail_Id = common.Email ?? string.Empty,
-                                        
-                                       
 
-                                        
 
-            }).ToList();
+                                        ApplicationID = common.ApplicationId,
+                                        CL_Pay = common.CI_Pay,
+                                        EducationCess = common.EducationCess,
+                                        LoanEMI_Outside = common.loanEMI_Outside,
+                                        LoanEMI_AGIF = common.LoanEmi,
+                                        LRA = common.Lra,
+                                        PMHA = common.Pmha,
+                                        StatusCode= common.StatusCode,
+                                        ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                                        Dealer_Name = common.ApplicationType == 1 ? hba.PropertySeller : common.ApplicationType == 2?car.DealerName:pca.PCA_dealerName,
+                                        Vehicle_Name = common.ApplicationType == 1 ? hba.PropertyAddress : common.ApplicationType == 2 ? car.ModelName : pca.PCA_modelName,
+                                        Vehicle_Make = common.ApplicationType == 1 ? "" : common.ApplicationType == 2 ? car.CompanyName : pca.PCA_companyName,
+                                        Total_Cost = common.ApplicationType == 1 ? hba.PropertyCost : common.ApplicationType == 2 ? car.VehicleCost : pca.computerCost,
+                                        Amount_Applied_For_Loan = common.ApplicationType == 1 ? hba.HBA_Amount_Applied_For_Loan : common.ApplicationType == 2 ? car.CA_Amount_Applied_For_Loan : pca.PCA_Amount_Applied_For_Loan,
+                                        No_Of_EMI_Applied = common.ApplicationType == 1 ? hba.HBA_EMI_Applied : common.ApplicationType == 2 ? car.CA_EMI_Applied : pca.PCA_EMI_Applied,
+                                        VehType = common.ApplicationType == 2 ? car.VehTypeId:0, 
+
+                                    }).ToList();
 
             dataTable = query.ToDataTable();
             return Task.FromResult(dataTable);
         }
+
+        public async Task<bool> InsertStatusCounter(TrnStatusCounter trnStatusCounter)
+        {
+            if (trnStatusCounter == null)
+                return false;
+
+            await _context.TrnStatusCounter.AddAsync(trnStatusCounter);
+            await SaveAsync(); // Make sure this saves changes
+            return true;
+        }
+
     }
 }

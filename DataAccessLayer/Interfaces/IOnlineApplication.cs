@@ -21,6 +21,7 @@ namespace DataAccessLayer.Interfaces
         Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
 
         Task<bool> UpdateApplicationStatus(int applicationId, int status);
+        Task<bool> InsertStatusCounter(TrnStatusCounter trnStatusCounter);
 
         Task<bool> CheckForCoRegister(string ArmyNo);
 
@@ -45,5 +46,7 @@ namespace DataAccessLayer.Interfaces
         Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport);
 
         Task<UserMapping?> GetCoDetails(int applicationId);
+
+        
     }
 }

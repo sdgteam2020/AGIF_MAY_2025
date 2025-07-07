@@ -77,6 +77,38 @@ namespace Agif_V2.Controllers
         }
         public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix,int regtId)
         {
+            if (Prefix == 11 && new[] { 24,23, 29, 22, 21 }.Contains(rankId))// For - NTR prefix
+            {
+                return Json(new { retirementAge = 57, userTypeId = 1 }); 
+            }
+            else if (Prefix == 11 && new[] { 26 }.Contains(rankId))// For - NTR prefix
+            {
+                return Json(new { retirementAge = 59, userTypeId = 1 });
+            }
+            else if (Prefix == 11 && new[] { 27 }.Contains(rankId))// For - NTR prefix
+            {
+                return Json(new { retirementAge = 60, userTypeId = 1 });
+            }
+            else if (Prefix == 11 && new[] { 28 }.Contains(rankId))// For - NTR prefix
+            {
+                return Json(new { retirementAge = 61, userTypeId = 1 });
+            }
+            else if(Prefix == 3 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - SC prefix
+            {
+                return Json(new { retirementAge = 57, userTypeId = 1 }); 
+            }
+            else if(Prefix == 3 && new[] {26}.Contains(rankId))// For - SC prefix
+            {
+                return Json(new { retirementAge = 58, userTypeId = 1 }); 
+            }
+            else if(Prefix == 3 && new[] {27 }.Contains(rankId))// For - SC prefix
+            {
+                return Json(new { retirementAge = 59, userTypeId = 1 }); 
+            }
+            else if(Prefix == 3 && new[] { 28}.Contains(rankId))// For - SC prefix
+            {
+                return Json(new { retirementAge = 60, userTypeId = 1 }); 
+            }
             var userType = await _IMasterOnlyTable.GetUserType(Prefix);
             var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
             var retirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0;
@@ -625,13 +657,14 @@ namespace Agif_V2.Controllers
                     {
                         applicationId = applicationDetails.OnlineApplicationResponse.ApplicationId,
                         name = applicationDetails.OnlineApplicationResponse.ApplicantName,
-                        armyNo = applicationDetails.OnlineApplicationResponse.ArmyPrefix+ applicationDetails.OnlineApplicationResponse.Number+ applicationDetails.OnlineApplicationResponse.Suffix,
+                        armyNo = applicationDetails.OnlineApplicationResponse.Number,
                         unitName = applicationDetails.OnlineApplicationResponse.PresentUnit,
                         applicationType = applicationDetails.OnlineApplicationResponse.ApplicationTypeName,
                         accountNumber = applicationDetails.OnlineApplicationResponse.SalaryAcctNo,
                         ifscCode = applicationDetails.OnlineApplicationResponse.IfsCode,
                         appliedDate = applicationDetails.OnlineApplicationResponse.UpdatedOn,
-                        // Add any other fields your application model has
+                        rank = applicationDetails.OnlineApplicationResponse.DdlRank,
+                        bank = applicationDetails.OnlineApplicationResponse.NameOfBank,
                     }
                 };
 

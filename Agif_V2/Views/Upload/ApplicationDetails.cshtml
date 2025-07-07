@@ -101,7 +101,7 @@
 
                         <div class="col-md-4">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Email:</strong>
+                                <strong class="me-2 lblforprint">Email Id:</strong>
                                 <span>@($"{Model.OnlineApplicationResponse.Email}@{Model.OnlineApplicationResponse.EmailDomain}")</span>
                             </div>
                         </div>
@@ -159,8 +159,8 @@
                     
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
-                                <strong class="me-2 lblforprint">Perm Home Address:</strong>
-                                <span>@Model.OnlineApplicationResponse.Vill_Town, @Model.OnlineApplicationResponse.PostOffice, @Model.OnlineApplicationResponse.Distt, @Model.OnlineApplicationResponse.State,, @Model.OnlineApplicationResponse.Code</span>
+                                <strong class="me-2 lblforprint">Permt Home Address:</strong>
+                                <span>@Model.OnlineApplicationResponse.Vill_Town, @Model.OnlineApplicationResponse.PostOffice, @Model.OnlineApplicationResponse.Distt, @Model.OnlineApplicationResponse.State, @Model.OnlineApplicationResponse.Code</span>
                             </div>
                         </div>
 
@@ -203,25 +203,6 @@
                                     <span>HBA</span>
                                 </div>
                             </div>
-                            @* <div class="col-md-4 ">
-                                <div class="p-3 h-100 d-flex align-items-center">
-                                    <strong class="me-2 lblforprint">Property Type:</strong>
-                                    <span>@Model.HbaApplicationResponse.PropertyType</span>
-                                </div>
-                            </div>
-                        
-                            <div class="col-md-4 ">
-                                <div class="p-3 h-100 d-flex align-items-center">
-                                    <strong class="me-2 lblforprint">Property Seller:</strong>
-                                    <span>@Model.HbaApplicationResponse.PropertySeller</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4 ">
-                                <div class="p-3 h-100 d-flex align-items-center">
-                                    <strong class="me-2 lblforprint">Property Address:</strong>
-                                    <span>@Model.HbaApplicationResponse.PropertyAddress</span>
-                                </div>
-                            </div> *@
                        
                             <div class="col-md-4 ">
                                 <div class="p-3 h-100 d-flex align-items-center">
@@ -238,7 +219,7 @@
                             <div class="col-md-4 ">
                                 <div class="p-3 h-100 d-flex align-items-center">
                                     <strong class="me-2 lblforprint">EMI:</strong>
-                                    <span>@Model.HbaApplicationResponse.HBA_EMI_Applied</span>
+                                    <span>@Model.HbaApplicationResponse.HBA_EMI_Applied?.ToString("0")</span>
                                 </div>
                             </div>
                             <div class="col-md-4 ">
@@ -301,7 +282,18 @@
                                     <span>@Model.CarApplicationResponse.CA_Amount_Applied_For_Loan</span>
                                 </div>
                             </div>
-
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">EMI:</strong>
+                                    <span>@Model.CarApplicationResponse.CA_EMI_Applied?.ToString("0")</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">EMI Amount:</strong>
+                                    <span>@Model.CarApplicationResponse.CA_approxEMIAmount</span>
+                                </div>
+                            </div>
                        
                     }
                         else if (Model.OnlineApplicationResponse.ApplicationType == 3)
@@ -343,7 +335,24 @@
                                     <span>@Model.PcaApplicationResponse.PCA_LoanFreq</span>
                                 </div>
                             </div>
-
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">Amount Applied for loan:</strong>
+                                    <span>@Model.PcaApplicationResponse.PCA_Amount_Applied_For_Loan</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">EMI:</strong>
+                                    <span>@Model.PcaApplicationResponse.PCA_EMI_Applied?.ToString("0")</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 ">
+                                <div class="p-3 h-100 d-flex align-items-center">
+                                    <strong class="me-2 lblforprint">EMI Amount:</strong>
+                                    <span>@Model.PcaApplicationResponse.PCA_approxEMIAmount</span>
+                                </div>
+                            </div>
                        
 
                        
