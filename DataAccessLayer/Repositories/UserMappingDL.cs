@@ -88,5 +88,13 @@ namespace DataAccessLayer.Repositories
                 .ToListAsync();
             return userMappings;
         }
+
+        public Task<bool> IsActiveUser(int userId)
+        {
+            bool res = _context.trnUserMappings
+                .Where(um => um.UserId == userId && um.IsActive == true)
+                .Any();
+            return Task.FromResult(res);
+        }
     }
 }

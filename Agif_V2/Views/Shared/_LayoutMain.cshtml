@@ -1,8 +1,10 @@
 ﻿@using System.Security.Claims;
+@using DataAccessLayer.Interfaces
 @using Microsoft.AspNetCore.Identity;
 @using DataTransferObject.Identitytable;
 @inject Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> signInManager;
 @inject SignInManager<ApplicationUser> _signInManager;
+@inject IUserMapping _userMapping;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,41 +139,48 @@
                                         <li><a class="dropdown-item" href="~/PdfViewer/InstrPCA" target="_blank">Computer Loan (PCA)</a></li>
                                     </ul>
                                 </li>
-                               <li>
+                                <li>
                                     <a class="dropdown-item" href="/OnlineApplication/LoanType">Online Application</a>
                                     <a class="dropdown-item" href="/EmiCalculator/Calculator">Loan EMI Calculator</a>
-                               </li>
+                                </li>
                             </ul>
-                            
+
                         </li>
-                     
-                                
-                                <!-- ... other code ... -->
-                                 @{
-                                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                                 }
-                                
-                                    @if (userId!=null)
-                                    {
-                            <li class="nav-item">
-                                <a class="nav-link fw-bold" href="~/Home/Index" style="background-color: #dd0000;">DashBoard</a>
-                            </li>
-                            <li>
-                                <a class="nav-link fw-bold"  href="~/Account/FinalLogout" > Sign Out </a>
-                            </li>
-                                    }
-                                    else
-                                    { 
+
+
+                        <!-- ... other code ... -->
+                        @{
+                            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                            if (userId != null)
+                            {
+                                var isActive = await _userMapping.IsActiveUser(Convert.ToInt32(userId));
+                                if (isActive == true)
+                                {
                                     <li class="nav-item">
-                                        <a class="nav-link fw-bold" href="~/Account/Login">Login</a>
+                                        <a class="nav-link fw-bold" href="~/Home/Index" style="background-color: #dd0000;">DashBoard</a>
                                     </li>
-                                    }
-                               
+                                    <li>
+                                        <a class="nav-link fw-bold" href="~/Account/FinalLogout"> Sign Out </a>
+                                    </li>
+                                }
+                                <li>
+                                    <a class="nav-link fw-bold" href="~/Account/FinalLogout"> Sign Out </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link fw-bold" href="~/Account/Login">Login</a>
+                                </li>
+                                
+                            }
+
+                        }
                         <li class="nav-item">
                             <a class="nav-link fw-bold" href="~/Default/CheckApplicationStatus"> Application Status</a>
                         </li>
-                                <!-- ... other code ... -->
-                       
+                        <!-- ... other code ... -->
+
                     </ul>
                 </div>
             </div>

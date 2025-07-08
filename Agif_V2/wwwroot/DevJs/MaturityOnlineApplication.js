@@ -568,8 +568,8 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
         alert("Please select a Date of Birth.");
         return;
     }
-    const dateOfBirth = new Date(dob);
-    const dateOfCommission = new Date(doc);
+    const dateOfBirth = new Date(my_date(dob));
+    const dateOfCommission = new Date(my_date(doc));
     if (dateOfCommission < dateOfBirth) {
         alert("Date of Commission cannot be earlier than Date of Birth.");
         return;
@@ -594,7 +594,7 @@ function calculateYearDifference() {
         return;
     }
     calculateDifferenceBetweenDOBAndDOC(value);
-    const commissionDate = new Date(value);
+    const commissionDate = new Date(my_date(value));
     const today = new Date();
 
     let years = today.getFullYear() - commissionDate.getFullYear();
