@@ -220,7 +220,7 @@ namespace Agif_V2.Controllers
                 }
             }
             
-            TempData["Message"] = "Application is forwarded to your Unit Cdr/IO/Superior countersigning Auth.";
+            TempData["Message"] = "Application has been forwarded to your Unit Cdr/IO/Superior Countersigning Auth.";
             return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
         }
         public IActionResult UploadSuccess()

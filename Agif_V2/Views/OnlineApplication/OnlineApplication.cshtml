@@ -350,13 +350,14 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" id="armyPrefix" name="CommonData.ArmyPrefix" required data-army-prefix="@if (Model.CommonData != null)
-                                                {
-                                                    @Model.CommonData.ArmyPrefix
-                                                    ;
-                                                }">
-                                                </select>
-                                                <label class="form-label select-label ">Prefix</label>
+                                                <select class="select form-select" data-mdb-filter="true" id="armyPrefix" name="CommonData.ArmyPrefix" required data-army-prefix="@if (Model.CommonData != null)
+                                                    {
+                                                        @Model.CommonData.ArmyPrefix
+                                                        ;
+                                                    }">
+                                                    </select>
+                                                    <label class="form-label select-label ">Prefix</label>
+                                                
                                                 @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -392,7 +393,7 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" id="oldArmyPrefix" name="CommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.CommonData != null)
+                                                <select class="select form-select" id="oldArmyPrefix" data-mdb-filter="true" name="CommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.CommonData != null)
                                                 {
                                                     @Model.CommonData.OldArmyPrefix
                                                     ;
@@ -432,7 +433,7 @@
                                         <span class="input-group-text">👮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="select form-select" id="ddlrank" name="CommonData.DdlRank" required data-rank-prefix="@if (Model.CommonData != null)
+                                        <select class="select form-select" id="ddlrank" name="CommonData.DdlRank" data-mdb-filter="true" required data-rank-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.DdlRank
                                             ;
@@ -464,7 +465,7 @@
                                         <span class="input-group-text">💼</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="CommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.CommonData != null)
+                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" data-mdb-filter="true" name="CommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.RegtCorps
                                             ;
@@ -716,7 +717,7 @@
                                         <span class="input-group-text">📮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" id="armyPostOffice" name="CommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.CommonData != null)
+                                        <select class="form-select select" id="armyPostOffice" name="CommonData.ArmyPostOffice" data-mdb-filter="true" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.ArmyPostOffice
                                             ;

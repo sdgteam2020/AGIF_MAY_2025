@@ -679,7 +679,7 @@ $('.LicencePicker').on('blur change', function () {
                 $(this).val('');
                 Swal.fire({
                     title: "Alert",
-                    text: "Your Driving Licence has been Expired!",
+                    text: "Your Driving Licence has Expired!",
                     icon:"warning"
                 })
                 $(this).focus();
