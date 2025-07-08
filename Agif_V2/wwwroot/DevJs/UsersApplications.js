@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     const params = new URLSearchParams(window.location.search);
     const value = params.get("status");
-    GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
+    GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList")    ;
 
     $('#Loan').click(function () {
         $("#UserType").val('Loan');
@@ -228,9 +228,11 @@ function GetApplicationList(status,endpoint) {
                 className: 'noExport',
                 render: function (data, type, row) {
                     if (row.isMergePdf == false) {
+                        var categorytype = $("#UserType").val() || "Loan"; 
+
                         return `
                         <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${category === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${category})'>
+                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})'>
                                 <i class="bi bi-eye"></i>
                         </div>
                        
@@ -433,8 +435,8 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
     var URL = '';
     $.ajax({
 
-        //url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
-        url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
+        url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
+        //url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
         contentType: 'application/json', // Set content type to XML
 
@@ -470,7 +472,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         error: function () {
             Swal.fire({
                 title: "Alert!",
-                text: "Install DGIS App for Digital Sign!",
+                text: "Please Ensure that DGIS App has been installed and running at the time of Digital Signature.",
                 icon: "error"
             });
         }
@@ -509,8 +511,8 @@ function GetTokenSignXml(xml, Usertype) {
     var URL = '';
 
     $.ajax({
-        //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
-        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
+        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        //url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
         data: xml, // Set the XML data

@@ -75,7 +75,7 @@
                         }
 
                         <div class="alert alert-warning mt-3 mb-0">
-                            <strong>Note:</strong> Total file size of file after merging pdf including application should not be more than <strong>1 MB</strong>.
+                            <strong>Note:</strong> Total size of each file should not be more than <strong>150 kb </strong>.
                         </div>
                     </div>
                     <form id="uploadForm" action="@Url.Action("ProcessUpload", "Upload")" method="post" enctype="multipart/form-data">
@@ -94,7 +94,7 @@
                                                 <label for="CancelledCheque" class="form-label fw-bold">
                                                     1. Cancelled Cheque
                                                 </label>
-                                                <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="CancelledCheque" name="CancelledCheque" data-preview="#cancelledChequePreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
                                             </div>
@@ -120,7 +120,7 @@
                                                 <label for="PaySlipPdf" class="form-label fw-bold">
                                                     2. First Page of Pay Slip
                                                 </label>
-                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="PaySlipPdf" name="PaySlipPdf" data-preview="#paySlipPreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -154,7 +154,7 @@
                                                 <label for="PaySlipPdf" class="form-label fw-bold">
                                                     3. Quotation (RC & Insurance in case of old car)
                                                 </label>
-                                                <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="QuotationPdf" name="QuotationPdf" data-preview="#quotationPreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.QuotationPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -186,7 +186,7 @@
                                                 <label for="DrivingLicensePdf" class="form-label fw-bold">
                                                     4. Valid Driving License
                                                 </label>
-                                                <input class="form-control" type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" data-preview="#DrivingLicensePreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.DrivingLicensePdf, "", new { @class = "text-danger" })
                                             </div>
@@ -217,7 +217,7 @@
                                                 <label for="SeviceExtnPdf" class="form-label fw-bold">
                                                     5. Service Extn Pt II order (If Applicable)
                                                 </label>
-                                                <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" data-preview="#SeviceExtnPre" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.SeviceExtnPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -247,7 +247,7 @@
                                                 <label for="CancelledCheque" class="form-label fw-bold">
                                                     1. Cancelled Cheque
                                                 </label>
-                                                <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="CancelledCheque" name="CancelledCheque" data-preview="#cancelledChequePreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
                                             </div>
@@ -273,7 +273,7 @@
                                                 <label for="PaySlipPdf" class="form-label fw-bold">
                                                     2. First Page of Pay Slip
                                                 </label>
-                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="PaySlipPdf" name="PaySlipPdf" data-preview="#paySlipPreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -307,7 +307,7 @@
                                                 <label for="PaySlipPdf" class="form-label fw-bold">
                                                     3. Quotation
                                                 </label>
-                                                <input class="form-control" type="file" id="QuotationPdf" name="QuotationPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="QuotationPdf" name="QuotationPdf" data-preview="#quotationPreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.QuotationPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -338,7 +338,7 @@
                                                 <label for="SeviceExtnPdf" class="form-label fw-bold">
                                                     4. Service Extn Pt II order (If Applicable)
                                                 </label>
-                                                <input class="form-control" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" data-preview="#SeviceExtnPre" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.SeviceExtnPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -367,7 +367,7 @@
                                                 <label for="CancelledCheque" class="form-label fw-bold">
                                                     1. Cancelled Cheque
                                                 </label>
-                                                <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="CancelledCheque" data-preview="#cancelledChequePreview" name="CancelledCheque" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
                                             </div>
@@ -393,7 +393,7 @@
                                                 <label for="PaySlipPdf" class="form-label fw-bold">
                                                     2. First Page of Pay Slip
                                                 </label>
-                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                                <input class="form-control file-upload-limited" type="file" id="PaySlipPdf" name="PaySlipPdf" data-preview="#paySlipPreview" accept=".pdf" required>
                                                 <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
                                             </div>

@@ -311,6 +311,8 @@ namespace DataAccessLayer.Repositories
                                         CA_LoanFreq = car.CA_LoanFreq,
                                         CA_Amount_Applied_For_Loan = car.CA_Amount_Applied_For_Loan,
                                         VehicleCost=car.VehicleCost,
+                                        CA_EMI_Applied = car.CA_EMI_Applied,
+                                        CA_approxEMIAmount = car.CA_approxEMIAmount,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result;
@@ -333,6 +335,8 @@ namespace DataAccessLayer.Repositories
                                         PCA_LoanFreq = pca.PCA_LoanFreq,
                                         PCA_modelName=pca.PCA_modelName,
                                         PCA_Amount_Applied_For_Loan=pca.PCA_Amount_Applied_For_Loan,
+                                        PCA_EMI_Applied = pca.PCA_EMI_Applied,
+                                        PCA_approxEMIAmount = pca.PCA_approxEMIAmount,
                                     }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined

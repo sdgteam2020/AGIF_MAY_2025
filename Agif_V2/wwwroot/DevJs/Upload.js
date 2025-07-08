@@ -18,26 +18,22 @@
         });
     }
 
-    $('#CancelledCheque').change(function () {
-        previewFile(this, '#cancelledChequePreview');
-    });
-
-    $('#PaySlipPdf').change(function () {
-        previewFile(this, '#paySlipPreview');
-    });
-
-    $('#QuotationPdf').change(function () {
-        previewFile(this, '#quotationPreview');
-    });
-
-    $('#DrivingLicensePdf').change(function () {
-        previewFile(this, '#DrivingLicensePreview');
-    });
-
-
-    $('#SeviceExtnPdf').change(function () {
-        previewFile(this, '#SeviceExtnPre');
-    });
+    $('.file-upload-limited').on('change', function () {
+        var file = this.files[0];
+        var errorrMessage = $(this).next('.file-error-message'); // Find the error message container next to the input')
+        var previewSelector = $(this).data('preview');
+        if (file && file.size > 150 * 1024) {
+            errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
+            this.value = ''; // Clear the input field
+        }
+        else {
+            errorrMessage.text(''); // Clear the error message if file size is valid)
+            if (previewSelector) {
+                previewFile(this, previewSelector);
+            }
+        }
+    })
+    
 
     // Function to preview the file (PDF or Image)
     function previewFile(input, previewSelector) {
@@ -124,49 +120,6 @@
 
 
 });
-
-
-//function checkUploadFiles() {
-//    const formType = $('#hiddenFormType').val();
-//    const $uploadBtn = $('#uploadBtn');
-
-//    const requiredFields = {
-//        'CA': ['CancelledCheque', 'PaySlipPdf', 'QuotationPdf', 'DrivingLicensePdf'],
-//        'PCA': ['CancelledCheque', 'PaySlipPdf', 'QuotationPdf'],
-//        'HBA': ['CancelledCheque', 'PaySlipPdf']
-//    };
-
-//    function checkAllRequiredFiles() {
-//        const required = requiredFields[formType] || [];
-//        let allFilled = true;
-//        let IsExtension = $('#isExtension').val();
-
-//        required.forEach(function (fieldId) {
-//            const $fileInput = $('#' + fieldId);
-//            if ($fileInput.length && (!$fileInput[0].files || $fileInput[0].files.length === 0)) {
-//                allFilled = false;
-//            }
-//        });
-
-//        if (IsExtension === 'true') {
-//            const $serviceExtnField = $('#SeviceExtnPdf');
-//            if ($serviceExtnField.length && (!$serviceExtnField[0].files || $serviceExtnField[0].files.length === 0)) {
-//                allFilled = false;
-//            }
-//        }
-//        $uploadBtn.prop('disabled', !allFilled);
-//        if (allFilled) {
-//            $uploadBtn.removeClass('btn-secondary').addClass('btn-success');
-//        } else {
-//            $uploadBtn.removeClass('btn-success').addClass('btn-secondary');
-//        }
-//    }
-//    $('input[type="file"]').on('change', checkAllRequiredFiles);
-
-//    // Initial check
-//    checkAllRequiredFiles();
-//}
-
 function checkUploadFiles() {
     const formType = $('#hiddenFormType').val();
     const $uploadBtn = $('#uploadBtn');
