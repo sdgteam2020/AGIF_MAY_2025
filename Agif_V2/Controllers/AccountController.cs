@@ -346,5 +346,25 @@ namespace Agif_V2.Controllers
             await _userMapping.Update(userMapping);
             return Json(new { success = true });
         }
+        public async Task<IActionResult> CheckIsCoRegister(int unitId)
+        {
+            try
+            {
+                var ret = await _userMapping.GetActiveUnitId(unitId);
+                if (ret == null || !ret.Any())
+                {
+                    return Json(0); // No user mapping found for the given unitId
+                }
+                else
+                {
+                    return Json(1); // User mapping exists for the given unitId
+                }
+            }
+            catch (Exception)
+            {
+                return Json(0);
+            }
+            
+        }
     }
 }

@@ -23,11 +23,13 @@ namespace DataAccessLayer.Repositories
 
         // Additional methods specific to UserMapping can be added here
 
-        public async Task<UserMapping> GetUnitDetails(int unitId)
+        public async Task<UserMapping?> GetUnitDetails(int unitId)
         {
-            return await _context.trnUserMappings.
-                          Where(um => um.UnitId == unitId && um.IsActive==true)
+            var userMapping = await _context.trnUserMappings
+                          .Where(um => um.UnitId == unitId && um.IsActive == true)
                           .FirstOrDefaultAsync();
+
+            return userMapping ?? throw new InvalidOperationException("UserMapping not found.");
         }
 
         public Task<List<UserMapping>> GetAllUser(bool status)
@@ -75,6 +77,14 @@ namespace DataAccessLayer.Repositories
         {
             var userMappings = await _context.trnUserMappings
                 .Where(um => um.UnitId == unitId)
+                .ToListAsync();
+            return userMappings;
+        }
+        
+        public async Task<List<UserMapping>> GetActiveUnitId(int unitId)
+        {
+            var userMappings = await _context.trnUserMappings
+                .Where(um => um.UnitId == unitId && um.IsActive == true)
                 .ToListAsync();
             return userMappings;
         }

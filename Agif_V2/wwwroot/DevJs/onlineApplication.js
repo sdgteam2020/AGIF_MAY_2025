@@ -2215,17 +2215,41 @@ $("#PresenttxtUnit").autocomplete({
     },
     select: function (e, i) {
         e.preventDefault();
-        $("#PresenttxtUnit").val(i.item.label);
-        $("#PresentUnitId").val(i.item.value);
         $("input[name='CommonData.PresentUnit']").val(i.item.value);
-
-        // $("#spnUnitMapId").html(i.item.value);
-        //alert(i.item.value)
+        CheckIsCoRegister(i.item.value, i.item.label)
 
     },
     appendTo: '#suggesstion-box'
 });
 
+function CheckIsCoRegister(UnitId, UnitName) {
+    var param = { "UnitId": UnitId };
+    $("#PresentUnitId").val(0);
+    $.ajax({
+        url: '/Account/CheckIsCoRegister',
+        contentType: 'application/x-www-form-urlencoded',
+        data: param,
+        type: 'POST',
+        success: function (data) {
+
+            if (data == 1) {
+                $("#PresenttxtUnit").val(UnitName);
+                $("#PresentUnitId").val(UnitId);
+            } else {
+                $("#PresenttxtUnit").val("");
+                $("#PresentUnitId").val(0);
+                Swal.fire({
+                    icon: "error",
+                    title: "Unit Cdr Not Registered on AGIF Web Appl",
+                    //text: UnitName + "of CO is not registered! ",
+                    text: "Please approach UNIT CDR to first Register on AGIF Web Appl.",
+                }).then(() => {
+                    //inputElement.value = "";
+                });
+            }
+        }
+    });
+}
 $('#oldArmyNo').on('focus', function () {
     $(this).off('focus');
     Swal.fire({
