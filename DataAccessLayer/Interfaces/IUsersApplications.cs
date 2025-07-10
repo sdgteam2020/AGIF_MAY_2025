@@ -20,5 +20,11 @@ namespace DataAccessLayer.Interfaces
 
         Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status);
 
+        Task<List<DTOGetApplResponse>> GetClaimUsersApplicationForAdmin(int status);
+
+        Task<bool> UpdateClaimStatus(DTOExportRequest dtoExport);
+
+        Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date);
+
     }
 }

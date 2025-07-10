@@ -4,6 +4,7 @@ using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,5 +31,11 @@ namespace DataAccessLayer.Interfaces
         Task<string> GetCOName(int mappingId);
 
         Task<bool> UpdateMergePdfStatus(int applicationId, bool status);
-    }
+
+        Task<bool> CheckExtensionofservice(int applicationid);
+
+        Task<DTOClaimCommonOnlineApplicationResponseList> GetApplicationDetailsForExport(DTOExportRequest dTOExport);
+
+        Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport);
+        }
 }

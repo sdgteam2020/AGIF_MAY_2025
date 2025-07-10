@@ -41,8 +41,12 @@ namespace DataTransferObject.Model
         public string? CancelledCheque { get; set; }
         public string? PaySlipPdf { get; set; }
         public string? SplWaiverPdf { get; set; }
+        public string? SeviceExtnPdf { get; set; }
+
         public bool IsCancelledChequePdf { get; set; }
         public bool IsPaySlipPdf { get; set; }
         public bool IsSplWaiverPdf { get; set; }
+        public bool IsSeviceExtnPdf { get; set; }
+
     }
 }

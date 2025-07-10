@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +24,8 @@ namespace DataAccessLayer.Repositories
         private readonly IProperty _Property;
         private readonly ISpecial _Special;
         private readonly IClaimDocumentUpload _DocumentUpload;
-        public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special, IClaimDocumentUpload documentUpload) : base(context)
+        private readonly IOnlineApplication _onlineApplication;
+        public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special, IClaimDocumentUpload documentUpload, IOnlineApplication onlineApplication) : base(context)
         {
             _context = context;
             _IArmyPrefixes = iArmyPrefixes;
@@ -32,6 +34,7 @@ namespace DataAccessLayer.Repositories
             _Property = property;
             _Special = special;
             _DocumentUpload = documentUpload;
+            _onlineApplication = onlineApplication;
         }
 
         public bool ValidateFileUpload(IFormFile file, out string errorMessage)
@@ -93,9 +96,12 @@ namespace DataAccessLayer.Repositories
                 {
                     if (model.PropertyRenovation.TotalExpenditureFile != null) files.Add(model.PropertyRenovation.TotalExpenditureFile);
                 }
+                else if (model.SplWaiver != null)
+                {
+                    if (model.SplWaiver.OtherReasonPdf != null) files.Add(model.SplWaiver.OtherReasonPdf);
+                }
 
-
-                string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
+            string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
                 if (!Directory.Exists(tempFolder))
                 {
                     Directory.CreateDirectory(tempFolder);
@@ -326,10 +332,15 @@ namespace DataAccessLayer.Repositories
                         fileUpload.IsPaySlipPdf = true;
                         fileUpload.PaySlipPdf = fileName; // Update with the dynamic file name
                     }
-                    else if (file.Name.Contains("SplWaiver"))
+                    else if (file.Name.Contains("Spdocus"))
                     {
                         fileUpload.IsSplWaiverPdf = true;
                         fileUpload.SplWaiverPdf = fileName; // Update with the dynamic file name
+                    }
+                    else if (file.Name.Contains("SeviceExtn"))
+                    {
+                        fileUpload.IsSeviceExtnPdf = true;
+                        fileUpload.SeviceExtnPdf = fileName; // Update with the dynamic file name
                     }
                 }
             }
@@ -369,6 +380,14 @@ namespace DataAccessLayer.Repositories
 
 
             await UpdateApplicationStatus(ApplicationId, 1);
+
+            TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+            {
+                StatusId = 1,
+                ApplicationId = ApplicationId,
+                ActionOn = DateTime.Now,
+            };
+            await _onlineApplication.InsertStatusCounter(trnStatusCounter);
 
             var IOArmyNo = await GetIOArmyNoAsync(ApplicationId);
             if (IOArmyNo == null)
@@ -551,7 +570,7 @@ namespace DataAccessLayer.Repositories
                 else if (result.ApplicationType == 3)
                 {
                     formtype = "PR";
-                    var PcaModal = (from PR in _context.trnPropertyRenovation
+                    var PRModal = (from PR in _context.trnPropertyRenovation
                                     where PR.ApplicationId == applicationId
                                     select new DTOPropertyRenovationResponse
                                     {
@@ -563,7 +582,23 @@ namespace DataAccessLayer.Repositories
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
                     // Directly assign the DTO
-                    data.PropertyRenovationResponse = PcaModal;
+                    data.PropertyRenovationResponse = PRModal;
+                }
+                else if (result.ApplicationType == 4)
+                {
+                    formtype = "SP";
+                    var SPModal = (from sp in _context.trnSplWaiver
+                                    where sp.ApplicationId == applicationId
+                                    select new DTOSplWaiverResponse
+                                    {
+                                       OtherReasons = sp.OtherReasons,
+
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.SplWaiverResponse = SPModal;
                 }
 
                 //var DocumentModel = _context.trnDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
@@ -630,6 +665,20 @@ namespace DataAccessLayer.Repositories
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
+                   if(DocumentModel.IsSeviceExtnPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
+                   if(DocumentModel.IsOtherReasonPdf)
+                    {
+                        DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
+                        dTODocumentFileView.FileName = DocumentModel.OtherReasonsPdf;
+                        dTODocumentFileView.FilePath = directoryPath;
+                        lstdoc.Add(dTODocumentFileView);
+                    }
 
                     data.Documents = lstdoc; // Assign the list of documents to the response object
                     // Get all files in the directory
@@ -680,5 +729,190 @@ namespace DataAccessLayer.Repositories
 
             return true;
         }
+
+        public async Task<bool> CheckExtensionofservice(int applicationid)
+        {
+            // Fetch the application record by applicationid
+            var application = await _context.trnClaim
+                .Where(a => a.ApplicationId == applicationid).FirstOrDefaultAsync();
+
+            if (application == null)
+                return false;
+
+            if (string.IsNullOrEmpty(application.ExtnOfService))
+                return false;
+            else if (application.ExtnOfService == "Yes")
+                return true;
+            else if (application.ExtnOfService == "No")
+                return false;
+            else
+                return false;
+
+        }
+
+
+        public Task<DTOClaimCommonOnlineApplicationResponseList> GetApplicationDetailsForExport(DTOExportRequest dTOExport)
+        {
+            DTOClaimCommonOnlineApplicationResponseList data = new DTOClaimCommonOnlineApplicationResponseList();
+
+            var result = (from common in _context.trnClaim
+                          join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                          from prefix in prefixGroup.DefaultIfEmpty()
+                          join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                          from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                          join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                          from rank in rankGroup.DefaultIfEmpty()
+                          join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                          from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                          join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                          from regCorps in regCorpsGroup.DefaultIfEmpty()
+                          join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                          from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                          join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                          from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                          join applicationType in _context.WithdrawalPurpose on common.WithdrawPurpose equals applicationType.Id
+
+                          where dTOExport.Id.Contains(common.ApplicationId)
+                          select new ClaimCommonDataOnlineResponse
+                          {
+                              ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                              PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                              ApplicationId = common.ApplicationId,
+                              ApplicationType = common.WithdrawPurpose,
+                              //ApplicationTypeAbbr = applicationType.ApplicationTypeAbbr ?? string.Empty,
+                              ArmyPrefix = common.ArmyPrefix,
+                              Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                              AadharCardNo = common.AadharCardNo ?? string.Empty,
+                              Suffix = common.Suffix ?? string.Empty,
+                              OldArmyPrefix = common.OldArmyPrefix,
+                              OldNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              DdlRank = rank != null ? rank.RankName : string.Empty,
+                              ApplicantName = common.ApplicantName ?? string.Empty,
+                              DateOfBirth = common.DateOfBirth,
+                              DateOfCommission = common.DateOfCommission,
+                              NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                              ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                              RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                              PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                              DateOfPromotion = common.DateOfPromotion,
+                              DateOfRetirement = common.DateOfRetirement,
+                              PanCardNo = common.PanCardNo ?? string.Empty,
+                              MobileNo = common.MobileNo ?? string.Empty,
+                              Email = common.Email ?? string.Empty,
+                              SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
+                              IfsCode = common.IfsCode ?? string.Empty,
+                              NameOfBank = common.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                              pcda_pao = common.pcda_pao ?? string.Empty,
+                              pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                              
+                              House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
+
+                              House_Repair_Advance_Loan = common.Computer_Advance_Loan ?? false,
+
+                              Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
+
+                              Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
+
+                              House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
+                              House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
+                              House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
+
+                              Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
+                              Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
+                              Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
+
+                              House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
+                              House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
+                              House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
+
+                              Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
+                              Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
+                              Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
+                          }).ToListAsync();
+            data.OnlineApplicationResponse = result.Result; // Assuming result is already defined
+
+            return Task.FromResult(data);
+        }
+
+        public Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport)
+        {
+            DataTable dataTable = new DataTable();
+            var query = (from common in _context.trnClaim
+                         join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                         from prefix in prefixGroup.DefaultIfEmpty()
+                         join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                         from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                         join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                         from rank in rankGroup.DefaultIfEmpty()
+                         join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                         from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                         join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                         from regCorps in regCorpsGroup.DefaultIfEmpty()
+                         join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                         from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                         join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                         from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                         join applicationType in _context.WithdrawalPurpose on common.WithdrawPurpose equals applicationType.Id
+
+                         join ED in _context.trnEducationDetails on common.ApplicationId equals ED.ApplicationId into EDGroup
+                         from ED in EDGroup.DefaultIfEmpty()
+
+                         join MW in _context.trnMarriageward on common.ApplicationId equals MW.ApplicationId into MWGroup
+                         from MW in MWGroup.DefaultIfEmpty()
+                         
+                         join PR in _context.trnPropertyRenovation on common.ApplicationId equals PR.ApplicationId into PRGroup
+                         from PR in PRGroup.DefaultIfEmpty()
+
+                         join SP in _context.trnSplWaiver on common.ApplicationId equals SP.ApplicationId into SPGroup
+                         from SP in SPGroup.DefaultIfEmpty()
+
+                         where dTOExport.Id.Contains(common.ApplicationId)
+                         select new DTOExcelResponse
+                         {
+                             Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+
+                             apfx = prefix.Prefix,
+                             ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                             AadharNo = common.AadharCardNo ?? string.Empty,
+                             asfx = common.Suffix ?? string.Empty,
+                             opfx = prefix.Prefix,
+                             ono = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                             osfx = common.OldSuffix ?? string.Empty,
+                             Rank = rank != null ? rank.RankName : string.Empty,
+                             Loanee_Name = common.ApplicantName ?? string.Empty,
+                             Date_Of_Birth = common.DateOfBirth,
+                             Enrollment_Date = common.DateOfCommission,
+                             Regt_Corps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+
+                             Promotion_Date = common.DateOfPromotion,
+                             Retirement_Date = common.DateOfRetirement,
+                             PANNo = common.PanCardNo ?? string.Empty,
+                             Mobile_No = common.MobileNo ?? string.Empty,
+                             Payee_Account_No = common.SalaryAcctNo ?? string.Empty,
+                             IFSC_Code = common.IfsCode ?? string.Empty,
+                             CDA_PAO = common.pcda_pao ?? string.Empty,
+                             CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
+                             Year_Of_Service = common.TotalService,
+                             Residual_Service = common.ResidualService,
+                             //ApplicationType = common.ApplicationType == 1 ? hba.PropertyType : common.ApplicationType == 2 ? car.Veh_Loan_Type : pca.computer_Loan_Type,
+
+                             E_Mail_Id = common.Email ?? string.Empty,
+
+
+                             ApplicationID = common.ApplicationId,
+
+                             StatusCode = common.StatusCode,
+                             ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                          
+
+
+                         }).ToList();
+
+            dataTable = query.ToDataTable();
+            return Task.FromResult(dataTable);
+        }
+
     }
 }

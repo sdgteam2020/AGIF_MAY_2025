@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,13 @@ namespace DataAccessLayer.Repositories
             _context = context;
 
         }
+
+        public async Task<bool> CheckDocumentUploaded(int ApplicationID)
+        {
+            var document = await _context.trnClaimDocumentUpload
+                .FirstOrDefaultAsync(d => d.ApplicationId == ApplicationID);
+            return document != null;
+        }
+
     }
 }

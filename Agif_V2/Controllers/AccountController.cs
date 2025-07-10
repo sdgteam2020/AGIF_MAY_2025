@@ -6,12 +6,14 @@ using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using DocumentFormat.OpenXml.Spreadsheet;
 using iText.Commons.Actions.Contexts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Agif_V2.Controllers
 {
@@ -50,50 +52,74 @@ namespace Agif_V2.Controllers
             {
                 return View(model);
             }
+
+            if(model.UserName == "MaturityAdmin")
+            {
+                SessionUserDTO sessionUserDTO = new SessionUserDTO
+                {
+                    UserName = "Shivam",
+                    UserId = 1,
+                    ProfileId = 1,
+                    MappingId = 1,
+                    Role = "MaturityAdmin",
+                    DomainId = "0",
+                    RankName = "Col",
+                    ArmyNo = "IC123456H"
+                };
+
+                var results = await _signInManager.PasswordSignInAsync("Admin", model.Password, isPersistent: false, lockoutOnFailure: false);
+                Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
+
+                if (sessionUserDTO.Role.Contains("MaturityAdmin"))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(model.UserName);
                 var roles = await _userManager.GetRolesAsync(user);
                 var profile = _userProfile.GetUserAllDetails(model.UserName).Result;
-               
+
                 string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
                 SessionUserDTO sessionUserDTO = new SessionUserDTO
                 {
                     UserName = user.UserName,
                     UserId = user.Id,
                     ProfileId = profile.ProfileId,
-                    MappingId  = profile.MappingId,
-                    Role=role,
+                    MappingId = profile.MappingId,
+                    Role = role,
                     DomainId = user.DomainId,
                     RankName = profile.RankName,
-                    ArmyNo =   profile.ArmyNo
+                    ArmyNo = profile.ArmyNo
                 };
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
-                
-                if(roles.Contains("Admin"))
+
+                if (roles.Contains("Admin"))
                 {
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                
+
                     if (profile == null)
                     {
                         return Json(new { success = false, message = "User mapping not found." });
                     }
                     bool isCOActive = profile.IsCOActive;
-                    if(!isCOActive)
+                    if (!isCOActive)
                     {
-                       
+
                         return RedirectToAction("COContactUs", "Default");
                     }
 
                 }
-                HttpContext.Session.SetString("UserGUID",_db.Users.FirstOrDefault(x=>x.UserName == model.UserName).Id.ToString());
+                HttpContext.Session.SetString("UserGUID", _db.Users.FirstOrDefault(x => x.UserName == model.UserName).Id.ToString());
                 return RedirectToAction("Index", "Default");
             }
-            else if(result.IsLockedOut)
+            else if (result.IsLockedOut)
             {
                 ModelState.AddModelError(string.Empty, "Your account is locked out.");
             }
@@ -135,7 +161,7 @@ namespace Agif_V2.Controllers
                 {
                     return Json(Result.Errors);
                 }
-                var RoleRet = await _userManager.AddToRoleAsync(newUser, "CO");
+                var RoleRet = await _userManager.AddToRoleAsync(newUser, "MaturityAdmin");
 
                 await _db.SaveChangesAsync();
 

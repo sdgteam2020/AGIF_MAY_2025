@@ -13,6 +13,8 @@ namespace DataTransferObject.Model
 
         public IFormFile? PaySlipPdf { get; set; }
 
-        public IFormFile? Spdocus { get; set; }
+        public IFormFile? SpdocusPdf { get; set; }
+
+        public IFormFile? SeviceExtnPdf { get; set; }
     }
 }

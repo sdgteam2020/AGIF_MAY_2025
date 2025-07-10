@@ -435,8 +435,8 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
     var URL = '';
     $.ajax({
 
-        url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
-        //url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
+       // url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
+        url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
         contentType: 'application/json', // Set content type to XML
 
@@ -511,8 +511,8 @@ function GetTokenSignXml(xml, Usertype) {
     var URL = '';
 
     $.ajax({
-        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
-        //url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
+        //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
         data: xml, // Set the XML data

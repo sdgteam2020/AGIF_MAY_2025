@@ -112,7 +112,7 @@ namespace DataTransferObject.Response
 
         public string? NameOfBankBranch { get; set; }
 
-        public decimal? AmountwithdrwalRequired { get; set; }
+        public double? AmountwithdrwalRequired { get; set; }
         public string? NoOfwithdrwal { get; set; }
 
 

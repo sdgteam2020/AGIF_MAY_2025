@@ -1,6 +1,7 @@
 ﻿@using DataTransferObject.Helpers
 @model SessionUserDTO;
 @{
+    var role = Model.Role;
     string status2Encrypted = EncryptDecrypt.EncryptionData("2");
     string status4Encrypted = EncryptDecrypt.EncryptionData("4");
 }
@@ -79,6 +80,50 @@
                         </ul>
                     </li>
                 }
+
+                else if(Model?.Role == "MaturityAdmin")
+                {
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#receivedApplicationToAdmin"
+                           aria-controls="receivedApplicationToAdmin"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">Received Application</span>
+                        </a>
+                        <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/ApplicationRequest/ClaimApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>Maturity Received Application </a>
+                            </li>
+                            <li>
+                                <a href="~/ApplicationRequest/ClaimApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>Maturity Downloaded Application </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#ddmenu_2"
+                           aria-controls="ddmenu_2"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">User Approval List</span>
+                        </a>
+                        <ul id="ddmenu_2" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
+                            </li>
+                            <li>
+                                <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+
                 else
                 {
                     <li class="nav-item nav-item-has-children">

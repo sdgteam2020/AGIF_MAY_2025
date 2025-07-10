@@ -200,6 +200,72 @@ namespace DataAccessLayer.Repositories
             //throw new NotImplementedException();
         }
 
+        public async Task<List<DTOGetApplResponse>> GetClaimUsersApplicationForAdmin(int status)
+        {
+            var UsersApplicationListToAdmin = await (from appl in _db.trnClaim
+                                                     where appl.StatusCode == status
+                                                     join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+                                                     join oldPrefix in _db.MArmyPrefixes on appl.OldArmyPrefix equals oldPrefix.Id
+                                                     join regt in _db.MRegtCorps on appl.RegtCorps equals regt.Id
+                                                     join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
+                                                     join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
+                                                     //join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+                                                     join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+                                                     orderby appl.UpdatedOn descending
+                                                     select new DTOGetApplResponse
+                                                     {
+                                                         ApplicationId = appl.ApplicationId,
+                                                         PresentStatus = statusName.StatusName,
+                                                         ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+                                                         Name = appl.ApplicantName,
+                                                         OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
+                                                         RegtCorps = regt.RegtName,
+                                                         PresentUnit = unit.UnitName,
+                                                         PcdaPao = appl.pcda_pao,
+                                                         AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                                         ApplicationType = applType.Name,
+                                                         UpdatedOn = appl.UpdatedOn,
+                                                         DownloadedOn = null,
+                                                         DownloadCount = 0,
+                                                     }).ToListAsync();
+            return UsersApplicationListToAdmin!;
+        }
+
+
+        public async Task<bool> UpdateClaimStatus(DTOExportRequest dtoExport)
+        {
+            var applications = _db.trnClaim
+                .Where(a => dtoExport.Id.Contains(a.ApplicationId))
+                .ToList();
+
+            if (applications == null || applications.Count == 0)
+                return false;
+
+            foreach (var app in applications)
+            {
+                app.DownloadCount += 1;
+                app.StatusCode = 4;
+                app.DownloadedOn = DateTime.Now;
+            }
+
+            _db.trnClaim.UpdateRange(applications);
+
+            int result = await _db.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date)
+        {
+            var result = await (from appl in _db.trnClaim
+                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && appl.StatusCode == 2
+                                select new DTOGetApplResponse
+                                {
+                                    ApplicationId = appl.ApplicationId,
+                                }).ToListAsync();
+
+            return result;
+        }
 
     }
 }

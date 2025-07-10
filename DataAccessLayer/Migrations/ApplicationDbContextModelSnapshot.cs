@@ -237,8 +237,8 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("AmountOfWithdrawalRequired")
-                        .HasColumnType("int");
+                    b.Property<double>("AmountOfWithdrawalRequired")
+                        .HasColumnType("float");
 
                     b.Property<string>("ApplicantName")
                         .IsRequired()
@@ -300,6 +300,12 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("DdlRank")
                         .HasColumnType("int");
+
+                    b.Property<int>("DownloadCount")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DownloadedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -521,6 +527,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsPaySlipPdf")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSeviceExtnPdf")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsSplWaiverPdf")
                         .HasColumnType("bit");
 
@@ -531,6 +540,9 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaySlipPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeviceExtnPdf")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SplWaiverPdf")

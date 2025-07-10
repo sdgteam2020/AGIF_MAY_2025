@@ -32,6 +32,10 @@
         previewFile(this, '#SpdocusPre');
     });
 
+    $('#SeviceExtnPdf').change(function () {
+        previewFile(this, '#SeviceExtnPre');
+    });
+
     // Function to preview the file (PDF or Image)
     function previewFile(input, previewSelector) {
         const file = input.files[0];
@@ -120,7 +124,7 @@
 
 function checkUploadFiles() {
     const $uploadBtn = $('#uploadBtn');
-    const requiredFields = ['CancelledCheque', 'PaySlipPdf']; // Make these fields required
+    const requiredFields = ['CancelledCheque', 'PaySlipPdf','SpdocusPdf']; // Make these fields required
     let allFilled = true;
     let IsExtension = $('#isExtension').val() === 'true';  // Get the value for IsExtension
 
@@ -133,7 +137,7 @@ function checkUploadFiles() {
     });
 
     // Handle Service Extension field based on IsExtension
-    const $serviceExtnField = $('#SpdocusPdf');
+    const $serviceExtnField = $('#SeviceExtnPdf');
 
     if (IsExtension) {
         // If extension is true: enable field and make it mandatory

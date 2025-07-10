@@ -1,0 +1,128 @@
+﻿@using DataTransferObject.Helpers
+@{
+    ViewData["Title"] = "Received Applications";
+
+}
+
+@{
+    string Page = "";
+}
+@if (ViewBag.Status != null && ViewBag.Status == "2")
+{
+    Page = "Received Applications";
+}
+else if (ViewBag.Status != null && ViewBag.Status == "4")
+{
+    Page = "Downloaded Applications";
+}
+
+<div class="container">
+    <div class="container-fluid">
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="title">
+                        <h2>
+                            @Page
+                        </h2>
+                    </div>
+                </div>
+                <!-- end col -->
+                <div class="col-md-6">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="#0">Applications</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @Page
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <div class="card mt-2">
+
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="row justify-content-center mb-2">
+                        <div class="col-auto">
+                            <input class="form-control" type="date" id="toDate" name="toDate" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary" id="btnAllDownload" onclick="getAllApplicationByDateWise()">
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="table-wrapper table-responsive">
+                            <table class="table table-striped border border-purple table-hover" id="tblReceivedApplications">
+                                <thead>
+                                    <tr>
+                                        <th>Sr.No.</th>
+                                        @* <th>Status</th> *@
+                                        <th class="text-nowrap">Army No</th>
+                                        <th class="text-nowrap">Applicant Name</th>
+                                        @* <th class="text-nowrap">Old Army No</th> *@
+                                        <th>Regt/Corps</th>
+                                        <th class="text-nowrap">Present Unit</th>
+                                        @* <th class="text-nowrap">PCDA(O)/PAO(OR)</th> *@
+                                        <th class="text-nowrap">Applied Date</th>
+                                        @if (ViewBag.Status != null && ViewBag.Status == "4")
+                                        {
+                                            <th class="text-nowrap">Download Count</th>
+                                            <th class="text-nowrap">DownloadedOn</th>
+                                        }
+                                        <th>Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- DataTables will populate this -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <!-- CSS: Bootstrap 5 and DataTables -->
+    <link href="~/lib/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/lib/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+    <!-- JS: jQuery (must come before DataTables) -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- JS: DataTables core -->
+    <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- JS: DataTables Buttons extension -->
+    <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/devjs/ClaimUserApllicationList.js"></script>
+
+}
+
+@* <script>
+        $(document).ready(function () {
+            const decryptedStatus = '@decryptedStatus';
+            BindUsersData(decryptedStatus);
+        });
+</script> *@

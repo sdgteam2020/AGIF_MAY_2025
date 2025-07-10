@@ -29,7 +29,7 @@ namespace DataTransferObject.Model
 
         // DO Part-II No
         [Required]
-        [RegularExpression(@"^\d{3,8}$", ErrorMessage = "Invalid DO Part-II No")]
+        //[RegularExpression(@"^\d{3,8}$", ErrorMessage = "Invalid DO Part-II No")]
         public string DOPartIINo { get; set; }
 
         // DO Part-II Date

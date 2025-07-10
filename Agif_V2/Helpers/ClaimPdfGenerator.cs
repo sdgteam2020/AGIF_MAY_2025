@@ -41,7 +41,7 @@ namespace Agif_V2.Helpers
             var dated = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
 
             string formType = string.Empty;
-
+            int counter = 0;
 
             // First, determine the form type
             if (data.EducationDetailsResponse != null)
@@ -56,6 +56,11 @@ namespace Agif_V2.Helpers
             {
                 formType = "Renovation-Repair of House";
             }
+            else if (data.SplWaiverResponse != null)
+            {
+                formType = "Special Waiver";
+            }
+
 
             if (!Directory.Exists(directory))
             {
@@ -169,11 +174,11 @@ namespace Agif_V2.Helpers
                     AddRow("9. Fmn HQ", common.NextFmnHQ, "10. Permanent Home Address", common.CivilPostalAddress);
                     AddRow("11. Date of Enrollment", common.DateOfCommission?.ToString("dd-MM-yyyy"), "12. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("13. Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"), "14. Total Service (In Years)", common.TotalService.ToString());
-                    AddRow("15. E-Mail", common.Email, "16. Aadhaar No", common.AadharCardNo);
+                    AddRow("15. E-Mail", common.Email+common.EmailDomain, "16. Aadhaar No", common.AadharCardNo);
                     AddRow("17. Pan No", common.PanCardNo, "18. Mob No", common.MobileNo);
                     AddRow("19. Salary Account No", common.SalaryAcctNo, "20. IFSC Code", common.IfsCode);
-                    AddRow("21. Purpose of Withdrawal", formType, "22. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString());
-                    AddRow("23. No of Withdrawals", common.NoOfwithdrwal, "", "");
+                    AddRow("21. Bank Branch", common.NameOfBankBranch, "22. Purpose of Withdrawal", formType);
+                    AddRow("23. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString(), "24. No of Withdrawals", common.NoOfwithdrwal);
 
                     document.Add(table);
 
@@ -214,8 +219,8 @@ namespace Agif_V2.Helpers
 
                     if (common.House_Building_Advance_Loan || common.House_Repair_Advance_Loan || common.Conveyance_Advance_Loan || common.Computer_Advance_Loan)
                     {
-
-                        Paragraph point14 = new Paragraph("24. Details of Existing Agif Loans:")
+                        counter = 25;
+                        Paragraph point14 = new Paragraph($"{counter}. Details of Existing Agif Loans:")
                                             .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                                             .SetFontSize(14)
                                             .SetBold().SetMarginTop(10);
@@ -223,6 +228,8 @@ namespace Agif_V2.Helpers
                         document.Add(point14);
                         AddRow2("S/No & Type of Loan", "Date of Loan taken", " Duration of loan", "Amount Taken");
                     }
+                    else
+                    counter= 24;
 
 
                     if (common.House_Building_Advance_Loan)
@@ -256,7 +263,7 @@ namespace Agif_V2.Helpers
                     {
                         var EducationDetailsDTO = data.EducationDetailsResponse;
 
-                        Paragraph point15 = new Paragraph("25. For Education of Child(Applicable for children studying in 12th Class and above")
+                        Paragraph point15 = new Paragraph($"{++counter}. For Education of Child(Applicable for children studying in 12th Class and above")
                                             .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                                             .SetFontSize(14)
                                             .SetBold().SetMarginTop(10);
@@ -305,7 +312,7 @@ namespace Agif_V2.Helpers
                     {
                         var MarraigeWardDTO = data.MarraigeWardResponse;
 
-                        Paragraph point16 = new Paragraph("25. For Marriage of Ward")
+                        Paragraph point16 = new Paragraph($"{++counter}. For Marriage of Ward")
                             .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                             .SetFontSize(14)
                             .SetBold().SetMarginTop(10);
@@ -351,7 +358,7 @@ namespace Agif_V2.Helpers
                     {
                         var PropertyRenovationDTO = data.PropertyRenovationResponse;
 
-                        Paragraph point17 = new Paragraph("25. For Renovation/Repair of House")
+                        Paragraph point17 = new Paragraph($"{++counter}. For Renovation/Repair of House")
                             .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                             .SetFontSize(14)
                             .SetBold().SetMarginTop(10);
@@ -392,7 +399,52 @@ namespace Agif_V2.Helpers
                         document.Add(table5);
                     }
 
-                    Paragraph point18 = new Paragraph("26. Certificate")
+                    else if (data.SplWaiverResponse != null)
+                    {
+                        var SplWaiverResponseDTO = data.SplWaiverResponse;
+
+                        Paragraph point17 = new Paragraph($"{++counter}. For Special Waiver")
+                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                            .SetFontSize(14)
+                            .SetBold().SetMarginTop(10);
+
+                        document.Add(point17);
+
+                        Table table5 = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
+                        // Helper method
+                        void AddRow5(string label1, string value1, string label2, string value2, bool isFirstRow = false)
+                        {
+                            Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
+                            Border bottomBorder = new SolidBorder(1); // Always apply bottom border
+                            table5.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont).SetFontSize(smallFontSize))
+                                .SetBorderTop(topBorder)
+                                .SetBorderBottom(new SolidBorder(1))
+                                .SetBorderLeft(Border.NO_BORDER)
+                                .SetBorderRight(Border.NO_BORDER));
+                            table5.AddCell(new Cell().Add(new Paragraph(value1 ?? "").SetFont(normalFont).SetFontSize(smallFontSize))
+                                .SetBorderTop(topBorder)
+                                .SetBorderBottom(new SolidBorder(1))
+                                .SetBorderLeft(Border.NO_BORDER)
+                                .SetBorderRight(Border.NO_BORDER));
+                            table5.AddCell(new Cell().Add(new Paragraph(label2).SetFont(normalFont).SetFontSize(smallFontSize))
+                                .SetBorderTop(topBorder)
+                                .SetBorderBottom(new SolidBorder(1))
+                                .SetBorderLeft(Border.NO_BORDER)
+                                .SetBorderRight(Border.NO_BORDER));
+                            table5.AddCell(new Cell().Add(new Paragraph(value2 ?? "").SetFont(normalFont).SetFontSize(smallFontSize))
+                                .SetBorderTop(topBorder)
+                                .SetBorderBottom(new SolidBorder(1))
+                                .SetBorderLeft(Border.NO_BORDER)
+                                .SetBorderRight(Border.NO_BORDER));
+                        }
+
+                        AddRow5("(a) Other Reason", SplWaiverResponseDTO.OtherReasons, "","");
+                        
+
+                        document.Add(table5);
+                    }
+
+                    Paragraph point18 = new Paragraph($"{++counter}. Certificate")
                                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                                            .SetFontSize(14)
                                            .SetBold().SetMarginTop(10);
@@ -402,7 +454,7 @@ namespace Agif_V2.Helpers
                             {
                             "(a) Certified that the particulars given are correct & the amount will be utilized for the purpose mentioned in application",
                             "(b) I understand that , if I withdraw money from maturity amount , it will reduce my ultimate saving amount receivable at the time of retirement/release/discharge as Member Maturity Fund.",
-                            "(c) Following documents are attached with the application (Strike out whichever is not applicable):-"
+                            "(c) Following documents signed by me are attached with the application (Strike out whichever is not applicable):-"
                             };
         
                             for (int i = 0; i < checkPara.Count; i++)
@@ -567,7 +619,8 @@ namespace Agif_V2.Helpers
                             .SetTextAlignment(TextAlignment.JUSTIFIED)
                             .SetMarginBottom(5f);
 
-                      
+
+                        document.Add(para6);
 
                     }
 
@@ -647,10 +700,15 @@ namespace Agif_V2.Helpers
                                 string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                                 if (File.Exists(imagePath))
                                 {
-                                    var imgData = ImageDataFactory.Create(imagePath);
-                                    var icon = new iText.Layout.Element.Image(imgData);
-                                    icon.ScaleAbsolute(60f, 60f);
-                                    icon.SetHorizontalAlignment(HorizontalAlignment.RIGHT);
+                                    //var imgData = ImageDataFactory.Create(imagePath);
+                                    //var icon = new iText.Layout.Element.Image(imgData);
+                                    //icon.ScaleAbsolute(60f, 60f);
+                                    //icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 270);
+                                    //document.Add(icon);
+
+                                    ImageData imageData = ImageDataFactory.Create(imagePath);
+                                    Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                                    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 270);
                                     document.Add(icon);
                                 }
                             }
@@ -659,10 +717,16 @@ namespace Agif_V2.Helpers
                                 string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                                 if (File.Exists(imagePath))
                                 {
-                                    var imgData = ImageDataFactory.Create(imagePath);
-                                    var icon = new iText.Layout.Element.Image(imgData);
-                                    icon.ScaleAbsolute(80f, 80f);
-                                    icon.SetHorizontalAlignment(HorizontalAlignment.LEFT);
+                                    //var imgData = ImageDataFactory.Create(imagePath);
+                                    //var icon = new iText.Layout.Element.Image(imgData);
+                                    //icon.ScaleAbsolute(80f, 80f);
+                                    //icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 557);
+                                    //document.Add(icon);
+
+
+                                    ImageData imageData = ImageDataFactory.Create(imagePath);
+                                    Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                                    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 557);
                                     document.Add(icon);
                                 }
                             }

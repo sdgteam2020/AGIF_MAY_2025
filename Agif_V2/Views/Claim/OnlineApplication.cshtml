@@ -383,6 +383,10 @@
             transform: scale(1);
         }
     }
+    .swal-popup-custom {
+        width: 600px !important;  /* Set custom width */
+        max-width: 90vw;  /* Ensure it's responsive on small screens */
+    }
         
 </style>
 
@@ -419,7 +423,7 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" id="armyPrefix" name="ClaimCommonData.ArmyPrefix" required data-army-prefix="@if (Model.ClaimCommonData != null) {
+                                                <select class="select form-select" data-mdb-filter="true" id="armyPrefix" name="ClaimCommonData.ArmyPrefix" required data-army-prefix="@if (Model.ClaimCommonData != null) {
                                                 @Model.ClaimCommonData.ArmyPrefix; }">
                                                     
                                                 </select>
@@ -433,7 +437,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                                <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" required/>
                                                 <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
@@ -461,8 +465,8 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix"  data-oldarmy-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.OldArmyPrefix; }">
+                                                <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix"  data-oldarmy-prefix="@if (Model.ClaimCommonData != null) {
+                                                @Model.ClaimCommonData.OldArmyPrefix; }" required>
                                                 </select>
                                                 <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
@@ -499,7 +503,7 @@
                                         <span class="input-group-text">👮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="select form-select" id="ddlrank" name="ClaimCommonData.DdlRank" required data-rank-prefix="@if (Model.ClaimCommonData != null) {
+                                        <select class="select form-select" data-mdb-filter="true" id="ddlrank" name="ClaimCommonData.DdlRank" required data-rank-prefix="@if (Model.ClaimCommonData != null) {
                                                 @Model.ClaimCommonData.DdlRank; }">
                                         </select>
                                         <label class="form-label select-label ">Rank & Trade</label>
@@ -528,7 +532,7 @@
                                         <span class="input-group-text">💼</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null) {
+                                        <select class="form-select select" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null) {
                                                 @Model.ClaimCommonData.RegtCorps; }">
                                         </select>
                                         <label class="form-label select-label ">Regt/Corps</label>
@@ -790,7 +794,7 @@
                                         <span class="input-group-text">📮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" id="armyPostOffice" name="ClaimCommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.ClaimCommonData != null) {
+                                        <select class="form-select select" data-mdb-filter="true" id="armyPostOffice" name="ClaimCommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.ClaimCommonData != null) {
                                                 @Model.ClaimCommonData.ArmyPostOffice; }">
                                         </select>
                                         <label class="form-label select-label ">Army Post Office</label>
@@ -951,7 +955,7 @@
                                  <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan"  class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan"  class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" />
                                                 <label class="form-label" for="hbaDuration">House Building Duration of Loan</label>
                                     </div>
 
@@ -994,7 +998,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control"   oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8"/>
                                                 <label class="form-label" for="hraDuration">House Repair Duration of Loan</label>
                                     </div>
 
@@ -1007,7 +1011,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8"  />
                                                 <label class="form-label" for="hraAmount">House Repair Amount Taken</label>
                                     </div>
 
@@ -1037,7 +1041,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)"  maxlength="8"  />
                                                 <label class="form-label" for="caDuration">Conveyance Duration of Loan</label>
                                     </div>
 
@@ -1079,7 +1083,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8"/>
                                                 <label class="form-label" for="pcaDuration">Computer Duration of Loan</label>
                                     </div>
 
@@ -1134,7 +1138,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired"  class="form-control"  oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired"  class="form-control"  oninput="formatIndianNumber(this)" required maxlength="10" />
                                                 <label class="form-label" for="AmountOfWithdrawalRequired">Amount of withdrawal required (Withdrawal will be limited to actual expenditure or 90% of Maturity Benefit Whichever is less)</label>
                                     </div>
 
@@ -1205,7 +1209,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                          <input type="text" class="form-control monthPicker" id="EducationdateOfBirth" aria-label="Date of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required"
+                                          <input type="text" class="form-control monthPicker" id="EducationdateOfBirth" aria-label="Education date Of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required"
                                     oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label ">DOB</label>
                                     </div>
@@ -1213,23 +1217,49 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.EducationDetails.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            
+                            @if(Category=="1")
+                                    {
+                                         <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo"  class="form-control"  oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo"  class="form-control"  required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" />
                                                 <label class="form-label" for="DOPartIINo">DO Part-II No</label>
                                     </div>
 
                                 </div>
                                 @Html.ValidationMessageFor(m => m.EducationDetails.DOPartIINo, "", new { @class = "text-danger" })
                             </div>
+
+                                    }
+                                                                        
+                             else
+                                {
+                                        <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🔟</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                       <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo"  class="form-control"  required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" />
+                                                <label class="form-label" for="DOPartIINo">DO Part-II No</label>
+                                    </div>
+
+                                </div>
+                                @Html.ValidationMessageFor(m => m.EducationDetails.DOPartIINo, "", new { @class = "text-danger" })
+                            </div>
+ 
+                                }
+                                   
+
+
+
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" class="form-control DOPartIIPicker" id="DOPartIIDate" aria-label="Date of Birth" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
-                                    oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                       <input type="text" class="form-control monthPicker" id="DOPartIIDate" aria-label="DO Part II Date" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
+                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                     <label class="form-label select-label">DO Part-II Date</label>
                                     </div>
                                 </div>
@@ -1310,7 +1340,7 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"    oninput="formatIndianNumber(this)"  required maxlength="10"  />
+                                       <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"   oninput="formatIndianNumber(this)"  required maxlength="10"  />
                                                 <label class="form-label" for="TotalExpenditure">Total Expenditure</label>
                                     </div>
 
@@ -1365,17 +1395,39 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.Marriageward.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            
+                            
+                         @if(Category=="1")
+                                    {
+                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🔟</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"   oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                       <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"   oninput="ValInDataNo(this)" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025"/>
+                                                <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
+                                    </div>
+
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Marriageward.DOPartIINo, "", new { @class = "text-danger" })
+                            </div> 
+                                    }
+                               
+                            else
+                            {
+                             <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <span class="input-group-text">🔟</span>
+                                    <div class="form-outline" data-mdb-input-init>
+                                       <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"   oninput="ValInDataNo(this)" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025"/>
                                                 <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
                                     </div>
 
                                 </div>
                                 @Html.ValidationMessageFor(m => m.Marriageward.DOPartIINo, "", new { @class = "text-danger" })
                             </div>
+                            }
+
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>

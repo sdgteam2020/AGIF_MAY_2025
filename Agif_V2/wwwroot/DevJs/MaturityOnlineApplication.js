@@ -376,6 +376,7 @@ function loadDropdown() {
     mMsater(presentunit, "presentUnit", 2, 0);
     mMsater(Armypostoffice, "armyPostOffice", 14, 0);
     mMsater(Cavehicleloanfreq, "CA_LoanFreq", 15, 0);
+    mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
     mMsater(Pcaloanfreq, "PCA_LoanFreq", 15, 0);
     mMsater(hbaloanfreq, "HBA_LoanFreq", 15, 0);
 }
@@ -2250,6 +2251,18 @@ $('#oldArmyNo').on('focus', function () {
     });
 });
 
+$("#OtherReasonPdf").on("click", function () {
+    // Trigger SweetAlert with two messages
+    Swal.fire({
+        title: 'Important Information',
+        html: '<p>Application Dully Recommended by Commanding Officer/IO</p><p>Otherwise DO Letter Of Commanding Officer</p>', // Two paragraphs
+        icon: 'info',
+        confirmButtonText: 'Okay',
+          customClass: {
+            popup: 'swal-popup-custom'  // Custom class for the popup
+        }
+    });
+});
 
 $('#Attach_Part_II_Order').change(function () {
     previewFile(this, '#Attach_Part_II_Order');

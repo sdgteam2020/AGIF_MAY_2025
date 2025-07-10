@@ -47,6 +47,5 @@ namespace DataAccessLayer.Interfaces
 
         Task<UserMapping?> GetCoDetails(int applicationId);
 
-        
     }
 }

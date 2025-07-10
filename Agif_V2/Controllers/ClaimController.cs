@@ -13,6 +13,7 @@ namespace Agif_V2.Controllers
     public class ClaimController : Controller
     {
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
+        private readonly IClaimDocumentUpload _IclaimDocumentUpload;
         private readonly IMasterOnlyTable _IMasterOnlyTable;
         private readonly ClaimPdfGenerator _pdfGenerator;
         private readonly MergePdf _mergePdf;
@@ -21,7 +22,7 @@ namespace Agif_V2.Controllers
         private readonly IHba _Hba;
         private readonly IPca _Pca;
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload)
         {
             _IClaimonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -31,6 +32,7 @@ namespace Agif_V2.Controllers
             _pdfGenerator = pdfGenerator;
             _env = env;
             _mergePdf = mergePdf;
+            this._IclaimDocumentUpload = claimDocumentUpload;
         }
 
         public IActionResult MaturityLoanType()
@@ -39,6 +41,22 @@ namespace Agif_V2.Controllers
         }
         public async Task<IActionResult> Upload()
         {
+            //int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+           //int applicationId = 4005;
+            bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
+
+            TempData.Keep("ClaimapplicationId");
+
+            if (application)
+            {
+                TempData["Message"] = "You have already uploaded the Documents for this Application.";
+                return RedirectToAction("ApplicationDetails", new { applicationId = applicationId });
+            }
+
+            bool IsextensionOfService = await _IClaimonlineApplication1.CheckExtensionofservice(applicationId);
+
+            TempData["ClaimIsextensionOfService"] = IsextensionOfService;
             ClaimFileUploadViewModel ClaimfileUploadViewModel = new ClaimFileUploadViewModel();
             return View(ClaimfileUploadViewModel);
         }
@@ -260,11 +278,11 @@ namespace Agif_V2.Controllers
                 else
                 {
                     formType = "SP";
-                    bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", claimCommonModel.ApplicationId);
+                    bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", 4005);
 
                 }
 
-                TempData["applicationId"] = claimCommonModel.ApplicationId;
+                TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
                 return RedirectToAction("Upload", "Claim", new { formType });
 
@@ -282,7 +300,8 @@ namespace Agif_V2.Controllers
             var files = new List<IFormFile>();
             if (model.CancelledCheque != null) files.Add(model.CancelledCheque);
             if (model.PaySlipPdf != null) files.Add(model.PaySlipPdf);            
-            if (model.Spdocus != null) files.Add(model.Spdocus);
+            if (model.SpdocusPdf != null) files.Add(model.SpdocusPdf);
+            if(model.SeviceExtnPdf != null) files.Add(model.SeviceExtnPdf);
 
             if (files.Count == 0)
             {

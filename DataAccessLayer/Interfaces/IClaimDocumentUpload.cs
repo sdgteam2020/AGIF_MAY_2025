@@ -9,5 +9,6 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IClaimDocumentUpload : IGenericRepositoryDL<ClaimDocumentUpload>
     {
+        Task<bool> CheckDocumentUploaded(int ApplicationID);
     }
 }

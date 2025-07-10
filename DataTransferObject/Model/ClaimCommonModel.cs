@@ -175,7 +175,9 @@ namespace DataTransferObject.Model
         public int? Computer_Duration_of_Loan { get; set; } 
         public decimal? Computer_Amount_Taken { get; set; }
 
-        public int? AmountOfWithdrawalRequired { get; set; } 
+        [Required]
+        [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid estimated cost.")]
+        public double? AmountOfWithdrawalRequired { get; set; } 
 
         public string? Noofwithdrawal { get; set; }
 
@@ -194,5 +196,8 @@ namespace DataTransferObject.Model
 
         public bool IsMergePdf { get; set; } = false;
         public string? IOArmyNo { get; set; }
+
+        public DateTime? DownloadedOn { get; set; }
+        public int DownloadCount { get; set; }
     }
 }

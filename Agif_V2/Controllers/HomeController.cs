@@ -43,6 +43,19 @@ namespace Agif_V2.Controllers
 
                 ViewBag.Metrics = metrics;
             }
+
+            else if (sessionUser.Role == "MaturityAdmin")
+            {
+                //var applCount = _applicationService.GetApplicationCount(sessionUser.UserId);
+                var userCounts = await home.GetUserCount();
+                var metrics = new Dictionary<string, int>
+                {
+                    ["ActiveUsers"] = userCounts.FirstOrDefault(x => x.Status == "Active")?.Count ?? 0,
+                    ["InactiveUsers"] = userCounts.FirstOrDefault(x => x.Status == "Inactive")?.Count ?? 0
+                };
+
+                ViewBag.Metrics = metrics;
+            }
             else
             {
                 var applCount = await home.GetApplicationCount(sessionUser.UserId);
