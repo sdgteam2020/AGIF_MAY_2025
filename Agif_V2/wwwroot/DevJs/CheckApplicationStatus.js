@@ -87,7 +87,6 @@
             type: 'GET',
             data: { applicationId: appId },
             success: function (response) {
-                console.log("Timeline response:", response);
 
                 // Hide loading
                 loadingDiv.hide();
@@ -110,6 +109,13 @@
             }
         });
     });
+    function my_date(date_string) {
+        var date_components = date_string.split("-");
+        var day = date_components[0];
+        var month = date_components[1];
+        var year = date_components[2];
+        return new Date(year, month - 1, day);
+    }
 
     function buildTimelineHtml(timelineData) {
         var timelineHtml = '<div class="timeline-vertical">';
@@ -147,16 +153,24 @@
         if (!dateString) return 'N/A';
 
         try {
-            var date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
+            // Expecting dd-mm-yyyy
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                // Rearranged to yyyy-mm-dd (ISO format)
+                const isoString = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                const date = new Date(isoString);
+                return date.toLocaleDateString('en-GB', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+            }
+            return dateString;
         } catch (e) {
             return dateString; // Return original if parsing fails
         }
     }
+
 
     function getStatusBadgeClass(statusId) {
         if (!statusId) {

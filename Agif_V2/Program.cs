@@ -16,12 +16,18 @@ var configration = builder.Configuration;
 builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(configration.GetConnectionString("AgifConnection")));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    var supportedCultures = new[] { "en-GB", "en-US" }; // Use en-GB for dd-MM-yyyy format
+    var supportedCultures = new[] { "en-GB", "en-US" };
     options.SetDefaultCulture(supportedCultures[0])
            .AddSupportedCultures(supportedCultures)
            .AddSupportedUICultures(supportedCultures);
-    options.RequestCultureProviders.Insert(0, new AcceptLanguageHeaderRequestCultureProvider());
+
+    // Force the request culture to always use "en-GB"
+    options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(context =>
+    {
+        return Task.FromResult(new ProviderCultureResult("en-GB"));
+    }));
 });
+
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
     option.Password.RequireNonAlphanumeric = true;

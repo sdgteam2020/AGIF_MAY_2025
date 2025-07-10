@@ -1310,9 +1310,19 @@ function filterAmountText(loanType) {
         //alert(cleanedValue);
     }
 }
+
+
+$('#dateOfBirth').on('change', function () {
+    var dob = $(this).val();
+    alert('Date of Birth input changed: ' + dob)
+    console.log('Current Date of Birth input: ' + dob);
+});
+
+
 function handleSubmitClick() {
     $("#btn-save").on("click", function (event) {
         event.preventDefault(); // Prevent form submission
+        alert($('#dateOfBirth').val());
         const form = $("#myForm");
         const inputs = form.find("input, select");
         // Clear previous error messages

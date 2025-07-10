@@ -28,7 +28,7 @@ namespace DataAccessLayer.Repositories
                                       StatusId = status.StatusId,
                                       Status = status.StatusName,
                                       timeLine = statusCtr.ActionOn.HasValue
-                                          ? statusCtr.ActionOn.Value.ToString("dd-MM-yyyy HH:mm")
+                                          ? statusCtr.ActionOn.Value.ToString("dd-MM-yyyy")
                                           : ""
                                   }).ToListAsync();
 

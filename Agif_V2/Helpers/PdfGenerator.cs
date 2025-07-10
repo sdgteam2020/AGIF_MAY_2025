@@ -34,20 +34,32 @@ namespace Agif_V2.Helpers
             var dated = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
 
             string formType = string.Empty;
+            string formTypeName = string.Empty;
 
 
             // First, determine the form type
             if (data.CarApplicationResponse != null)
             {
                 formType = "CAR / TWO WHEELER ADVANCE";
+                if(data.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+                {
+                    formTypeName = "Two Wheeler";
+                }
+                else
+                {
+                    formTypeName = "Car";
+                }
+                
             }
             else if (data.PcaApplicationResponse != null)
             {
                 formType = "PERSONAL COMPUTER LOAN";
+                formTypeName = "PCA";
             }
             else if (data.HbaApplicationResponse != null)
             {
                 formType = "HOUSE BUILDING ADVANCE";
+                formTypeName = "HBA";
             }
 
             if (!Directory.Exists(directory))
@@ -126,7 +138,7 @@ namespace Agif_V2.Helpers
                     var common = data.OnlineApplicationResponse;
 
                     // Populate rows
-                    AddRow("1. Type of Loan", formType, "2. Army Number", common.Number);
+                    AddRow("1. Type of Loan", formTypeName, "2. Army Number", common.Number);
                     AddRow("3.Old Army No", common.OldNumber, "4.Rank", common.DdlRank);
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));

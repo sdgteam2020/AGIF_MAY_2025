@@ -480,7 +480,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("yyyy-MM-dd")"
+                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("dd-MM-yyyy")"
                                                required oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOB</label>
                                     </div>
@@ -493,7 +493,7 @@
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"
-                                               required value="@Model.CommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
+                                               required value="@Model.CommonData?.DateOfCommission?.ToString("dd-MM-yyyy")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>

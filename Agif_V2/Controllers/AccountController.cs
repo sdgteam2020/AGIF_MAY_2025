@@ -301,6 +301,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "User mapping not found." });
             }
             userMapping.IsActive = isActive;
+            userMapping.UpdatedOn = DateTime.Now;
             await _userMapping.Update(userMapping);
             return Json(new { success = true });
         }
