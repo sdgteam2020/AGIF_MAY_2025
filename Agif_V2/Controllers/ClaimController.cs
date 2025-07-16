@@ -39,11 +39,41 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+
+        public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            var existingUser = await _IClaimonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+
+            if (existingUser != null) // Check if the user exists
+            {
+                return Json(new { exists = true }); // User exists
+            }
+            else
+            {
+                return Json(new { exists = false }); // User does not exist
+            }
+        }
+
+        public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            bool result = await _IClaimonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
+
+            if (result == true)
+            {
+                return Json(new { exists = true });
+            }
+            else
+            {
+                return Json(new { exists = false });
+            }
+        }
+
+
         public async Task<IActionResult> Upload()
         {
             //int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-           //int applicationId = 4005;
+           int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+          // int applicationId = 5012;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             TempData.Keep("ClaimapplicationId");
@@ -278,7 +308,7 @@ namespace Agif_V2.Controllers
                 else
                 {
                     formType = "SP";
-                    bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", 4005);
+                    bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", claimCommonModel.ApplicationId);
 
                 }
 

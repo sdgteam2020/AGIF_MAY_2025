@@ -1,4 +1,5 @@
-﻿using DataTransferObject.Request;
+﻿using DataTransferObject.Helpers;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace DataAccessLayer.Interfaces
         Task<bool> UpdateClaimStatus(DTOExportRequest dtoExport);
 
         Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date);
+
+        Task<bool> UpdateUserDetails(SessionUserDTO sessionUserDTO);
 
     }
 }

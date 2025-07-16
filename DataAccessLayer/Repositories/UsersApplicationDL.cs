@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
+using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
@@ -11,15 +12,20 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccessLayer.Repositories
 {
     public class UsersApplicationDL : IUsersApplications
     {
         protected readonly ApplicationDbContext _db;
-        public UsersApplicationDL(ApplicationDbContext db)
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+
+        public UsersApplicationDL(ApplicationDbContext db, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
 
         public async Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date)
@@ -267,5 +273,49 @@ namespace DataAccessLayer.Repositories
             return result;
         }
 
+
+        public async Task<bool> UpdateUserDetails(SessionUserDTO sessionUserDTO)
+        {
+            bool updated = false;
+
+            // Update UserProfile
+            var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
+            if (profile != null)
+            {
+                profile.Name = sessionUserDTO.name;
+                profile.Email = sessionUserDTO.EmailId;
+                profile.rank = sessionUserDTO.RankId;
+                profile.MobileNo = sessionUserDTO.MobileNo;
+                updated = true;
+            }
+
+            // Update UserMapping
+            var mapping = await _db.trnUserMappings.FirstOrDefaultAsync(x => x.MappingId == sessionUserDTO.ProfileId);
+            if (mapping != null)
+            {
+                mapping.IsFmn = sessionUserDTO.DteFmn;
+                updated = true;
+            }
+
+            if (updated)
+            {
+                await _db.SaveChangesAsync();
+            }
+
+            // Update Identity User
+            var user = await _userManager.FindByIdAsync(sessionUserDTO.ProfileId.ToString());
+            if (user != null)
+            {
+                user.Email = sessionUserDTO.EmailId;
+                user.PhoneNumber = sessionUserDTO.MobileNo;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

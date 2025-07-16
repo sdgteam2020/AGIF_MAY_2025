@@ -16,12 +16,34 @@
         <div class="card-body">
 
             <!-- Search Box Start -->
-            <form id="searchByArmyNo" class="mb-4 d-flex justify-content-center">
+           @*  <form id="searchByArmyNo" class="mb-4 d-flex justify-content-center">
+
+
                 <div class="input-group shadow-sm" style="max-width: 320px;">
                     <input type="text" class="form-control border-info" placeholder="Enter Army No" aria-label="Army No" name="armyNo" id="armyNoInput">
                     <button class="btn btn-info text-white fw-bold px-4" type="submit">
                         <i class="fas fa-search me-2"></i>Search
                     </button>
+                </div>
+            </form> *@
+            <form id="searchByArmyNo" class="mb-4 d-flex justify-content-center">
+                <div class="d-flex align-items-center gap-3" style="max-width: 500px;">
+                    <!-- Dropdown Section -->
+                    <div class="dropdown-section">
+@*                         <label class="form-label fw-bold text-dark mb-2">Choose Type</label>
+ *@                        <select class="form-select border-info" id="typeSelect" name="type" style="min-width: 120px;">
+                            <option value="Loan">Loan</option>
+                            <option value="Maturity">Maturity</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Input Section -->
+                    <div class="input-group shadow-sm" style="max-width: 320px;">
+                        <input type="text" class="form-control border-info" placeholder="Enter Army No" aria-label="Army No" name="armyNo" id="armyNoInput">
+                        <button class="btn btn-info text-white fw-bold px-4" type="submit">
+                            <i class="fas fa-search me-2"></i>Search
+                        </button>
+                    </div>
                 </div>
             </form>
 
@@ -40,43 +62,7 @@
                         </tr>
                     </thead>
                     <tbody id="applicationTableBody">
-                        @* @foreach (var app in applications)
-                        {
-                            <tr>
-                                <td>@app.Name</td>
-                                <td>@app.Status</td>
-                                <td>
-                                    <button class="btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#timeline-@app.Id" aria-expanded="false" aria-controls="timeline-@app.Id">
-                                        <i class="fas fa-calendar-check"></i> Show Timeline
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr class="collapse" id="timeline-@app.Id">
-                                <td colspan="3">
-                                    <div class="timeline-container">
-                                        <div class="timeline-vertical">
-                                            @for (int i = 0; i < app.Timeline.Length; i++)
-                                            {
-                                                var step = app.Timeline[i];
-                                                var isLast = i == app.Timeline.Length - 1;
-                                                <div class="timeline-step @(isLast ? "last" : "")">
-                                                    <div class="timeline-dot"></div>
-                                                    @if (!isLast)
-                                                    {
-                                                        <div class="timeline-line"></div>
-                                                    }
-                                                    <div class="timeline-content">
-                                                        <div class="timeline-title">@step.Item1</div>
-                                                        <div class="timeline-date">@step.Item2</div>
-                                                        <div class="timeline-date">Updated HTML and CSS for Horizontal Timeline with Correct Updated HTML and CSS for Horizontal Timeline with Correct</div>
-                                                    </div>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        } *@
+                        
                     </tbody>
                 </table>
             </div>

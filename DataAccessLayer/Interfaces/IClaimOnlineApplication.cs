@@ -37,5 +37,10 @@ namespace DataAccessLayer.Interfaces
         Task<DTOClaimCommonOnlineApplicationResponseList> GetApplicationDetailsForExport(DTOExportRequest dTOExport);
 
         Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport);
+
+        Task<ClaimCommonDataOnlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType);
+
+        Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
+
         }
 }

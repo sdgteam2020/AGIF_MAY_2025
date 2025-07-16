@@ -1,15 +1,41 @@
 ﻿$(document).ready(function () {
+    $('#typeSelect').on('change', function () {
+        var selectedType = $(this).val();
+        console.log('Dropdown changed to:', selectedType);
+        clearAllData();
+    });
+
+    function clearAllData() {
+        // Hide result table and no results message
+        $('#resultsTable').addClass('d-none');
+        $('#noResultsMessage').addClass('d-none');
+
+        // Clear the table body
+        $('#applicationTableBody').empty();
+
+        // Clear the input field (optional)
+        $('#armyNoInput').val('');
+
+        console.log('All data cleared');
+    }
+
+
     $('#searchByArmyNo').on('submit', function (e) {
         e.preventDefault();
         var armyNo = $('#armyNoInput').val().trim();
+        var selectedType = $('#typeSelect').val(); // Get the selected dropdown value
+
         if (armyNo === '') return;
 
         // Clear previous results
         $('#noResultsMessage').addClass('d-none');
         $('#resultsTable').addClass('d-none');
 
+        // Determine the endpoint based on selected type
+        var searchEndpoint = getSearchEndpoint(selectedType);
+
         $.ajax({
-            url: '/Default/SearchByArmyNo',
+            url: searchEndpoint,
             type: 'GET',
             data: { armyNo: armyNo },
             success: function (data) {
@@ -26,6 +52,19 @@
             }
         });
     });
+
+    // Function to determine the search endpoint based on selected type
+    function getSearchEndpoint(type) {
+        switch (type) {
+            case 'Loan':
+                return '/Default/SearchByArmyNo';
+            case 'Maturity':
+                return '/Default/ClaimSearchByArmyNo';
+            default:
+                return '/Default/SearchByArmyNo'; // Default to loan endpoint
+        }
+    }
+
 
     function populateTable(applications) {
         var tbody = $('#applicationTableBody');
@@ -67,6 +106,7 @@
 
     $(document).on('click', '.timeline-btn', function () {
         var appId = $(this).data('app-id');
+        var selectedType = $('#typeSelect').val(); // Get current selected type
         var timelineRow = $('#timeline-' + appId);
         var timelineContent = $('#timeline-content-' + appId);
         var loadingDiv = $('#loading-' + appId);
@@ -76,18 +116,18 @@
             return; // Timeline already loaded, just toggle
         }
 
-        console.log("Timeline button clicked for App ID:", appId);
+        console.log("Timeline button clicked for App ID:", appId, "Type:", selectedType);
 
         // Show loading
         loadingDiv.show();
         timelineContent.hide();
 
+        // Get the appropriate timeline endpoint
         $.ajax({
             url: '/Default/GetTimeline',
             type: 'GET',
             data: { applicationId: appId },
             success: function (response) {
-
                 // Hide loading
                 loadingDiv.hide();
 
@@ -109,6 +149,7 @@
             }
         });
     });
+
     function my_date(date_string) {
         var date_components = date_string.split("-");
         var day = date_components[0];
@@ -125,13 +166,13 @@
             var stepClass = isLast ? 'timeline-step last' : 'timeline-step';
             let shadow = "";
             if (step.statusId == 1 || step.statusId == 2) {
-                shadow= 'green';
+                shadow = 'green';
             }
             else if (step.statusId == 3) {
-                shadow= 'red';
+                shadow = 'red';
             }
             else if (step.statusId == 5) {
-                shadow= 'yellow';
+                shadow = 'yellow';
             }
             timelineHtml += `
                 <div class="${stepClass}">
@@ -170,7 +211,6 @@
             return dateString; // Return original if parsing fails
         }
     }
-
 
     function getStatusBadgeClass(statusId) {
         if (!statusId) {

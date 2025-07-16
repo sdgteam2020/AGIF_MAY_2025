@@ -406,8 +406,8 @@ function getApplicantDetalis() {
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
-                    title: "You Have Already applied for  Loan.",
-                    text: "Would you like to apply for a new loan !",
+                    title: "You Have Already applied for Maturity.",
+                    text: "Would you like to apply for a new Maturity !",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -429,8 +429,8 @@ function getApplicantDetalis() {
 
 function DeleteConfirmation() {
     Swal.fire({
-        title: "Previous Loan data deleted !",
-        text: "your previous Loan data will be deleted permanently !",
+        title: "Previous Maturity data deleted !",
+        text: "Your previous Maturity data will be deleted permanently !",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

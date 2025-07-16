@@ -1,0 +1,176 @@
+﻿@using DataTransferObject.Helpers;
+@model SessionUserDTO;
+@{
+    ViewData["Title"] = "Edit User";
+    var message = TempData["ProfileMessage"] ?? string.Empty;
+
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user"></i>
+                        <span id="page-title">User Profile</span>
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("EditUser", "ApplicationRequest", FormMethod.Post, new { @class = "form-horizontal", role = "form",id = "editUserForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.ArmyNo, "Army Number", htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.ArmyNo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter Army Number", @disabled = "disabled" } })
+                                    @Html.ValidationMessageFor(model => model.ArmyNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.name, "Full Name", htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control form-control-Alphabets", @placeholder = "Enter Full Name", @disabled = "disabled", maxlength="15", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserName, "Username", htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control form-control-Alphabets", @placeholder = "Enter Username", @disabled = "disabled", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.EmailId, "Email Address", htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { @class = "form-control", @type = "email", @placeholder = "Enter Email Address", @disabled = "disabled",maxlength="50", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MobileNo, "Mobile Number", htmlAttributes: new { @class = "control-label" })
+                                    @Html.EditorFor(model => model.MobileNo, new { htmlAttributes = new { @class = "form-control isNumerictxt", @placeholder = "Enter Mobile Number", @disabled = "disabled",maxlength="10", @required = "required" } })
+                                    @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label asp-for="RankId">Rank:</label>
+                                    <select class="form-select select" asp-for="RankId" id="rank" name="RankId" data-rank-prefix="@(Model?.RankId)" required disabled></select>
+                                    @Html.ValidationMessageFor(m => m.RankId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                <label asp-for="RegtId">Regt/Corps:</label>
+                                    <select class="form-select select" asp-for="RegtId" id="regtCorps" name="regtCorps" required disabled data-regtcorps-prefix="@if (Model != null) {
+                                                @Model.RegtId;}"></select>
+                                    @Html.ValidationMessageFor(m => m.RegtId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                            
+
+                                     <label asp-for="ApptId">Appointment:</label>
+                                    <select class="form-select select" asp-for="ApptId" id="ApptId" name="ApptId" required disabled data-apptid-prefix="@if (Model != null) {
+                                                @Model.ApptId;}"></select>
+                                    @Html.ValidationMessageFor(m => m.ApptId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                  
+                                     <label asp-for="UnitId">Unit Name:</label>
+
+                                    @Html.EditorFor(model => model.UnitId, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "Unit's name", @disabled = "disabled"  } })
+                                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
+                                        <span id="UnitId" class="d-none">@Model.UnitId</span>
+                                        <input type="text" class="form-control form-control-Alphabets" id="txtUnit" required disabled />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6  mt-4">
+                                <div class="form-group">
+                                    <input type="checkbox" asp-for="DteFmn" id="DteFmn" class="form-check-input large-checkbox" disabled />
+                                    <label for="DteFmn" class="form-label">I am posted at Fmn HQ/Dte</label>
+                                     
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <hr />
+                                <div class="btn-group" role="group">
+                                    <button type="button" id="editButton" class="btn btn-warning">
+                                        <i class="fas fa-edit"></i>
+                                        Click here to Edit your Profile
+                                    </button>
+
+                                    <button type="button" id="btnTokenDetails" class="btn btn-primary w-50" style="display: none;">
+                                        Get Token Details
+                                    </button>
+
+                                    
+                                     <div class="d-flex justify-content-center align-items-center">
+                                         <button type ="submit" class="btn btn-success d-none" id="btnsignup"> Update Profile</button>
+                                     </div>
+
+                               
+                                </div>
+                            </div>
+
+                            <div id="errormsg">
+
+                            </div>
+
+                        </div>
+                        <input type="hidden" id="hdnProfileId" name="ProfileId" value="@Model?.ProfileId" />
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/devjs/mtable.js"></script>
+<script src="~/devjs/Validation.js"></script>
+<script src="~/devjs/EditUser.js"></script>
+<script>
+    $(document).ready(function () {
+        var message = '@message';
+
+        if (message !== '' && message !== null) {
+            // Display SweetAlert with custom styles
+            Swal.fire({
+                html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
+                icon: 'success',
+                confirmButtonText: 'OK',  // Text on the confirm button
+                confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
+                customClass: {
+                    title: 'font-weight-bold',  // Optional: makes the title bold
+                    htmlContainer: 'text-dark'  // Optional: sets the message text color
+                },
+                padding: '25px'  // Adds padding to the alert for better spacing
+            });
+        }
+    });
+</script>

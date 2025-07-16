@@ -18,6 +18,23 @@ namespace DataTransferObject.Helpers
         public string DomainId { get; set; }
         public string RankName { get; set; }
 
+        public string? ProfileName { get; set; }
+        public string? AppointmentName { get; set; }
+        public string? MobileNo { get; set; }
+        public string? RegtName { get; set; }
+        public string? UnitName { get; set; }
+        public string? EmailId { get; set; }
+        public bool IsPrimary { get; set; }
+        public bool DteFmn { get; set; }
+        public bool IsActive { get; set; }
+        public bool IsCOActive { get; set; }
+        public int RankId { get; set; }
+        public int RegtId { get; set; }
 
+        public int ApptId { get; set; }
+
+        public int UnitId { get; set; }
+
+        public string? name { get; set; } = string.Empty;
     }
 }

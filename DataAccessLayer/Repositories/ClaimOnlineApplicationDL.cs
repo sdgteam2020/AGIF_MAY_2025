@@ -65,6 +65,73 @@ namespace DataAccessLayer.Repositories
             return true;
         }
 
+        public async Task<ClaimCommonDataOnlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            var existingUser = await (from app in _context.trnClaim
+                                      join doc in _context.trnClaimDocumentUpload on app.ApplicationId equals doc.ApplicationId into docGroup
+                                      from doc in docGroup.DefaultIfEmpty()
+                                      where app.WithdrawPurpose == appType && (app.ArmyPrefix.ToString() + app.Number + app.Suffix) == (armyNumber + Prefix + Suffix)
+                                      select new ClaimCommonDataOnlineResponse
+                                      {
+                                          ApplicationId = app.ApplicationId
+                                      }).FirstOrDefaultAsync();
+
+
+            return existingUser;
+        }
+
+        public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        {
+            var existingUser = await GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+
+            if (existingUser != null)
+            {
+                var ED = await _context.trnEducationDetails
+                    .FirstOrDefaultAsync(c => c.ApplicationId == existingUser.ApplicationId);
+
+                var MW = await _context.trnMarriageward
+                    .FirstOrDefaultAsync(h => h.ApplicationId == existingUser.ApplicationId);
+
+                var PC = await _context.trnPropertyRenovation
+                    .FirstOrDefaultAsync(p => p.ApplicationId == existingUser.ApplicationId);
+                
+                var Sp= await _context.trnSplWaiver
+                    .FirstOrDefaultAsync(s => s.ApplicationId == existingUser.ApplicationId);
+
+                var documents = await _context.trnClaimDocumentUpload
+                    .Where(d => d.ApplicationId == existingUser.ApplicationId)
+                    .ToListAsync();
+
+
+                if (ED != null)
+                    _context.trnEducationDetails.Remove(ED);
+
+                if (MW != null)
+                    _context.trnMarriageward.Remove(MW);
+
+                if (PC != null)
+                    _context.trnPropertyRenovation.Remove(PC);
+
+                if(Sp != null)
+                    _context.trnSplWaiver.Remove(Sp);
+
+                if (documents.Any())
+                    _context.trnClaimDocumentUpload.RemoveRange(documents);
+
+                var applicationEntity = await _context.trnClaim
+                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+                if (applicationEntity != null)
+                    _context.trnClaim.Remove(applicationEntity);
+
+                await _context.SaveChangesAsync();
+                return true;
+
+            }
+
+            return false;
+        }
+
 
         public async Task<bool> submitApplication(DTOClaimApplication model,string PurposeType ,int ApplicationId)
         {
@@ -497,7 +564,7 @@ namespace DataAccessLayer.Repositories
 
                               House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
                               
-                              House_Repair_Advance_Loan = common.Computer_Advance_Loan ?? false,
+                              House_Repair_Advance_Loan = common.House_Repair_Advance_Loan ?? false,
                               
                               Conveyance_Advance_Loan= common.Conveyance_Advance_Loan ?? false,
                               
@@ -519,6 +586,10 @@ namespace DataAccessLayer.Repositories
                               Computer_Date_of_Loan_taken= common.Computer_Date_of_Loan_taken,
                               Computer_Duration_of_Loan= common.Computer_Duration_of_Loan ?? 0,
 
+                              Vill_Town = common.Vill_Town ?? string.Empty,
+                              PostOffice = common.PostOffice ?? string.Empty,
+                              Distt = common.Distt ?? string.Empty,
+                              State = common.State ?? string.Empty,
 
                           }).FirstOrDefault();
             string formtype = string.Empty;
@@ -830,6 +901,11 @@ namespace DataAccessLayer.Repositories
                               Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
                               Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
                               Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
+
+                              Vill_Town = common.Vill_Town ?? string.Empty,
+                              PostOffice = common.PostOffice ?? string.Empty,
+                              Distt = common.Distt ?? string.Empty,
+                              State = common.State ?? string.Empty,
                           }).ToListAsync();
             data.OnlineApplicationResponse = result.Result; // Assuming result is already defined
 

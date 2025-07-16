@@ -142,7 +142,20 @@ namespace DataTransferObject.Response
         public int? Computer_Duration_of_Loan { get; set; }
         public decimal? Computer_Amount_Taken { get; set; }
 
+        public string? Vill_Town { get; set; }
 
+
+        public string? PostOffice { get; set; }
+
+
+        public string? Distt { get; set; }
+
+
+
+        public string? State { get; set; }
+
+
+        public string? Code { get; set; }
 
 
         public string? UpdatedOn { get; set; }

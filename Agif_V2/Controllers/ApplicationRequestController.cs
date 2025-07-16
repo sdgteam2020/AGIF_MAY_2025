@@ -5,6 +5,7 @@ using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,54 @@ namespace Agif_V2.Controllers
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             return View(dTOTempSession);
         }
+
+        public async Task<IActionResult> EditUser()
+        {
+            var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+            DTOUserProfileResponse dTOUserProfileResponse = new DTOUserProfileResponse();
+
+            if (dTOTempSession != null)
+              dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
+
+            if (dTOUserProfileResponse != null)
+            {
+                // Map properties as needed. Example:
+                dTOTempSession.ArmyNo = dTOUserProfileResponse.ArmyNo;
+                dTOTempSession.MobileNo = dTOUserProfileResponse.MobileNo;
+                dTOTempSession.ProfileName = dTOUserProfileResponse.ProfileName;
+                dTOTempSession.UserName = dTOUserProfileResponse.DomainId;
+                dTOTempSession.EmailId = dTOUserProfileResponse.EmailId;
+                dTOTempSession.RankId = dTOUserProfileResponse.RankId;
+                dTOTempSession.RegtId = dTOUserProfileResponse.RegtId;
+                dTOTempSession.ApptId = dTOUserProfileResponse.ApptId;
+                dTOTempSession.UnitId = dTOUserProfileResponse.UnitId;
+                dTOTempSession.name = dTOUserProfileResponse.username;
+                dTOTempSession.DteFmn = dTOUserProfileResponse.IsFmn;
+            }
+
+            return View(dTOTempSession);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(SessionUserDTO sessionUserDTO)
+        {
+            var result= await _userApplication.UpdateUserDetails(sessionUserDTO);
+            if (result)
+            {
+                // Update session with new user details
+                //Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
+                TempData["ProfileMessage"] = "Your Profile is Updated Successfully.";
+                return RedirectToAction("EditUser", "ApplicationRequest");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed to update user details. Please try again.");
+            }
+            return View();
+        }
+
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {
 

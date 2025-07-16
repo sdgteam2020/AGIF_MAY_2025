@@ -132,10 +132,30 @@ namespace Agif_V2.Controllers
             return View();
         }
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+            //DTOUserProfileResponse dTOUserProfileResponse = new DTOUserProfileResponse();
+
+            //if (sessionUser!=null)
+            //    dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
 
             DTOuserProfile userProfileDTO = new DTOuserProfile();
+
+            //if (dTOUserProfileResponse != null)
+            //{
+            //    // Map properties as needed. Example:
+            //    userProfileDTO.ArmyNo = dTOUserProfileResponse.ArmyNo;
+            //    userProfileDTO.MobileNo = dTOUserProfileResponse.MobileNo;
+            //    userProfileDTO.Name = dTOUserProfileResponse.ProfileName;
+            //    userProfileDTO.userName= dTOUserProfileResponse.DomainId;
+            //    userProfileDTO.Email = dTOUserProfileResponse.EmailId;
+            //    userProfileDTO.rank = dTOUserProfileResponse.RankId;
+            //    userProfileDTO.regtCorps = dTOUserProfileResponse.RegtId;
+            //    userProfileDTO.ApptId = dTOUserProfileResponse.ApptId;
+            //    userProfileDTO.UnitId = dTOUserProfileResponse.UnitId;
+            //}
             TempData.Keep("UserName");
             ///////GetUserProfile
             return View(userProfileDTO);
@@ -206,6 +226,8 @@ namespace Agif_V2.Controllers
             }
          
         }
+       
+
 
         public IActionResult GetAllUsers(bool status)
         {
@@ -392,6 +414,26 @@ namespace Agif_V2.Controllers
                 return Json(0);
             }
             
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> GetUnitById(int UnitId)
+        {
+            try
+            {
+                if (UnitId > 0)
+                {
+
+                    var ret = _db.MUnits.Where(i => i.UnitId == UnitId).FirstOrDefault().UnitName;
+                    return Json(ret);
+
+                }
+                return Json(0);
+            }
+            catch (Exception ex)
+            {
+                return Json(0);
+            }
         }
     }
 }

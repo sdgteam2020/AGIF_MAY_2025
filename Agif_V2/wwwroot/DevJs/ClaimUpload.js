@@ -124,10 +124,10 @@
 
 function checkUploadFiles() {
     const $uploadBtn = $('#uploadBtn');
-    const requiredFields = ['CancelledCheque', 'PaySlipPdf','SpdocusPdf']; // Make these fields required
+    const requiredFields = ['CancelledCheque', 'PaySlipPdf']; // Make these fields required
     let allFilled = true;
     let IsExtension = $('#isExtension').val() === 'true';  // Get the value for IsExtension
-
+    var type = $('#hiddenFormType').val(); // Get the value for type
     // Check if the required fields have files selected
     requiredFields.forEach(function (fieldId) {
         const $fileInput = $('#' + fieldId);
@@ -138,6 +138,27 @@ function checkUploadFiles() {
 
     // Handle Service Extension field based on IsExtension
     const $serviceExtnField = $('#SeviceExtnPdf');
+    const $SpdocusPdfField = $('#SpdocusPdf');
+
+    if (type === 'SP') {
+        $SpdocusPdfField.prop('disabled', false);
+        $SpdocusPdfField.prop('required', true);
+
+        // Check if Service Extension file is uploaded
+        if ($SpdocusPdfField.length && (!$SpdocusPdfField[0].files || $SpdocusPdfField[0].files.length === 0)) {
+            allFilled = false;
+        }
+
+    }
+    else {
+        // If extension is false: disable field and make it not required
+        $SpdocusPdfField.prop('disabled', true);
+        $SpdocusPdfField.prop('required', false);
+        // Clear the file input if disabled
+        $SpdocusPdfField.val('');
+    }
+
+
 
     if (IsExtension) {
         // If extension is true: enable field and make it mandatory

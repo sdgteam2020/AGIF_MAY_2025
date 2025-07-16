@@ -82,6 +82,13 @@ namespace Agif_V2.Controllers
             return Json(data);
         }
 
+
+        public async Task<IActionResult> ClaimSearchByArmyNo(string armyNo)
+        {
+            var data = await _default.GetClaimUserApplicationStatusByArmyNo(armyNo);
+            return Json(data);
+        }
+
         public async Task<IActionResult> GetTimeline(int ApplicationId)
         {
             var data = await _default.GetTimeLine(ApplicationId);

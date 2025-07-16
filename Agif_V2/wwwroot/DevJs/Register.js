@@ -1,14 +1,34 @@
 ﻿function loadDropdown() {
 
     var Rank = $('#rank').data('rank-prefix');
-    var UnitId = $('#UnitId').data('unitid-prefix');
+  //  var UnitId = $('#UnitId').val();
     var regtCorps = $('#regtCorps').data('regtcorps-prefix');
     var ApptId = $('#ApptId').data('apptid-prefix');
 
     mMsater(Rank, "rank", 3, 0);
-    mMsater(UnitId, "UnitId", 2, 0);
     mMsater(regtCorps, "regtCorps", 8, 0);
     mMsater(ApptId, "ApptId", 1, 0);
+    //if (regtCorps) {
+    //    $('#regtCorps').prop('disabled', true); // Disable the select dropdown
+    //}
+
+    //if (UnitId) {
+    //    $.ajax({
+    //        url: '/Account/GetUnitById',
+    //        type: 'POST',
+    //        data: { UnitId: UnitId },
+    //        success: function (data) {
+    //            if (data) {
+    //                $('#txtUnit').val(data);
+    //                $('#txtUnit').prop('readonly', true); // Make input readonly
+    //            }
+    //        },
+    //        error: function (response) {
+    //            alert(response.responseText);
+    //        }
+    //    });
+    //}
+ 
 }
 
 $('#DteFmn').on('change', function () {

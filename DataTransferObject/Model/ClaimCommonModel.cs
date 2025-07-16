@@ -128,6 +128,26 @@ namespace DataTransferObject.Model
         [StringLength(100, ErrorMessage = "Next Fmn HQ can't be longer than 100 characters.")]
         public string? NextFmnHQ { get; set; }
 
+        [Required(ErrorMessage = "Village/Town is required.")]
+        [StringLength(100, ErrorMessage = "Village/Town can't be longer than 100 characters.")]
+        public string? Vill_Town { get; set; }
+
+        [Required(ErrorMessage = "Post Office is required.")]
+        [StringLength(100, ErrorMessage = "Post Office can't be longer than 100 characters.")]
+        public string? PostOffice { get; set; }
+
+        [Required(ErrorMessage = "District is required.")]
+        [StringLength(100, ErrorMessage = "District can't be longer than 100 characters.")]
+        public string? Distt { get; set; }
+
+        [Required(ErrorMessage = "State is required.")]
+        [StringLength(100, ErrorMessage = "State can't be longer than 100 characters.")]
+        public string? State { get; set; }
+
+        [Required(ErrorMessage = "Zip Code is required.")]
+        [StringLength(6, ErrorMessage = "Zip Code can't be longer than 6 characters.")]
+        public string? Code { get; set; }
+
         [Required(ErrorMessage = "Salary Account No is required.")]
         [StringLength(20, ErrorMessage = "Salary Account No can't be longer than 20 characters.")]
         public string? SalaryAcctNo { get; set; }

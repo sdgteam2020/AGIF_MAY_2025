@@ -24,6 +24,14 @@ namespace DataTransferObject.Response
         public bool IsFmn { get; set; }
         public bool IsActive { get; set; }
         public bool IsCOActive { get; set; }
+        public int RankId { get; set; }
+        public int RegtId { get; set; }
+
+        public int ApptId { get; set; }
+
+        public int UnitId { get; set; }
+
+        public string? username { get; set; }   
 
     }
 }

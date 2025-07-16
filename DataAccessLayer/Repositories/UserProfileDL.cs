@@ -89,6 +89,11 @@ namespace DataAccessLayer.Repositories
                     RegtName = regt.RegtName,
                     IsPrimary = mapping.IsPrimary,
                     IsFmn = mapping.IsFmn,
+                    RankId = rank.RankId,
+                    RegtId = regt.Id,
+                    ApptId = profile.ApptId,
+                    UnitId = unit.UnitId,
+                    username = profile.Name
                 }
             ).FirstOrDefaultAsync();
 

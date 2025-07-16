@@ -75,7 +75,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="Email">Email:</label>
-                                    <input type="email" asp-for="Email" class="form-email" id="Email" name="Email" value="@Model?.Email" maxlength="100" required />
+                                    <input type="email" asp-for="Email" class="form-email" id="Email" name="Email" value="@Model?.Email" maxlength="50" required />
                                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>

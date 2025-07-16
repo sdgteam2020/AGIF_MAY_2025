@@ -8,6 +8,15 @@
     string loanType = Context.Request.Query["formtype"].ToString()?.ToUpper() ?? "CA";
     var message = ViewBag.Message ?? string.Empty;
 
+    if(Model.EducationDetailsResponse!=null)
+    loanType= "EDUCATION OF WARD";
+    else if(Model.MarraigeWardResponse!=null)
+    loanType = "MARRAIGE OF WARD";
+    else if(Model.PropertyRenovationResponse!=null)
+    loanType = "RENOVATION-REPAIR OF HOSUE";
+    else if(Model.SplWaiverResponse!=null)
+    loanType = "SPECIAL WAIVER";    
+
 }
 <style>
     .lblforprint {
@@ -156,13 +165,13 @@
                         </div>
 
                         
-                    @* 
+                    
                         <div class="col-md-4 ">
                             <div class="p-3 h-100 d-flex align-items-center">
                                 <strong class="me-2 lblforprint">Perm Home Address:</strong>
                                 <span>@Model.OnlineApplicationResponse.Vill_Town, @Model.OnlineApplicationResponse.PostOffice, @Model.OnlineApplicationResponse.Distt, @Model.OnlineApplicationResponse.State,, @Model.OnlineApplicationResponse.Code</span>
                             </div>
-                        </div> *@
+                        </div>
 
                        
 

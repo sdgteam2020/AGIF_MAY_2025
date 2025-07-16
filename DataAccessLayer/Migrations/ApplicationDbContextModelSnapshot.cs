@@ -257,6 +257,11 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("CivilPostalAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
                     b.Property<bool?>("Computer_Advance_Loan")
                         .HasColumnType("bit");
 
@@ -300,6 +305,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("DdlRank")
                         .HasColumnType("int");
+
+                    b.Property<string>("Distt")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("DownloadCount")
                         .HasColumnType("int");
@@ -407,6 +417,11 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ParentUnit")
                         .HasColumnType("int");
 
+                    b.Property<string>("PostOffice")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("PresentUnit")
                         .HasColumnType("int");
 
@@ -426,6 +441,11 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("StatusCode")
                         .HasColumnType("int");
 
@@ -442,6 +462,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
+
+                    b.Property<string>("Vill_Town")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("WithdrawPurpose")
                         .HasColumnType("int");

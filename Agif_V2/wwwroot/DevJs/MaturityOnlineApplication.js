@@ -341,11 +341,8 @@ function loadDropdown() {
     var presentunit = $('#presentUnit').data('present-prefix');
     var Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
     var propertytype = $('#propertyType').data('propertytype-prefix');
-    var hbaloanfreq = $('#HBA_LoanFreq').data('hbaloanfreq-prefix');
     var vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
-    var Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
     var computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
-    var Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
 
     if (loanType == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -375,10 +372,7 @@ function loadDropdown() {
     mMsater(parentunit, "parentUnit", 2, 0);
     mMsater(presentunit, "presentUnit", 2, 0);
     mMsater(Armypostoffice, "armyPostOffice", 14, 0);
-    mMsater(Cavehicleloanfreq, "CA_LoanFreq", 15, 0);
     mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
-    mMsater(Pcaloanfreq, "PCA_LoanFreq", 15, 0);
-    mMsater(hbaloanfreq, "HBA_LoanFreq", 15, 0);
 }
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
@@ -491,11 +485,11 @@ function getApplicantDetalis() {
     var armyNumber = $("#armyPrefix").val();
     var Prefix = $("#armyNumber").val();
     var Suffix = $("#txtSuffix").val();
-    var appType = parseInt($("#loanType").val(), 10);
+    var appType = parseInt($("#Purpose").val(), 10);
 
     $.ajax({
         type: "get",
-        url: "/OnlineApplication/CheckExistUser",
+        url: "/Claim/CheckExistUser",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
         success: function (data) {
             if (data.exists) {
@@ -541,10 +535,10 @@ function DeleteExistingLoan() {
     var armyNumber = $("#armyPrefix").val();
     var Prefix = $("#armyNumber").val();
     var Suffix = $("#txtSuffix").val();
-    var appType = parseInt($("#loanType").val(), 10);
+    var appType = parseInt($("#Purpose").val(), 10);
     $.ajax({
         type: "get",
-        url: "/OnlineApplication/DeleteExistingLoan",
+        url: "/Claim/DeleteExistingLoan",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
         success: function (data) {
             if (data.exists) {
@@ -581,11 +575,17 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
         Swal.fire({
             title: 'Warning!',
             text: 'Atleast 15 years of age is required for commission. Please check the Date of Birth and Date of Commission.',
-            icon: 'warning'
-        }).then(() => {
-            $('#dateOfCommission').val("");
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#dateOfCommission').val("");
+                window.location.href = '/Claim/MaturityLoanType';
+            }
         });
     }
+
+
 }
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();

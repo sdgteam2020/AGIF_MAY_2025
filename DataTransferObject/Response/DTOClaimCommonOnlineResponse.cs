@@ -24,6 +24,9 @@ namespace DataTransferObject.Response
         public List<DTOEducationDetailsResponse>? EducationDetailsResponse { get; set; }
         public List<DTOMarraigeWardResponse>? MarraigeWardResponse { get; set; }
         public List<DTOPropertyRenovationResponse>? PropertyRenovationResponse { get; set; }
+
+        public List<DTOSplWaiverResponse>? SplWaiverResponse { get; set; }
+
         public List<ClaimCommonDataOnlineResponse>? OnlineApplicationResponse { get; set; }
 
         public List<DTODocumentFileView>? Documents { get; set; }
