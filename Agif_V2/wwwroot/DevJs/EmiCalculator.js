@@ -3,9 +3,24 @@
     $('#loanAmount, #interestRate, #maxEmi').on('input', function () {
         CheckEmiCalculater();
     });
+    checkEMIMonths() 
 
 
 });
+
+function checkEMIMonths() {
+    $('#maxEmi').on('input', function () {
+        let inputValue = parseInt($(this).val(), 10);
+
+        if (inputValue > 240) {
+            $(this).val(240); // Set to max of 240
+        } else if (inputValue < 1 || isNaN(inputValue)) {
+            $(this).val(''); // Clear invalid input
+        }
+    });
+}
+
+
 function CheckEmiCalculater() {
 
     const loanAmount = parseFloat($("#loanAmount").val().replace(/,/g, '')); // Remove commas and convert to number

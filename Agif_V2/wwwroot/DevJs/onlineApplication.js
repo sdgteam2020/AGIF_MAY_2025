@@ -2043,27 +2043,18 @@ function calculateEMIRepayingCapacity_HBA() {
     setOutlineActive("HBA_repayingCapacity");
 }
 function calculateMaxEMI_HBA(propType) {
-    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+    let Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
     Residual -= 6;
 
+    let EMI = 0;
+
     if (propType == 5) {
-       let EMI = 120;
-        if (EMI < Residual) {
-            $("#HBA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#HBA_EMI_Eligible").val(Residual);
-        }
-    }
-    else {
+        EMI = 120;
+    } else {
         EMI = 240;
-        if (EMI < Residual) {
-            $("#HBA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#HBA_EMI_Eligible").val(Residual);
-        }
     }
+
+    $("#HBA_EMI_Eligible").val(EMI < Residual ? EMI : Residual);
 
     setOutlineActive("HBA_EMI_Eligible");
 }

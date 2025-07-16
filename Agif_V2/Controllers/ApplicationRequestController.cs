@@ -10,13 +10,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
+//using OfficeOpenXml;
+//using OfficeOpenXml.Style;
 using System;
 using System.Data;
 using System.Drawing;
 using System.IO.Compression;
-
 namespace Agif_V2.Controllers
 {
     public class ApplicationRequestController : Controller
@@ -532,16 +531,18 @@ namespace Agif_V2.Controllers
                 // Apply sorting - fixed to match JavaScript column names
                 if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
                 {
-                    bool ascending = request.sortDirection.ToLower() == "asc";
-                    query = request.sortColumn.ToLower() switch
-                    {
-                        "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
-                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                        "regtname" => ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps),
-                        "presentunit" => ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit),
-                        "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
-                        _ => query.OrderByDescending(x => x.UpdatedOn) // Default sorting
-                    };
+                    bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
+                    query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
+                    string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
+                    string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
+                    string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
+                    string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
+                        query.OrderByDescending(x => x.UpdatedOn); // Default sorting
                 }
                 else
                 {
@@ -786,15 +787,17 @@ namespace Agif_V2.Controllers
             string caFolder = Path.Combine(newFolderPath, "CA");
             string pcaFolder = Path.Combine(newFolderPath, "PCA");
 
-           
-           
+
+
 
             foreach (var data in ret.OnlineApplicationResponse)
             {
-                var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
-                var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+                //var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+                var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
+                //var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
 
-                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
+                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
+                //var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
 
                 if (System.IO.File.Exists(sourceFilePath))
                 {
@@ -807,20 +810,29 @@ namespace Agif_V2.Controllers
                         _ => newFolderPath // fallback if unknown
                     };
 
-                    if(data.ApplicationTypeAbbr== "HBA")
-                    Directory.CreateDirectory(hbaFolder);
+                    if (data.ApplicationTypeAbbr == "HBA")
+                    {
+                        Directory.CreateDirectory(hbaFolder);
+                    }
+
                     if (data.ApplicationTypeAbbr == "CA")
+                    {
                         Directory.CreateDirectory(caFolder);
+                    }
+
                     if (data.ApplicationTypeAbbr == "PCA")
+                    {
                         Directory.CreateDirectory(pcaFolder);
+                    }
 
                     var destinationFilePath = Path.Combine(destinationFolder, fileName);
                     System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
                 }
             }
 
+
             // Generate Excel file and save to timestamp folder
-           bool retexcel= await ExportToExcelInFolder(dTOExport, newFolderPath);
+            bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
             if (!retexcel)
             {
                 return Json(Constants.DataNotExport);

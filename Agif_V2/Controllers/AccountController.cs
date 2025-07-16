@@ -243,7 +243,6 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
-           
             try
             {
                 bool userStatus = false;

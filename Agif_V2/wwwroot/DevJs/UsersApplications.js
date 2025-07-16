@@ -392,13 +392,18 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
                 });
             } else {
                 if (response.success) {
+                    let url = "";
 
-                    if (val === "Maturity")
+                    if (val === "Maturity") {
                         url = "/Claim/GetPdfFilePath";
-                    else if (val === "Loan")
+                    } else if (val === "Loan") {
                         url = "/OnlineApplication/GetPdfFilePath";
+                    } else {
+                        console.warn("Unknown value for 'val':", val);
+                        return;
+                    }
+
                     OpenAction(applicationId, url, val);
-                    //OpenAction(applicationId);
                 } else {
                     alert('Error generating PDF: ' + response.message);
                     console.error('PDF merge failed:', response.message);

@@ -194,92 +194,6 @@ namespace Agif_V2.Controllers
         {
             return Json(await _IonlineApplication1.CheckIsCoRegister(UnitId));
         }
-
-
-
-        /*
-        public IActionResult SubmitApplication(DTOOnlineApplication model)
-        {
-            //string formType = string.Empty;
-
-            //// Check which application model is populated
-            //if (model.CarApplication != null)
-            //{
-            //    formType = "CA"; // If CarApplication is populated, use "CA"
-            //}
-            //else if (model.PCAApplication != null)
-            //{
-            //    formType = "PCA"; // If PCAApplication is populated, use "PCA"
-            //}
-            //else if (model.HBAApplication != null)
-            //{
-            //    formType = "HBA"; // If HBAApplication is populated, use "HBA"
-            //}
-            //else
-            //{
-            //    // Handle the case where none of the models are populated (optional)
-            //    return RedirectToAction("OnlineApplication", "OnlineApplication"); // Or any appropriate action
-            //}
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return View("OnlineApplication", model); // Redirect to OnlineApplication if validation fails
-            //}
-
-            //// Redirect to the Upload action with the formType
-            //return RedirectToAction("Upload", "Upload", new { formType });
-
-            string formType = string.Empty;
-
-            // Perform server-side validation on the entire model
-            var validationContext = new ValidationContext(model);
-            var validationResults = new List<ValidationResult>();
-
-            // Validate the DTO model and all its properties (including nested models)
-            bool isValid = Validator.TryValidateObject(
-                model,
-                validationContext,
-                validationResults,
-                validateAllProperties: true
-            );
-
-            // If validation fails, add errors to ModelState and return the view with validation errors
-            if (!isValid)
-            {
-                foreach (var validationResult in validationResults)
-                {
-                    // Add each validation error message to ModelState
-                    ModelState.AddModelError("", validationResult.ErrorMessage);
-                }
-
-                // Return to the same view with validation errors
-                return View("OnlineApplication", model);
-            }
-
-            // If the model is valid, check which application model is populated and set formType
-            if (model.CarApplication != null)
-            {
-                formType = "CA"; // If CarApplication is populated, use "CA"
-            }
-            else if (model.PCAApplication != null)
-            {
-                formType = "PCA"; // If PCAApplication is populated, use "PCA"
-            }
-            else if (model.HBAApplication != null)
-            {
-                formType = "HBA"; // If HBAApplication is populated, use "HBA"
-            }
-            else
-            {
-                ModelState.AddModelError("", "Please select an application type."); // Add validation error
-                return View("OnlineApplication", model); // Return the view with validation errors
-            }
-
-            // Proceed to the next step (e.g., redirecting to Upload page)
-            return RedirectToAction("Upload", "Upload", new { formType });
-
-        }
-        */
         public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
             {
             string formType = string.Empty;
@@ -508,6 +422,7 @@ namespace Agif_V2.Controllers
 
                 string applicationIdStr = applicationId.ToString();
                 string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+                //string folderPath = "MergePdf";
                 string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
 
 
@@ -556,13 +471,14 @@ namespace Agif_V2.Controllers
                 }
 
                 // Create merged PDF path in TempUploads root
-                string tempUploadsPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+                //string tempUploadsPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+                string tempUploadsPath = Path.Combine(_env.WebRootPath, "MergePdf");
                 if (!Directory.Exists(tempUploadsPath))
                 {
                     Directory.CreateDirectory(tempUploadsPath);
                 }
-
-                string mergedPdfPath = Path.Combine(tempUploadsPath, folderPath + "_Merged.pdf");
+                string MergePdfName = "App" + applicationIdStr + armyNo;
+                string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
                 ViewBag.MergedPdfPath = mergedPdfPath;
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
@@ -631,8 +547,10 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Application ID is not specified." });
             }
+            //string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
             string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
-            string pdfFilePath = $"/TempUploads/{folderPath}/{folderPath}_Merged.pdf";
+            string mergepdfName = "App" + applicationIdStr + armyNo;
+            string pdfFilePath = $"/MergePdf/{mergepdfName}.pdf";
             
             return Json(pdfFilePath);
         }

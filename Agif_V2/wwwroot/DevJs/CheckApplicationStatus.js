@@ -22,9 +22,7 @@
 
     $('#searchByArmyNo').on('submit', function (e) {
         e.preventDefault();
-        var armyNo = $('#armyNoInput').val().trim();
-        var selectedType = $('#typeSelect').val(); // Get the selected dropdown value
-
+        const armyNo = $('#armyNoInput').val().trim();
         if (armyNo === '') return;
 
         // Clear previous results
@@ -67,12 +65,12 @@
 
 
     function populateTable(applications) {
-        var tbody = $('#applicationTableBody');
+        const tbody = $('#applicationTableBody');
         tbody.empty(); // Clear old results
 
         $.each(applications, function (index, app) {
-            var safeAppId = (app.applicationId !== undefined && app.applicationId !== null) ? app.applicationId : index;
-            var rowHtml = `
+            const safeAppId = (app.applicationId !== undefined && app.applicationId !== null) ? app.applicationId : index;
+            const rowHtml = `
                 <tr>
                     <td>${app.applicationType || 'N/A'}</td>
                     <td>
@@ -105,11 +103,10 @@
     }
 
     $(document).on('click', '.timeline-btn', function () {
-        var appId = $(this).data('app-id');
-        var selectedType = $('#typeSelect').val(); // Get current selected type
-        var timelineRow = $('#timeline-' + appId);
-        var timelineContent = $('#timeline-content-' + appId);
-        var loadingDiv = $('#loading-' + appId);
+        const appId = $(this).data('app-id');
+        const timelineRow = $('#timeline-' + appId);
+        const timelineContent = $('#timeline-content-' + appId);
+        const loadingDiv = $('#loading-' + appId);
 
         // Check if timeline is already loaded
         if (timelineContent.children().length > 0) {
@@ -133,7 +130,7 @@
 
                 if (response && response.length > 0) {
                     // Build timeline HTML
-                    var timelineHtml = buildTimelineHtml(response);
+                    const timelineHtml = buildTimelineHtml(response);
                     timelineContent.html(timelineHtml);
                     timelineContent.show();
                 } else {
@@ -151,19 +148,19 @@
     });
 
     function my_date(date_string) {
-        var date_components = date_string.split("-");
-        var day = date_components[0];
-        var month = date_components[1];
-        var year = date_components[2];
+        const date_components = date_string.split("-");
+        const day = date_components[0];
+        const month = date_components[1];
+        const year = date_components[2];
         return new Date(year, month - 1, day);
     }
 
     function buildTimelineHtml(timelineData) {
-        var timelineHtml = '<div class="timeline-vertical">';
+        let timelineHtml = '<div class="timeline-vertical">';
 
         $.each(timelineData, function (index, step) {
-            var isLast = index === timelineData.length - 1;
-            var stepClass = isLast ? 'timeline-step last' : 'timeline-step';
+            const isLast = index === timelineData.length - 1;
+            const stepClass = isLast ? 'timeline-step last' : 'timeline-step';
             let shadow = "";
             if (step.statusId == 1 || step.statusId == 2) {
                 shadow = 'green';

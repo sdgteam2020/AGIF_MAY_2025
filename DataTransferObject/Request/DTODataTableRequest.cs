@@ -18,13 +18,16 @@ namespace DataTransferObject.Request
         [RegularExpression("^[0-9]+$", ErrorMessage = "Numbers allowed.")]
         public int Length { get; set; }
 
+        // Only Alphabets and Numbers allowed for search value
         [RegularExpression("^[a-zA-Z0-9 ]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
         public string? searchValue { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z_]*$", ErrorMessage = "Only alphabets and underscores are allowed.")]
+        // Valid column names: ensure the sortColumn is in the allowed columns list
+        [RegularExpression(@"^[a-zA-Z0-9_]*$", ErrorMessage = "Only alphabets, numbers, and underscores allowed.")]
         public string sortColumn { get; set; } = string.Empty;
 
-        [RegularExpression("^[a-zA-Z]*$", ErrorMessage = "Only Alphabets allowed.")]
+        // Only "asc" or "desc" for sort direction
+        [RegularExpression("^(asc|desc)$", ErrorMessage = "Only 'asc' or 'desc' are allowed.")]
         public string sortDirection { get; set; } = string.Empty;
     }
 }

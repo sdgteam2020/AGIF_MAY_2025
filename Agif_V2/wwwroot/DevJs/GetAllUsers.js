@@ -83,7 +83,7 @@ function BindUsersData(status) {
     }
 
     // Initialize DataTable with server-side processing
-    var table = $('#tblData').DataTable({
+    let table = $('#tblData').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -93,16 +93,19 @@ function BindUsersData(status) {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: function (data) {
+                // Set default values for sortColumn and sortDirection if no sorting is applied
+                const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName'; // Default column if none selected
+                const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc'; // Default direction if none selected
+
                 return {
                     draw: data.draw,
                     start: data.start,
                     length: data.length,
                     searchValue: data.search.value,
-                    sortColumn: data.order.length > 0 ? data.columns[data.order[0].column].data : '',
-                    sortDirection: data.order.length > 0 ? data.order[0].dir : '',
+                    sortColumn: sortColumn, // Ensure it has a default
+                    sortDirection: sortDirection, // Ensure it has a default
                     status: status // Pass the status parameter
                 };
-                
             },
             error: function (xhr, error, code) {
                 console.error('Error loading data:', error);

@@ -320,29 +320,26 @@ function loadDropdown() {
     const params = new URLSearchParams(window.location.search);
 
     const loanTypeFromUrl = params.get("Category");
-
     const loanTypeFromInput = document.getElementById('Category')?.value || null;
-
     const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
 
-    //const applicantCategory = params.get("applicantCategory");
-
     const applicantCategoryFromUrl = params.get("PurposeOfWithdrwal");
-
     const applicantCategoryFromInput = document.getElementById('Purpose')?.value || null;
-
     const applicantCategory = applicantCategoryFromUrl ? applicantCategoryFromUrl : applicantCategoryFromInput;
 
-    var armyPrefixValue = $('#armyPrefix').data('army-prefix');  // Access the data-attribute value
-    var OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');
-    var Rank = $('#ddlrank').data('rank-prefix');
-    var regtcorps = $('#regtCorps').data('regt-prefix');
-    var parentunit = $('#parentUnit').data('parent-prefix');
-    var presentunit = $('#presentUnit').data('present-prefix');
-    var Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
-    var propertytype = $('#propertyType').data('propertytype-prefix');
-    var vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
-    var computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
+    const armyPrefixValue = $('#armyPrefix').data('army-prefix');
+    const OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');
+    const Rank = $('#ddlrank').data('rank-prefix');
+    const regtcorps = $('#regtCorps').data('regt-prefix');
+    const parentunit = $('#parentUnit').data('parent-prefix');
+    const presentunit = $('#presentUnit').data('present-prefix');
+    const Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
+    const propertytype = $('#propertyType').data('propertytype-prefix');
+    const hbaloanfreq = $('#HBA_LoanFreq').data('hbaloanfreq-prefix');
+    const vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
+    const Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
+    const computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
+    const Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
 
     if (loanType == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -359,133 +356,124 @@ function loadDropdown() {
         mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
         mMsater(Rank, "ddlrank", 13, 0);
     }
-    //if (loanType == 1) {
-    //    mMsater(propertytype, "propertyType", 16, 0);
-    //}
-    //else if (loanType == 2) {
-    //    mMsater(vehicletype, "veh_Loan_Type", 17, 0);
-    //}
-    //else if (loanType == 3) {
-    //    mMsater(computer_Loan_Type, "computer_Loan_Type", 18, 0);
-    //}
+
+    // Commented section can be refactored similarly if reused later
+    /*
+    if (loanType == 1) {
+        mMsater(propertytype, "propertyType", 16, 0);
+    }
+    else if (loanType == 2) {
+        mMsater(vehicletype, "veh_Loan_Type", 17, 0);
+    }
+    else if (loanType == 3) {
+        mMsater(computer_Loan_Type, "computer_Loan_Type", 18, 0);
+    }
+    */
+
     mMsater(regtcorps, "regtCorps", 8, 0);
     mMsater(parentunit, "parentUnit", 2, 0);
     mMsater(presentunit, "presentUnit", 2, 0);
     mMsater(Armypostoffice, "armyPostOffice", 14, 0);
     mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
 }
+
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
-        var accountNo = $('#salaryAcctNo').val();
-        var reEnterAccountNo = $('#confirmSalaryAcctNo').val();
+        const accountNo = $('#salaryAcctNo').val();
+        const reEnterAccountNo = $('#confirmSalaryAcctNo').val();
+
         if (accountNo !== reEnterAccountNo) {
             $('#confirmSalaryAcctNo').val('').css('border', '2px solid red');
+
+            const $this = $(this); // store jQuery reference to use in arrow functions
+
             setTimeout(() => {
-                $(this).focus();
+                $this.focus();
             }, 10);
+
             setTimeout(() => {
-                $(this).css('border', '');
+                $this.css('border', '');
             }, 2000);
         }
-
     });
 }
+
 function SetSuffixLetter(obj) {
-    var arr1 = [], arr2 = [];
-    var ArmyNumber = $(obj).val();
-    var fixed = "98765432";
-    arr1 = ArmyNumber.split('');
-    arr2 = fixed.split('');
-    var len = arr2.length - arr1.length;
-    if (len == 1) {
+    const fixed = "98765432";
+    let ArmyNumber = $(obj).val();
+    let arr1 = ArmyNumber.split('');
+    const arr2 = fixed.split('');
+
+    const len = arr2.length - arr1.length;
+    if (len === 1) {
         ArmyNumber = "0" + ArmyNumber;
-    }
-    if (len == 2) {
+    } else if (len === 2) {
         ArmyNumber = "00" + ArmyNumber;
-    }
-    if (len == 3) {
+    } else if (len === 3) {
         ArmyNumber = "000" + ArmyNumber;
-    }
-    if (len == 4) {
+    } else if (len === 4) {
         ArmyNumber = "0000" + ArmyNumber;
-    }
-    if (len == 5) {
+    } else if (len === 5) {
         ArmyNumber = "00000" + ArmyNumber;
-    }
-    if (len == 6) {
+    } else if (len === 6) {
         ArmyNumber = "000000" + ArmyNumber;
-    }
-    if (len == 7) {
+    } else if (len === 7) {
         ArmyNumber = "0000000" + ArmyNumber;
     }
 
-    var total = 0;
     arr1 = ArmyNumber.split('');
-    for (var i = 0; i < arr1.length; i++) {
-        var val1 = arr1[i];
-        var val2 = arr2[i];
+    let total = 0;
+    for (let i = 0; i < arr1.length; i++) {
+        const val1 = arr1[i];
+        const val2 = arr2[i];
         total += parseInt(val1) * parseInt(val2);
     }
-    var rem = total % 11;
-    var Sletter = '';
+
+    const rem = total % 11;
+    let Sletter = '';
     switch (rem.toString()) {
         case '0':
-            Sletter = 'A'
-            break;
+            Sletter = 'A'; break;
         case '1':
-            Sletter = 'F'
-            break;
+            Sletter = 'F'; break;
         case '2':
-            Sletter = 'H'
-            break;
+            Sletter = 'H'; break;
         case '3':
-            Sletter = 'K'
-            break;
+            Sletter = 'K'; break;
         case '4':
-            Sletter = 'L'
-            break;
+            Sletter = 'L'; break;
         case '5':
-            Sletter = 'M'
-            break;
+            Sletter = 'M'; break;
         case '6':
-            Sletter = 'N'
-            break;
+            Sletter = 'N'; break;
         case '7':
-            Sletter = 'P'
-            break;
+            Sletter = 'P'; break;
         case '8':
-            Sletter = 'W'
-            break;
+            Sletter = 'W'; break;
         case '9':
-            Sletter = 'X'
-            break;
+            Sletter = 'X'; break;
         case '10':
-            Sletter = 'Y'
-            break;
+            Sletter = 'Y'; break;
     }
-    var sourceId = $(obj).attr('id');
-    var targetSuffixId;
+
+    const sourceId = $(obj).attr('id');
+    let targetSuffixId;
 
     if (sourceId === 'armyNumber') {
         targetSuffixId = 'txtSuffix';
     } else if (sourceId === 'oldArmyNo') {
         targetSuffixId = 'txtOldSuffix';
     }
+
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
-
-    //var oldArmyNo = $('#oldArmyNo').val();
-    //if (oldArmyNo =="")
-    //    getApplicantDetalis();
 }
 
-
 function getApplicantDetalis() {
-
-    var armyNumber = $("#armyPrefix").val();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
-    var appType = parseInt($("#Purpose").val(), 10);
+    const armyNumber = $("#armyPrefix").val();
+    const Prefix = $("#armyNumber").val();
+    const Suffix = $("#txtSuffix").val();
+    const appType = parseInt($("#loanType").val(), 10);
 
     $.ajax({
         type: "get",
@@ -494,8 +482,8 @@ function getApplicantDetalis() {
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
-                    title: "You Have Already applied for  Loan.",
-                    text: "Would you like to apply for a new loan !",
+                    title: "You Have Already applied for Loan.",
+                    text: "Would you like to apply for a new loan?",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -507,13 +495,13 @@ function getApplicantDetalis() {
                     }
                 });
             }
-
         },
         error: function () {
-            alert("Data Not loaded!")
+            alert("Data not loaded!");
         }
     });
 }
+
 
 function DeleteConfirmation() {
     Swal.fire({
@@ -532,10 +520,10 @@ function DeleteConfirmation() {
 }
 
 function DeleteExistingLoan() {
-    var armyNumber = $("#armyPrefix").val();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
-    var appType = parseInt($("#Purpose").val(), 10);
+    const armyNumber = $("#armyPrefix").val();
+    const Prefix = $("#armyNumber").val();
+    const Suffix = $("#txtSuffix").val();
+    const appType = parseInt($("#loanType").val(), 10);
     $.ajax({
         type: "get",
         url: "/Claim/DeleteExistingLoan",
@@ -619,32 +607,33 @@ $('.monthPicker').datepicker({
     changeYear: true,
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
-    maxDate: 0, // This restricts to today and past dates only (no future dates)
-    yearRange: "1900:+0", // Allow years from 1900 to current year only
-    defaultDate: null, // Default to today
-   
+    maxDate: 0, // Restrict to today and past dates only
+    yearRange: "1900:+0", // Years from 1900 to current year
+    defaultDate: null,
+
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
-        var dt = $(this).val();
+        const dt = $(this).val();
 
-        // Call the custom functions on select
-        formatDate(this); // Ensure the function formats the date
-        validateDateFormat(this); // Ensure validation is handled 
+        // Call custom functions
+        formatDate(this);
+        validateDateFormat(this);
 
         // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
-        // Optional: Set the calculated date back to the field or use as needed
-
+        // Optional: Use `newdt` as needed
     },
+
     beforeShowDay: function (date) {
-        // Additional check to disable future dates
-        var today = new Date();
-        today.setHours(23, 59, 59, 999); // Set to end of today
+        // Disable future dates
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
         return [date <= today];
     }
 });
+
 
 $('.DocPicker').datepicker({
     changeMonth: true,
@@ -658,7 +647,7 @@ $('.DocPicker').datepicker({
 
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
-        var dt = $('#dateOfCommission').val();
+        const dt = $('#dateOfCommission').val();
 
         // Call the custom functions on select
         formatDate(this); // Ensure the function formats the date
@@ -666,18 +655,12 @@ $('.DocPicker').datepicker({
         calculateYearDifference(); // Calculate the year difference (if needed)
 
         // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
-
-        // Optional: Set the calculated date back to the field or use as needed
+        
 
     }
-    //beforeShowDay: function (date) {
-    //    // Additional check to disable future dates
-    //    var today = new Date();
-    //    today.setHours(23, 59, 59, 999); // Set to end of today
-    //    return [date <= today];
-    //}
+    
 });
 $('.DopPicker').datepicker({
     changeMonth: true,
@@ -689,14 +672,14 @@ $('.DopPicker').datepicker({
    
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
-        var dt = $('#dateOfPromotion').val();
+        const dt = $('#dateOfPromotion').val();
 
         // Call the custom functions on select
         formatDate(this); // Ensure the function formats the date
         updateRetDateOnPromotionDateSelection(); // Calculate the year difference (if needed)
 
         // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
         // Optional: Set the calculated date back to the field or use as needed
@@ -714,13 +697,13 @@ $('.DOPartIIPicker').datepicker({
 
     onSelect: function (dateText, inst) {
         // Get the selected date from the input field
-        var dt = $('this').val();
+        const dt = $('this').val();
 
         // Call the custom functions on select
         formatDate(this); // Ensure the function formats the date
 
         // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
         // Optional: Set the calculated date back to the field or use as needed
@@ -764,9 +747,9 @@ function formatDate(input) {
 }
 
 function formatDateToString(date) {
-    var day = ("0" + date.getDate()).slice(-2);
-    var month = ("0" + (date.getMonth() + 1)).slice(-2);
-    var year = date.getFullYear();
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
     return day + "/" + month + "/" + year;
 }
 
@@ -814,19 +797,20 @@ function validateDateFormat(input) {
 }
 
 function my_date(date_string) {
-    var date_components = date_string.split("/");
-    var day = date_components[0];
-    var month = date_components[1];
-    var year = date_components[2];
+    const date_components = date_string.split("/");
+    const day = date_components[0];
+    const month = date_components[1];
+    const year = date_components[2];
     return new Date(year, month - 1, day);
 }
 function SetRetDate() {
-    var Prefix = $('#armyPrefix').val();
-    var ranks = $('#ddlrank').val();
-    var rankId = parseInt(ranks);
-    var EnrollDate = $('#dateOfCommission').val();
-    var regtCorps = $('#regtCorps').val();
-    var regtId = parseInt(regtCorps);
+    const Prefix = $('#armyPrefix').val();
+    const ranks = $('#ddlrank').val();
+    const rankId = parseInt(ranks);
+    const EnrollDate = $('#dateOfCommission').val();
+    const regtCorps = $('#regtCorps').val();
+    const regtId = parseInt(regtCorps);
+
     if (!regtCorps) {
         Swal.fire({
             title: 'Warning!',
@@ -847,46 +831,38 @@ function SetRetDate() {
         $('#dateOfBirth').val('');
         return;
     }
-    if (Prefix == "0" || Prefix=="") {
+    if (Prefix == "0" || Prefix == "") {
         Swal.fire({
             title: 'Warning!',
             html: '<p style="font-size: 18px;">Please select Prefix.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
-
-
         $('#dateOfBirth').val('');
         return;
     }
 
-    var dateOfBirthString = $('#dateOfBirth').val();
-    var dateParts = dateOfBirthString.split('/');
+    const dateOfBirthString = $('#dateOfBirth').val();
+    const dateParts = dateOfBirthString.split('/');
     if (dateParts.length === 3) {
-        if (EnrollDate == "" || EnrollDate == undefined || dateOfBirthString == "" || dateOfBirthString == undefined) {
+        if (!EnrollDate || !dateOfBirthString) {
             console.log('EnrollDate or dateOfBirthString is empty or undefined.')
-        }
-        else {
+        } else {
             $.ajax({
                 type: "get",
                 url: "/OnlineApplication/GetRetirementDate",
                 data: { rankId: rankId, Prefix: Prefix, regtId: regtId },
                 success: function (data) {
                     if (data.userTypeId == 1) {
-                        //userTypeId == 1 => Officers
-                        var dateOfBirth = $('#dateOfBirth').val();
-                        var dateParts = dateOfBirth.split('/');
+                        const dateParts = $('#dateOfBirth').val().split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[2];
-                            var month = dateParts[1] - 1;
-                            var day = dateParts[0];
-
-                            var dob = new Date(year, month, day);
+                            const [day, month, year] = dateParts;
+                            const dob = new Date(year, month - 1, day);
                             dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                            var yyyy = dob.getFullYear();
-                            var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                            var dd = String(dob.getDate()).padStart(2, '0');
-                            var formattedDate = `${yyyy}-${mm}-${dd}`;
+                            const yyyy = dob.getFullYear();
+                            const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                            const dd = String(dob.getDate()).padStart(2, '0');
+                            const formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
                             setOutlineActive("dateOfRetirement");
                             globleRetirementDate.value = formattedDate;
@@ -895,22 +871,16 @@ function SetRetDate() {
                             $('#dateOfRetirement').val('');
                             console.warn("Invalid retirement age or date of birth.");
                         }
-                    }
-                    else if (data.userTypeId == 2) {
-                        //userTypeId == 2 => Short Service Officers
-                        var dateOfCommission = $('#dateOfCommission').val();
-                        var dateParts = dateOfCommission.split('/');
+                    } else if (data.userTypeId == 2) {
+                        const dateParts = $('#dateOfCommission').val().split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[2];
-                            var month = dateParts[1] - 1;
-                            var day = dateParts[0];
-
-                            var dob = new Date(year, month, day);
+                            const [day, month, year] = dateParts;
+                            const dob = new Date(year, month - 1, day);
                             dob.setFullYear(dob.getFullYear() + 10);
-                            var yyyy = dob.getFullYear();
-                            var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                            var dd = String(dob.getDate()).padStart(2, '0');
-                            var formattedDate = `${yyyy}-${mm}-${dd}`;
+                            const yyyy = dob.getFullYear();
+                            const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                            const dd = String(dob.getDate()).padStart(2, '0');
+                            const formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
                             setOutlineActive("dateOfRetirement");
                             globleRetirementDate.value = formattedDate;
@@ -919,27 +889,41 @@ function SetRetDate() {
                             $('#dateOfRetirement').val('');
                             console.warn("Invalid retirement age or date of birth.");
                         }
-                    }
-                    else if (data.userTypeId == 3 || data.userTypeId == 4) {
-                        //userTypeId == 3 => JCOs     userTypeId == 4 => ORs
-                        var rankType = $('#ddlrank').val();
+                    } else if (data.userTypeId == 3 || data.userTypeId == 4) {
+                        const rankType = $('#ddlrank').val();
                         if (rankType == 0) {
                             alert("Please select Rank Type.");
                         }
-                        if (rankType == 31 || rankType == 32 || rankType == 33) {
-                            var dateOfBirth = $('#dateOfBirth').val();
-                            var dateParts = dateOfBirth.split('/');
-                            if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[2];
-                                var month = dateParts[1] - 1;
-                                var day = dateParts[0];
 
-                                var dob = new Date(year, month, day);
+                        if (rankType == 31 || rankType == 32 || rankType == 33) {
+                            const dateParts = $('#dateOfBirth').val().split('/');
+                            if (data != 0 && dateParts.length == 3) {
+                                const [day, month, year] = dateParts;
+                                const dob = new Date(year, month - 1, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                                var yyyy = dob.getFullYear();
-                                var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                                var dd = String(dob.getDate()).padStart(2, '0');
-                                var formattedDate = `${yyyy}-${mm}-${dd}`;
+                                const yyyy = dob.getFullYear();
+                                const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                                const dd = String(dob.getDate()).padStart(2, '0');
+                                const formattedDate = `${yyyy}-${mm}-${dd}`;
+                                $('#dateOfRetirement').val(formattedDate);
+                                setOutlineActive("dateOfRetirement");
+                                globleRetirementDate.value = formattedDate;
+                                calculateResidualService();
+                                ExtensionOfServiceAccess();
+                            } else {
+                                $('#dateOfRetirement').val('');
+                                console.warn("Invalid retirement age or date of birth.");
+                            }
+                        } else {
+                            const dateParts = $('#dateOfCommission').val().split('/');
+                            if (data != 0 && dateParts.length == 3) {
+                                const [day, month, year] = dateParts;
+                                const dob = new Date(year, month - 1, day);
+                                dob.setFullYear(dob.getFullYear() + data.retirementAge);
+                                const yyyy = dob.getFullYear();
+                                const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                                const dd = String(dob.getDate()).padStart(2, '0');
+                                const formattedDate = `${yyyy}-${mm}-${dd}`;
                                 $('#dateOfRetirement').val(formattedDate);
                                 setOutlineActive("dateOfRetirement");
                                 globleRetirementDate.value = formattedDate;
@@ -950,31 +934,6 @@ function SetRetDate() {
                                 console.warn("Invalid retirement age or date of birth.");
                             }
                         }
-                        else {
-                            var dateOfCommission = $('#dateOfCommission').val();
-                            var dateParts = dateOfCommission.split('/');
-                            if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[2];
-                                var month = dateParts[1] - 1;
-                                var day = dateParts[0];
-
-                                var dob = new Date(year, month, day);
-                                dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                                var yyyy = dob.getFullYear();
-                                var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                                var dd = String(dob.getDate()).padStart(2, '0');
-                                var formattedDate = `${yyyy}-${mm}-${dd}`;
-                                $('#dateOfRetirement').val(formattedDate);
-                                setOutlineActive("dateOfRetirement")
-                                globleRetirementDate.value = formattedDate;
-                                calculateResidualService();
-                                ExtensionOfServiceAccess();
-                            } else {
-                                $('#dateOfRetirement').val('');
-                                console.warn("Invalid retirement age or date of birth.");
-                            }
-                        }
-
                     }
                 },
                 error: function () {
@@ -982,11 +941,11 @@ function SetRetDate() {
                 }
             });
         }
-    }
-    else {
+    } else {
         console.error('Invalid date string.');
     }
 }
+
 function calculateResidualService() {
     var retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
     var purposetype = $('#Purpose').val();
@@ -1088,46 +1047,50 @@ function updateRetDateOnPromotionDateSelection() {
     }
 }
 function extensionOfService() {
-    var prefix = $('#armyPrefix').val();
-    var extension = $('#ExtnOfService').val();
+    const prefix = $('#armyPrefix').val();
+    const extension = $('#ExtnOfService').val();
+
     if (!prefix) {
         alert("Please select Prefix.");
         return;
     }
+
     if (prefix == 13 || prefix == 14) {
-        if (extension == "Yes") {
-            var currentRetDate = $('#dateOfRetirement').val();
-            var currentResidualService = parseInt($('#residualService').val());
+        if (extension === "Yes") {
+            const currentRetDate = $('#dateOfRetirement').val();
+            const currentResidualService = parseInt($('#residualService').val());
 
-            var dateParts = currentRetDate.split('-');
+            const dateParts = currentRetDate.split('-');
             if (dateParts.length === 3) {
-                var year = dateParts[0];
-                var month = dateParts[1] - 1;
-                var day = dateParts[2];
+                const year = parseInt(dateParts[0]);
+                const month = parseInt(dateParts[1]) - 1;
+                const day = parseInt(dateParts[2]);
 
-                var dateOfRetirement = new Date(year, month, day);
+                const dateOfRetirement = new Date(year, month, day);
                 dateOfRetirement.setFullYear(dateOfRetirement.getFullYear() + 2);
-                var yyyy = dateOfRetirement.getFullYear();
-                var mm = String(dateOfRetirement.getMonth() + 1).padStart(2, '0');
-                var dd = String(dateOfRetirement.getDate()).padStart(2, '0');
-                var formattedDate = `${yyyy}-${mm}-${dd}`;
+
+                const yyyy = dateOfRetirement.getFullYear();
+                const mm = String(dateOfRetirement.getMonth() + 1).padStart(2, '0');
+                const dd = String(dateOfRetirement.getDate()).padStart(2, '0');
+                const formattedDate = `${yyyy}-${mm}-${dd}`;
+
                 $('#dateOfRetirement').val(formattedDate);
                 calculateResidualService();
             } else {
                 $('#dateOfRetirement').val('');
                 console.warn("Invalid retirement age or date of birth.");
             }
-        }
-        else {
+        } else {
             $('#dateOfRetirement').val(globleRetirementDate.value);
             calculateResidualService();
         }
     }
 }
+
 function ExtensionOfServiceAccess() {
-    var prefix = $('#armyPrefix').val();
-    var yearOfService = parseFloat($('#residualService').val());
-    var extensionDropdown = $('#ExtnOfService');
+    const prefix = $('#armyPrefix').val();
+    const yearOfService = parseFloat($('#residualService').val());
+    const extensionDropdown = $('#ExtnOfService');
     // Enable only if Year of Service < 2 and Prefix is JC or OR
     if ((prefix == 13 || prefix == 14) && yearOfService < 2 && yearOfService >= 0) {
         extensionDropdown.prop('disabled', false);
@@ -1137,7 +1100,7 @@ function ExtensionOfServiceAccess() {
     }
 }
 function fetchPCDA_PAO() {
-    var regt = $('#regtCorps').val();
+    const regt = $('#regtCorps').val();
     if (!regt) {
         alert("Please select Regt/Corps.");
         return;
@@ -1174,7 +1137,7 @@ function setOutlineActive(id) {
 }
 function EnableDisablePCDA() {
     $("#armyPrefix").on("change", function () {
-        var Prefix = $('#armyPrefix').val();
+        const Prefix = $('#armyPrefix').val();
 
         if (Prefix == "13" || Prefix == "14") {
             $('#pcda_AcctNo').val("00/000/000000A");
@@ -1186,7 +1149,7 @@ function EnableDisablePCDA() {
 }
 function EnableDisableCivilPostalAdd() {
     $("#armyPostOffice").on("change", function () {
-        var apo = $('#armyPostOffice').val();
+        const apo = $('#armyPostOffice').val();
 
         if (apo == "3") {
             $('#civilPostalAddress')
@@ -1240,7 +1203,7 @@ function textChange() {
     function parseValue(value) {
         return value === "" ? 0 : parseInt(value);
     }
-    var cr = parseValue($('#basicPay').val().replace(/,/g, ''))
+    const cr = parseValue($('#basicPay').val().replace(/,/g, ''))
         + parseValue($('#rank_gradePay').val().replace(/,/g, ''))
         + parseValue($('#msp').val().replace(/,/g, ''))
         + parseValue($('#CI_Pay').val().replace(/,/g, ''))
@@ -1251,7 +1214,7 @@ function textChange() {
         + parseValue($('#lra').val().replace(/,/g, ''))
         + parseValue($('#miscPay').val().replace(/,/g, ''));
 
-    var debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
+    const debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
         + parseValue($('#agif_Subs').val().replace(/,/g, ''))
         + parseValue($('#incomeTaxMonthly').val().replace(/,/g, ''))
         + parseValue($('#educationCess').val().replace(/,/g, ''))
@@ -1259,7 +1222,7 @@ function textChange() {
         + parseValue($('#misc_Deduction').val().replace(/,/g, ''))
         + parseValue($('#loanEMI_Outside').val().replace(/,/g, ''))
         + parseValue($('#loanEMI').val().replace(/,/g, ''));
-    var totalDebit = debt.toLocaleString('en-IN');
+    const totalDebit = debt.toLocaleString('en-IN');
     $('#totalDeductions').val(totalDebit);
     $('#totalCredit').val(cr.toLocaleString('en-IN'));
     $('#salary_After_Deductions').val((cr - debt).toLocaleString('en-IN'));
@@ -1797,7 +1760,7 @@ function calculateMaxEMI_PCA() {
     var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
     Residual -= 6;
 
-    EMI = 48;
+    var EMI = 48;
     if (EMI < Residual) {
         $("#PCA_EMI_Eligible").val(EMI);
     }
