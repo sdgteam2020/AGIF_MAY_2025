@@ -46,6 +46,6 @@ namespace DataAccessLayer.Interfaces
         Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport);
 
         Task<UserMapping?> GetCoDetails(int applicationId);
-
+        Task<int> GetVehicleType(int applicationId, string formType);
     }
 }

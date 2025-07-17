@@ -349,7 +349,15 @@ namespace DataAccessLayer.Repositories
 
                 if (DocumentModel != null)
                 {
-                    string directoryPath = Path.Combine("/TempUploads", $"{formtype}_{result.Number}_{applicationId}");
+                    if (formtype == "CA")
+                    {
+                        if(data.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+                        {
+                            formtype = "TW";
+                        }
+                    }
+                    
+                    string directoryPath = Path.Combine("/TempUploads", $"{formtype}{result.Number}_{applicationId}");
                     List<DTODocumentFileView> lstdoc = new List<DTODocumentFileView>();
 
                     if (DocumentModel.IsCancelledCheque)
@@ -768,5 +776,22 @@ namespace DataAccessLayer.Repositories
             return true;
         }
 
+        public async Task<int> GetVehicleType(int applicationId, string formType)
+        {
+            if(formType == null || applicationId <= 0)
+            {
+                return 0;
+            }
+            int vehicleType = 0;
+            if (formType == "CA")
+            {
+                  vehicleType = await _context.trnCar
+                    .Where(c => c.ApplicationId == applicationId)
+                    .Select(c => c.Veh_Loan_Type)
+                    .FirstOrDefaultAsync();
+            }
+            
+            return vehicleType;
+        }
     }
 }

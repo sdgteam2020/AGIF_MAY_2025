@@ -374,7 +374,7 @@
                             @foreach (var doc in Model.Documents)
                             {
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-paperclip"></i> @doc.FileName.Split("_")[3]</span>
+                            <span><i class="bi bi-paperclip"></i> @doc.FileName.Split("_")[2]</span>
                             <a href='@doc.FilePath/@doc.FileName' target="_blank" class="btn btn-sm btn-outline-primary">View</a>
                             </li>
                             }
