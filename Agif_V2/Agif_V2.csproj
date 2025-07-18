@@ -91,6 +91,7 @@
     <Folder Include="wwwroot\images\projects\" />
     <Folder Include="wwwroot\MergePdf\" />
     <Folder Include="wwwroot\PdfDownloaded\" />
+    <Folder Include="wwwroot\TempUploads\CA_IC45678833M_15214\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -429,8 +429,8 @@ function getApplicantDetalis() {
 
 function DeleteConfirmation() {
     Swal.fire({
-        title: "Previous Maturity data deleted !",
-        text: "Your previous Maturity data will be deleted permanently !",
+        title: "Previous Loan data deleted !",
+        text: "Your previous Loan data will be deleted permanently !",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -1314,7 +1314,6 @@ function filterAmountText(loanType) {
 
 $('#dateOfBirth').on('change', function () {
     var dob = $(this).val();
-    alert('Date of Birth input changed: ' + dob)
     console.log('Current Date of Birth input: ' + dob);
 });
 
@@ -1322,7 +1321,6 @@ $('#dateOfBirth').on('change', function () {
 function handleSubmitClick() {
     $("#btn-save").on("click", function (event) {
         event.preventDefault(); // Prevent form submission
-        alert($('#dateOfBirth').val());
         const form = $("#myForm");
         const inputs = form.find("input, select");
         // Clear previous error messages
@@ -1763,10 +1761,10 @@ function calculateEMIRepayingCapacity_PCA() {
 }
 function calculateMaxEMI_PCA() {
 
-    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+    let Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
     Residual -= 6;
 
-    var EMI = 48;
+    const EMI = 48;
     if (EMI < Residual) {
         $("#PCA_EMI_Eligible").val(EMI);
     }

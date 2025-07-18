@@ -74,10 +74,20 @@ namespace Agif_V2.Controllers
             if (applicationId != 0)
             {
                 commonDataModel = await _IonlineApplication1.Get(applicationId);
+                
                 int id = commonDataModel.ArmyPrefix;
                 mArmyPrefix = await _IArmyPrefixes.Get(id);
                 ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
                 ArmyNo = ArmyNo.Trim();
+            }
+
+            if(formType == "CA")
+            {
+                int vehType = await _IonlineApplication1.GetVehicleType(applicationId, formType);
+                if(vehType == 4)
+                {
+                    formType = "TW";
+                }
             }
 
             var files = new List<IFormFile>();
@@ -105,7 +115,7 @@ namespace Agif_V2.Controllers
                 }
             }
 
-            ViewData["formType"] = formType;
+            //ViewData["formType"] = formType;
 
             if (!ModelState.IsValid)
             {
@@ -119,7 +129,7 @@ namespace Agif_V2.Controllers
                 Directory.CreateDirectory(tempFolder);
             }
 
-            string folderName = $"{formType}_{ArmyNo}_{applicationId}";
+            string folderName = $"{formType}{ArmyNo}_{applicationId}";
             string folderPath = Path.Combine(tempFolder, folderName);
             if (!Directory.Exists(folderPath))
             {
@@ -132,7 +142,7 @@ namespace Agif_V2.Controllers
             foreach (var file in files)
             {
                 string fileExtension = Path.GetExtension(file.FileName);
-                string fileName = $"{formType}_{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
+                string fileName = $"{formType}{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
                 string outputFile = Path.Combine(folderPath, fileName);
 
                 using (var fileStream = new FileStream(outputFile, FileMode.Create))

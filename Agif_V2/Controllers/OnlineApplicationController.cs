@@ -406,7 +406,14 @@ namespace Agif_V2.Controllers
                     }
                     else if (applicationType == "2")
                     {
-                        applicationTypeName = "CA";
+                        if(userData.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+                        {
+                            applicationTypeName = "TW";
+                        }
+                        else
+                        {
+                            applicationTypeName = "CAR";
+                        }
                     }
                     else
                     {
@@ -421,7 +428,7 @@ namespace Agif_V2.Controllers
                 }
 
                 string applicationIdStr = applicationId.ToString();
-                string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+                string folderPath = applicationTypeName  + armyNo + "_" + applicationIdStr;
                 //string folderPath = "MergePdf";
                 string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
 
@@ -530,7 +537,14 @@ namespace Agif_V2.Controllers
                 }
                 else if (applicationType == "2")
                 {
-                    applicationTypeName = "CA";
+                    if (userData.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+                    {
+                        applicationTypeName = "TW";
+                    }
+                    else
+                    {
+                        applicationTypeName = "CAR";
+                    }
                 }
                 else
                 {
@@ -548,7 +562,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Application ID is not specified." });
             }
             //string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
-            string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+            string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
             string mergepdfName = "App" + applicationIdStr + armyNo;
             string pdfFilePath = $"/MergePdf/{mergepdfName}.pdf";
             
