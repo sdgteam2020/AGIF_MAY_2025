@@ -14,7 +14,7 @@ namespace DataAccessLayer.Interfaces
     public interface IClaimOnlineApplication : IGenericRepositoryDL<ClaimCommonModel>
     {
         bool ValidateFileUpload(IFormFile file, out string errorMessage);
-
+        Task<string> GetFormType(int ApplicationID);
        Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId);
 
         Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId);
@@ -41,6 +41,8 @@ namespace DataAccessLayer.Interfaces
         Task<ClaimCommonDataOnlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType);
 
         Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
+
+        Task<DTOClaimCommonOnlineResponse> GetUnitByApplicationId(int applicationId);
 
         }
 }

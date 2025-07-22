@@ -38,6 +38,7 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> UserApplicationList(int status)
         {
             ViewBag.Status = status;
@@ -1016,10 +1017,16 @@ namespace Agif_V2.Controllers
                     applicationTypeName = "SP";
 
 
-                var folderName = $"{applicationTypeName}_{data.Number}_{data.ApplicationId}";
-                var fileName = $"{applicationTypeName}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+                 //var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
+                var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
+                //var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
 
-                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads", folderName, fileName);
+                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
+
+                //var folderName = $"{applicationTypeName}_{data.Number}_{data.ApplicationId}";
+                //var fileName = $"{applicationTypeName}_{data.Number}_{data.ApplicationId}_Merged.pdf";
+
+                //var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads", folderName, fileName);
 
                 if (System.IO.File.Exists(sourceFilePath))
                 {

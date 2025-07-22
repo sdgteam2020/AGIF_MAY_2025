@@ -1417,6 +1417,17 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                 @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditure, "", new { @class = "text-danger" })
                             </div>
 
+                            
+                                 <div class="col-md-4">
+                        <div class="mb-2">
+                                 <div class="form-outline" data-mdb-input-init>
+                        <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
+                            <p class="file-error-message" style="color:red;"></p>
+                        @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
+                         </div>
+                             </div>
+                             </div>
+
                             <input type="hidden" id="PresentlyStudyingIn" name="EducationDetails.PresentlyStudyingIn" value="0" />
 
                         </div>
@@ -1680,6 +1691,17 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                              </div>
                              </div>
 
+
+                              <div class="col-md-8">
+                        <div class="mb-2">
+                                 <div class="form-outline" data-mdb-input-init>
+                        <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
+                            <p class="file-error-message" style="color:red;"></p>
+                        @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
+                         </div>
+                             </div>
+                             </div>
+
                         </div>
                        
                     </div>
@@ -1734,7 +1756,7 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
 <script type="text/javascript" src="~/js/mdb/mdbsnippet.min.js"></script>
 <script type="text/javascript" src="~/js/mdb/mdb.min.js"></script>
 
-@*
+
 <script>
     $(document).ready(function () {
         Swal.fire({
@@ -1812,7 +1834,7 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
                                     <div style="margin-bottom: 8px; padding: 8px; background: #f8d7da; border-radius: 4px;">
                                         <strong style="color: #721c24;">(iv)</strong> 
                                         <span style="margin-left: 10px;">
-                                            All other cases requesting withdrawal to be treated for grant of "Special Waiver".
+                                            All other cases requesting withdrawal to be treated for grant of "Special Reason".
                                         </span>
                                     </div>
                                 </div>
@@ -1963,4 +1985,3 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
         });
     });
 </script>
-*@

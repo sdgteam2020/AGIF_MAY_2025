@@ -75,6 +75,51 @@
             preview.html('<p>No file selected</p>');
         }
     }
+
+
+    $('#uploadBtn').on('click', function (e) {
+        e.preventDefault();
+
+        let applicationId = $('#hiddenApplicationId').val().trim();
+
+        if (!applicationId) {
+            Swal.fire('Missing', 'Application ID is missing.', 'warning');
+            return;
+        }
+
+        $.ajax({
+            url: "/Claim/InfoBeforeUpload",
+            type: 'POST',
+            data: { applicationId: applicationId },
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        html: response.message,
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonText: 'OK',
+                        cancelButtonText: 'Cancel',
+                        customClass: {
+                            popup: 'custom-swal-popup',
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-html',
+                            confirmButton: 'custom-swal-button'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#uploadForm').submit();
+                        }
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function () {
+                Swal.fire('Error', 'Something went wrong while validating.', 'error');
+            }
+        });
+    });
 });
 
 function checkUploadFiles() {

@@ -1,6 +1,7 @@
 ﻿$(document).ready(function () {
     $('#typeSelect').on('change', function () {
-        var selectedType = $(this).val();
+        let selectedType = $(this).val();
+        console.log('Dropdown changed to:', selectedType);
         clearAllData();
     });
 
@@ -27,6 +28,8 @@
         // Clear previous results
         $('#noResultsMessage').addClass('d-none');
         $('#resultsTable').addClass('d-none');
+
+        let selectedType = $('#typeSelect').val();
 
         // Determine the endpoint based on selected type
         var searchEndpoint = getSearchEndpoint(selectedType);
@@ -112,7 +115,7 @@
             return; // Timeline already loaded, just toggle
         }
 
-        console.log("Timeline button clicked for App ID:", appId, "Type:", selectedType);
+        //console.log("Timeline button clicked for App ID:", appId, "Type:", selectedType);
 
         // Show loading
         loadingDiv.show();

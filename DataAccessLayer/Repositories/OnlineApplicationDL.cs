@@ -54,6 +54,25 @@ namespace DataAccessLayer.Repositories
 
         }
 
+        public async Task<string> GetFormType(int ApplicationID)
+        {
+            var application = await _context.trnApplications
+                .Where(a => a.ApplicationId == ApplicationID)
+                .Select(a => a.ApplicationType)
+                .FirstOrDefaultAsync();
+            if(application!=null && application!=0)
+            {
+                return application switch
+                {
+                    1 => "HBA",
+                    2 => "CA",
+                    3 => "PCA",
+                    _ => ""
+                };
+            }
+            return string.Empty;
+        }
+
         public Task<DateTime> GetRetirementDate(int rankId, int Prefix, DateTime dateTime)
         {
             var userType = _context.MArmyPrefixes.FirstOrDefault(x => x.Id == Prefix);
@@ -363,35 +382,35 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsCancelledCheque)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque;
+                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSeviceExtnPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf;
+                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsPaySlipPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf;
+                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsQuotationPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.QuotationPdf;
+                        dTODocumentFileView.FileName = DocumentModel.QuotationPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsDrivingLicensePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.DrivingLicensePdf;
+                        dTODocumentFileView.FileName = DocumentModel.DrivingLicensePdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }

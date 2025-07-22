@@ -42,6 +42,7 @@ namespace Agif_V2.Helpers
 
             string formType = string.Empty;
             int counter = 0;
+            string Splreason = string.Empty;
 
             // First, determine the form type
             if (data.EducationDetailsResponse != null)
@@ -58,7 +59,7 @@ namespace Agif_V2.Helpers
             }
             else if (data.SplWaiverResponse != null)
             {
-                formType = "Special Waiver";
+                formType = "Special Reason";
             }
 
 
@@ -155,18 +156,6 @@ namespace Agif_V2.Helpers
 
                     var common = data.OnlineApplicationResponse;
 
-                    // Populate rows
-                    //AddRow("1. Type of Loan", formType, "2. Army Number", common.Number);
-                    //AddRow("3.Old Army No", common.OldNumber, "4.Rank", common.DdlRank);
-                    //AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
-                    //AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
-                    //AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email);
-                    //AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.pcda_pao);
-                    //AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN Card", common.PanCardNo);
-                    //AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);
-                    //AddRow("17. Present Unit", common.PresentUnit, "18.Unit PIN", common.PresentUnitPin);
-                    //AddRow("19. Unit Address", common.ArmyPostOffice, "20. Civil Postal Address", common.CivilPostalAddress);
-                    //AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
 
 
                     AddRow("1. Army No", common.Number, "2. Old Army No", common.OldNumber);
@@ -407,7 +396,7 @@ namespace Agif_V2.Helpers
                     {
                         var SplWaiverResponseDTO = data.SplWaiverResponse;
 
-                        Paragraph point17 = new Paragraph($"{++counter}. For Special Waiver")
+                        Paragraph point17 = new Paragraph($"{++counter}. For Special Reason (Warranting waiver from competent authority)")
                             .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                             .SetFontSize(14)
                             .SetBold().SetMarginTop(10);
@@ -446,19 +435,25 @@ namespace Agif_V2.Helpers
                         
 
                         document.Add(table5);
+                        Splreason="For Special Reason (Warranting waiver from competent authority *)";
                     }
+                 
 
-                    Paragraph point18 = new Paragraph($"{++counter}. Certificate")
+                    Paragraph point18 = new Paragraph($"{++counter}. Certificate {Splreason}")
                                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
                                            .SetFontSize(14)
                                            .SetBold().SetMarginTop(10);
                     document.Add(point18);
-               
+
+                    if (data.SplWaiverResponse != null)
+                    {
+                        document.Add(new Paragraph("* Claim process will take time and is subject to approval of competent authority").SetBold().SetFontSize(10));
+                    }
                             List<string> checkPara = new List<string>
                             {
                             "(a) Certified that the particulars given are correct & the amount will be utilized for the purpose mentioned in application",
                             "(b) I understand that , if I withdraw money from maturity amount , it will reduce my ultimate saving amount receivable at the time of retirement/release/discharge as Member Maturity Fund.",
-                            "(c) Following documents signed by me are attached with the application (Strike out whichever is not applicable):-"
+                            "(c) Following documents signed by me are attached with the application:-"
                             };
         
                             for (int i = 0; i < checkPara.Count; i++)
@@ -480,18 +475,31 @@ namespace Agif_V2.Helpers
                     ImageData checkimageData = ImageDataFactory.Create(Checkmark);
                     List<string> matchedDocuments = new List<string>();
 
-             Dictionary<string, string> documentMap = new Dictionary<string, string>
-            {
-               { "AttachPartIIOrder", "(i) Attested copy of Birth Part II Order of child (In case of edn/marriage of child)." },
-               { "Attach_PartIIOrder", "(i) Attested copy of Birth Part II Order of child (In case of edn/marriage of child)." },
-               { "AttachBonafideLetterPdf", "(ii) Copy of Fee details of child (For Edn of Child) attested by OC unit." },
-               { "CancelledCheque", "(iii) Cancelled cheque or first page of passbook duly authenticated by bank." },
-               { "PaySlip", "(iv) Latest Pay Slip." },
-               { "Attachinvitationcard", "(v) Marriage invitation Card (In case of marriage of child) duly attested by OC unit." },
-               { "TotalExpenditureFile", "(vi) Estimate of cost of expdr duly approved by Architect (For renovation of House in the last two years of service)" },
-               { "Spdocus", "(vii) Personal application & sp docus (for seeking of special waiver)." }
-            };
+            // Dictionary<string, string> documentMap = new Dictionary<string, string>
+            //{
+            //   { "AttachPartIIOrder", "Attested copy of Birth Part II Order of child (In case of edn/marriage of child)." },
+            //   { "Attach_PartIIOrder", "Attested copy of Birth Part II Order of child (In case of edn/marriage of child)." },
+            //   { "AttachBonafideLetterPdf", "Copy of Fee details of child (For Edn of Child) attested by OC unit." },
+            //   { "CancelledCheque", "Cancelled cheque of salary acct." },
+            //   { "PaySlip", " Latest Pay Slip." },
+            //   { "Attachinvitationcard", "Marriage invitation Card (In case of marriage of child) duly attested by OC unit." },
+            //   { "TotalExpenditureFile", "Estimate of cost of expdr duly approved by Architect (For renovation of House in the last two years of service)" },
+            //   { "Spdocus", "Personal application endorsed by recommending authority." }
+            //};
 
+                    Dictionary<string, string> documentMap = new Dictionary<string, string>
+            {
+               { "AttachPartIIOrder", "Copy of birth Part II Order of child." },
+               { "Attach_PartIIOrder", "Copy of birth Part II Order of child." },
+               { "AttachBonafideLetterPdf", "Copy of Fee details of child (For Edn of Child) attested by OC unit." },
+               { "CancelledCheque", "Cancelled cheque of salary acct." },
+               { "PaySlip", " Latest Monthly Pay Slip." },
+               { "Attachinvitationcard", "Details of marraige duly self attested." },
+               { "TotalExpenditureFile", "Expenditure details duly self attested." },
+               { "Spdocus", "Personal application endorsed by recommending authority." },
+               {"SeviceExtn", "Unwilling cert for further promotion/extn of service duly signed by the indl and countersigned by CO/OC unit (Warning Order/Premature retirement letter)."}
+
+            };
 
 
 
@@ -513,31 +521,57 @@ namespace Agif_V2.Helpers
                     }
 
                     // Second pass: Generate output for all document types
+                    //foreach (var entry in documentMap.Values.Distinct()) // Use Distinct() to avoid duplicates
+                    //{
+                    //    Paragraph docParagraph = new Paragraph()
+                    //        .SetFont(normalFont)
+                    //        .SetFontSize(10)
+                    //        .SetTextAlignment(TextAlignment.LEFT)
+                    //        .SetMarginLeft(30)
+                    //        .SetMarginBottom(3);
+
+                    //    if (matchedDescriptions.Contains(entry))
+                    //    {
+                    //        // Create paragraph with checkmark
+                    //        Image newCheckIcon = new Image(checkimageData).ScaleToFit(15, 15);
+                    //        docParagraph.Add(newCheckIcon);
+                    //        docParagraph.Add(new Text(" " + entry));
+                    //    }
+                    //    else
+                    //    {
+                    //        // Create invisible placeholder with same width as icon
+                    //        Image placeholderIcon = new Image(checkimageData).ScaleToFit(15, 15).SetOpacity(0f);
+                    //        docParagraph.Add(placeholderIcon);
+                    //        docParagraph.Add(new Text(" " + entry));
+                    //    }
+
+                    //    document.Add(docParagraph);
+                    //}
+                    int counter2 = 1; // This will track the numbering for the matched documents
                     foreach (var entry in documentMap.Values.Distinct()) // Use Distinct() to avoid duplicates
                     {
-                        Paragraph docParagraph = new Paragraph()
-                            .SetFont(normalFont)
-                            .SetFontSize(10)
-                            .SetTextAlignment(TextAlignment.LEFT)
-                            .SetMarginLeft(30)
-                            .SetMarginBottom(3);
-
                         if (matchedDescriptions.Contains(entry))
                         {
+                            Paragraph docParagraph = new Paragraph()
+                                .SetFont(normalFont)
+                                .SetFontSize(10)
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetMarginLeft(30)
+                                .SetMarginBottom(3);
+
+                            string romanNumeral = ToRoman(counter2);
+                            docParagraph.Add(new Text($"({romanNumeral}) "));
+
                             // Create paragraph with checkmark
                             Image newCheckIcon = new Image(checkimageData).ScaleToFit(15, 15);
                             docParagraph.Add(newCheckIcon);
                             docParagraph.Add(new Text(" " + entry));
-                        }
-                        else
-                        {
-                            // Create invisible placeholder with same width as icon
-                            Image placeholderIcon = new Image(checkimageData).ScaleToFit(15, 15).SetOpacity(0f);
-                            docParagraph.Add(placeholderIcon);
-                            docParagraph.Add(new Text(" " + entry));
-                        }
 
-                        document.Add(docParagraph);
+                            // Add the paragraph to the document
+                            document.Add(docParagraph);
+
+                            counter2++; // Increment the counter for the next matched document
+                        }
                     }
 
                     // Add part (d) and (e) after documentsRequired
@@ -615,8 +649,7 @@ namespace Agif_V2.Helpers
 
                         document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
                             .SetFont(boldFont).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(10).SetMarginBottom(5));
-                        document.Add(new Paragraph("(To be countersigned by CO/OC Tps/Head of Adm Br)")
-                            .SetFont(boldFont).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER).SetMarginTop(10));
+                    
 
                         Paragraph para = new Paragraph();
                         para.Add(new Text("1.  I certify that above MAWD application ").SetFont(normalFont));
@@ -624,18 +657,18 @@ namespace Agif_V2.Helpers
                         para.Add(new Text(common.Number).SetFont(boldFont));
                         para.Add(new Text(" Rank ").SetFont(normalFont));
                         para.Add(new Text(common.DdlRank).SetFont(boldFont));
-                        para.Add(new Text(" Name ").SetFont(normalFont));
-                        para.Add(new Text(common.ApplicantName).SetFont(normalFont));
+                        para.Add(new Text(" Name ").SetFont(boldFont));
+                        para.Add(new Text(common.ApplicantName).SetFont(boldFont));
                         para.Add(new Text(" of my Unit ").SetFont(normalFont));
                         para.Add(new Text(common.PresentUnit).SetFont(boldFont));
                         para.Add(new Text(". I identify his signature on supporting documents as attested by him and certify them to be correct.").SetFont(normalFont));
                         document.Add(para);
 
                         Paragraph para2 = new Paragraph();
-                        para2.Add(new Text("2. It's certified that I am the CO/OC Tps of No ").SetFont(normalFont));
-                        para2.Add(new Text(common.Number).SetFont(boldFont));
+                        para2.Add(new Text("2. It's certified that I am the CO/OC Tps/Head of Adm Branch of No ").SetFont(normalFont));
+                        para2.Add(new Text(common.Number).SetFont(normalFont));
                         para2.Add(new Text(" Rank ").SetFont(normalFont));
-                        para2.Add(new Text(common.DdlRank).SetFont(boldFont));
+                        para2.Add(new Text(common.DdlRank).SetFont(normalFont));
                         para2.Add(new Text(" Name ").SetFont(normalFont));
                         para2.Add(new Text(common.ApplicantName).SetFont(normalFont));
                         para2.Add(new Text(". and I am authorised to countersign financial documents of this individual.").SetFont(normalFont));
@@ -647,22 +680,22 @@ namespace Agif_V2.Helpers
                         //document.Add(para3);
 
 
-                        Paragraph para3 = new Paragraph();
-                        para3.Add(new Text("3.I have checked and verified all documents submitted by the officer and found them correct.").SetFont(normalFont));
-                        document.Add(para3);
+                        //Paragraph para3 = new Paragraph();
+                        //para3.Add(new Text("3.I have checked and verified all documents submitted by the officer and found them correct.").SetFont(normalFont));
+                        //document.Add(para3);
 
                         Paragraph para4 = new Paragraph();
-                        para4.Add(new Text("4. It is certified that Bank A/c No ").SetFont(normalFont));
+                        para4.Add(new Text("3. It is certified that Bank A/c No ").SetFont(normalFont));
                         para4.Add(new Text(common.SalaryAcctNo).SetFont(boldFont));
                         para4.Add(new Text(" of Bank ").SetFont(normalFont));
                         para4.Add(new Text(common.NameOfBank).SetFont(boldFont));
                         para4.Add(new Text(" with IFSC ").SetFont(normalFont));
                         para4.Add(new Text(common.IfsCode).SetFont(boldFont));
                         para4.Add(new Text(" as given in the application and cancelled cheque is of Salary account of ").SetFont(normalFont));
-                        para4.Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont));
+                        para4.Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(normalFont));
                         document.Add(para4);
 
-                        Paragraph para5 = new Paragraph("5. I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.")
+                        Paragraph para5 = new Paragraph("4. I have satisfied myself of the correctness of personal details and reasons for withdrawal given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.")
                             .SetFont(normalFont);
                         document.Add(para5);
 
@@ -747,6 +780,7 @@ namespace Agif_V2.Helpers
 
                             if (isApproved)
                             {
+                                document.Add(new Paragraph("\n\r"));
                                 string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                                 if (File.Exists(imagePath))
                                 {
@@ -796,6 +830,19 @@ namespace Agif_V2.Helpers
 
                 return 1;
             }
+        }
+
+        public static string ToRoman(int number)
+        {
+            string[] ones = { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" };
+            string[] tens = { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" };
+            string[] hundreds = { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" };
+
+            int h = number / 100;
+            int t = (number % 100) / 10;
+            int o = number % 10;
+
+            return hundreds[h] + tens[t] + ones[o];
         }
     }
 }

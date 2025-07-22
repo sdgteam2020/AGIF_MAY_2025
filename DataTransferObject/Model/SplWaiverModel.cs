@@ -27,8 +27,17 @@ namespace DataTransferObject.Model
         [Required]
         public IFormFile OtherReasonPdf { get; set; }
 
+        [NotMapped]
+        [Required]
+        public IFormFile TotalExpenditureFile { get; set; }
+
+
         public string? OtherReasonsPdf { get; set; }
+        public string? TotalExpenditureFilePdf { get; set; }
+
 
         public bool IsOtherReasonPdf { get; set; }
+        public bool IsTotalExpenditureFilePdf { get; set; }
+
     }
 }

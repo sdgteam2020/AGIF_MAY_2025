@@ -1,6 +1,12 @@
 ﻿$(document).ready(function () {
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get("status");
+    //const params = new URLSearchParams(window.location.search);
+    //const value = params.get("status");
+
+    //let rawValue = $("#Status").val();
+    //let value = (rawValue === "false" || !rawValue) ? true : rawValue;
+
+    let rawValue = $("#Status").val();
+    let value = rawValue !== "false"; // true if "true" or blank; false only when "false"
 
     // Add CSS for toggle slider
     $('<style>')

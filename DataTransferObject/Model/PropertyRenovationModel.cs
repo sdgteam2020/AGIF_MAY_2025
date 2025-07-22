@@ -23,6 +23,7 @@ namespace DataTransferObject.Model
 
         // Name of property holder(s)
         [Required]
+        [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Property Holder Name must only contain alphabets and spaces.")]
         public string PropertyHolderName { get; set; }
 
         // Estimated cost of expenditure

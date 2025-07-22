@@ -31,6 +31,7 @@ namespace DataTransferObject.Model
 
         [Required(ErrorMessage = "Company Name is required.")]
         [StringLength(100, ErrorMessage = "Company Name can't be longer than 100 characters.")]
+        [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Company Name must only contain alphabets and spaces.")]
         public string? CompanyName { get; set; }
 
         [Required(ErrorMessage = "Model Name is required.")]

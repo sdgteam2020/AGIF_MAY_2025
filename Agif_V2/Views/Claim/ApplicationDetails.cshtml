@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
     // Fetch loantype from query string
-    string loanType = Context.Request.Query["formtype"].ToString()?.ToUpper() ?? "CA";
+    string loanType = string.Empty;
     var message = ViewBag.Message ?? string.Empty;
 
     if(Model.EducationDetailsResponse!=null)

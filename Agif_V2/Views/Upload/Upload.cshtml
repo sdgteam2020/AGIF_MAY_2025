@@ -4,7 +4,8 @@
     ViewData["Title"] = "Upload";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-    string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "CA";
+//    string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "CA";
+    string formType = Model.FormType ?? "CA";
     int applicationId = Convert.ToInt32(TempData["applicationId"]);
     var message = TempData["Message"] ?? string.Empty;
     var IsExtension = TempData["IsextensionOfService"] ?? false;
@@ -462,7 +463,7 @@
     $(document).ready(function () {
         var message = '@message';
 
-        if (message !== '') {
+        if (message !== '' && message !== null) {
             // Display SweetAlert with custom styles
             Swal.fire({
                 html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style

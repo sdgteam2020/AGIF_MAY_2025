@@ -1,4 +1,4 @@
-using Agif_V2.Controllers;
+﻿using Agif_V2.Controllers;
 using Agif_V2.Helpers;
 using Agif_V2.Middleware;
 using DataAccessLayer;
@@ -27,6 +27,8 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
         return Task.FromResult(new ProviderCultureResult("en-GB"));
     }));
 });
+
+
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
@@ -83,6 +85,7 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -107,6 +110,23 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
+
+app.Use(async (context, next) =>
+{
+    var referer = context.Request.Headers["Referer"].ToString();
+    var path = context.Request.Path.Value;
+
+    if (string.IsNullOrEmpty(referer) &&
+        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
+        !path.StartsWith("/css") &&
+        !path.StartsWith("/js"))
+    {
+        context.Response.Redirect("/Default/Index");
+        return;
+    }
+
+    await next();
+});
 
 app.UseAuthorization();
 

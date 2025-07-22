@@ -16,5 +16,7 @@ namespace DataTransferObject.Model
         public IFormFile? SpdocusPdf { get; set; }
 
         public IFormFile? SeviceExtnPdf { get; set; }
+
+        public string? FormType { get; set; }
     }
 }

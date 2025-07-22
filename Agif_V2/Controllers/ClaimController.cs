@@ -72,27 +72,37 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             //int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-           int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-          // int applicationId = 5012;
+            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+           
+          //int applicationId = 5017;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
+
+            string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
+
 
             TempData.Keep("ClaimapplicationId");
 
             if (application)
             {
                 TempData["Message"] = "You have already uploaded the Documents for this Application.";
-                return RedirectToAction("ApplicationDetails", new { applicationId = applicationId });
+                return RedirectToAction("ApplicationDetails");
             }
 
             bool IsextensionOfService = await _IClaimonlineApplication1.CheckExtensionofservice(applicationId);
 
             TempData["ClaimIsextensionOfService"] = IsextensionOfService;
+
             ClaimFileUploadViewModel ClaimfileUploadViewModel = new ClaimFileUploadViewModel();
+            ClaimfileUploadViewModel.FormType= FormType;
             return View(ClaimfileUploadViewModel);
         }
 
-        public async Task<IActionResult> ApplicationDetails(int applicationId)
+        public async Task<IActionResult> ApplicationDetails()
         {
+            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+
+            TempData.Keep("ClaimapplicationId");
+
             if (applicationId == 0)
             {
                 return NotFound();
@@ -314,7 +324,7 @@ namespace Agif_V2.Controllers
 
                 TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
-                return RedirectToAction("Upload", "Claim", new { formType });
+                return RedirectToAction("Upload", "Claim");
 
             }
 
@@ -368,7 +378,7 @@ namespace Agif_V2.Controllers
             }
 
             // Return a success message or redirect after successful upload
-            return RedirectToAction("ApplicationDetails", "Claim", new { applicationId = applicationId });
+            return RedirectToAction("ApplicationDetails", "Claim");
         }
 
         [HttpPost]
@@ -467,13 +477,19 @@ namespace Agif_V2.Controllers
                 }
 
                 // Create merged PDF path in TempUploads root
-                string tempUploadsPath = Path.Combine(_env.WebRootPath, "ClaimTempUploads", folderPath);
+                string tempUploadsPath = Path.Combine(_env.WebRootPath, "ClaimMergePdf");
                 if (!Directory.Exists(tempUploadsPath))
                 {
                     Directory.CreateDirectory(tempUploadsPath);
                 }
 
-                string mergedPdfPath = Path.Combine(tempUploadsPath, folderPath + "_Merged.pdf");
+                //string mergedPdfPath = Path.Combine(tempUploadsPath, folderPath + "_Merged.pdf");
+                //ViewBag.MergedPdfPath = mergedPdfPath;
+                //// Merge all PDFs using iText7
+                //bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+                string MergePdfName = "App" + applicationIdStr + armyNo;
+                string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
                 ViewBag.MergedPdfPath = mergedPdfPath;
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
@@ -544,9 +560,11 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Application ID is not specified." });
             }
+            //string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
+            //string pdfFilePath = $"/ClaimTempUploads/{folderPath}/{folderPath}_Merged.pdf";
             string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
-            string pdfFilePath = $"/ClaimTempUploads/{folderPath}/{folderPath}_Merged.pdf";
-
+            string mergepdfName = "App" + applicationIdStr + armyNo;
+            string pdfFilePath = $"/ClaimMergePdf/{mergepdfName}.pdf";
             return Json(pdfFilePath);
         }
 
@@ -570,7 +588,9 @@ namespace Agif_V2.Controllers
                     {
                         applicationId = applicationDetails.OnlineApplicationResponse.ApplicationId,
                         name = applicationDetails.OnlineApplicationResponse.ApplicantName,
-                        armyNo = applicationDetails.OnlineApplicationResponse.ArmyPrefix + applicationDetails.OnlineApplicationResponse.Number + applicationDetails.OnlineApplicationResponse.Suffix,
+                        //armyNo = applicationDetails.OnlineApplicationResponse.ArmyPrefix + applicationDetails.OnlineApplicationResponse.Number + applicationDetails.OnlineApplicationResponse.Suffix,
+                        armyNo = applicationDetails.OnlineApplicationResponse.Number,
+                        rank=applicationDetails.OnlineApplicationResponse.DdlRank,
                         unitName = applicationDetails.OnlineApplicationResponse.PresentUnit,
                         applicationType = applicationDetails.OnlineApplicationResponse.ApplicationTypeName,
                         accountNumber = applicationDetails.OnlineApplicationResponse.SalaryAcctNo,
@@ -587,6 +607,32 @@ namespace Agif_V2.Controllers
                 // Log the exception if you have logging setup
                 return Json(new { success = false, message = "An error occurred while fetching application details" });
             }
+        }
+
+        [HttpPost]
+        public JsonResult InfoBeforeUpload(string applicationId)
+        {
+            if (string.IsNullOrWhiteSpace(applicationId) || applicationId == "0")
+            {
+                return Json(new { success = false, message = "Application ID is required." });
+            }
+
+            var coDetails = _IClaimonlineApplication1.GetUnitByApplicationId(int.Parse(applicationId));
+            var data = coDetails.Result?.OnlineApplicationResponse;
+
+
+            if (data == null)
+            {
+                return Json(new { success = false, message = "No data found for the provided Application ID." });
+            }
+
+            string CoArmyNumber = data.Number ?? string.Empty;
+            string CoRank = data.DdlRank ?? string.Empty;
+            string CoUnit = data.PresentUnit ?? string.Empty;
+            string CoName = data.CoName ?? string.Empty;
+
+            var message = $"Application will be forwarded to your Unit Commander {CoArmyNumber} {CoRank} {CoName}, {CoUnit}";
+            return Json(new { success = true, message = message });
         }
 
     }

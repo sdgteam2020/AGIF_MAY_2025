@@ -65,6 +65,26 @@ namespace DataAccessLayer.Repositories
             return true;
         }
 
+        public async Task<string> GetFormType(int ApplicationID)
+        {
+            var application = await _context.trnClaim
+                .Where(a => a.ApplicationId == ApplicationID)
+                .Select(a => a.WithdrawPurpose)
+                .FirstOrDefaultAsync();
+            if (application != null && application != 0)
+            {
+                return application switch
+                {
+                    1 => "ED",
+                    2 => "MW",
+                    3 => "PR",
+                    4 => "SP",
+                    _ => ""
+                };
+            }
+            return string.Empty;
+        }
+
         public async Task<ClaimCommonDataOnlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType)
         {
             var existingUser = await (from app in _context.trnClaim
@@ -153,6 +173,7 @@ namespace DataAccessLayer.Repositories
                 {
                     if (model.EducationDetails.AttachBonafideLetter != null) files.Add(model.EducationDetails.AttachBonafideLetter);
                     if (model.EducationDetails.AttachPartIIOrder != null) files.Add(model.EducationDetails.AttachPartIIOrder);
+                    if (model.EducationDetails.TotalExpenditureFile != null) files.Add(model.EducationDetails.TotalExpenditureFile);
                 }
                 else if (model.Marriageward != null)
                 {
@@ -166,6 +187,7 @@ namespace DataAccessLayer.Repositories
                 else if (model.SplWaiver != null)
                 {
                     if (model.SplWaiver.OtherReasonPdf != null) files.Add(model.SplWaiver.OtherReasonPdf);
+                    if( model.SplWaiver.TotalExpenditureFile != null) files.Add(model.SplWaiver.TotalExpenditureFile);
                 }
 
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
@@ -206,6 +228,11 @@ namespace DataAccessLayer.Repositories
                             model.EducationDetails.AttachPartIIOrderPdf = fileName;
                             model.EducationDetails.IsAttachPartIIOrderPdf = true;
                         }
+                        else if (file.Name.Equals(model.EducationDetails.TotalExpenditureFile.Name))
+                        {
+                            model.EducationDetails.TotalExpenditureFilePdf = fileName;
+                            model.EducationDetails.IsTotalExpenditureFilePdf = true;
+                        }
                     }
 
                     if (model.Marriageward != null)
@@ -238,7 +265,12 @@ namespace DataAccessLayer.Repositories
                             model.SplWaiver.OtherReasonsPdf = fileName;
                             model.SplWaiver.IsOtherReasonPdf = true;
                         }
-                    }
+                        else if (file.Name.Equals(model.SplWaiver.TotalExpenditureFile.Name))
+                        {
+                            model.SplWaiver.TotalExpenditureFilePdf = fileName;
+                            model.SplWaiver.IsTotalExpenditureFilePdf = true;
+                        }
+                }
 
                 }
 
@@ -419,6 +451,8 @@ namespace DataAccessLayer.Repositories
                 fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
                 fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
                 fileUpload.IsAttachPartIIOrderPdf = Eddetails.IsAttachPartIIOrderPdf;
+                fileUpload.TotalExpenditureFile = Eddetails.TotalExpenditureFilePdf;
+                fileUpload.IsTotalExpenditureFilePdf = Eddetails.IsTotalExpenditureFilePdf;
             }
             else if (PurposeType == "MW")
             {
@@ -441,6 +475,8 @@ namespace DataAccessLayer.Repositories
                 var SPdetails = await _Special.GetByApplicationId(ApplicationId);
                 fileUpload.OtherReasonsPdf = SPdetails.OtherReasonsPdf;
                 fileUpload.IsOtherReasonPdf = SPdetails.IsOtherReasonPdf;
+                fileUpload.TotalExpenditureFile = SPdetails.TotalExpenditureFilePdf;
+                fileUpload.IsTotalExpenditureFilePdf = SPdetails.IsTotalExpenditureFilePdf;
             }
 
             await _DocumentUpload.Add(fileUpload);
@@ -751,6 +787,7 @@ namespace DataAccessLayer.Repositories
                         lstdoc.Add(dTODocumentFileView);
                     }
 
+
                     data.Documents = lstdoc; // Assign the list of documents to the response object
                     // Get all files in the directory
 
@@ -989,6 +1026,62 @@ namespace DataAccessLayer.Repositories
             dataTable = query.ToDataTable();
             return Task.FromResult(dataTable);
         }
+
+        public Task<DTOClaimCommonOnlineResponse> GetUnitByApplicationId(int applicationId)
+        {
+            DTOClaimCommonOnlineResponse data = new DTOClaimCommonOnlineResponse();
+
+            var application = _context.trnClaim
+                .Where(x => x.ApplicationId == applicationId)
+                .Select(x => new { x.ApplicationId, x.IOArmyNo })
+                .FirstOrDefault();
+
+            if (application == null)
+            {
+                return Task.FromResult(data); // return empty if not found
+            }
+
+            if (string.IsNullOrEmpty(application.IOArmyNo))
+            {
+                var result = (from appl in _context.trnClaim
+                              where appl.ApplicationId == applicationId
+                              join unit in _context.MUnits on appl.PresentUnit equals unit.UnitId
+                              join mapping in _context.trnUserMappings on unit.UnitId equals mapping.UnitId
+                              join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+                              where mapping.IsActive == true && mapping.IsPrimary == true
+                              join Rank in _context.MRanks on profile.rank equals Rank.RankId
+                              select new ClaimCommonDataOnlineResponse
+                              {
+                                  PresentUnit = unit.UnitName,
+                                  ApplicationId = appl.ApplicationId,
+                                  Number = profile.ArmyNo,
+                                  CoName = profile.Name,
+                                  DdlRank = Rank.RankName,
+                              }).FirstOrDefault();
+                data.OnlineApplicationResponse = result;
+            }
+            else
+            {
+                var ioResult = (from appl in _context.trnClaim
+                                where appl.ApplicationId == applicationId
+                                join profile in _context.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
+                                join mapping in _context.trnUserMappings on profile.ProfileId equals mapping.ProfileId
+                                join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
+                                where mapping.IsActive == true
+                                join rank in _context.MRanks on profile.rank equals rank.RankId
+                                select new ClaimCommonDataOnlineResponse
+                                {
+                                    PresentUnit = unit.UnitName,
+                                    ApplicationId = appl.ApplicationId,
+                                    Number = profile.ArmyNo,
+                                    CoName = profile.Name,
+                                    DdlRank = rank.RankName,
+                                }).FirstOrDefault();
+                data.OnlineApplicationResponse = ioResult;
+            }
+            return Task.FromResult(data);
+        }
+
 
     }
 }

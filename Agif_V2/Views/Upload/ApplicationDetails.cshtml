@@ -5,9 +5,16 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
     // Fetch loantype from query string
-    string loanType = Context.Request.Query["formtype"].ToString()?.ToUpper() ?? "CA";
+    string loanType = string.Empty;
     var message = ViewBag.Message ?? string.Empty;
 
+     if(Model.HbaApplicationResponse!=null)
+    loanType= "HBA";
+    else if(Model.CarApplicationResponse!=null)
+    loanType = "CAR";
+    else if(Model.PcaApplicationResponse!=null)
+    loanType = "PCA";
+        
 }
 <style>
     .lblforprint {
@@ -374,7 +381,7 @@
                             @foreach (var doc in Model.Documents)
                             {
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-paperclip"></i> @doc.FileName.Split("_")[2]</span>
+                            <span><i class="bi bi-paperclip"></i> @doc.FileName</span>
                             <a href='@doc.FilePath/@doc.FileName' target="_blank" class="btn btn-sm btn-outline-primary">View</a>
                             </li>
                             }
@@ -408,7 +415,7 @@ else
     $(document).ready(function () {        
         var message = '@message'; 
 
-       if (message !== '') {
+       if (message !== '' && message !== null) {
             // Display SweetAlert with custom styles
             Swal.fire({      
                 html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style

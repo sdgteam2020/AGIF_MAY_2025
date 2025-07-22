@@ -21,6 +21,7 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage = "Property Type is required.")]
         public int PropertyType { get; set; }
 
+        [Required(ErrorMessage = "Property Seller is required.")]
         public string? PropertySeller { get; set; }
 
         [Required(ErrorMessage = "Property Address is required.")]

@@ -4,7 +4,9 @@
     ViewData["Title"] = "Upload";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-    string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "ED";
+    //string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "ED";
+    string formType = Model.FormType ?? "ED";
+
     //int applicationId = Convert.ToInt32(TempData["applicationId"]);
     var message = TempData["Message"] ?? string.Empty;
     int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
@@ -159,7 +161,8 @@
                                     <div class="row">
                                         <div class="col-md-10">
                                             <label for="SeviceExtnPdf" class="form-label fw-bold">
-                                                4. Service Extn Pt II order (If Applicable)
+                                                @* 4. Service Extn Pt II order (If Applicable) *@
+                                                4. Unwilling cert for further promotion/extension of service (If Applicable)
                                             </label>
                                             <input class="form-control file-upload-limited" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" data-preview="#SeviceExtnPre" accept=".pdf" required>
                                             <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
@@ -225,7 +228,7 @@
     $(document).ready(function () {
         var message = '@message';
 
-        if (message !== '') {
+        if (message !== '' && message !== null) {
             // Display SweetAlert with custom styles
             Swal.fire({
                 html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style

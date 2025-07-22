@@ -362,7 +362,7 @@ namespace Agif_V2.Controllers
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
                 TempData["COArmyNumber"] = model.COArmyNo;
-                return RedirectToAction("Upload", "Upload", new { formType });
+                return RedirectToAction("Upload", "Upload");
 
 
 

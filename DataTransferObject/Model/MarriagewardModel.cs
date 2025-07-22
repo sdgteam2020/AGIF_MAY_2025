@@ -20,6 +20,7 @@ namespace DataTransferObject.Model
         [ForeignKey("ApplicationId")]
         public ClaimCommonModel? ClaimCommonModel { get; set; }
         [Required]
+        [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Child Name must only contain alphabets and spaces.")]
         public string NameOfChild { get; set; }
 
         // Date of Birth of the Child

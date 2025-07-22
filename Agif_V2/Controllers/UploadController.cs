@@ -27,12 +27,14 @@ namespace Agif_V2.Controllers
 
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
+            string FormType = await _IonlineApplication1.GetFormType(applicationId);
+
             TempData.Keep("applicationId");
 
             if (application)
             {
                 TempData["Message"] = "You have already uploaded the Documents for this Application.";
-                return RedirectToAction("ApplicationDetails", new { applicationId = applicationId });
+                return RedirectToAction("ApplicationDetails");
             }
 
             bool IsextensionOfService = await _IonlineApplication1.CheckExtensionofservice(applicationId);
@@ -40,11 +42,16 @@ namespace Agif_V2.Controllers
             TempData["IsextensionOfService"] = IsextensionOfService;
 
             FileUploadViewModel fileUploadViewModel = new FileUploadViewModel();
+            fileUploadViewModel.FormType= FormType;
             return View(fileUploadViewModel);
         }
 
-        public async Task<IActionResult> ApplicationDetails(int applicationId)
+        public async Task<IActionResult> ApplicationDetails()
         {
+            int applicationId = Convert.ToInt32(TempData["applicationId"]);
+
+            TempData.Keep("applicationId");
+
             if (applicationId == 0)
             {
                 return NotFound();
@@ -142,7 +149,8 @@ namespace Agif_V2.Controllers
             foreach (var file in files)
             {
                 string fileExtension = Path.GetExtension(file.FileName);
-                string fileName = $"{formType}{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
+                //string fileName = $"{formType}{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
+                string fileName = $"{file.Name}{fileExtension}";
                 string outputFile = Path.Combine(folderPath, fileName);
 
                 using (var fileStream = new FileStream(outputFile, FileMode.Create))
@@ -152,27 +160,27 @@ namespace Agif_V2.Controllers
 
                 if (file.Name == nameof(model.CancelledCheque))
                 {
-                    fileUpload.CancelledCheque = fileName;
+                    fileUpload.CancelledCheque = file.Name;
                     fileUpload.IsCancelledCheque = true;
                 }
                 else if (file.Name == nameof(model.PaySlipPdf))
                 {
-                    fileUpload.PaySlipPdf = fileName;
+                    fileUpload.PaySlipPdf = file.Name;
                     fileUpload.IsPaySlipPdf = true;
                 }
                 else if (file.Name == nameof(model.QuotationPdf))
                 {
-                    fileUpload.QuotationPdf = fileName;
+                    fileUpload.QuotationPdf = file.Name;
                     fileUpload.IsQuotationPdf = true;
                 }
                 else if (file.Name == nameof(model.DrivingLicensePdf))
                 {
-                    fileUpload.DrivingLicensePdf = fileName;
+                    fileUpload.DrivingLicensePdf = file.Name;
                     fileUpload.IsDrivingLicensePdf = true;
                 }
                 else if (file.Name == nameof(model.SeviceExtnPdf))
                 {
-                    fileUpload.SeviceExtnPdf = fileName;
+                    fileUpload.SeviceExtnPdf = file.Name;
                     fileUpload.IsSeviceExtnPdf = true;
                 }
             }
@@ -231,7 +239,7 @@ namespace Agif_V2.Controllers
             }
             
             TempData["Message"] = "Application has been forwarded to your Unit Cdr/IO/Superior Countersigning Auth.";
-            return RedirectToAction("ApplicationDetails", new { applicationId = applicationId});
+            return RedirectToAction("ApplicationDetails");
         }
         public IActionResult UploadSuccess()
         {

@@ -1,7 +1,11 @@
 ﻿$(document).ready(function () {
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get("status");
-    GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList")    ;
+    //const params = new URLSearchParams(window.location.search);
+    //const value = params.get("status");
+    let rawValue = $("#Status").val();
+    let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
+
+
+    GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
 
     $('#Loan').click(function () {
         $("#UserType").val('Loan');

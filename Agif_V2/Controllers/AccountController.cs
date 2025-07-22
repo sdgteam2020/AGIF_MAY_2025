@@ -9,6 +9,7 @@ using DataTransferObject.Response;
 using DocumentFormat.OpenXml.Spreadsheet;
 using iText.Commons.Actions.Contexts;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,11 +36,13 @@ namespace Agif_V2.Controllers
             _db = db;
             this._masterOnlyTable = _masterOnlyTable;
         }
+
         public IActionResult Index()
         {
            
             return View();
         }
+
         public IActionResult Login()
         {
             return View();
@@ -75,6 +78,7 @@ namespace Agif_V2.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
+
 
             var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
             if (result.Succeeded)

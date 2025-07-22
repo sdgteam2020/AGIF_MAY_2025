@@ -24,5 +24,7 @@ namespace DataTransferObject.Model
 
    
         public IFormFile? SeviceExtnPdf { get; set; }
+
+        public string? FormType { get; set; }   
     }
 }

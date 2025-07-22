@@ -157,6 +157,7 @@ namespace DataTransferObject.Response
 
         public string? Code { get; set; }
 
+        public string? CoName { get; set; }
 
         public string? UpdatedOn { get; set; }
     }

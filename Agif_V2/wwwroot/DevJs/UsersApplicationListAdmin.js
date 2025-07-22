@@ -7,8 +7,11 @@ $(document).ready(function () {
         alert('DataTables library is not loaded. Please check your script references.');
         return;
     }
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get("status");
+    //const params = new URLSearchParams(window.location.search);
+    //const value = params.get("status");
+
+    let rawValue = $("#Status").val();
+    let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
     BindUsersData(value);
 });
 

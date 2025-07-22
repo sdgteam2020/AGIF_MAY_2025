@@ -1028,8 +1028,14 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsAttachPartIIOrderPdf")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsTotalExpenditureFilePdf")
+                        .HasColumnType("bit");
+
                     b.Property<double>("TotalExpenditure")
                         .HasColumnType("float");
+
+                    b.Property<string>("TotalExpenditureFilePdf")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -1675,11 +1681,17 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsOtherReasonPdf")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsTotalExpenditureFilePdf")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OtherReasons")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OtherReasonsPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalExpenditureFilePdf")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
