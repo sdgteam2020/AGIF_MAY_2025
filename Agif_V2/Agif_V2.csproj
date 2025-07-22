@@ -51,7 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Home\UserApprovalLists.cshtml" />
     <None Include="wwwroot\images\auth\.DS_Store" />
     <None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
     <None Include="wwwroot\ImportantPdfFiles\AGIF Loan  Inward Payment Using NEFT.pdf" />

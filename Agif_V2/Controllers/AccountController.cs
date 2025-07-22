@@ -245,7 +245,7 @@ namespace Agif_V2.Controllers
             return View(dTOTempSession);
         }
 
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
             try
