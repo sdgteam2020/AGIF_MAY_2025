@@ -162,6 +162,7 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
+        
         public async Task<IActionResult> Register(DTOuserProfile signUpDto)
         {
             if(ModelState.IsValid)

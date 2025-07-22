@@ -440,14 +440,15 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
     var URL = '';
     $.ajax({
 
-       // url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
-        url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
+       url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
+        //url:"https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
         contentType: 'application/json', // Set content type to XML
 
         data: JSON.stringify({
             //"inputPersID": IcNo
-            "inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"
+            //"inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"
+            "inputPersID": "9A4BEB14B87DE35D6BBA98E2B16AD4EB341D52BDA2BB3B7EADB064BAF676CBD3"
             //"inputPersID": "9A4BEB14B87DE35D6BBA98E2B16AD4EB341D52BDA2BB3B7EADB064BAF676CBD3"
         }),
 
@@ -516,8 +517,8 @@ function GetTokenSignXml(xml, Usertype) {
     var URL = '';
 
     $.ajax({
-        //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
-        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
+        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        //url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
         data: xml, // Set the XML data

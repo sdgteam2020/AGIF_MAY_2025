@@ -365,3 +365,10 @@ FodyWeavers.xsd
 appsettings.json
 /Agif_V2/appsettings.json
 /Agif_V2/Views/Home/UserApprovalLists.cshtml
+/Agif_V2/appsettings.json
+/Agif_V2/wwwroot/iis-test.html
+/Agif_V2/admin-instructions.txt
+/Agif_V2/appsettings.Production.json
+/Agif_V2/setup-iis.bat
+/Agif_V2/setup-iis.ps1
+/Agif_V2/web.config

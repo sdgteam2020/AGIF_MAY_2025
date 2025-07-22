@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     $('#typeSelect').on('change', function () {
         var selectedType = $(this).val();
-        console.log('Dropdown changed to:', selectedType);
         clearAllData();
     });
 
