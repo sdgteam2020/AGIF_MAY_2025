@@ -38,6 +38,13 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
     option.User.RequireUniqueEmail = false;
 }).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+});
+
 builder.Services.AddTransient<IOnlineApplication, OnlineApplicationDL>();
 builder.Services.AddScoped<IClaimOnlineApplication, ClaimOnlineApplicationDL>();
 builder.Services.AddTransient<IAppointment, AppointmentDL>();

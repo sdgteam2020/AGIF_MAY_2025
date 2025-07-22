@@ -32,7 +32,7 @@ function BindUsersData(status) {
         $('#tblReceivedApplications').DataTable().destroy();
     }
 
-    var columns = [
+    let columns = [
         {
             data: null,
             name: "SerialNumber",
@@ -94,7 +94,7 @@ function BindUsersData(status) {
                 render: function (data, type, row) {
                     if (data) {
                         // Format the date if needed
-                        var date = new Date(data);
+                        const date = new Date(data);
                         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
                     }
                     return 'N/A';
@@ -119,7 +119,7 @@ function BindUsersData(status) {
     });
 
     // Initialize DataTable with server-side processing
-    var table = $('#tblReceivedApplications').DataTable({
+    const table = $('#tblReceivedApplications').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -179,7 +179,7 @@ function downloadApplication(applicationId, armyNo, applicationType) {
         return;
     }
 
-    var applicationIds = [];
+    let applicationIds = [];
     applicationIds.push(applicationId);
 
     // Option 2: Using AJAX if you need to handle response differently
@@ -211,7 +211,7 @@ function downloadApplication(applicationId, armyNo, applicationType) {
 
 
 function getAllApplicationByDateWise() {
-    var date = $('#toDate').val();
+    const date = $('#toDate').val();
     if (!date) {
         alert('Please select a date to filter applications.');
         return;
@@ -227,7 +227,7 @@ function getAllApplicationByDateWise() {
                 return;
             }
 
-            var applicationIds = [];
+            let applicationIds = [];
             response.forEach(function (item) {
                 applicationIds.push(item.applicationId);
             });
@@ -255,7 +255,7 @@ function downloadApplications(applicationIds) {
             }
 
             // Automatically trigger download of the zip file
-            var downloadUrl = `/ClaimPdfDownloaded/${folderName}.zip`;
+            const downloadUrl = `/ClaimPdfDownloaded/${folderName}.zip`;
             window.location.href = downloadUrl; // triggers file download
         },
         error: function (xhr, status, error) {

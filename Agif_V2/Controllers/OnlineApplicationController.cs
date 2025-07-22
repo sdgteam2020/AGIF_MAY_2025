@@ -4,6 +4,7 @@ using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,7 +37,7 @@ namespace Agif_V2.Controllers
             _env = env;
             _mergePdf = mergePdf;
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> OnlineApplication()
         {
             var loanType = TempData["LoanType"] as string;

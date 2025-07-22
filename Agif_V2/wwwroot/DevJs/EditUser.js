@@ -2,10 +2,10 @@
     populateDropdowns();
 
     function populateDropdowns() {
-        var Rank = $('#rank').data('rank-prefix');
-        var regtCorps = $('#regtCorps').data('regtcorps-prefix');
-        var ApptId = $('#ApptId').data('apptid-prefix');
-        var UnitId = $('#UnitId').val();
+        const Rank = $('#rank').data('rank-prefix');
+        const regtCorps = $('#regtCorps').data('regtcorps-prefix');
+        const ApptId = $('#ApptId').data('apptid-prefix');
+        const UnitId = $('#UnitId').val();
 
         mMsater(regtCorps, "regtCorps", 8, 0);
         mMsater(Rank, "rank", 3, 0);

@@ -2034,7 +2034,7 @@ function calculateMaxEMI_HBA(propType) {
     Residual -= 6;
 
     if (propType == 5) {
-        EMI = 120;
+         let EMI = 120;
         if (EMI < Residual) {
             $("#HBA_EMI_Eligible").val(EMI);
         }
