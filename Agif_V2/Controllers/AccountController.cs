@@ -9,6 +9,7 @@ using DataTransferObject.Response;
 using DocumentFormat.OpenXml.Spreadsheet;
 using iText.Commons.Actions.Contexts;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -241,7 +242,7 @@ namespace Agif_V2.Controllers
             return View(dTOTempSession);
         }
 
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
             try
