@@ -38,7 +38,7 @@ namespace Agif_V2.Controllers
             if (application)
             {
                 TempData["Message"] = "You have already uploaded the Documents for this Application.";
-                return RedirectToAction("ApplicationDetails");
+                return RedirectToAction("ApplicationDetails","Upload");
             }
 
             bool IsextensionOfService = await _IonlineApplication1.CheckExtensionofservice(applicationId);
@@ -265,7 +265,7 @@ namespace Agif_V2.Controllers
             }
             
             TempData["Message"] = "Application has been forwarded to your Unit Cdr/IO/Superior Countersigning Auth.";
-            return RedirectToAction("ApplicationDetails");
+            return RedirectToAction("ApplicationDetails","Upload");
         }
         [HttpPost]
         public JsonResult InfoBeforeUpload(string applicationId)

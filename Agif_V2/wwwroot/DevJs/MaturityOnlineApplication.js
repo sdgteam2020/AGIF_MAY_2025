@@ -1,5 +1,6 @@
 ﻿
 $(document).ready(function () {
+    maturityInfo();
     expandAccordions();
     confirmAccountNo();
     loadDropdown();
@@ -1528,3 +1529,133 @@ $('#OtherReasons').on('input', function () {
         $(this).val(words.join(' ')); // Join them back into a string and update the input
     }
 });
+
+
+function maturityInfo() {
+    Swal.fire({
+        title: 'MAWD Application Instructions',
+        html: `
+            <div class="mawd-container">
+                <!-- Instructions for Member Section -->
+                <div class="member-header">
+                    <h3 class="header-title">
+                        📋 Instructions for Member
+                    </h3>
+                </div>
+
+                <!-- Guidelines Section -->
+                <div class="guidelines-section">
+                    <div class="guideline-header">
+                        <h4 class="guideline-title">
+                            1. Guidelines for applying MAWD application:
+                        </h4>
+                    </div>
+
+                    <div class="guideline-content">
+                        <div class="guideline-item">
+                            <strong class="item-label">(a)</strong>
+                            <span class="item-text">
+                                Applicant should apply only after completion of 15 years of service.
+                            </span>
+                        </div>
+
+                        <div class="guideline-item">
+                            <strong class="item-label">(b)</strong>
+                            <span class="item-text">
+                                MAWD can be withdrawn only in following circumstances:
+                            </span>
+
+                            <div class="sub-items">
+                                <div class="sub-item education">
+                                    <strong class="sub-label">(i)</strong>
+                                    <span class="sub-text">
+                                        Education of child (for children studying 12<sup>th</sup> class and above).
+                                    </span>
+                                </div>
+                                <div class="sub-item marriage">
+                                    <strong class="sub-label">(ii)</strong>
+                                    <span class="sub-text">
+                                        Marriage of child.
+                                    </span>
+                                </div>
+                                <div class="sub-item repair">
+                                    <strong class="sub-label">(iii)</strong>
+                                    <span class="sub-text">
+                                        Repair-renovation of existing house (applicable during last 2 years of service only).
+                                    </span>
+                                </div>
+                                <div class="sub-item special">
+                                    <strong class="sub-label">(iv)</strong>
+                                    <span class="sub-text">
+                                        All other cases requesting withdrawal to be treated for grant of "Special Reason".
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Rules Section -->
+                <div class="rules-section">
+                    <div class="rule-warning">
+                        <div class="rule-content">
+                            <span class="rule-icon">⚠️</span>
+                            <strong class="rule-text">
+                                2. Maximum two times withdrawal can be done during entire service including withdrawal in last two years of service.
+                            </strong>
+                        </div>
+                    </div>
+
+                    <div class="rule-time">
+                        <div class="rule-content">
+                            <span class="rule-icon">⏱️</span>
+                            <strong class="rule-text">
+                                3. Minimum gap between two withdrawals should be at least six months.
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Separator -->
+                <div class="separator">
+                    <div class="separator-text">
+                        ◆ ◆ ◆
+                    </div>
+                </div>
+
+                <!-- Instructions for Approving Authority Section -->
+                <div class="authority-header">
+                    <h3 class="header-title">
+                        👨‍💼 Instructions for Approving Authority
+                    </h3>
+                </div>
+
+                <!-- Approval Guidelines -->
+                <div class="approval-guidelines">
+                    <div class="approval-item verification">
+                        <div class="approval-number">1</div>
+                        <div class="approval-text">
+                            <strong>Particulars of applicant, purpose of withdrawal & bank details must be verified as correct.</strong>
+                        </div>
+                    </div>
+
+                    <div class="approval-item documents">
+                        <div class="approval-number">2</div>
+                        <div class="approval-text">
+                            <strong>Supporting documents should be verified.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#667eea',
+        width: '750px',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        }
+    });
+}

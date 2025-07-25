@@ -427,51 +427,6 @@
     </div>
 
     <input type="hidden" id="isExtension" value="@IsExtension.ToString().ToLower()" />
-
+    <input type="hidden" id="messageHolder" value="@message" />
 </div>
-
-<style>
-    .file-preview-container {
-        margin-top: 6px;
-        overflow: hidden;
-    }
-
-        .file-preview-container embed {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .file-preview-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .file-preview-container p {
-            color: #888;
-            font-style: italic;
-        }
-</style>
 <script src="~/devjs/upload.js"></script>
-
-<script>
-    $(document).ready(function () {
-        var message = '@message';
-
-        if (message !== '' && message !== null) {
-            // Display SweetAlert with custom styles
-            Swal.fire({
-                html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
-                icon: 'success',
-                confirmButtonText: 'OK',  // Text on the confirm button
-                confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
-                customClass: {
-                    title: 'font-weight-bold',  // Optional: makes the title bold
-                    htmlContainer: 'text-dark'  // Optional: sets the message text color
-                },
-                padding: '25px'  // Adds padding to the alert for better spacing
-            });
-        }
-    });
-</script>

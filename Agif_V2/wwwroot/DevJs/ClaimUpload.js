@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-
+    messageHandler() 
     checkUploadFiles();
 
 
@@ -173,3 +173,20 @@ function checkUploadFiles() {
 // Bind change event to all file inputs
 $('input[type="file"]').on('change', checkUploadFiles);
 
+function messageHandler() {
+    var message = $('#messageHolder').val();
+
+    if (message && message.trim() !== '') {
+        Swal.fire({
+            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            customClass: {
+                confirmButton: 'btn btn-primary btn-lg',
+                title: 'font-weight-bold',
+                htmlContainer: 'text-dark'
+            },
+            padding: '25px'
+        });
+    }
+}

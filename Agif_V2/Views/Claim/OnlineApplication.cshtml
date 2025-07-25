@@ -25,368 +25,8 @@
 
 }
 <style>
-    .ui-autocomplete {
-        z-index: 1050 !important; /* higher than your popup/modal */
-    }
 
-    #unitSearchDialog input {
-        text-align: left !important;
-        font-size: 20px;
-    }
-
-    .uploadDialog {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark background */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1050; /* Make sure it's on top of other elements */
-        padding: 10px;
-    }
-
-    /* Styling for the dialog box */
-    .dialog-box {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        max-height: 80vh;
-        width: 60%;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 20px; /* Add space between elements */
-        transition: all 0.3s ease-in-out;
-    }
-
-        /* Heading style */
-        .dialog-box h4 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-    /* Input field styling */
-    #unitSearchDialog input {
-        font-size: 1.2rem;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: border-color 0.3s;
-    }
-
-        #unitSearchDialog input:focus {
-            border-color: #007bff; /* Blue color on focus */
-            outline: none;
-        }
-
-    /* Error message styling */
-    #unitSearchMessage {
-        font-size: 18px;
-        font-weight: normal;
-        color: red;
-        margin-top: -8px;
-    }
-
-    /* Button styles */
-
-    #unitSearchDialog .dialog-box {
-        width: 600px; /* keep your width */
-        padding: 20px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* center children horizontally */
-    }
-
-    #unitSearchDialog h4 {
-        margin-bottom: 20px;
-        font-weight: 600;
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    #unitSearchInput {
-        width: 100%; /* full width inside dialog */
-        font-weight: bold;
-        font-size: 20px; /* larger font size */
-        padding: 12px 15px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-        text-align: center; /* center the text */
-        outline-offset: 2px;
-        transition: border-color 0.3s;
-    }
-
-        #unitSearchInput:focus {
-            border-color: #4292f4;
-            box-shadow: 0 0 8px rgba(66,146,244,0.5);
-        }
-
-    #unitSearchMessage {
-        margin-top: 8px;
-        min-height: 1.2em;
-        font-size: 18px;
-        color: #d9534f;
-        text-align: center;
-        width: 100%;
-    }
-
-    #unitSearchDialog .d-flex.justify-content-end.mt-3 {
-        justify-content: center !important; /* center the buttons container */
-        gap: 15px; /* spacing between buttons */
-        margin-top: 25px !important;
-        width: 100%;
-    }
-
-    #unitSearchCancelBtn,
-    #unitSearchConfirmBtn {
-        min-width: 120px;
-        font-weight: 600;
-        padding: 12px 25px;
-        border-radius: 8px;
-    }
-
-
-    .custom-file-text::-webkit-file-upload-button {
-        visibility: hidden;
-    }
-
-    .custom-file-text::before {
-        content: attr(data-text);
-        display: inline-block;
-        background: #007bff;
-        color: white;
-        border: 1px solid #007bff;
-        border-radius: 3px;
-        padding: 0px 2px;
-        outline: none;
-        white-space: nowrap;
-        cursor: pointer;
-        font-weight: 700;
-    }
-
-    .custom-file-text:hover::before {
-        border-color: #0056b3;
-        background: #0056b3;
-    }
-
-    .custom-file-text:active::before {
-        background: #004085;
-    }
-
-    .loan-entry {
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background-color: #f8f9fa;
-    }
-
-    .remove-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-
-    .loan-entry {
-        position: relative;
-    }
-
-    .add-loan-section {
-        text-align: center;
-        padding: 30px;
-        border: 2px dashed #dee2e6;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    }
-
-    .loan-type-section {
-        display: none;
-        margin-top: 20px;
-    }
-
-        .loan-type-section.active {
-            display: block;
-        }
-
-    .ui-datepicker {
-        background: white;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        padding: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        width: 280px;
-        z-index: 9999;
-    }
-
-    .ui-datepicker-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
-        position: relative;
-    }
-
-    .ui-datepicker-title {
-        text-align: center;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .ui-datepicker-prev,
-    .ui-datepicker-next {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255,255,255,0.2);
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .ui-datepicker-prev {
-        left: 10px;
-    }
-
-    .ui-datepicker-next {
-        right: 10px;
-    }
-
-        .ui-datepicker-prev:hover,
-        .ui-datepicker-next:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .ui-datepicker-prev span,
-        .ui-datepicker-next span {
-            display: block;
-            width: 100%;
-            height: 100%;
-            text-indent: -9999px;
-            position: relative;
-        }
-
-            .ui-datepicker-prev span:before {
-                content: "❮";
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                text-indent: 0;
-                color: white;
-                font-size: 12px;
-            }
-
-            .ui-datepicker-next span:before {
-                content: "❯";
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                text-indent: 0;
-                color: white;
-                font-size: 12px;
-            }
-
-    .ui-datepicker-calendar {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .ui-datepicker-calendar th {
-            padding: 10px 5px;
-            text-align: center;
-            font-weight: 600;
-            color: #667eea;
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-
-        .ui-datepicker-calendar td {
-            padding: 2px;
-            text-align: center;
-        }
-
-            .ui-datepicker-calendar td a {
-                display: block;
-                width: 32px;
-                height: 32px;
-                line-height: 32px;
-                text-decoration: none;
-                color: #333;
-                border-radius: 6px;
-                transition: all 0.3s ease;
-                font-size: 14px;
-            }
-
-                .ui-datepicker-calendar td a:hover {
-                    background: #667eea;
-                    color: white;
-                    transform: scale(1.1);
-                }
-
-        .ui-datepicker-calendar .ui-datepicker-today a {
-            background: #f8f9fa;
-            border: 2px solid #667eea;
-            font-weight: bold;
-        }
-
-        .ui-datepicker-calendar .ui-datepicker-current-day a,
-        .ui-datepicker-calendar .ui-state-active {
-            background: #667eea;
-            color: white;
-            font-weight: bold;
-        }
-
-        .ui-datepicker-calendar .ui-datepicker-other-month a {
-            color: #ccc;
-        }
-
-    /* Clip Effect Animation */
-    .ui-datepicker {
-        animation: clipIn 0.4s ease-out;
-    }
-
-    @@keyframes clipIn {
-        0% {
-            clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
-            opacity: 0;
-            transform: scale(0.8);
-        }
-
-        50% {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-            opacity: 0.7;
-            transform: scale(0.9);
-        }
-
-        100% {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    .swal-popup-custom {
-        width: 600px !important; /* Set custom width */
-        max-width: 90vw; /* Ensure it's responsive on small screens */
-    }
+   
 </style>
 
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
@@ -397,7 +37,7 @@
 
     <div class="pagetitletwo position-relative text-center mb-3">
         <h1>Application Form <span id="loanTypeSpan">@PurposeTypeText</span></h1>
-        <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y" style=" margin-top:-29px" id="toggleAll">Expand All</button>
+        <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y mt-minus-29" id="toggleAll">Expand All</button>
     </div>
 
     <div class="accordion" id="formAccordion">
@@ -405,7 +45,7 @@
             <!-- Personal Info -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
+                    <button class="accordion-button fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
                         <span class="w-100 text-center text-decoration-underline"><strong>Personal Details </strong></span>
                     </button>
                 </h2>
@@ -567,7 +207,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission" style="caret-color: transparent;"
+                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission"
                                                required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
@@ -705,7 +345,7 @@
             <!--Regt/Unit Details-->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
                         <span class="w-100 text-center text-decoration-underline"><strong>Regt/Unit Details</strong></span>
                     </button>
                 </h2>
@@ -819,7 +459,7 @@
             <!-- Address -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Home Address</strong></span>
                     </button>
@@ -889,7 +529,7 @@
             <!-- Salary Account Details -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Salary Account Details</strong></span>
                     </button>
@@ -956,7 +596,7 @@
             <!--Exisitng Agif Loan-->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#ExistingAGIFLoans" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#ExistingAGIFLoans" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Details of Existing AGIF Loans</strong></span>
                     </button>
@@ -1000,7 +640,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="hbaDate" aria-label="Date of Birth" name="ClaimCommonData.House_Building_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Building_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <input type="date" class="form-control" id="hbaDate" aria-label="Date of Birth" name="ClaimCommonData.House_Building_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Building_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" >
                                                             <label class="form-label select-label ">House Building Date of Loan taken</label>
                                                         </div>
 
@@ -1043,7 +683,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="hraDate" aria-label="Date of Birth" name="ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <input type="date" class="form-control" id="hraDate" aria-label="Date of Birth" name="ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")">
                                                             <label class="form-label select-label" for="hraDate">House Repair Date of Loan taken</label>
                                                         </div>
 
@@ -1085,7 +725,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="caDate" aria-label="Date of Birth" name="ClaimCommonData.Conveyance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Conveyance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <input type="date" class="form-control" id="caDate" aria-label="Date of Birth" name="ClaimCommonData.Conveyance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Conveyance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" >
                                                             <label class="form-label select-label" for="caDate">Conveyance Date of Loan taken</label>
                                                         </div>
 
@@ -1127,7 +767,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="pcaDate" aria-label="Date of Birth" name="ClaimCommonData.Computer_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Computer_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <input type="date" class="form-control" id="pcaDate" aria-label="Date of Birth" name="ClaimCommonData.Computer_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Computer_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" >
                                                             <label class="form-label select-label" for="pcaDate">Computer Date of Loan taken</label>
                                                         </div>
 
@@ -1240,7 +880,7 @@
                     <!-- HBA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline"><strong>For Education only (Applicable for children studying in 12th Class and above)</strong></span>
                             </button>
                         </h2>
@@ -1326,7 +966,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1379,7 +1019,7 @@
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text" data-text="
         Attach Bonafide cert/admission letter" required accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1405,7 +1045,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1424,7 +1064,7 @@
                     <!-- Marriage Purpose -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline"><strong>For Marriage Purpose Only</strong></span>
                             </button>
                         </h2>
@@ -1506,7 +1146,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
 
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
                                             </div>
@@ -1546,7 +1186,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text" required data-text="Attach invitation card" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1564,7 +1204,7 @@
                     <!-- PCA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline">
                                     <strong>
                                         For Renovation/Repair of House only(Applicable only in last two years of service).
@@ -1627,7 +1267,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1644,7 +1284,7 @@
                 {
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline"><strong>Any other reason requiring waiver</strong></span>
                             </button>
                         </h2>
@@ -1670,7 +1310,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1681,7 +1321,7 @@
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                                                <p class="file-error-message" style="color:red;"></p>
+                                                <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1700,7 +1340,7 @@
 
                 </div>
             </div>
-            <div class="col-md-12" id="msgerror" style="margin-top: 10px;">
+            <div class="col-md-12 mt-10px" id="msgerror">
             </div>
 
             <input type="hidden" id="Category" name="Category" value=@Category />
@@ -1711,15 +1351,15 @@
             <input type="hidden" id="ca_Loan" name="ClaimCommonData.Conveyance_Advance_Loan" value=@Model.ClaimCommonData?.Conveyance_Advance_Loan />
             <input type="hidden" id="pca_Loan" name="ClaimCommonData.Computer_Advance_Loan" value=@Model.ClaimCommonData?.Computer_Advance_Loan />
 
-            <div id="unitSearchDialog" class="uploadDialog" style="display:none;">
-                <div class="dialog-box" style="width: 668px;">
+            <div id="unitSearchDialog" class="uploadDialog d-none" style="display:none;">
+                <div class="dialog-box w-668">
                     <h3 class="text-center mb-3">Please Enter Army No to Your Formation Unit Cdr</h3>
 
-                    <input type="text" id="unitSearchInput" class="form-control form-space" placeholder="Enter Army Number..." autocomplete="off" maxlength="15" style="font-weight:bold;" />
+                    <input type="text" id="unitSearchInput" class="form-control form-space fw-bold" placeholder="Enter Army Number..." autocomplete="off" maxlength="15" />
                     <span class="text-danger" id="unitSearchMessage"></span>
                     <div class="d-flex justify-content-end mt-3">
-                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2" style="margin-top:10px;">Cancel</button>
-                        <button id="unitSearchConfirmBtn" class="btn btn-primary" disabled style="margin-top:10px;">Confirm</button>
+                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2 mt-10px" >Cancel</button>
+                        <button id="unitSearchConfirmBtn" class="btn btn-primary mt-10px" disabled >Confirm</button>
                     </div>
                 </div>
             </div>
@@ -1739,231 +1379,3 @@
 <script type="text/javascript" src="~/js/mdb/mdb.min.js"></script>
 
 
-<script>
-    $(document).ready(function () {
-        Swal.fire({
-            title: 'MAWD Application Instructions',
-            html: `
-                    <div style="
-                        margin: 20px;
-                        text-align: left;
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        line-height: 1.6;
-                        color: #333;
-                    ">
-                        <!-- Instructions for Member Section -->
-                        <div style="
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            color: white;
-                            padding: 15px;
-                            border-radius: 8px;
-                            margin-bottom: 20px;
-                            text-align: center;
-                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                        ">
-                            <h3 style="margin: 0; font-size: 18px; font-weight: 600;">
-                                📋 Instructions for Member
-                            </h3>
-                        </div>
-
-                        <!-- Guidelines Section -->
-                        <div style="margin-bottom: 25px;">
-                            <div style="
-                                background: #f8f9fa;
-                                border-left: 4px solid #667eea;
-                                padding: 15px;
-                                margin-bottom: 15px;
-                                border-radius: 0 8px 8px 0;
-                            ">
-                                <h4 style="margin: 0 0 10px 0; color: #667eea; font-size: 16px;">
-                                    1. Guidelines for applying MAWD application:
-                                </h4>
-                            </div>
-
-                            <div style="margin-left: 20px;">
-                                <div style="margin-bottom: 15px;">
-                                    <strong style="color: #495057;">(a)</strong>
-                                    <span style="margin-left: 10px;">
-                                        Applicant should apply only after completion of 15 years of service.
-                                    </span>
-                                </div>
-
-                                <div style="margin-bottom: 15px;">
-                                    <strong style="color: #495057;">(b)</strong>
-                                    <span style="margin-left: 10px;">
-                                        MAWD can be withdrawn only in following circumstances:
-                                    </span>
-
-                                    <div style="margin-left: 30px; margin-top: 10px;">
-                                        <div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px;">
-                                            <strong style="color: #856404;">(i)</strong>
-                                            <span style="margin-left: 10px;">
-                                                Education of child (for children studying 12<sup>th</sup> class and above).
-                                            </span>
-                                        </div>
-                                        <div style="margin-bottom: 8px; padding: 8px; background: #d1ecf1; border-radius: 4px;">
-                                            <strong style="color: #0c5460;">(ii)</strong>
-                                            <span style="margin-left: 10px;">
-                                                Marriage of child.
-                                            </span>
-                                        </div>
-                                        <div style="margin-bottom: 8px; padding: 8px; background: #d4edda; border-radius: 4px;">
-                                            <strong style="color: #155724;">(iii)</strong>
-                                            <span style="margin-left: 10px;">
-                                                Repair-renovation of existing house (applicable during last 2 years of service only).
-                                            </span>
-                                        </div>
-                                        <div style="margin-bottom: 8px; padding: 8px; background: #f8d7da; border-radius: 4px;">
-                                            <strong style="color: #721c24;">(iv)</strong>
-                                            <span style="margin-left: 10px;">
-                                                All other cases requesting withdrawal to be treated for grant of "Special Reason".
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Important Rules Section -->
-                        <div style="margin-bottom: 25px;">
-                            <div style="
-                                background: #fff3cd;
-                                border: 1px solid #ffeaa7;
-                                padding: 15px;
-                                border-radius: 8px;
-                                margin-bottom: 10px;
-                            ">
-                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                    <span style="font-size: 18px; margin-right: 10px;">⚠️</span>
-                                    <strong style="color: #856404; font-size: 16px;">
-                                        2. Maximum two times withdrawal can be done during entire service including withdrawal in last two years of service.
-                                    </strong>
-                                </div>
-                            </div>
-
-                            <div style="
-                                background: #d1ecf1;
-                                border: 1px solid #bee5eb;
-                                padding: 15px;
-                                border-radius: 8px;
-                            ">
-                                <div style="display: flex; align-items: center;">
-                                    <span style="font-size: 18px; margin-right: 10px;">⏱️</span>
-                                    <strong style="color: #0c5460; font-size: 16px;">
-                                        3. Minimum gap between two withdrawals should be at least six months.
-                                    </strong>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Separator -->
-                        <div style="
-                            border-top: 2px solid #e9ecef;
-                            margin: 30px 0;
-                            position: relative;
-                        ">
-                            <div style="
-                                position: absolute;
-                                top: -15px;
-                                left: 50%;
-                                transform: translateX(-50%);
-                                background: white;
-                                padding: 0 20px;
-                                color: #6c757d;
-                                font-size: 14px;
-                            ">
-                                ◆ ◆ ◆
-                            </div>
-                        </div>
-
-                        <!-- Instructions for Approving Authority Section -->
-                        <div style="
-                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                            color: white;
-                            padding: 15px;
-                            border-radius: 8px;
-                            margin-bottom: 20px;
-                            text-align: center;
-                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                        ">
-                            <h3 style="margin: 0; font-size: 18px; font-weight: 600;">
-                                👨‍💼 Instructions for Approving Authority
-                            </h3>
-                        </div>
-
-                        <!-- Approval Guidelines -->
-                        <div style="margin-left: 20px;">
-                            <div style="
-                                display: flex;
-                                align-items: flex-start;
-                                margin-bottom: 15px;
-                                padding: 12px;
-                                background: #e7f3ff;
-                                border-radius: 8px;
-                                border-left: 4px solid #2196f3;
-                            ">
-                                <div style="
-                                    background: #2196f3;
-                                    color: white;
-                                    width: 24px;
-                                    height: 24px;
-                                    border-radius: 50%;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    font-weight: bold;
-                                    font-size: 14px;
-                                    margin-right: 15px;
-                                    flex-shrink: 0;
-                                ">
-                                    1
-                                </div>
-                                <div style="color: #1976d2;">
-                                    <strong>Particulars of applicant, purpose of withdrawal & bank details must be verified as correct.</strong>
-                                </div>
-                            </div>
-
-                            <div style="
-                                display: flex;
-                                align-items: flex-start;
-                                margin-bottom: 15px;
-                                padding: 12px;
-                                background: #f3e5f5;
-                                border-radius: 8px;
-                                border-left: 4px solid #9c27b0;
-                            ">
-                                <div style="
-                                    background: #9c27b0;
-                                    color: white;
-                                    width: 24px;
-                                    height: 24px;
-                                    border-radius: 50%;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    font-weight: bold;
-                                    font-size: 14px;
-                                    margin-right: 15px;
-                                    flex-shrink: 0;
-                                ">
-                                    2
-                                </div>
-                                <div style="color: #7b1fa2;">
-                                    <strong>Supporting documents should be verified.</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `,
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#667eea',
-            width: '750px',
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-            }
-        });
-    });
-</script>

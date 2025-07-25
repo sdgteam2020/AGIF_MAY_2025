@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    
+    messageHandler();
     checkUploadFiles();
 
     $('.file-upload-limited').on('change', function () {
@@ -161,20 +161,20 @@ function checkUploadFiles() {
     checkAllRequiredFiles();
 }
 
-$(document).ready(function () {
-    // Make sure the message is injected dynamically from Razor into a JS variable
-    if (window.message !== '' && window.message !== null && typeof window.message !== 'undefined') {
+function messageHandler() {
+    var message = $('#messageHolder').val();
+
+    if (message && message.trim() !== '') {
         Swal.fire({
-            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${window.message}</span>`,
+            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,
             icon: 'success',
             confirmButtonText: 'OK',
-            confirmButtonClass: 'btn btn-primary btn-lg',
             customClass: {
+                confirmButton: 'btn btn-primary btn-lg',
                 title: 'font-weight-bold',
                 htmlContainer: 'text-dark'
             },
             padding: '25px'
         });
     }
-});
-
+}
