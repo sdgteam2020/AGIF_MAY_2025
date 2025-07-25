@@ -15,6 +15,22 @@
         });
     }, 2000);
 }
+
+$(document).ready(function () {
+    // Event listener for the link with id 'pendingLink'
+    $('.submit-status').on('click', function (e) {
+        e.preventDefault();  // Prevent default anchor behavior
+
+        // Retrieve data attributes from the link
+        const controller = $(this).data('controller');
+        const method = $(this).data('method');
+        const status = $(this).data('status');
+
+        // Call the submitStatus function with the extracted data
+        submitStatus(controller, method, status);
+    });
+});
+
 function submitStatus(controller, method, status) {
     const form = document.createElement('form');
     form.method = 'POST';

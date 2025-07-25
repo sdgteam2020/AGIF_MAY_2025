@@ -65,20 +65,27 @@
                         </a>
                         <ul id="ddmenu_1" class="collapse show dropdown-nav">
                             <li>
-@*                                 <a href="~/ApplicationRequest/UserApplicationList?status=1"><i class="bi bi-hourglass"></i>Pending </a>
- *@
-                            <a href="#" onclick="submitStatus('ApplicationRequest','UserApplicationList',1)"><i class="bi bi-hourglass"></i> Pending</a>
+                            @*    <a href="~/ApplicationRequest/UserApplicationList?status=1"><i class="bi bi-hourglass"></i>Pending </a>
+ 
+                            <a href="#" onclick="submitStatus('ApplicationRequest','UserApplicationList',1)"><i class="bi bi-hourglass"></i> Pending</a> *@
+                                   <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="1"><i class="bi bi-hourglass"></i> Pending</a>
+
                             </li>
                             <li>
 
 @*                                 <a href="~/ApplicationRequest/UserApplicationList?status=2" class=""><i class="bi bi-check-circle-fill"></i>Approved </a>
- *@                                <a href="#" onclick="submitStatus('ApplicationRequest','UserApplicationList',2)"><i class="bi bi-check-circle-fill"></i> Approved</a>
+ *@                                
+                                   @* <a href="#" onclick="submitStatus('ApplicationRequest','UserApplicationList',2)"><i class="bi bi-check-circle-fill"></i> Approved</a> *@
+                                   <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="2"><i class="bi bi-check-circle-fill"></i> Approved</a>
+
                             </li>
                             <li>
 
-@*                                 <a href="~/ApplicationRequest/UserApplicationList?status=3" class=""><i class="bi bi-x-circle-fill"></i>Rejected </a>
- *@                            
-                <a href="#" onclick="submitStatus('ApplicationRequest','UserApplicationList',3)"><i class="bi bi-x-circle-fill"></i> Rejected</a>
+                              @*   <a href="~/applicationrequest/userapplicationlist?status=3" class=""><i class="bi bi-x-circle-fill"></i>rejected </a>                          
+                                    <a href="#" onclick="submitstatus('applicationrequest','userapplicationlist',3)"><i class="bi bi-x-circle-fill"></i> rejected</a> *@
+
+                                  <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="3"><i class="bi bi-check-circle-fill"></i> Rejected</a>
+
                         </li>
                         </ul>
                     </li>
@@ -98,15 +105,19 @@
                         </a>
                         <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
                             <li>
-@*                                 <a href="~/ApplicationRequest/ClaimApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>Maturity Received Application </a>
- *@
-                               <a href="#" onclick="submitStatus('ApplicationRequest','ClaimApplicationListAdmin',2)"><i class="bi bi-hourglass"></i> Maturity Received Application</a>
+                               @*  <a href="~/ApplicationRequest/ClaimApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>Maturity Received Application </a>
+
+                               <a href="#" onclick="submitStatus('ApplicationRequest','ClaimApplicationListAdmin',2)"><i class="bi bi-hourglass"></i> Maturity Received Application</a> *@
+                              <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="ClaimApplicationListAdmin" data-status="2"><i class="bi bi-hourglass"></i> Maturity Received Application</a>
 
                             </li>
                             <li>
-@*                                 <a href="~/ApplicationRequest/ClaimApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>Maturity Downloaded Application </a>
- *@                           
-                                <a href="#" onclick="submitStatus('ApplicationRequest','ClaimApplicationListAdmin',4)"><i class="bi bi-hourglass"></i> Maturity Downloaded Application</a>
+                              @*  <a href="~/ApplicationRequest/ClaimApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>Maturity Downloaded Application </a>
+                           
+                                <a href="#" onclick="submitStatus('ApplicationRequest','ClaimApplicationListAdmin',4)"><i class="bi bi-hourglass"></i> Maturity Downloaded Application</a> *@
+
+                             <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="ClaimApplicationListAdmin" data-status="4"><i class="bi bi-hourglass"></i> Maturity Downloaded Application</a>
+
                             </li>
                         </ul>
                     </li>
@@ -123,13 +134,17 @@
                         </a>
                         <ul id="ddmenu_2" class="collapse show dropdown-nav">
                             <li>
-@*                                 <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
- *@                                <a href="#" onclick="submitStatus('Account','GetAllUsers',true)" class="active"><i class="bi bi-hourglass"></i>Active Users</a>
+                                @* <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
+                                <a href="#" onclick="submitStatus('Account','GetAllUsers',true)" class="active"><i class="bi bi-hourglass"></i>Active Users</a> *@
+
+                                 <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="true"><i class="bi bi-hourglass"></i>Active Users</a>
+
                             </li>
                             <li>
-@*                                 <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
- *@                                
-                                <a href="#" onclick="submitStatus('Account','GetAllUsers',false)" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
+                               @*  <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
+                                
+                                <a href="#" onclick="submitStatus('Account','GetAllUsers',false)" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users</a> *@
+                                 <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="false"><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
 
                             </li>
                         </ul>
@@ -150,13 +165,18 @@
                         </a>
                         <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
                             <li>
-@*                                 <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
- *@                                  <a href="#" onclick="submitStatus('ApplicationRequest','UsersApplicationListAdmin', 2)"><i class="bi bi-hourglass"></i> CA/PCA/HBA Received Application</a>
+                         @*        <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=2" class="active"><i class="bi bi-hourglass"></i>CA/PCA/HBA Received Application </a>
+                                  <a href="#" onclick="submitStatus('ApplicationRequest','UsersApplicationListAdmin', 2)"><i class="bi bi-hourglass"></i> CA/PCA/HBA Received Application</a> *@
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UsersApplicationListAdmin" data-status="2"><i class="bi bi-hourglass"></i> CA/PCA/HBA Received Application</a>
+
+                                
                             </li>
                             <li>
-@*                                 <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>CA/PCA/HBA Downloaded Application </a>
- *@                           
-                                    <a href="#" onclick="submitStatus('ApplicationRequest','UsersApplicationListAdmin', 4)"><i class="bi bi-hourglass"></i> CA/PCA/HBA Downloaded Application</a>
+                            @*     <a href="~/ApplicationRequest/UsersApplicationListAdmin?status=4" class=""><i class="bi bi-hourglass"></i>CA/PCA/HBA Downloaded Application </a>
+                           
+                                <a href="#" onclick="submitStatus('ApplicationRequest','UsersApplicationListAdmin', 4)"><i class="bi bi-hourglass"></i> CA/PCA/HBA Downloaded Application</a> *@
+                              <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UsersApplicationListAdmin" data-status="4"><i class="bi bi-hourglass"></i> CA/PCA/HBA Downloaded Application</a> 
+
                             </li>
                         </ul>
                     </li>
@@ -181,13 +201,18 @@
                         </ul> *@
                          <ul id="ddmenu_2" class="collapse show dropdown-nav">
                             <li>
-@*                                 <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
- *@                                <a href="#" onclick="submitStatus('Account','GetAllUsers',true)" class="active"><i class="bi bi-hourglass"></i>Active Users</a>
+                               @*  <a href="~/Account/GetAllUsers?status=true" class="active"><i class="bi bi-hourglass"></i>Active Users </a>
+                                <a href="#" onclick="submitStatus('Account','GetAllUsers',true)" class="active"><i class="bi bi-hourglass"></i>Active Users</a> *@
+
+                                <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="true"><i class="bi bi-hourglass"></i>Active Users</a>
+
                             </li>
                             <li>
-@*                                 <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
- *@                                
-                                <a href="#" onclick="submitStatus('Account','GetAllUsers',false)" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
+                                @* <a href="~/Account/GetAllUsers?status=false" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users </a>
+                                
+                                <a href="#" onclick="submitStatus('Account','GetAllUsers',false)" class=""><i class="bi bi-check-circle-fill"></i>Deactive Users</a> *@
+
+                                <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="false"><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
 
                             </li>
                         </ul>
