@@ -30,7 +30,10 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     }));
 });
 
-
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    options.ValidationInterval = TimeSpan.Zero; 
+});
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
@@ -45,7 +48,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;
 });
 //builder.Services.AddResponseCompression(options =>

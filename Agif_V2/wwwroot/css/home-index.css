@@ -1,0 +1,30 @@
+﻿.ticker-container {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+#ticker01 {
+    animation: scroll 20s linear infinite;
+    position: relative;
+    padding-top: 200px; /* Start below the container */
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-100%);
+    }
+}
+.second-row{
+    height:310px;
+}
+
+.img-fluid{
+    width: 70%;
+    height: 109%;
+    object-fit: cover;
+}

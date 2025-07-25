@@ -6608,3 +6608,16 @@ tbody, td, tfoot, th, thead, tr {
     background-color: #310;
     color: white;
 }
+.bg-white-90 {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+.full-height-minus-200 {
+    height: calc(100vh - 200px);
+}
+.w-95 {
+    width: 95%;
+}
+
+.h-95 {
+    height: 95%;
+}

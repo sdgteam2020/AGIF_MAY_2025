@@ -5,29 +5,30 @@
     var samlRole = Context.Session.GetString("SAMLRole");
 }
 
+    <link href="~/css/home-index.css" rel="stylesheet" />
+
 <div class="container-fluid mt-2">
     <div class="row align-items-center">
-        <!-- First Column: 20% -->
+        <!-- First Column: MD Profile -->
         <div class="col-12 col-md-3 text-start">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="height:40px;text-align: -webkit-center;">
-                    <b style="margin:0px;color:white;">MD</b>
-
+            <div class="panel panel-default border">
+                <div class="panel-heading d-flex justify-content-center align-items-center">
+                    <b class="m-0 text-white">MD</b>
                 </div>
-                <div class="panel-body" style="text-align:center;">
+                <div class="panel-body text-center p-4">
                     <a href="~/Home/MDprofile">
                         <img src="~/Images/profile/RCP-2902.webp" style="width:60%; height:100%;">
                     </a>
-                    <div>
-                        <a href="~/Home/MDprofile"><b>Maj AB Singh, SM, VSM(Retd)</b></a>
+                    <div class="mt-2">
+                        <a href="~/Home/MDprofile" class="fw-bold text-decoration-none">Maj AB Singh, SM, VSM(Retd)</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Second Column: 60% -->
+        <!-- Second Column: Image Slider -->
         <div class="col-12 col-md-6 text-center">
-            <div class="slider">
+            <div class="slider border">
                 <div class="slides">
                     <div class="slide">
                         <img src="~/Images/pics/agif.webp" alt="Slide 1">
@@ -53,112 +54,123 @@
             </div>
         </div>
 
-        <!-- Third Column: 20% -->
+        <!-- Third Column: What's New -->
         <div class="col-12 col-md-3 text-end">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="height:40px;text-align: -webkit-center;">
-                    <b style="margin:0px;color:white;">What's New</b>
-
+            <div class="panel panel-default border">
+                <div class="panel-heading d-flex justify-content-center align-items-center">
+                    <b class="m-0 text-white">What's New</b>
                 </div>
-                <div class="panel-body">
-                    <div class="holder" style="height:-webkit-fill-available;height:-moz-fill-available;">
-                        <ul id="ticker01">
-                            <li><img src="~/Images/new.gif" /><a target="_blank" href="~/PdfViewer/SavingElement">Saving Element</a></li>
-                            <li><img src="~/Images/new.gif" /><a target="_blank" href="~/PdfViewer/AgifInfoBrochure">AGIF Info Brochure 2024 </a></li>
-                            <li><img src="~/Images/new.gif" /><a target="_blank" href="~/PdfViewer/GuidelinesUnitCdr">Guidelines for Unit Cdr Registration</a></li>
-                            <li><img src="~/Images/new.gif" /><a target="_blank" href="~/PdfViewer/UserManual">Guidelines for Applicant to apply online CA/PCA/HBA </a></li>
+                <div class="panel-body p-0">
+                    <div class="ticker-container h-100">
+                        <ul id="ticker01" class="list-unstyled p-3 m-0">
+                            <li class="mb-2">
+                                <img src="~/Images/new.gif" class="me-2" />
+                                <a target="_blank" href="~/PdfViewer/SavingElement" class="text-decoration-none">Saving Element</a>
+                            </li>
+                            <li class="mb-2">
+                                <img src="~/Images/new.gif" class="me-2" />
+                                <a target="_blank" href="~/PdfViewer/AgifInfoBrochure" class="text-decoration-none">AGIF Info Brochure 2024</a>
+                            </li>
+                            <li class="mb-2">
+                                <img src="~/Images/new.gif" class="me-2" />
+                                <a target="_blank" href="~/PdfViewer/GuidelinesUnitCdr" class="text-decoration-none">Guidelines for Unit Cdr Registration</a>
+                            </li>
+                            <li class="mb-2">
+                                <img src="~/Images/new.gif" class="me-2" />
+                                <a target="_blank" href="~/PdfViewer/UserManual" class="text-decoration-none">Guidelines for Applicant to apply online CA/PCA/HBA</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Second Row -->
+    <div class="row align-items-center mt-3">
+        <!-- FAQ Column -->
+        <div class="col-12 col-md-3 text-center">
+            <div class="panel panel-default border second-row" >
+                <div class="panel-heading d-flex justify-content-center align-items-center">
+                    <b class="m-0 text-white">FAQ</b>
+                </div>
+                <div class="panel-body p-3">
+                    <div class="h-100 text-start">
+                        <ul class="list-styled">
+                            <li class="mb-2">
+                                <a href="~/PdfViewer/AGIFLoanInwardPaymentUsingNEFT" target="_blank" class="text-decoration-none">Claims</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="~/PdfViewer/FaqAdvancesGeneral" target="_blank" class="text-decoration-none">Advances General</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="~/PdfViewer/FaqHBA" target="_blank" class="text-decoration-none">House Building Advance (HBA)</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="~/PdfViewer/FaqCA" target="_blank" class="text-decoration-none">Conveyance Advance (CA)</a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="~/PdfViewer/FaqPCA" target="_blank" class="text-decoration-none">Personal Computer Advance (PCA)</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row align-items-center">
-            <div class="col-12 col-md-3 text-center">
-                <div class="panel panel-default" style="height:310px">
-                    <div class="panel-heading" style="height:40px;text-align: -webkit-center;">
-                        <b style="margin:0px;color:white;">FAQ</b>
-
-                    </div>
-                    <div class="panel-body">
-                        <div style="height:-webkit-fill-available;height:-moz-fill-available; text-align:left">
-                            <ul>
-                                <li> <a href="~/PdfViewer/AGIFLoanInwardPaymentUsingNEFT" target="_blank">Claims</a></li>
-                                <li> <a href="~/PdfViewer/FaqAdvancesGeneral" target="_blank">Advances General</a></li>
-                                <li> <a href="~/PdfViewer/FaqHBA" target="_blank">House Building Advance (HBA)</a></li>
-                                <li> <a href="~/PdfViewer/FaqCA" target="_blank">Conveyance Advance (CA)</a></li>
-                                <li> <a href="~/PdfViewer/FaqPCA" target="_blank">Personal Computer Advance (PCA)</a></li>
-
-                            </ul>
-                        </div>
-                    </div>
+        <!-- About Us Column -->
+        <div class="col-12 col-md-6 text-center">
+            <div class="panel panel-default border second-row" >
+                <div class="panel-heading d-flex justify-content-center align-items-center" >
+                    <b class="m-0 text-white">About Us</b>
                 </div>
-            </div>
-            <div class="col-12 col-md-6 text-center">
-                <div class="panel panel-default" style="height:310px;">
-                    <div class="panel-heading" style="height:40px;text-align: -webkit-center;">
-                        <b style="margin:0px;color:white;">About Us </b>
-
-                    </div>
-
-                    <div class="panel-body text-justify">
-                        The Army Group Insurance Scheme is a group insurance cum savings scheme. It provides insurance and allied benefits to all ranks of the Indian Army. It is a society registered with the Registrar of Societies under the Registration of Societies Act (Act XX1) of 1860. It is operated entirely on the basis of monthly contributions by all ranks of the Army and is a self supporting and self sustaining organisation.AGIF is dynamic in its outlook and keeps revising its schemes to meet the aspirations and needs of its members. The entire cost of running the scheme i.e pay and allowances and maintenance charges of the organization are borne by the Fund.
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-3 text-center">
-                <div class="panel panel-default" style="height:310px;">
-                    <div class="panel-heading" style="height:40px;text-align:center;">
-                        <b style="margin:0px;color:white;">Quick Links </b>
-
-                    </div>
-
-                    <div class="panel-body" style="height:250px;">
-                        <div style="height:-webkit-fill-available">
-                            <ul class="p-0 list-unstyled">
-                                <li class="pb-1"><a target="_blank" href="https://portal.army.mil" class="btn btn-info btn-block">Army Portal</a></li>
-                                <li class="pb-1"><a target="_blank" href="https://msweb.army.mil" class="btn btn-info btn-block">MS Web</a></li>
-                                <li class="pb-1"><a target="_blank" href="https://agweb.army.mil" class="btn btn-info btn-block">AG Web</a></li>
-                                <li class="btn btn-info btn-block" style="cursor:auto;"><i class="fa fa-envelope-o "></i> adagif@gmail.com  </li>
-                                @if (!string.IsNullOrEmpty(samlRole) && samlRole == "unitCdr")
-                                {
-                                    <li class="btn btn-info btn-block" style="cursor:auto;"><i class="fa fa-envelope-o "><a href="~/CORole/UserApplicationList">Unit Cdr Dashboard</a></i>   </li>
-                                }
-                               
-                            </ul>
-
-                        </div>
+                <div class="panel-body text-justify p-3">
+                    <div class="overflow-auto h-100">
+                        The Army Group Insurance Scheme is a group insurance cum savings scheme. It provides insurance and allied benefits to all ranks of the Indian Army. It is a society registered with the Registrar of Societies under the Registration of Societies Act (Act XX1) of 1860. It is operated entirely on the basis of monthly contributions by all ranks of the Army and is a self supporting and self sustaining organisation. AGIF is dynamic in its outlook and keeps revising its schemes to meet the aspirations and needs of its members. The entire cost of running the scheme i.e pay and allowances and maintenance charges of the organization are borne by the Fund.
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- Quick Links Column -->
+        <div class="col-12 col-md-3 text-center">
+            <div class="panel panel-default border second-row">
+                <div class="panel-heading d-flex justify-content-center align-items-center" >
+                    <b class="m-0 text-white">Quick Links</b>
+                </div>
+                <div class="panel-body p-3">
+                    <div class="d-flex flex-column h-100 justify-content-start">
+                        <ul class="p-0 list-unstyled">
+                            <li class="pb-2">
+                                <a target="_blank" href="https://portal.army.mil" class="btn btn-info w-100">Army Portal</a>
+                            </li>
+                            <li class="pb-2">
+                                <a target="_blank" href="https://msweb.army.mil" class="btn btn-info w-100">MS Web</a>
+                            </li>
+                            <li class="pb-2">
+                                <a target="_blank" href="https://agweb.army.mil" class="btn btn-info w-100">AG Web</a>
+                            </li>
+                            <li class="pb-2">
+                                <div class="btn btn-info w-100 d-flex align-items-center justify-content-center">
+                                    <i class="fa fa-envelope-o me-2"></i>adagif@gmail.com
+                                </div>
+                            </li>
+                            @if (!string.IsNullOrEmpty(samlRole) && samlRole == "unitCdr")
+                            {
+                                <li class="pb-2">
+                                    <a href="~/CORole/UserApplicationList" class="btn btn-info w-100">
+                                        <i class="fa fa-envelope-o me-2"></i>Unit Cdr Dashboard
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    
-
 </div>
-<script>
-    const slides = document.querySelector('.slides');
-    const dots = document.querySelectorAll('.dot');
-    let index = 0;
-    const totalSlides = dots.length;
 
-    function showSlide(i) {
-        index = (i + totalSlides) % totalSlides; // Ensure circular navigation
-        slides.style.transform = `translateX(${-index * 100}%)`;
-
-        // Highlight the active dot
-        dots.forEach(dot => dot.classList.remove('active'));
-        dots[index].classList.add('active');
-    }
-
-    // Auto slide every 3 seconds
-    setInterval(() => showSlide(index + 1), 3000); // Change slide every 3 seconds
-
-    // Dot navigation (optional)
-    dots.forEach((dot, i) => {
-        dot.addEventListener('click', () => showSlide(i));
-    });
-</script>
+@section Scripts {
+    <script src="~/devjs/home-index.js"></script>
+}

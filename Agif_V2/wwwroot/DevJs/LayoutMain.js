@@ -1,4 +1,8 @@
-﻿function handleNavbarClick() {
+﻿
+$(document).ready(function () {
+    handleNavbarClick();
+});
+function handleNavbarClick() {
     let currentPath = window.location.pathname.toLowerCase();
 
     $(".dropdown-item, .nav-link").each(function () {

@@ -6,6 +6,7 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using DocumentFormat.OpenXml.InkML;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +51,6 @@ namespace Agif_V2.Controllers
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             return View(dTOTempSession);
         }
-
         public async Task<IActionResult> EditUser()
         {
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -494,7 +494,6 @@ namespace Agif_V2.Controllers
             return View(dTOTempSession);
         }
 
-
         public async Task<IActionResult> ClaimApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
@@ -634,124 +633,6 @@ namespace Agif_V2.Controllers
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
         }
-
-
-
-
-        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
-        //{
-
-
-        //    DTOExportRequest dTOExport = new DTOExportRequest
-        //    {
-        //        Id = id,
-
-        //    };
-        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
-
-
-        //    foreach (var data in ret.OnlineApplicationResponse)
-        //    {
-
-
-
-        //        //string ArmyNO = data.ArmyPrefix + data.Number + data.Suffix;
-        //        var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
-        //        var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
-
-        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
-
-        //        //Create Folder and GetFolder NAme
-        //        string basePath = Path.Combine("wwwroot", "PdfDownloaded");//Change Filder
-        //        if (Directory.Exists(basePath))
-        //        {
-        //            DirectoryInfo dirInfo = new DirectoryInfo(basePath);
-        //            foreach (var dir in dirInfo.GetDirectories())
-        //            {
-        //                dir.Delete(true); // true to delete all subdirectories and files
-        //            }
-
-        //            foreach (var file in dirInfo.GetFiles())
-        //            {
-        //                file.Delete();
-        //            }
-        //        }
-
-
-        //        string newFolderPath = CreateFolder(basePath);
-        //        //new Folder Url
-        //        string newFolderPathUri = Path.Combine(basePath, newFolderPath);
-        //        // Ensure the new folder exists
-        //        string destinationFilePath = Path.Combine(newFolderPathUri, fileName); // Corrected to use newFolderPathUri
-
-        //        // Copy the file to the new folder
-        //        System.IO.File.Copy(filePath, destinationFilePath, overwrite: true); // Corrected to use destinationFilePath
-        //        string zipFileName = $"{newFolderPathUri}.zip";
-        //        createZip(newFolderPathUri, zipFileName);
-
-
-
-        //        //////////////////Create Excel File Witlh Application Details/////////////////////
-
-
-        //        return Json(newFolderPath);
-        //    }
-
-        //    return Json(0);
-        //}
-
-        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
-        //{
-        //    DTOExportRequest dTOExport = new DTOExportRequest
-        //    {
-        //        Id = id,
-        //    };
-
-        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
-
-        //    // Base path to clean and create new folder
-        //    string basePath = Path.Combine("wwwroot", "PdfDownloaded");
-
-        //    // Clean old folders/files
-        //    if (Directory.Exists(basePath))
-        //    {
-        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
-        //        foreach (var dir in dirInfo.GetDirectories())
-        //        {
-        //            dir.Delete(true);
-        //        }
-
-        //        foreach (var file in dirInfo.GetFiles())
-        //        {
-        //            file.Delete();
-        //        }
-        //    }
-
-        //    // Create new folder
-        //    string newFolderName = CreateFolder(basePath);
-        //    string newFolderPath = Path.Combine(basePath, newFolderName);
-
-        //    foreach (var data in ret.OnlineApplicationResponse)
-        //    {
-        //        var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
-        //        var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
-
-        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
-
-        //        // Ensure file exists before copying
-        //        if (System.IO.File.Exists(filePath))
-        //        {
-        //            var destinationFilePath = Path.Combine(newFolderPath, fileName);
-        //            System.IO.File.Copy(filePath, destinationFilePath, overwrite: true);
-        //        }
-        //    }
-
-        //    // Zip the final folder
-        //    string zipFileName = $"{newFolderPath}.zip";
-        //    createZip(newFolderPath, zipFileName);
-
-        //    return Json(newFolderName); // return only after everything is complete
-        //}
 
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {

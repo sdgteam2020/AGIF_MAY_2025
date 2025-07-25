@@ -56,9 +56,8 @@ namespace Agif_V2.Controllers
                 return View(model);
             }
 
-
-
-            if(model.UserName == "MaturityAdmin")
+            // Special handling for MaturityAdmin
+            if (model.UserName == "MaturityAdmin")
             {
                 SessionUserDTO sessionUserDTO = new SessionUserDTO
                 {
@@ -72,24 +71,76 @@ namespace Agif_V2.Controllers
                     ArmyNo = "IC123456H"
                 };
 
-                var results = await _signInManager.PasswordSignInAsync("Admin", model.Password, isPersistent: false, lockoutOnFailure: false);
-                Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
+                var results = await _signInManager.PasswordSignInAsync("Admin", model.Password, isPersistent: false, lockoutOnFailure: true);
 
-                if (sessionUserDTO.Role.Contains("MaturityAdmin"))
+                if (results.Succeeded)
                 {
+                    // Generate new SecurityStamp for MaturityAdmin to enforce single session
+                    var adminUser = await _userManager.FindByNameAsync("Admin");
+                    if (adminUser != null)
+                    {
+                        adminUser.SecurityStamp = Guid.NewGuid().ToString();
+                        await _userManager.UpdateAsync(adminUser);
+                    }
+
+                    Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
                     return RedirectToAction("Index", "Home");
+                }
+                else if (results.IsLockedOut)
+                {
+                    var adminUser = await _userManager.FindByNameAsync("Admin");
+                    model = await PopulateLockoutInfo(model, adminUser);
+                    return View(model);
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt for MaturityAdmin.");
+                    return View(model);
                 }
             }
 
+            var user = await _userManager.FindByNameAsync(model.UserName);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid username or password.");
+                TempData["UserName"] = model.UserName;
+                return RedirectToAction("Register","Account");
+            }
 
-            var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, isPersistent: false, lockoutOnFailure: false);
+            if (await _userManager.IsLockedOutAsync(user))
+            {
+                model = await PopulateLockoutInfo(model, user);
+                return View(model);
+            }
+
+            var currentFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+
+            var lockoutOptions = _userManager.Options.Lockout;
+            var maxAttempts = lockoutOptions.MaxFailedAccessAttempts;
+            var lockoutDuration = lockoutOptions.DefaultLockoutTimeSpan;
+
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            await _userManager.UpdateAsync(user);
+
+            await _signInManager.SignOutAsync(); // Clear any existing session/cookies
+
+            var result = await _signInManager.PasswordSignInAsync(
+                model.UserName,
+                model.Password,
+                model.RememberMe,
+                lockoutOnFailure: true // Enable lockout on failure
+            );
+
             if (result.Succeeded)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+                await _userManager.ResetAccessFailedCountAsync(user);
+
                 var roles = await _userManager.GetRolesAsync(user);
-                var profile = _userProfile.GetUserAllDetails(model.UserName).Result;
+                var profile = await _userProfile.GetUserAllDetails(model.UserName);
 
                 string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
+                
+
                 SessionUserDTO sessionUserDTO = new SessionUserDTO
                 {
                     UserName = user.UserName,
@@ -101,6 +152,7 @@ namespace Agif_V2.Controllers
                     RankName = profile.RankName,
                     ArmyNo = profile.ArmyNo
                 };
+
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
 
                 if (roles.Contains("Admin"))
@@ -109,61 +161,96 @@ namespace Agif_V2.Controllers
                 }
                 else
                 {
-
                     if (profile == null)
                     {
                         return Json(new { success = false, message = "User mapping not found." });
                     }
+
                     bool isCOActive = profile.IsCOActive;
                     if (!isCOActive)
                     {
-
                         return RedirectToAction("COContactUs", "Default");
                     }
-
                 }
-                HttpContext.Session.SetString("UserGUID", _db.Users.FirstOrDefault(x => x.UserName == model.UserName).Id.ToString());
+
+                HttpContext.Session.SetString("UserGUID", user.Id.ToString());
                 return RedirectToAction("Index", "Default");
             }
             else if (result.IsLockedOut)
             {
-                ModelState.AddModelError(string.Empty, "Your account is locked out.");
+                // User is now locked out
+                model = await PopulateLockoutInfo(model, user);
+                return View(model);
+            }
+            else if (result.IsNotAllowed)
+            {
+                ModelState.AddModelError(string.Empty, "Your account is not allowed to sign in.");
+                return View(model);
             }
             else
             {
-                TempData["UserName"] = model.UserName;
+                // Failed login attempt
+                var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+                var remainingAttempts = maxAttempts - updatedFailedAttempts;
 
-                return RedirectToAction("Register", "Account");
+                if (remainingAttempts > 0)
+                {
+                    ModelState.AddModelError(string.Empty,
+                        $"Invalid username or password. {remainingAttempts} attempt(s) remaining before account lockout.");
+                }
+                else
+                {
+                    model = await PopulateLockoutInfo(model, user);
+                }
+
+                return View(model);
             }
-            return View();
         }
+
+        // Helper method to populate lockout information
+        private async Task<LoginViewModel> PopulateLockoutInfo(LoginViewModel model, ApplicationUser user)
+        {
+            if (user != null)
+            {
+                var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+                var failedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+                var maxAttempts = _userManager.Options.Lockout.MaxFailedAccessAttempts;
+
+                model.IsLockedOut = await _userManager.IsLockedOutAsync(user);
+                model.LockoutEnd = lockoutEnd?.DateTime;
+                model.FailedAttempts = failedAttempts;
+                model.MaxAllowedAttempts = maxAttempts;
+
+                if (model.IsLockedOut && lockoutEnd.HasValue)
+                {
+                    var timeRemaining = lockoutEnd.Value.Subtract(DateTimeOffset.UtcNow);
+                    if (timeRemaining.TotalMinutes > 60)
+                    {
+                        model.LockoutMessage = $"Account locked for {Math.Ceiling(timeRemaining.TotalHours)} hour(s).";
+                    }
+                    else if (timeRemaining.TotalSeconds > 0)
+                    {
+                        model.LockoutMessage = $"Account locked for {Math.Ceiling(timeRemaining.TotalMinutes)} minute(s).";
+                    }
+                    else
+                    {
+                        model.LockoutMessage = "Account lockout has expired. Please try again.";
+                    }
+                }
+            }
+
+            return model;
+        }
+
 
         public async Task<IActionResult> Register()
         {
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
-            //DTOUserProfileResponse dTOUserProfileResponse = new DTOUserProfileResponse();
-
-            //if (sessionUser!=null)
-            //    dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
 
             DTOuserProfile userProfileDTO = new DTOuserProfile();
 
-            //if (dTOUserProfileResponse != null)
-            //{
-            //    // Map properties as needed. Example:
-            //    userProfileDTO.ArmyNo = dTOUserProfileResponse.ArmyNo;
-            //    userProfileDTO.MobileNo = dTOUserProfileResponse.MobileNo;
-            //    userProfileDTO.Name = dTOUserProfileResponse.ProfileName;
-            //    userProfileDTO.userName= dTOUserProfileResponse.DomainId;
-            //    userProfileDTO.Email = dTOUserProfileResponse.EmailId;
-            //    userProfileDTO.rank = dTOUserProfileResponse.RankId;
-            //    userProfileDTO.regtCorps = dTOUserProfileResponse.RegtId;
-            //    userProfileDTO.ApptId = dTOUserProfileResponse.ApptId;
-            //    userProfileDTO.UnitId = dTOUserProfileResponse.UnitId;
-            //}
             TempData.Keep("UserName");
-            ///////GetUserProfile
             return View(userProfileDTO);
         }
 
@@ -233,7 +320,6 @@ namespace Agif_V2.Controllers
             }
          
         }
-       
 
 
         public IActionResult GetAllUsers(bool status)
@@ -246,8 +332,6 @@ namespace Agif_V2.Controllers
             }
             return View(dTOTempSession);
         }
-
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
             try

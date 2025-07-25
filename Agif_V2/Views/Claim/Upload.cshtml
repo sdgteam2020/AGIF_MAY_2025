@@ -73,7 +73,7 @@
                                                     1. Cancelled Cheque
                                                 </label>
                                                 <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
-                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                            <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
                                             </div>
 
@@ -99,7 +99,7 @@
                                                     2. First Page of Pay Slip
                                                 </label>
                                                 <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
-                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                            <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
                                             </div>
 
@@ -136,7 +136,7 @@
                                                 3. sp docus (for seeking of spl waiver)
                                                 </label>
                                             <input class="form-control" type="file" id="SpdocusPdf" name="SpdocusPdf" accept=".pdf" disabled required>
-                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                            <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.SpdocusPdf, "", new { @class = "text-danger" })
                                             </div>
 
@@ -165,7 +165,7 @@
                                                 4. Unwilling cert for further promotion/extension of service (If Applicable)
                                             </label>
                                             <input class="form-control file-upload-limited" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" data-preview="#SeviceExtnPre" accept=".pdf" required>
-                                            <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                            <p class="file-error-message  text-danger" ></p> <!-- Error message container -->
                                             @Html.ValidationMessageFor(m => m.SeviceExtnPdf, "", new { @class = "text-danger" })
                                         </div>
 

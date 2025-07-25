@@ -9,7 +9,6 @@ using Microsoft.Identity.Client;
 
 namespace Agif_V2.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

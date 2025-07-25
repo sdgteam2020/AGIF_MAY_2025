@@ -51,10 +51,10 @@
                 </div>
             </div>
         </div>
-        <div class="row fw-bold" style="background-color:#fff">
+        <div class="row fw-bold bg-white">
 
             <marquee>
-                <b> <span style="color:red">***</span>A New & Revamped <span style="color:red">AGIF Web 3.0</span> Launched with Addl Features of Online Conveyance Advance(CA), Personal Computer Advance(PCA) and House Building Advance(HBA)<span style="color:red">***</span></b>
+                <b> <span class="text-danger">***</span>A New & Revamped <span class="text-danger">AGIF Web 3.0</span> Launched with Addl Features of Online Conveyance Advance(CA), Personal Computer Advance(PCA) and House Building Advance(HBA)<span class="text-danger">***</span></b>
             </marquee>
         </div>
 
@@ -162,7 +162,7 @@
                                 if (isActive == true)
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link fw-bold" href="~/Home/Index" style="background-color: #dd0000;">DashBoard</a>
+                                        <a class="nav-link fw-bold bg-danger" href="~/Home/Index">DashBoard</a>
                                     </li>
                                     <li>
                                         <a class="nav-link fw-bold" href="~/Account/FinalLogout"> Sign Out </a>
@@ -213,15 +213,12 @@
             </div>
         </div>
     </footer>
-    <script src="~/devjs/layoutmain.js" ></script>
-    <script src="~/js/bootstrap.bundle.min.js" ></script>
-    <script src="~/lib/sweetalert2/sweetalert2.min.js" ></script>
-    <script src="~/devjs/mtable.js" ></script>
-    <script>
-        $(document).ready(function () {
-            handleNavbarClick();
-        });
-    </script>
+
+    <script src="~/devjs/layoutmain.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/devjs/mtable.js"></script>
+    
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -47,10 +47,12 @@
 
   <ItemGroup>
     <Content Remove="Views\Home\UserApprovalLists.cshtml" />
+    <Content Remove="wwwroot\DevJs\Login.js" />
     <Content Remove="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\DevJs\Login.js" />
     <None Include="wwwroot\images\auth\.DS_Store" />
     <None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
     <None Include="wwwroot\ImportantPdfFiles\AGIF Loan  Inward Payment Using NEFT.pdf" />
@@ -106,6 +108,8 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Account\GetAllUsers.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\home-index.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\DevJs\Login.js" />
   </ItemGroup>
 
   <ItemGroup>
