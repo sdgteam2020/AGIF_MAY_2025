@@ -2,6 +2,8 @@
 
 
 $(document).ready(function () {
+    mMsater(0, "loanType", 5, 0);
+    mMsater(0, "applicantCategory", 6, 0);
     $('#btnAgree').click(function () {
         const loanType = $('#loanType').val();
         const applicantCategory = $('#applicantCategory').val();
@@ -28,7 +30,7 @@ $(document).ready(function () {
         else if (loanType == 2) {
             url = `/PdfViewer/InstrCA`;
         }
-        else{
+        else {
             url = `/PdfViewer/InstrPCA`;
         }
         window.open(url, '_blank');

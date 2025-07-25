@@ -9,42 +9,134 @@
     <div class="d-flex justify-content-center align-items-center">
         <div class="card shadow p-4 w-25 mt-lg-5">
             <div class="pagetitle">
-                <h1>
-                    Login
-                </h1>
+                <h1>Login</h1>
             </div>
-            <form asp-action="Login" method="post">
+
+            @* Lockout Alert *@
+            @if (Model?.IsLockedOut == true)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-lock me-2"></i>
+                    <strong>Account Locked!</strong><br />
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @* Validation Summary *@
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <div>@error.ErrorMessage</div>
+                    }
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <form asp-action="Login" method="post" id="loginForm">
                 <div class="mb-3">
                     <div class="form-group">
                         <label asp-for="UserName">Username:</label>
-                        <input type="text" asp-for="UserName" class="form-control" />
+                        <input type="text" asp-for="UserName" class="form-control"
+                               disabled="@(Model?.IsLockedOut == true)" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
-
                 </div>
+
                 <div class="mb-3">
                     <div class="form-group">
                         <label asp-for="Password">Password:</label>
-                        <input type="password" asp-for="Password" class="form-control" autocomplete="off" />
+                        <div class="input-group">
+                            <input type="password" asp-for="Password" class="form-control"
+                                   autocomplete="off" disabled="@(Model?.IsLockedOut == true)" />
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                 </div>
+
                 <div class="mb-3">
                     <div class="form-group">
-                        
-                        <input type="checkbox" asp-for="RememberMe" />
+                        <input type="checkbox" asp-for="RememberMe" disabled="@(Model?.IsLockedOut == true)" />
                         <label asp-for="RememberMe">Remember Me</label>
                     </div>
                 </div>
+
+                @* Attempt Counter *@
+                @if (Model?.FailedAttempts > 0 && Model?.IsLockedOut != true)
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Failed attempts: @Model.FailedAttempts/@Model.MaxAllowedAttempts
+                        
+                    </div>
+                }
+
                 <div class="d-flex justify-content-center align-items-center">
-                    <button type="submit" class="btn btn-success">Login</button>
+                    <button type="submit" class="btn btn-success"
+                            disabled="@(Model?.IsLockedOut == true)" id="loginBtn">
+                        @if (Model?.IsLockedOut == true)
+                        {
+                            <i class="fas fa-lock me-2"></i>
+
+                            @: Account Locked
+                        }
+                        else
+                        {
+                            <i class="fas fa-sign-in-alt me-2"></i>
+
+                            @: Login
+                        }
+                    </button>
                 </div>
+
+                @* Countdown Timer for Lockout *@
+                @if (Model?.IsLockedOut == true && Model?.LockoutEnd.HasValue == true)
+                {
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            Time remaining: <span id="countdown" class="fw-bold text-danger"></span>
+                        </small>
+                    </div>
+                }
             </form>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $("#UserName").val("admin");
-        $("#Password").val("Admin123!");
-    });
-</script>
+
+
+
+@section Scripts {
+    <script src="~/DevJs/Login.js"></script>
+    @{
+        var isLockedOut = Model?.IsLockedOut ?? false;
+        var lockoutEndStr = "null";
+        var autoRefreshTimeoutStr = "null";
+
+        if (isLockedOut && Model?.LockoutEnd.HasValue == true)
+        {
+            // ISO 8601 format for JS Date parsing
+            lockoutEndStr = Model.LockoutEnd.Value.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+
+            // Calculate auto refresh timeout in milliseconds
+            var timeoutMs = Math.Max(1000, (Model.LockoutEnd.Value - DateTime.UtcNow).TotalMilliseconds + 1000);
+            autoRefreshTimeoutStr = timeoutMs.ToString("F0"); // no decimal
+        }
+    }
+
+    <div id="loginConfig"
+         data-is-locked-out="@isLockedOut.ToString().ToLower()"
+         data-lockout-end="@lockoutEndStr"
+         data-auto-refresh-timeout="@autoRefreshTimeoutStr">
+    </div>
+    @* <script>
+        window.loginConfig = {
+            isLockedOut: @isLockedOut.ToString().ToLower(),
+            lockoutEnd: @Html.Raw(lockoutEndStr),
+            autoRefreshTimeout: @Html.Raw(autoRefreshTimeoutStr)
+                };
+
+    </script> *@
+}

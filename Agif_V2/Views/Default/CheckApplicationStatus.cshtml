@@ -7,38 +7,25 @@
         new { Id = 2, Name = "Application B", Status = "Approved", Timeline = new[] { ("Submitted", "2024-05-20"), ("Approved", "2024-05-25"), ("Reviewed", "2024-06-03") } }
     };
 }
-
-<div class="container ">
+<link href="~/css/checkapplicationstatus.css" rel="stylesheet" />
+<div class="container">
     <div class="card shadow-lg border-0 rounded-lg">
         <div class="card-header btn-info text-white mb-3">
             <h4 class="mb-0 text-center">Application Status</h4>
         </div>
         <div class="card-body">
-
             <!-- Search Box Start -->
-           @*  <form id="searchByArmyNo" class="mb-4 d-flex justify-content-center">
-
-
-                <div class="input-group shadow-sm" style="max-width: 320px;">
-                    <input type="text" class="form-control border-info" placeholder="Enter Army No" aria-label="Army No" name="armyNo" id="armyNoInput">
-                    <button class="btn btn-info text-white fw-bold px-4" type="submit">
-                        <i class="fas fa-search me-2"></i>Search
-                    </button>
-                </div>
-            </form> *@
             <form id="searchByArmyNo" class="mb-4 d-flex justify-content-center">
-                <div class="d-flex align-items-center gap-3" style="max-width: 500px;">
+                <div class="d-flex align-items-center search-gap search-form-container">
                     <!-- Dropdown Section -->
                     <div class="dropdown-section">
-@*                         <label class="form-label fw-bold text-dark mb-2">Choose Type</label>
- *@                        <select class="form-select border-info" id="typeSelect" name="type" style="min-width: 120px;">
+                        <select class="form-select border-info type-select" id="typeSelect" name="type">
                             <option value="Loan">Loan</option>
                             <option value="Maturity">Maturity</option>
                         </select>
                     </div>
-
                     <!-- Search Input Section -->
-                    <div class="input-group shadow-sm" style="max-width: 320px;">
+                    <div class="input-group shadow-sm search-input-group">
                         <input type="text" class="form-control border-info" placeholder="Enter Army No" aria-label="Army No" name="armyNo" id="armyNoInput">
                         <button class="btn btn-info text-white fw-bold px-4" type="submit">
                             <i class="fas fa-search me-2"></i>Search
@@ -62,198 +49,12 @@
                         </tr>
                     </thead>
                     <tbody id="applicationTableBody">
-                        
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .timeline-container {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 20px 0;
-    }
-
-    .timeline-vertical {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .timeline-step {
-        display: flex;
-        align-items: flex-start;
-        position: relative;
-        min-height: 60px;
-        margin-bottom: 0;
-        transition: all 0.3s ease-in-out;
-    }
-
-        .timeline-step.last {
-            min-height: 40px;
-        }
-
-    .timeline-dot {
-        width: 18px;
-        height: 18px;
-        background: #17a2b8;
-        border-radius: 50%;
-        border: 3px solid #fff;
-        box-shadow: 0 0 0 2px #17a2b8;
-        position: relative;
-        z-index: 2;
-        margin-right: 16px;
-        margin-top: 2px;
-    }
-
-    .timeline-line {
-        position: absolute;
-        left: 8px;
-        top: 20px;
-        width: 2px;
-        height: 100%;
-        background: #17a2b8;
-        z-index: 1;
-    }
-
-    .timeline-content {
-        background: #f8f9fa;
-        border-radius: 6px;
-        padding: 10px 18px;
-        margin-bottom: 10px;
-        min-width: 180px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        transition: all 0.3s ease-in-out;
-    }
-
-    .timeline-title {
-        font-weight: 600;
-        color: #17a2b8;
-        margin-bottom: 2px;
-    }
-
-    .timeline-date {
-        font-size: 0.95em;
-        color: #6c757d;
-    }
-
-    /* Button styles */
-    .btn-info {
-        font-size: 16px;
-        background-color: #17a2b8;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-    }
-
-    /* Table styles */
-    .table-striped tbody tr:nth-child(odd) {
-        background-color: #f2f2f2;
-    }
-
-    /* Hover effects */
-    .timeline-step:hover .timeline-content {
-        background: #e9ecef;
-    }
-
-    .btn-info:hover {
-        background-color: #138496;
-    }
-
-    /* Responsive design */
-    @@media (max-width: 768px) {
-        .timeline-vertical {
-            flex-direction: column;
-        }
-
-        .timeline-step {
-            margin-bottom: 10px;
-        }
-    }
-    /* Additional styles for timeline features */
-.timeline-description {
-    font-size: 0.9em;
-    color: #495057;
-    margin-top: 4px;
-    line-height: 1.4;
-}
-
-.timeline-remarks {
-    font-size: 0.85em;
-    color: #6c757d;
-    margin-top: 4px;
-    font-style: italic;
-}
-
-.timeline-loading {
-    color: #17a2b8;
-    font-size: 1.1em;
-}
-
-.timeline-loading i {
-    margin-right: 8px;
-}
-
-/* Enhanced timeline content spacing */
-.timeline-content {
-    background: #f8f9fa;
-    border-radius: 6px;
-    padding: 12px 18px;
-    margin-bottom: 10px;
-    min-width: 200px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    transition: all 0.3s ease-in-out;
-}
-
-/* Loading animation */
-@@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.fa-spinner {
-    animation: spin 1s linear infinite;
-}
-
-/* Status-based timeline dot colors */
-.timeline-dot.approved {
-    background: #28a745;
-    box-shadow: 0 0 0 2px #28a745;
-}
-
-.timeline-dot.rejected {
-    background: #dc3545;
-    box-shadow: 0 0 0 2px #dc3545;
-}
-
-.timeline-dot.pending {
-    background: #ffc107;
-    box-shadow: 0 0 0 2px #ffc107;
-}
-
-/* Responsive improvements */
-@@media (max-width: 768px) {
-    .timeline-content {
-        min-width: 160px;
-        padding: 10px 14px;
-    }
-    
-    .timeline-title {
-        font-size: 0.95em;
-    }
-    
-    .timeline-date {
-        font-size: 0.85em;
-    }
-}
-
-
-</style>
 
 
 <script src="~/devjs/checkapplicationstatus.js"></script>

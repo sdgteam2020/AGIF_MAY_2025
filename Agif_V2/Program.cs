@@ -28,7 +28,10 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     }));
 });
 
-
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    options.ValidationInterval = TimeSpan.Zero; 
+});
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
@@ -43,7 +46,7 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;
 });
 
@@ -92,6 +95,8 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
     options.Cookie.HttpOnly = true; // Make the session cookie HTTP only
     options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
 });
 var app = builder.Build();
 app.UseRequestLocalization();

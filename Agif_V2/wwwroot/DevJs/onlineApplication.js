@@ -1473,7 +1473,8 @@ function checkCORegistration() {
                     //    unitValidation.classList.add("field-validation-valid");
                     //}
                     // Open unit search popup
-                    $('#unitSearchDialog').show();
+                    //$('#unitSearchDialog').show();
+                    $('#unitSearchDialog').removeClass('d-none');
                 } else if (result === false) {
                     // If not registered, set unit input back to required
                     formSubmitting = true;
@@ -1593,7 +1594,7 @@ $("#unitSearchCancelBtn").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
 
-    $('#unitSearchDialog').hide();
+    $('#unitSearchDialog').addClass('d-none');
 
     formSubmitting = false;
     formCancelled = true;
@@ -1676,9 +1677,9 @@ function checkUnitSameOrNot(ArmyNo) {
                             reverseButtons: true,  // Make Cancel button appear on the left
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                $('#unitSearchDialog').hide();
+                                $('#unitSearchDialog').addClass('d-none');
                             } else if (result.isDismissed) {
-                                $("unitSearchDialog").show();
+                                $("unitSearchDialog").removeClass('d-none');
                             }
                         });
                     }
@@ -2284,3 +2285,193 @@ function validateEMIForRepayingCapacity(prefix) {
 
     return true;
 }
+
+
+
+
+//     document.getElementById('fillDemoDataBtn').addEventListener('click', function () {
+//         // Fill in demo data
+
+//         const fields = [
+//             // { id: 'armyNumber', value: '1234567'},
+//             // { id: 'txtSuffix', value: 'A'},
+//             // { id: 'oldArmyNo', value: '7654321' },
+//             // { id: 'txtOldSuffix', value: 'B' },
+//             { id: 'txtApplicantName', value: 'John Doe' },
+//             // { id: 'dateOfBirth', value: '1980-01-01' },
+//             // { id: 'dateOfCommission', value: '2005-05-10' },
+//             // { id: 'dateOfRetirement', value: '2040-01-01' },
+//             { id: 'aadharCardNo', value: '1234 5678 9012' },
+//             { id: 'panCardNo', value: 'ABCDE1234F' },
+//             { id: 'mobileNo', value: '9876543210' },
+//             { id: 'emailId', value: 'johndoe@example.com' },
+//             { id: 'emailDomain', value: 'gmail.com' },
+//             { id: 'totalService', value: '15' },
+//             { id: 'residualService', value: '10' },
+//             // { id: 'regtCorps', value: 'Infantry' },
+//             // { id: 'pcda_pao', value: 'PCDA Bangalore' },
+//             { id: 'pcda_AcctNo', value: '99/999/999999A' },
+//             // { id: 'parentUnit', value: 'Parent Unit 1' },
+//             // { id: 'presentUnit', value: 'Present Unit 1' },
+//             // { id: 'presentUnitPin', value: '123456' },
+//             // { id: 'armyPostOffice', value: 'Army PO 123' },
+//             { id: 'civilPostalAddress', value: 'Test' },
+//             { id: 'nextFmnHQ', value: 'Next FMN HQ 1' },
+//             { id: 'Vill_Town', value: 'Demo Village' },
+//             { id: 'postOffice', value: 'Demo Post Office' },
+//             { id: 'distt', value: 'Demo District' },
+//             { id: 'state', value: 'Demo State' },
+//             { id: 'Code', value: '123456' },
+//             { id: 'salaryAcctNo', value: '12345678901234567' },
+//             { id: 'confirmSalaryAcctNo', value: '12345678901234567' },
+//             { id: 'ifsCode', value: 'HDFC0001234' },
+//             { id: 'nameOfBank', value: 'HDFC Bank' },
+//             { id: 'nameOfBankBranch', value: 'HDFC Main Branch' },
+//             { id: 'basicPay', value: '50000' },
+//             { id: 'dsop_afpp', value: '1500' },
+//             { id: 'rank_gradePay', value: '2000' },
+//             { id: 'agif_Subs', value: '1000' },
+//             { id: 'msp', value: '3000' },
+//             { id: 'incomeTaxMonthly', value: '500' },
+//             { id: 'CI_Pay', value: '1200' },
+//             { id: 'educationCess', value: '50' },
+//             { id: 'npax_Pay', value: '800' },
+//             { id: 'pli', value: '600' },
+//             { id: 'techPay', value: '400' },
+//             { id: 'misc_Deduction', value: '200' },
+//             { id: 'da', value: '3000' },
+//             { id: 'loanEMI_Outside', value: '1000' },
+//             { id: 'pmha', value: '500' },
+//             { id: 'loanEMI', value: '1500' },
+//             { id: 'lra', value: '2000' },
+//             { id: 'miscPay', value: '700' }
+//         ];
+
+//         // Loop through each field and set the values
+//         fields.forEach(function (field) {
+//             const element = document.getElementById(field.id);
+//             if (element) {
+//                 element.value = field.value; // Set the value of the input field
+//                 element.removeAttribute('placeholder'); // Remove the placeholder
+
+//                 // Add the "active" class to float the label above the input field
+//                 $("#" + field.id).closest(".form-outline").addClass("active");
+
+//                 // Reinitialize MDB Input if needed (for floating labels)
+//                 if (typeof mdb !== 'undefined') {
+//                     $("#" + field.id).closest(".form-outline").each(function () {
+//                         new mdb.Input(this).init();
+//                     });
+//                 }
+//             }
+//         });
+
+//         const loanType = document.getElementById('loanType').value; // Get loan type value from hidden input
+
+//         if (loanType == "1") {
+//             // HBA Application
+//             const fields = [
+//                 { id: 'propertyType', value: 'Flat' },
+//                 { id: 'propertySeller', value: 'XYZ Realtors' },
+//                 { id: 'propertyAddress', value: '123, Some Street, City' },
+//                 { id: 'propertyCost', value: '500000' },
+//                 { id: 'HBA_LoanFreq', value: 'Monthly' },
+//                 { id: 'HBA_repayingCapacity', value: '20000' },
+//                 { id: 'HBA_Amt_Eligible_for_loan', value: '400000' },
+//                 { id: 'HBA_EMI_Eligible', value: '15000' },
+//                 { id: 'HBA_Amount_Applied_For_Loan', value: '300000' },
+//                 { id: 'HBA_EMI_Applied', value: '15000' },
+//                 { id: 'HBA_approxEMIAmount', value: '14500' },
+//                 { id: 'HBA_approxDisbursementAmt', value: '290000' }
+//             ];
+
+//             fields.forEach(function (field) {
+//                 const element = document.getElementById(field.id);
+//                 if (element) {
+//                     element.value = field.value; // Set the value of the field
+//                     element.removeAttribute('placeholder'); // Remove placeholder if present
+
+//                     $("#" + field.id).closest(".form-outline").addClass("active");
+
+//                     // Reinitialize MDB Input if needed (for floating labels)
+//                     if (typeof mdb !== 'undefined') {
+//                         $("#" + field.id).closest(".form-outline").each(function () {
+//                             new mdb.Input(this).init();
+//                         });
+//                     }
+
+//                 }
+//             });
+//         }
+//         else if (loanType == "2") {
+//             // CA Application
+//             const fields = [
+//                 { id: 'dealerName', value: 'ABC Motors' },
+//                 { id: 'companyName', value: 'ABC Company' },
+//                 { id: 'modelName', value: 'Sedan Model 2025' },
+//                 { id: 'vehicleCost', value: '1000000' },
+//                 { id: 'CA_Amt_Eligible_for_loan', value: '800000' },
+//                 { id: 'CA_EMI_Eligible', value: '25000' },
+//                 { id: 'CA_repayingCapacity', value: '20000' },
+//                 { id: 'CA_Amount_Applied_For_Loan', value: '500000' },
+//                 { id: 'CA_EMI_Applied', value: '15000' },
+//                 { id: 'CA_approxEMIAmount', value: '14000' },
+//                 { id: 'CA_approxDisbursementAmt', value: '480000' },
+//                 { id: 'drivingLicenseNo', value: 'DL1234567890' },
+//                 { id: 'DL_IssuingAuth', value: 'RTO City' }
+//             ];
+
+//             fields.forEach(function (field) {
+//                 const element = document.getElementById(field.id);
+//                 if (element) {
+//                     element.value = field.value; // Set the value of the field
+//                     element.removeAttribute('placeholder'); // Remove placeholder if present
+
+//                     $("#" + field.id).closest(".form-outline").addClass("active");
+
+//                     // Reinitialize MDB Input if needed (for floating labels)
+//                     if (typeof mdb !== 'undefined') {
+//                         $("#" + field.id).closest(".form-outline").each(function () {
+//                             new mdb.Input(this).init();
+//                         });
+//                     }
+//                 }
+//             });
+//         }
+//         else if (loanType == "3") {
+//             const fields = [
+//                 { id: 'PCA_dealerName', value: 'XYZ Electronics' },
+//                 { id: 'PCA_companyName', value: 'XYZ Company' },
+//                 { id: 'PCA_modelName', value: 'Laptop Model 2025' },
+//                 { id: 'computerCost', value: '60000' },
+//                 { id: 'PCA_Amt_Eligible_for_loan', value: '50000' },
+//                 { id: 'PCA_EMI_Eligible', value: '2000' },
+//                 { id: 'PCA_repayingCapacity', value: '1500' },
+//                 { id: 'PCA_Amount_Applied_For_Loan', value: '30000' },
+//                 { id: 'PCA_EMI_Applied', value: '1000' },
+//                 { id: 'PCA_approxEMIAmount', value: '950' },
+//                 { id: 'PCA_approxDisbursementAmt', value: '29000' }
+//             ];
+
+//             // Fill fields with demo data
+//             fields.forEach(function (field) {
+//                 const element = document.getElementById(field.id);
+//                 if (element) {
+//                     element.value = field.value; // Set the value of the field
+//                     element.removeAttribute('placeholder'); // Remove placeholder if present
+
+//                     // Add the "active" class to float the label above the input field
+//                     $("#" + field.id).closest(".form-outline").addClass("active");
+
+//                     // Reinitialize MDB Input if needed (for floating labels)
+//                     if (typeof mdb !== 'undefined') {
+//                         $("#" + field.id).closest(".form-outline").each(function () {
+//                             new mdb.Input(this).init();
+//                         });
+//                     }
+//                 }
+//             });
+//         }
+
+//     });
+

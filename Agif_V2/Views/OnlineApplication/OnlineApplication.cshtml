@@ -20,304 +20,6 @@
         loanTypeText = "Computer Loan (PCA)";
     }
 }
-<style>
-    .ui-datepicker {
-        background: white;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        padding: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        width: 280px;
-        z-index: 9999;
-    }
-
-    .ui-datepicker-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 15px;
-        position: relative;
-    }
-
-    .ui-datepicker-title {
-        text-align: center;
-        font-weight: 600;
-        font-size: 16px;
-    }
-
-    .ui-datepicker-prev,
-    .ui-datepicker-next {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255,255,255,0.2);
-        border: none;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .ui-datepicker-prev {
-        left: 10px;
-    }
-
-    .ui-datepicker-next {
-        right: 10px;
-    }
-
-        .ui-datepicker-prev:hover,
-        .ui-datepicker-next:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .ui-datepicker-prev span,
-        .ui-datepicker-next span {
-            display: block;
-            width: 100%;
-            height: 100%;
-            text-indent: -9999px;
-            position: relative;
-        }
-
-            .ui-datepicker-prev span:before {
-                content: "❮";
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                text-indent: 0;
-                color: white;
-                font-size: 12px;
-            }
-
-            .ui-datepicker-next span:before {
-                content: "❯";
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                text-indent: 0;
-                color: white;
-                font-size: 12px;
-            }
-
-    .ui-datepicker-calendar {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .ui-datepicker-calendar th {
-            padding: 10px 5px;
-            text-align: center;
-            font-weight: 600;
-            color: #667eea;
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-
-        .ui-datepicker-calendar td {
-            padding: 2px;
-            text-align: center;
-        }
-
-            .ui-datepicker-calendar td a {
-                display: block;
-                width: 32px;
-                height: 32px;
-                line-height: 32px;
-                text-decoration: none;
-                color: #333;
-                border-radius: 6px;
-                transition: all 0.3s ease;
-                font-size: 14px;
-            }
-
-                .ui-datepicker-calendar td a:hover {
-                    background: #667eea;
-                    color: white;
-                    transform: scale(1.1);
-                }
-
-        .ui-datepicker-calendar .ui-datepicker-today a {
-            background: #f8f9fa;
-            border: 2px solid #667eea;
-            font-weight: bold;
-        }
-
-        .ui-datepicker-calendar .ui-datepicker-current-day a,
-        .ui-datepicker-calendar .ui-state-active {
-            background: #667eea;
-            color: white;
-            font-weight: bold;
-        }
-
-        .ui-datepicker-calendar .ui-datepicker-other-month a {
-            color: #ccc;
-        }
-
-    /* Clip Effect Animation */
-    .ui-datepicker {
-        animation: clipIn 0.4s ease-out;
-    }
-
-    @@keyframes clipIn {
-        0% {
-            clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
-            opacity: 0;
-            transform: scale(0.8);
-        }
-
-        50% {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-            opacity: 0.7;
-            transform: scale(0.9);
-        }
-
-        100% {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-
-    .ui-autocomplete {
-        z-index: 1050 !important; /* higher than your popup/modal */
-    }
-
-    #unitSearchDialog input {
-        text-align: left !important;
-        font-size: 20px;
-    }
-
-    .uploadDialog {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark background */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1050; /* Make sure it's on top of other elements */
-        padding: 10px;
-    }
-
-    /* Styling for the dialog box */
-    .dialog-box {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        max-height: 80vh;
-        width: 60%;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 20px; /* Add space between elements */
-        transition: all 0.3s ease-in-out;
-    }
-
-        /* Heading style */
-        .dialog-box h4 {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-    /* Input field styling */
-    #unitSearchDialog input {
-        font-size: 1.2rem;
-        padding: 12px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: border-color 0.3s;
-    }
-
-        #unitSearchDialog input:focus {
-            border-color: #007bff; /* Blue color on focus */
-            outline: none;
-        }
-
-    /* Error message styling */
-    #unitSearchMessage {
-        font-size: 18px;
-        font-weight: normal;
-        color: red;
-        margin-top: -8px;
-    }
-
-    /* Button styles */
-
-    #unitSearchDialog .dialog-box {
-        width: 600px; /* keep your width */
-        padding: 20px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* center children horizontally */
-    }
-
-    #unitSearchDialog h4 {
-        margin-bottom: 20px;
-        font-weight: 600;
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    #unitSearchInput {
-        width: 100%; /* full width inside dialog */
-        font-weight: bold;
-        font-size: 20px; /* larger font size */
-        padding: 12px 15px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-        text-align: center; /* center the text */
-        outline-offset: 2px;
-        transition: border-color 0.3s;
-    }
-
-        #unitSearchInput:focus {
-            border-color: #4292f4;
-            box-shadow: 0 0 8px rgba(66,146,244,0.5);
-        }
-
-    #unitSearchMessage {
-        margin-top: 8px;
-        min-height: 1.2em;
-        font-size: 18px;
-        color: #d9534f;
-        text-align: center;
-        width: 100%;
-    }
-
-    #unitSearchDialog .d-flex.justify-content-end.mt-3 {
-        justify-content: center !important; /* center the buttons container */
-        gap: 15px; /* spacing between buttons */
-        margin-top: 25px !important;
-        width: 100%;
-    }
-
-    #unitSearchCancelBtn,
-    #unitSearchConfirmBtn {
-        min-width: 120px;
-        font-weight: 600;
-        padding: 12px 25px;
-        border-radius: 8px;
-    }
-</style>
-
-
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -326,7 +28,7 @@
 
     <div class="pagetitletwo position-relative text-center mb-3">
         <h1>Application Form <span id="loanTypeSpan">@loanTypeText</span></h1>
-        <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y" style=" margin-top:-29px" id="toggleAll">Expand All</button>
+        <button class="btn btn-secondary position-absolute end-0 top-50 translate-middle-y mt-minus-29" id="toggleAll">Expand All</button>
     </div>
 
     
@@ -335,7 +37,7 @@
             <!-- Personal Info -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
+                    <button class="accordion-button fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
                         <span class="w-100 text-center text-decoration-underline"><strong>Personal Details </strong></span>
                     </button>
                 </h2>
@@ -637,7 +339,7 @@
             <!--Regt/Unit Details-->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
                         <span class="w-100 text-center text-decoration-underline"><strong>Regt/Unit Details</strong></span>
                     </button>
                 </h2>
@@ -756,7 +458,7 @@
             <!-- Address -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Home Address</strong></span>
                     </button>
@@ -826,7 +528,7 @@
             <!-- Salary Account Details -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Salary Account Details</strong></span>
                     </button>
@@ -893,7 +595,7 @@
             <!-- Salary Details -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#salaryDetails" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#salaryDetails" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Salary Details</strong></span>
                     </button>
@@ -914,10 +616,10 @@
                         </div>
                         <div class="row g-3">
                             <div class="col-md-4 text-center">
-                                <h3 class="fw-bold" style="color:green"><u>Credit</u></h3>
+                                <h3 class="fw-bold text-success"><u>Credit</u></h3>
                             </div>
                             <div class="col-md-4 fw-bold text-center">
-                                <h3 class="fw-bold" style="color:red"><u>Debit</u></h3>
+                                <h3 class="fw-bold text-danger" ><u>Debit</u></h3>
                             </div>
                         </div>
                         <div class="row g-3">
@@ -926,7 +628,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="basicPay" name="CommonData.BasicPay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.BasicPay" />
-                                        <label class="form-label select-label ">Basic Pay<span style="color:red">*</span></label>
+                                        <label class="form-label select-label ">Basic Pay<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.BasicPay, "", new { @class = "text-danger" })
@@ -936,7 +638,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="dsop_afpp" name="CommonData.dsop_afpp" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.dsop_afpp" />
-                                        <label class="form-label select-label ">DSOP/AFPP Subs<span style="color:red">*</span></label>
+                                        <label class="form-label select-label ">DSOP/AFPP Subs<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.dsop_afpp, "", new { @class = "text-danger" })
@@ -957,7 +659,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="agif_Subs" name="CommonData.agif_Subs" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.agif_Subs" />
-                                        <label class="form-label select-label ">AGIF Subs<span style="color:red">*</span></label>
+                                        <label class="form-label select-label ">AGIF Subs<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.agif_Subs, "", new { @class = "text-danger" })
@@ -969,7 +671,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="msp" name="CommonData.Msp" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.Msp" />
-                                        <label class="form-label select-label ">MSP<span style="color:red">*</span></label>
+                                        <label class="form-label select-label ">MSP<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Msp, "", new { @class = "text-danger" })
@@ -1050,7 +752,7 @@
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="da" name="CommonData.Da" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.Da" />
-                                        <label class="form-label select-label ">DA<span style="color:red">*</span></label>
+                                        <label class="form-label select-label ">DA<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Da, "", new { @class = "text-danger" })
@@ -1145,7 +847,7 @@
                     <!-- HBA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#propertyDetails" aria-expanded="false">
+                            <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#propertyDetails" aria-expanded="false">
 
                                 <span class="w-100 text-center text-decoration-underline"><strong>Property and Loan Details</strong></span>
                             </button>
@@ -1307,7 +1009,7 @@
                     <!-- CA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#vehicleDetails" aria-expanded="false">
+                            <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#vehicleDetails" aria-expanded="false">
 
                                 <span class="w-100 text-center text-decoration-underline"><strong>Vehicle Loan and Driving License Details</strong></span>
                             </button>
@@ -1498,7 +1200,7 @@
                     <!-- PCA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#computerDetails" aria-expanded="false">
+                            <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#computerDetails" aria-expanded="false">
 
                                 <span class="w-100 text-center text-decoration-underline"><strong>Personal Computer and Loan Details</strong></span>
                             </button>
@@ -1670,26 +1372,26 @@
                     <!-- <a href="/Upload/Upload?formType=CA" class="btn btn-primary">CA Form</a>
                     <a href="/Upload/Upload?formType=PCA" class="btn btn-primary">PCA Form</a>
                     <a href="/Upload/Upload?formType=HBA" class="btn btn-primary">HBA Form</a-->
-                    <button type="button" class="btn btn-primary" id="fillDemoDataBtn">Fill Demo Data</button>
+                    <button type="button" class="btn btn-primary d-none" id="fillDemoDataBtn">Fill Demo Data</button>
 
                 </div>
             </div>
-            <div class="col-md-12" id="msgerror" style="margin-top: 10px;">
+            <div class="col-md-12 mt-10px" id="msgerror">
             </div>
 
             <input type="hidden" id="loanType" name="loanType" value=@loanType />
             <input type="hidden" id="applicantCategory" name="applicantCategory" value=@applicantCategory />
             <input type="hidden" id="COArmyNo" name="COArmyNo" value=@Model.COArmyNo />
 
-            <div id="unitSearchDialog" class="uploadDialog" style="display:none;">
-                <div class="dialog-box" style="width: 668px;">
+            <div id="unitSearchDialog" class="uploadDialog d-none">
+                <div class="dialog-box w-668">
                     <h3 class="text-center mb-3">Please Enter Army No to Your Formation Unit Cdr</h3>
 
-                    <input type="text" id="unitSearchInput" class="form-control form-space" placeholder="Enter Army Number..." autocomplete="off" maxlength="15" style="font-weight:bold;" />
+                    <input type="text" id="unitSearchInput" class="form-control form-space fw-bold" placeholder="Enter Army Number..." autocomplete="off" maxlength="15"  />
                     <span class="text-danger" id="unitSearchMessage"></span>
                     <div class="d-flex justify-content-end mt-3">
-                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2" style="margin-top:10px;">Cancel</button>
-                        <button id="unitSearchConfirmBtn" class="btn btn-primary" disabled style="margin-top:10px;">Confirm</button>
+                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2 mt-10px" >Cancel</button>
+                        <button id="unitSearchConfirmBtn" class="btn btn-primary mt-10px" disabled >Confirm</button>
                     </div>
                 </div>
             </div>
@@ -1708,193 +1410,4 @@
 <script type="text/javascript" src="~/js/mdb/mdbsnippet.min.js"></script>
 <script type="text/javascript" src="~/js/mdb/mdb.min.js"></script>
 
-<script>
 
-
-    document.getElementById('fillDemoDataBtn').addEventListener('click', function () {
-        // Fill in demo data
-
-        const fields = [
-            // { id: 'armyNumber', value: '1234567'},
-            // { id: 'txtSuffix', value: 'A'},
-            // { id: 'oldArmyNo', value: '7654321' },
-            // { id: 'txtOldSuffix', value: 'B' },
-            { id: 'txtApplicantName', value: 'John Doe' },
-            // { id: 'dateOfBirth', value: '1980-01-01' },
-            // { id: 'dateOfCommission', value: '2005-05-10' },
-            // { id: 'dateOfRetirement', value: '2040-01-01' },
-            { id: 'aadharCardNo', value: '1234 5678 9012' },
-            { id: 'panCardNo', value: 'ABCDE1234F' },
-            { id: 'mobileNo', value: '9876543210' },
-            { id: 'emailId', value: 'johndoe@example.com' },
-            { id: 'emailDomain', value: 'gmail.com' },
-            { id: 'totalService', value: '15' },
-            { id: 'residualService', value: '10' },
-            // { id: 'regtCorps', value: 'Infantry' },
-            // { id: 'pcda_pao', value: 'PCDA Bangalore' },
-            { id: 'pcda_AcctNo', value: '99/999/999999A' },
-            // { id: 'parentUnit', value: 'Parent Unit 1' },
-            // { id: 'presentUnit', value: 'Present Unit 1' },
-            // { id: 'presentUnitPin', value: '123456' },
-            // { id: 'armyPostOffice', value: 'Army PO 123' },
-            { id: 'civilPostalAddress', value: 'Test' },
-            { id: 'nextFmnHQ', value: 'Next FMN HQ 1' },
-            { id: 'Vill_Town', value: 'Demo Village' },
-            { id: 'postOffice', value: 'Demo Post Office' },
-            { id: 'distt', value: 'Demo District' },
-            { id: 'state', value: 'Demo State' },
-            { id: 'Code', value: '123456' },
-            { id: 'salaryAcctNo', value: '12345678901234567' },
-            { id: 'confirmSalaryAcctNo', value: '12345678901234567' },
-            { id: 'ifsCode', value: 'HDFC0001234' },
-            { id: 'nameOfBank', value: 'HDFC Bank' },
-            { id: 'nameOfBankBranch', value: 'HDFC Main Branch' },
-            { id: 'basicPay', value: '50000' },
-            { id: 'dsop_afpp', value: '1500' },
-            { id: 'rank_gradePay', value: '2000' },
-            { id: 'agif_Subs', value: '1000' },
-            { id: 'msp', value: '3000' },
-            { id: 'incomeTaxMonthly', value: '500' },
-            { id: 'CI_Pay', value: '1200' },
-            { id: 'educationCess', value: '50' },
-            { id: 'npax_Pay', value: '800' },
-            { id: 'pli', value: '600' },
-            { id: 'techPay', value: '400' },
-            { id: 'misc_Deduction', value: '200' },
-            { id: 'da', value: '3000' },
-            { id: 'loanEMI_Outside', value: '1000' },
-            { id: 'pmha', value: '500' },
-            { id: 'loanEMI', value: '1500' },
-            { id: 'lra', value: '2000' },
-            { id: 'miscPay', value: '700' }
-        ];
-
-        // Loop through each field and set the values
-        fields.forEach(function (field) {
-            const element = document.getElementById(field.id);
-            if (element) {
-                element.value = field.value; // Set the value of the input field
-                element.removeAttribute('placeholder'); // Remove the placeholder
-
-                // Add the "active" class to float the label above the input field
-                $("#" + field.id).closest(".form-outline").addClass("active");
-
-                // Reinitialize MDB Input if needed (for floating labels)
-                if (typeof mdb !== 'undefined') {
-                    $("#" + field.id).closest(".form-outline").each(function () {
-                        new mdb.Input(this).init();
-                    });
-                }
-            }
-        });
-
-        const loanType = document.getElementById('loanType').value; // Get loan type value from hidden input
-
-        if (loanType == "1") {
-            // HBA Application
-            const fields = [
-                { id: 'propertyType', value: 'Flat' },
-                { id: 'propertySeller', value: 'XYZ Realtors' },
-                { id: 'propertyAddress', value: '123, Some Street, City' },
-                { id: 'propertyCost', value: '500000' },
-                { id: 'HBA_LoanFreq', value: 'Monthly' },
-                { id: 'HBA_repayingCapacity', value: '20000' },
-                { id: 'HBA_Amt_Eligible_for_loan', value: '400000' },
-                { id: 'HBA_EMI_Eligible', value: '15000' },
-                { id: 'HBA_Amount_Applied_For_Loan', value: '300000' },
-                { id: 'HBA_EMI_Applied', value: '15000' },
-                { id: 'HBA_approxEMIAmount', value: '14500' },
-                { id: 'HBA_approxDisbursementAmt', value: '290000' }
-            ];
-
-            fields.forEach(function (field) {
-                const element = document.getElementById(field.id);
-                if (element) {
-                    element.value = field.value; // Set the value of the field
-                    element.removeAttribute('placeholder'); // Remove placeholder if present
-
-                    $("#" + field.id).closest(".form-outline").addClass("active");
-
-                    // Reinitialize MDB Input if needed (for floating labels)
-                    if (typeof mdb !== 'undefined') {
-                        $("#" + field.id).closest(".form-outline").each(function () {
-                            new mdb.Input(this).init();
-                        });
-                    }
-
-                }
-            });
-        }
-        else if (loanType == "2") {
-            // CA Application
-            const fields = [
-                { id: 'dealerName', value: 'ABC Motors' },
-                { id: 'companyName', value: 'ABC Company' },
-                { id: 'modelName', value: 'Sedan Model 2025' },
-                { id: 'vehicleCost', value: '1000000' },
-                { id: 'CA_Amt_Eligible_for_loan', value: '800000' },
-                { id: 'CA_EMI_Eligible', value: '25000' },
-                { id: 'CA_repayingCapacity', value: '20000' },
-                { id: 'CA_Amount_Applied_For_Loan', value: '500000' },
-                { id: 'CA_EMI_Applied', value: '15000' },
-                { id: 'CA_approxEMIAmount', value: '14000' },
-                { id: 'CA_approxDisbursementAmt', value: '480000' },
-                { id: 'drivingLicenseNo', value: 'DL1234567890' },
-                { id: 'DL_IssuingAuth', value: 'RTO City' }
-            ];
-
-            fields.forEach(function (field) {
-                const element = document.getElementById(field.id);
-                if (element) {
-                    element.value = field.value; // Set the value of the field
-                    element.removeAttribute('placeholder'); // Remove placeholder if present
-
-                    $("#" + field.id).closest(".form-outline").addClass("active");
-
-                    // Reinitialize MDB Input if needed (for floating labels)
-                    if (typeof mdb !== 'undefined') {
-                        $("#" + field.id).closest(".form-outline").each(function () {
-                            new mdb.Input(this).init();
-                        });
-                    }
-                }
-            });
-        }
-        else if (loanType == "3") {
-            const fields = [
-                { id: 'PCA_dealerName', value: 'XYZ Electronics' },
-                { id: 'PCA_companyName', value: 'XYZ Company' },
-                { id: 'PCA_modelName', value: 'Laptop Model 2025' },
-                { id: 'computerCost', value: '60000' },
-                { id: 'PCA_Amt_Eligible_for_loan', value: '50000' },
-                { id: 'PCA_EMI_Eligible', value: '2000' },
-                { id: 'PCA_repayingCapacity', value: '1500' },
-                { id: 'PCA_Amount_Applied_For_Loan', value: '30000' },
-                { id: 'PCA_EMI_Applied', value: '1000' },
-                { id: 'PCA_approxEMIAmount', value: '950' },
-                { id: 'PCA_approxDisbursementAmt', value: '29000' }
-            ];
-
-            // Fill fields with demo data
-            fields.forEach(function (field) {
-                const element = document.getElementById(field.id);
-                if (element) {
-                    element.value = field.value; // Set the value of the field
-                    element.removeAttribute('placeholder'); // Remove placeholder if present
-
-                    // Add the "active" class to float the label above the input field
-                    $("#" + field.id).closest(".form-outline").addClass("active");
-
-                    // Reinitialize MDB Input if needed (for floating labels)
-                    if (typeof mdb !== 'undefined') {
-                        $("#" + field.id).closest(".form-outline").each(function () {
-                            new mdb.Input(this).init();
-                        });
-                    }
-                }
-            });
-        }
-
-    });
-
-</script>

@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    
     checkUploadFiles();
 
     var message = '@message';
@@ -176,3 +177,25 @@ function checkUploadFiles() {
     // Initial check
     checkAllRequiredFiles();
 }
+
+// site-alert.js
+
+
+// site-alert.js
+$(document).ready(function () {
+    // Make sure the message is injected dynamically from Razor into a JS variable
+    if (window.message !== '' && window.message !== null && typeof window.message !== 'undefined') {
+        Swal.fire({
+            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${window.message}</span>`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            confirmButtonClass: 'btn btn-primary btn-lg',
+            customClass: {
+                title: 'font-weight-bold',
+                htmlContainer: 'text-dark'
+            },
+            padding: '25px'
+        });
+    }
+});
+

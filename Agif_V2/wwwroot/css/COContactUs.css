@@ -1,0 +1,90 @@
+﻿:root {
+    --primary-color: #2596be;
+    --accent-color: #ffc107;
+}
+
+/* Background and Layout Classes */
+.bg-primary-custom {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #1e7ba8 100%);
+}
+
+/* Logo Classes */
+.logo-container {
+    position: relative;
+    overflow: hidden;
+}
+
+    .logo-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .logo-container:hover::after {
+        opacity: 1;
+    }
+
+.logo-main {
+    height: 100px;
+    width: 100px;
+}
+
+/* Contact Card Classes */
+.contact-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .contact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+.contact-card-image {
+    height: 80px;
+    width: 80px;
+}
+
+/* Divider Classes */
+.welcome-divider {
+    width: 25%;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .logo-main {
+        height: 80px;
+        width: 80px;
+    }
+
+    .contact-card-image {
+        height: 60px;
+        width: 60px;
+    }
+
+    .welcome-divider {
+        width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .logo-main {
+        height: 70px;
+        width: 70px;
+    }
+
+    .contact-card-image {
+        height: 50px;
+        width: 50px;
+    }
+
+    .welcome-divider {
+        width: 75%;
+    }
+}

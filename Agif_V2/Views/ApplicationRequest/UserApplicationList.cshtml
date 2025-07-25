@@ -113,7 +113,7 @@ else
             <!-- Modal Body -->
             <div class="modal-body p-0 bg-secondary bg-opacity-10">
                 <!-- PDF Toolbar -->
-                    <div class="bg-white border-bottom px-3 py-2" style="z-index: 1; position: relative;" >
+                    <div class="bg-white border-bottom px-3 py-2 position-relative z-1">
                     <div class="row align-items-center">
                         <div class="col-md-6">
                             <div class="d-flex align-items-center">
@@ -131,8 +131,8 @@ else
                 </div>
 
                 <!-- PDF Container -->
-                    <div class="d-flex justify-content-center align-items-center" style="height: calc(100vh - 200px);">
-                    <div class="bg-white shadow-lg rounded" style="width: 95%; height: 95%;">
+                    <div class="d-flex justify-content-center align-items-center full-height-minus-200">
+                        <div class="bg-white shadow-lg rounded w-95 h-95">
                         <div id="pdfContainer" class="w-100 h-100 d-flex justify-content-center align-items-center position-relative">
                             <!-- PDF Object -->
                               @*   <object id="PdfViwerFOrDigital"
@@ -144,7 +144,7 @@ else
 @*                                 <canvas id="pdfCanvas" class="border-0 rounded" style="max-width: 100%; max-height: 100%; display: block; margin: 0 auto;"></canvas>
  *@
                             <!-- Loading overlay -->
-                                <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center d-none" style="background-color: rgba(255, 255, 255, 0.9);">
+                                <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center d-none bg-white-90">
                                     <div class="text-center">
                                     <div class="spinner-border text-primary mb-3" role="status">
                                         <span class="visually-hidden">Loading...</span>
