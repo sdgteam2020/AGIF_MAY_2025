@@ -11,6 +11,5 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IApplication : IGenericRepositoryDL<DigitalSignRecords>
     {
-        //Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl);
     }
 }

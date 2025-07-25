@@ -72,10 +72,8 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> Upload()
         {
-            //int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
            
-          //int applicationId = 5017;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
@@ -139,9 +137,6 @@ namespace Agif_V2.Controllers
 
         public IActionResult Redirection(string Category, string PurposeOfWithdrwal)
         {
-            // Handle the received loanType and applicantCategory
-            // You can now access the form data here
-            // For example, you can pass these values to a view or use them in processing logic
             string AppCategory = EncryptDecrypt.EncryptionData(Category);
             string WithdrwalPurpose = EncryptDecrypt.EncryptionData(PurposeOfWithdrwal);
 
@@ -412,8 +407,6 @@ namespace Agif_V2.Controllers
             }
 
 
-
-            // Also validate the CommonData if it exists
             if (model.ClaimCommonData != null)
             {
                 var commonDataValidationContext = new ValidationContext(model.ClaimCommonData);
@@ -448,7 +441,7 @@ namespace Agif_V2.Controllers
                 {
                     formType = "ED";
                     bool result = await _IClaimonlineApplication1.submitApplication(model, "ED", claimCommonModel.ApplicationId);
-                   // bool result = await _IClaimonlineApplication1.submitApplication(model, "ED", 1002);
+                 
 
                 }
                 else if (model.Marriageward != null)
@@ -635,7 +628,6 @@ namespace Agif_V2.Controllers
                     {
                         pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
                                  .ToArray(); ;
-                        // pdfFiles.OrderByDescending().ToArray(); // Ensure the latest PDF is included
                     }
                 }
                 catch (Exception pdfGenEx)
@@ -650,11 +642,6 @@ namespace Agif_V2.Controllers
                 {
                     Directory.CreateDirectory(tempUploadsPath);
                 }
-
-                //string mergedPdfPath = Path.Combine(tempUploadsPath, folderPath + "_Merged.pdf");
-                //ViewBag.MergedPdfPath = mergedPdfPath;
-                //// Merge all PDFs using iText7
-                //bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
                 string MergePdfName = "App" + applicationIdStr + armyNo;
                 string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
@@ -728,8 +715,6 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Application ID is not specified." });
             }
-            //string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
-            //string pdfFilePath = $"/ClaimTempUploads/{folderPath}/{folderPath}_Merged.pdf";
             string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
             string mergepdfName = "App" + applicationIdStr + armyNo;
             string pdfFilePath = $"/ClaimMergePdf/{mergepdfName}.pdf";
@@ -756,7 +741,6 @@ namespace Agif_V2.Controllers
                     {
                         applicationId = applicationDetails.OnlineApplicationResponse.ApplicationId,
                         name = applicationDetails.OnlineApplicationResponse.ApplicantName,
-                        //armyNo = applicationDetails.OnlineApplicationResponse.ArmyPrefix + applicationDetails.OnlineApplicationResponse.Number + applicationDetails.OnlineApplicationResponse.Suffix,
                         armyNo = applicationDetails.OnlineApplicationResponse.Number,
                         rank=applicationDetails.OnlineApplicationResponse.DdlRank,
                         unitName = applicationDetails.OnlineApplicationResponse.PresentUnit,
@@ -764,7 +748,6 @@ namespace Agif_V2.Controllers
                         accountNumber = applicationDetails.OnlineApplicationResponse.SalaryAcctNo,
                         ifscCode = applicationDetails.OnlineApplicationResponse.IfsCode,
                         appliedDate = applicationDetails.OnlineApplicationResponse.UpdatedOn,
-                        // Add any other fields your application model has
                     }
                 };
 

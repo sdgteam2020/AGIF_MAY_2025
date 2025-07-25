@@ -4,14 +4,11 @@
     ViewData["Title"] = "Upload";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-    //string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "ED";
     string formType = Model.FormType ?? "ED";
 
-    //int applicationId = Convert.ToInt32(TempData["applicationId"]);
     var message = TempData["Message"] ?? string.Empty;
     int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
 
-    //int applicationId = 1002;
     var IsExtension = TempData["ClaimIsextensionOfService"] ?? false;
 
 }
@@ -28,9 +25,6 @@
                 <div class="card-body">
                     <!-- Instructions Section -->
                     <div class="alert alert-info mb-4">
-                        @* <h6 class="alert-heading mb-3">
-                        <strong>UPLOAD PDF OF SUPPORTING DOCUMENTS</strong>
-                        </h6> *@
 
 
 
@@ -161,7 +155,6 @@
                                     <div class="row">
                                         <div class="col-md-10">
                                             <label for="SeviceExtnPdf" class="form-label fw-bold">
-                                                @* 4. Service Extn Pt II order (If Applicable) *@
                                                 4. Unwilling cert for further promotion/extension of service (If Applicable)
                                             </label>
                                             <input class="form-control file-upload-limited" type="file" id="SeviceExtnPdf" name="SeviceExtnPdf" data-preview="#SeviceExtnPre" accept=".pdf" required>

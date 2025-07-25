@@ -1,10 +1,4 @@
 ﻿$(document).ready(function () {
-    //const params = new URLSearchParams(window.location.search);
-    //const value = params.get("status");
-
-    //let rawValue = $("#Status").val();
-    //let value = (rawValue === "false" || !rawValue) ? true : rawValue;
-
     let rawValue = $("#Status").val();
     let value = rawValue !== "false"; // true if "true" or blank; false only when "false"
 
@@ -176,13 +170,6 @@ function BindUsersData(status) {
                     return data || 'N/A';
                 }
             },
-            //{
-            //    data: "isPrimary",
-            //    name: "IsPrimary",
-            //    render: function (data, type, row) {
-            //        return data ? 'Primary' : 'Secondary';
-            //    }
-            //},
             {
                 data: "isPrimary",
                 name: "IsPrimary",
@@ -242,15 +229,6 @@ function BindUsersData(status) {
             }
         },
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
-        buttons: [
-            //{
-            //    extend: 'excel',
-            //    title: 'Users List',
-            //    exportOptions: {
-            //        columns: "thead th:not(.noExport)"
-            //    }
-            //}
-        ],
         drawCallback: function (settings) {
             // Re-bind toggle switch events after each draw
             $('#tblData tbody').off('change', '.cls-toggle-status').on('change', '.cls-toggle-status', function () {

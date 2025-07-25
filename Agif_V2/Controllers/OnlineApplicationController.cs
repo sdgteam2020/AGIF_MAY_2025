@@ -54,23 +54,6 @@ namespace Agif_V2.Controllers
             DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
             return View(DTOOnlineapplication);
         }
-        //public IActionResult SaveApplication(DTOOnlineApplicationRequest Data)
-        //{
-        //    var validationContext = new ValidationContext(Data.onlineApplications);
-        //    var validationResults = new List<ValidationResult>();
-
-        //    bool isValid = Validator.TryValidateObject(
-        //        Data.onlineApplications,
-        //        validationContext,
-        //        validationResults,
-        //        validateAllProperties: true);
-
-        //    if (!isValid)
-        //    {
-        //        // validationResults contains errors
-        //    }
-        //    return View();  
-        //}
         public IActionResult LoanType()
         {
             return View();
@@ -168,9 +151,6 @@ namespace Agif_V2.Controllers
 
         public IActionResult Redirection(string loanType, string applicantCategory)
         {
-            // Handle the received loanType and applicantCategory
-            // You can now access the form data here
-            // For example, you can pass these values to a view or use them in processing logic
             string Loan = EncryptDecrypt.EncryptionData(loanType);
             string Category = EncryptDecrypt.EncryptionData(applicantCategory);
 
@@ -284,10 +264,6 @@ namespace Agif_V2.Controllers
                     }
                 }
             }
-
-            // int Applicationtype = int.Parse(model.loantype);
-            //int ApplicantType = int.Parse(model.applicantCategory);
-            // Check ModelState validity after all validations
             if (!ModelState.IsValid)
             {
 
@@ -352,29 +328,15 @@ namespace Agif_V2.Controllers
                     ModelState.AddModelError("", "An error occurred while processing your application.");
                 }
 
-                // TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
-
-                //int Applicationid = common.ApplicationId;
-
                TempData["applicationId"] = common.ApplicationId;
                 //TempData["applicationId"] = 2039; // For testing purposes, replace with actual ApplicationId from common.ApplicationId
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
 
                 TempData["COArmyNumber"] = model.COArmyNo;
                 return RedirectToAction("Upload", "Upload");
-
-
-
-
-
-                // Proceed to the next step
             }
 
         }
-
-        //public async Task<IActionResult> GetApplicationDetails(int applicationId)
-        //{
-        //    return View();
         //}
 
         public async Task<JsonResult> MergePdf(int applicationId,bool isRejected,bool isApproved)
@@ -429,17 +391,12 @@ namespace Agif_V2.Controllers
 
                 string applicationIdStr = applicationId.ToString();
                 string folderPath = applicationTypeName  + armyNo + "_" + applicationIdStr;
-                //string folderPath = "MergePdf";
                 string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
-
-
-                // Check if source folder exists
                 if (!Directory.Exists(sourceFolderPath))
                 {
                     return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
                 }
 
-                // Get all PDF files from the source folder
                 string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
 
                 if (pdfFiles.Length == 0)
@@ -467,18 +424,13 @@ namespace Agif_V2.Controllers
                     if (data == 1)
                     {
                         pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
-                                 .ToArray(); ;
-                       // pdfFiles.OrderByDescending().ToArray(); // Ensure the latest PDF is included
+                                 .ToArray();
                     }
                 }
                 catch (Exception pdfGenEx)
                 {
                     Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
-                    // Continue with existing PDFs if generation fails
                 }
-
-                // Create merged PDF path in TempUploads root
-                //string tempUploadsPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
                 string tempUploadsPath = Path.Combine(_env.WebRootPath, "MergePdf");
                 if (!Directory.Exists(tempUploadsPath))
                 {

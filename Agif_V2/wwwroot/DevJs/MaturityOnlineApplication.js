@@ -7,9 +7,6 @@ $(document).ready(function () {
     Inputmask().mask(document.querySelectorAll("input"));
     EnableDisablePCDA();
     EnableDisableCivilPostalAdd();
-    //RefreshMaxAmt_PCA();
-    //RefreshMaxAmt_CA();
-    //RefreshMaxAmt_HBA();
     handleSubmitClick();
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
@@ -52,9 +49,6 @@ function resetLoanForm() {
     $('#loanType').val('');
     $('.loan-type-section').hide();
     $('#addLoanButton').hide().prop('disabled', true);
-
-    // Clear all input fields
-    //$('#loanFormContainer input').val('');
 }
 
 
@@ -135,14 +129,7 @@ function removeLoanRow(button) {
 }
 function addLoanToGrid() {
     const loanType = $('#loanType').val();
-
-   
-
-    // Updated addLoanToGrid function with better duplicate checking
-
-        //const loanType = $('#loanType').val();
-
-        // Double-check for duplicates before adding
+    
         if (isLoanTypeAlreadyAdded(loanType)) {
             const loanTypeNames = {
                 'hba': 'House Building Advance (HBA)',
@@ -205,19 +192,6 @@ function validateLoanData(loanType, date, duration, amount) {
         showErrorMessage('Loan date cannot be in the future.');
         return false;
     }
-
-    //if (loanDate < minDate) {
-    //    alert('Please enter a valid loan date.');
-    //    return false;
-    //}
-
-    // Duration validation (assuming months)
-    //const durationNum = parseInt(duration);
-    //if (isNaN(durationNum) || durationNum <= 0 || durationNum > 360) {
-    //    alert('Please enter a valid duration (1-360 months).');
-    //    return false;
-    //}
-
     // Amount validation
     const amountNum = parseFloat(amount);
     if (isNaN(amountNum) || amountNum <= 0 || amountNum > 10000000) {
@@ -350,19 +324,7 @@ function loadDropdown() {
         mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
         mMsater(Rank, "ddlrank", 13, 0);
     }
-
-    // Commented section can be refactored similarly if reused later
-    /*
-    if (loanType == 1) {
-        mMsater(propertytype, "propertyType", 16, 0);
-    }
-    else if (loanType == 2) {
-        mMsater(vehicletype, "veh_Loan_Type", 17, 0);
-    }
-    else if (loanType == 3) {
-        mMsater(computer_Loan_Type, "computer_Loan_Type", 18, 0);
-    }
-    */
+    
 
     mMsater(regtcorps, "regtCorps", 8, 0);
     mMsater(parentunit, "parentUnit", 2, 0);
@@ -1156,75 +1118,6 @@ function EnableDisableCivilPostalAdd() {
         }
     });
 }
-//function Validate_Salary_Slip_date(inputElement) {
-//    const value = inputElement.value;
-
-//    if (!value) {
-//        Swal.fire({
-//            icon: "error",
-//            title: "Date Required",
-//            text: "Please select a date.",
-//        });
-//        return;
-//    }
-
-//    const selectedDate = new Date(value);
-//    const currentDate = new Date();
-//    const threeMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, 1);
-
-//    // Normalize selectedDate to the 1st of its month
-//    const normalizedSelectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-//    const normalizedCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-
-//    // Validate range
-//    if (normalizedSelectedDate < threeMonthsAgo || normalizedSelectedDate > normalizedCurrentMonth) {
-//        const minAllowed = threeMonthsAgo.toLocaleString("default", { month: "long", year: "numeric" });
-//        const maxAllowed = normalizedCurrentMonth.toLocaleString("default", { month: "long", year: "numeric" });
-
-//        Swal.fire({
-//            icon: "error",
-//            title: "Invalid Date",
-//            text: `Please select a date between ${minAllowed} and ${maxAllowed}.`,
-//        }).then(() => {
-//            inputElement.value = "";
-//            inputElement.focus();
-//        });
-//    } else {
-//        console.log("Valid date:", normalizedSelectedDate);
-//    }
-//}
-//function textChange() {
-//    function parseValue(value) {
-//        return value === "" ? 0 : parseInt(value);
-//    }
-//    const cr = parseValue($('#basicPay').val().replace(/,/g, ''))
-//        + parseValue($('#rank_gradePay').val().replace(/,/g, ''))
-//        + parseValue($('#msp').val().replace(/,/g, ''))
-//        + parseValue($('#CI_Pay').val().replace(/,/g, ''))
-//        + parseValue($('#npax_Pay').val().replace(/,/g, ''))
-//        + parseValue($('#techPay').val().replace(/,/g, ''))
-//        + parseValue($('#da').val().replace(/,/g, ''))
-//        + parseValue($('#pmha').val().replace(/,/g, ''))
-//        + parseValue($('#lra').val().replace(/,/g, ''))
-//        + parseValue($('#miscPay').val().replace(/,/g, ''));
-
-//    const debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
-//        + parseValue($('#agif_Subs').val().replace(/,/g, ''))
-//        + parseValue($('#incomeTaxMonthly').val().replace(/,/g, ''))
-//        + parseValue($('#educationCess').val().replace(/,/g, ''))
-//        + parseValue($('#pli').val().replace(/,/g, ''))
-//        + parseValue($('#misc_Deduction').val().replace(/,/g, ''))
-//        + parseValue($('#loanEMI_Outside').val().replace(/,/g, ''))
-//        + parseValue($('#loanEMI').val().replace(/,/g, ''));
-//    const totalDebit = debt.toLocaleString('en-IN');
-//    $('#totalDeductions').val(totalDebit);
-//    $('#totalCredit').val(cr.toLocaleString('en-IN'));
-//    $('#salary_After_Deductions').val((cr - debt).toLocaleString('en-IN'));
-//    setOutlineActive("totalDeductions");
-//    setOutlineActive("totalCredit");
-//    setOutlineActive("salary_After_Deductions");
-//}
-
 let formSubmitting = false;
 let formCancelled = false;
 function filterAmountText(loanType) {
@@ -1250,19 +1143,11 @@ function handleSubmitClick() {
 
         const params = new URLSearchParams(window.location.search);
 
-        //const params = new URLSearchParams(window.location.search);
-        //const loanType = params.get("loanType");
-        // const params = new URLSearchParams(window.location.search);
-
         const loanTypeFromUrl = params.get("loanType");
 
         const loanTypeFromInput = document.getElementById('loanType')?.value || null;
 
         const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
-
-        //const loanTypeFromInput = document.getElementById('loanType')?.value || null;
-
-        //const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
         filterAmountText(loanType);
 
 
@@ -1302,9 +1187,7 @@ function handleSubmitClick() {
             }
         });
 
-
-        //document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist : "";
-        //  document.getElementById("msgerror").textContent = hasError ? "Error in: " + errorlist.join(", ") : "";
+        
 
         var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
         $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
@@ -1328,8 +1211,7 @@ function handleSubmitClick() {
                 checkCORegistration(); // First check CO registration
             }
         }
-        //else
-        //    form.submit();
+        
 
     });
 
@@ -1358,21 +1240,11 @@ function checkCORegistration() {
             data: { ArmyNo: ArmyNo },
             success: function (result) {
                 if (result === true) {
-                    // If already registered, allow editing of unit
-                    //document.querySelector("input[name='Unit']").removeAttribute("required");
-                    //if (unitValidation) {
-                    //    unitValidation.innerHTML = "";  // Clear error message
-                    //    unitValidation.classList.remove("field-validation-error");
-                    //    unitValidation.classList.add("field-validation-valid");
-                    //}
-                    // Open unit search popup
                     $('#unitSearchDialog').show();
                 } else if (result === false) {
                     // If not registered, set unit input back to required
                     formSubmitting = true;
                     $('#myMaturityForm').submit();
-                    //document.getElementById("txtUnit").removeAttribute("disabled");
-                    //document.getElementById("txtUnit").setAttribute("required", "required");
                 }
             },
             error: function () {
@@ -1384,82 +1256,15 @@ function checkCORegistration() {
     }
 }
 
-//$("#unitSearchInput").autocomplete({
-//    source: function (request, response) {
-//        //alert(1);
-//        // $("#Unit").val(0);
-
-//        if (request.term.length > 2) {
-//            var param = { "UnitName": request.term };
-//            $("#CommonData_IOUnit").val(0);
-//            $.ajax({
-//                url: '/Account/GetALLByUnitName',
-//                contentType: 'application/x-www-form-urlencoded',
-//                data: param,
-//                type: 'POST',
-//                success: function (data) {
-//                    if (data.length != 0) {
-
-//                        response($.map(data, function (item) {
-
-//                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
-
-//                        }))
-//                    }
-//                    else {
-//                        $("#CommonData_IOUnit").val(0);
-//                        $("#unitSearchInput").val("");
-
-//                        //alert("Unit not found.")
-//                        Swal.fire({
-//                            icon: 'warning',
-//                            title: 'Unit not found',
-//                            text: 'Please check the unit name and try again.',
-//                            confirmButtonText: 'OK'
-//                        });
-//                    }
-
-//                },
-//                error: function (response) {
-//                    alert(response.responseText);
-//                },
-//                failure: function (response) {
-//                    alert(response.responseText);
-//                }
-//            });
-//        }
-//    },
-//    select: function (e, i) {
-//        e.preventDefault();
-
-//        $("#unitSearchInput").val(i.item.label);
-//        //$("#IOUnit").val(i.item.value);
-
-//        //$("#PresenttxtUnit").val(i.item.label);
-//        $("#CommonData_IOUnit").val(i.item.value);
-//       // $("input[name='CommonData.PresentUnit']").val(i.item.value);
-
-
-//        $("#unitSearchConfirmBtn").prop("disabled", false);
-//    },
-//    appendTo: '#suggesstion-box'
-//});
-
 $('#unitSearchInput').on('input', function () {
     const inputValue = $(this).val().trim();
     $('#unitSearchConfirmBtn').prop('disabled', inputValue === '');
 });
 
 $("#unitSearchConfirmBtn").click(function (e) {
-    //const $message = $('#unitSearchMessage');
-    //if ($message.length) {
-    //    $message.hide();
-    //}
     e.preventDefault();
     e.stopPropagation();
-    //var value = $("#CommonData_IOUnit").val()
     var value = $("#unitSearchInput").val()
-    //console.log($("#PresentUnitId").val());
 
     if (value != 0) {
         Swal.fire({
@@ -1511,68 +1316,10 @@ function checkUnitSameOrNot(ArmyNo) {
     var Suffix = $("#txtSuffix").val();
 
     var Value = armyNumber + Prefix + Suffix;
-
-    //$.ajax({
-    //    url: '/OnlineApplication/CheckIsUnitRegister',
-    //    method: 'GET',
-    //    data: { ArmyNo: (ArmyNo).toUpperCase()},
-    //    success: function (response) {
-    //        if (response === true) {
-
-    //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
-
-    //            // Clear input and reopen dialog
-    //            $("#unitSearchInput").val("");
-    //            $("#CommonData_IOUnit").val(0)
-    //        }
-
-    //        else {
-
-
-    //            checkUnitRegistration(unitId);
-
-
-    //        }
-    //    },
-    //    error: function () {
-    //        alert('Could not verify unit registration. Please try again.');
-    //    }
-    //});
-
     if (ArmyNo == Value.toUpperCase()) {
         //console.log("Unit is same as Army No");
         $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
     }
-
-    // else {
-    //$.ajax({
-    //    url: '/OnlineApplication/CheckIsUnitRegister',
-    //    method: 'GET',
-    //    data: { ArmyNo: (ArmyNo).toUpperCase()},
-    //    success: function (response) {
-    //        if (response === true) {
-
-    //            $('#unitSearchMessage').text("Unit Already Registered.\nYou are already registered as CO for this unit. Please select another unit.");
-
-    //            // Clear input and reopen dialog
-    //            $("#unitSearchInput").val("");
-    //            $("#CommonData_IOUnit").val(0)
-    //        }
-
-    //        else {
-
-
-    //            checkUnitRegistration(unitId);
-
-
-    //        }
-    //    },
-    //    error: function () {
-    //        alert('Could not verify unit registration. Please try again.');
-    //    }
-    //});
-    //checkUnitRegistration(ArmyNo);
-    //}
 
     else {
         try {
@@ -1600,18 +1347,8 @@ function checkUnitSameOrNot(ArmyNo) {
                             reverseButtons: true,  // Make Cancel button appear on the left
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Redirect to Create page
-                                //var appType = $('#ApplicationType').val();
-                                //if (appType == "9") {
-                                //    window.location.href = `/HBA_Application/Create`;
-                                //}
-                                //else {
-                                //    window.location.href = `/Car_PC_Advance_Application/Create`;
-                                //}
                                 $('#unitSearchDialog').hide();
                             } else if (result.isDismissed) {
-                                // If Cancel is clicked, reopen the unit search popup
-                                //$('#txtUnit').val('');
                                 $("unitSearchDialog").show();
                             }
                         });
@@ -1628,62 +1365,6 @@ function checkUnitSameOrNot(ArmyNo) {
 
 
 }
-
-//function checkUnitRegistration(selectedUnitId) {
-//    $.ajax({
-//        url: '/OnlineApplication/CheckIsCoRegister',
-//        method: 'GET',
-//        data: { UnitId: selectedUnitId },
-//        success: function (response) {
-//            if (response === true) {
-//                //alert('Unit Available. You can proceed with this unit.');
-//                $("#CommonData_IOUnit").val(selectedUnitId);
-//                //$('#txtUnit').val(selectedUnitName);
-//                formSubmitting = true;
-//                $('#myMaturityForm').submit();
-//            } else {
-//                //if (confirm('Unit registration pending/not activated. Please approach your Unit IO.\nGo to Create page?')) {
-//                //    window.location.href = '/Car_PC_Advance_Application/Create';
-//                //} else {
-//                //    openUnitSearchPopup();
-//                //}
-//                $('#unitSearchMessage').text('');
-
-
-//                Swal.fire({
-//                    icon: 'info',
-//                    title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
-//                    html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
-//                    confirmButtonText: 'OK',
-//                    cancelButtonText: 'Cancel', // Cancel button text
-//                    showCancelButton: true, // Enable cancel button
-//                    reverseButtons: true,  // Make Cancel button appear on the left
-//                }).then((result) => {
-//                    if (result.isConfirmed) {
-//                        // Redirect to Create page
-//                        //var appType = $('#ApplicationType').val();
-//                        //if (appType == "9") {
-//                        //    window.location.href = `/HBA_Application/Create`;
-//                        //}
-//                        //else {
-//                        //    window.location.href = `/Car_PC_Advance_Application/Create`;
-//                        //}
-//                        $('#unitSearchDialog').hide();
-//                    } else if (result.isDismissed) {
-//                        // If Cancel is clicked, reopen the unit search popup
-//                        //$('#txtUnit').val('');
-//                        $("unitSearchDialog").show();
-//                    }
-//                });
-//            }
-//        },
-//        error: function () {
-//            alert('Could not verify unit registration. Please try again.');
-//        }
-//    });
-//}
-
-
 function formatIndianNumber(input) {
 
     let num = input.value.replace(/[^0-9]/g, '');
@@ -1710,391 +1391,6 @@ function formatIndianNumber(input) {
 
     input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
 }
-
-//PCA Calculations
-//function RefreshMaxAmt_PCA() {
-//    $("#computerCost").on('change', function () {
-//        var rawValue = $('#computerCost').val().replace(/,/g, '');
-//        var PcCost = parseFloat(rawValue);
-
-//        PcCost = Math.round(PcCost * 0.9);
-//        if (isNaN(PcCost)) {
-//            alert("Please enter a valid computer cost.");
-//            return;
-//        }
-//        var Amount = 200000;
-//        if (Amount > PcCost) {
-//            $('#PCA_Amt_Eligible_for_loan').val(PcCost.toLocaleString('en-IN'));
-//        }
-//        else {
-//            $('#PCA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-//        }
-
-//        setOutlineActive("PCA_Amt_Eligible_for_loan");
-//        calculateMaxEMI_PCA();
-//        calculateEMIRepayingCapacity_PCA();
-//    });
-//}
-//function calculateEMIRepayingCapacity_PCA() {
-//    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-//    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
-//    if (isNaN(credit) || isNaN(debit)) {
-//        alert("Please enter valid credit and debit amounts.");
-//        return;
-//    }
-//    var repayingCapacity = credit * 0.75 - debit;
-//    if (repayingCapacity < 0) {
-//        repayingCapacity = 0;
-//    }
-//    $('#PCA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
-//    setOutlineActive("PCA_repayingCapacity");
-//}
-//function calculateMaxEMI_PCA() {
-
-//    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
-//    Residual -= 6;
-
-//    var EMI = 48;
-//    if (EMI < Residual) {
-//        $("#PCA_EMI_Eligible").val(EMI);
-//    }
-//    else {
-//        $("#PCA_EMI_Eligible").val(Residual);
-//    }
-
-//    setOutlineActive("PCA_EMI_Eligible");
-//}
-//function validateAmount_PCA(input) {
-//    var $input = $(input);
-//    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-//    var eligibleAmount = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-//    var disbusermentAmt = enteredAmount * 0.99;
-//    if (isNaN(enteredAmount)) {
-//        $input.val('');
-//    } else {
-//        if (enteredAmount > eligibleAmount) {
-//            $input.val($("#PCA_Amt_Eligible_for_loan").val());
-//            disbusermentAmt = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-//        }
-//    }
-
-//    $('#PCA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
-//    setOutlineActive("PCA_approxDisbursementAmt");
-//}
-//function validateEMI_PCA(input) {
-//    var $input = $(input);
-//    var enteredEMI = parseFloat($input.val());
-//    var eligibleEMI = parseFloat($("#PCA_EMI_Eligible").val());
-
-//    if (isNaN(enteredEMI)) {
-//        $input.val('');
-//    } else {
-//        if (enteredEMI > eligibleEMI) {
-//            $input.val(eligibleEMI);
-//        }
-//    }
-//}
-//function calculateEMI_PCA() {
-//    let P = parseFloat($("#PCA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-//    let N = parseInt($("#PCA_EMI_Applied").val()); // Number of EMIs
-//    let R = (8.50 / 12) / 100;
-
-//    if (!P || !N || !R) {
-//        $("#PCA_approxEMIAmount").val("");
-//        return;
-//    }
-
-//    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-//    $("#PCA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
-
-//    setOutlineActive("PCA_approxEMIAmount");
-//}
-
-//CA Calculations
-//function RefreshMaxAmt_CA() {
-//    $("#vehicleCost").on('change', function () {
-//        var vehicalType = $('#veh_Loan_Type').val();
-//        var rawValue = $('#vehicleCost').val().replace(/,/g, '');
-//        var carCost = parseFloat(rawValue);
-//        var prefix = $('#armyPrefix').val();
-//        carCost = Math.round(carCost * 0.9);
-//        var Amount = 0;
-//        if (isNaN(carCost)) {
-//            alert("Please enter a valid car cost.");
-//            return;
-//        }
-//        if (vehicalType == 2) {
-//            Amount = (prefix == 13 || prefix == 14) ? 1000000 : 2000000;
-//        }
-//        else if (vehicalType == 3) {
-//            Amount = (prefix == 13 || prefix == 14) ? 500000 : 1000000;
-//        }
-//        else {
-//            Amount = (prefix == 13 || prefix == 14) ? 200000 : 1000000;
-//        }
-
-//        if (Amount > carCost) {
-//            $('#CA_Amt_Eligible_for_loan').val(carCost.toLocaleString('en-IN'));
-//        }
-//        else {
-//            $('#CA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-//        }
-
-//        setOutlineActive("CA_Amt_Eligible_for_loan");
-//        calculateMaxEMI_CA(vehicalType);
-//        calculateEMIRepayingCapacity_CA();
-//    });
-//}
-//function calculateEMIRepayingCapacity_CA() {
-//    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-//    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
-//    if (isNaN(credit) || isNaN(debit)) {
-//        alert("Please enter valid credit and debit amounts.");
-//        return;
-//    }
-//    var repayingCapacity = credit * 0.75 - debit;
-//    if (repayingCapacity < 0) {
-//        repayingCapacity = 0;
-//    }
-//    $('#CA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
-
-//    setOutlineActive("CA_repayingCapacity");
-//}
-//function calculateMaxEMI_CA(vehicalType) {
-
-//    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
-//    Residual -= 6;
-
-//    var EMI = 0;
-//    if (vehicalType == 2) {
-//        EMI = 96;
-//        if (EMI < Residual) {
-//            $("#CA_EMI_Eligible").val(EMI);
-//        }
-//        else {
-//            $("#CA_EMI_Eligible").val(Residual);
-//        }
-//    }
-//    else if (vehicalType == 3) {
-//        EMI = 72;
-//        if (EMI < Residual) {
-//            $("#CA_EMI_Eligible").val(EMI);
-//        }
-//        else {
-//            $("#CA_EMI_Eligible").val(Residual);
-//        }
-//    }
-//    else {
-//        EMI = 60;
-//        if (EMI < Residual) {
-//            $("#CA_EMI_Eligible").val(EMI);
-//        }
-//        else {
-//            $("#CA_EMI_Eligible").val(Residual);
-//        }
-//    }
-
-//    setOutlineActive("CA_EMI_Eligible");
-
-//}
-//function validateAmount_CA(input) {
-//    var $input = $(input);
-//    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-//    var eligibleAmount = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-//    var disbusermentAmt = enteredAmount * 0.99;
-//    if (isNaN(enteredAmount)) {
-//        $input.val('');
-//    } else {
-//        if (enteredAmount > eligibleAmount) {
-//            $input.val($("#CA_Amt_Eligible_for_loan").val());
-//            disbusermentAmt = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-//        }
-//    }
-
-//    $('#CA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
-
-//    setOutlineActive("CA_approxDisbursementAmt");
-//}
-//function validateEMI_CA(input) {
-//    var $input = $(input);
-//    var enteredEMI = parseFloat($input.val());
-//    var eligibleEMI = parseFloat($("#CA_EMI_Eligible").val());
-
-//    if (isNaN(enteredEMI)) {
-//        $input.val('');
-//    } else {
-//        if (enteredEMI > eligibleEMI) {
-//            $input.val(eligibleEMI);
-//        }
-//    }
-//}
-//function calculateEMI_CA() {
-//    let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-//    let N = parseInt($("#CA_EMI_Applied").val()); // Number of EMIs
-//    let R = (8.50 / 12) / 100;
-
-//    if (!P || !N || !R) {
-//        $("#CA_approxEMIAmount").val("");
-//        return;
-//    }
-
-//    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-//    $("#CA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
-
-//    setOutlineActive("CA_approxEMIAmount");
-//}
-
-////HBA Calculations
-//function RefreshMaxAmt_HBA() {
-//    $("#propertyCost").on('change', function () {
-//        var propType = $('#propertyType').val();
-//        if (!propType || propType == "0") {
-//            alert("Please select Property Type.");
-//            return;
-//        }
-//        var rawValue = $('#propertyCost').val().replace(/,/g, '');
-//        var propertyCost = parseFloat(rawValue);
-
-//        propertyCost = Math.round(propertyCost * 0.85);
-//        if (isNaN(propertyCost)) {
-//            alert("Please enter a valid car cost.");
-//            return;
-//        }
-//        if (propType == 5) {
-//            var Amount = 2000000;
-//            if (Amount > propertyCost) {
-//                $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-//            }
-//            else {
-//                $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-//            }
-//        }
-//        else {
-//            var prefix = $('#armyPrefix').val();
-//            if (!prefix || prefix == "0") {
-//                alert("Please select Prefix.");
-//                return;
-//            }
-//            if (prefix == 13) {
-//                var Amount = 5000000;
-//                if (Amount > propertyCost) {
-//                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-//                }
-//                else {
-//                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-//                }
-//            }
-//            else if (prefix == 14) {
-//                var Amount = 4000000;
-//                if (Amount > propertyCost) {
-//                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-//                }
-//                else {
-//                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-//                }
-//            }
-//            else {
-//                var Amount = 10000000;
-//                if (Amount > propertyCost) {
-//                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-//                }
-//                else {
-//                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-//                }
-//            }
-//        }
-
-//        setOutlineActive("HBA_Amt_Eligible_for_loan");
-//        calculateMaxEMI_HBA(propType);
-//        calculateEMIRepayingCapacity_HBA();
-//    });
-//}
-//function calculateEMIRepayingCapacity_HBA() {
-//    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-//    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
-//    if (isNaN(credit) || isNaN(debit)) {
-//        alert("Please enter valid credit and debit amounts.");
-//        return;
-//    }
-//    var repayingCapacity = credit * 0.75 - debit;
-//    if (repayingCapacity < 0) {
-//        repayingCapacity = 0;
-//    }
-//    $('#HBA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
-//    setOutlineActive("HBA_repayingCapacity");
-//}
-//function calculateMaxEMI_HBA(propType) {
-//    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
-//    Residual -= 6;
-
-//    if (propType == 5) {
-//         let EMI = 120;
-//        if (EMI < Residual) {
-//            $("#HBA_EMI_Eligible").val(EMI);
-//        }
-//        else {
-//            $("#HBA_EMI_Eligible").val(Residual);
-//        }
-//    }
-//    else {
-//        console.log($('#totalResidualMonth').val())
-//        EMI = 240;
-//        if (EMI < Residual) {
-//            $("#HBA_EMI_Eligible").val(EMI);
-//        }
-//        else {
-//            $("#HBA_EMI_Eligible").val(Residual);
-//        }
-//    }
-
-//    setOutlineActive("HBA_EMI_Eligible");
-//}
-//function validateAmount_HBA(input) {
-//    var $input = $(input);
-//    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-//    var eligibleAmount = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-//    var disbusermentAmt = enteredAmount * 0.99;
-//    if (isNaN(enteredAmount)) {
-//        $input.val('');
-//    } else {
-//        if (enteredAmount > eligibleAmount) {
-//            $input.val($("#HBA_Amt_Eligible_for_loan").val());
-//            disbusermentAmt = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-//        }
-//    }
-
-//    $('#HBA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
-
-//    setOutlineActive("HBA_approxDisbursementAmt");
-//}
-//function validateEMI_HBA(input) {
-//    var $input = $(input);
-//    var enteredEMI = parseFloat($input.val());
-//    var eligibleEMI = parseFloat($("#HBA_EMI_Eligible").val());
-
-//    if (isNaN(enteredEMI)) {
-//        $input.val('');
-//    } else {
-//        if (enteredEMI > eligibleEMI) {
-//            $input.val(eligibleEMI);
-//        }
-//    }
-//}
-//function calculateEMI_HBA() {
-//    let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-//    let N = parseInt($("#HBA_EMI_Applied").val()); // Number of EMIs
-//    let R = (8.50 / 12) / 100;
-
-//    if (!P || !N || !R) {
-//        $("#HBA_approxEMIAmount").val("");
-//        return;
-//    }
-
-//    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-//    $("#HBA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
-
-//    setOutlineActive("HBA_approxEMIAmount");
-//}
 
 
 $("#ParenttxtUnit").autocomplete({
@@ -2190,9 +1486,7 @@ $("#PresenttxtUnit").autocomplete({
         $("#PresenttxtUnit").val(i.item.label);
         $("#PresentUnitId").val(i.item.value);
         $("input[name='ClaimCommonData.PresentUnit']").val(i.item.value);
-
-        // $("#spnUnitMapId").html(i.item.value);
-        //alert(i.item.value)
+        
 
     },
     appendTo: '#suggesstion-box'
@@ -2221,52 +1515,6 @@ $("#OtherReasonPdf").on("click", function () {
     });
 });
 
-//$('#Attach_Part_II_Order').change(function () {
-//    previewFile(this, '#Attach_Part_II_Order');
-//}); 
-
-//$('#Attach_Bonafide_letter').change(function () {
-//    previewFile(this, '#Attach_Bonafide_letter');
-//}); 
-
-//$('#Attach_invitation_card').change(function () {
-//    previewFile(this, '#Attach_invitation_card');
-//}); 
-
-//$('#TotalexpenditureFile').change(function () {
-//    previewFile(this, '#TotalexpenditureFile');
-//}); 
-
-//$('#OtherReasonPdf').change(function () {
-//    previewFile(this, '#OtherReasonPdf');
-//}); 
-
-
-//function previewFile(input, previewSelector) {
-//    const file = input.files[0];
-//    const preview = $(previewSelector);
-//    const errorContainer = $(input).closest('.col-md-4').find('.file-error-message'); // Find the error container below the input
-//    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
-//    errorContainer.text('');
-
-//    if (file) {
-//        // Check if the file is a PDF
-//        if (file.type !== 'application/pdf') {
-//            errorContainer.text('Only PDF files are allowed').css('color', 'red');
-//            input.value = ''; // Clear the input field
-//            return;
-//        }
-
-//        // Check the file size (must not exceed 1MB)
-//        if (file.size > maxFileSize) {
-//            errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
-//            input.value = ''; // Clear the input field
-//        }
-
-//    } else {
-//        preview.html('<p>No file selected</p>');
-//    }
-//}
 $('#OtherReasons').on('input', function () {
     var maxWords = 50;
     var currentValue = $(this).val();
@@ -2280,15 +1528,3 @@ $('#OtherReasons').on('input', function () {
         $(this).val(words.join(' ')); // Join them back into a string and update the input
     }
 });
-
-//function formatIndianNumber(input) {
-//    let value = input.value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-//    if (value.length <= 3) {
-//        input.value = value;  // No formatting for less than or equal to 3 digits
-//    } else {
-//        let lastThree = value.slice(-3);
-//        let otherNumbers = value.slice(0, value.length - 3);
-//        otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");  // Add commas in pairs for the Indian system
-//        input.value = otherNumbers + "," + lastThree;
-//    }
-//}

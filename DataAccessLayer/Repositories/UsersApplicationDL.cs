@@ -84,7 +84,6 @@ namespace DataAccessLayer.Repositories
                           .OrderByDescending(a => a.UpdatedOn)
                           .ToList();
             return applicationList!;
-            //throw new NotImplementedException();
         }
 
         public async Task<List<DTOGetApplResponse>> GetUsersApplicationForAdmin(int status)
@@ -164,7 +163,6 @@ namespace DataAccessLayer.Repositories
             var UsersApplicationList = await (from appl in _db.trnClaim
                                               join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
                                               join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                              //join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
                                               join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
                                               where user.MappingId == Mapping && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3)) && user.IsPrimary == true
                                               orderby appl.UpdatedOn descending
@@ -183,7 +181,6 @@ namespace DataAccessLayer.Repositories
             var COApplicationList = await (from appl in _db.trnClaim
                                            join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
                                            join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                           //join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
                                            join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
                                            where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
                                            orderby appl.UpdatedOn descending
@@ -203,7 +200,6 @@ namespace DataAccessLayer.Repositories
                           .OrderByDescending(a => a.UpdatedOn)
                           .ToList();
             return applicationList!;
-            //throw new NotImplementedException();
         }
 
         public async Task<List<DTOGetApplResponse>> GetClaimUsersApplicationForAdmin(int status)
@@ -215,7 +211,6 @@ namespace DataAccessLayer.Repositories
                                                      join regt in _db.MRegtCorps on appl.RegtCorps equals regt.Id
                                                      join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
                                                      join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
-                                                     //join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
                                                      join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
                                                      orderby appl.UpdatedOn descending
                                                      select new DTOGetApplResponse

@@ -51,13 +51,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 3;
     options.Lockout.AllowedForNewUsers = true;
 });
-//builder.Services.AddResponseCompression(options =>
-//{
-//    // Enable gzip compression for fonts
-//    options.EnableForHttps = true; // Optional: Enables compression for HTTPS traffic
-//    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-//        new[] { "font/woff2", "font/woff", "application/font-woff2", "application/font-woff", "application/x-font-ttf", "font/ttf" });
-//});
 
 builder.Services.AddResponseCompression(options =>
 {
@@ -162,22 +155,22 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-//app.Use(async (context, next) =>
-//{
-//    var referer = context.Request.Headers["Referer"].ToString();
-//    var path = context.Request.Path.Value;
+app.Use(async (context, next) =>
+{
+    var referer = context.Request.Headers["Referer"].ToString();
+    var path = context.Request.Path.Value;
 
-//    if (string.IsNullOrEmpty(referer) &&
-//        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
-//        !path.StartsWith("/css") &&
-//        !path.StartsWith("/js"))
-//    {
-//        context.Response.Redirect("/Default/Index");
-//        return;
-//    }
+    if (string.IsNullOrEmpty(referer) &&
+        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
+        !path.StartsWith("/css") &&
+        !path.StartsWith("/js"))
+    {
+        context.Response.Redirect("/Default/Index");
+        return;
+    }
 
-//    await next();
-//});
+    await next();
+});
 
 app.UseAuthorization();
 

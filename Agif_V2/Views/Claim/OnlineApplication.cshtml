@@ -4,11 +4,9 @@
     ViewData["Title"] = "Application Form";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-    // string loanType = Model?.loantype ?? Context.Request.Query["loanType"].ToString() ?? "CA";
-    // string applicantCategory = Model?.applicantCategory ?? Context.Request.Query["applicantCategory"].ToString() ?? "CA";
 
     string Category = Model?.Category ?? TempData["CategoryNew"] as string ?? "1";
-    string Purpose =  Model?.Purpose ?? TempData["WithdrwalPurposeNew"] as string ?? "1";
+    string Purpose = Model?.Purpose ?? TempData["WithdrwalPurposeNew"] as string ?? "1";
     string PurposeTypeText = "";
     if (Purpose == "1")
     {
@@ -27,10 +25,11 @@
 
 }
 <style>
- .ui-autocomplete {
+    .ui-autocomplete {
         z-index: 1050 !important; /* higher than your popup/modal */
     }
-  #unitSearchDialog input {
+
+    #unitSearchDialog input {
         text-align: left !important;
         font-size: 20px;
     }
@@ -96,7 +95,7 @@
     }
 
     /* Button styles */
-  
+
     #unitSearchDialog .dialog-box {
         width: 600px; /* keep your width */
         padding: 20px;
@@ -159,68 +158,68 @@
 
 
     .custom-file-text::-webkit-file-upload-button {
-    visibility: hidden;
-}
+        visibility: hidden;
+    }
 
-.custom-file-text::before {
-   content: attr(data-text);
-    display: inline-block;
-    background: #007bff;
-    color: white;
-    border: 1px solid #007bff;
-    border-radius: 3px;
-    padding: 0px 2px;
-    outline: none;
-    white-space: nowrap;
-    cursor: pointer;
-    font-weight: 700;
-}
+    .custom-file-text::before {
+        content: attr(data-text);
+        display: inline-block;
+        background: #007bff;
+        color: white;
+        border: 1px solid #007bff;
+        border-radius: 3px;
+        padding: 0px 2px;
+        outline: none;
+        white-space: nowrap;
+        cursor: pointer;
+        font-weight: 700;
+    }
 
-.custom-file-text:hover::before {
-    border-color: #0056b3;
-    background: #0056b3;
-}
+    .custom-file-text:hover::before {
+        border-color: #0056b3;
+        background: #0056b3;
+    }
 
-.custom-file-text:active::before {
-    background: #004085;
-}
+    .custom-file-text:active::before {
+        background: #004085;
+    }
 
-  .loan-entry {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #f8f9fa;
-        }
-        
-        .remove-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        
-        .loan-entry {
-            position: relative;
-        }
-        
-        .add-loan-section {
-            text-align: center;
-            padding: 30px;
-            border: 2px dashed #dee2e6;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        
-        .loan-type-section {
-            display: none;
-            margin-top: 20px;
-        }
-        
+    .loan-entry {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f8f9fa;
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .loan-entry {
+        position: relative;
+    }
+
+    .add-loan-section {
+        text-align: center;
+        padding: 30px;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .loan-type-section {
+        display: none;
+        margin-top: 20px;
+    }
+
         .loan-type-section.active {
             display: block;
         }
 
-        .ui-datepicker {
+    .ui-datepicker {
         background: white;
         border: none;
         border-radius: 12px;
@@ -383,11 +382,11 @@
             transform: scale(1);
         }
     }
+
     .swal-popup-custom {
-        width: 600px !important;  /* Set custom width */
-        max-width: 90vw;  /* Ensure it's responsive on small screens */
+        width: 600px !important; /* Set custom width */
+        max-width: 90vw; /* Ensure it's responsive on small screens */
     }
-        
 </style>
 
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
@@ -423,9 +422,11 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" data-mdb-filter="true" id="armyPrefix" name="ClaimCommonData.ArmyPrefix" required data-army-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.ArmyPrefix; }">
-                                                    
+                                                <select class="select form-select" data-mdb-filter="true" id="armyPrefix" name="ClaimCommonData.ArmyPrefix" required data-army-prefix="@if (Model.ClaimCommonData != null)
+                                                {
+                                                    @Model.ClaimCommonData.ArmyPrefix
+                                                    ;
+                                                }">
                                                 </select>
                                                 <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPrefix, "", new { @class = "text-danger" })
@@ -437,7 +438,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control" onblur="getApplicantDetalis(this)"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" required/>
+                                                <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control" onblur="getApplicantDetalis(this)" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" required />
                                                 <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
@@ -447,7 +448,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🧩</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="txtSuffix" name="ClaimCommonData.Suffix" class="form-control readonly-blocked" value="@Model.ClaimCommonData?.Suffix" maxlength="1"  readonly tabindex="-1" />
+                                                <input type="text" id="txtSuffix" name="ClaimCommonData.Suffix" class="form-control readonly-blocked" value="@Model.ClaimCommonData?.Suffix" maxlength="1" readonly tabindex="-1" />
                                                 <label class="form-label" for="txtSuffix">Suffix</label>
                                             </div>
                                         </div>
@@ -465,8 +466,11 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix"  data-oldarmy-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.OldArmyPrefix; }" required>
+                                                <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
+                                                {
+                                                    @Model.ClaimCommonData.OldArmyPrefix
+                                                    ;
+                                                }" required>
                                                 </select>
                                                 <label class="form-label select-label ">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
@@ -477,7 +481,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="oldArmyNo" name="ClaimCommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.ClaimCommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)"  pattern="^\d{3,8}$" />
+                                                <input type="text" id="oldArmyNo" name="ClaimCommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.ClaimCommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)" pattern="^\d{3,8}$" />
                                                 <label class="form-label" for="txtOldNumber">Old Army No.</label>
                                             </div>
                                         </div>
@@ -503,8 +507,11 @@
                                         <span class="input-group-text">👮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="select form-select" data-mdb-filter="true" id="ddlrank" name="ClaimCommonData.DdlRank" required data-rank-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.DdlRank; }">
+                                        <select class="select form-select" data-mdb-filter="true" id="ddlrank" name="ClaimCommonData.DdlRank" required data-rank-prefix="@if (Model.ClaimCommonData != null)
+                                        {
+                                            @Model.ClaimCommonData.DdlRank
+                                            ;
+                                        }">
                                         </select>
                                         <label class="form-label select-label ">Rank & Trade</label>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.DdlRank, "", new { @class = "text-danger" })
@@ -526,14 +533,17 @@
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.ApplicantName, "", new { @class = "text-danger" })
                             </div>
 
-                             <div class="col-md-2">
+                            <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <div class="col-md-2">
                                         <span class="input-group-text">💼</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.RegtCorps; }">
+                                        <select class="form-select select" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null)
+                                        {
+                                            @Model.ClaimCommonData.RegtCorps
+                                            ;
+                                        }">
                                         </select>
                                         <label class="form-label select-label ">Regt/Corps</label>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
@@ -545,9 +555,9 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                    <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                    <label class="form-label select-label ">DOB</label>
+                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                               oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.DateOfBirth, "", new { @class = "text-danger" })
@@ -557,8 +567,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission"  style="caret-color: transparent;"
-                                           required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")"  oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission" style="caret-color: transparent;"
+                                               required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>
@@ -572,28 +582,23 @@
                                         <span class="input-group-text">👮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        @*<select class="select form-select" id="ExtnOfService" onchange="extensionOfService()" name="ClaimCommonData.ExtnOfService"  onblur="ExtensionOfServiceAccess()">
-                                            <option value="" selected disabled>Select one</option>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select>*@
-                                         @Html.DropDownListFor(m => m.ClaimCommonData.ExtnOfService, 
-                                                                            new SelectList(new[] {
-                                                                                new { Value = " ", Text = "Select one" },
-                                                                                new { Value = "Yes", Text = "Yes" },
-                                                                                new { Value = "No", Text = "No" }
-                                                                            }, "Value", "Text"), 
-                                                                            new { 
-                                                                                @class = "select form-select", 
-                                                                                id = "ExtnOfService", 
-                                                                                onchange = "extensionOfService()", 
-                                                                                onblur = "ExtensionOfServiceAccess()" 
-                                                                            })
+                                        @Html.DropDownListFor(m => m.ClaimCommonData.ExtnOfService,
+                                                 new SelectList(new[] {
+                                        new { Value = " ", Text = "Select one" },
+                                        new { Value = "Yes", Text = "Yes" },
+                                        new { Value = "No", Text = "No" }
+                                        }, "Value", "Text"),
+                                                 new
+                                                 {
+                                                     @class = "select form-select",
+                                                     id = "ExtnOfService",
+                                                     onchange = "extensionOfService()",
+                                                     onblur = "ExtensionOfServiceAccess()"
+                                                 })
                                         <label class="form-label select-label ">Extn of Service in Present Rank</label>
-                                        @* @Html.ValidationMessageFor(m => m.ClaimCommonData.ExtnOfService, "", new { @class = "text-danger" }) *@
                                     </div>
 
-                                  
+
 
                                 </div>
                             </div>
@@ -603,7 +608,7 @@
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="ClaimCommonData.DateOfPromotion" value="@Model.ClaimCommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled
-                                     oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
+                                               oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
@@ -707,20 +712,6 @@
                 <div id="regt_Unit" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            @* <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">💼</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.RegtCorps; }">
-                                        </select>
-                                        <label class="form-label select-label ">Regt/Corps</label>
-                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
-                                    </div>
-                                </div>
-                            </div> *@
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💼</span>
@@ -742,42 +733,36 @@
                                 </div>
                             </div>
 
-                              <div class="col-md-2">
+                            <div class="col-md-2">
                                 <div class="input-group mb-2">
-                                        <div class="col-md-2">
-                                            <span class="input-group-text">🪖</span>
-                                        </div>
-                                        <div class="form-outline" data-mdb-input-init">
-                                            @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
-                                            @Html.ValidationMessageFor(m => m.ClaimCommonData.ParentUnit, "", new { @class = "text-danger" })
-                                            <span id="ParentUnitId" class="d-none">@Model.ClaimCommonData?.ParentUnit</span>
-                                            <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..."   />   
-                                             <label class="form-label" for="ParentUnit">Parent Unit</label>
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">🪖</span>
+                                    </div>
+                                    <div class="form-outline" data-mdb-input-init">
+                                        @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
+                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.ParentUnit, "", new { @class = "text-danger" })
+                                        <span id="ParentUnitId" class="d-none">@Model.ClaimCommonData?.ParentUnit</span>
+                                        <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..." />
+                                        <label class="form-label" for="ParentUnit">Parent Unit</label>
 
-                                            </div>
+                                    </div>
                                 </div>
                             </div>
 
-                     <div class="col-md-2">
+                            <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <div class="col-md-2">
-                                         <span class="input-group-text">🪖</span>
+                                        <span class="input-group-text">🪖</span>
+                                    </div>
+                                    <div class="form-outline" data-mdb-input-init>
+                                        @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
+                                        @Html.ValidationMessageFor(model => model.ClaimCommonData.PresentUnit, "", new { @class = "text-danger" })
+                                        <span id="PresentUnitId" class="d-none">@Model.ClaimCommonData?.PresentUnit</span>
+                                        <input type="text" class="form-control" id="PresenttxtUnit" placeholder="Search Present Unit..." />
+                                        <label class="form-label" for="PresentUnit">Present Unit</label>
+                                    </div>
                                 </div>
-                                      <div class="form-outline" data-mdb-input-init>
-                                         @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
-                                         @Html.ValidationMessageFor(model => model.ClaimCommonData.PresentUnit, "", new { @class = "text-danger" })
-                                          <span id="PresentUnitId" class="d-none">@Model.ClaimCommonData?.PresentUnit</span>
-                                          <input type="text" class="form-control" id="PresenttxtUnit"  placeholder="Search Present Unit..."  />
-                                          <label class="form-label" for="PresentUnit">Present Unit</label>
-                                      </div>
-                                   </div>
-                            @* <span class="input-group-text">🪖</span> *@
-    
-                        </div>
-
-                        @*  @Html.HiddenFor(model => model.ClaimCommonData.IOUnit) *@
-
-	  
+                            </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
@@ -794,8 +779,11 @@
                                         <span class="input-group-text">📮</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" data-mdb-filter="true" id="armyPostOffice" name="ClaimCommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.ClaimCommonData != null) {
-                                                @Model.ClaimCommonData.ArmyPostOffice; }">
+                                        <select class="form-select select" data-mdb-filter="true" id="armyPostOffice" name="ClaimCommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.ClaimCommonData != null)
+                                        {
+                                            @Model.ClaimCommonData.ArmyPostOffice
+                                            ;
+                                        }">
                                         </select>
                                         <label class="form-label select-label ">Army Post Office</label>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPostOffice, "", new { @class = "text-danger" })
@@ -827,7 +815,7 @@
                 </div>
             </div>
 
-        
+
             <!-- Address -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
@@ -934,7 +922,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="ifsCode" name="ClaimCommonData.IfsCode" class="form-control" value="@Model.ClaimCommonData?.IfsCode" required maxlength="12"/>
+                                        <input type="text" id="ifsCode" name="ClaimCommonData.IfsCode" class="form-control" value="@Model.ClaimCommonData?.IfsCode" required maxlength="12" />
                                         <label class="form-label select-label ">IFSC of Bank</label>
                                     </div>
                                 </div>
@@ -966,7 +954,7 @@
             </div>
 
             <!--Exisitng Agif Loan-->
-           <div class="accordion-item">
+            <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
                     <button class="accordion-button collapsed fs-5 acc-btn" style="height:50px" type="button" data-bs-toggle="collapse" data-bs-target="#ExistingAGIFLoans" aria-expanded="false">
 
@@ -975,746 +963,740 @@
                 </h2>
 
                 <div id="ExistingAGIFLoans" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-                <div class="accordion-body">
-                    <div class="row g-3">
-                        <div class="col-12">
-                            <div class="add-loan-section" id="addLoanSection">
-                                <h5 class="mb-3">Do you have an existing AGIF Loan?</h5>
-                                <button type="button" class="btn btn-primary" onclick="showLoanForm()">
-                                    <i class="fas fa-plus"></i> Add Loan
-                                </button>
-                            </div>
-                            
-                            <div id="loanFormContainer" style="display: none;">
-                                <div class="loan-entry">
-                                    <button type="button" class="btn btn-sm btn-outline-danger remove-btn" onclick="removeLoanForm()">
-                                        <i class="fas fa-times"></i>Remove
+                    <div class="accordion-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="add-loan-section" id="addLoanSection">
+                                    <h5 class="mb-3">Do you have an existing AGIF Loan?</h5>
+                                    <button type="button" class="btn btn-primary" onclick="showLoanForm()">
+                                        <i class="fas fa-plus"></i> Add Loan
                                     </button>
-                                    
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="loanType" class="form-label"><strong>Choose your loan type</strong></label>
-                                            <select class="form-select" id="loanType" onchange="showLoanTypeFields(this.value)">
-                                                <option value="">Select Loan Type</option>
-                                                <option value="hba">HBA (House Building Advance)</option>
-                                                <option value="hra">HRA (House Repair Advance)</option>
-                                                <option value="ca">CA (Convenyance Advance)</option>
-                                                <option value="pca">PCA (Personal Computer Advance)</option>
-                                            </select>
+                                </div>
+
+                                <div id="loanFormContainer" style="display: none;">
+                                    <div class="loan-entry">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-btn" onclick="removeLoanForm()">
+                                            <i class="fas fa-times"></i>Remove
+                                        </button>
+
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="loanType" class="form-label"><strong>Choose your loan type</strong></label>
+                                                <select class="form-select" id="loanType" onchange="showLoanTypeFields(this.value)">
+                                                    <option value="">Select Loan Type</option>
+                                                    <option value="hba">HBA (House Building Advance)</option>
+                                                    <option value="hra">HRA (House Repair Advance)</option>
+                                                    <option value="ca">CA (Convenyance Advance)</option>
+                                                    <option value="pca">PCA (Personal Computer Advance)</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                    <!-- HBA Fields -->
-                    <div id="hbaFields" class="loan-type-section">
-                           <div class="row g-3 mt-3">
 
-                              <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎂</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="hbaDate" aria-label="Date of Birth" name="ClaimCommonData.House_Building_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Building_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
-                                    <label class="form-label select-label ">House Building Date of Loan taken</label>
-                                    </div>
-                                  
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Date_of_Loan_taken, "", new { @class = "text-danger" })
-                            </div>
-
-                              <div class="col-md-3">
-                                 <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan"  class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" />
-                                                <label class="form-label" for="hbaDuration">House Building Duration of Loan</label>
-                                    </div>
-
-                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Duration_of_Loan, "", new { @class = "text-danger" })
-                            </div>
-
-
-                             <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hbaAmount" name="ClaimCommonData.House_Building_Amount_Taken" value="@Model.ClaimCommonData?.House_Building_Amount_Taken"  class="form-control"  oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="hbaAmount">House Building Amount Taken</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Amount_Taken, "", new { @class = "text-danger" })
-                            </div>
-                                            
-                      </div>
-                 </div>
-                                    
-                                    <!-- HRA Fields -->
-                                    <div id="hraFields" class="loan-type-section">
-                                        <div class="row g-3 mt-3">
-                                            <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎂</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="hraDate" aria-label="Date of Birth" name="ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")"  style="caret-color: transparent;">
-                                    <label class="form-label select-label" for="hraDate">House Repair Date of Loan taken</label>
-                                    </div>
-                                  
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken, "", new { @class = "text-danger" })
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8"/>
-                                                <label class="form-label" for="hraDuration">House Repair Duration of Loan</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Duration_of_Loan, "", new { @class = "text-danger" })
-                            </div>
-
-
-                                                         <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8"  />
-                                                <label class="form-label" for="hraAmount">House Repair Amount Taken</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Amount_Taken, "", new { @class = "text-danger" })
-                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- CA Fields -->
-                                    <div id="caFields" class="loan-type-section">
-                                        <div class="row g-3 mt-3">
-                                                  <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎂</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="caDate" aria-label="Date of Birth" name="ClaimCommonData.Conveyance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Conveyance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")"  style="caret-color: transparent;"
-                                   >
-                                    <label class="form-label select-label" for="caDate">Conveyance Date of Loan taken</label>
-                                    </div>
-                                  
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Date_of_Loan_taken, "", new { @class = "text-danger" })
-                            </div>
+                                        <!-- HBA Fields -->
+                                        <div id="hbaFields" class="loan-type-section">
+                                            <div class="row g-3 mt-3">
 
                                                 <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)"  maxlength="8"  />
-                                                <label class="form-label" for="caDuration">Conveyance Duration of Loan</label>
-                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🎂</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="date" class="form-control" id="hbaDate" aria-label="Date of Birth" name="ClaimCommonData.House_Building_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Building_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <label class="form-label select-label ">House Building Date of Loan taken</label>
+                                                        </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Duration_of_Loan, "", new { @class = "text-danger" })
-                            </div>
-
-
-                                                         <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="caAmount" name="ClaimCommonData.Conveyance_Amount_Taken" value="@Model.ClaimCommonData?.Conveyance_Amount_Taken"  class="form-control"   oninput="ValInDataNo(this)"  maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="caAmount">Conveyance Amount Taken</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Amount_Taken, "", new { @class = "text-danger" })
-                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- PCA Fields -->
-                                    <div id="pcaFields" class="loan-type-section">
-                                        <div class="row g-3 mt-3">
-                                            <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎂</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                          <input type="date" class="form-control" id="pcaDate" aria-label="Date of Birth" name="ClaimCommonData.Computer_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Computer_Date_of_Loan_taken?.ToString("yyyy-MM-dd")"  style="caret-color: transparent;">
-                                    <label class="form-label select-label" for="pcaDate">Computer Date of Loan taken</label>
-                                    </div>
-                                  
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Date_of_Loan_taken, "", new { @class = "text-danger" })
-                            </div>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Date_of_Loan_taken, "", new { @class = "text-danger" })
+                                                </div>
 
                                                 <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control"  oninput="ValInDataNo(this)"  maxlength="8"/>
-                                                <label class="form-label" for="pcaDuration">Computer Duration of Loan</label>
-                                    </div>
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <label class="form-label" for="hbaDuration">House Building Duration of Loan</label>
+                                                        </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Duration_of_Loan, "", new { @class = "text-danger" })
-                            </div>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Duration_of_Loan, "", new { @class = "text-danger" })
+                                                </div>
 
 
-                                                         <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="pcaAmount" name="ClaimCommonData.Computer_Amount_Taken" value="@Model.ClaimCommonData?.Computer_Amount_Taken"  class="form-control"   oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="pcaAmount">Computer Amount Taken</label>
-                                    </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="hbaAmount" name="ClaimCommonData.House_Building_Amount_Taken" value="@Model.ClaimCommonData?.House_Building_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
+                                                            <label class="form-label" for="hbaAmount">House Building Amount Taken</label>
+                                                        </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Amount_Taken, "", new { @class = "text-danger" })
-                            </div>
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Amount_Taken, "", new { @class = "text-danger" })
+                                                </div>
+
+                                            </div>
                                         </div>
+
+                                        <!-- HRA Fields -->
+                                        <div id="hraFields" class="loan-type-section">
+                                            <div class="row g-3 mt-3">
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🎂</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="date" class="form-control" id="hraDate" aria-label="Date of Birth" name="ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <label class="form-label select-label" for="hraDate">House Repair Date of Loan taken</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken, "", new { @class = "text-danger" })
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <label class="form-label" for="hraDuration">House Repair Duration of Loan</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Duration_of_Loan, "", new { @class = "text-danger" })
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <label class="form-label" for="hraAmount">House Repair Amount Taken</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Amount_Taken, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- CA Fields -->
+                                        <div id="caFields" class="loan-type-section">
+                                            <div class="row g-3 mt-3">
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🎂</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="date" class="form-control" id="caDate" aria-label="Date of Birth" name="ClaimCommonData.Conveyance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Conveyance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <label class="form-label select-label" for="caDate">Conveyance Date of Loan taken</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Date_of_Loan_taken, "", new { @class = "text-danger" })
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <label class="form-label" for="caDuration">Conveyance Duration of Loan</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Duration_of_Loan, "", new { @class = "text-danger" })
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="caAmount" name="ClaimCommonData.Conveyance_Amount_Taken" value="@Model.ClaimCommonData?.Conveyance_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
+                                                            <label class="form-label" for="caAmount">Conveyance Amount Taken</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Amount_Taken, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- PCA Fields -->
+                                        <div id="pcaFields" class="loan-type-section">
+                                            <div class="row g-3 mt-3">
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🎂</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="date" class="form-control" id="pcaDate" aria-label="Date of Birth" name="ClaimCommonData.Computer_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Computer_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" style="caret-color: transparent;">
+                                                            <label class="form-label select-label" for="pcaDate">Computer Date of Loan taken</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Date_of_Loan_taken, "", new { @class = "text-danger" })
+                                                </div>
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <label class="form-label" for="pcaDuration">Computer Duration of Loan</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Duration_of_Loan, "", new { @class = "text-danger" })
+                                                </div>
+
+
+                                                <div class="col-md-3">
+                                                    <div class="input-group mb-2">
+                                                        <span class="input-group-text">🔟</span>
+                                                        <div class="form-outline" data-mdb-input-init>
+                                                            <input type="text" id="pcaAmount" name="ClaimCommonData.Computer_Amount_Taken" value="@Model.ClaimCommonData?.Computer_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
+                                                            <label class="form-label" for="pcaAmount">Computer Amount Taken</label>
+                                                        </div>
+
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Amount_Taken, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <button type="button" class="btn btn-success" id="addLoanButton" style="display: none;" onclick="addLoanToGrid()">Add Loan</button>
+
+
+                                        <div id="loanGridContainer" style="display:none;">
+                                            <h5 class="mt-3">Added Loans</h5>
+                                            <table class="table" id="loanGrid" style="display: none;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Loan Type</th>
+                                                        <th>Date of Loan</th>
+                                                        <th>Duration</th>
+                                                        <th>Amount</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Added loans will be inserted here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
                                     </div>
-
-
-                             <button type="button" class="btn btn-success" id="addLoanButton" style="display: none;" onclick="addLoanToGrid()">Add Loan</button>
-
-
-                              <div id="loanGridContainer" style="display:none;">
-                    <h5 class="mt-3">Added Loans</h5>
-                    <table class="table" id="loanGrid" style="display: none;">
-                        <thead>
-                            <tr>
-                                <th>Loan Type</th>
-                                <th>Date of Loan</th>
-                                <th>Duration</th>
-                                <th>Amount</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Added loans will be inserted here -->
-                        </tbody>
-                    </table>
-                </div>
-
-
                                 </div>
-                            </div>
-                            
-                            <div class="row g-3">
-                           
-                            <div class="col-md-7">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired"  class="form-control"  oninput="formatIndianNumber(this)" required maxlength="10" />
+
+                                <div class="row g-3">
+
+                                    <div class="col-md-7">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🔟</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired" class="form-control" oninput="formatIndianNumber(this)" required maxlength="10" />
                                                 <label class="form-label" for="AmountOfWithdrawalRequired">Amount of withdrawal required (Withdrawal will be limited to actual expenditure or 90% of Maturity Benefit Whichever is less)</label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.AmountOfWithdrawalRequired, "", new { @class = "text-danger" })
                                     </div>
 
+                                    <div class="col-md-5">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-1">
+                                                <span class="input-group-text">📚</span>
+                                            </div>
+                                            <div class="col-md-11">
+
+                                                @Html.DropDownListFor(m => m.ClaimCommonData.Noofwithdrawal,
+                                                         new SelectList(new[] {
+                                                new { Value = " ", Text = "Select one" },
+                                                new { Value = "First", Text = "First" },
+                                                new { Value = "Second", Text = "Second" }
+                                                }, "Value", "Text"),
+                                                         new
+                                                         {
+                                                             @class = "select form-select",
+                                                             id = "Noofwithdrawal"
+
+                                                         })
+                                                <label class="form-label select-label ">No of withdrawal(Maximum two withdrawals permitted in entire service)</label>
+                                                </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.AmountOfWithdrawalRequired, "", new { @class = "text-danger" })
-                            </div>
-                                
-                            <div class="col-md-5">
-                                <div class="input-group mb-2">
-                                    <div class="col-md-1">
-                                        <span class="input-group-text">📚</span>
-                                    </div>
-                                    <div class="col-md-11">
-
-                                         @Html.DropDownListFor(m => m.ClaimCommonData.Noofwithdrawal, 
-                                                                            new SelectList(new[] {
-                                                                                new { Value = " ", Text = "Select one" },
-                                                                                new { Value = "First", Text = "First" },
-                                                                                new { Value = "Second", Text = "Second" }
-                                                                            }, "Value", "Text"), 
-                                                                            new { 
-                                                                                @class = "select form-select", 
-                                                                                id = "Noofwithdrawal"
-                                                                                 
-                                                                            })
-                                        <label class="form-label select-label ">No of withdrawal(Maximum two withdrawals permitted in entire service)</label>
-                                        @* @Html.ValidationMessageFor(m => m.ClaimCommonData.ExtnOfService, "", new { @class = "text-danger" }) *@
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
 
 
+                            </div>
                         </div>
                     </div>
                 </div>
-           </div>
-      </div>
-           
+            </div>
+
             @{
                 if (Purpose == "1")
                 {
                     <!-- HBA Application -->
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
-                <span class="w-100 text-center text-decoration-underline"><strong>For Education only (Applicable for children studying in 12th Class and above)</strong></span>
-            </button>
-        </h2>
-        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-            <div class="accordion-body">
-                        <div class="row g-3">
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">👶</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtChildName" name="EducationDetails.ChildName" class="form-control form-control-Alphabets" value="@Model.EducationDetails?.ChildName" required oninput="ValInDataLetter(this)"  />
-                                        <label class="form-label" for="txtChildName">Name of Child</label>
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                                <span class="w-100 text-center text-decoration-underline"><strong>For Education only (Applicable for children studying in 12th Class and above)</strong></span>
+                            </button>
+                        </h2>
+                        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">👶</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="txtChildName" name="EducationDetails.ChildName" class="form-control form-control-Alphabets" value="@Model.EducationDetails?.ChildName" required oninput="ValInDataLetter(this)" />
+                                                <label class="form-label" for="txtChildName">Name of Child</label>
+                                                <div class="invalid-feedback">
+                                                    Please choose a username.
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.ChildName, "", new { @class = "text-danger" })
+                                        @Html.ValidationMessageFor(m => m.EducationDetails.ChildName, "", new { @class = "text-danger" })
 
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎂</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                          <input type="text" class="form-control monthPicker" id="EducationdateOfBirth" aria-label="Education date Of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required"
-                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                    <label class="form-label select-label ">DOB</label>
                                     </div>
-                                  
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.DateOfBirth, "", new { @class = "text-danger" })
-                            </div>
-                            
-                            @if(Category=="1")
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🎂</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control monthPicker" id="EducationdateOfBirth" aria-label="Education date Of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required"
+                                                       oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <label class="form-label select-label ">DOB</label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.EducationDetails.DateOfBirth, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    @if (Category == "1")
                                     {
-                                         <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo"  class="form-control"  required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" />
-                                                <label class="form-label" for="DOPartIINo">DO Part-II No</label>
-                                    </div>
+                                        <div class="col-md-2">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">🔟</span>
+                                                <div class="form-outline" data-mdb-input-init>
+                                                    <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo" class="form-control" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" />
+                                                    <label class="form-label" for="DOPartIINo">DO Part-II No</label>
+                                                </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.DOPartIINo, "", new { @class = "text-danger" })
-                            </div>
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.EducationDetails.DOPartIINo, "", new { @class = "text-danger" })
+                                        </div>
 
                                     }
-                                                                        
-                             else
-                                {
+
+                                    else
+                                    {
                                         <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo"  class="form-control"  required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" />
-                                                <label class="form-label" for="DOPartIINo">DO Part-II No</label>
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">🔟</span>
+                                                <div class="form-outline" data-mdb-input-init>
+                                                    <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo" class="form-control" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" />
+                                                    <label class="form-label" for="DOPartIINo">DO Part-II No</label>
+                                                </div>
+
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.EducationDetails.DOPartIINo, "", new { @class = "text-danger" })
+                                        </div>
+
+                                    }
+
+
+
+
+
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">📅</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control monthPicker" id="DOPartIIDate" aria-label="DO Part II Date" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
+                                                       oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <label class="form-label select-label">DO Part-II Date</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.EducationDetails.DoPartIIDate, "", new { @class = "text-danger" })
                                     </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.DOPartIINo, "", new { @class = "text-danger" })
-                            </div>
- 
-                                }
-                                   
-
-
-
-
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">📅</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" class="form-control monthPicker" id="DOPartIIDate" aria-label="DO Part II Date" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
-                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                    <label class="form-label select-label">DO Part-II Date</label>
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
+                                                @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.DoPartIIDate, "", new { @class = "text-danger" })
-                            </div>
 
-                          <div class="col-md-4">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf"  />
-                         <p class="file-error-message" style="color:red;"></p> <!-- Error message container -->
 
-                  @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
 
-                            
-                            
-                            <div class="col-md-4">
-                                <div class="input-group mb-2">
-                                    <div class="col-md-1">
-                                        <span class="input-group-text">📚</span>
+                                    <div class="col-md-4">
+                                        <div class="input-group mb-2">
+                                            <div class="col-md-1">
+                                                <span class="input-group-text">📚</span>
+                                            </div>
+                                            <div class="col-md-11">
+                                                
+                                                @Html.DropDownListFor(m => m.EducationDetails.CourseForWithdrawal,
+                                                     new SelectList(new[] {
+                                        new { Value = " ", Text = "Select one" },
+                                        new { Value = "12th", Text = "12th" },
+                                        new { Value = "UG", Text = "UG" },
+                                        new { Value = "PG", Text = "PG" }
+                                        }, "Value", "Text"),
+                                                     new
+                                                     {
+                                                         @class = "select form-select",
+                                                         id = "CourseForWithdrawal"
+                                                     })
+                                                <label class="form-label select-label ">Name of Course/Class for withdrawal required</label>
+                                                 </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-11">
-                                        @*<select class="select form-select" id="ExtnOfService" onchange="extensionOfService()" name="CommonData.ExtnOfService"  onblur="ExtensionOfServiceAccess()">
-                                            <option value="" selected disabled>Select one</option>
-                                            <option value="Yes">Yes</option>
-                                            <option value="No">No</option>
-                                        </select>*@
-                                         @Html.DropDownListFor(m => m.EducationDetails.CourseForWithdrawal, 
-                                                                            new SelectList(new[] {
-                                                                                new { Value = " ", Text = "Select one" },
-                                                                                new { Value = "12th", Text = "12th" },
-                                                                                new { Value = "UG", Text = "UG" },                                                                                
-                                                                                new { Value = "PG", Text = "PG" }
-                                                                            }, "Value", "Text"), 
-                                                                            new { 
-                                                                                @class = "select form-select", 
-                                                                                id = "CourseForWithdrawal"                                                                                
-                                                                            })
-                                        <label class="form-label select-label ">Name of Course/Class for withdrawal required</label>
-                                        @* @Html.ValidationMessageFor(m => m.CommonData.ExtnOfService, "", new { @class = "text-danger" }) *@
-                                    </div>
-                                </div>
-                            </div>
 
 
-                               <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎓</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="NameOfcollege" name="EducationDetails.CollegeInstitution" value="@Model.EducationDetails?.CollegeInstitution" class="form-control form-control-Alphabets" oninput="ValInDataLetter(this)" required maxlength="30"/>
-                                                <label class="form-label" for="NameOfcollege">Name of College/Institution where studying
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🎓</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="NameOfcollege" name="EducationDetails.CollegeInstitution" value="@Model.EducationDetails?.CollegeInstitution" class="form-control form-control-Alphabets" oninput="ValInDataLetter(this)" required maxlength="30" />
+                                                <label class="form-label" for="NameOfcollege">
+                                                    Name of College/Institution where studying
                                                 </label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.EducationDetails.CollegeInstitution, "", new { @class = "text-danger" })
                                     </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.CollegeInstitution, "", new { @class = "text-danger" })
-                            </div>
 
-
-                                  <div class="col-md-4">
-                        <div class="mb-2">
-                         <div class="form-outline" data-mdb-input-init>
-                      <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text" data-text="
-Attach Bonafide cert/admission letter" required accept=".pdf"/>
-                      <p class="file-error-message" style="color:red;"></p>
-                  @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
-                  </div>
-                    </div>
-            </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text" data-text="
+        Attach Bonafide cert/admission letter" required accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+                                                @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
 
 
 
 
-                             <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">💸</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"   oninput="formatIndianNumber(this)"  required maxlength="10"  />
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💸</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control" oninput="formatIndianNumber(this)" required maxlength="10" />
                                                 <label class="form-label" for="TotalExpenditure">Total Expenditure</label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditure, "", new { @class = "text-danger" })
                                     </div>
 
+
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+                                                @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="PresentlyStudyingIn" name="EducationDetails.PresentlyStudyingIn" value="0" />
+
                                 </div>
-                                @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditure, "", new { @class = "text-danger" })
+
                             </div>
-
-                            
-                                 <div class="col-md-4">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
-                            <p class="file-error-message" style="color:red;"></p>
-                        @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
-
-                            <input type="hidden" id="PresentlyStudyingIn" name="EducationDetails.PresentlyStudyingIn" value="0" />
-
                         </div>
-                        
                     </div>
-        </div>
-    </div>
 
                 }
                 else if (Purpose == "2")
                 {
                     <!-- Marriage Purpose -->
-                  <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
-                <span class="w-100 text-center text-decoration-underline"><strong>For Marriage Purpose Only</strong></span>
-            </button>
-        </h2>
-        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-            <div class="accordion-body">
-                        <div class="row g-3">
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">👶</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtNameOfChild" name="Marriageward.NameOfChild" class="form-control" value="@Model.Marriageward?.NameOfChild" required oninput="ValInDataLetter(this)" />
-                                        <label class="form-label" for="txtNameOfChild">Name of Child</label>
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                                <span class="w-100 text-center text-decoration-underline"><strong>For Marriage Purpose Only</strong></span>
+                            </button>
+                        </h2>
+                        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">👶</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="txtNameOfChild" name="Marriageward.NameOfChild" class="form-control" value="@Model.Marriageward?.NameOfChild" required oninput="ValInDataLetter(this)" />
+                                                <label class="form-label" for="txtNameOfChild">Name of Child</label>
+                                                <div class="invalid-feedback">
+                                                    Please choose a username.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.Marriageward.NameOfChild, "", new { @class = "text-danger" })
+
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🎂</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control monthPicker" id="MarriagewarddateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                                       oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <label class="form-label select-label ">DOB</label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.Marriageward.DateOfBirth, "", new { @class = "text-danger" })
+                                    </div>
+
+
+                                    @if (Category == "1")
+                                    {
+                                        <div class="col-md-2">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">🔟</span>
+                                                <div class="form-outline" data-mdb-input-init>
+                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control" oninput="ValInDataNo(this)" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" />
+                                                    <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
+                                                </div>
+
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.Marriageward.DOPartIINo, "", new { @class = "text-danger" })
+                                        </div>
+                                    }
+
+                                    else
+                                    {
+                                        <div class="col-md-2">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">🔟</span>
+                                                <div class="form-outline" data-mdb-input-init>
+                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control" oninput="ValInDataNo(this)" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" />
+                                                    <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
+                                                </div>
+
+                                            </div>
+                                            @Html.ValidationMessageFor(m => m.Marriageward.DOPartIINo, "", new { @class = "text-danger" })
+                                        </div>
+                                    }
+
+
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">📅</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control DOPartIIPicker" id="MarriagewardDOPartIIDate" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
+                                                       oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <label class="form-label select-label ">DO Part-II Date</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.Marriageward.DoPartIIDate, "", new { @class = "text-danger" })
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+
+                                                @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.NameOfChild, "", new { @class = "text-danger" })
 
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🎂</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                          <input type="text" class="form-control monthPicker" id="MarriagewarddateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                    <label class="form-label select-label ">DOB</label>
-                                    </div>
-                                  
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.DateOfBirth, "", new { @class = "text-danger" })
-                            </div>
-                            
-                            
-                         @if(Category=="1")
-                                    {
-                             <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"   oninput="ValInDataNo(this)" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025"/>
-                                                <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.DOPartIINo, "", new { @class = "text-danger" })
-                            </div> 
-                                    }
-                               
-                            else
-                            {
-                             <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"   oninput="ValInDataNo(this)" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025"/>
-                                                <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
-                                    </div>
-
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.DOPartIINo, "", new { @class = "text-danger" })
-                            </div>
-                            }
-
-
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">📅</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" class="form-control DOPartIIPicker" id="MarriagewardDOPartIIDate" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required 
-                                    oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                    <label class="form-label select-label ">DO Part-II Date</label>
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.DoPartIIDate, "", new { @class = "text-danger" })
-                            </div>
-
-                           <div class="col-md-4">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
-                              <p class="file-error-message" style="color:red;"></p> 
-
-                        @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
-
-                          <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🔟</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="AgeOfWard" name="Marriageward.AgeOfWard" value="@Model.Marriageward?.AgeOfWard" class="form-control" oninput="ValInDataNo(this)" required maxlength="2" />
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🔟</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="AgeOfWard" name="Marriageward.AgeOfWard" value="@Model.Marriageward?.AgeOfWard" class="form-control" oninput="ValInDataNo(this)" required maxlength="2" />
                                                 <label class="form-label" for="AgeOfWard">Age of Ward</label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.Marriageward.AgeOfWard, "", new { @class = "text-danger" })
                                     </div>
 
-                                </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.AgeOfWard, "", new { @class = "text-danger" })
-                            </div>
-                            
-                               <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">📅</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" class="form-control DOPartIIPicker" id="DateOfMarriage" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required 
-                                    oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                    <label class="form-label select-label ">Date of Marriage</label>
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">📅</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control DOPartIIPicker" id="DateOfMarriage" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required
+                                                       oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <label class="form-label select-label ">Date of Marriage</label>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.Marriageward.DateofMarriage, "", new { @class = "text-danger" })
                                     </div>
+
+
+
+
+
+
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text" required data-text="Attach invitation card" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+                                                @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
-                                @Html.ValidationMessageFor(m => m.Marriageward.DateofMarriage, "", new { @class = "text-danger" })
+
                             </div>
-                            
-
-
-                               
-
-
-                                <div class="col-md-4">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text" required data-text="Attach invitation card" accept=".pdf" />
-                        <p class="file-error-message" style="color:red;"></p>
-                        @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
-
-
                         </div>
-                        
                     </div>
-        </div>
-    </div>
                 }
-                else if(Purpose =="3")
+                else if (Purpose == "3")
                 {
                     <!-- PCA Application -->
-                     <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
-                <span class="w-100 text-center text-decoration-underline"><strong>For Renovation/Repair of House only(Applicable only in last two years of service).
-</strong></span>
-            </button>
-        </h2>
-        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-            <div class="accordion-body">
-                        <div class="row g-3">
-                            <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🏠</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="AddressOfProperty" name="PropertyRenovation.AddressOfProperty" class="form-control" value="@Model.PropertyRenovation?.AddressOfProperty" required  />
-                                        <label class="form-label" for="AddressOfProperty">Address of property intended to make renovation/repair</label>
-                                        <div class="invalid-feedback">
-                                            Please Write a Address.
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                                <span class="w-100 text-center text-decoration-underline">
+                                    <strong>
+                                        For Renovation/Repair of House only(Applicable only in last two years of service).
+                                    </strong>
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-3">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🏠</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="AddressOfProperty" name="PropertyRenovation.AddressOfProperty" class="form-control" value="@Model.PropertyRenovation?.AddressOfProperty" required />
+                                                <label class="form-label" for="AddressOfProperty">Address of property intended to make renovation/repair</label>
+                                                <div class="invalid-feedback">
+                                                    Please Write a Address.
+                                                </div>
+                                            </div>
                                         </div>
+                                        @Html.ValidationMessageFor(m => m.PropertyRenovation.AddressOfProperty, "", new { @class = "text-danger" })
+
                                     </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.PropertyRenovation.AddressOfProperty, "", new { @class = "text-danger" })
-
-                            </div>
 
 
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">👤</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="PropertyHolderName" name="PropertyRenovation.PropertyHolderName" class="form-control" value="@Model.PropertyRenovation?.PropertyHolderName" required oninput="ValInDataLetter(this)" maxlength="15" />
-                                        <label class="form-label" for="PropertyHolderName">Name of property holder(s)</label>
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">👤</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="PropertyHolderName" name="PropertyRenovation.PropertyHolderName" class="form-control" value="@Model.PropertyRenovation?.PropertyHolderName" required oninput="ValInDataLetter(this)" maxlength="15" />
+                                                <label class="form-label" for="PropertyHolderName">Name of property holder(s)</label>
+                                                <div class="invalid-feedback">
+                                                    Please choose a username.
+                                                </div>
+                                            </div>
                                         </div>
+                                        @Html.ValidationMessageFor(m => m.PropertyRenovation.PropertyHolderName, "", new { @class = "text-danger" })
+
                                     </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.PropertyRenovation.PropertyHolderName, "", new { @class = "text-danger" })
 
-                            </div>
 
-                         
-                          <div class="col-md-3">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">💸</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                       <input type="text" id="EstimatedCost" name="PropertyRenovation.EstimatedCost" value="@Model.PropertyRenovation?.EstimatedCost"  class="form-control"  required oninput="formatIndianNumber(this)"  maxlength="10" />
+                                    <div class="col-md-3">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💸</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="EstimatedCost" name="PropertyRenovation.EstimatedCost" value="@Model.PropertyRenovation?.EstimatedCost" class="form-control" required oninput="formatIndianNumber(this)" maxlength="10" />
                                                 <label class="form-label" for="EstimatedCost">Estimated cost of expenditure</label>
+                                            </div>
+
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.PropertyRenovation.EstimatedCost, "", new { @class = "text-danger" })
+                                    </div>
+
+
+
+
+
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+                                                @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
-                                @Html.ValidationMessageFor(m => m.PropertyRenovation.EstimatedCost, "", new { @class = "text-danger" })
+
                             </div>
-                            
-                               
-                              
-
-
-                                 <div class="col-md-4">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
-                            <p class="file-error-message" style="color:red;"></p>
-                        @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
-
                         </div>
-                        
-                    </div>
-        </div>
                     </div>
                 }
 
                 else
                 {
-                     <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
-                <span class="w-100 text-center text-decoration-underline"><strong>Any other reason requiring waiver</strong></span>
-            </button>
-        </h2>
-        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-            <div class="accordion-body">
-                        <div class="row g-3">
-                            <div class="col-md-8">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">💬</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control" value="@Model.SplWaiver?.OtherReasons" required  oninput="ValInDataLetter(this)" />
-                                        <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
-                                        <div class="invalid-feedback">
-                                            Please type other reason.
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button  fs-5 acc-btn" type="button" data-bs-toggle="collapse" style="height:50px" type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                                <span class="w-100 text-center text-decoration-underline"><strong>Any other reason requiring waiver</strong></span>
+                            </button>
+                        </h2>
+                        <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-8">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">💬</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control" value="@Model.SplWaiver?.OtherReasons" required oninput="ValInDataLetter(this)" />
+                                                <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
+                                                <div class="invalid-feedback">
+                                                    Please type other reason.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+                                                @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                     </div>
+
+
+                                    <div class="col-md-8">
+                                        <div class="mb-2">
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
+                                                <p class="file-error-message" style="color:red;"></p>
+                                                @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                                @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
 
                             </div>
-
-                            <div class="col-md-4">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons"  accept=".pdf"/>
-                            <p class="file-error-message" style="color:red;"></p>
-                        @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
-
-
-                              <div class="col-md-8">
-                        <div class="mb-2">
-                                 <div class="form-outline" data-mdb-input-init>
-                        <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)"  accept=".pdf"/>
-                            <p class="file-error-message" style="color:red;"></p>
-                        @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
-                         </div>
-                             </div>
-                             </div>
-
                         </div>
-                       
                     </div>
-        </div>
-                    </div> 
                 }
             }
             <div class="col-md-12">
                 <div class="mt-4 text-center">
                     <button class="btn btn-primary" id="btn-save" type="submit">Next</button>
-                    <!-- <a href="/Upload/Upload?formType=CA" class="btn btn-primary">CA Form</a>
-                    <a href="/Upload/Upload?formType=PCA" class="btn btn-primary">PCA Form</a>
-                    <a href="/Upload/Upload?formType=HBA" class="btn btn-primary">HBA Form</a-->
 
                 </div>
             </div>
@@ -1729,18 +1711,18 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
             <input type="hidden" id="ca_Loan" name="ClaimCommonData.Conveyance_Advance_Loan" value=@Model.ClaimCommonData?.Conveyance_Advance_Loan />
             <input type="hidden" id="pca_Loan" name="ClaimCommonData.Computer_Advance_Loan" value=@Model.ClaimCommonData?.Computer_Advance_Loan />
 
-        <div id="unitSearchDialog" class="uploadDialog" style="display:none;">
-        <div class="dialog-box" style="width: 668px;">
-            <h3 class="text-center mb-3">Please Enter Army No to Your Formation Unit Cdr</h3>
+            <div id="unitSearchDialog" class="uploadDialog" style="display:none;">
+                <div class="dialog-box" style="width: 668px;">
+                    <h3 class="text-center mb-3">Please Enter Army No to Your Formation Unit Cdr</h3>
 
-            <input type="text" id="unitSearchInput" class="form-control form-space" placeholder="Enter Army Number..." autocomplete="off" maxlength="15" style="font-weight:bold;"/>
-            <span class="text-danger" id="unitSearchMessage"></span>
-            <div class="d-flex justify-content-end mt-3">
-                <button id="unitSearchCancelBtn" class="btn btn-secondary me-2" style="margin-top:10px;">Cancel</button>
-                <button id="unitSearchConfirmBtn" class="btn btn-primary" disabled style="margin-top:10px;">Confirm</button>
+                    <input type="text" id="unitSearchInput" class="form-control form-space" placeholder="Enter Army Number..." autocomplete="off" maxlength="15" style="font-weight:bold;" />
+                    <span class="text-danger" id="unitSearchMessage"></span>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2" style="margin-top:10px;">Cancel</button>
+                        <button id="unitSearchConfirmBtn" class="btn btn-primary" disabled style="margin-top:10px;">Confirm</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
         </form>
     </div>
@@ -1749,230 +1731,230 @@ Attach Bonafide cert/admission letter" required accept=".pdf"/>
 
 </div>
 
-<script src="~/devjs/Validation.js" ></script>
-<script src="~/devjs/MaturityOnlineApplication.js" ></script>
-<script src="~/lib/inputmask/dist/inputmask.min.js" ></script>
+<script src="~/devjs/Validation.js"></script>
+<script src="~/devjs/MaturityOnlineApplication.js"></script>
+<script src="~/lib/inputmask/dist/inputmask.min.js"></script>
 <script type="text/javascript" src="~/js/mdb/new-prism.js"></script>
 <script type="text/javascript" src="~/js/mdb/mdbsnippet.min.js"></script>
 <script type="text/javascript" src="~/js/mdb/mdb.min.js"></script>
 
 
-<script >
+<script>
     $(document).ready(function () {
         Swal.fire({
             title: 'MAWD Application Instructions',
             html: `
-                <div style="
-                    margin: 20px; 
-                    text-align: left; 
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    line-height: 1.6;
-                    color: #333;
-                ">
-                    <!-- Instructions for Member Section -->
                     <div style="
-                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                        color: white;
-                        padding: 15px;
-                        border-radius: 8px;
-                        margin-bottom: 20px;
-                        text-align: center;
-                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                        margin: 20px;
+                        text-align: left;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        line-height: 1.6;
+                        color: #333;
                     ">
-                        <h3 style="margin: 0; font-size: 18px; font-weight: 600;">
-                            📋 Instructions for Member
-                        </h3>
-                    </div>
-                    
-                    <!-- Guidelines Section -->
-                    <div style="margin-bottom: 25px;">
+                        <!-- Instructions for Member Section -->
                         <div style="
-                            background: #f8f9fa;
-                            border-left: 4px solid #667eea;
+                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                            color: white;
                             padding: 15px;
-                            margin-bottom: 15px;
-                            border-radius: 0 8px 8px 0;
+                            border-radius: 8px;
+                            margin-bottom: 20px;
+                            text-align: center;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                         ">
-                            <h4 style="margin: 0 0 10px 0; color: #667eea; font-size: 16px;">
-                                1. Guidelines for applying MAWD application:
-                            </h4>
+                            <h3 style="margin: 0; font-size: 18px; font-weight: 600;">
+                                📋 Instructions for Member
+                            </h3>
                         </div>
-                        
-                        <div style="margin-left: 20px;">
-                            <div style="margin-bottom: 15px;">
-                                <strong style="color: #495057;">(a)</strong> 
-                                <span style="margin-left: 10px;">
-                                    Applicant should apply only after completion of 15 years of service.
-                                </span>
+
+                        <!-- Guidelines Section -->
+                        <div style="margin-bottom: 25px;">
+                            <div style="
+                                background: #f8f9fa;
+                                border-left: 4px solid #667eea;
+                                padding: 15px;
+                                margin-bottom: 15px;
+                                border-radius: 0 8px 8px 0;
+                            ">
+                                <h4 style="margin: 0 0 10px 0; color: #667eea; font-size: 16px;">
+                                    1. Guidelines for applying MAWD application:
+                                </h4>
                             </div>
-                            
-                            <div style="margin-bottom: 15px;">
-                                <strong style="color: #495057;">(b)</strong> 
-                                <span style="margin-left: 10px;">
-                                    MAWD can be withdrawn only in following circumstances:
-                                </span>
-                                
-                                <div style="margin-left: 30px; margin-top: 10px;">
-                                    <div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px;">
-                                        <strong style="color: #856404;">(i)</strong> 
-                                        <span style="margin-left: 10px;">
-                                            Education of child (for children studying 12<sup>th</sup> class and above).
-                                        </span>
-                                    </div>
-                                    <div style="margin-bottom: 8px; padding: 8px; background: #d1ecf1; border-radius: 4px;">
-                                        <strong style="color: #0c5460;">(ii)</strong> 
-                                        <span style="margin-left: 10px;">
-                                            Marriage of child.
-                                        </span>
-                                    </div>
-                                    <div style="margin-bottom: 8px; padding: 8px; background: #d4edda; border-radius: 4px;">
-                                        <strong style="color: #155724;">(iii)</strong> 
-                                        <span style="margin-left: 10px;">
-                                            Repair-renovation of existing house (applicable during last 2 years of service only).
-                                        </span>
-                                    </div>
-                                    <div style="margin-bottom: 8px; padding: 8px; background: #f8d7da; border-radius: 4px;">
-                                        <strong style="color: #721c24;">(iv)</strong> 
-                                        <span style="margin-left: 10px;">
-                                            All other cases requesting withdrawal to be treated for grant of "Special Reason".
-                                        </span>
+
+                            <div style="margin-left: 20px;">
+                                <div style="margin-bottom: 15px;">
+                                    <strong style="color: #495057;">(a)</strong>
+                                    <span style="margin-left: 10px;">
+                                        Applicant should apply only after completion of 15 years of service.
+                                    </span>
+                                </div>
+
+                                <div style="margin-bottom: 15px;">
+                                    <strong style="color: #495057;">(b)</strong>
+                                    <span style="margin-left: 10px;">
+                                        MAWD can be withdrawn only in following circumstances:
+                                    </span>
+
+                                    <div style="margin-left: 30px; margin-top: 10px;">
+                                        <div style="margin-bottom: 8px; padding: 8px; background: #fff3cd; border-radius: 4px;">
+                                            <strong style="color: #856404;">(i)</strong>
+                                            <span style="margin-left: 10px;">
+                                                Education of child (for children studying 12<sup>th</sup> class and above).
+                                            </span>
+                                        </div>
+                                        <div style="margin-bottom: 8px; padding: 8px; background: #d1ecf1; border-radius: 4px;">
+                                            <strong style="color: #0c5460;">(ii)</strong>
+                                            <span style="margin-left: 10px;">
+                                                Marriage of child.
+                                            </span>
+                                        </div>
+                                        <div style="margin-bottom: 8px; padding: 8px; background: #d4edda; border-radius: 4px;">
+                                            <strong style="color: #155724;">(iii)</strong>
+                                            <span style="margin-left: 10px;">
+                                                Repair-renovation of existing house (applicable during last 2 years of service only).
+                                            </span>
+                                        </div>
+                                        <div style="margin-bottom: 8px; padding: 8px; background: #f8d7da; border-radius: 4px;">
+                                            <strong style="color: #721c24;">(iv)</strong>
+                                            <span style="margin-left: 10px;">
+                                                All other cases requesting withdrawal to be treated for grant of "Special Reason".
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Important Rules Section -->
-                    <div style="margin-bottom: 25px;">
-                        <div style="
-                            background: #fff3cd;
-                            border: 1px solid #ffeaa7;
-                            padding: 15px;
-                            border-radius: 8px;
-                            margin-bottom: 10px;
-                        ">
-                            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                                <span style="font-size: 18px; margin-right: 10px;">⚠️</span>
-                                <strong style="color: #856404; font-size: 16px;">
-                                    2. Maximum two times withdrawal can be done during entire service including withdrawal in last two years of service.
-                                </strong>
+
+                        <!-- Important Rules Section -->
+                        <div style="margin-bottom: 25px;">
+                            <div style="
+                                background: #fff3cd;
+                                border: 1px solid #ffeaa7;
+                                padding: 15px;
+                                border-radius: 8px;
+                                margin-bottom: 10px;
+                            ">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <span style="font-size: 18px; margin-right: 10px;">⚠️</span>
+                                    <strong style="color: #856404; font-size: 16px;">
+                                        2. Maximum two times withdrawal can be done during entire service including withdrawal in last two years of service.
+                                    </strong>
+                                </div>
+                            </div>
+
+                            <div style="
+                                background: #d1ecf1;
+                                border: 1px solid #bee5eb;
+                                padding: 15px;
+                                border-radius: 8px;
+                            ">
+                                <div style="display: flex; align-items: center;">
+                                    <span style="font-size: 18px; margin-right: 10px;">⏱️</span>
+                                    <strong style="color: #0c5460; font-size: 16px;">
+                                        3. Minimum gap between two withdrawals should be at least six months.
+                                    </strong>
+                                </div>
                             </div>
                         </div>
-                        
+
+                        <!-- Separator -->
                         <div style="
-                            background: #d1ecf1;
-                            border: 1px solid #bee5eb;
-                            padding: 15px;
-                            border-radius: 8px;
-                        ">
-                            <div style="display: flex; align-items: center;">
-                                <span style="font-size: 18px; margin-right: 10px;">⏱️</span>
-                                <strong style="color: #0c5460; font-size: 16px;">
-                                    3. Minimum gap between two withdrawals should be at least six months.
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Separator -->
-                    <div style="
-                        border-top: 2px solid #e9ecef;
-                        margin: 30px 0;
-                        position: relative;
-                    ">
-                        <div style="
-                            position: absolute;
-                            top: -15px;
-                            left: 50%;
-                            transform: translateX(-50%);
-                            background: white;
-                            padding: 0 20px;
-                            color: #6c757d;
-                            font-size: 14px;
-                        ">
-                            ◆ ◆ ◆
-                        </div>
-                    </div>
-                    
-                    <!-- Instructions for Approving Authority Section -->
-                    <div style="
-                        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                        color: white;
-                        padding: 15px;
-                        border-radius: 8px;
-                        margin-bottom: 20px;
-                        text-align: center;
-                        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-                    ">
-                        <h3 style="margin: 0; font-size: 18px; font-weight: 600;">
-                            👨‍💼 Instructions for Approving Authority
-                        </h3>
-                    </div>
-                    
-                    <!-- Approval Guidelines -->
-                    <div style="margin-left: 20px;">
-                        <div style="
-                            display: flex;
-                            align-items: flex-start;
-                            margin-bottom: 15px;
-                            padding: 12px;
-                            background: #e7f3ff;
-                            border-radius: 8px;
-                            border-left: 4px solid #2196f3;
+                            border-top: 2px solid #e9ecef;
+                            margin: 30px 0;
+                            position: relative;
                         ">
                             <div style="
-                                background: #2196f3;
-                                color: white;
-                                width: 24px;
-                                height: 24px;
-                                border-radius: 50%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-weight: bold;
+                                position: absolute;
+                                top: -15px;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background: white;
+                                padding: 0 20px;
+                                color: #6c757d;
                                 font-size: 14px;
-                                margin-right: 15px;
-                                flex-shrink: 0;
                             ">
-                                1
-                            </div>
-                            <div style="color: #1976d2;">
-                                <strong>Particulars of applicant, purpose of withdrawal & bank details must be verified as correct.</strong>
+                                ◆ ◆ ◆
                             </div>
                         </div>
-                        
+
+                        <!-- Instructions for Approving Authority Section -->
                         <div style="
-                            display: flex;
-                            align-items: flex-start;
-                            margin-bottom: 15px;
-                            padding: 12px;
-                            background: #f3e5f5;
+                            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                            color: white;
+                            padding: 15px;
                             border-radius: 8px;
-                            border-left: 4px solid #9c27b0;
+                            margin-bottom: 20px;
+                            text-align: center;
+                            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
                         ">
+                            <h3 style="margin: 0; font-size: 18px; font-weight: 600;">
+                                👨‍💼 Instructions for Approving Authority
+                            </h3>
+                        </div>
+
+                        <!-- Approval Guidelines -->
+                        <div style="margin-left: 20px;">
                             <div style="
-                                background: #9c27b0;
-                                color: white;
-                                width: 24px;
-                                height: 24px;
-                                border-radius: 50%;
                                 display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-weight: bold;
-                                font-size: 14px;
-                                margin-right: 15px;
-                                flex-shrink: 0;
+                                align-items: flex-start;
+                                margin-bottom: 15px;
+                                padding: 12px;
+                                background: #e7f3ff;
+                                border-radius: 8px;
+                                border-left: 4px solid #2196f3;
                             ">
-                                2
+                                <div style="
+                                    background: #2196f3;
+                                    color: white;
+                                    width: 24px;
+                                    height: 24px;
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-weight: bold;
+                                    font-size: 14px;
+                                    margin-right: 15px;
+                                    flex-shrink: 0;
+                                ">
+                                    1
+                                </div>
+                                <div style="color: #1976d2;">
+                                    <strong>Particulars of applicant, purpose of withdrawal & bank details must be verified as correct.</strong>
+                                </div>
                             </div>
-                            <div style="color: #7b1fa2;">
-                                <strong>Supporting documents should be verified.</strong>
+
+                            <div style="
+                                display: flex;
+                                align-items: flex-start;
+                                margin-bottom: 15px;
+                                padding: 12px;
+                                background: #f3e5f5;
+                                border-radius: 8px;
+                                border-left: 4px solid #9c27b0;
+                            ">
+                                <div style="
+                                    background: #9c27b0;
+                                    color: white;
+                                    width: 24px;
+                                    height: 24px;
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-weight: bold;
+                                    font-size: 14px;
+                                    margin-right: 15px;
+                                    flex-shrink: 0;
+                                ">
+                                    2
+                                </div>
+                                <div style="color: #7b1fa2;">
+                                    <strong>Supporting documents should be verified.</strong>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `,
+                `,
             confirmButtonText: 'OK',
             confirmButtonColor: '#667eea',
             width: '750px',

@@ -4,7 +4,6 @@
     ViewData["Title"] = "Upload";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
-//    string formType = ViewBag.FormType?.ToString() ?? Context.Request.Query["formType"].ToString() ?? "CA";
     string formType = Model.FormType ?? "CA";
     int applicationId = Convert.ToInt32(TempData["applicationId"]);
     var message = TempData["Message"] ?? string.Empty;
@@ -21,10 +20,7 @@
                 <div class="card-body">
                     <!-- Instructions Section -->
                     <div class="alert alert-info mb-4">
-                        @* <h6 class="alert-heading mb-3">
-                        <strong>UPLOAD PDF OF SUPPORTING DOCUMENTS</strong>
-                        </h6> *@
-
+                       
 
 
                         @if (formType == "CA")

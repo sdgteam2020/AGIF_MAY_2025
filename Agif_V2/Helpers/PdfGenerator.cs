@@ -103,10 +103,6 @@ namespace Agif_V2.Helpers
                         .SetMarginBottom(20)
                         .SetUnderline());
 
-                    // 4-column table
-                    //Table table = new Table(new float[] { 8f, 7f, 8f, 7f });
-                    //table.SetWidth(UnitValue.CreatePercentValue(100));
-
                     Table table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
                     // Helper method
                     void AddRow(string label1, string value1, string label2, string value2, bool isFirstRow = false)
@@ -166,33 +162,10 @@ namespace Agif_V2.Helpers
                         .SetBorderLeft(Border.NO_BORDER)
                         .SetBorderRight(Border.NO_BORDER));
 
-                    //table.AddCell(new Cell(1, 4).Add(new Paragraph("23. Permt Home Address: "+(common.Vill_Town ?? "") + ", " +(common.PostOffice ?? "") + ", " +(common.Distt ?? "") + ", " +
-                    //   (common.State ?? "") + ", " +
-                    //   (common.Code ?? "")).SetFont(normalFont).SetFontSize(smallFontSize)).SetBorderTop(new SolidBorder(1)).SetBorderBottom(new SolidBorder(1)).SetBorderLeft(Border.NO_BORDER).SetBorderRight(Border.NO_BORDER));
-
-                    //AddRow("22. Property Address", common.NextFmnHQ, "20. Date Of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
-
-                    //AddRow("21. Salary Account No", common.SalaryAcctNo, "22. IFSC Code", common.IfsCode);
-
-                    //AddRow("23. Bank Name", common.NameOfBank, "24. Bank Branch", common.NameOfBankBranch);
-
-                    //AddRow("25. PCDA/PAO", common.pcda_pao, "", "");
-
                     document.Add(table);
-
-                    // Footer
-                    //document.Add(new Paragraph("This is a system-generated PDF using iText7.")
-                    //    .SetFont(normalFont)
-                    //    .SetFontSize(10)
-                    //    .SetTextAlignment(TextAlignment.CENTER)
-                    //    .SetMarginTop(30));
 
                     if (data.HbaApplicationResponse != null)
                     {
-                        //document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                        //document.Add(new Paragraph("HBA Loan Details")
-                        //    .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
-
                         var hba = data.HbaApplicationResponse;
                         Table hbaTable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
 
@@ -277,13 +250,6 @@ namespace Agif_V2.Helpers
                             .SetTextAlignment(TextAlignment.JUSTIFIED)
                             .SetMarginBottom(10));
 
-
-                        //Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
-                        //// signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
-                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                        //signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                        //document.Add(signatureTable);
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
                         signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); // Empty left cell
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
@@ -385,11 +351,7 @@ namespace Agif_V2.Helpers
 
                     else if (data.CarApplicationResponse != null)
                     {
-                        //document.Add(new Paragraph("CAR Loan Details")
-                        //   .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
-
                         var car = data.CarApplicationResponse;
-                        //Table cartable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 5, 3, 5 })).UseAllAvailableWidth();
                         Table cartable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
 
 
@@ -443,7 +405,6 @@ namespace Agif_V2.Helpers
                             document.Add(bulletPoint);
                         }
 
-                        // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                         // Section 30 title
                         var titleParagraph30 = new Paragraph("31. I further agree that:")
@@ -492,13 +453,6 @@ namespace Agif_V2.Helpers
 
                         document.Add(new Paragraph("\n"));
 
-
-                        //Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
-                        //// signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + carPcModel.DateTimeUpdated)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
-                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                        //signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                        //signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                        //document.Add(signatureTable);
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
                         signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); // Empty left cell
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
@@ -627,8 +581,6 @@ namespace Agif_V2.Helpers
                     }
                     else if (data.PcaApplicationResponse != null)
                     {
-                        //document.Add(new Paragraph("PCA Loan Details")
-                        //    .SetFont(boldFont).SetFontSize(14).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(20));
                         var pca = data.PcaApplicationResponse;
                         Table pcatable = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
 

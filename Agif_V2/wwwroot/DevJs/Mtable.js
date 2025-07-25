@@ -46,9 +46,7 @@ function mMsater(sectid , ddl, TableId, ParentId) {
                 }
             }
             else {
-                //Swal.fire({
-                //    text: "No data found Offrs"
-                //});
+                
             }
         },
         error: function (result) {
@@ -117,7 +115,6 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow) {
     }
     catch (error) {
 
-        //$("#" + msgid).html(`<div class="alert alert-danger " style="margin-top:5px;><i class="fa fa-times" aria-hidden="true" ></i><span class="m-lg-2">DGIS Appl Not Running</span></div>`);
         $("#" + msgid).html(`<div  class="alert alert-danger" style="margin-top:5px;><i class="fa fa-times" aria-hidden="true" >
         </i><span class="m-lg-2 text-danger alert-danger tokenremarks">DGIS App Not running
         </span </div>

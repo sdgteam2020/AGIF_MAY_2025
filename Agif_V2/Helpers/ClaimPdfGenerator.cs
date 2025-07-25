@@ -122,10 +122,6 @@ namespace Agif_V2.Helpers
                         .SetUnderline());
 
 
-                    // 4-column table
-                    //Table table = new Table(new float[] { 8f, 7f, 8f, 7f });
-                    //table.SetWidth(UnitValue.CreatePercentValue(100));
-
                     Table table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
                     // Helper method
                     void AddRow(string label1, string value1, string label2, string value2, bool isFirstRow = false)
@@ -475,17 +471,6 @@ namespace Agif_V2.Helpers
                     ImageData checkimageData = ImageDataFactory.Create(Checkmark);
                     List<string> matchedDocuments = new List<string>();
 
-            // Dictionary<string, string> documentMap = new Dictionary<string, string>
-            //{
-            //   { "AttachPartIIOrder", "Attested copy of Birth Part II Order of child (In case of edn/marriage of child)." },
-            //   { "Attach_PartIIOrder", "Attested copy of Birth Part II Order of child (In case of edn/marriage of child)." },
-            //   { "AttachBonafideLetterPdf", "Copy of Fee details of child (For Edn of Child) attested by OC unit." },
-            //   { "CancelledCheque", "Cancelled cheque of salary acct." },
-            //   { "PaySlip", " Latest Pay Slip." },
-            //   { "Attachinvitationcard", "Marriage invitation Card (In case of marriage of child) duly attested by OC unit." },
-            //   { "TotalExpenditureFile", "Estimate of cost of expdr duly approved by Architect (For renovation of House in the last two years of service)" },
-            //   { "Spdocus", "Personal application endorsed by recommending authority." }
-            //};
 
                     Dictionary<string, string> documentMap = new Dictionary<string, string>
             {
@@ -520,33 +505,7 @@ namespace Agif_V2.Helpers
                         }
                     }
 
-                    // Second pass: Generate output for all document types
-                    //foreach (var entry in documentMap.Values.Distinct()) // Use Distinct() to avoid duplicates
-                    //{
-                    //    Paragraph docParagraph = new Paragraph()
-                    //        .SetFont(normalFont)
-                    //        .SetFontSize(10)
-                    //        .SetTextAlignment(TextAlignment.LEFT)
-                    //        .SetMarginLeft(30)
-                    //        .SetMarginBottom(3);
-
-                    //    if (matchedDescriptions.Contains(entry))
-                    //    {
-                    //        // Create paragraph with checkmark
-                    //        Image newCheckIcon = new Image(checkimageData).ScaleToFit(15, 15);
-                    //        docParagraph.Add(newCheckIcon);
-                    //        docParagraph.Add(new Text(" " + entry));
-                    //    }
-                    //    else
-                    //    {
-                    //        // Create invisible placeholder with same width as icon
-                    //        Image placeholderIcon = new Image(checkimageData).ScaleToFit(15, 15).SetOpacity(0f);
-                    //        docParagraph.Add(placeholderIcon);
-                    //        docParagraph.Add(new Text(" " + entry));
-                    //    }
-
-                    //    document.Add(docParagraph);
-                    //}
+                    
                     int counter2 = 1; // This will track the numbering for the matched documents
                     foreach (var entry in documentMap.Values.Distinct()) // Use Distinct() to avoid duplicates
                     {
@@ -675,14 +634,6 @@ namespace Agif_V2.Helpers
                         document.Add(para2);
 
 
-                        //Paragraph para3 = new Paragraph();
-                        //para3.Add(new Text("3.I have interviewed him and verified his financial condition and established need for taking this MAWD. Applicant will be using MAWD amount for intended purpose only.").SetFont(normalFont));
-                        //document.Add(para3);
-
-
-                        //Paragraph para3 = new Paragraph();
-                        //para3.Add(new Text("3.I have checked and verified all documents submitted by the officer and found them correct.").SetFont(normalFont));
-                        //document.Add(para3);
 
                         Paragraph para4 = new Paragraph();
                         para4.Add(new Text("3. It is certified that Bank A/c No ").SetFont(normalFont));
@@ -712,8 +663,7 @@ namespace Agif_V2.Helpers
 
                     if (isApproved || isRejected)
                     {
-                        // Replace the selected block with the following (iTextSharp code removed, iText7 style used, variable names fixed)
-
+                        
                         if (isApproved || isRejected)
                         {
                             if (isRejected)
@@ -784,11 +734,6 @@ namespace Agif_V2.Helpers
                                 string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                                 if (File.Exists(imagePath))
                                 {
-                                    //var imgData = ImageDataFactory.Create(imagePath);
-                                    //var icon = new iText.Layout.Element.Image(imgData);
-                                    //icon.ScaleAbsolute(60f, 60f);
-                                    //icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 270);
-                                    //document.Add(icon);
 
                                     ImageData imageData = ImageDataFactory.Create(imagePath);
                                     Image icon = new Image(imageData).ScaleToFit(60f, 60f);
@@ -801,12 +746,6 @@ namespace Agif_V2.Helpers
                                 string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                                 if (File.Exists(imagePath))
                                 {
-                                    //var imgData = ImageDataFactory.Create(imagePath);
-                                    //var icon = new iText.Layout.Element.Image(imgData);
-                                    //icon.ScaleAbsolute(80f, 80f);
-                                    //icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 557);
-                                    //document.Add(icon);
-
 
                                     ImageData imageData = ImageDataFactory.Create(imagePath);
                                     Image icon = new Image(imageData).ScaleToFit(80f, 80f);

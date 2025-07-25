@@ -69,19 +69,6 @@ namespace Agif_V2.Helpers
         {
             try
             {
-                //using var stream = file.OpenReadStream();
-                //using var reader = new StreamReader(stream);
-
-                //var content = await reader.ReadToEndAsync();
-
-                //// Check for encryption indicators in PDF
-                //return content.Contains("/Encrypt") ||
-                //       content.Contains("/Filter/Standard") ||
-                //       content.Contains("/V 1") ||
-                //       content.Contains("/V 2") ||
-                //       content.Contains("/V 4") ||
-                //       content.Contains("/V 5");
-
                 using var stream = file.OpenReadStream();
                 using var reader = new StreamReader(stream);
                 var content = await reader.ReadToEndAsync();
@@ -115,20 +102,6 @@ namespace Agif_V2.Helpers
                 using var reader = new StreamReader(stream);
 
                 var content = await reader.ReadToEndAsync();
-
-                //    var maliciousPatterns = new[]
-                //    {
-                //    "/JavaScript", "/JS", "/Launch", "/EmbeddedFile",
-                //    "/OpenAction", "/AA", "/XFA", "/RichMedia",
-                //    "/3D", "/U3D", "/PRC", "/SWF", "/Movie",
-                //    "eval(", "unescape(", "String.fromCharCode(",
-                //    "%u0065%u0076%u0061%u006c", // Encoded 'eval'
-                //    "/F 4", // Submit form action
-                //    "/S/Launch", // Launch action
-                //    "/Win", "/Mac", "/Unix" // Platform-specific launches
-                //};
-
-                // Check for potentially malicious PDF elements
 
                 var maliciousPatterns = new[]
                {
@@ -172,8 +145,7 @@ namespace Agif_V2.Helpers
                 @"\\x65\\x76\\x61\\x6c",    // 'eval' hex encoded
               };
 
-                //return maliciousPatterns.Any(pattern =>
-                //    content.Contains(pattern, StringComparison.OrdinalIgnoreCase));
+                
 
                 return maliciousPatterns.Any(pattern =>
                 Regex.IsMatch(content, pattern, RegexOptions.IgnoreCase));

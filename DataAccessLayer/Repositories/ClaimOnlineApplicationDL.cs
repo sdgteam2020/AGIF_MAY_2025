@@ -571,7 +571,6 @@ namespace DataAccessLayer.Repositories
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.WithdrawPurpose,
-                              //ApplicationTypeName = applicationType.ApplicationTypeName,
                               ArmyPrefix = common.ArmyPrefix,
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
@@ -638,7 +637,6 @@ namespace DataAccessLayer.Repositories
             string formtype = string.Empty;
             if (result != null)
             {
-                //if(result.ApplicationType==1)
                 if (result.ApplicationType == 1)
                 {
                     formtype = "ED";
@@ -715,7 +713,6 @@ namespace DataAccessLayer.Repositories
                     data.SplWaiverResponse = SPModal;
                 }
 
-                //var DocumentModel = _context.trnDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
                 var DocumentModel = _context.trnClaimDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
 
                 if (DocumentModel != null)
@@ -894,7 +891,6 @@ namespace DataAccessLayer.Repositories
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.WithdrawPurpose,
-                              //ApplicationTypeAbbr = applicationType.ApplicationTypeAbbr ?? string.Empty,
                               ArmyPrefix = common.ArmyPrefix,
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
@@ -1016,8 +1012,7 @@ namespace DataAccessLayer.Repositories
                              CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
                              Year_Of_Service = common.TotalService,
                              Residual_Service = common.ResidualService,
-                             //ApplicationType = common.ApplicationType == 1 ? hba.PropertyType : common.ApplicationType == 2 ? car.Veh_Loan_Type : pca.computer_Loan_Type,
-
+                            
                              E_Mail_Id = common.Email ?? string.Empty,
 
 

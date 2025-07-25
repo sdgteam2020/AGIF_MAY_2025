@@ -24,7 +24,6 @@ namespace DataTransferObject.Model
         public string? DealerName { get; set; }
 
         [Required(ErrorMessage = "Vehicle Loan Type is required.")]
-        //[StringLength(50, ErrorMessage = "Loan Type can't be longer than 50 characters.")]
         public int Veh_Loan_Type { get; set; }
 
         public int VehTypeId { get; set; }
@@ -39,7 +38,6 @@ namespace DataTransferObject.Model
         public string? ModelName { get; set; }
 
         [Required(ErrorMessage = "Vehicle Cost is required.")]
-        //[DataType(DataType.Currency, ErrorMessage = "Invalid format for vehicle cost.")]
         [Range(0, int.MaxValue, ErrorMessage = "Vehicle Cost must be a valid amount.")]
         public int? VehicleCost { get; set; }
 

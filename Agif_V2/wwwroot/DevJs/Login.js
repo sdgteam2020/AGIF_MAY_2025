@@ -104,12 +104,6 @@ class LoginManager {
     }
 }
 
-//$(document).ready(() => {
-//    if (typeof window.loginConfig !== 'undefined') {
-//        new LoginManager(window.loginConfig);
-//    }
-//});
-
 $(document).ready(() => {
     const configEl = document.getElementById("loginConfig");
     if (configEl) {

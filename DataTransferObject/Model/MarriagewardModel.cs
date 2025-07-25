@@ -23,30 +23,23 @@ namespace DataTransferObject.Model
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Child Name must only contain alphabets and spaces.")]
         public string NameOfChild { get; set; }
 
-        // Date of Birth of the Child
         [Required(ErrorMessage = "Date of Birth is required.")]
         [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
         public DateTime? DateOfBirth { get; set; }
 
-        // DO Part-II No
         [Required]
-        //[RegularExpression(@"^\d{3,8}$", ErrorMessage = "Invalid DO Part-II No")]
         public string DOPartIINo { get; set; }
 
-        // DO Part-II Date
         [Required]
         public DateTime? DoPartIIDate { get; set; }
 
-        // Attach Part-II Order
         [NotMapped]
         [Required]
         public IFormFile AttachPartIIOrder { get; set; }
 
-        // Presently studying in (School or College)
         [Required]
         public int AgeOfWard { get; set; }
 
-        // Course/Class for Withdrawal Required
         [Required(ErrorMessage = "Date of Marraige is required.")]
         [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]
         public DateTime? DateofMarriage { get; set; }

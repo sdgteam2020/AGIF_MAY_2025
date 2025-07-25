@@ -7,18 +7,6 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Response
 {
-    //public class DTOApplicationStatusResponse
-    //{
-    //    public LoanStatus LoanType1 { get; set; } = new LoanStatus();
-    //    public LoanStatus LoanType2 { get; set; } = new LoanStatus();
-    //    public LoanStatus LoanType3 { get; set; } = new LoanStatus();
-    //}
-
-    //public class LoanStatus
-    //{
-    //    public string LoanType { get; set; }
-    //    public string StatusCode { get; set; }
-    //}
 
     public class DTOApplicationStatusResponse
     {

@@ -1,5 +1,4 @@
-﻿/*import { forEach } from "angular";*/
-
+﻿
 $(document).ready(function () {
     // Check if DataTables is loaded
     if (typeof $.fn.DataTable === 'undefined') {
@@ -7,8 +6,6 @@ $(document).ready(function () {
         alert('DataTables library is not loaded. Please check your script references.');
         return;
     }
-    //const params = new URLSearchParams(window.location.search);
-    //const value = params.get("status");
 
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
@@ -23,7 +20,6 @@ $(document).on('click', '.download-btn', function () {
 });
 
 function BindUsersData(status) {
-    // Check if DataTables is available
 
     if (typeof $.fn.DataTable === 'undefined') {
         console.error('DataTables is not available');

@@ -1,16 +1,8 @@
-﻿/**
- * Home Index Page JavaScript
- * Handles image slider functionality and navigation
- */
-
-document.addEventListener('DOMContentLoaded', function () {
+﻿document.addEventListener('DOMContentLoaded', function () {
     // Initialize slider functionality
     initializeImageSlider();
 });
 
-/**
- * Initialize the image slider with auto-play and dot navigation
- */
 function initializeImageSlider() {
     const slides = document.querySelector('.slides');
     const dots = document.querySelectorAll('.dot');
@@ -25,10 +17,7 @@ function initializeImageSlider() {
     const totalSlides = dots.length;
     const slideInterval = 3000; // 3 seconds
 
-    /**
-     * Show slide at specified index
-     * @param {number} i - Index of slide to show
-     */
+    
     function showSlide(i) {
         index = (i + totalSlides) % totalSlides; // Ensure circular navigation
         slides.style.transform = `translateX(${-index * 100}%)`;
@@ -37,10 +26,6 @@ function initializeImageSlider() {
         updateActiveDot(index);
     }
 
-    /**
-     * Update active dot indicator
-     * @param {number} activeIndex - Index of active dot
-     */
     function updateActiveDot(activeIndex) {
         dots.forEach((dot, i) => {
             if (i === activeIndex) {
@@ -50,20 +35,13 @@ function initializeImageSlider() {
             }
         });
     }
-
-    /**
-     * Start auto-play functionality
-     */
+    
     function startAutoPlay() {
         return setInterval(() => {
             showSlide(index + 1);
         }, slideInterval);
     }
-
-    /**
-     * Stop auto-play functionality
-     * @param {number} intervalId - Interval ID to clear
-     */
+    
     function stopAutoPlay(intervalId) {
         clearInterval(intervalId);
     }

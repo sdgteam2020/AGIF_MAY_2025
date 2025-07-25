@@ -1,4 +1,9 @@
-﻿function loadDropdown() {
+﻿$(document).ready(function () {
+    loadDropdown();
+
+})
+
+function loadDropdown() {
 
     var Rank = $('#rank').data('rank-prefix');
   //  var UnitId = $('#UnitId').val();
@@ -8,27 +13,6 @@
     mMsater(Rank, "rank", 3, 0);
     mMsater(regtCorps, "regtCorps", 8, 0);
     mMsater(ApptId, "ApptId", 1, 0);
-    //if (regtCorps) {
-    //    $('#regtCorps').prop('disabled', true); // Disable the select dropdown
-    //}
-
-    //if (UnitId) {
-    //    $.ajax({
-    //        url: '/Account/GetUnitById',
-    //        type: 'POST',
-    //        data: { UnitId: UnitId },
-    //        success: function (data) {
-    //            if (data) {
-    //                $('#txtUnit').val(data);
-    //                $('#txtUnit').prop('readonly', true); // Make input readonly
-    //            }
-    //        },
-    //        error: function (response) {
-    //            alert(response.responseText);
-    //        }
-    //    });
-    //}
- 
 }
 
 $('#DteFmn').on('change', function () {
@@ -54,8 +38,6 @@ $("#btnsignup").on("click", function (e) {
         cancelButtonText: 'No, cancel!',
     }).then((result) => {
         if (result.isConfirmed) {
-            // If the user clicked 'Yes', submit the form
-            // Assuming the form has an id of #signupForm
             $("#signupForm").submit();  // Or trigger your form submit action here
         } else {
             // If the user clicked 'No', do nothing or show an alert
@@ -107,9 +89,6 @@ $("#txtUnit").autocomplete({
         e.preventDefault();
         $("#txtUnit").val(i.item.label);
         $("#UnitId").val(i.item.value);
-        // $("#spnUnitMapId").html(i.item.value);
-        //alert(i.item.value)
-
     },
     appendTo: '#suggesstion-box'
 });

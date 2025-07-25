@@ -58,8 +58,7 @@ namespace DataAccessLayer.Repositories
         {
             var applications = await (from appl in _context.trnClaim
                                       join prefix in _context.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                     // join applicationType in _context.MApplicationTypes on appl.ApplicationType equals applicationType.ApplicationTypeId
-                                      join applicationType in _context.WithdrawalPurpose on appl.WithdrawPurpose equals applicationType.Id
+                                     join applicationType in _context.WithdrawalPurpose on appl.WithdrawPurpose equals applicationType.Id
                                       join status in _context.StatusTable on appl.StatusCode equals status.StatusCode
                                       where (prefix.Prefix + appl.Number + appl.Suffix) == armyNo
                                       select new DTOApplicationStatusResponse

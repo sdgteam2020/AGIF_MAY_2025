@@ -397,7 +397,6 @@
 
                                     </div>
                                 </div>
-                                @* <span class="input-group-text">🪖</span> *@
 
                             </div>
 
@@ -1028,7 +1027,6 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.DealerName, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="col-md-2">
-                                        @* <span class="input-group-text">🚗</span> *@
                                         <select class="form-select select" id="veh_Loan_Type" name="CarApplication.Veh_Loan_Type" aria-label="Vehicle Loan Type" required data-vehicletype-prefix="@if (Model.CarApplication != null)
                                         {
                                             @Model.CarApplication.Veh_Loan_Type
@@ -1038,7 +1036,6 @@
                                         <label class="form-label select-label ">Vehicle Loan Type</label>
                                     </div>
                                     <div class="col-md-2">
-                                        @* <span class="input-group-text">🚗</span> *@
                                         <select class="form-select select" id="VehTypeId" name="CarApplication.VehTypeId" aria-label="Vehicle Type" required data-vehicletypeId-prefix="@if (Model.CarApplication != null)
                                         {
                                             @Model.CarApplication.VehTypeId
@@ -1069,7 +1066,6 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.ModelName, "", new { @class = "text-danger" })
                                     </div>
                                     <div class="col-md-2">
-                                        @* <span class="input-group-text">🔁</span> *@
                                         <select class="form-select select" id="CA_LoanFreq" name="CarApplication.CA_LoanFreq" aria-label="Frequency of Loan" required data-vehicleloanfreq-prefix="@if (Model.CarApplication != null)
                                         {
                                             @Model.CarApplication.CA_LoanFreq
@@ -1369,9 +1365,6 @@
             <div class="col-md-12">
                 <div class="mt-4 text-center">
                     <button class="btn btn-primary" id="btn-save" type="submit">Next</button>
-                    <!-- <a href="/Upload/Upload?formType=CA" class="btn btn-primary">CA Form</a>
-                    <a href="/Upload/Upload?formType=PCA" class="btn btn-primary">PCA Form</a>
-                    <a href="/Upload/Upload?formType=HBA" class="btn btn-primary">HBA Form</a-->
                     <button type="button" class="btn btn-primary d-none" id="fillDemoDataBtn">Fill Demo Data</button>
 
                 </div>

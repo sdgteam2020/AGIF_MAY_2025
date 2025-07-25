@@ -1,6 +1,4 @@
 ﻿$(document).ready(function () {
-    //const params = new URLSearchParams(window.location.search);
-    //const value = params.get("status");
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
 
@@ -44,17 +42,10 @@
                 confirmButtonText: "Yes, approve it!"
             }).then((result) => {
                 if (result.isConfirmed) {
-
-                    //GetTokenvalidatepersid2fa("A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448", id);
                     GetTokenvalidatepersid2fa(icNo, applnId, type);
-                    //alert("Sweet");
                 }
             });
-
-            ////verify pop
-
-            //GetTokenvalidatepersid2fa(icNo, id);
-            // SignXmlSendTOdatabase("<DigitalSignature1><Root>Kapoor</Root></DigitalSignature1>");
+            
 
         }
     });
@@ -67,12 +58,6 @@
         if (remarkValue === "") {
             remarkField.val("Rejected");
         }
-        //$("#tokenMessage").html("");
-        //if ($("#txtremark").val().trim() === "") {
-        //    $("#tokenMessage").html(`<span class="m-lg-2 text-danger tokenremarks">Enter Remarks!</span>`);
-
-        //    return;
-        //}
         Swal.fire({
             title: "Are you sure?",
             text: "Do you want to reject!",
@@ -510,8 +495,6 @@ function DataSignDigitaly(applicationId, endpoint,Usertype) {
                 text: "Please Ensure that DGIS App has been installed and running at the time of Digital Signature.",
                 icon: "error"
             });
-            //$("#tokenMessage").html(`<span class="m-lg-2 text-danger alert-danger tokenremarks"> DGIS App Not running</span> <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; font-size:12px">Install DGIS App for Digital Sign!</a>`);
-
         }
     });
 

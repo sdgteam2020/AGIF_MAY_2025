@@ -272,7 +272,6 @@ namespace DataAccessLayer.Repositories
                               Email = common.Email ?? string.Empty,
                               Code = common.Code ?? string.Empty,
                               SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                              //ConfirmSalaryAcctNo= common.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = common.IfsCode ?? string.Empty,
                               NameOfBank = common.NameOfBank ?? string.Empty,
                               NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
@@ -288,7 +287,6 @@ namespace DataAccessLayer.Repositories
             string formtype = string.Empty;
             if (result != null)
             {
-                //if(result.ApplicationType==1)
                 if (result.ApplicationType == 1)
                 {
                     formtype = "HBA";
@@ -484,16 +482,7 @@ namespace DataAccessLayer.Repositories
                 return false;
             else
                 return true;
-            // Step 2: Get UserMapping by ProfileId
-            //var userMapping = await _context.trnUserMappings
-            //    .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
-
-            //// Step 3: Return true if mapping exists, else false
-            //if (userMapping.UnitId == UnitId)
-            //    return true;
-            //else
-            //    return false;
-
+            
         }
 
         public async Task<bool> CheckIsCoRegister(int UnitId)
@@ -748,7 +737,6 @@ namespace DataAccessLayer.Repositories
                                         Rank_Grade_Pay = common.rank_gradePay,
                                         MSP = common.Msp,
                                         NPA_X_Pay = common.npax_Pay,
-                                        //Tech_Pay = common.TechPay,
                                         DA = common.Da,
                                         MISC_Pay = common.MiscPay,
                                         PLI = common.Pli,

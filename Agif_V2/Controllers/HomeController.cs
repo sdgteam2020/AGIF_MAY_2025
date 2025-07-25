@@ -27,10 +27,6 @@ namespace Agif_V2.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            //var model = new DTODashboardViewModelReponse
-            //{
-            //    SessionUser = sessionUser,
-            //};
             if(sessionUser.Role == "Admin")
             {
                 var userCounts = await home.GetUserCount();
@@ -45,7 +41,6 @@ namespace Agif_V2.Controllers
 
             else if (sessionUser.Role == "MaturityAdmin")
             {
-                //var applCount = _applicationService.GetApplicationCount(sessionUser.UserId);
                 var userCounts = await home.GetUserCount();
                 var metrics = new Dictionary<string, int>
                 {
@@ -66,9 +61,6 @@ namespace Agif_V2.Controllers
                 };
 
                 ViewBag.Metrics = metrics;
-                //model.PendingApplications = _applicationService.GetPendingCount(sessionUser.UserId);
-                //model.ApprovedApplications = _applicationService.GetApprovedCount(sessionUser.UserId);
-                //model.RejectedApplications = _applicationService.GetRejectedCount(sessionUser.UserId);
             }
             return View(sessionUser);
         }
@@ -84,10 +76,5 @@ namespace Agif_V2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        //public IActionResult UserApprovalLists()
-        //{
-
-        //    return View();
-        //}
     }
 }

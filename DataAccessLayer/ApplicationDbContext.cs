@@ -68,8 +68,6 @@ namespace DataAccessLayer
         public virtual DbSet<MVehType> MVehType { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
-            // Configure foreign key relationship
             builder.Entity<CommonDataModel>()
                 .HasOne<MUnit>()
                 .WithMany()

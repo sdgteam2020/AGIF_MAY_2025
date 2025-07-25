@@ -71,9 +71,6 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="UnitId">Unit Name:</label>
-                                   @*  <select class="form-select select" asp-for="UnitId" id="UnitId" name="UnitId" required data-unitid-prefix="@if (Model != null) {
-                                                @Model.UnitId;}"></select>
-                                    @Html.ValidationMessageFor(m => m.UnitId, "", new { @class = "text-danger" }) *@
                                     <div>
                                         @Html.EditorFor(model => model.UnitId, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "Unit's name" } })
                                         @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
@@ -123,9 +120,3 @@
 
 <script src="~/devjs/Validation.js"></script>
 <script src="~/devjs/register.js"></script>
-<script>
-    $(document).ready(function () {
-        loadDropdown();
-         
-    })
-</script>

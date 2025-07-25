@@ -27,7 +27,6 @@ function ValInAadhar(input) {
 function verifyMobileNo(input) {
     var inputValue = input.value.trim();
     if (inputValue.length !== 10 || !/^\d{10}$/.test(inputValue)) {
-        // alert("Please enter a valid 10-digit mobile number");
         swal.fire({
             title: "Invalid Mobile No",
             text: "Please enter a valid 10-digit mobile number",
@@ -61,7 +60,6 @@ function validateAccountNo(input) {
         }).then(() => {
             input.focus();
         })
-        //setTimeout(function () { input.focus(); }, 100);
 
     }
 }

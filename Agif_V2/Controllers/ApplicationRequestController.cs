@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-//using OfficeOpenXml;
-//using OfficeOpenXml.Style;
 using System;
 using System.Data;
 using System.Drawing;
@@ -86,8 +84,6 @@ namespace Agif_V2.Controllers
             var result= await _userApplication.UpdateUserDetails(sessionUserDTO);
             if (result)
             {
-                // Update session with new user details
-                //Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
                 TempData["ProfileMessage"] = "Your Profile is Updated Successfully.";
                 return RedirectToAction("EditUser", "ApplicationRequest");
             }
@@ -117,7 +113,6 @@ namespace Agif_V2.Controllers
             {
                 string searchValue = request.searchValue.ToLower();
                 query = query.Where(x =>
-                    //x.Name.ToLower().Contains(searchValue) ||
                     x.ArmyNo.ToLower().Contains(searchValue) ||
                     x.DateOfBirth.ToLower().Contains(searchValue) ||
                     x.AppliedDate.ToLower().Contains(searchValue)
@@ -176,7 +171,6 @@ namespace Agif_V2.Controllers
             {
                 string searchValue = request.searchValue.ToLower();
                 query = query.Where(x =>
-                    //x.Name.ToLower().Contains(searchValue) ||
                     x.ArmyNo.ToLower().Contains(searchValue) ||
                     x.DateOfBirth.ToLower().Contains(searchValue) ||
                     x.AppliedDate.ToLower().Contains(searchValue)
@@ -213,11 +207,6 @@ namespace Agif_V2.Controllers
             return Json(responseData);
 
         }
-
-        //public async Task<IActionResult> ViewDetails(int applicationId)
-        //{
-        //    return View();
-        //}
 
         public async Task<string> DataDigitalXmlSign(int applicationId)
         {
@@ -471,7 +460,6 @@ namespace Agif_V2.Controllers
             };
             await _application.Add(digitalSignRecords);
             await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 3);
-            //await _onlineApplicationController.MergePdf(applId, true, false);
             TrnStatusCounter trnStatusCounter = new TrnStatusCounter
             {
                 StatusId = 3,
@@ -676,16 +664,12 @@ namespace Agif_V2.Controllers
 
             foreach (var data in ret.OnlineApplicationResponse)
             {
-                //var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
                 var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-                //var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
 
                 var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
-                //var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempUploads", folderName, fileName);
-
+                
                 if (System.IO.File.Exists(sourceFilePath))
                 {
-                    // Choose target subfolder based on ApplicationTypeAbbr
                     string destinationFolder = data.ApplicationTypeAbbr switch
                     {
                         "HBA" => hbaFolder,
@@ -713,9 +697,6 @@ namespace Agif_V2.Controllers
                     System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
                 }
             }
-
-
-            // Generate Excel file and save to timestamp folder
             bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
             if (!retexcel)
             {
@@ -735,8 +716,6 @@ namespace Agif_V2.Controllers
             }
           
         }
-
-        // Modified method to save Excel file to specific folder instead of returning File result
         public async Task<bool> ExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
         {
             DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
@@ -780,15 +759,9 @@ namespace Agif_V2.Controllers
                     return false;
                 }
 
-
-
             }
         }
 
-
-
-
-        // Keep the original method if you need it for direct download
         public async Task<IActionResult> ExportToExcel(DTOExportRequest dTOExport)
         {
             DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
@@ -899,21 +872,13 @@ namespace Agif_V2.Controllers
                 else if (data.ApplicationType == 4)
                     applicationTypeName = "SP";
 
-
-                 //var folderName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}";
                 var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-                //var fileName = $"{data.ApplicationTypeAbbr}_{data.Number}_{data.ApplicationId}_Merged.pdf";
 
                 var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
 
-                //var folderName = $"{applicationTypeName}_{data.Number}_{data.ApplicationId}";
-                //var fileName = $"{applicationTypeName}_{data.Number}_{data.ApplicationId}_Merged.pdf";
-
-                //var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads", folderName, fileName);
-
+               
                 if (System.IO.File.Exists(sourceFilePath))
                 {
-                    // Choose target subfolder based on ApplicationTypeAbbr
                     string destinationFolder = applicationTypeName switch
                     {
                         "ED" => EDFolder,
@@ -937,7 +902,6 @@ namespace Agif_V2.Controllers
                 }
             }
 
-            // Generate Excel file and save to timestamp folder
             bool retexcel = await ClaimExportToExcelInFolder(dTOExport, newFolderPath);
             if (!retexcel)
             {

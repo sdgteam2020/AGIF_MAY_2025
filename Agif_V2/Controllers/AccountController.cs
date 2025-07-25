@@ -37,12 +37,6 @@ namespace Agif_V2.Controllers
             this._masterOnlyTable = _masterOnlyTable;
         }
 
-        //public IActionResult Index()
-        //{
-           
-        //    return View();
-        //}
-
         public IActionResult Login()
         {
             return View();
@@ -314,8 +308,7 @@ namespace Agif_V2.Controllers
                 return RedirectToAction("COContactUs", "Default");
             }
             else
-            {
-                //return Json(ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));   
+            {   
                 return View(signUpDto);
             }
          
@@ -399,7 +392,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // _logger.LogError(1001, ex, "UserDB->GetAllUsersListPaginated");
                 var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
                 {
                     draw = 0,

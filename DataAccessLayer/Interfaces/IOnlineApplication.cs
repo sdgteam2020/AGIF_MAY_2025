@@ -12,7 +12,6 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IOnlineApplication : IGenericRepositoryDL<CommonDataModel>
     {
-        //Task<bool> IsUser(string AadharNo);
         Task<string> GetFormType(int ApplicationID);
 
         Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);

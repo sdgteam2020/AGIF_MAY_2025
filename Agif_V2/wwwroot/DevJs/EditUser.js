@@ -48,11 +48,7 @@
             
             // Show/hide buttons
          $('#editButton').hide();
-
-         //$('#btnsignup').removeClass('d-none');
-
          $("#btnTokenDetails").removeClass("d-none");
-
         }
 
     $("#btnsignup").on("click", function (e) {

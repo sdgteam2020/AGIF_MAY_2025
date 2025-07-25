@@ -29,8 +29,6 @@ namespace Agif_V2.Controllers
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
 
-            //int applicationId = 2;//Testing purpose
-            //TempData["applicationId"] = applicationId;
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
@@ -178,7 +176,6 @@ namespace Agif_V2.Controllers
             foreach (var file in files)
             {
                 string fileExtension = Path.GetExtension(file.FileName);
-                //string fileName = $"{formType}{ArmyNo}_{applicationId}_{file.Name}{fileExtension}";
                 string fileName = $"{file.Name}{fileExtension}";
                 string outputFile = Path.Combine(folderPath, fileName);
 
@@ -270,11 +267,6 @@ namespace Agif_V2.Controllers
             TempData["Message"] = "Application has been forwarded to your Unit Cdr/IO/Superior Countersigning Auth.";
             return RedirectToAction("ApplicationDetails");
         }
-        //public IActionResult UploadSuccess()
-        //{
-        //    return View();
-        //}
-
         [HttpPost]
         public JsonResult InfoBeforeUpload(string applicationId)
         {
@@ -300,7 +292,5 @@ namespace Agif_V2.Controllers
             var message = $"Application will be forwarded to your Unit Commander {CoArmyNumber} {CoRank} {CoName}, {CoUnit}";
             return Json(new { success = true, message = message });
         }
-
-
     }
 }
