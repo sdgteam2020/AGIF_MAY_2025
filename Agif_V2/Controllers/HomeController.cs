@@ -85,10 +85,10 @@ namespace Agif_V2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult UserApprovalLists()
-        {
+        //public IActionResult UserApprovalLists()
+        //{
 
-            return View();
-        }
+        //    return View();
+        //}
     }
 }

@@ -39,7 +39,7 @@
     <aside class="sidebar-nav-wrapper bg-gradient-custom-vertical ">
         <div class="navbar-logo">
             <a href="/Home/Index">
-                <img src="~/images/logo/AGIF_Logo.png" alt="logo" />
+                <img src="~/images/logo/AGIF_Logo.webp" alt="logo" />
             </a>
         </div>
         <nav class="sidebar-nav ">
@@ -230,7 +230,7 @@
                                     <div class="profile-info">
                                         <div class="info d-flex align-items-center">
                                             <div class="image me-2">
-                                                <img src="~/images/logo/User_Logo.png" alt="" />
+                                                <img src="~/images/logo/User_Logo.webp" alt="" />
                                             </div>
                                             <div>
                                                 <h6 class="fw-500 text-white">Welcome  </h6>
@@ -317,22 +317,7 @@
     <script src="~/devjs/comman.js"></script>
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
 
-    <script>
-    function submitStatus(controller,method,status) {
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = `/${controller}/${method}`;
-
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'status';
-        input.value = status;
-
-        form.appendChild(input);
-        document.body.appendChild(form);
-        form.submit();
-    }
-</script>
+    
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

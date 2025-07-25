@@ -1,12 +1,14 @@
-﻿using DataAccessLayer.Interfaces;
+﻿using Agif_V2.Helpers;
+using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using iText.Kernel.Pdf;
 using iText.Kernel.Utils;
 using iText.StyledXmlParser.Node;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.IdentityModel.Tokens;
+using System;
 
 namespace Agif_V2.Controllers
 {
@@ -15,16 +17,20 @@ namespace Agif_V2.Controllers
         private readonly IOnlineApplication _IonlineApplication1;
         private readonly IArmyPrefixes _IArmyPrefixes;
        private readonly IDoucmentupload _IDocumentUpload;
-        public UploadController(IOnlineApplication OnlineApplication, IArmyPrefixes _IArmyPrefixes, IDoucmentupload _IDocumentUpload)
+        private readonly PdfUpload _pdfUpload;
+        public UploadController(IOnlineApplication OnlineApplication, IArmyPrefixes _IArmyPrefixes, IDoucmentupload _IDocumentUpload,PdfUpload _pdfUpload)
         {
             _IonlineApplication1 = OnlineApplication;
             this._IArmyPrefixes = _IArmyPrefixes;
             this._IDocumentUpload = _IDocumentUpload;
+            this._pdfUpload = _pdfUpload;
         }
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
 
+            //int applicationId = 2;//Testing purpose
+            //TempData["applicationId"] = applicationId;
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
@@ -116,10 +122,33 @@ namespace Agif_V2.Controllers
                 {
                     ModelState.AddModelError(file.Name, "Only PDF files are allowed.");
                 }
+
+                if (file.Length > 150 * 1024)  
+                {
+                    ModelState.AddModelError(file.Name, "File size must not exceed 150 KB.");
+                    return View();
+                }
+
                 if (file.Length > 1 * 1024 * 1024)
                 {
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
                 }
+
+                if(!await _pdfUpload.IsValidPdfFile(file))
+                {
+                     ModelState.AddModelError(file.Name,"File is not a valid PDF or appears to be a disguised file type.");
+                }
+
+                if(await _pdfUpload.IsPdfPasswordProtected(file))
+                {
+                     ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
+                }
+
+                if(await _pdfUpload.ContainsMaliciousPdfContent(file))
+                {
+                     ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
+                }
+
             }
 
             //ViewData["formType"] = formType;
@@ -241,10 +270,10 @@ namespace Agif_V2.Controllers
             TempData["Message"] = "Application has been forwarded to your Unit Cdr/IO/Superior Countersigning Auth.";
             return RedirectToAction("ApplicationDetails");
         }
-        public IActionResult UploadSuccess()
-        {
-            return View();
-        }
+        //public IActionResult UploadSuccess()
+        //{
+        //    return View();
+        //}
 
         [HttpPost]
         public JsonResult InfoBeforeUpload(string applicationId)

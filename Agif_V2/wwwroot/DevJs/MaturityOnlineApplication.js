@@ -7,9 +7,9 @@ $(document).ready(function () {
     Inputmask().mask(document.querySelectorAll("input"));
     EnableDisablePCDA();
     EnableDisableCivilPostalAdd();
-    RefreshMaxAmt_PCA();
-    RefreshMaxAmt_CA();
-    RefreshMaxAmt_HBA();
+    //RefreshMaxAmt_PCA();
+    //RefreshMaxAmt_CA();
+    //RefreshMaxAmt_HBA();
     handleSubmitClick();
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
@@ -334,12 +334,6 @@ function loadDropdown() {
     const parentunit = $('#parentUnit').data('parent-prefix');
     const presentunit = $('#presentUnit').data('present-prefix');
     const Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
-    const propertytype = $('#propertyType').data('propertytype-prefix');
-    const hbaloanfreq = $('#HBA_LoanFreq').data('hbaloanfreq-prefix');
-    const vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
-    const Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
-    const computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
-    const Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
 
     if (loanType == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -1162,74 +1156,74 @@ function EnableDisableCivilPostalAdd() {
         }
     });
 }
-function Validate_Salary_Slip_date(inputElement) {
-    const value = inputElement.value;
+//function Validate_Salary_Slip_date(inputElement) {
+//    const value = inputElement.value;
 
-    if (!value) {
-        Swal.fire({
-            icon: "error",
-            title: "Date Required",
-            text: "Please select a date.",
-        });
-        return;
-    }
+//    if (!value) {
+//        Swal.fire({
+//            icon: "error",
+//            title: "Date Required",
+//            text: "Please select a date.",
+//        });
+//        return;
+//    }
 
-    const selectedDate = new Date(value);
-    const currentDate = new Date();
-    const threeMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, 1);
+//    const selectedDate = new Date(value);
+//    const currentDate = new Date();
+//    const threeMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, 1);
 
-    // Normalize selectedDate to the 1st of its month
-    const normalizedSelectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    const normalizedCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+//    // Normalize selectedDate to the 1st of its month
+//    const normalizedSelectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+//    const normalizedCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
-    // Validate range
-    if (normalizedSelectedDate < threeMonthsAgo || normalizedSelectedDate > normalizedCurrentMonth) {
-        const minAllowed = threeMonthsAgo.toLocaleString("default", { month: "long", year: "numeric" });
-        const maxAllowed = normalizedCurrentMonth.toLocaleString("default", { month: "long", year: "numeric" });
+//    // Validate range
+//    if (normalizedSelectedDate < threeMonthsAgo || normalizedSelectedDate > normalizedCurrentMonth) {
+//        const minAllowed = threeMonthsAgo.toLocaleString("default", { month: "long", year: "numeric" });
+//        const maxAllowed = normalizedCurrentMonth.toLocaleString("default", { month: "long", year: "numeric" });
 
-        Swal.fire({
-            icon: "error",
-            title: "Invalid Date",
-            text: `Please select a date between ${minAllowed} and ${maxAllowed}.`,
-        }).then(() => {
-            inputElement.value = "";
-            inputElement.focus();
-        });
-    } else {
-        console.log("Valid date:", normalizedSelectedDate);
-    }
-}
-function textChange() {
-    function parseValue(value) {
-        return value === "" ? 0 : parseInt(value);
-    }
-    const cr = parseValue($('#basicPay').val().replace(/,/g, ''))
-        + parseValue($('#rank_gradePay').val().replace(/,/g, ''))
-        + parseValue($('#msp').val().replace(/,/g, ''))
-        + parseValue($('#CI_Pay').val().replace(/,/g, ''))
-        + parseValue($('#npax_Pay').val().replace(/,/g, ''))
-        + parseValue($('#techPay').val().replace(/,/g, ''))
-        + parseValue($('#da').val().replace(/,/g, ''))
-        + parseValue($('#pmha').val().replace(/,/g, ''))
-        + parseValue($('#lra').val().replace(/,/g, ''))
-        + parseValue($('#miscPay').val().replace(/,/g, ''));
+//        Swal.fire({
+//            icon: "error",
+//            title: "Invalid Date",
+//            text: `Please select a date between ${minAllowed} and ${maxAllowed}.`,
+//        }).then(() => {
+//            inputElement.value = "";
+//            inputElement.focus();
+//        });
+//    } else {
+//        console.log("Valid date:", normalizedSelectedDate);
+//    }
+//}
+//function textChange() {
+//    function parseValue(value) {
+//        return value === "" ? 0 : parseInt(value);
+//    }
+//    const cr = parseValue($('#basicPay').val().replace(/,/g, ''))
+//        + parseValue($('#rank_gradePay').val().replace(/,/g, ''))
+//        + parseValue($('#msp').val().replace(/,/g, ''))
+//        + parseValue($('#CI_Pay').val().replace(/,/g, ''))
+//        + parseValue($('#npax_Pay').val().replace(/,/g, ''))
+//        + parseValue($('#techPay').val().replace(/,/g, ''))
+//        + parseValue($('#da').val().replace(/,/g, ''))
+//        + parseValue($('#pmha').val().replace(/,/g, ''))
+//        + parseValue($('#lra').val().replace(/,/g, ''))
+//        + parseValue($('#miscPay').val().replace(/,/g, ''));
 
-    const debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
-        + parseValue($('#agif_Subs').val().replace(/,/g, ''))
-        + parseValue($('#incomeTaxMonthly').val().replace(/,/g, ''))
-        + parseValue($('#educationCess').val().replace(/,/g, ''))
-        + parseValue($('#pli').val().replace(/,/g, ''))
-        + parseValue($('#misc_Deduction').val().replace(/,/g, ''))
-        + parseValue($('#loanEMI_Outside').val().replace(/,/g, ''))
-        + parseValue($('#loanEMI').val().replace(/,/g, ''));
-    const totalDebit = debt.toLocaleString('en-IN');
-    $('#totalDeductions').val(totalDebit);
-    $('#totalCredit').val(cr.toLocaleString('en-IN'));
-    $('#salary_After_Deductions').val((cr - debt).toLocaleString('en-IN'));
-    setOutlineActive("totalDeductions");
-    setOutlineActive("totalCredit");
-    setOutlineActive("salary_After_Deductions");
-}
+//    const debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
+//        + parseValue($('#agif_Subs').val().replace(/,/g, ''))
+//        + parseValue($('#incomeTaxMonthly').val().replace(/,/g, ''))
+//        + parseValue($('#educationCess').val().replace(/,/g, ''))
+//        + parseValue($('#pli').val().replace(/,/g, ''))
+//        + parseValue($('#misc_Deduction').val().replace(/,/g, ''))
+//        + parseValue($('#loanEMI_Outside').val().replace(/,/g, ''))
+//        + parseValue($('#loanEMI').val().replace(/,/g, ''));
+//    const totalDebit = debt.toLocaleString('en-IN');
+//    $('#totalDeductions').val(totalDebit);
+//    $('#totalCredit').val(cr.toLocaleString('en-IN'));
+//    $('#salary_After_Deductions').val((cr - debt).toLocaleString('en-IN'));
+//    setOutlineActive("totalDeductions");
+//    setOutlineActive("totalCredit");
+//    setOutlineActive("salary_After_Deductions");
+//}
 
 let formSubmitting = false;
 let formCancelled = false;
@@ -1718,389 +1712,389 @@ function formatIndianNumber(input) {
 }
 
 //PCA Calculations
-function RefreshMaxAmt_PCA() {
-    $("#computerCost").on('change', function () {
-        var rawValue = $('#computerCost').val().replace(/,/g, '');
-        var PcCost = parseFloat(rawValue);
+//function RefreshMaxAmt_PCA() {
+//    $("#computerCost").on('change', function () {
+//        var rawValue = $('#computerCost').val().replace(/,/g, '');
+//        var PcCost = parseFloat(rawValue);
 
-        PcCost = Math.round(PcCost * 0.9);
-        if (isNaN(PcCost)) {
-            alert("Please enter a valid computer cost.");
-            return;
-        }
-        var Amount = 200000;
-        if (Amount > PcCost) {
-            $('#PCA_Amt_Eligible_for_loan').val(PcCost.toLocaleString('en-IN'));
-        }
-        else {
-            $('#PCA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-        }
+//        PcCost = Math.round(PcCost * 0.9);
+//        if (isNaN(PcCost)) {
+//            alert("Please enter a valid computer cost.");
+//            return;
+//        }
+//        var Amount = 200000;
+//        if (Amount > PcCost) {
+//            $('#PCA_Amt_Eligible_for_loan').val(PcCost.toLocaleString('en-IN'));
+//        }
+//        else {
+//            $('#PCA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
+//        }
 
-        setOutlineActive("PCA_Amt_Eligible_for_loan");
-        calculateMaxEMI_PCA();
-        calculateEMIRepayingCapacity_PCA();
-    });
-}
-function calculateEMIRepayingCapacity_PCA() {
-    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
-    if (isNaN(credit) || isNaN(debit)) {
-        alert("Please enter valid credit and debit amounts.");
-        return;
-    }
-    var repayingCapacity = credit * 0.75 - debit;
-    if (repayingCapacity < 0) {
-        repayingCapacity = 0;
-    }
-    $('#PCA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
-    setOutlineActive("PCA_repayingCapacity");
-}
-function calculateMaxEMI_PCA() {
+//        setOutlineActive("PCA_Amt_Eligible_for_loan");
+//        calculateMaxEMI_PCA();
+//        calculateEMIRepayingCapacity_PCA();
+//    });
+//}
+//function calculateEMIRepayingCapacity_PCA() {
+//    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
+//    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
+//    if (isNaN(credit) || isNaN(debit)) {
+//        alert("Please enter valid credit and debit amounts.");
+//        return;
+//    }
+//    var repayingCapacity = credit * 0.75 - debit;
+//    if (repayingCapacity < 0) {
+//        repayingCapacity = 0;
+//    }
+//    $('#PCA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
+//    setOutlineActive("PCA_repayingCapacity");
+//}
+//function calculateMaxEMI_PCA() {
 
-    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
-    Residual -= 6;
+//    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+//    Residual -= 6;
 
-    var EMI = 48;
-    if (EMI < Residual) {
-        $("#PCA_EMI_Eligible").val(EMI);
-    }
-    else {
-        $("#PCA_EMI_Eligible").val(Residual);
-    }
+//    var EMI = 48;
+//    if (EMI < Residual) {
+//        $("#PCA_EMI_Eligible").val(EMI);
+//    }
+//    else {
+//        $("#PCA_EMI_Eligible").val(Residual);
+//    }
 
-    setOutlineActive("PCA_EMI_Eligible");
-}
-function validateAmount_PCA(input) {
-    var $input = $(input);
-    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-    var eligibleAmount = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-    var disbusermentAmt = enteredAmount * 0.99;
-    if (isNaN(enteredAmount)) {
-        $input.val('');
-    } else {
-        if (enteredAmount > eligibleAmount) {
-            $input.val($("#PCA_Amt_Eligible_for_loan").val());
-            disbusermentAmt = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-        }
-    }
+//    setOutlineActive("PCA_EMI_Eligible");
+//}
+//function validateAmount_PCA(input) {
+//    var $input = $(input);
+//    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
+//    var eligibleAmount = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
+//    var disbusermentAmt = enteredAmount * 0.99;
+//    if (isNaN(enteredAmount)) {
+//        $input.val('');
+//    } else {
+//        if (enteredAmount > eligibleAmount) {
+//            $input.val($("#PCA_Amt_Eligible_for_loan").val());
+//            disbusermentAmt = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
+//        }
+//    }
 
-    $('#PCA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
-    setOutlineActive("PCA_approxDisbursementAmt");
-}
-function validateEMI_PCA(input) {
-    var $input = $(input);
-    var enteredEMI = parseFloat($input.val());
-    var eligibleEMI = parseFloat($("#PCA_EMI_Eligible").val());
+//    $('#PCA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
+//    setOutlineActive("PCA_approxDisbursementAmt");
+//}
+//function validateEMI_PCA(input) {
+//    var $input = $(input);
+//    var enteredEMI = parseFloat($input.val());
+//    var eligibleEMI = parseFloat($("#PCA_EMI_Eligible").val());
 
-    if (isNaN(enteredEMI)) {
-        $input.val('');
-    } else {
-        if (enteredEMI > eligibleEMI) {
-            $input.val(eligibleEMI);
-        }
-    }
-}
-function calculateEMI_PCA() {
-    let P = parseFloat($("#PCA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-    let N = parseInt($("#PCA_EMI_Applied").val()); // Number of EMIs
-    let R = (8.50 / 12) / 100;
+//    if (isNaN(enteredEMI)) {
+//        $input.val('');
+//    } else {
+//        if (enteredEMI > eligibleEMI) {
+//            $input.val(eligibleEMI);
+//        }
+//    }
+//}
+//function calculateEMI_PCA() {
+//    let P = parseFloat($("#PCA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
+//    let N = parseInt($("#PCA_EMI_Applied").val()); // Number of EMIs
+//    let R = (8.50 / 12) / 100;
 
-    if (!P || !N || !R) {
-        $("#PCA_approxEMIAmount").val("");
-        return;
-    }
+//    if (!P || !N || !R) {
+//        $("#PCA_approxEMIAmount").val("");
+//        return;
+//    }
 
-    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-    $("#PCA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
+//    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+//    $("#PCA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
 
-    setOutlineActive("PCA_approxEMIAmount");
-}
+//    setOutlineActive("PCA_approxEMIAmount");
+//}
 
 //CA Calculations
-function RefreshMaxAmt_CA() {
-    $("#vehicleCost").on('change', function () {
-        var vehicalType = $('#veh_Loan_Type').val();
-        var rawValue = $('#vehicleCost').val().replace(/,/g, '');
-        var carCost = parseFloat(rawValue);
-        var prefix = $('#armyPrefix').val();
-        carCost = Math.round(carCost * 0.9);
-        var Amount = 0;
-        if (isNaN(carCost)) {
-            alert("Please enter a valid car cost.");
-            return;
-        }
-        if (vehicalType == 2) {
-            Amount = (prefix == 13 || prefix == 14) ? 1000000 : 2000000;
-        }
-        else if (vehicalType == 3) {
-            Amount = (prefix == 13 || prefix == 14) ? 500000 : 1000000;
-        }
-        else {
-            Amount = (prefix == 13 || prefix == 14) ? 200000 : 1000000;
-        }
+//function RefreshMaxAmt_CA() {
+//    $("#vehicleCost").on('change', function () {
+//        var vehicalType = $('#veh_Loan_Type').val();
+//        var rawValue = $('#vehicleCost').val().replace(/,/g, '');
+//        var carCost = parseFloat(rawValue);
+//        var prefix = $('#armyPrefix').val();
+//        carCost = Math.round(carCost * 0.9);
+//        var Amount = 0;
+//        if (isNaN(carCost)) {
+//            alert("Please enter a valid car cost.");
+//            return;
+//        }
+//        if (vehicalType == 2) {
+//            Amount = (prefix == 13 || prefix == 14) ? 1000000 : 2000000;
+//        }
+//        else if (vehicalType == 3) {
+//            Amount = (prefix == 13 || prefix == 14) ? 500000 : 1000000;
+//        }
+//        else {
+//            Amount = (prefix == 13 || prefix == 14) ? 200000 : 1000000;
+//        }
 
-        if (Amount > carCost) {
-            $('#CA_Amt_Eligible_for_loan').val(carCost.toLocaleString('en-IN'));
-        }
-        else {
-            $('#CA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-        }
+//        if (Amount > carCost) {
+//            $('#CA_Amt_Eligible_for_loan').val(carCost.toLocaleString('en-IN'));
+//        }
+//        else {
+//            $('#CA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
+//        }
 
-        setOutlineActive("CA_Amt_Eligible_for_loan");
-        calculateMaxEMI_CA(vehicalType);
-        calculateEMIRepayingCapacity_CA();
-    });
-}
-function calculateEMIRepayingCapacity_CA() {
-    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
-    if (isNaN(credit) || isNaN(debit)) {
-        alert("Please enter valid credit and debit amounts.");
-        return;
-    }
-    var repayingCapacity = credit * 0.75 - debit;
-    if (repayingCapacity < 0) {
-        repayingCapacity = 0;
-    }
-    $('#CA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
+//        setOutlineActive("CA_Amt_Eligible_for_loan");
+//        calculateMaxEMI_CA(vehicalType);
+//        calculateEMIRepayingCapacity_CA();
+//    });
+//}
+//function calculateEMIRepayingCapacity_CA() {
+//    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
+//    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
+//    if (isNaN(credit) || isNaN(debit)) {
+//        alert("Please enter valid credit and debit amounts.");
+//        return;
+//    }
+//    var repayingCapacity = credit * 0.75 - debit;
+//    if (repayingCapacity < 0) {
+//        repayingCapacity = 0;
+//    }
+//    $('#CA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
 
-    setOutlineActive("CA_repayingCapacity");
-}
-function calculateMaxEMI_CA(vehicalType) {
+//    setOutlineActive("CA_repayingCapacity");
+//}
+//function calculateMaxEMI_CA(vehicalType) {
 
-    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
-    Residual -= 6;
+//    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+//    Residual -= 6;
 
-    var EMI = 0;
-    if (vehicalType == 2) {
-        EMI = 96;
-        if (EMI < Residual) {
-            $("#CA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#CA_EMI_Eligible").val(Residual);
-        }
-    }
-    else if (vehicalType == 3) {
-        EMI = 72;
-        if (EMI < Residual) {
-            $("#CA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#CA_EMI_Eligible").val(Residual);
-        }
-    }
-    else {
-        EMI = 60;
-        if (EMI < Residual) {
-            $("#CA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#CA_EMI_Eligible").val(Residual);
-        }
-    }
+//    var EMI = 0;
+//    if (vehicalType == 2) {
+//        EMI = 96;
+//        if (EMI < Residual) {
+//            $("#CA_EMI_Eligible").val(EMI);
+//        }
+//        else {
+//            $("#CA_EMI_Eligible").val(Residual);
+//        }
+//    }
+//    else if (vehicalType == 3) {
+//        EMI = 72;
+//        if (EMI < Residual) {
+//            $("#CA_EMI_Eligible").val(EMI);
+//        }
+//        else {
+//            $("#CA_EMI_Eligible").val(Residual);
+//        }
+//    }
+//    else {
+//        EMI = 60;
+//        if (EMI < Residual) {
+//            $("#CA_EMI_Eligible").val(EMI);
+//        }
+//        else {
+//            $("#CA_EMI_Eligible").val(Residual);
+//        }
+//    }
 
-    setOutlineActive("CA_EMI_Eligible");
+//    setOutlineActive("CA_EMI_Eligible");
 
-}
-function validateAmount_CA(input) {
-    var $input = $(input);
-    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-    var eligibleAmount = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-    var disbusermentAmt = enteredAmount * 0.99;
-    if (isNaN(enteredAmount)) {
-        $input.val('');
-    } else {
-        if (enteredAmount > eligibleAmount) {
-            $input.val($("#CA_Amt_Eligible_for_loan").val());
-            disbusermentAmt = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-        }
-    }
+//}
+//function validateAmount_CA(input) {
+//    var $input = $(input);
+//    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
+//    var eligibleAmount = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
+//    var disbusermentAmt = enteredAmount * 0.99;
+//    if (isNaN(enteredAmount)) {
+//        $input.val('');
+//    } else {
+//        if (enteredAmount > eligibleAmount) {
+//            $input.val($("#CA_Amt_Eligible_for_loan").val());
+//            disbusermentAmt = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
+//        }
+//    }
 
-    $('#CA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
+//    $('#CA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
 
-    setOutlineActive("CA_approxDisbursementAmt");
-}
-function validateEMI_CA(input) {
-    var $input = $(input);
-    var enteredEMI = parseFloat($input.val());
-    var eligibleEMI = parseFloat($("#CA_EMI_Eligible").val());
+//    setOutlineActive("CA_approxDisbursementAmt");
+//}
+//function validateEMI_CA(input) {
+//    var $input = $(input);
+//    var enteredEMI = parseFloat($input.val());
+//    var eligibleEMI = parseFloat($("#CA_EMI_Eligible").val());
 
-    if (isNaN(enteredEMI)) {
-        $input.val('');
-    } else {
-        if (enteredEMI > eligibleEMI) {
-            $input.val(eligibleEMI);
-        }
-    }
-}
-function calculateEMI_CA() {
-    let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-    let N = parseInt($("#CA_EMI_Applied").val()); // Number of EMIs
-    let R = (8.50 / 12) / 100;
+//    if (isNaN(enteredEMI)) {
+//        $input.val('');
+//    } else {
+//        if (enteredEMI > eligibleEMI) {
+//            $input.val(eligibleEMI);
+//        }
+//    }
+//}
+//function calculateEMI_CA() {
+//    let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
+//    let N = parseInt($("#CA_EMI_Applied").val()); // Number of EMIs
+//    let R = (8.50 / 12) / 100;
 
-    if (!P || !N || !R) {
-        $("#CA_approxEMIAmount").val("");
-        return;
-    }
+//    if (!P || !N || !R) {
+//        $("#CA_approxEMIAmount").val("");
+//        return;
+//    }
 
-    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-    $("#CA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
+//    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+//    $("#CA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
 
-    setOutlineActive("CA_approxEMIAmount");
-}
+//    setOutlineActive("CA_approxEMIAmount");
+//}
 
-//HBA Calculations
-function RefreshMaxAmt_HBA() {
-    $("#propertyCost").on('change', function () {
-        var propType = $('#propertyType').val();
-        if (!propType || propType == "0") {
-            alert("Please select Property Type.");
-            return;
-        }
-        var rawValue = $('#propertyCost').val().replace(/,/g, '');
-        var propertyCost = parseFloat(rawValue);
+////HBA Calculations
+//function RefreshMaxAmt_HBA() {
+//    $("#propertyCost").on('change', function () {
+//        var propType = $('#propertyType').val();
+//        if (!propType || propType == "0") {
+//            alert("Please select Property Type.");
+//            return;
+//        }
+//        var rawValue = $('#propertyCost').val().replace(/,/g, '');
+//        var propertyCost = parseFloat(rawValue);
 
-        propertyCost = Math.round(propertyCost * 0.85);
-        if (isNaN(propertyCost)) {
-            alert("Please enter a valid car cost.");
-            return;
-        }
-        if (propType == 5) {
-            var Amount = 2000000;
-            if (Amount > propertyCost) {
-                $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-            }
-            else {
-                $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-            }
-        }
-        else {
-            var prefix = $('#armyPrefix').val();
-            if (!prefix || prefix == "0") {
-                alert("Please select Prefix.");
-                return;
-            }
-            if (prefix == 13) {
-                var Amount = 5000000;
-                if (Amount > propertyCost) {
-                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-                }
-                else {
-                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-                }
-            }
-            else if (prefix == 14) {
-                var Amount = 4000000;
-                if (Amount > propertyCost) {
-                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-                }
-                else {
-                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-                }
-            }
-            else {
-                var Amount = 10000000;
-                if (Amount > propertyCost) {
-                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-                }
-                else {
-                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-                }
-            }
-        }
+//        propertyCost = Math.round(propertyCost * 0.85);
+//        if (isNaN(propertyCost)) {
+//            alert("Please enter a valid car cost.");
+//            return;
+//        }
+//        if (propType == 5) {
+//            var Amount = 2000000;
+//            if (Amount > propertyCost) {
+//                $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
+//            }
+//            else {
+//                $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
+//            }
+//        }
+//        else {
+//            var prefix = $('#armyPrefix').val();
+//            if (!prefix || prefix == "0") {
+//                alert("Please select Prefix.");
+//                return;
+//            }
+//            if (prefix == 13) {
+//                var Amount = 5000000;
+//                if (Amount > propertyCost) {
+//                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
+//                }
+//                else {
+//                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
+//                }
+//            }
+//            else if (prefix == 14) {
+//                var Amount = 4000000;
+//                if (Amount > propertyCost) {
+//                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
+//                }
+//                else {
+//                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
+//                }
+//            }
+//            else {
+//                var Amount = 10000000;
+//                if (Amount > propertyCost) {
+//                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
+//                }
+//                else {
+//                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
+//                }
+//            }
+//        }
 
-        setOutlineActive("HBA_Amt_Eligible_for_loan");
-        calculateMaxEMI_HBA(propType);
-        calculateEMIRepayingCapacity_HBA();
-    });
-}
-function calculateEMIRepayingCapacity_HBA() {
-    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
-    if (isNaN(credit) || isNaN(debit)) {
-        alert("Please enter valid credit and debit amounts.");
-        return;
-    }
-    var repayingCapacity = credit * 0.75 - debit;
-    if (repayingCapacity < 0) {
-        repayingCapacity = 0;
-    }
-    $('#HBA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
-    setOutlineActive("HBA_repayingCapacity");
-}
-function calculateMaxEMI_HBA(propType) {
-    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
-    Residual -= 6;
+//        setOutlineActive("HBA_Amt_Eligible_for_loan");
+//        calculateMaxEMI_HBA(propType);
+//        calculateEMIRepayingCapacity_HBA();
+//    });
+//}
+//function calculateEMIRepayingCapacity_HBA() {
+//    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
+//    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
+//    if (isNaN(credit) || isNaN(debit)) {
+//        alert("Please enter valid credit and debit amounts.");
+//        return;
+//    }
+//    var repayingCapacity = credit * 0.75 - debit;
+//    if (repayingCapacity < 0) {
+//        repayingCapacity = 0;
+//    }
+//    $('#HBA_repayingCapacity').val(repayingCapacity.toLocaleString('en-IN'));
+//    setOutlineActive("HBA_repayingCapacity");
+//}
+//function calculateMaxEMI_HBA(propType) {
+//    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+//    Residual -= 6;
 
-    if (propType == 5) {
-         let EMI = 120;
-        if (EMI < Residual) {
-            $("#HBA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#HBA_EMI_Eligible").val(Residual);
-        }
-    }
-    else {
-        console.log($('#totalResidualMonth').val())
-        EMI = 240;
-        if (EMI < Residual) {
-            $("#HBA_EMI_Eligible").val(EMI);
-        }
-        else {
-            $("#HBA_EMI_Eligible").val(Residual);
-        }
-    }
+//    if (propType == 5) {
+//         let EMI = 120;
+//        if (EMI < Residual) {
+//            $("#HBA_EMI_Eligible").val(EMI);
+//        }
+//        else {
+//            $("#HBA_EMI_Eligible").val(Residual);
+//        }
+//    }
+//    else {
+//        console.log($('#totalResidualMonth').val())
+//        EMI = 240;
+//        if (EMI < Residual) {
+//            $("#HBA_EMI_Eligible").val(EMI);
+//        }
+//        else {
+//            $("#HBA_EMI_Eligible").val(Residual);
+//        }
+//    }
 
-    setOutlineActive("HBA_EMI_Eligible");
-}
-function validateAmount_HBA(input) {
-    var $input = $(input);
-    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-    var eligibleAmount = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-    var disbusermentAmt = enteredAmount * 0.99;
-    if (isNaN(enteredAmount)) {
-        $input.val('');
-    } else {
-        if (enteredAmount > eligibleAmount) {
-            $input.val($("#HBA_Amt_Eligible_for_loan").val());
-            disbusermentAmt = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-        }
-    }
+//    setOutlineActive("HBA_EMI_Eligible");
+//}
+//function validateAmount_HBA(input) {
+//    var $input = $(input);
+//    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
+//    var eligibleAmount = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
+//    var disbusermentAmt = enteredAmount * 0.99;
+//    if (isNaN(enteredAmount)) {
+//        $input.val('');
+//    } else {
+//        if (enteredAmount > eligibleAmount) {
+//            $input.val($("#HBA_Amt_Eligible_for_loan").val());
+//            disbusermentAmt = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
+//        }
+//    }
 
-    $('#HBA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
+//    $('#HBA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
 
-    setOutlineActive("HBA_approxDisbursementAmt");
-}
-function validateEMI_HBA(input) {
-    var $input = $(input);
-    var enteredEMI = parseFloat($input.val());
-    var eligibleEMI = parseFloat($("#HBA_EMI_Eligible").val());
+//    setOutlineActive("HBA_approxDisbursementAmt");
+//}
+//function validateEMI_HBA(input) {
+//    var $input = $(input);
+//    var enteredEMI = parseFloat($input.val());
+//    var eligibleEMI = parseFloat($("#HBA_EMI_Eligible").val());
 
-    if (isNaN(enteredEMI)) {
-        $input.val('');
-    } else {
-        if (enteredEMI > eligibleEMI) {
-            $input.val(eligibleEMI);
-        }
-    }
-}
-function calculateEMI_HBA() {
-    let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-    let N = parseInt($("#HBA_EMI_Applied").val()); // Number of EMIs
-    let R = (8.50 / 12) / 100;
+//    if (isNaN(enteredEMI)) {
+//        $input.val('');
+//    } else {
+//        if (enteredEMI > eligibleEMI) {
+//            $input.val(eligibleEMI);
+//        }
+//    }
+//}
+//function calculateEMI_HBA() {
+//    let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
+//    let N = parseInt($("#HBA_EMI_Applied").val()); // Number of EMIs
+//    let R = (8.50 / 12) / 100;
 
-    if (!P || !N || !R) {
-        $("#HBA_approxEMIAmount").val("");
-        return;
-    }
+//    if (!P || !N || !R) {
+//        $("#HBA_approxEMIAmount").val("");
+//        return;
+//    }
 
-    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
-    $("#HBA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
+//    let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+//    $("#HBA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
 
-    setOutlineActive("HBA_approxEMIAmount");
-}
+//    setOutlineActive("HBA_approxEMIAmount");
+//}
 
 
 $("#ParenttxtUnit").autocomplete({
@@ -2227,52 +2221,52 @@ $("#OtherReasonPdf").on("click", function () {
     });
 });
 
-$('#Attach_Part_II_Order').change(function () {
-    previewFile(this, '#Attach_Part_II_Order');
-}); 
+//$('#Attach_Part_II_Order').change(function () {
+//    previewFile(this, '#Attach_Part_II_Order');
+//}); 
 
-$('#Attach_Bonafide_letter').change(function () {
-    previewFile(this, '#Attach_Bonafide_letter');
-}); 
+//$('#Attach_Bonafide_letter').change(function () {
+//    previewFile(this, '#Attach_Bonafide_letter');
+//}); 
 
-$('#Attach_invitation_card').change(function () {
-    previewFile(this, '#Attach_invitation_card');
-}); 
+//$('#Attach_invitation_card').change(function () {
+//    previewFile(this, '#Attach_invitation_card');
+//}); 
 
-$('#TotalexpenditureFile').change(function () {
-    previewFile(this, '#TotalexpenditureFile');
-}); 
+//$('#TotalexpenditureFile').change(function () {
+//    previewFile(this, '#TotalexpenditureFile');
+//}); 
 
-$('#OtherReasonPdf').change(function () {
-    previewFile(this, '#OtherReasonPdf');
-}); 
+//$('#OtherReasonPdf').change(function () {
+//    previewFile(this, '#OtherReasonPdf');
+//}); 
 
 
-function previewFile(input, previewSelector) {
-    const file = input.files[0];
-    const preview = $(previewSelector);
-    const errorContainer = $(input).closest('.col-md-4').find('.file-error-message'); // Find the error container below the input
-    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
-    errorContainer.text('');
+//function previewFile(input, previewSelector) {
+//    const file = input.files[0];
+//    const preview = $(previewSelector);
+//    const errorContainer = $(input).closest('.col-md-4').find('.file-error-message'); // Find the error container below the input
+//    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+//    errorContainer.text('');
 
-    if (file) {
-        // Check if the file is a PDF
-        if (file.type !== 'application/pdf') {
-            errorContainer.text('Only PDF files are allowed').css('color', 'red');
-            input.value = ''; // Clear the input field
-            return;
-        }
+//    if (file) {
+//        // Check if the file is a PDF
+//        if (file.type !== 'application/pdf') {
+//            errorContainer.text('Only PDF files are allowed').css('color', 'red');
+//            input.value = ''; // Clear the input field
+//            return;
+//        }
 
-        // Check the file size (must not exceed 1MB)
-        if (file.size > maxFileSize) {
-            errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
-            input.value = ''; // Clear the input field
-        }
+//        // Check the file size (must not exceed 1MB)
+//        if (file.size > maxFileSize) {
+//            errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
+//            input.value = ''; // Clear the input field
+//        }
 
-    } else {
-        preview.html('<p>No file selected</p>');
-    }
-}
+//    } else {
+//        preview.html('<p>No file selected</p>');
+//    }
+//}
 $('#OtherReasons').on('input', function () {
     var maxWords = 50;
     var currentValue = $(this).val();
@@ -2287,14 +2281,14 @@ $('#OtherReasons').on('input', function () {
     }
 });
 
-function formatIndianNumber(input) {
-    let value = input.value.replace(/[^\d]/g, ''); // Remove non-numeric characters
-    if (value.length <= 3) {
-        input.value = value;  // No formatting for less than or equal to 3 digits
-    } else {
-        let lastThree = value.slice(-3);
-        let otherNumbers = value.slice(0, value.length - 3);
-        otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");  // Add commas in pairs for the Indian system
-        input.value = otherNumbers + "," + lastThree;
-    }
-}
+//function formatIndianNumber(input) {
+//    let value = input.value.replace(/[^\d]/g, ''); // Remove non-numeric characters
+//    if (value.length <= 3) {
+//        input.value = value;  // No formatting for less than or equal to 3 digits
+//    } else {
+//        let lastThree = value.slice(-3);
+//        let otherNumbers = value.slice(0, value.length - 3);
+//        otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");  // Add commas in pairs for the Indian system
+//        input.value = otherNumbers + "," + lastThree;
+//    }
+//}

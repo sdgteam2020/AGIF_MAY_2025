@@ -117,12 +117,14 @@ namespace Agif_V2.Controllers
             {
                 string searchValue = request.searchValue.ToLower();
                 query = query.Where(x =>
-                    x.Name.ToLower().Contains(searchValue) ||
+                    //x.Name.ToLower().Contains(searchValue) ||
                     x.ArmyNo.ToLower().Contains(searchValue) ||
                     x.DateOfBirth.ToLower().Contains(searchValue) ||
                     x.AppliedDate.ToLower().Contains(searchValue)
                 );
             }
+
+
 
             var filteredRecords = query.Count();
 
@@ -174,7 +176,7 @@ namespace Agif_V2.Controllers
             {
                 string searchValue = request.searchValue.ToLower();
                 query = query.Where(x =>
-                    x.Name.ToLower().Contains(searchValue) ||
+                    //x.Name.ToLower().Contains(searchValue) ||
                     x.ArmyNo.ToLower().Contains(searchValue) ||
                     x.DateOfBirth.ToLower().Contains(searchValue) ||
                     x.AppliedDate.ToLower().Contains(searchValue)
@@ -212,10 +214,10 @@ namespace Agif_V2.Controllers
 
         }
 
-        public async Task<IActionResult> ViewDetails(int applicationId)
-        {
-            return View();
-        }
+        //public async Task<IActionResult> ViewDetails(int applicationId)
+        //{
+        //    return View();
+        //}
 
         public async Task<string> DataDigitalXmlSign(int applicationId)
         {

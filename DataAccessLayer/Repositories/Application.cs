@@ -19,9 +19,9 @@ namespace DataAccessLayer.Repositories
             _context = context;
         }
 
-        public Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl)
-        {
-            throw new NotImplementedException();
-        }
+        //public Task<List<DTOGetApplResponse>> GetApplicationsAsync(DTOGetApplRequest dTOGetAppl)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

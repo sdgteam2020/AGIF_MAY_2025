@@ -14,6 +14,7 @@ Version: 4.0
        url('../fonts/lineicons.woff') format('woff'),
        url('../fonts/lineicons.ttf') format('truetype'),
        url('../fonts/lineicons.svg') format('svg');
+  font-display:swap;
 }
 
 /* base class */

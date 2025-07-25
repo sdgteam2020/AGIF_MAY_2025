@@ -62,6 +62,13 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
 
+
+            if (file.Length > 150 * 1024)
+            {
+                errorMessage = "File size cannot exceed 150 KB.";
+                return false;
+            }
+
             return true;
         }
 

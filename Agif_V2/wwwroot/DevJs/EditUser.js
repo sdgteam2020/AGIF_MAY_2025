@@ -51,7 +51,7 @@
 
          //$('#btnsignup').removeClass('d-none');
 
-         $('#btnTokenDetails').show();
+         $("#btnTokenDetails").removeClass("d-none");
 
         }
 

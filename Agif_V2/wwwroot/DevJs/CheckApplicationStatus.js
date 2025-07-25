@@ -149,13 +149,13 @@
         });
     });
 
-    function my_date(date_string) {
-        const date_components = date_string.split("-");
-        const day = date_components[0];
-        const month = date_components[1];
-        const year = date_components[2];
-        return new Date(year, month - 1, day);
-    }
+    //function my_date(date_string) {
+    //    const date_components = date_string.split("-");
+    //    const day = date_components[0];
+    //    const month = date_components[1];
+    //    const year = date_components[2];
+    //    return new Date(year, month - 1, day);
+    //}
 
     function buildTimelineHtml(timelineData) {
         let timelineHtml = '<div class="timeline-vertical">';

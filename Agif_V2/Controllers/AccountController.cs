@@ -37,11 +37,11 @@ namespace Agif_V2.Controllers
             this._masterOnlyTable = _masterOnlyTable;
         }
 
-        public IActionResult Index()
-        {
+        //public IActionResult Index()
+        //{
            
-            return View();
-        }
+        //    return View();
+        //}
 
         public IActionResult Login()
         {
@@ -55,6 +55,8 @@ namespace Agif_V2.Controllers
             {
                 return View(model);
             }
+
+
 
             if(model.UserName == "MaturityAdmin")
             {

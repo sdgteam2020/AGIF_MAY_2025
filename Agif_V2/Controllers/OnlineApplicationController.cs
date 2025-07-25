@@ -37,7 +37,7 @@ namespace Agif_V2.Controllers
             _env = env;
             _mergePdf = mergePdf;
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> OnlineApplication()
         {
             var loanType = TempData["LoanType"] as string;

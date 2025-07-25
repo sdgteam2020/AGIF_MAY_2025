@@ -21,8 +21,8 @@ namespace Agif_V2.Controllers
         private readonly ICar _car;
         private readonly IHba _Hba;
         private readonly IPca _Pca;
-
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload)
+        private readonly PdfUpload _pdfUpload;
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload)
         {
             _IClaimonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -33,6 +33,7 @@ namespace Agif_V2.Controllers
             _env = env;
             _mergePdf = mergePdf;
             this._IclaimDocumentUpload = claimDocumentUpload;
+            this._pdfUpload = pdfUpload;
         }
 
         public IActionResult MaturityLoanType()
@@ -178,6 +179,19 @@ namespace Agif_V2.Controllers
                     {
                         ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
                     }
+                    if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.AttachPartIIOrder))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.AttachPartIIOrder))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
+                    }
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.AttachPartIIOrder))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "PDF contains potentially malicious content.");
+                    }
+
                 }
 
                 if (model.EducationDetails.AttachBonafideLetter != null)
@@ -187,7 +201,47 @@ namespace Agif_V2.Controllers
                     {
                         ModelState.AddModelError("EducationDetails.AttachInvitationcard", errorMessage);
                     }
+
+                    if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.AttachBonafideLetter))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.AttachBonafideLetter))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.AttachBonafideLetter))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", "PDF contains potentially malicious content.");
+                    }
                 }
+
+                if (model.EducationDetails.TotalExpenditureFile != null)
+                {
+                    string errorMessage;
+                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.TotalExpenditureFile, out errorMessage))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
+                    }
+                    if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "PDF contains potentially malicious content.");
+                    }
+                }
+
+
             }
             else if (model.Marriageward != null)
             {
@@ -210,7 +264,22 @@ namespace Agif_V2.Controllers
                     string errorMessage;
                     if (!_IClaimonlineApplication1.ValidateFileUpload(model.Marriageward.AttachPartIIOrder, out errorMessage))
                     {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
+                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", errorMessage);
+                    }
+
+                    if (!await _pdfUpload.IsValidPdfFile(model.Marriageward.AttachPartIIOrder))
+                    {
+                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.Marriageward.AttachPartIIOrder))
+                    {
+                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.Marriageward.AttachPartIIOrder))
+                    {
+                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", "PDF contains potentially malicious content.");
                     }
                 }
 
@@ -219,7 +288,21 @@ namespace Agif_V2.Controllers
                     string errorMessage;
                     if (!_IClaimonlineApplication1.ValidateFileUpload(model.Marriageward.AttachInvitationcard, out errorMessage))
                     {
-                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", errorMessage);
+                        ModelState.AddModelError("Marriageward.AttachInvitationcard", errorMessage);
+                    }
+                    if (!await _pdfUpload.IsValidPdfFile(model.Marriageward.AttachInvitationcard))
+                    {
+                        ModelState.AddModelError("Marriageward.AttachInvitationcard", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.Marriageward.AttachInvitationcard))
+                    {
+                        ModelState.AddModelError("Marriageward.AttachInvitationcard", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.Marriageward.AttachInvitationcard))
+                    {
+                        ModelState.AddModelError("Marriageward.AttachInvitationcard", "PDF contains potentially malicious content.");
                     }
                 }
             }
@@ -244,7 +327,22 @@ namespace Agif_V2.Controllers
                     string errorMessage;
                     if (!_IClaimonlineApplication1.ValidateFileUpload(model.PropertyRenovation.TotalExpenditureFile, out errorMessage))
                     {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
+                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", errorMessage);
+                    }
+
+                    if (!await _pdfUpload.IsValidPdfFile(model.PropertyRenovation.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.PropertyRenovation.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.PropertyRenovation.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "PDF contains potentially malicious content.");
                     }
                 }
             }
@@ -263,6 +361,54 @@ namespace Agif_V2.Controllers
                         ModelState.AddModelError(errorKey, result.ErrorMessage);
                     }
                 }
+                if (model.SplWaiver.TotalExpenditureFile != null)
+                {
+                    string errorMessage;
+                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.SplWaiver.TotalExpenditureFile, out errorMessage))
+                    {
+                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", errorMessage);
+                    }
+
+                    if (!await _pdfUpload.IsValidPdfFile(model.SplWaiver.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.SplWaiver.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.SplWaiver.TotalExpenditureFile))
+                    {
+                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "PDF contains potentially malicious content.");
+                    }
+                }
+
+                if (model.SplWaiver.OtherReasonPdf != null)
+                {
+                    string errorMessage;
+                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.SplWaiver.OtherReasonPdf, out errorMessage))
+                    {
+                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", errorMessage);
+                    }
+
+                    if (!await _pdfUpload.IsValidPdfFile(model.SplWaiver.OtherReasonPdf))
+                    {
+                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", "File is not a valid PDF or appears to be a disguised file type.");
+                    }
+
+                    if (await _pdfUpload.IsPdfPasswordProtected(model.SplWaiver.OtherReasonPdf))
+                    {
+                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", "Password-protected PDFs are not allowed.");
+                    }
+
+                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.SplWaiver.OtherReasonPdf))
+                    {
+                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", "PDF contains potentially malicious content.");
+                    }
+                }
+
             }
 
 
@@ -355,9 +501,31 @@ namespace Agif_V2.Controllers
                 {
                     ModelState.AddModelError(file.Name, "Only PDF files are allowed.");
                 }
+
+                if (file.Length > 150 * 1024)
+                {
+                    ModelState.AddModelError(file.Name, "File size must not exceed 150 KB.");
+                    return View();
+                }
+
                 if (file.Length > 1 * 1024 * 1024)
                 {
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
+                }
+
+                if (!await _pdfUpload.IsValidPdfFile(file))
+                {
+                    ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
+                }
+
+                if (await _pdfUpload.IsPdfPasswordProtected(file))
+                {
+                    ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
+                }
+
+                if (await _pdfUpload.ContainsMaliciousPdfContent(file))
+                {
+                    ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
                 }
             }
 

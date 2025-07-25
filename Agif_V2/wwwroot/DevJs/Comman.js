@@ -15,3 +15,17 @@
         });
     }, 2000);
 }
+function submitStatus(controller, method, status) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = `/${controller}/${method}`;
+
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'status';
+    input.value = status;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
+}

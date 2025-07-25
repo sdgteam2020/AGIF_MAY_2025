@@ -2,22 +2,22 @@
 
     checkUploadFiles();
 
-    let message = '@message';
+    //let message = '@message';
 
-    if (message !== '') {
-        // Display SweetAlert with custom styles
-        Swal.fire({
-            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
-            icon: 'success',
-            confirmButtonText: 'OK',  // Text on the confirm button
-            confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
-            customClass: {
-                title: 'font-weight-bold',  // Optional: makes the title bold
-                htmlContainer: 'text-dark'  // Optional: sets the message text color
-            },
-            padding: '25px'  // Adds padding to the alert for better spacing
-        });
-    }
+    //if (message !== '') {
+    //    // Display SweetAlert with custom styles
+    //    Swal.fire({
+    //        html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
+    //        icon: 'success',
+    //        confirmButtonText: 'OK',  // Text on the confirm button
+    //        confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
+    //        customClass: {
+    //            title: 'font-weight-bold',  // Optional: makes the title bold
+    //            htmlContainer: 'text-dark'  // Optional: sets the message text color
+    //        },
+    //        padding: '25px'  // Adds padding to the alert for better spacing
+    //    });
+    //}
 
     $('#CancelledCheque').change(function () {
         previewFile(this, '#cancelledChequePreview');

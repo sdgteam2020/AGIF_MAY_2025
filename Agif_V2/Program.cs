@@ -8,7 +8,9 @@ using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,45 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
 });
+//builder.Services.AddResponseCompression(options =>
+//{
+//    // Enable gzip compression for fonts
+//    options.EnableForHttps = true; // Optional: Enables compression for HTTPS traffic
+//    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+//        new[] { "font/woff2", "font/woff", "application/font-woff2", "application/font-woff", "application/x-font-ttf", "font/ttf" });
+//});
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+    options.Providers.Add<BrotliCompressionProvider>();
+    options.Providers.Add<GzipCompressionProvider>();
+
+    // Add font MIME types
+    options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
+    {
+        "font/woff",
+        "font/woff2",
+        "application/font-woff",
+        "application/font-woff2",
+        "application/vnd.ms-fontobject",
+        "font/ttf",
+        "font/otf",
+        "application/font-sfnt"
+    });
+});
+
+builder.Services.Configure<BrotliCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.Fastest;
+});
+
+builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+{
+    options.Level = CompressionLevel.SmallestSize;
+});
+
+
 
 builder.Services.AddTransient<IOnlineApplication, OnlineApplicationDL>();
 builder.Services.AddScoped<IClaimOnlineApplication, ClaimOnlineApplicationDL>();
@@ -69,6 +110,7 @@ builder.Services.AddTransient<IDefault, DefaultDL>();
 builder.Services.AddTransient<IHome, HomeDL>();
 builder.Services.AddTransient<PdfGenerator>();
 builder.Services.AddTransient<ClaimPdfGenerator>();
+builder.Services.AddTransient<PdfUpload>();
 builder.Services.AddTransient<MergePdf>();
 builder.Services.AddTransient<OnlineApplicationController>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
@@ -87,15 +129,22 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 builder.Services.AddDistributedMemoryCache();
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
     options.Cookie.HttpOnly = true; // Make the session cookie HTTP only
     options.Cookie.IsEssential = true; // Make the session cookie essential
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;  // Strong CSRF protection
 });
+
 var app = builder.Build();
+
 app.UseRequestLocalization();
 app.UseSession();
+
+app.UseResponseCompression();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -110,22 +159,22 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-app.Use(async (context, next) =>
-{
-    var referer = context.Request.Headers["Referer"].ToString();
-    var path = context.Request.Path.Value;
+//app.Use(async (context, next) =>
+//{
+//    var referer = context.Request.Headers["Referer"].ToString();
+//    var path = context.Request.Path.Value;
 
-    if (string.IsNullOrEmpty(referer) &&
-        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
-        !path.StartsWith("/css") &&
-        !path.StartsWith("/js"))
-    {
-        context.Response.Redirect("/Default/Index");
-        return;
-    }
+//    if (string.IsNullOrEmpty(referer) &&
+//        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
+//        !path.StartsWith("/css") &&
+//        !path.StartsWith("/js"))
+//    {
+//        context.Response.Redirect("/Default/Index");
+//        return;
+//    }
 
-    await next();
-});
+//    await next();
+//});
 
 app.UseAuthorization();
 
