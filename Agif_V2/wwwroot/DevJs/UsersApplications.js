@@ -613,7 +613,7 @@ function sendPDFToServer(filepath, thumbprint) {
             CustomText: "Digital Signature"
         }]),
         success: function (response) {
-            console.log('PDF signed successfully:', response);
+            //console.log('PDF signed successfully:', response);
 
             if (response) {
                 Swal.fire({
@@ -621,8 +621,10 @@ function sendPDFToServer(filepath, thumbprint) {
                     text: "PDF signed successfully.",
                     icon: "success"
                 }).then(() => {
-                    const directoryPath = filepath.substring(0, filepath.lastIndexOf('/'));
-                    SaveSignedPdf(response.Message, directoryPath);
+                    //const directoryPath = filepath.substring(0, filepath.lastIndexOf('/'));
+                    const fileName = filepath.split('/').pop();
+                    alert('filename' + fileName);
+                    SaveSignedPdf(response.Message, fileName);
                 });
             } else {
                 Swal.fire({
@@ -654,7 +656,8 @@ function GetThumbprint() {
     });
 }
 
-function SaveSignedPdf(base64String) {
+function SaveSignedPdf(base64String, fn) {
+    console.log(fn +" from SaveSignedPdf");
     console.log("jkajdskfjd" + base64String) 
     $.ajax({
         url: '/OnlineApplication/SaveBase64ToFile',
@@ -662,7 +665,7 @@ function SaveSignedPdf(base64String) {
         dataType: 'json',
         data:{
             base64String: base64String, 
-            fileName: "SignedDoc.pdf"
+            fileName: `SignedDoc${fn}.pdf`
         },
         success: function (response) {
             console.log('Signed PDF saved successfully:', response);
