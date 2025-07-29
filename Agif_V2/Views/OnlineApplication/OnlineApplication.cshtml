@@ -374,7 +374,7 @@
                                         <span class="input-group-text">🪖</span>
                                     </div>
                                     <div class="form-outline" data-mdb-input-init>
-                                        @Html.EditorFor(m => m.CommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
+                                        @Html.EditorFor(m => m.CommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name", @data_val = "true" } })
                                         @Html.ValidationMessageFor(m => m.CommonData.ParentUnit, "", new { @class = "text-danger" })
                                         <span id="ParentUnitId" class="d-none">@Model.CommonData?.ParentUnit</span>
                                         <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..." />
@@ -469,53 +469,53 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Vill_Town" name="CommonData.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.Vill_Town" />
+                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Vill_Town" />
                                         <label class="form-label" for="Vill_Town">Village/Town</label>
                                     </div>
 
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.Vill_Town, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.Vill_Town, "", new { @class = "text-danger" })
 
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="postOffice" name="CommonData.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.PostOffice" />
+                                        <input type="text" id="postOffice" name="AddressDetails.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.PostOffice" />
                                         <label class="form-label" for="postOffice">Post Office</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.PostOffice, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.PostOffice, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="distt" name="CommonData.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.Distt" />
+                                        <input type="text" id="distt" name="AddressDetails.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Distt" />
                                         <label class="form-label" for="distt">Enter Dist</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.Distt, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.Distt, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="state" name="CommonData.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.CommonData?.State" />
+                                        <input type="text" id="state" name="AddressDetails.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.State" />
                                         <label class="form-label" for="state">Enter State</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.State, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.State, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="CommonData.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.Code, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.Code, "", new { @class = "text-danger" })
                             </div>
 
 
@@ -539,52 +539,52 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="password" id="salaryAcctNo" name="CommonData.SalaryAcctNo" class="form-control" minlength="10" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onblur="validateAccountNo(this)" value="@Model.CommonData?.SalaryAcctNo" required />
+                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" minlength="10" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onblur="validateAccountNo(this)" value="@Model.AccountDetails?.SalaryAcctNo" required />
                                         <label class="form-label select-label ">Applicant's Salary Acct No</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.SalaryAcctNo, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.SalaryAcctNo, "", new { @class = "text-danger" })
 
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="confirmSalaryAcctNo" name="CommonData.ConfirmSalaryAcctNo" class="form-control" onblur="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" value="@Model.CommonData?.ConfirmSalaryAcctNo" required />
+                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control" onblur="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
                                         <label class="form-label select-label ">Re-Enter Salary Acct No</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="ifsCode" name="CommonData.IfsCode" class="form-control" data-inputmask="'mask': 'AAAA9999999', 'placeholder': 'AAAA9999999'" placeholder="AAAA9999999" value="@Model.CommonData?.IfsCode" required />
+                                        <input type="text" id="ifsCode" name="AccountDetails.IfsCode" class="form-control" data-inputmask="'mask': 'AAAA9999999', 'placeholder': 'AAAA9999999'" placeholder="AAAA9999999" value="@Model.AccountDetails?.IfsCode" required />
                                         <label class="form-label select-label ">IFSC of Bank</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.IfsCode, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.IfsCode, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="CommonData.NameOfBank" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.CommonData?.NameOfBank" required />
+                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
                                         <label class="form-label select-label ">Name of Bank</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.NameOfBank, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBank, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="CommonData.NameOfBankBranch" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.CommonData?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.CommonData.NameOfBankBranch, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBankBranch, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>

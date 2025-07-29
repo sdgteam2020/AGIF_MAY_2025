@@ -9,7 +9,7 @@ $(document).ready(function () {
     }
 
     let rawValue = $("#Status").val();
-    let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
+    let value = (rawValue === "0" || !rawValue) ? 102 : rawValue;
     BindUsersData(value);
 });
 
@@ -80,7 +80,7 @@ function BindUsersData(status) {
     ];
 
     // Add conditional columns for status = 4
-    if (status === '4') {
+    if (status === '104') {
         columns.push(
             {
                 data: "downloadCount",

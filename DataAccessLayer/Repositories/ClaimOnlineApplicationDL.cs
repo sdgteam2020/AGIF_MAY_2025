@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -489,11 +490,11 @@ namespace DataAccessLayer.Repositories
             await _DocumentUpload.Add(fileUpload);
 
 
-            await UpdateApplicationStatus(ApplicationId, 1);
+            await UpdateApplicationStatus(ApplicationId, 101);
 
             TrnStatusCounter trnStatusCounter = new TrnStatusCounter
             {
-                StatusId = 1,
+                StatusId = 101,
                 ApplicationId = ApplicationId,
                 ActionOn = DateTime.Now,
             };
@@ -512,7 +513,7 @@ namespace DataAccessLayer.Repositories
                         COUserId = CoDetails.UserId,
                         ProfileId = CoDetails.ProfileId,
                         CreatedOn = DateTime.Now,
-                        Status = 1
+                        Status = 101
                     };
                     await AddFwdCO(trnFwdCO);
                 }
@@ -532,7 +533,7 @@ namespace DataAccessLayer.Repositories
                             COUserId = IoDetails.UserId,
                             ProfileId = IoDetails.ProfileId,
                             CreatedOn = DateTime.Now,
-                            Status = 1
+                            Status = 101
                         };
                         await AddFwdCO(trnFwdCO);
                     }
@@ -985,44 +986,92 @@ namespace DataAccessLayer.Repositories
                          from SP in SPGroup.DefaultIfEmpty()
 
                          where dTOExport.Id.Contains(common.ApplicationId)
-                         select new DTOExcelResponse
+                         select new DTOClaimExcelResponse
                          {
-                             Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
-
-                             apfx = prefix.Prefix,
-                             ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
-                             AadharNo = common.AadharCardNo ?? string.Empty,
-                             asfx = common.Suffix ?? string.Empty,
-                             opfx = prefix.Prefix,
-                             ono = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
-                             osfx = common.OldSuffix ?? string.Empty,
-                             Rank = rank != null ? rank.RankName : string.Empty,
-                             Loanee_Name = common.ApplicantName ?? string.Empty,
-                             Date_Of_Birth = common.DateOfBirth,
-                             Enrollment_Date = common.DateOfCommission,
-                             Regt_Corps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
-
-                             Promotion_Date = common.DateOfPromotion,
-                             Retirement_Date = common.DateOfRetirement,
-                             PANNo = common.PanCardNo ?? string.Empty,
-                             Mobile_No = common.MobileNo ?? string.Empty,
-                             Payee_Account_No = common.SalaryAcctNo ?? string.Empty,
-                             IFSC_Code = common.IfsCode ?? string.Empty,
-                             CDA_PAO = common.pcda_pao ?? string.Empty,
-                             CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
-                             Year_Of_Service = common.TotalService,
-                             Residual_Service = common.ResidualService,
-                            
-                             E_Mail_Id = common.Email ?? string.Empty,
-
-
-                             ApplicationID = common.ApplicationId,
-
-                             StatusCode = common.StatusCode,
                              ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
-                          
+                             PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                             ApplicationId = common.ApplicationId,
+                             ApplicationType = common.WithdrawPurpose,
+                             ApplicationTypeName= applicationType.Name ?? string.Empty,
+                             ArmyNumber = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                             AadharCardNo = common.AadharCardNo ?? string.Empty,
+                             OldArmyNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                             Rank = rank != null ? rank.RankName : string.Empty,
+                             ApplicantName = common.ApplicantName ?? string.Empty,
+                             DateOfBirth = common.DateOfBirth,
+                             DateOfCommission = common.DateOfCommission,
+                             NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                             ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                             RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                             PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                             DateOfPromotion = common.DateOfPromotion,
+                             DateOfRetirement = common.DateOfRetirement,
+                             PanCardNo = common.PanCardNo ?? string.Empty,
+                             MobileNo = common.MobileNo ?? string.Empty,
+                             Email = (common.Email ?? string.Empty) + "@" + (common.EmailDomain ?? string.Empty),
+                             SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
+                             IfsCode = common.IfsCode ?? string.Empty,
+                             NameOfBank = common.NameOfBank ?? string.Empty,
+                             NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                             pcda_pao = common.pcda_pao ?? string.Empty,
+                             pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                             Pers_Address_Line1 = common.Vill_Town ?? string.Empty,
+                             Pers_Address_Line2 = common.PostOffice ?? string.Empty,
+                             Pers_Address_Line3 = common.Distt ?? string.Empty,
+                             Pers_Address_Line4 = common.State ?? string.Empty,
+                             AmountwithdrwalRequired = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
+                             NoOfwithdrwal = common.Noofwithdrawal ?? string.Empty,
+                             TotalService = common.TotalService ?? 0,
+                             ResidualService=common.ResidualService ?? 0,
+                             ExtnOfService= common.ExtnOfService ?? string.Empty,   
+
+                             House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
+
+                             House_Repair_Advance_Loan = common.Computer_Advance_Loan ?? false,
+
+                             Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
+
+                             Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
+
+                             House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
+                             House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
+                             House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
+
+                             Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
+                             Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
+                             Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
+
+                             House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
+                             House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
+                             House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
+
+                             Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
+                             Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
+                             Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
 
 
+                             ChildName = common.WithdrawPurpose==1 ? ED.ChildName : common.ApplicantType==2 ? MW.NameOfChild : null,
+                             ChildDateOfBirth = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,
+                             DOPartIINo= common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
+                             DoPartIIDate=common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
+
+                             AgeOfWard= common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
+
+                             DateofMarriage = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
+
+                             CourseForWithdrawal= common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
+
+                             CollegeInstitution=common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
+
+                             TotalExpenditure=common.WithdrawPurpose == 1 ? ED.TotalExpenditure: common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
+
+                             AddressOfProperty= common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
+
+                             PropertyHolderName= common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
+
+                             OtherReasons = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
+
+                             StatusCode = common.StatusCode
                          }).ToList();
 
             dataTable = query.ToDataTable();

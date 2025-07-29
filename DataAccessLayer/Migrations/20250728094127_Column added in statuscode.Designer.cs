@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250728094127_Column added in statuscode")]
+    partial class Columnaddedinstatuscode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,110 +135,6 @@ namespace DataAccessLayer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.AccountDetailsModel", b =>
-                {
-                    b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AccountId"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConfirmSalaryAcctNo")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("IfsCode")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NameOfBank")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("NameOfBankBranch")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("SalaryAcctNo")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Updatedby")
-                        .HasColumnType("int");
-
-                    b.HasKey("AccountId");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("trnAccountDetails");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.AddressDetailsModel", b =>
-                {
-                    b.Property<int>("AddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
-
-                    b.Property<int>("ApplicationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<string>("Distt")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PostOffice")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Updatedby")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Vill_Town")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("AddressId");
-
-                    b.HasIndex("ApplicationId");
-
-                    b.ToTable("trnAddressDetails");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.CarApplicationModel", b =>
@@ -731,6 +630,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("CivilPostalAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("ConfirmSalaryAcctNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<decimal>("Da")
                         .HasColumnType("decimal(18,2)");
 
@@ -748,6 +657,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("DdlRank")
                         .HasColumnType("int");
+
+                    b.Property<string>("Distt")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("DownloadCount")
                         .HasColumnType("int");
@@ -772,6 +686,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<string>("IOArmyNo")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IfsCode")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
 
                     b.Property<decimal?>("IncomeTaxMonthly")
                         .HasColumnType("decimal(18,2)");
@@ -804,6 +723,16 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<decimal>("Msp")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NameOfBank")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NameOfBankBranch")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NextFmnHQ")
                         .IsRequired()
@@ -840,6 +769,11 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal?>("Pmha")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("PostOffice")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("PresentUnit")
                         .HasColumnType("int");
 
@@ -853,6 +787,16 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int?>("ResidualService")
                         .HasColumnType("int");
+
+                    b.Property<string>("SalaryAcctNo")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("StatusCode")
                         .HasColumnType("int");
@@ -879,6 +823,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int?>("Updatedby")
                         .HasColumnType("int");
+
+                    b.Property<string>("Vill_Town")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("agif_Subs")
                         .HasColumnType("decimal(18,2)");
@@ -2073,28 +2022,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.AccountDetailsModel", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModels");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.AddressDetailsModel", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModels");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.CarApplicationModel", b =>

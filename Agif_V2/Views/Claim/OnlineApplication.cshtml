@@ -24,10 +24,7 @@
         PurposeTypeText = "Special Waiver";
 
 }
-<style>
 
-   
-</style>
 
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
 
@@ -608,12 +605,12 @@
                             <div class="col-12">
                                 <div class="add-loan-section" id="addLoanSection">
                                     <h5 class="mb-3">Do you have an existing AGIF Loan?</h5>
-                                    <button type="button" class="btn btn-primary" onclick="showLoanForm()">
+                                    <button type="button" class="btn btn-primary" id="showLoanFormButton">
                                         <i class="fas fa-plus"></i> Add Loan
                                     </button>
                                 </div>
 
-                                <div id="loanFormContainer" style="display: none;">
+                                <div id="loanFormContainer" class="d-none">
                                     <div class="loan-entry">
                                         <button type="button" class="btn btn-sm btn-outline-danger remove-btn" onclick="removeLoanForm()">
                                             <i class="fas fa-times"></i>Remove
@@ -622,7 +619,7 @@
                                         <div class="row g-3">
                                             <div class="col-md-6">
                                                 <label for="loanType" class="form-label"><strong>Choose your loan type</strong></label>
-                                                <select class="form-select" id="loanType" onchange="showLoanTypeFields(this.value)">
+                                                <select class="form-select" id="loanType">
                                                     <option value="">Select Loan Type</option>
                                                     <option value="hba">HBA (House Building Advance)</option>
                                                     <option value="hra">HRA (House Repair Advance)</option>
@@ -803,12 +800,12 @@
                                         </div>
 
 
-                                        <button type="button" class="btn btn-success" id="addLoanButton" style="display: none;" onclick="addLoanToGrid()">Add Loan</button>
+                                        <button type="button" class="btn btn-success" id="addLoanButton">Add Loan</button>
 
 
-                                        <div id="loanGridContainer" style="display:none;">
+                                        <div id="loanGridContainer" class="d-none">
                                             <h5 class="mt-3">Added Loans</h5>
-                                            <table class="table" id="loanGrid" style="display: none;">
+                                            <table class="table d-none" id="loanGrid" >
                                                 <thead>
                                                     <tr>
                                                         <th>Loan Type</th>
@@ -1351,7 +1348,7 @@
             <input type="hidden" id="ca_Loan" name="ClaimCommonData.Conveyance_Advance_Loan" value=@Model.ClaimCommonData?.Conveyance_Advance_Loan />
             <input type="hidden" id="pca_Loan" name="ClaimCommonData.Computer_Advance_Loan" value=@Model.ClaimCommonData?.Computer_Advance_Loan />
 
-            <div id="unitSearchDialog" class="uploadDialog d-none" style="display:none;">
+            <div id="unitSearchDialog" class="uploadDialog d-none">
                 <div class="dialog-box w-668">
                     <h3 class="text-center mb-3">Please Enter Army No to Your Formation Unit Cdr</h3>
 

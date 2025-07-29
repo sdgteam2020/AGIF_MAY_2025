@@ -7,11 +7,11 @@
 @{
     string Page = "";
 }
-@if (ViewBag.Status != null && ViewBag.Status == "2")
+@if (ViewBag.Status != null && ViewBag.Status == "102")
 {
     Page = "Received Applications";
 }
-else if (ViewBag.Status != null && ViewBag.Status == "4")
+else if (ViewBag.Status != null && ViewBag.Status == "104")
 {
     Page = "Downloaded Applications";
 }
@@ -84,7 +84,7 @@ else
                                         <th>Regt/Corps</th>
                                         <th class="text-nowrap">Present Unit</th>
                                         <th class="text-nowrap">Applied Date</th>
-                                        @if (ViewBag.Status != null && ViewBag.Status == "4")
+                                        @if (ViewBag.Status != null && ViewBag.Status == "104")
                                         {
                                             <th class="text-nowrap">Download Count</th>
                                             <th class="text-nowrap">DownloadedOn</th>

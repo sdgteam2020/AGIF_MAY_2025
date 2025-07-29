@@ -13,6 +13,7 @@ namespace DataTransferObject.Model
         public int StatusId { get; set; }
         public string StatusName { get; set; } = string.Empty;
         public int StatusCode { get; set; }
+        public int ClaimStatusCode { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
     }
 }

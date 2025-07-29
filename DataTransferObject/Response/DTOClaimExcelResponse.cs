@@ -14,27 +14,11 @@ namespace DataTransferObject.Response
 
         public int ApplicationId { get; set; }
 
+        public string? ArmyNumber { get; set; }
 
-        public int ArmyPrefix { get; set; }
+        public string? OldArmyNumber { get; set; }
 
-
-        public string? Number { get; set; }
-
-
-
-        public string? Suffix { get; set; }
-
-
-        public int OldArmyPrefix { get; set; }
-
-        public string? OldNumber { get; set; }
-
-
-        public string? OldSuffix { get; set; }
-
-
-
-        public string DdlRank { get; set; }
+        public string Rank { get; set; }
 
         public string? ApplicantName { get; set; }
 
@@ -64,8 +48,6 @@ namespace DataTransferObject.Response
 
         public string? Email { get; set; }
 
-
-        public string? EmailDomain { get; set; }
 
         public int? TotalService { get; set; }
 
@@ -101,14 +83,10 @@ namespace DataTransferObject.Response
         public string? SalaryAcctNo { get; set; }
 
 
-        public string? ConfirmSalaryAcctNo { get; set; }
-
-
         public string? IfsCode { get; set; }
 
 
         public string? NameOfBank { get; set; }
-
 
         public string? NameOfBankBranch { get; set; }
 
@@ -142,6 +120,28 @@ namespace DataTransferObject.Response
         public int? Computer_Duration_of_Loan { get; set; }
         public decimal? Computer_Amount_Taken { get; set; }
 
+        public string? Pers_Address_Line1 { get; set; }
+        public string? Pers_Address_Line2 { get; set; }
+        public string? Pers_Address_Line3 { get; set; }
+        public string? Pers_Address_Line4 { get; set; }
+
+        public string ChildName { get; set; }
+        public DateTime? ChildDateOfBirth { get; set; }
+        public string DOPartIINo { get; set; }
+        public DateTime? DoPartIIDate { get; set; }
+        public string AgeOfWard { get; set; }
+
+        public DateTime? DateofMarriage { get; set; }
+
+        public string CourseForWithdrawal { get; set; }
+        public string CollegeInstitution { get; set; }
+        public double TotalExpenditure { get; set; }
+
+        public string AddressOfProperty { get; set; }
+        public string PropertyHolderName { get; set; }
+
+        public string? OtherReasons { get; set; }
+        public int StatusCode { get; set; }
 
 
     }

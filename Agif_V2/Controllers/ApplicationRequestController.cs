@@ -390,12 +390,12 @@ namespace Agif_V2.Controllers
                     RankName = dTOTempSession.RankName
                 };
 
-                await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 2);
+                await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);
 
 
                 TrnStatusCounter trnStatusCounter = new TrnStatusCounter
                 {
-                    StatusId = 2,
+                    StatusId = 102,
                     ApplicationId = applId,
                     ActionOn = DateTime.Now,
                 };
@@ -459,10 +459,10 @@ namespace Agif_V2.Controllers
                 IsRejectced = true,
             };
             await _application.Add(digitalSignRecords);
-            await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 3);
+            await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 103);
             TrnStatusCounter trnStatusCounter = new TrnStatusCounter
             {
-                StatusId = 3,
+                StatusId = 103,
                 ApplicationId = applId,
                 ActionOn = DateTime.Now,
             };
@@ -846,7 +846,7 @@ namespace Agif_V2.Controllers
             string newFolderPath = Path.Combine(basePath, newFolderName);
             Directory.CreateDirectory(newFolderPath);
 
-            // Create subfolders HBA, CA, PCA inside new folder
+            // Create subfolders ED, MW, PR and SP inside new folder
             string EDFolder = Path.Combine(newFolderPath, "ED");
             string MWFolder = Path.Combine(newFolderPath, "MW");
             string PRFolder = Path.Combine(newFolderPath, "PR");

@@ -159,12 +159,12 @@ namespace DataAccessLayer.Repositories
 
         public async Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status)
         {
-            int actualStatus = (status == 2 || status > 3) ? 2 : status;
+            int actualStatus = (status == 102 || status > 103) ? 102 : status;
             var UsersApplicationList = await (from appl in _db.trnClaim
                                               join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
                                               join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                               join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
-                                              where user.MappingId == Mapping && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3)) && user.IsPrimary == true
+                                              where user.MappingId == Mapping && (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103)) && user.IsPrimary == true
                                               orderby appl.UpdatedOn descending
                                               select new DTOGetApplResponse
                                               {
@@ -182,7 +182,7 @@ namespace DataAccessLayer.Repositories
                                            join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
                                            join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                            join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
-                                           where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
+                                           where (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103))
                                            orderby appl.UpdatedOn descending
                                            select new DTOGetApplResponse
                                            {
@@ -210,7 +210,7 @@ namespace DataAccessLayer.Repositories
                                                      join oldPrefix in _db.MArmyPrefixes on appl.OldArmyPrefix equals oldPrefix.Id
                                                      join regt in _db.MRegtCorps on appl.RegtCorps equals regt.Id
                                                      join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
-                                                     join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
+                                                     join statusName in _db.StatusTable on appl.StatusCode equals statusName.ClaimStatusCode
                                                      join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
                                                      orderby appl.UpdatedOn descending
                                                      select new DTOGetApplResponse
@@ -226,8 +226,8 @@ namespace DataAccessLayer.Repositories
                                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                          ApplicationType = applType.Name,
                                                          UpdatedOn = appl.UpdatedOn,
-                                                         DownloadedOn = null,
-                                                         DownloadCount = 0,
+                                                         DownloadedOn = appl.DownloadedOn,
+                                                         DownloadCount = appl.DownloadCount,
                                                      }).ToListAsync();
             return UsersApplicationListToAdmin!;
         }
@@ -245,7 +245,7 @@ namespace DataAccessLayer.Repositories
             foreach (var app in applications)
             {
                 app.DownloadCount += 1;
-                app.StatusCode = 4;
+                app.StatusCode = 104;
                 app.DownloadedOn = DateTime.Now;
             }
 

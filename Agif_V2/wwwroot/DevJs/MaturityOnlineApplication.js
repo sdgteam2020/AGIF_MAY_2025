@@ -19,6 +19,7 @@ function resetCivilPostalAddress() {
         $('#civilPostalAddress').val("");
     });
 }
+$('#addLoanButton').hide();
 
 
 function resetFieldsOnRankRegtChange() {
@@ -34,15 +35,21 @@ $('#loanType').change(function () {
 $('#loanFormContainer').on('input change', 'input, select', function () {
     checkFieldsForLoan();
 });
-function showLoanForm() {
-    $('#addLoanSection').hide();
-    $('#loanFormContainer').show();
-    resetLoanForm();
-}
+//function showLoanForm() {
+//    $('#addLoanSection').hide();
+//    $('#loanFormContainer').show();
+//    resetLoanForm();
+//}
+$('#showLoanFormButton').on('click', function () {
+    $('#addLoanSection').hide();         // Hide the loan section
+    //$('#loanFormContainer').show();      // Show the loan form container
+    $('#loanFormContainer').removeClass('d-none');
+    resetLoanForm();                     // Call function to reset the loan form
+});
 
 function removeLoanForm() {
     $('#addLoanSection').show();
-    $('#loanFormContainer').hide();
+    $('#loanFormContainer').addClass('d-none');
     resetLoanForm();
 }
 
@@ -85,14 +92,19 @@ function showLoanTypeFields(loanType) {
             alert(`${loanTypeNames[loanType]} has already been added. Only one entry per loan type is allowed.`);
             $('#loanType').val(''); // Reset selection
             $('#addLoanButton').hide();
+            //$('#addLoanButton').addClass('d-none');
+
             return;
         }
 
         $('#' + loanType + 'Fields').show();
         $('#addLoanButton').show();
+        //$('#addLoanButton').removeClass('d-none');
         checkFieldsForLoan();
     } else {
         $('#addLoanButton').hide();
+        //$('#addLoanButton').addClass('d-none');
+
     }
 }
 
@@ -122,12 +134,17 @@ function removeLoanRow(button) {
     $(button).closest('tr').remove();
 
     if ($('#loanGrid tbody tr').length === 0) {
-        $('#loanGridContainer').hide();
+        // $('#loanGridContainer').hide();
+        $('#loanGridContainer').addClass('d-none');
     }
 
     // Update dropdown options after removing a loan
     updateLoanTypeDropdown();
 }
+
+$('#addLoanButton').on('click', function () {
+    addLoanToGrid();
+});
 function addLoanToGrid() {
     const loanType = $('#loanType').val();
     
@@ -173,7 +190,9 @@ function addLoanToGrid() {
     `;
 
         $('#loanGrid tbody').append(newRow);
-        $('#loanGridContainer, #loanGrid').show();
+        //$('#loanGridContainer, #loanGrid').show();
+        $('#loanGridContainer').removeClass('d-none');
+        $('#loanGrid').removeClass('d-none');
 
         // Update dropdown to disable the added loan type
         updateLoanTypeDropdown();
@@ -1241,7 +1260,8 @@ function checkCORegistration() {
             data: { ArmyNo: ArmyNo },
             success: function (result) {
                 if (result === true) {
-                    $('#unitSearchDialog').show();
+                    //$('#unitSearchDialog').show();
+                    $('#unitSearchDialog').removeClass('d-none'); // Show the dialog if CO is registered
                 } else if (result === false) {
                     // If not registered, set unit input back to required
                     formSubmitting = true;
@@ -1487,11 +1507,37 @@ $("#PresenttxtUnit").autocomplete({
         $("#PresenttxtUnit").val(i.item.label);
         $("#PresentUnitId").val(i.item.value);
         $("input[name='ClaimCommonData.PresentUnit']").val(i.item.value);
-        
+        CheckIsCoRegister(i.item.value, i.item.label)
 
     },
     appendTo: '#suggesstion-box'
 });
+function CheckIsCoRegister(UnitId, UnitName) {
+    var param = { "UnitId": UnitId };
+    $("#PresentUnitId").val(0);
+    $.ajax({
+        url: '/Account/CheckIsCoRegister',
+        contentType: 'application/x-www-form-urlencoded',
+        data: param,
+        type: 'POST',
+        success: function (data) {
+
+            if (data == 1) {
+                $("#PresenttxtUnit").val(UnitName);
+                $("#PresentUnitId").val(UnitId);
+            } else {
+                $("#PresenttxtUnit").val("");
+                $("#PresentUnitId").val(0);
+                Swal.fire({
+                    icon: "error",
+                    title: "Unit Cdr Not Registered on AGIF Web Appl",
+                    text: "Please approach UNIT CDR to first Register on AGIF Web Appl.",
+                }).then(() => {
+                });
+            }
+        }
+    });
+}
 
 $('#oldArmyNo').on('focus', function () {
     $(this).off('focus');
@@ -1659,3 +1705,17 @@ function maturityInfo() {
         }
     });
 }
+
+$("#ParenttxtUnit").on('input', function () {
+    if ($(this).val() === '') {
+        $("input[name='ClaimCommonData.ParentUnit']").val('');
+        $("#ParentUnitId").val(0);
+
+    }
+});
+$("#PresenttxtUnit").on('input', function () {
+    if ($(this).val() === '') {
+        $("input[name='ClaimCommonData.PresentUnit']").val('');
+        $("#PresentUnitId").val(0);
+    }
+});

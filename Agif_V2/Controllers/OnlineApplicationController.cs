@@ -25,8 +25,10 @@ namespace Agif_V2.Controllers
         private readonly ICar _car;
         private readonly IHba _Hba;
         private readonly IPca _Pca;
+        private readonly IAddress _address;
+        private readonly IAccount _account;
 
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf)
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -36,6 +38,8 @@ namespace Agif_V2.Controllers
             _pdfGenerator = pdfGenerator;
             _env = env;
             _mergePdf = mergePdf;
+            _address = address;
+            _account = account;
         }
         public async Task<IActionResult> OnlineApplication()
         {
@@ -175,7 +179,7 @@ namespace Agif_V2.Controllers
             return Json(await _IonlineApplication1.CheckIsCoRegister(UnitId));
         }
         public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
-            {
+        {
             string formType = string.Empty;
 
 
@@ -195,6 +199,40 @@ namespace Agif_V2.Controllers
             else
             {
                 ModelState.AddModelError("", "Please select an application type.");
+            }
+
+            if (model.AddressDetails != null)
+            {
+                var addressValidationContext = new ValidationContext(model.AddressDetails);
+                var addressValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.AddressDetails, addressValidationContext, addressValidationResults, true))
+                {
+                    foreach (var result in addressValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "AddressDetails"
+                            : $"AddressDetails.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+
+            if(model.AccountDetails != null)
+            {
+                var accountValidationContext = new ValidationContext(model.AccountDetails);
+                var accountValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.AccountDetails, accountValidationContext, accountValidationResults, true))
+                {
+                    foreach (var result in accountValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "AccountDetails"
+                            : $"AccountDetails.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
             }
 
             // Validate nested objects more specifically based on form type
@@ -275,7 +313,8 @@ namespace Agif_V2.Controllers
             else
             {
                 CommonDataModel common = new CommonDataModel();
-
+                AddressDetailsModel addressDetails = new AddressDetailsModel();
+                AccountDetailsModel accountDetails = new AccountDetailsModel();
                 try
                 {
 
@@ -285,6 +324,18 @@ namespace Agif_V2.Controllers
                         model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
                         model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
                         common = await _IonlineApplication1.AddWithReturn(model.CommonData);
+                    }
+
+                    if (model.AddressDetails != null)
+                    {
+                        model.AddressDetails.ApplicationId = common.ApplicationId;
+                        await _address.Add(model.AddressDetails);
+                    }
+
+                    if(model.AccountDetails!=null)
+                    {
+                        model.AccountDetails.ApplicationId = common.ApplicationId;
+                        await _account.Add(model.AccountDetails);
                     }
 
                     if (formType == "HBA" && model.HBAApplication != null)
@@ -337,7 +388,6 @@ namespace Agif_V2.Controllers
             }
 
         }
-        //}
 
         public async Task<JsonResult> MergePdf(int applicationId,bool isRejected,bool isApproved)
         {
@@ -421,11 +471,25 @@ namespace Agif_V2.Controllers
 
                     var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip, Name);
 
+                    //if (data == 1)
+                    //{
+                    //    pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
+                    //             .ToArray();
+                    //}
                     if (data == 1)
                     {
-                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
-                                 .ToArray();
+                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf")
+                            .OrderBy(file =>
+                            {
+                                bool containsApplication = Path.GetFileName(file).Contains("Application");
+                                // Return a tuple where the first item is the priority (true/false) for sorting
+                                // We want "application" files to come first, so we return a boolean
+                                return containsApplication ? 0 : 1;
+                            })
+                            .ThenBy(file => Path.GetFileName(file))  // After prioritizing, order by the filename
+                            .ToArray();
                     }
+
                 }
                 catch (Exception pdfGenEx)
                 {

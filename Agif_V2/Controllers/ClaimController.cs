@@ -84,7 +84,7 @@ namespace Agif_V2.Controllers
             if (application)
             {
                 TempData["Message"] = "You have already uploaded the Documents for this Application.";
-                return RedirectToAction("ApplicationDetails");
+                return RedirectToAction("ApplicationDetails", "Claim");
             }
 
             bool IsextensionOfService = await _IClaimonlineApplication1.CheckExtensionofservice(applicationId);

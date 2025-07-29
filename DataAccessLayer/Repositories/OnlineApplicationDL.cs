@@ -238,6 +238,12 @@ namespace DataAccessLayer.Repositories
                           join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
                           join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
+
+                          join AddressDetails in _context.trnAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+                          join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
                           where common.ApplicationId == applicationId
                           select new CommonDataonlineResponse
                           {
@@ -261,24 +267,24 @@ namespace DataAccessLayer.Repositories
                               ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
                               RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
-                              Vill_Town = common.Vill_Town ?? string.Empty,
-                              PostOffice = common.PostOffice ?? string.Empty,
-                              Distt = common.Distt ?? string.Empty,
-                              State = common.State ?? string.Empty,
+                              Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
+                              PostOffice = AddressDetails.PostOffice ?? string.Empty,
+                              Distt = AddressDetails.Distt ?? string.Empty,
+                              State = AddressDetails.State ?? string.Empty,
                               DateOfPromotion = common.DateOfPromotion,
                               DateOfRetirement = common.DateOfRetirement,
                               PanCardNo = common.PanCardNo ?? string.Empty,
                               MobileNo = common.MobileNo ?? string.Empty,
                               Email = common.Email ?? string.Empty,
-                              Code = common.Code ?? string.Empty,
-                              SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                              IfsCode = common.IfsCode ?? string.Empty,
-                              NameOfBank = common.NameOfBank ?? string.Empty,
-                              NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                              Code = AddressDetails.Code ?? string.Empty,
+                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
-                              ConfirmSalaryAcctNo=common.ConfirmSalaryAcctNo,
+                              ConfirmSalaryAcctNo= AccountDetails.ConfirmSalaryAcctNo,
                               UpdatedOn = common.UpdatedOn.ToString(),
                               EmailDomain = common.EmailDomain ?? string.Empty,
                               
@@ -627,6 +633,12 @@ namespace DataAccessLayer.Repositories
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
                           join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
 
+                          join AddressDetails in _context.trnAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+                          join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
+
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new CommonDataonlineResponse
                           {
@@ -651,20 +663,20 @@ namespace DataAccessLayer.Repositories
                               ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
                               RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
-                              Vill_Town = common.Vill_Town ?? string.Empty,
-                              PostOffice = common.PostOffice ?? string.Empty,
-                              Distt = common.Distt ?? string.Empty,
-                              State = common.State ?? string.Empty,
+                              Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
+                              PostOffice = AddressDetails.PostOffice ?? string.Empty,
+                              Distt = AddressDetails.Distt ?? string.Empty,
+                              State = AddressDetails.State ?? string.Empty,
                               DateOfPromotion = common.DateOfPromotion,
                               DateOfRetirement = common.DateOfRetirement,
                               PanCardNo = common.PanCardNo ?? string.Empty,
                               MobileNo = common.MobileNo ?? string.Empty,
                               Email = common.Email ?? string.Empty,
-                              Code = common.Code ?? string.Empty,
-                              SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                              IfsCode = common.IfsCode ?? string.Empty,
-                              NameOfBank = common.NameOfBank ?? string.Empty,
-                              NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                              Code = AddressDetails.Code ?? string.Empty,
+                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                           }).ToListAsync();
@@ -678,28 +690,33 @@ namespace DataAccessLayer.Repositories
         {
             DataTable dataTable = new DataTable();
             var query = (from common in _context.trnApplications
-                                    join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
-                                    from prefix in prefixGroup.DefaultIfEmpty()
-                                    join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
-                                    from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
-                                    join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
-                                    from rank in rankGroup.DefaultIfEmpty()
-                                    join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
-                                    from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
-                                    join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
-                                    from regCorps in regCorpsGroup.DefaultIfEmpty()
-                                    join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
-                                    from parentUnit in parentUnitGroup.DefaultIfEmpty()
-                                    join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
-                                    from presentUnit in presentUnitGroup.DefaultIfEmpty()
-                                    join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
-                                    join car in _context.trnCar on common.ApplicationId equals car.ApplicationId into carGroup
-                                    from car in carGroup.DefaultIfEmpty()
-                                    join pca in _context.trnPCA on common.ApplicationId equals pca.ApplicationId into pcaGroup
-                                    from pca in pcaGroup.DefaultIfEmpty()
-                                    join hba in _context.trnHBA on common.ApplicationId equals hba.ApplicationId into hbaGroup
-                                    from hba in hbaGroup.DefaultIfEmpty()
-                                    where dTOExport.Id.Contains(common.ApplicationId)
+                         join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                         from prefix in prefixGroup.DefaultIfEmpty()
+                         join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                         from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                         join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                         from rank in rankGroup.DefaultIfEmpty()
+                         join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                         from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                         join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                         from regCorps in regCorpsGroup.DefaultIfEmpty()
+                         join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                         from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                         join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                         from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                         join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
+                         join car in _context.trnCar on common.ApplicationId equals car.ApplicationId into carGroup
+                         from car in carGroup.DefaultIfEmpty()
+                         join pca in _context.trnPCA on common.ApplicationId equals pca.ApplicationId into pcaGroup
+                         from pca in pcaGroup.DefaultIfEmpty()
+                         join hba in _context.trnHBA on common.ApplicationId equals hba.ApplicationId into hbaGroup
+                         from hba in hbaGroup.DefaultIfEmpty()
+                         join AddressDetails in _context.trnAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                         from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+                         join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                         from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+                         where dTOExport.Id.Contains(common.ApplicationId)
+
                                     select new DTOExcelResponse
                                     {
                                         Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
@@ -716,16 +733,16 @@ namespace DataAccessLayer.Repositories
                                         Date_Of_Birth = common.DateOfBirth,
                                         Enrollment_Date = common.DateOfCommission,
                                         Regt_Corps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
-                                        Pers_Address_Line1 = common.Vill_Town ?? string.Empty,
-                                        Pers_Address_Line2 = common.PostOffice ?? string.Empty,
-                                        Pers_Address_Line3 = common.Distt ?? string.Empty,
-                                        Pers_Address_Line4 = common.State ?? string.Empty,
+                                        Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
+                                        Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
+                                        Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
+                                        Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
                                         Promotion_Date = common.DateOfPromotion,
                                         Retirement_Date = common.DateOfRetirement,
                                         PANNo = common.PanCardNo ?? string.Empty,
                                         Mobile_No = common.MobileNo ?? string.Empty,
-                                        Payee_Account_No = common.SalaryAcctNo ?? string.Empty,
-                                        IFSC_Code = common.IfsCode ?? string.Empty,
+                                        Payee_Account_No = AccountDetails.SalaryAcctNo ?? string.Empty,
+                                        IFSC_Code = AccountDetails.IfsCode ?? string.Empty,
                                         CDA_PAO = common.pcda_pao ?? string.Empty,
                                         CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
                                         Year_Of_Service = common.TotalService,
@@ -746,9 +763,8 @@ namespace DataAccessLayer.Repositories
                                         MISC = common.misc_Deduction,
                                         Total = common.TotalCredit,
                                         Salary_After_Deduction = common.salary_After_Deductions,
-                                        Pin_Code = common.Code ?? string.Empty,
+                                        Pin_Code = AddressDetails.Code ?? string.Empty,
                                         E_Mail_Id = common.Email ?? string.Empty,
-
 
                                         ApplicationID = common.ApplicationId,
                                         CL_Pay = common.CI_Pay,

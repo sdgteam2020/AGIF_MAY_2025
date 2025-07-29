@@ -1383,7 +1383,7 @@ function handleSubmitClick() {
                 }
                 // errorlist += input.name + ", ";
                 let errorText = input.attr("name");
-                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication."];
+                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication.", "AddressDetails.","AccountDetails."];
                 prefixes.forEach(prefix => {
                     if (errorText.includes(prefix)) {
                         errorText = errorText.replace(prefix, "");
@@ -2154,3 +2154,16 @@ function validateEMIForRepayingCapacity(prefix) {
     }
     return true;
 }
+$("#ParenttxtUnit").on('input', function () {
+    if ($(this).val() === '') {
+        $("input[name='CommonData.ParentUnit']").val('');
+        $("#ParentUnitId").val(0);
+
+    }
+});
+$("#PresenttxtUnit").on('input', function () {
+    if ($(this).val() === '') {
+        $("input[name='CommonData.PresentUnit']").val('');
+        $("#PresentUnitId").val(0);
+    }
+});

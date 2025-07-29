@@ -66,6 +66,9 @@ namespace DataAccessLayer
 
         public virtual DbSet<MAgeMapping> MAgeMapping { get; set; }
         public virtual DbSet<MVehType> MVehType { get; set; }
+
+        public virtual DbSet<AddressDetailsModel> trnAddressDetails { get; set; }
+        public virtual DbSet<AccountDetailsModel> trnAccountDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CommonDataModel>()

@@ -15,7 +15,15 @@
         $("#UserType").val('Maturity');
         $("#PdfViwerFOrDigital").attr("data", "");
 
-        GetApplicationList(value, "/ApplicationRequest/GetMaturityUsersApplicationList");
+        let Mvalue = 0;
+        if (value == 1)
+            Mvalue = 101;
+        else if (value == 2)
+            Mvalue = 102;
+        else if (value == 3)
+            Mvalue = 103;
+
+        GetApplicationList(Mvalue, "/ApplicationRequest/GetMaturityUsersApplicationList");
     });
 
 
@@ -124,7 +132,7 @@ function populateRecommendationModal(applicationData) {
 function GetApplicationList(status,endpoint) {
 
 
-    if (status == 1) {
+    if (status == 1 || status == 101) {
         $("#DigitalSignatureforaction").html(`
         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             <i class="bi bi-x-lg me-2"></i>
@@ -369,7 +377,7 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
                     text: "Signed succesfull and Saved",
                     icon: "success"
                 }).then(() => {
-                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1";
+                    window.location.href = "/ApplicationRequest/UserApplicationList";
                 });
             } else if (isRejected) {
                 Swal.fire({
@@ -377,7 +385,7 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
                     text: "Application Rejected!",
                     icon: "warning"
                 }).then(() => {
-                    window.location.href = "/ApplicationRequest/UserApplicationList?status=1";
+                    window.location.href = "/ApplicationRequest/UserApplicationList";
                 });
             } else {
                 if (response.success) {

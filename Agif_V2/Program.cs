@@ -91,6 +91,8 @@ builder.Services.AddTransient<IMasterOnlyTable, MasterOnlyTable>();
 builder.Services.AddTransient<ICar, CarDL>();
 builder.Services.AddTransient<IHba, HbaDL>();
 builder.Services.AddTransient<IPca, PcaDL>();
+builder.Services.AddTransient<IAddress, AddressDL>();
+builder.Services.AddTransient<IAccount, AccountDL>();
 builder.Services.AddTransient<IEducation,EducationDL>();
 builder.Services.AddTransient<IMarraige, MarraigeDL>();
 builder.Services.AddTransient<IProperty, PropertyDL>();
