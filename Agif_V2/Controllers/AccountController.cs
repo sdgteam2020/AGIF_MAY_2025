@@ -472,9 +472,11 @@ namespace Agif_V2.Controllers
                         await _userMapping.Update(mapping);
                     }
                 }
+                userMapping.IsPrimary = isPrimary;
+                await _userMapping.Update(userMapping);
             }
-            userMapping.IsPrimary = isPrimary;
-            await _userMapping.Update(userMapping);
+            //userMapping.IsPrimary = isPrimary;
+            //await _userMapping.Update(userMapping);
             return Json(new { success = true });
         }
         public async Task<IActionResult> CheckIsCoRegister(int unitId)

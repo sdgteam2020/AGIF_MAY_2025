@@ -5,9 +5,11 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -311,6 +313,94 @@ namespace DataAccessLayer.Repositories
             }
 
             return true;
+        }
+
+        public async Task<bool> CheckAllApplnIdPresent(List<string> applicationIds)
+        {
+            if (applicationIds == null || !applicationIds.Any())
+                return false;
+
+            var allPresent = await _db.trnApplications
+                .Where(a => applicationIds.Contains(a.ApplicationId.ToString()))
+                .CountAsync();
+
+            return allPresent == applicationIds.Count;
+        }
+
+        public async Task<List<string>> GetAllStatusCode()
+        {
+            return await _db.StatusTable
+                .Select(s => s.StatusCode.ToString())
+                .ToListAsync();
+        }
+        public async Task<List<string>> GetNotApplId(List<string> applicationIds)
+        {
+            if (applicationIds == null || !applicationIds.Any())
+                return new List<string>();
+
+            var presentApplicationIds = await _db.trnApplications
+                .Where(a => applicationIds.Contains(a.ApplicationId.ToString()))
+                .Select(a => a.ApplicationId.ToString())
+                .ToListAsync();
+
+            var notPresentApplicationIds = applicationIds.Except(presentApplicationIds).ToList();
+
+            return notPresentApplicationIds;
+        }
+
+        public async Task<(bool, string)> ProcessBulkApplicationUpdates(System.Data.DataTable applicationUpdates)
+        {
+            var connection = _db.Database.GetDbConnection();
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "dbo.ProcessBulkApplicationUpdates";
+                command.CommandType = CommandType.StoredProcedure;
+
+                // Add table-valued parameter
+                var parameter = new SqlParameter("@ApplicationUpdates", applicationUpdates)
+                {
+                    SqlDbType = SqlDbType.Structured,
+                    TypeName = "dbo.BulkApplicationUpdateType"
+                };
+                command.Parameters.Add(parameter);
+
+                // Ensure connection is open
+                if (connection.State != ConnectionState.Open)
+                    await connection.OpenAsync();
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        var result = reader["Result"].ToString();
+                        var message = reader["Message"].ToString();
+
+                        return (result == "Success", message);
+                    }
+                }
+            }
+
+            return (false, "No response from stored procedure");
+        }
+
+        public DataTable CreateApplicationUpdatesDataTable(List<DTOApplStatusBulkUpload> applications)
+        {
+            DataTable table = new DataTable();
+            table.Columns.Add("ApplId", typeof(int));
+            table.Columns.Add("StatusCode", typeof(int));
+            table.Columns.Add("Remarks", typeof(string));
+
+            foreach (var app in applications)
+            {
+                table.Rows.Add(
+                    app.ApplId,
+                    app.Status_Code,
+                    string.IsNullOrEmpty(app.Remarks) ? (object)DBNull.Value : app.Remarks
+                );
+            }
+
+            return table;
         }
     }
 }

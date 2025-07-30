@@ -6,15 +6,19 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Data;
 using System.Drawing;
+
 using System.IO.Compression;
+using System.Net.Http.Headers;
 namespace Agif_V2.Controllers
 {
     public class ApplicationRequestController : Controller
@@ -25,11 +29,11 @@ namespace Agif_V2.Controllers
         private readonly IUserProfile _userProfile;
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
 
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application,IUserProfile _userProfile,IClaimOnlineApplication claimOnlineApplication)
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
-            this._application = _application;            
+            this._application = _application;
             this._userProfile = _userProfile;
             this._IClaimonlineApplication1 = claimOnlineApplication;
         }
@@ -57,7 +61,7 @@ namespace Agif_V2.Controllers
             DTOUserProfileResponse dTOUserProfileResponse = new DTOUserProfileResponse();
 
             if (dTOTempSession != null)
-              dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
+                dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
 
             if (dTOUserProfileResponse != null)
             {
@@ -81,7 +85,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(SessionUserDTO sessionUserDTO)
         {
-            var result= await _userApplication.UpdateUserDetails(sessionUserDTO);
+            var result = await _userApplication.UpdateUserDetails(sessionUserDTO);
             if (result)
             {
                 TempData["ProfileMessage"] = "Your Profile is Updated Successfully.";
@@ -370,7 +374,7 @@ namespace Agif_V2.Controllers
         {
             try
             {
-            DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetails(applId);
+                DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetails(applId);
 
                 var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
                 if (dTOTempSession == null)
@@ -667,7 +671,7 @@ namespace Agif_V2.Controllers
                 var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
 
                 var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
-                
+
                 if (System.IO.File.Exists(sourceFilePath))
                 {
                     string destinationFolder = data.ApplicationTypeAbbr switch
@@ -707,14 +711,14 @@ namespace Agif_V2.Controllers
                 string zipFileName = $"{newFolderPath}.zip";
                 createZip(newFolderPath, zipFileName);
                 bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
-                if (!updateStatus) 
-                { 
+                if (!updateStatus)
+                {
                     return Json(Constants.DataNotExport);
                 }
                 return Json(newFolderName);
 
             }
-          
+
         }
         public async Task<bool> ExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
         {
@@ -734,9 +738,9 @@ namespace Agif_V2.Controllers
                 {
                     return false;
                 }
-                
 
-              
+
+
             }
         }
 
@@ -783,9 +787,9 @@ namespace Agif_V2.Controllers
             }
         }
 
-        public void createZip(string sourceFolderPath,string destinationFilePath)
+        public void createZip(string sourceFolderPath, string destinationFilePath)
         {
-            
+
             if (System.IO.File.Exists(destinationFilePath))
             {
                 System.IO.File.Delete(destinationFilePath);
@@ -813,7 +817,7 @@ namespace Agif_V2.Controllers
             var result = await _userApplication.GetApplicationByDate(exportDate);
             return Json(result);
         }
-        
+
         public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
         {
             DTOExportRequest dTOExport = new DTOExportRequest
@@ -876,7 +880,7 @@ namespace Agif_V2.Controllers
 
                 var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
 
-               
+
                 if (System.IO.File.Exists(sourceFilePath))
                 {
                     string destinationFolder = applicationTypeName switch
@@ -919,7 +923,7 @@ namespace Agif_V2.Controllers
                 return Json(newFolderName);
 
             }
-        
+
 
         }
 
@@ -928,6 +932,252 @@ namespace Agif_V2.Controllers
             DateTime exportDate = Convert.ToDateTime(date);
             var result = await _userApplication.GetClaimApplicationByDate(exportDate);
             return Json(result);
+        }
+
+        public async Task<IActionResult> UploadExcelFile(IFormFile file)
+        {
+            // Initialize the list properly
+            DTOApplStatusBulkUploadlst lst = new DTOApplStatusBulkUploadlst
+            {
+                DTOApplStatusBulkUploadOK = new List<DTOApplStatusBulkUpload>(),
+                DTOApplStatusBulkUploadNotOk = new List<DTOApplStatusBulkUpload>()
+            };
+
+            if (file == null || file.Length == 0)
+            {
+                return Json(new { success = false, message = "Please select a valid Excel file." });
+            }
+
+            try
+            {
+                string tempPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelTempUploads");
+                if (Directory.Exists(tempPath))
+                {
+                    var existingFiles = Directory.GetFiles(tempPath);
+                    foreach (var existingFile in existingFiles)
+                    {
+                        System.IO.File.Delete(existingFile); // Delete existing files
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(tempPath);
+                }
+
+                string filename = $"ExcelImport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                string extension = Path.GetExtension(file.FileName);
+                string filePath = Path.Combine(tempPath, filename);
+
+                using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var requiredHeaders = new List<string> { "Army No", "Appln_ID", "ApplicationType", "Status_Code", "AGIF Remarks" };
+                var foundHeaders = new List<string>();
+
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+                    if (worksheet == null)
+                    {
+                        return Json(new { success = false, message = "No worksheets found in the Excel file." });
+                    }
+
+                    var firstRow = worksheet.Row(1);
+                    if (firstRow == null)
+                    {
+                        return Json(new { success = false, message = "Excel file appears to be empty." });
+                    }
+
+                    foreach (var cell in firstRow.CellsUsed())
+                    {
+                        var header = cell.GetString()?.Trim();
+                        if (!string.IsNullOrEmpty(header))
+                        {
+                            foundHeaders.Add(header);
+                        }
+                    }
+                }
+
+                // Check missing headers
+                var missingHeaders = requiredHeaders
+                    .Where(required => !foundHeaders.Contains(required, StringComparer.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (missingHeaders.Any())
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "The following required columns are missing: " + string.Join(", ", missingHeaders)
+                    });
+                }
+
+                DataTable dt = ExcelToDatatable(filePath);
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    return Json(new { success = false, message = "No data found in Excel file." });
+                }
+
+                var AllStatusCode = await _userApplication.GetAllStatusCode();
+                if (AllStatusCode == null)
+                {
+                    return Json(new { success = false, message = "Unable to retrieve status codes." });
+                }
+
+                var applicationIds = dt.AsEnumerable()
+                    .Select(row => row.Field<string>("Appln_ID"))
+                    .Where(id => !string.IsNullOrEmpty(id))
+                    .Distinct()
+                    .ToList();
+
+                var NotApp_id = await _userApplication.GetNotApplId(applicationIds);
+
+                foreach (DataRow rw in dt.Rows)
+                {
+                    string applicationId = rw.Field<string>("Appln_ID");
+                    string statusCode = rw.Field<string>("Status_Code");
+
+                    if (string.IsNullOrEmpty(applicationId) || string.IsNullOrEmpty(statusCode))
+                    {
+                        continue;
+                    }
+
+                    // Validate that they can be converted to integers
+                    if (!int.TryParse(applicationId, out int applIdInt) || !int.TryParse(statusCode, out int statusCodeInt))
+                    {
+                        string reason = "";
+                        if (!int.TryParse(applicationId, out _))
+                        {
+                            reason += "Invalid Application ID format. ";
+                        }
+                        if (!int.TryParse(statusCode, out _))
+                        {
+                            reason += "Invalid Status Code format.";
+                        }
+
+                        lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
+                        {
+                            ApplId = 0, // Or skip setting
+                            Status_Code = 0, // Or skip setting
+                            Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                            Reason = reason.Trim()
+                        });
+                        continue;
+                    }
+
+
+                    // Check if the application ID is valid
+                    if (NotApp_id.Contains(applicationId))
+                    {
+                        // Handle invalid application ID
+                        lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
+                        {
+                            ApplId = applIdInt,
+                            Status_Code = statusCodeInt,
+                            Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                            Reason = "Invalid Application ID"
+                        });
+
+                    }
+                    else
+                    {
+                        // Check if the status code is valid
+                        if (AllStatusCode.Contains(statusCode))
+                        {
+                            // Add to the valid list
+                            lst.DTOApplStatusBulkUploadOK.Add(new DTOApplStatusBulkUpload
+                            {
+                                ApplId = applIdInt,
+                                ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
+                                Status_Code = statusCodeInt,
+                                Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty
+                            });
+                        }
+                        else
+                        {
+                            // Handle invalid status code
+                            lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
+                            {
+                                ApplId = applIdInt,
+                                Status_Code = statusCodeInt,
+                                Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                                Reason = "Invalid Status Code"
+                            });
+                        }
+                    }
+                }
+                TempData["BulkUploadOK"] = JsonConvert.SerializeObject(lst.DTOApplStatusBulkUploadOK);
+                return Json(new
+                {
+                    success = true,
+                    message = "File uploaded successfully.",
+                    Data = lst
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error uploading file: " + ex.Message });
+            }
+        }
+        public async Task<IActionResult> ProcessBulkApplications()
+        {
+            var tempDataOK = TempData["BulkUploadOK"]?.ToString();
+            if (string.IsNullOrEmpty(tempDataOK))
+            {
+                return Json(new { success = false, message = "No valid applications to process." });
+            }
+
+            var lst = JsonConvert.DeserializeObject<List<DTOApplStatusBulkUpload>>(tempDataOK);
+            if (lst == null || lst.Count == 0)
+            {
+                return Json(new { success = false, message = "No valid applications to process." });
+            }
+
+            DataTable applicationUpdatesTable = _userApplication.CreateApplicationUpdatesDataTable(lst);
+
+            // Call the bulk update method
+            var result = await _userApplication.ProcessBulkApplicationUpdates(applicationUpdatesTable);
+
+            if (result.Item1) // Assuming result is a tuple (bool, string)
+            {
+                return Json(new { success = true, message = "Bulk applications processed successfully." });
+            }
+            else
+            {
+                return Json(new { success = false, message = result.Item2 });
+            }
+
+            // Unreachable code removed
+        }
+
+        public DataTable ExcelToDatatable(string filePath)
+        {
+            DataTable dt = new DataTable();
+            using (var workbook = new XLWorkbook(filePath))
+            {
+                var worksheet = workbook.Worksheets.First();
+                var firstRowUsed = worksheet.FirstRowUsed();
+                var rowCount = worksheet.LastRowUsed().RowNumber();
+                var columnCount = worksheet.LastColumnUsed().ColumnNumber();
+
+                for (int col = 1; col <= columnCount; col++)
+                {
+                    dt.Columns.Add(worksheet.Cell(1, col).GetString().Trim(), typeof(string));
+                }
+                //Read data rows
+                for (int row = 2; row <= rowCount; row++)
+                {
+                    var dataRow = dt.NewRow();
+                    for (int col = 1; col <= columnCount; col++)
+                    {
+                        dataRow[col - 1] = worksheet.Cell(row, col).GetString().Trim();
+                    }
+                    dt.Rows.Add(dataRow);
+                }
+            }
+            return dt;
         }
 
     }
