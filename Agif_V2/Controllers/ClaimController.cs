@@ -674,9 +674,10 @@ namespace Agif_V2.Controllers
                         return Json(new { success = false, message = "Session expired or invalid user context." });
                     }
 
-                    string Name = await _IClaimonlineApplication1.GetCOName(dTOTempSession.ProfileId);
+                    var (name, mobile, armyno) = await _IClaimonlineApplication1.GetCODetails(dTOTempSession.ProfileId);
 
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, Name);
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, name, mobile, armyno);
+
 
                     if (data == 1)
                     {

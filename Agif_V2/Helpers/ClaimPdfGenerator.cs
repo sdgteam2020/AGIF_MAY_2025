@@ -34,7 +34,7 @@ namespace Agif_V2.Helpers
             _usersApplications = usersApplications;
         }
 
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name, string Mobile, string Armyno)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
@@ -691,7 +691,7 @@ namespace Agif_V2.Helpers
                                 .SetTextAlignment(TextAlignment.LEFT));
 
                             // Right: Army No
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"{common.Number ?? ""}")
+                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Armyno ?? ""}")
                                 .SetFont(normalFont).SetFontSize(11))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.RIGHT));
@@ -701,7 +701,7 @@ namespace Agif_V2.Helpers
                                 .SetBorder(Border.NO_BORDER));
 
                             // Right: Rank & Name
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"{common.DdlRank} {common.ApplicantName ?? ""}")
+                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Name ?? ""}")
                                 .SetFont(normalFont).SetFontSize(11))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.RIGHT));
@@ -711,7 +711,7 @@ namespace Agif_V2.Helpers
                                 .SetBorder(Border.NO_BORDER));
 
                             // Right: Mobile No
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"Mobile No: {common.MobileNo ?? ""}")
+                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"Mobile No: {Mobile ?? ""}")
                                 .SetFont(normalFont).SetFontSize(11))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.RIGHT));
