@@ -97,6 +97,8 @@ builder.Services.AddTransient<IEducation,EducationDL>();
 builder.Services.AddTransient<IMarraige, MarraigeDL>();
 builder.Services.AddTransient<IProperty, PropertyDL>();
 builder.Services.AddTransient<ISpecial, SpecialDL>();
+builder.Services.AddTransient<IClaimAccount,ClaimAccountDL>();
+builder.Services.AddTransient<IClaimAddress,ClaimAddressDL>();
 builder.Services.AddTransient<IArmyPrefixes, ArmyPrefixesDL>();
 builder.Services.AddTransient<IDoucmentupload, DocumentUploadDL>();
 builder.Services.AddTransient<IClaimDocumentUpload, ClaimDocumentUploadDL>();
