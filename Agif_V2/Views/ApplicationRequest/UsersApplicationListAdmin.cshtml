@@ -68,6 +68,11 @@ else
                                 Download PDF
                             </button>
                         </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary" id="UploadExcel">
+                                Upload Excel
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -104,7 +109,91 @@ else
     </div>
 
 </div>
+<div class="modal fade" id="AddBulkModel" data-backdrop="static">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Update Status</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body ">
+               
+                <div class="row h-100 mr-0">
+                   
+                    <div class="col-lg-9 col-xl-12">
+                        <div class="px-3 pb-5 pt-4 inner-block">
+                            <h4 class="modal-title text-blue mb-2">Update Status in bulk</h4>
+                            <p class="mb-3 f13">Choose a excel file to upload in bulk</p>
+                            <div class="form-inline f13 mb-2  p-3 shadow-sm border">
+                                <div class="form-group">
+                                    <label class="mr-sm-2">Choose File</label>
+                                    <i class="fas fa-asterisk mr-1 f8 text-red"></i><input type="file" class="mr-sm-2" id="fileExcel" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                    <button type="button" id="btnBulkUpload" class="btn btn-info btn-sm mt-2 mt-lg-0 ">Upload</button>
+                                </div>
+                            </div>
 
+
+                           <h6 class="text-purple font-weight-600">Validation Passed<i class="fas fa-angle-right f12 ml-2"></i></h6>
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <p class="mb-0 13">
+                                    Total Candidate <span id="lblTotalOk" class="ml-3 border border-secondary b px-2 py-1">0</span>
+                                </p>
+
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table border border-purple table-sm  mb-0" id="tblOk">
+                                    <thead class="">
+                                        <tr>
+                                            <th class="noExport d-none"></th>
+                                            <th class="wd-30-f">SNo.</th>
+                                            <th>Application Id</th>
+                                            <th>ArmyNO</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            
+                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody id="OkBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                            @*<hr />*@
+                            <h6 class="text-purple font-weight-600 mt-3">Validation Failed<i class="fas fa-angle-right f12 ml-2"></i></h6>
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
+                                <p class="mb-0 13">
+                                    Total Courses <span id="lblTotalNotOk" class="ml-3 border border-secondary b px-2 py-1">0</span>
+                                </p>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table border border-purple table-sm  mb-0" id="tblNotOk">
+                                    <thead class="">
+                                        <tr>
+                                            <th class="noExport d-none"></th>
+                                            <th class="wd-30-f">SNo.</th>
+                                            <th>Application Id</th>
+                                            <th>ArmyNO</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="NotOkBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr />
+                            <div class="text-right mt-3">
+                                <p class="text-danger font-weight-600" id="postBulk-msg"></p>
+                                <button type="button" id="btnProcessBulk" class="btn btn-primary btn-shadow">Process All Validated</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <!-- CSS: Bootstrap 5 and DataTables -->

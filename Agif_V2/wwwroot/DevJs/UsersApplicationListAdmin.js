@@ -11,7 +11,178 @@ $(document).ready(function () {
     let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
     BindUsersData(value);
 });
+$('#UploadExcel').on('click', function () {
+    $("#AddBulkModel").modal('show');
+});
 
+$('#btnBulkUpload').on('click', function () {
+    const file = $('#fileExcel')[0].files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    $.ajax({
+        url: '/ApplicationRequest/UploadExcelFile',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            populateUploadTables(response.data);
+            if (response.success) {
+                Swal.fire({
+                    title: 'Success',
+                    text: response.message,
+                    icon: 'success'
+                }).then(() => {
+                    // Reload the DataTable after successful upload
+                    BindUsersData($('#Status').val());
+                });
+            } else {
+                $("#postBulk-msg").html(response.message) ;
+               
+            }
+        },
+    });
+});
+
+function populateUploadTables(data) {
+    $('#OkBody').empty();
+    $('#NotOkBody').empty();
+    if (data.dtoApplStatusBulkUploadOK && data.dtoApplStatusBulkUploadOK.length > 0) {
+        let okTableBody = '';
+        data.dtoApplStatusBulkUploadOK.forEach((item, index) => {
+            okTableBody += `
+                <tr>
+                    <td class="noExport d-none">${item.applId}</td>
+                    <td class="wd-30-f">${index + 1}</td>
+                    <td>${item.applId}</td>
+                    <td>${item.armyNo || ''}</td>
+                    <td>${item.name || ''}</td>
+                    <td>${item.status_Code}</td>
+                </tr>
+            `;
+        });
+        $('#OkBody').html(okTableBody);
+        $('#lblTotalOk').text(data.dtoApplStatusBulkUploadOK.length);
+    } else {
+        $('#lblTotalOk').text('0');
+    }
+
+    if (data.dtoApplStatusBulkUploadNotOk && data.dtoApplStatusBulkUploadNotOk.length > 0) {
+        let notOkTableBody = '';
+        data.dtoApplStatusBulkUploadNotOk.forEach((item, index) => {
+            notOkTableBody += `
+                <tr>
+                    <td class="noExport d-none">${item.applId}</td>
+                    <td class="wd-30-f">${index + 1}</td>
+                    <td>${item.applId}</td>
+                    <td>${item.armyNo || ''}</td>
+                    <td>${item.name || ''}</td>
+                    <td>${item.status_Code}</td>
+                    <td>${item.reason}</td>
+                </tr>
+            `;
+        });
+        $('#NotOkBody').html(notOkTableBody);
+        $('#lblTotalNotOk').text(data.dtoApplStatusBulkUploadNotOk.length);
+    } else {
+        $('#lblTotalNotOk').text('0');
+    }
+}
+
+$('#btnProcessBulk').on('click', function () {
+    $.ajax({
+        url: '/ApplicationRequest/ProcessBulkApplications',
+        type: 'Get',
+        contentType: 'application/json',
+        data: {},
+        success: function (response) {
+            $('#fileExcel').val(''); // Clear the file input
+            $('#postBulk-msg').empty(); // Clear any previous messages
+
+            $('#OkBody').empty();
+            $('#NotOkBody').empty();
+            $('#lblTotalOk').text('0');
+            $('#lblTotalNotOk').text('0');
+            $('#AddBulkModel').modal('hide');
+
+            if (response.success) {
+                Swal.fire({
+                    title: 'Success',
+                    text: response.message,
+                    icon: 'success'
+                }).then(() => {
+                    // Reload the DataTable after processing
+                    BindUsersData($('#Status').val());
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: response.message,
+                    icon: 'error'
+                });
+            }
+        },
+    });
+});
+$('#UploadExcel1').on('click', function () {
+    Swal.fire({
+        title: "Upload Excel File",
+        text: "Please select an Excel file to upload.",
+        input: 'file',
+        inputAttributes: {
+            accept: '.xlsx,.xls',
+            'aria-label': 'Upload your Excel file'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Upload',
+        cancelButtonText: 'Cancel',
+        showLoaderOnConfirm: true,
+        allowOutsideClick: () => !Swal.isLoading(),
+        preConfirm: (file) => {
+            if (!file) {
+                Swal.showValidationMessage('No file selected. Please select an Excel file to upload.');
+                return false;
+            }
+            const fileName = file.name.toLowerCase();
+            if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls')) {
+                Swal.showValidationMessage('Invalid file type. Please upload an Excel file (.xlsx or .xls).');
+                return false;
+            }
+            return file;
+        }
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            const file = result.value;
+            const formData = new FormData();
+            formData.append('file', file);
+            $.ajax({
+                url: '/ApplicationRequest/UploadExcelFile',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: response.message,
+                            icon: 'success'
+                        }).then(() => {
+                            // Reload the DataTable after successful upload
+                            BindUsersData($('#Status').val());
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: response.message,
+                            icon: 'error'
+                        });
+                    }
+                },
+            });
+        }
+    });
+});
 $(document).on('click', '.download-btn', function () {
     const applicationId = $(this).data('id');
     const armyNo = $(this).data('army');

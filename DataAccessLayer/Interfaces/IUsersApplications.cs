@@ -3,6 +3,7 @@ using DataTransferObject.Request;
 using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,14 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date);
 
         Task<bool> UpdateUserDetails(SessionUserDTO sessionUserDTO);
+
+        Task<bool> CheckAllApplnIdPresent(List<string> applicationIds);
+
+        Task<List<string>> GetAllStatusCode();
+        Task<List<string>> GetNotApplId(List<string> applicationIds);
+
+        Task<(bool, string)> ProcessBulkApplicationUpdates(DataTable applicationUpdates);
+        DataTable CreateApplicationUpdatesDataTable(List<DTOApplStatusBulkUpload> applications);
 
     }
 }

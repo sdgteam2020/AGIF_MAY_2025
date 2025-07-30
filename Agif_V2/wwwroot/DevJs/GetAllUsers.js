@@ -315,7 +315,8 @@ function updateUserStatus(domainId, isActive, toggleElement) {
             if (response.success) {
                 $('#tblData').DataTable().ajax.reload(null, false);
                 showSuccessMessage(`User status updated to: ${isActive ? 'Active' : 'Inactive'}`);
-            } else {
+            }
+            else {
                 revertToggle(toggleElement, !isActive);
                 console.error('Failed to update user status:', response.message);
                 showErrorMessage('Failed to update user status: ' + response.message);
@@ -337,10 +338,14 @@ function updateUserPrimary(domainId, isPrimary, toggleElement) {
             isPrimary: isPrimary
         },
         success: function (response) {
-            if (response.success) {
+            if (response.success && isPrimary) {
                 $('#tblData').DataTable().ajax.reload(null, false);
-                showSuccessMessage(`User role updated to: ${isPrimary ? 'Primary' : 'Secondary'}`);
-            } else {
+                showSuccessMessage(`User role updated to: Primary'}`);
+            } else if (response.success && !isPrimary) {
+                $('#tblData').DataTable().ajax.reload(null, false);
+                showErrorMessage(`You cannot change primary to secondary`);
+            }
+            else {
                 revertToggle(toggleElement, !isPrimary, 'primary');
                 console.error('Failed to update user primary status:', response.message);
                 showErrorMessage('Failed to update user role: ' + response.message);
