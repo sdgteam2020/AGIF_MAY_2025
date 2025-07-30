@@ -136,6 +136,12 @@ namespace DataAccessLayer.Repositories
                     .Where(d => d.ApplicationId == existingUser.ApplicationId)
                     .ToListAsync();
 
+                var AddressDetails = await _context.trnAddressDetails
+                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+                var AccountDetails = await _context.trnAccountDetails
+                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
                 if (carLoan != null)
                     _context.trnCar.Remove(carLoan);
 
@@ -147,6 +153,12 @@ namespace DataAccessLayer.Repositories
 
                 if (documents.Any())
                     _context.trnDocumentUpload.RemoveRange(documents);
+
+                if(AddressDetails != null)
+                    _context.trnAddressDetails.Remove(AddressDetails);
+
+                if (AccountDetails != null)
+                    _context.trnAccountDetails.Remove(AccountDetails);
 
                 var applicationEntity = await _context.trnApplications
                     .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
@@ -688,6 +700,7 @@ namespace DataAccessLayer.Repositories
 
         public Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport)
         {
+           
             DataTable dataTable = new DataTable();
             var query = (from common in _context.trnApplications
                          join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup

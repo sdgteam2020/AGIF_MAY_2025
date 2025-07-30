@@ -1192,7 +1192,7 @@ function handleSubmitClick() {
                 }
                 // errorlist += input.name + ", ";
                 let errorText = input.name;
-                const prefixes = ["ClaimCommonData.", "Marriageward.", "EducationDetails.", "PropertyRenovation.","SplWaiver."];
+                const prefixes = ["ClaimCommonData.", "Marriageward.", "EducationDetails.", "PropertyRenovation.", "SplWaiver.", "AddressDetails.", "AccountDetails."];
                 prefixes.forEach(prefix => {
                     if (errorText.includes(prefix)) {
                         errorText = errorText.replace(prefix, "");

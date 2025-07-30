@@ -402,8 +402,8 @@ function getApplicantDetalis() {
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
-                    title: "You Have Already applied for Maturity.",
-                    text: "Would you like to apply for a new Maturity !",
+                    title: "You Have Already applied for Loan.",
+                    text: "Would you like to apply for a new Loan !",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
@@ -492,7 +492,7 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();
     if (!value) {
-        alert("Please select a Date of Commission.");
+        //alert("Please select a Date of Commission.");
         return;
     }
     calculateDifferenceBetweenDOBAndDOC(value);
@@ -715,6 +715,49 @@ function formatDateToString(date) {
     return day + "/" + month + "/" + year;
 }
 
+//function validateDateFormat(input) {
+//    const value = input.value;
+//    const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
+
+//    // Check if the value matches the date format
+//    if (value && !datePattern.test(value)) {
+//        Swal.fire({
+//            icon: "error",
+//            title: "Invalid date",
+//            text: "Invalid date format. Please select a valid date.",
+//        });
+//        input.focus();
+//        input.value = ""; // Clear the invalid input
+//        return;
+//    }
+
+//    // Additional validation to check date validity and reasonable year range
+//    if (value && datePattern.test(value)) {
+//        const parts = value.split('/');
+//        const day = parseInt(parts[0], 10);
+//        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+//        const year = parseInt(parts[2], 10);
+
+//        // Check for reasonable year range (e.g., 1900 to current year)
+//        const currentYear = new Date().getFullYear();
+//        if (year < 1900 || year > currentYear) {
+//            Swal.fire({
+//                icon: "error",
+//                title: "Invalid year",
+//                text: `Please enter a year between 1900 and ${currentYear}.`,
+//            });
+//            input.focus();
+//            input.value = ""; // Clear the invalid input
+//            return;
+//        }
+
+//        // Check if it's a valid date
+
+//    }
+
+//    SetRetDate();
+//}
+
 function validateDateFormat(input) {
     const value = input.value;
     const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
@@ -739,7 +782,11 @@ function validateDateFormat(input) {
         const year = parseInt(parts[2], 10);
 
         // Check for reasonable year range (e.g., 1900 to current year)
-        const currentYear = new Date().getFullYear();
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        const currentMonth = currentDate.getMonth(); // 0-indexed month
+        const currentDay = currentDate.getDate();
+
         if (year < 1900 || year > currentYear) {
             Swal.fire({
                 icon: "error",
@@ -751,13 +798,46 @@ function validateDateFormat(input) {
             return;
         }
 
-        // Check if it's a valid date
+        // Check if the entered date's month and day are not in the future
+        if (year === currentYear && month > currentMonth) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid month",
+                text: "Month cannot be in the future.",
+            });
+            input.focus();
+            input.value = ""; // Clear the invalid input
+            return;
+        }
 
+        // Check if the entered day is greater than today's day for the same month and year
+        if (year === currentYear && month === currentMonth && day > currentDay) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid day",
+                text: "Day cannot be in the future.",
+            });
+            input.focus();
+            input.value = ""; // Clear the invalid input
+            return;
+        }
+
+        // Check if it's a valid date (for example, handle February 30th, etc.)
+        const inputDate = new Date(year, month, day);
+        if (inputDate.getDate() !== day) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid date",
+                text: "The date you entered does not exist.",
+            });
+            input.focus();
+            input.value = ""; // Clear the invalid input
+            return;
+        }
     }
 
     SetRetDate();
 }
-
 function my_date(date_string) {
     var date_components = date_string.split("/");
     var day = date_components[0];
@@ -999,7 +1079,7 @@ function togglePromotionDate(rankValue) {
 function updateRetDateOnPromotionDateSelection() {
     var promotionDate = $('#dateOfPromotion').val();
     if (!promotionDate) {
-        alert("Please select the Date of Promotion.");
+        //alert("Please select the Date of Promotion.");
         return;
     }
     var dateParts = promotionDate.split('/');

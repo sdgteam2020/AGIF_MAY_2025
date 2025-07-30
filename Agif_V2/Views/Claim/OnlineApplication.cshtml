@@ -468,53 +468,53 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Vill_Town" name="ClaimCommonData.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.ClaimCommonData?.Vill_Town" />
+                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Vill_Town" />
                                         <label class="form-label" for="Vill_Town">Village/Town</label>
                                     </div>
 
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Vill_Town, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.Vill_Town, "", new { @class = "text-danger" })
 
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="postOffice" name="ClaimCommonData.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.ClaimCommonData?.PostOffice" />
+                                        <input type="text" id="postOffice" name="AddressDetails.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.PostOffice" />
                                         <label class="form-label" for="postOffice">Post Office</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.PostOffice, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.PostOffice, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="distt" name="ClaimCommonData.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.ClaimCommonData?.Distt" />
+                                        <input type="text" id="distt" name="AddressDetails.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Distt" />
                                         <label class="form-label" for="distt">Enter Dist</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Distt, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.Distt, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="state" name="ClaimCommonData.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.ClaimCommonData?.State" />
+                                        <input type="text" id="state" name="AddressDetails.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.State" />
                                         <label class="form-label" for="state">Enter State</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.State, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.State, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="ClaimCommonData.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.ClaimCommonData?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.Code, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AddressDetails.Code, "", new { @class = "text-danger" })
                             </div>
 
 
@@ -538,52 +538,52 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="password" id="salaryAcctNo" name="ClaimCommonData.SalaryAcctNo" class="form-control" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onchange="validateAccountNo(this)" value="@Model.ClaimCommonData?.SalaryAcctNo" required />
+                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onchange="validateAccountNo(this)" value="@Model.AccountDetails?.SalaryAcctNo" required />
                                         <label class="form-label select-label ">Applicant's Salary Acct No</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.SalaryAcctNo, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.SalaryAcctNo, "", new { @class = "text-danger" })
 
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="confirmSalaryAcctNo" name="ClaimCommonData.ConfirmSalaryAcctNo" class="form-control" onchange="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" value="@Model.ClaimCommonData?.ConfirmSalaryAcctNo" required />
+                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control" onchange="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
                                         <label class="form-label select-label ">Re-Enter Salary Acct No</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="ifsCode" name="ClaimCommonData.IfsCode" class="form-control" value="@Model.ClaimCommonData?.IfsCode" required maxlength="12" />
+                                        <input type="text" id="ifsCode" name="AccountDetails.IfsCode" class="form-control" value="@Model.AccountDetails?.IfsCode" required maxlength="12" />
                                         <label class="form-label select-label ">IFSC of Bank</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.IfsCode, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.IfsCode, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="ClaimCommonData.NameOfBank" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.ClaimCommonData?.NameOfBank" required />
+                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
                                         <label class="form-label select-label ">Name of Bank</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.NameOfBank, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBank, "", new { @class = "text-danger" })
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="ClaimCommonData.NameOfBankBranch" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.ClaimCommonData?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
-                                @Html.ValidationMessageFor(m => m.ClaimCommonData.NameOfBankBranch, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBankBranch, "", new { @class = "text-danger" })
                             </div>
                         </div>
                     </div>

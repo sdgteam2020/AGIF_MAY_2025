@@ -16,6 +16,9 @@ namespace DataTransferObject.Request
 
         public ClaimCommonModel ClaimCommonData { get; set; }
 
+        public ClaimAccountDetailsModel? AccountDetails { get; set; }
+        public ClaimAddressDetailsModel? AddressDetails { get; set; }
+
         public string? Category { get; set; }
 
         public string? Purpose { get; set; }

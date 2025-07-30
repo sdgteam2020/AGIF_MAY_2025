@@ -127,47 +127,6 @@ namespace DataTransferObject.Model
         [StringLength(100, ErrorMessage = "Next Fmn HQ can't be longer than 100 characters.")]
         public string? NextFmnHQ { get; set; }
 
-        [Required(ErrorMessage = "Village/Town is required.")]
-        [StringLength(100, ErrorMessage = "Village/Town can't be longer than 100 characters.")]
-        public string? Vill_Town { get; set; }
-
-        [Required(ErrorMessage = "Post Office is required.")]
-        [StringLength(100, ErrorMessage = "Post Office can't be longer than 100 characters.")]
-        public string? PostOffice { get; set; }
-
-        [Required(ErrorMessage = "District is required.")]
-        [StringLength(100, ErrorMessage = "District can't be longer than 100 characters.")]
-        public string? Distt { get; set; }
-
-        [Required(ErrorMessage = "State is required.")]
-        [StringLength(100, ErrorMessage = "State can't be longer than 100 characters.")]
-        public string? State { get; set; }
-
-        [Required(ErrorMessage = "Zip Code is required.")]
-        [StringLength(6, ErrorMessage = "Zip Code can't be longer than 6 characters.")]
-        public string? Code { get; set; }
-
-        [Required(ErrorMessage = "Salary Account No is required.")]
-        [StringLength(20, ErrorMessage = "Salary Account No can't be longer than 20 characters.")]
-        public string? SalaryAcctNo { get; set; }
-
-        [Required(ErrorMessage = "Re-Enter Salary Account No is required.")]
-        [StringLength(20, ErrorMessage = "Confirm Salary Account No can't be longer than 20 characters.")]
-        public string? ConfirmSalaryAcctNo { get; set; }
-
-        [Required(ErrorMessage = "IFSC Code is required.")]
-        [StringLength(11, ErrorMessage = "IFSC Code can't be longer than 11 characters.")]
-        public string? IfsCode { get; set; }
-
-        [Required(ErrorMessage = "Bank Name is required.")]
-        [StringLength(100, ErrorMessage = "Bank Name can't be longer than 100 characters.")]
-        public string? NameOfBank { get; set; }
-
-        [Required(ErrorMessage = "Bank Branch is required.")]
-        [StringLength(100, ErrorMessage = "Bank Branch Name can't be longer than 100 characters.")]
-        public string? NameOfBankBranch { get; set; }
-
-
         public bool? House_Building_Advance_Loan { get; set; }
         public bool? House_Repair_Advance_Loan { get; set; }
         public bool? Conveyance_Advance_Loan { get; set; }

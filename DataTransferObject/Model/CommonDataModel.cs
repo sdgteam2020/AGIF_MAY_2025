@@ -216,5 +216,7 @@ namespace DataTransferObject.Model
         public string? IOArmyNo { get; set; }
         public DateTime? DownloadedOn { get; set; }
         public int  DownloadCount { get; set; }
+
+        public string? AGIFRemarks { get; set; }= string.Empty;
     }
 }

@@ -130,6 +130,12 @@ namespace DataAccessLayer.Repositories
                     .Where(d => d.ApplicationId == existingUser.ApplicationId)
                     .ToListAsync();
 
+                var AccountDetails = await _context.trnClaimAccountDetails
+                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+                var AddressDetails = await _context.trnClaimAddressDetails
+                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
 
                 if (ED != null)
                     _context.trnEducationDetails.Remove(ED);
@@ -145,6 +151,12 @@ namespace DataAccessLayer.Repositories
 
                 if (documents.Any())
                     _context.trnClaimDocumentUpload.RemoveRange(documents);
+
+                if(AccountDetails != null)
+                    _context.trnClaimAccountDetails.Remove(AccountDetails);
+                
+                if (AddressDetails != null)
+                    _context.trnClaimAddressDetails.Remove(AddressDetails);
 
                 var applicationEntity = await _context.trnClaim
                     .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
@@ -565,6 +577,13 @@ namespace DataAccessLayer.Repositories
                           join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
                           join applicationType in _context.WithdrawalPurpose on common.WithdrawPurpose equals applicationType.Id
+
+                          join AddressDetails in _context.trnClaimAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+
+                          join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -593,11 +612,11 @@ namespace DataAccessLayer.Repositories
                               MobileNo = common.MobileNo ?? string.Empty,
                               Email = common.Email ?? string.Empty,
                               EmailDomain = common.EmailDomain ?? string.Empty,
-                              SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                              ConfirmSalaryAcctNo = common.ConfirmSalaryAcctNo ?? string.Empty,
-                              IfsCode = common.IfsCode ?? string.Empty,
-                              NameOfBank = common.NameOfBank ?? string.Empty,
-                              NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                              ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo ?? string.Empty,
+                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
@@ -629,11 +648,11 @@ namespace DataAccessLayer.Repositories
                               Computer_Date_of_Loan_taken= common.Computer_Date_of_Loan_taken,
                               Computer_Duration_of_Loan= common.Computer_Duration_of_Loan ?? 0,
 
-                              Vill_Town = common.Vill_Town ?? string.Empty,
-                              PostOffice = common.PostOffice ?? string.Empty,
-                              Distt = common.Distt ?? string.Empty,
-                              State = common.State ?? string.Empty,
-
+                              Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
+                              PostOffice = AddressDetails.PostOffice ?? string.Empty,
+                              Distt = AddressDetails.Distt ?? string.Empty,
+                              State = AddressDetails.State ?? string.Empty,
+                              Code= AddressDetails.Code ?? string.Empty,
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
@@ -885,6 +904,12 @@ namespace DataAccessLayer.Repositories
                           from presentUnit in presentUnitGroup.DefaultIfEmpty()
                           join applicationType in _context.WithdrawalPurpose on common.WithdrawPurpose equals applicationType.Id
 
+                          join AddressDetails in _context.trnClaimAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+
+                          join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -912,10 +937,10 @@ namespace DataAccessLayer.Repositories
                               PanCardNo = common.PanCardNo ?? string.Empty,
                               MobileNo = common.MobileNo ?? string.Empty,
                               Email = common.Email ?? string.Empty,
-                              SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                              IfsCode = common.IfsCode ?? string.Empty,
-                              NameOfBank = common.NameOfBank ?? string.Empty,
-                              NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               
@@ -943,10 +968,11 @@ namespace DataAccessLayer.Repositories
                               Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
                               Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
 
-                              Vill_Town = common.Vill_Town ?? string.Empty,
-                              PostOffice = common.PostOffice ?? string.Empty,
-                              Distt = common.Distt ?? string.Empty,
-                              State = common.State ?? string.Empty,
+                              Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
+                              PostOffice = AddressDetails.PostOffice ?? string.Empty,
+                              Distt = AddressDetails.Distt ?? string.Empty,
+                              State = AddressDetails.State ?? string.Empty,
+                              Code= AddressDetails.Code ?? string.Empty,
                           }).ToListAsync();
             data.OnlineApplicationResponse = result.Result; // Assuming result is already defined
 
@@ -985,6 +1011,12 @@ namespace DataAccessLayer.Repositories
                          join SP in _context.trnSplWaiver on common.ApplicationId equals SP.ApplicationId into SPGroup
                          from SP in SPGroup.DefaultIfEmpty()
 
+                         join AddressDetails in _context.trnClaimAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                         from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+
+                         join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                         from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
                          where dTOExport.Id.Contains(common.ApplicationId)
                          select new DTOClaimExcelResponse
                          {
@@ -1009,16 +1041,16 @@ namespace DataAccessLayer.Repositories
                              PanCardNo = common.PanCardNo ?? string.Empty,
                              MobileNo = common.MobileNo ?? string.Empty,
                              Email = (common.Email ?? string.Empty) + "@" + (common.EmailDomain ?? string.Empty),
-                             SalaryAcctNo = common.SalaryAcctNo ?? string.Empty,
-                             IfsCode = common.IfsCode ?? string.Empty,
-                             NameOfBank = common.NameOfBank ?? string.Empty,
-                             NameOfBankBranch = common.NameOfBankBranch ?? string.Empty,
+                             SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                             IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                             NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                             NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                              pcda_pao = common.pcda_pao ?? string.Empty,
                              pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
-                             Pers_Address_Line1 = common.Vill_Town ?? string.Empty,
-                             Pers_Address_Line2 = common.PostOffice ?? string.Empty,
-                             Pers_Address_Line3 = common.Distt ?? string.Empty,
-                             Pers_Address_Line4 = common.State ?? string.Empty,
+                             Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
+                             Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
+                             Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
+                             Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
                              AmountwithdrwalRequired = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
                              NoOfwithdrwal = common.Noofwithdrawal ?? string.Empty,
                              TotalService = common.TotalService ?? 0,

@@ -22,7 +22,9 @@ namespace Agif_V2.Controllers
         private readonly IHba _Hba;
         private readonly IPca _Pca;
         private readonly PdfUpload _pdfUpload;
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload)
+        private readonly IClaimAddress _ClaimAddress;
+        private readonly IClaimAccount _ClaimAccount;
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount)
         {
             _IClaimonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -34,6 +36,8 @@ namespace Agif_V2.Controllers
             _mergePdf = mergePdf;
             this._IclaimDocumentUpload = claimDocumentUpload;
             this._pdfUpload = pdfUpload;
+            _ClaimAddress = claimAddress;
+            _ClaimAccount = claimAccount;
         }
 
         public IActionResult MaturityLoanType()
@@ -424,11 +428,48 @@ namespace Agif_V2.Controllers
                 }
             }
 
+            if (model.AddressDetails != null)
+            {
+                var addressValidationContext = new ValidationContext(model.AddressDetails);
+                var addressValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.AddressDetails, addressValidationContext, addressValidationResults, true))
+                {
+                    foreach (var result in addressValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "AddressDetails"
+                            : $"AddressDetails.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+
+            if (model.AccountDetails != null)
+            {
+                var accountValidationContext = new ValidationContext(model.AccountDetails);
+                var accountValidationResults = new List<ValidationResult>();
+                if (!Validator.TryValidateObject(model.AccountDetails, accountValidationContext, accountValidationResults, true))
+                {
+                    foreach (var result in accountValidationResults)
+                    {
+                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string errorKey = string.IsNullOrEmpty(propertyName)
+                            ? "AccountDetails"
+                            : $"AccountDetails.{propertyName}";
+                        ModelState.AddModelError(errorKey, result.ErrorMessage);
+                    }
+                }
+            }
+
             if (!ModelState.IsValid)
                 return View("OnlineApplication", model);
             else
             {
                 ClaimCommonModel claimCommonModel = new ClaimCommonModel();
+                ClaimAddressDetailsModel addressDetails = new ClaimAddressDetailsModel();
+                ClaimAccountDetailsModel accountDetails = new ClaimAccountDetailsModel();
+
                 if (model.ClaimCommonData != null)
                 {
                     model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
@@ -436,6 +477,19 @@ namespace Agif_V2.Controllers
                     model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
                     claimCommonModel = await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
                 }
+
+                if (model.AddressDetails != null)
+                {
+                    model.AddressDetails.ApplicationId = claimCommonModel.ApplicationId;
+                    await _ClaimAddress.Add(model.AddressDetails);
+                }
+
+                if (model.AccountDetails != null)
+                {
+                    model.AccountDetails.ApplicationId = claimCommonModel.ApplicationId;
+                    await _ClaimAccount.Add(model.AccountDetails);
+                }
+
 
                 if (model.EducationDetails != null)
                 {

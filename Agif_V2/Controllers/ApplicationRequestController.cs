@@ -508,7 +508,7 @@ namespace Agif_V2.Controllers
                 {
                     string searchValue = request.searchValue.ToLower();
                     query = query.Where(x =>
-                        (x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
+                        //(x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
                         (x.ArmyNo != null && x.ArmyNo.ToLower().Contains(searchValue)) ||
                         (x.RegtCorps != null && x.RegtCorps.ToLower().Contains(searchValue)) ||
                         (x.PresentUnit != null && x.PresentUnit.ToLower().Contains(searchValue)) ||
@@ -572,7 +572,7 @@ namespace Agif_V2.Controllers
                 {
                     string searchValue = request.searchValue.ToLower();
                     query = query.Where(x =>
-                        (x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
+                        //(x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
                         (x.ArmyNo != null && x.ArmyNo.ToLower().Contains(searchValue)) ||
                         (x.RegtCorps != null && x.RegtCorps.ToLower().Contains(searchValue)) ||
                         (x.PresentUnit != null && x.PresentUnit.ToLower().Contains(searchValue)) ||
