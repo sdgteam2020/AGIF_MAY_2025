@@ -115,6 +115,7 @@ builder.Services.AddTransient<MergePdf>();
 builder.Services.AddTransient<OnlineApplicationController>();
 builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<FileUtility>();
 
 
 builder.Services.AddCors(options =>

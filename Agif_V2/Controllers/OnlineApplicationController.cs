@@ -25,9 +25,11 @@ namespace Agif_V2.Controllers
         private readonly ICar _car;
         private readonly IHba _Hba;
         private readonly IPca _Pca;
+        private readonly FileUtility _fileUtility;
         private readonly IAddress _address;
         private readonly IAccount _account;
 
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, FileUtility fileUtility)
         public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account)
         {
             _IonlineApplication1 = OnlineApplication;
@@ -38,6 +40,7 @@ namespace Agif_V2.Controllers
             _pdfGenerator = pdfGenerator;
             _env = env;
             _mergePdf = mergePdf;
+            _fileUtility = fileUtility;
             _address = address;
             _account = account;
         }
@@ -62,11 +65,11 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
-        public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix,int regtId)
+        public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix, int regtId)
         {
-            if (Prefix == 11 && new[] { 24,23, 29, 22, 21 }.Contains(rankId))// For - NTR prefix
+            if (Prefix == 11 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - NTR prefix
             {
-                return Json(new { retirementAge = 57, userTypeId = 1 }); 
+                return Json(new { retirementAge = 57, userTypeId = 1 });
             }
             else if (Prefix == 11 && new[] { 26 }.Contains(rankId))// For - NTR prefix
             {
@@ -80,21 +83,21 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { retirementAge = 61, userTypeId = 1 });
             }
-            else if(Prefix == 3 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - SC prefix
+            else if (Prefix == 3 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - SC prefix
             {
-                return Json(new { retirementAge = 57, userTypeId = 1 }); 
+                return Json(new { retirementAge = 57, userTypeId = 1 });
             }
-            else if(Prefix == 3 && new[] {26}.Contains(rankId))// For - SC prefix
+            else if (Prefix == 3 && new[] { 26 }.Contains(rankId))// For - SC prefix
             {
-                return Json(new { retirementAge = 58, userTypeId = 1 }); 
+                return Json(new { retirementAge = 58, userTypeId = 1 });
             }
-            else if(Prefix == 3 && new[] {27 }.Contains(rankId))// For - SC prefix
+            else if (Prefix == 3 && new[] { 27 }.Contains(rankId))// For - SC prefix
             {
-                return Json(new { retirementAge = 59, userTypeId = 1 }); 
+                return Json(new { retirementAge = 59, userTypeId = 1 });
             }
-            else if(Prefix == 3 && new[] { 28}.Contains(rankId))// For - SC prefix
+            else if (Prefix == 3 && new[] { 28 }.Contains(rankId))// For - SC prefix
             {
-                return Json(new { retirementAge = 60, userTypeId = 1 }); 
+                return Json(new { retirementAge = 60, userTypeId = 1 });
             }
             var userType = await _IMasterOnlyTable.GetUserType(Prefix);
             var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
@@ -143,13 +146,13 @@ namespace Agif_V2.Controllers
         {
             bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
 
-            if (result == true) 
+            if (result == true)
             {
-                return Json(new { exists = true }); 
+                return Json(new { exists = true });
             }
             else
             {
-                return Json(new { exists = false }); 
+                return Json(new { exists = false });
             }
         }
 
@@ -166,7 +169,7 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> CheckForCoRegister(string ArmyNo)
         {
-           return Json(await _IonlineApplication1.CheckForCoRegister(ArmyNo));
+            return Json(await _IonlineApplication1.CheckForCoRegister(ArmyNo));
         }
 
         public async Task<JsonResult> CheckIsUnitRegister(string ArmyNo)
@@ -418,7 +421,7 @@ namespace Agif_V2.Controllers
                     }
                     else if (applicationType == "2")
                     {
-                        if(userData.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+                        if (userData.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
                         {
                             applicationTypeName = "TW";
                         }
@@ -461,7 +464,7 @@ namespace Agif_V2.Controllers
                 try
                 {
                     SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-                    
+
                     if (dTOTempSession == null)
                     {
                         return Json(new { success = false, message = "Session expired or invalid user context." });
@@ -469,7 +472,7 @@ namespace Agif_V2.Controllers
 
                     string Name = await _IonlineApplication1.GetCOName(dTOTempSession.ProfileId);
 
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip, Name);
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, Name);
 
                     //if (data == 1)
                     //{
@@ -581,7 +584,7 @@ namespace Agif_V2.Controllers
             string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
             string mergepdfName = "App" + applicationIdStr + armyNo;
             string pdfFilePath = $"/MergePdf/{mergepdfName}.pdf";
-            
+
             return Json(pdfFilePath);
         }
 
@@ -625,7 +628,54 @@ namespace Agif_V2.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<JsonResult> GetPdfFileByteByApplicationId(int applicationId)
+        {
+            try
+            {
+                // Fetch the PDF file path
+                var pdfFilePathResult = await GetPdfFilePath(applicationId);
+                if (pdfFilePathResult.Value is not string pdfPath || string.IsNullOrEmpty(pdfPath))
+                {
+                    throw new FileNotFoundException("The specified file path is invalid or empty.");
+                }
 
+                // Resolve the full path
+                string fullPath = Path.Combine(_env.WebRootPath, pdfPath.TrimStart('/'));
+
+                // Check if the file exists
+                if (!System.IO.File.Exists(fullPath))
+                {
+                    throw new FileNotFoundException("The specified file does not exist.", fullPath);
+                }
+
+                // Read the PDF file into a byte array
+                byte[] fileBytes = System.IO.File.ReadAllBytes(fullPath);
+
+                // Return the byte array as a JSON response
+                return Json(fileBytes);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"An error occurred while fetching PDF: {ex.Message}" });
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> SaveBase64ToFile(string base64String, string fileName)
+        {
+            string directoryPath = Path.Combine(_env.WebRootPath, "MergePdf");
+            try
+            {
+                // Call the FileUtility method to save the Base64 string to a file
+                await _fileUtility.SaveBase64ToFileAsync(base64String, directoryPath, fileName); 
+                return Json(new { success = true, message = "File saved successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
+            }
+        }
     }
 
 }
