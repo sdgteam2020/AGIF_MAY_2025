@@ -17,6 +17,14 @@ $('#UploadExcel').on('click', function () {
 
 $('#btnBulkUpload').on('click', function () {
     const file = $('#fileExcel')[0].files[0];
+    if (!file) {
+        Swal.fire({
+            title: 'Error',
+            text: 'Please select a file to upload.',
+            icon: 'error'
+        });
+        return; // Exit the function if no file is selected
+    }
     const formData = new FormData();
     formData.append('file', file);
     $.ajax({

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\ClaimTempUploads\**" />
     <Compile Remove="wwwroot\images\cards\card-style-1\**" />
     <Compile Remove="wwwroot\images\cards\card-style-2\**" />
     <Compile Remove="wwwroot\images\cards\card-style-4\**" />
@@ -16,7 +15,6 @@
     <Compile Remove="wwwroot\images\invoice\**" />
     <Compile Remove="wwwroot\images\lead\**" />
     <Compile Remove="wwwroot\images\modals\**" />
-    <Content Remove="wwwroot\ClaimTempUploads\**" />
     <Content Remove="wwwroot\images\cards\card-style-1\**" />
     <Content Remove="wwwroot\images\cards\card-style-2\**" />
     <Content Remove="wwwroot\images\cards\card-style-4\**" />
@@ -25,7 +23,6 @@
     <Content Remove="wwwroot\images\invoice\**" />
     <Content Remove="wwwroot\images\lead\**" />
     <Content Remove="wwwroot\images\modals\**" />
-    <EmbeddedResource Remove="wwwroot\ClaimTempUploads\**" />
     <EmbeddedResource Remove="wwwroot\images\cards\card-style-1\**" />
     <EmbeddedResource Remove="wwwroot\images\cards\card-style-2\**" />
     <EmbeddedResource Remove="wwwroot\images\cards\card-style-4\**" />
@@ -34,7 +31,6 @@
     <EmbeddedResource Remove="wwwroot\images\invoice\**" />
     <EmbeddedResource Remove="wwwroot\images\lead\**" />
     <EmbeddedResource Remove="wwwroot\images\modals\**" />
-    <None Remove="wwwroot\ClaimTempUploads\**" />
     <None Remove="wwwroot\images\cards\card-style-1\**" />
     <None Remove="wwwroot\images\cards\card-style-2\**" />
     <None Remove="wwwroot\images\cards\card-style-4\**" />
