@@ -445,7 +445,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         data: JSON.stringify({
             //"inputPersID": IcNo
             //"inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"
-            "inputPersID": "9A4BEB14B87DE35D6BBA98E2B16AD4EB341D52BDA2BB3B7EADB064BAF676CBD3"
+            "inputPersID": "9a4beb14b87de35d6bba98e2b16ad4eb341d52bda2bb3b7eadb064baf676cbd3"
             //"inputPersID": "9A4BEB14B87DE35D6BBA98E2B16AD4EB341D52BDA2BB3B7EADB064BAF676CBD3"
         }),
 

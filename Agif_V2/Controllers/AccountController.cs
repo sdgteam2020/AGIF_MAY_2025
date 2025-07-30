@@ -50,48 +50,6 @@ namespace Agif_V2.Controllers
                 return View(model);
             }
 
-            // Special handling for MaturityAdmin
-            if (model.UserName == "MaturityAdmin")
-            {
-                SessionUserDTO sessionUserDTO = new SessionUserDTO
-                {
-                    UserName = "Shivam",
-                    UserId = 1,
-                    ProfileId = 1,
-                    MappingId = 1,
-                    Role = "MaturityAdmin",
-                    DomainId = "0",
-                    RankName = "Col",
-                    ArmyNo = "IC123456H"
-                };
-
-                var results = await _signInManager.PasswordSignInAsync("Admin", model.Password, isPersistent: false, lockoutOnFailure: true);
-
-                if (results.Succeeded)
-                {
-                    // Generate new SecurityStamp for MaturityAdmin to enforce single session
-                    var adminUser = await _userManager.FindByNameAsync("Admin");
-                    if (adminUser != null)
-                    {
-                        adminUser.SecurityStamp = Guid.NewGuid().ToString();
-                        await _userManager.UpdateAsync(adminUser);
-                    }
-
-                    Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
-                    return RedirectToAction("Index", "Home");
-                }
-                else if (results.IsLockedOut)
-                {
-                    var adminUser = await _userManager.FindByNameAsync("Admin");
-                    model = await PopulateLockoutInfo(model, adminUser);
-                    return View(model);
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt for MaturityAdmin.");
-                    return View(model);
-                }
-            }
 
             var user = await _userManager.FindByNameAsync(model.UserName);
             if (user == null)
@@ -150,6 +108,14 @@ namespace Agif_V2.Controllers
                 Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
 
                 if (roles.Contains("Admin"))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if(roles.Contains("MaturityAdmin"))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else if(roles.Contains("SuperAdmin"))
                 {
                     return RedirectToAction("Index", "Home");
                 }
@@ -269,7 +235,7 @@ namespace Agif_V2.Controllers
                 {
                     return Json(Result.Errors);
                 }
-                var RoleRet = await _userManager.AddToRoleAsync(newUser, "MaturityAdmin");
+                var RoleRet = await _userManager.AddToRoleAsync(newUser, "CO");
 
                 await _db.SaveChangesAsync();
 
