@@ -95,7 +95,8 @@ namespace Agif_V2.Controllers
             if(formType == "CA")
             {
                 int vehType = await _IonlineApplication1.GetVehicleType(applicationId, formType);
-                if(vehType == 4)
+                formType = "CAR";
+                if (vehType == 4)
                 {
                     formType = "TW";
                 }
