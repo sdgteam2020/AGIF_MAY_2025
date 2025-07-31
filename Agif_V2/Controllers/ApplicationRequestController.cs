@@ -77,6 +77,7 @@ namespace Agif_V2.Controllers
                 dTOTempSession.UnitId = dTOUserProfileResponse.UnitId;
                 dTOTempSession.name = dTOUserProfileResponse.username;
                 dTOTempSession.DteFmn = dTOUserProfileResponse.IsFmn;
+                dTOTempSession.MappingId = dTOUserProfileResponse.MappingId;
             }
 
             return View(dTOTempSession);
@@ -740,8 +741,6 @@ namespace Agif_V2.Controllers
                     return false;
                 }
 
-
-
             }
         }
 
@@ -1084,7 +1083,6 @@ namespace Agif_V2.Controllers
                             Reason = "Invalid Application ID",
                             Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
                         });
-
                     }
                     else
                     {

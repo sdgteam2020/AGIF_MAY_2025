@@ -287,10 +287,12 @@ namespace DataAccessLayer.Repositories
             }
 
             // Update UserMapping
-            var mapping = await _db.trnUserMappings.FirstOrDefaultAsync(x => x.MappingId == sessionUserDTO.ProfileId);
+            var mapping = await _db.trnUserMappings.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (mapping != null)
             {
                 mapping.IsFmn = sessionUserDTO.DteFmn;
+                mapping.IsActive = false;
+                mapping.UpdatedOn = DateTime.Now;
                 updated = true;
             }
 
@@ -300,7 +302,7 @@ namespace DataAccessLayer.Repositories
             }
 
             // Update Identity User
-            var user = await _userManager.FindByIdAsync(sessionUserDTO.ProfileId.ToString());
+            var user = await _userManager.FindByIdAsync(sessionUserDTO.MappingId.ToString());
             if (user != null)
             {
                 user.Email = sessionUserDTO.EmailId;

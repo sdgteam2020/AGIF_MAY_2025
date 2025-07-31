@@ -6621,3 +6621,13 @@ tbody, td, tfoot, th, thead, tr {
 .h-95 {
     height: 95%;
 }
+
+.table-dark-red {
+    background-color: #c93e3e !important; /* Dark red */
+    color: white; /* White text color for contrast */
+}
+
+.table-dark-green {
+    background-color: #008000ba !important; /* Dark red */
+    color: white; /* White text color for contrast */
+}
