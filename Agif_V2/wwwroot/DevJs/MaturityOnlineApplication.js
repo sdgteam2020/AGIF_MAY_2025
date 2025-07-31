@@ -1801,3 +1801,14 @@ $("#PresenttxtUnit").on('input', function () {
         $("#PresentUnitId").val(0);
     }
 });
+$('#ifsCode').on('blur', function () {
+    const ifsCode = $(this).val();
+
+    // Check if IFSC code length is less than 11
+    if (ifsCode.length < 11) {
+     
+        showErrorMessage('IFSC code must be exactly 11 characters');
+        // Clear the input field if invalid
+        $(this).val('');
+    }
+});

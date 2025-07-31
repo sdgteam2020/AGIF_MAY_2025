@@ -825,26 +825,53 @@ namespace DataAccessLayer.Repositories
             return Task.FromResult(data);
         }
 
-        public async Task<string> GetCOName(int mappingId)
+        //public async Task<string> GetCOName(int mappingId)
+        //{
+        //    // Get the UserMapping by MappingId
+        //    var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
+
+
+        //    if (userMapping == null)
+        //        return string.Empty;
+
+        //    // Get the UserProfile by ProfileId from UserMapping
+        //    var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
+        //    if (userProfile == null)
+        //        return string.Empty;
+
+        //    // Get the RankName from MRanks using rank id from UserProfile
+        //    var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
+        //    string rankName = rank != null ? rank.RankName : string.Empty;
+
+        //    // Concatenate rankName and userName
+        //    return $"{rankName} {userProfile.userName}".Trim();
+        //}
+
+        public async Task<(string Name, string Mobile, string Armyno)> GetCODetails(int mappingId)
         {
             // Get the UserMapping by MappingId
             var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
-
-
             if (userMapping == null)
-                return string.Empty;
+                return (string.Empty, string.Empty, string.Empty);
 
             // Get the UserProfile by ProfileId from UserMapping
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
             if (userProfile == null)
-                return string.Empty;
+                return (string.Empty, string.Empty, string.Empty);
 
             // Get the RankName from MRanks using rank id from UserProfile
             var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
             string rankName = rank != null ? rank.RankName : string.Empty;
 
+
+
             // Concatenate rankName and userName
-            return $"{rankName} {userProfile.userName}".Trim();
+            string fullName = $"{rankName} {userProfile.Name}".Trim();
+            string mobile = userProfile.MobileNo ?? string.Empty; // Assuming MobileNo is the field name
+
+            var Armyno = userProfile.ArmyNo ?? string.Empty;
+
+            return (fullName, mobile, Armyno);
         }
 
         public async Task<bool> UpdateMergePdfStatus(int applicationId, bool status)

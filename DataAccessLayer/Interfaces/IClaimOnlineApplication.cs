@@ -28,8 +28,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<UserMapping?> GetUserDetails(string CoArmyNumber);
 
-        Task<string> GetCOName(int mappingId);
-
+        Task<(string Name, string Mobile, string Armyno)> GetCODetails(int mappingId);
         Task<bool> UpdateMergePdfStatus(int applicationId, bool status);
 
         Task<bool> CheckExtensionofservice(int applicationid);
