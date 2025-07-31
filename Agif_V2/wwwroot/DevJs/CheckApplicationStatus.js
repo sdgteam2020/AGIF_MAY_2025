@@ -85,7 +85,7 @@
                                 data-bs-target="#timeline-${safeAppId}" 
                                 aria-expanded="false" 
                                 aria-controls="timeline-${safeAppId}">
-                            <i class="fas fa-calendar-check"></i> Show Timeline
+                            <i class="fas fa-calendar-check"></i> Application Timeline
                         </button>
                     </td>
                 </tr>

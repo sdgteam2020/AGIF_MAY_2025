@@ -1,4 +1,5 @@
-﻿
+﻿let validatedRecords = [];
+let rejectedRecords = [];
 $(document).ready(function () {
     // Check if DataTables is loaded
     if (typeof $.fn.DataTable === 'undefined') {
@@ -11,11 +12,57 @@ $(document).ready(function () {
     let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
     BindUsersData(value);
 });
+
+// Export Validated Records
+$('#btnExportOk').on('click', function () {
+    if (!validatedRecords.length) {
+        alert("No validated records to export.");
+        return;
+    }
+
+    $.ajax({
+        url: '/ApplicationRequest/ExportValidatedExcel',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(validatedRecords),
+        xhrFields: { responseType: 'blob' },
+        success: function (blob) {
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "ValidatedRecords.xlsx";
+            link.click();
+        }
+    });
+});
+
+$('#btnExportNotOk').on('click', function () {
+    if (!rejectedRecords.length) {
+        alert("No rejected records to export.");
+        return;
+    }
+
+    $.ajax({
+        url: '/ApplicationRequest/ExportRejectedExcel',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(rejectedRecords),
+        xhrFields: { responseType: 'blob' },
+        success: function (blob) {
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = "RejectedRecords.xlsx";
+            link.click();
+        }
+    });
+});
+
+
 $('#UploadExcel').on('click', function () {
     $("#AddBulkModel").modal('show');
 });
 
 $('#btnBulkUpload').on('click', function () {
+    $("#postBulk-msg").html('');
     const file = $('#fileExcel')[0].files[0];
     if (!file) {
         Swal.fire({
@@ -34,8 +81,11 @@ $('#btnBulkUpload').on('click', function () {
         contentType: false,
         processData: false,
         success: function (response) {
-            populateUploadTables(response.data);
+            
             if (response.success) {
+                populateUploadTables(response.data);
+                validatedRecords = response.data.dtoApplStatusBulkUploadOK || [];
+                rejectedRecords = response.data.dtoApplStatusBulkUploadNotOk || [];
                 Swal.fire({
                     title: 'Success',
                     text: response.message,
@@ -46,13 +96,18 @@ $('#btnBulkUpload').on('click', function () {
                 });
             } else {
                 $("#postBulk-msg").html(response.message) ;
-               
             }
         },
     });
 });
 
 function populateUploadTables(data) {
+    if ($.fn.DataTable.isDataTable('#tblOk')) {
+        $('#tblOk').DataTable().clear().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#tblNotOk')) {
+        $('#tblNotOk').DataTable().clear().destroy();
+    }
     $('#OkBody').empty();
     $('#NotOkBody').empty();
     if (data.dtoApplStatusBulkUploadOK && data.dtoApplStatusBulkUploadOK.length > 0) {
@@ -71,6 +126,14 @@ function populateUploadTables(data) {
         });
         $('#OkBody').html(okTableBody);
         $('#lblTotalOk').text(data.dtoApplStatusBulkUploadOK.length);
+        $('#tblOk').DataTable({
+            paging: true,
+            searching: false,
+            ordering: true,
+            info: true,
+            pageLength: 10,
+            lengthChange: false
+        });
     } else {
         $('#lblTotalOk').text('0');
     }
@@ -92,6 +155,14 @@ function populateUploadTables(data) {
         });
         $('#NotOkBody').html(notOkTableBody);
         $('#lblTotalNotOk').text(data.dtoApplStatusBulkUploadNotOk.length);
+        $('#tblNotOk').DataTable({
+            paging: true,
+            searching: false,
+            ordering: true,
+            info: true,
+            pageLength: 10,
+            lengthChange: false
+        });
     } else {
         $('#lblTotalNotOk').text('0');
     }

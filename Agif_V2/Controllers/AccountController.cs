@@ -280,7 +280,7 @@ namespace Agif_V2.Controllers
          
         }
 
-
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult GetAllUsers(bool status)
         {
             ViewBag.UserStatus = status;
