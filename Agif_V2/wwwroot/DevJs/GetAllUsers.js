@@ -76,6 +76,45 @@
     BindUsersData(value);
 });
 
+$('#btnDownloadExcel').on('click', function () {
+    Swal.fire({
+        title: 'Processing...',
+        text: 'Your file is being generated.',
+        icon: 'info',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        willOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    $.ajax({
+        url: '/Account/ExportAllUsersToExcel', 
+        type: 'POST',
+        xhrFields: {
+            responseType: 'blob'  
+        },
+        success: function (response) {
+            Swal.close();
+            
+            var link = document.createElement('a');
+            link.href = URL.createObjectURL(response);
+            link.download = "UsersList.xlsx";
+            link.click();
+        },
+        error: function () {
+            Swal.close();
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while exporting the data.',
+                icon: 'error'
+            });
+        }
+    });
+});
+
+
+
 function BindUsersData(status) {
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblData')) {

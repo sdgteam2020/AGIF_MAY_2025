@@ -13,6 +13,23 @@ $(document).ready(function () {
     BindUsersData(value);
 });
 
+$('#btnCloseModal').on('click', function () {
+    if ($.fn.DataTable.isDataTable('#tblOk')) {
+        $('#tblOk').DataTable().clear().destroy();
+    }
+    if ($.fn.DataTable.isDataTable('#tblNotOk')) {
+        $('#tblNotOk').DataTable().clear().destroy();
+    }
+    $('#fileExcel').val(''); // Clear the file input
+    $('#postBulk-msg').empty(); // Clear any previous messages
+
+    $('#OkBody').empty();
+    $('#NotOkBody').empty();
+    $('#lblTotalOk').text('0');
+    $('#lblTotalNotOk').text('0');
+    $('#AddBulkModel').modal('hide');
+});
+
 // Export Validated Records
 $('#btnExportOk').on('click', function () {
     if (!validatedRecords.length) {
