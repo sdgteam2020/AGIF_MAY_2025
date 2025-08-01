@@ -21,8 +21,8 @@ else
     Page = "Received Applications";
 }
 
-<div class="container">
-    <div class="container-fluid">
+@* <div class="container"> *@
+   @*  <div class="container-fluid">
         <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
             <div class="row align-items-center">
@@ -103,6 +103,173 @@ else
         </div>
     </div>
 
+</div>
+ *@
+
+
+<div class="container">
+    <div class="container-fluid">
+        <!-- ========== title-wrapper start ========== -->
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+                <div class="col-md-12 text-decoration-underline text-center">
+                    <div class="title">
+                        <h2>
+                            @Page
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+
+        <input type="hidden" id="Status" value="@ViewBag.Status" />
+
+        <div class="card mt-2">
+
+            <div class="card-body">
+                <div class="text-center">
+                    <div class="row justify-content-center mb-2">
+                        <div class="col-auto">
+                            <input class="form-control" type="date" id="toDate" name="toDate" />
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary" id="btnAllDownload" onclick="getAllApplicationByDateWise()">
+                                Download Appln
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary" id="UploadExcel">
+                                Upload Status
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        <div class="table-wrapper table-responsive">
+                            <table class="table table-striped border border-purple table-hover" id="tblReceivedApplications">
+                                <thead>
+                                    <tr>
+                                        <th>Ser No</th>
+                                        <th class="text-nowrap ">Army No</th>
+                                        <th class="text-nowrap ">Applicant Name</th>
+                                        <th>Regt/Corps</th>
+                                        <th class="text-nowrap text-center">Present Unit</th>
+                                        <th class="text-nowrap">Applied Date</th>
+                                        @if (ViewBag.Status != null && ViewBag.Status == "4")
+                                        {
+                                            <th class="text-nowrap text-center">Download Count</th>
+                                            <th class="text-nowrap text-center">DownloadedOn</th>
+                                        }
+                                        <th>Download</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- DataTables will populate this -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="AddBulkModel" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content shadow-lg rounded-4">
+            <div class="modal-header bg-primary text-white rounded-top-4">
+                <h5 class="modal-title fw-bold"><i class="fas fa-upload me-2"></i> Bulk Status Update</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body px-4 py-3">
+                <div class="mb-4">
+                    <h5 class="text-secondary fw-semibold">Upload Excel File</h5>
+                    <p class="text-muted small">Choose an Excel file (.xls, .xlsx) to upload and validate multiple applications.</p>
+                    <div class="p-3 border rounded shadow-sm bg-light d-flex flex-wrap align-items-center gap-3">
+                        <label class="form-label mb-0 me-2"><i class="fas fa-file-excel me-1 text-success"></i> Choose File</label>
+                        <input type="file" class="form-control form-control-sm w-auto" id="fileExcel" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                        <button type="button" id="btnBulkUpload" class="btn btn-info btn-sm ms-auto">
+                            <i class="fas fa-cloud-upload-alt me-1"></i> Upload
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Validated Records -->
+                <div class="mt-4">
+                    <h6 class="text-success fw-semibold">✅ Validation Passed</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Total Valid Records: <span id="lblTotalOk" class="badge bg-secondary ms-2">0</span></span>
+                        <button type="button" id="btnExportOk" class="btn btn-success btn-sm">
+                            <i class="fas fa-file-excel me-1"></i> Export Validated
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="tblOk">
+                            <thead class="table-success text-dark">
+                                <tr>
+                                    <th class="d-none"></th>
+                                    <th>S.No.</th>
+                                    <th>Application Id</th>
+                                    <th>Army No</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="OkBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Rejected Records -->
+                <div class="mt-4">
+                    <h6 class="text-danger fw-semibold">❌ Validation Failed</h6>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span>Failed Records: <span id="lblTotalNotOk" class="badge bg-danger ms-2">0</span></span>
+                        <div>
+                            <button type="button" id="btnDownloadNotOk" class="btn btn-outline-warning btn-sm d-none me-2">
+                                <i class="fas fa-download me-1"></i> Download Failed
+                            </button>
+                            <button type="button" id="btnExportNotOk" class="btn btn-warning btn-sm">
+                                <i class="fas fa-file-excel me-1"></i> Export Rejected
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm" id="tblNotOk">
+                            <thead class="table-danger text-dark">
+                                <tr>
+                                    <th class="d-none"></th>
+                                    <th>S.No.</th>
+                                    <th>Application Id</th>
+                                    <th>Army No</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="NotOkBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <!-- Final Actions -->
+                <div class="d-flex justify-content-end">
+                    <div class="me-3 text-danger fw-semibold" id="postBulk-msg"></div>
+                    <button type="button" id="btnProcessBulk" class="btn btn-primary btn-shadow">
+                        <i class="fas fa-check-circle me-1"></i> Process All Validated
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 

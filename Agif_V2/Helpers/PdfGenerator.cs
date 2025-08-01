@@ -27,7 +27,7 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name,string Mobile,string armyno)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
@@ -319,9 +319,9 @@ namespace Agif_V2.Helpers
                             }
                             Table signatureTable2 = new Table(UnitValue.CreatePercentArray(new float[] { 100 })).UseAllAvailableWidth();
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO").SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.DdlRank).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + common.MobileNo).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(armyno).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(Name).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + Mobile).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Sign On: " + dated).SetFont(regularFont).SetFontSize(11)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
                             document.Add(signatureTable2);
 
@@ -543,13 +543,13 @@ namespace Agif_V2.Helpers
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO").SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(armyno).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(Name).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + common.MobileNo).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + Mobile).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph(" ").SetFont(normalFont)).SetBorder(Border.NO_BORDER));
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Sign On: " + dated).SetFont(normalFont)).SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
@@ -714,13 +714,13 @@ namespace Agif_V2.Helpers
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
 
                             signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.Number)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(armyno)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
 
                             signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(common.DdlRank)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(Name)).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
 
                             signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph($"Mobile No: {common.MobileNo}")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph($"Mobile No: {Mobile}")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
 
                             signatureTable2.AddCell(new Cell().SetBorder(Border.NO_BORDER));
                             signatureTable2.AddCell(new Cell().Add(new Paragraph($"Digital Sign On: {dated}")).SetBorder(Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));

@@ -41,7 +41,7 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
-
+        [Authorize(Roles = "CO")]
         public async Task<IActionResult> UserApplicationList(int status)
         {
             ViewBag.Status = status;
@@ -77,6 +77,7 @@ namespace Agif_V2.Controllers
                 dTOTempSession.UnitId = dTOUserProfileResponse.UnitId;
                 dTOTempSession.name = dTOUserProfileResponse.username;
                 dTOTempSession.DteFmn = dTOUserProfileResponse.IsFmn;
+                dTOTempSession.MappingId = dTOUserProfileResponse.MappingId;
             }
 
             return View(dTOTempSession);
@@ -474,6 +475,7 @@ namespace Agif_V2.Controllers
 
             return Json(new { success = true, message = "Application rejected." });
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UsersApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
@@ -485,7 +487,7 @@ namespace Agif_V2.Controllers
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             return View(dTOTempSession);
         }
-
+        [Authorize(Roles = "MaturityAdmin")]
         public async Task<IActionResult> ClaimApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
@@ -738,8 +740,6 @@ namespace Agif_V2.Controllers
                 {
                     return false;
                 }
-
-
 
             }
         }
@@ -1061,8 +1061,10 @@ namespace Agif_V2.Controllers
                         {
                             ApplId = 0, // Or skip setting
                             Status_Code = 0, // Or skip setting
+                            ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
                             Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-                            Reason = reason.Trim()
+                            Reason = reason.Trim(),
+                            Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
                         });
                         continue;
                     }
@@ -1076,10 +1078,11 @@ namespace Agif_V2.Controllers
                         {
                             ApplId = applIdInt,
                             Status_Code = statusCodeInt,
+                            ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
                             Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-                            Reason = "Invalid Application ID"
+                            Reason = "Invalid Application ID",
+                            Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
                         });
-
                     }
                     else
                     {
@@ -1092,7 +1095,8 @@ namespace Agif_V2.Controllers
                                 ApplId = applIdInt,
                                 ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
                                 Status_Code = statusCodeInt,
-                                Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty
+                                Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                                Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
                             });
                         }
                         else
@@ -1102,8 +1106,10 @@ namespace Agif_V2.Controllers
                             {
                                 ApplId = applIdInt,
                                 Status_Code = statusCodeInt,
+                                ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
                                 Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-                                Reason = "Invalid Status Code"
+                                Reason = "Invalid Status Code",
+                                Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
                             });
                         }
                     }
@@ -1179,6 +1185,65 @@ namespace Agif_V2.Controllers
             }
             return dt;
         }
+
+        [HttpPost]
+        public IActionResult ExportValidatedExcel([FromBody] List<DTOApplStatusBulkUpload> data)
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Validated");
+
+            worksheet.Cell(1, 1).Value = "Application ID";
+            worksheet.Cell(1, 2).Value = "Army No";
+            worksheet.Cell(1, 3).Value = "Name";
+            worksheet.Cell(1, 4).Value = "Status";
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                worksheet.Cell(i + 2, 1).Value = data[i].ApplId;
+                worksheet.Cell(i + 2, 2).Value = data[i].ArmyNo;
+                worksheet.Cell(i + 2, 3).Value = data[i].Name;
+                worksheet.Cell(i + 2, 4).Value = data[i].Status_Code;
+            }
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            stream.Position = 0;
+
+            return File(stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "ValidatedRecords.xlsx");
+        }
+
+        [HttpPost]
+        public IActionResult ExportRejectedExcel([FromBody] List<DTOApplStatusBulkUpload> data)
+        {
+            using var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Rejected");
+
+            worksheet.Cell(1, 1).Value = "Application ID";
+            worksheet.Cell(1, 2).Value = "Army No";
+            worksheet.Cell(1, 3).Value = "Name";
+            worksheet.Cell(1, 4).Value = "Status";
+            worksheet.Cell(1, 5).Value = "Reason";
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                worksheet.Cell(i + 2, 1).Value = data[i].ApplId;
+                worksheet.Cell(i + 2, 2).Value = data[i].ArmyNo;
+                worksheet.Cell(i + 2, 3).Value = data[i].Name;
+                worksheet.Cell(i + 2, 4).Value = data[i].Status_Code;
+                worksheet.Cell(i + 2, 5).Value = data[i].Reason;
+            }
+
+            using var stream = new MemoryStream();
+            workbook.SaveAs(stream);
+            stream.Position = 0;
+
+            return File(stream.ToArray(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "RejectedRecords.xlsx");
+        }
+
 
     }
 }

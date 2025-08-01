@@ -514,8 +514,8 @@ function GetTokenSignXml(xml, Usertype) {
     var URL = '';
 
     $.ajax({
-        url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
-        //url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
+       // url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
         data: xml, // Set the XML data

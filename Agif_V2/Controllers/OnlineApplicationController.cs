@@ -470,9 +470,9 @@ namespace Agif_V2.Controllers
                         return Json(new { success = false, message = "Session expired or invalid user context." });
                     }
 
-                    string Name = await _IonlineApplication1.GetCOName(dTOTempSession.ProfileId);
+                    var (name, mobile,armyno) = await _IonlineApplication1.GetCODetails(dTOTempSession.ProfileId);
 
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, Name);
+                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip, name,mobile,armyno);
 
                     //if (data == 1)
                     //{
@@ -584,7 +584,7 @@ namespace Agif_V2.Controllers
             string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
             string mergepdfName = "App" + applicationIdStr + armyNo;
             string pdfFilePath = $"/MergePdf/{mergepdfName}.pdf";
-
+            
             return Json(pdfFilePath);
         }
 

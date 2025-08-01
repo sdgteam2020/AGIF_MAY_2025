@@ -73,6 +73,22 @@
       "files": [
         "js/dataTables.buttons.min.js"
       ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "datatables.net-buttons@3.2.4",
+      "destination": "wwwroot/js/datatables.net-buttons/",
+      "files": [
+        "js/buttons.print.min.js"
+      ]
+    },
+    {
+      "library": "datatables.net-buttons@3.2.4",
+      "destination": "wwwroot/lib/datatables.net-buttons/",
+      "files": [
+        "js/dataTables.buttons.min.js",
+        "js/buttons.print.min.js"
+      ]
     }
   ]
 }

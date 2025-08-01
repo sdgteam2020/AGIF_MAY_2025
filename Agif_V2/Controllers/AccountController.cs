@@ -1,4 +1,5 @@
-﻿using DataAccessLayer;
+﻿using ClosedXML.Excel;
+using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
@@ -280,7 +281,7 @@ namespace Agif_V2.Controllers
          
         }
 
-
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult GetAllUsers(bool status)
         {
             ViewBag.UserStatus = status;
@@ -366,6 +367,65 @@ namespace Agif_V2.Controllers
                     data = new List<DTOUserProfileResponse>()
                 };
                 return Json(responseData);
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ExportAllUsersToExcel(string status = "")
+        {
+            try
+            {
+                bool userStatus = true;
+                if (!string.IsNullOrEmpty(status))
+                {
+                    userStatus = status.ToLower() == "true";
+                }
+
+                // Get all users data
+                var queryableData = await _userProfile.GetAllUser(userStatus);
+                var userList = queryableData.ToList();
+
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Users");
+
+                    // Add headers and data to worksheet
+                    worksheet.Cell(1, 1).Value = "S.No.";
+                    worksheet.Cell(1, 2).Value = "Profile Name";
+                    worksheet.Cell(1, 3).Value = "Email Id";
+                    worksheet.Cell(1, 4).Value = "Mobile No";
+                    worksheet.Cell(1, 5).Value = "Army No";
+                    worksheet.Cell(1, 6).Value = "Unit Name";
+                    worksheet.Cell(1, 7).Value = "Appointment Name";
+                    worksheet.Cell(1, 8).Value = "Regiment Name";
+                    worksheet.Cell(1, 9).Value = "Active Status";
+
+                    int row = 2;
+                    foreach (var user in userList)
+                    {
+                        worksheet.Cell(row, 1).Value = row - 1;
+                        worksheet.Cell(row, 2).Value = user.ProfileName;
+                        worksheet.Cell(row, 3).Value = user.EmailId;
+                        worksheet.Cell(row, 4).Value = user.MobileNo;
+                        worksheet.Cell(row, 5).Value = user.ArmyNo;
+                        worksheet.Cell(row, 6).Value = user.UnitName;
+                        worksheet.Cell(row, 7).Value = user.AppointmentName;
+                        worksheet.Cell(row, 8).Value = user.RegtName;
+                        worksheet.Cell(row, 9).Value = user.IsActive ? "Active" : "Inactive";
+                        row++;
+                    }
+
+                    // Save the file to memory stream
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var fileContents = stream.ToArray();
+                        return File(fileContents, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "UsersList.xlsx");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "An error occurred while exporting the data. " + ex.Message });
             }
         }
 
