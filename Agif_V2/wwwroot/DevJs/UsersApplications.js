@@ -333,29 +333,22 @@ function fetchApplicationDetails(applicationId, endpoint) {
         dataType: 'json',
         success: function (response) {
             if (response.success) {
-                // Store the application data globally
                 currentApplicationData = response.data;
-
-                // Update PDF viewer with application info if needed
+                
                 updatePdfViewerInfo(response.data);
             } else {
                 console.error('Failed to fetch application details:', response.message);
-                // Don't show error popup as PDF is still loading successfully
             }
         },
         error: function (xhr, status, error) {
             console.error('Error fetching application details:', error);
-            // Don't show error popup as PDF functionality should still work
         }
     });
 }
 
-// Function to update PDF viewer with application information (optional)
 function updatePdfViewerInfo(applicationData) {
-    // Update applicant name in the PDF modal if you want
     $('#ViewPdf .text-muted strong').text(applicationData.name || 'Unknown Applicant');
-
-    // Update date in the PDF modal if you want
+    
     $('#ViewPdf .badge.bg-info').html(`
         <i class="bi bi-calendar3 me-1"></i>
         ${applicationData.appliedDate || new Date().toLocaleDateString()}
@@ -372,13 +365,14 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
         dataType: 'json',
         success: function (response) {
             if (isApproved) {
-                Swal.fire({
-                    title: "Approved!",
-                    text: "Signed succesfull and Saved",
-                    icon: "success"
-                }).then(() => {
-                    window.location.href = "/ApplicationRequest/UserApplicationList";
-                });
+                DigitalSignByAPI(applicationId);
+                //Swal.fire({
+                //    title: "Approved!",
+                //    text: "Signed succesfull and Saved",
+                //    icon: "success"
+                //}).then(() => {
+                //    window.location.href = "/ApplicationRequest/UserApplicationList";
+                //});
             } else if (isRejected) {
                 Swal.fire({
                     title: "Rejected!",
@@ -436,15 +430,10 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
 async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
     var URL = '';
     $.ajax({
-
-        // url: "http://localhost/Temporary_Listen_Addresses/ValidatePersID2FA",
         url: "https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
-        contentType: 'application/json', // Set content type to XML
-
+        contentType: 'application/json',
         data: JSON.stringify({
-            //"inputPersID": IcNo
-            //"inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"
             "inputPersID": "9a4beb14b87de35d6bba98e2b16ad4eb341d52bda2bb3b7eadb064baf676cbd3"
         }),
 
@@ -480,9 +469,6 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
             });
         }
     });
-
-
-
 }
 
 function DataSignDigitaly(applicationId, endpoint, Usertype) {
@@ -495,8 +481,8 @@ function DataSignDigitaly(applicationId, endpoint, Usertype) {
         success: function (data) {
 
             if (data != null) {
-                GetTokenSignXml(data, Usertype);
-                DigitalSignByAPI(applicationId);
+                GetTokenSignXml(data, Usertype, applicationId);
+                //DigitalSignByAPI(applicationId);
             }
         },
         error: function () {
@@ -510,11 +496,11 @@ function DataSignDigitaly(applicationId, endpoint, Usertype) {
 
 }
 
-function GetTokenSignXml(xml, Usertype) {
+function GetTokenSignXml(xml, Usertype, applicationId) {
     var URL = '';
 
     $.ajax({
-       // url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
+       //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
         type: "POST",
         contentType: 'application/xml', // Set content type to XML
@@ -532,8 +518,8 @@ function GetTokenSignXml(xml, Usertype) {
                         URL = "/ApplicationRequest/SaveClaimXML";
 
 
-                    SignXmlSendTOdatabase(xmlContent, URL, Usertype);
-
+                    SignXmlSendTOdatabase(xmlContent, URL, Usertype, applicationId);
+                    //DigitalSignByAPI(applicationId);
 
                 } else {
                     Swal.fire({
@@ -595,6 +581,7 @@ function sendPDFToServer(filepath, thumbprint) {
     const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
 
     $.ajax({
+        //url: 'http://localhost/Temporary_Listen_Addresses/ByteDigitalSignAsync',
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ByteDigitalSignAsync',
         type: 'POST',
         contentType: 'application/json',
@@ -602,23 +589,29 @@ function sendPDFToServer(filepath, thumbprint) {
         data: JSON.stringify([{
             Thumbprint: thumbprint,
             pdfpath: fullPath,
-            XCoordinate: "100",
+            XCoordinate: "480",
             YCoordinate: "50",
             Page: "1",
             CustomText: "Digital Signature"
         }]),
         success: function (response) {
             //console.log('PDF signed successfully:', response);
-
+            //Swal.fire({
+            //    title: "Approved!",
+            //    text: "Signed succesfull and Saved",
+            //    icon: "success"
+            //}).then(() => {
+            //    window.location.href = "/ApplicationRequest/UserApplicationList";
+            //});
             if (response) {
                 Swal.fire({
-                    title: "Success!",
-                    text: "PDF signed successfully.",
+                    title: "Approved!",
+                    text: "Signed succesfull and Saved",
                     icon: "success"
                 }).then(() => {
                     //const directoryPath = filepath.substring(0, filepath.lastIndexOf('/'));
                     const fileName = filepath.split('/').pop();
-                    alert('filename' + fileName);
+                   /* alert('filename' + fileName);*/
                     SaveSignedPdf(response.Message, fileName);
                 });
             } else {
@@ -637,6 +630,7 @@ function sendPDFToServer(filepath, thumbprint) {
 
 function GetThumbprint() {
     return $.ajax({
+        //url: 'http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails',
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/FetchUniqueTokenDetails',
         type: 'GET'
     }).then(function (response) {
@@ -652,18 +646,17 @@ function GetThumbprint() {
 }
 
 function SaveSignedPdf(base64String, fn) {
-    console.log(fn +" from SaveSignedPdf");
-    console.log("jkajdskfjd" + base64String) 
     $.ajax({
         url: '/OnlineApplication/SaveBase64ToFile',
         type: 'POST',        
         dataType: 'json',
         data:{
             base64String: base64String, 
-            fileName: `SignedDoc${fn}.pdf`
+            fileName: `${fn}`
         },
         success: function (response) {
-            console.log('Signed PDF saved successfully:', response);
+            window.location.href = "/ApplicationRequest/UserApplicationList";
+            //console.log('Signed PDF saved successfully:', response);
         },
         error: function (error) {
             console.error('Error saving signed PDF:', error);
@@ -687,8 +680,9 @@ function SignXmlSendTOdatabase(xmlString, endpoint, Usertype) {
             else if (Usertype === 'Maturity')
                 URL = "/Claim/MergePdf";
 
-
+            //DigitalSignByAPI(applnId);
             mergePdf(applnId, false, true, URL, Usertype)
+            //DigitalSignByAPI(applnId);
 
         },
         error: function () {
