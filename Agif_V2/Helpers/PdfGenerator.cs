@@ -27,7 +27,7 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name,string Mobile,string armyno)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name, string Mobile, string armyno)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
@@ -41,7 +41,7 @@ namespace Agif_V2.Helpers
             if (data.CarApplicationResponse != null)
             {
                 formType = "CAR / TWO WHEELER ADVANCE";
-                if(data.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+                if (data.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
                 {
                     formTypeName = "Two Wheeler";
                 }
@@ -49,7 +49,7 @@ namespace Agif_V2.Helpers
                 {
                     formTypeName = "Car";
                 }
-                
+
             }
             else if (data.PcaApplicationResponse != null)
             {
@@ -310,7 +310,8 @@ namespace Agif_V2.Helpers
                             document.Add(new Paragraph("\n"));
                         }
 
-                        if (isApproved || isRejected)
+                        //if (isApproved || isRejected)
+                        if (isRejected)
                         {
                             if (isRejected)
                             {
@@ -328,15 +329,15 @@ namespace Agif_V2.Helpers
 
                         }
 
-                        if (isApproved)
-                        {
+                        //if (isApproved)
+                        //{
 
-                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
-                            ImageData imageData = ImageDataFactory.Create(imagePath);
-                            Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 732);
-                            document.Add(icon);
-                        }
+                        //    string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                        //    ImageData imageData = ImageDataFactory.Create(imagePath);
+                        //    Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                        //    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 732);
+                        //    document.Add(icon);
+                        //}
                         if (isRejected)
                         {
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
@@ -535,7 +536,8 @@ namespace Agif_V2.Helpers
                             AddRecParagraph("6.Application is recommended for sanction and accordingly I countersign the same.");
                         }
 
-                        if (isApproved || isRejected)
+                        //if (isApproved || isRejected)
+                        if (isRejected)
                         {
                             document.Add(new Paragraph("\n\n"));
                             Table signatureTable2 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
@@ -557,16 +559,16 @@ namespace Agif_V2.Helpers
                             document.Add(signatureTable2);
                         }
 
-                        if (isApproved)
-                        {
+                        //if (isApproved)
+                        //{
 
 
-                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
-                            ImageData imageData = ImageDataFactory.Create(imagePath);
-                            Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 270);
-                            document.Add(icon);
-                        }
+                        //    string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                        //    ImageData imageData = ImageDataFactory.Create(imagePath);
+                        //    Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                        //    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 270);
+                        //    document.Add(icon);
+                        //}
 
                         if (isRejected)
                         {
@@ -706,7 +708,8 @@ namespace Agif_V2.Helpers
                             document.Add(new Paragraph("Application is recommended for sanction and accordingly I countersign the same.").SetFont(normalFont).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(5));
                         }
 
-                        if (isApproved || isRejected)
+                        //if (isApproved || isRejected)
+                        if (isRejected)
                         {
                             document.Add(new Paragraph("\n\n"));
                             Table signatureTable2 = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
@@ -727,16 +730,16 @@ namespace Agif_V2.Helpers
                             document.Add(signatureTable2);
                         }
 
-                        if (isApproved)
-                        {
+                        //if (isApproved)
+                        //{
 
 
-                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
-                            ImageData imageData = ImageDataFactory.Create(imagePath);
-                            Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 253);
-                            document.Add(icon);
-                        }
+                        //    string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                        //    ImageData imageData = ImageDataFactory.Create(imagePath);
+                        //    Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                        //    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 253);
+                        //    document.Add(icon);
+                        //}
 
                         if (isRejected)
                         {

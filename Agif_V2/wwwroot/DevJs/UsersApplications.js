@@ -589,29 +589,19 @@ function sendPDFToServer(filepath, thumbprint) {
         data: JSON.stringify([{
             Thumbprint: thumbprint,
             pdfpath: fullPath,
-            XCoordinate: "480",
+            XCoordinate: "450",
             YCoordinate: "50",
             Page: "1",
             CustomText: "Digital Signature"
         }]),
         success: function (response) {
-            //console.log('PDF signed successfully:', response);
-            //Swal.fire({
-            //    title: "Approved!",
-            //    text: "Signed succesfull and Saved",
-            //    icon: "success"
-            //}).then(() => {
-            //    window.location.href = "/ApplicationRequest/UserApplicationList";
-            //});
             if (response) {
                 Swal.fire({
                     title: "Approved!",
                     text: "Signed succesfull and Saved",
                     icon: "success"
                 }).then(() => {
-                    //const directoryPath = filepath.substring(0, filepath.lastIndexOf('/'));
                     const fileName = filepath.split('/').pop();
-                   /* alert('filename' + fileName);*/
                     SaveSignedPdf(response.Message, fileName);
                 });
             } else {
@@ -656,7 +646,6 @@ function SaveSignedPdf(base64String, fn) {
         },
         success: function (response) {
             window.location.href = "/ApplicationRequest/UserApplicationList";
-            //console.log('Signed PDF saved successfully:', response);
         },
         error: function (error) {
             console.error('Error saving signed PDF:', error);
@@ -680,9 +669,8 @@ function SignXmlSendTOdatabase(xmlString, endpoint, Usertype) {
             else if (Usertype === 'Maturity')
                 URL = "/Claim/MergePdf";
 
-            //DigitalSignByAPI(applnId);
+            
             mergePdf(applnId, false, true, URL, Usertype)
-            //DigitalSignByAPI(applnId);
 
         },
         error: function () {
