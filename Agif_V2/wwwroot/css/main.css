@@ -6632,3 +6632,7 @@ tbody, td, tfoot, th, thead, tr {
     color: white; /* White text color for contrast */
 }
 
+.modal-blur {
+    filter: blur(5px);
+    transition: filter 0.3s ease;
+}

@@ -151,24 +151,22 @@ input:invalid {
     }
 
 .acc-btn {
-    background-color: #e9f4ff;
-    /* background: linear-gradient(135deg, #c3cfe2 0%, #f5f7fa 50%, #c3cfe2 100%);*/
+    background: linear-gradient(135deg, #310 0%, #ffe9e9 50%, #310 100%);
     color: #000;
     transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
     .acc-btn:not(.collapsed) {
-        background: linear-gradient(135deg, #7fa1ea 0%, #c9d6f8 50%, #7fa1ea 100%);
+        background: linear-gradient(135deg, #310 0%, #d0c9c9 50%, #310 100%);
         color: #000;
         box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.1);
     }
 
     .acc-btn:hover {
-        background: linear-gradient(135deg, #8faae0 0%, #d5dff6 50%, #8faae0 100%);
+        background: linear-gradient(135deg, #170800 0%, #cababa 50%, #150700 100%);
         color: #000;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-
 
 .error {
     color: red;
