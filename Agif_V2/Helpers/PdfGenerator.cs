@@ -518,13 +518,18 @@ namespace Agif_V2.Helpers
 
                             document.Add(p3);
 
+                            string accountNo = common.ConfirmSalaryAcctNo ?? "";
+                            string bankName = common.NameOfBank ?? "";
+                            string branchName = common.NameOfBankBranch ?? "";
+
+
                             Paragraph p4 = new Paragraph()
                                 .Add(new Text("4.     It is certified that Bank A/c No ").SetFont(normalFont))
-                                .Add(new Text(common.ConfirmSalaryAcctNo).SetFont(boldFont))
+                                .Add(new Text(accountNo).SetFont(boldFont))
                                 .Add(new Text(" of Bank (").SetFont(normalFont))
-                                .Add(new Text(common.NameOfBank).SetFont(boldFont))
+                                .Add(new Text(bankName).SetFont(boldFont))
                                 .Add(new Text(") with IFSC ").SetFont(normalFont))
-                                .Add(new Text(common.NameOfBankBranch).SetFont(boldFont))
+                                .Add(new Text(branchName).SetFont(boldFont))
                                 .Add(new Text(" as given in the application and cancelled cheque is of Salary account of ").SetFont(normalFont))
                                 .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont))
                                 .SetTextAlignment(TextAlignment.JUSTIFIED)

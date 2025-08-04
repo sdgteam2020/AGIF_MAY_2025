@@ -24,7 +24,10 @@ namespace Agif_V2.Controllers
         private readonly PdfUpload _pdfUpload;
         private readonly IClaimAddress _ClaimAddress;
         private readonly IClaimAccount _ClaimAccount;
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount)
+        private readonly FileUtility _fileUtility;
+
+
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility)
         {
             _IClaimonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -38,6 +41,7 @@ namespace Agif_V2.Controllers
             this._pdfUpload = pdfUpload;
             _ClaimAddress = claimAddress;
             _ClaimAccount = claimAccount;
+            _fileUtility = fileUtility;
         }
 
         public IActionResult MaturityLoanType()
@@ -841,5 +845,21 @@ namespace Agif_V2.Controllers
             return Json(new { success = true, message = message });
         }
 
+
+        [HttpPost]
+        public async Task<JsonResult> SaveBase64ToFile(string base64String, string fileName)
+        {
+            string directoryPath = Path.Combine(_env.WebRootPath, "ClaimMergePdf");
+            try
+            {
+                // Call the FileUtility method to save the Base64 string to a file
+                await _fileUtility.SaveBase64ToFileAsync(base64String, directoryPath, fileName);
+                return Json(new { success = true, message = "File saved successfully." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
+            }
+        }
     }
 }

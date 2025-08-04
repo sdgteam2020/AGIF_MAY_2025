@@ -365,7 +365,7 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
         dataType: 'json',
         success: function (response) {
             if (isApproved) {
-                DigitalSignByAPI(applicationId);
+                DigitalSignByAPI(applicationId,val);
                 //Swal.fire({
                 //    title: "Approved!",
                 //    text: "Signed succesfull and Saved",
@@ -541,10 +541,15 @@ function GetTokenSignXml(xml, Usertype, applicationId) {
 }
 
 //tez code start
-function DigitalSignByAPI(applicationId) {
+function DigitalSignByAPI(applicationId, type) {
     GetThumbprint().then(function (tprint) {
+        var URL = '';
         if (tprint) {
-            getPdfFilePath(applicationId, tprint);
+            if (type === "Loan")
+                URL = "/OnlineApplication/GetPdfFilePath";
+            else if (type === "Maturity")
+                URL = "/Claim/GetPdfFilePath";
+            getPdfFilePath(applicationId, tprint, URL,type);
         } else {
             console.error('No thumbprint received.');
         }
@@ -553,17 +558,18 @@ function DigitalSignByAPI(applicationId) {
     });
 }
 
-function getPdfFilePath(applicationId, thumbprint) {
+function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
+
     console.log(JSON.stringify({ applicationId: applicationId }));
 
     $.ajax({
-        url: '/OnlineApplication/GetPdfFilePath',
+        url: endpoint,
         type: 'POST',
         data: { applicationId: applicationId },
         dataType: 'json',
         success: function (response) {
             if (response) {
-                sendPDFToServer(response, thumbprint);
+                sendPDFToServer(response, thumbprint, type);
             } else {
                 console.log('No file path returned.');
             }
@@ -574,11 +580,12 @@ function getPdfFilePath(applicationId, thumbprint) {
     });
 }
 
-function sendPDFToServer(filepath, thumbprint) {
+function sendPDFToServer(filepath, thumbprint, type) {
     console.log("Thumbprint used:", thumbprint);
 
     const baseUrl = window.location.origin;
     const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
+    var URL = '';
 
     $.ajax({
         //url: 'http://localhost/Temporary_Listen_Addresses/ByteDigitalSignAsync',
@@ -602,7 +609,14 @@ function sendPDFToServer(filepath, thumbprint) {
                     icon: "success"
                 }).then(() => {
                     const fileName = filepath.split('/').pop();
-                    SaveSignedPdf(response.Message, fileName);
+                    /* alert('filename' + fileName);*/
+
+                    if (type === "Loan")
+                        URL = "/OnlineApplication/SaveBase64ToFile";
+                    else if (type === "Maturity")
+                        URL = "/Claim/SaveBase64ToFile";
+
+                    SaveSignedPdf(response.Message, fileName,URL);
                 });
             } else {
                 Swal.fire({
@@ -635,9 +649,9 @@ function GetThumbprint() {
     });
 }
 
-function SaveSignedPdf(base64String, fn) {
+function SaveSignedPdf(base64String, fn, endpoint) {
     $.ajax({
-        url: '/OnlineApplication/SaveBase64ToFile',
+        url: endpoint,
         type: 'POST',        
         dataType: 'json',
         data:{

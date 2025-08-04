@@ -441,6 +441,9 @@ namespace DataAccessLayer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
 
+                    b.Property<string>("AGIFRemarks")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AadharCardNo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

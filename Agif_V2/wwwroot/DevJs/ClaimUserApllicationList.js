@@ -77,7 +77,7 @@ $('#btnBulkUpload').on('click', function () {
     const formData = new FormData();
     formData.append('file', file);
     $.ajax({
-        url: '/ApplicationRequest/UploadExcelFile',
+        url: '/ApplicationRequest/ClaimUploadExcelFile',
         type: 'POST',
         data: formData,
         contentType: false,
@@ -197,7 +197,7 @@ function populateUploadTables(data) {
 
 $('#btnProcessBulk').on('click', function () {
     $.ajax({
-        url: '/ApplicationRequest/ProcessBulkApplications',
+        url: '/ApplicationRequest/ClaimProcessBulkApplications',
         type: 'Get',
         contentType: 'application/json',
         data: {},
@@ -262,7 +262,7 @@ $('#UploadExcel1').on('click', function () {
             const formData = new FormData();
             formData.append('file', file);
             $.ajax({
-                url: '/ApplicationRequest/UploadExcelFile',
+                url: '/ApplicationRequest/ClaimUploadExcelFile',
                 type: 'POST',
                 data: formData,
                 contentType: false,
