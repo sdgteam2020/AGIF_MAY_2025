@@ -707,3 +707,5 @@ function rejectedApplication(applicationId, type) {
         }
     });
 }
+// Function to add blur effect when ApplicationAction modal opens
+
