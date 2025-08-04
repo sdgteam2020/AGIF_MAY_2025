@@ -316,7 +316,7 @@ namespace DataAccessLayer.Repositories
                     await _Property.Add(model.PropertyRenovation);
                 }
 
-                else if (PurposeType == "SP")
+                else if (model.SplWaiver!=null)
                 {
                     SplWaiverModel splWaiver = new SplWaiverModel();
                     splWaiver = model.SplWaiver;

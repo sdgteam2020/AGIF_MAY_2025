@@ -312,7 +312,7 @@ namespace Agif_V2.Controllers
                 {
                     string searchValue = request.searchValue.ToLower();
                     query = query.Where(x =>
-                        x.ProfileName.ToLower().Contains(searchValue) ||
+                        //x.ProfileName.ToLower().Contains(searchValue) ||
                         x.EmailId.ToLower().Contains(searchValue) ||
                         x.MobileNo.ToLower().Contains(searchValue) ||
                         x.ArmyNo.ToLower().Contains(searchValue) ||
