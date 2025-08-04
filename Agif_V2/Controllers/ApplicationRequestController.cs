@@ -591,16 +591,18 @@ namespace Agif_V2.Controllers
                 // Apply sorting - fixed to match JavaScript column names
                 if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
                 {
-                    bool ascending = request.sortDirection.ToLower() == "asc";
-                    query = request.sortColumn.ToLower() switch
-                    {
-                        "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
-                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                        "regtname" => ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps),
-                        "presentunit" => ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit),
-                        "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
-                        _ => query.OrderByDescending(x => x.UpdatedOn) // Default sorting
-                    };
+                    bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
+                    query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
+                    string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
+                    string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
+                    string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
+                    string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
+                        query.OrderByDescending(x => x.UpdatedOn); // Default sorting
                 }
                 else
                 {

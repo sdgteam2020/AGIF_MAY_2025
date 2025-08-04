@@ -152,14 +152,14 @@ else
                         <div class="table-wrapper table-responsive">
                             <table class="table table-striped border border-purple table-hover" id="tblReceivedApplications">
                                 <thead>
-                                    <tr>
+                                    <tr class="bg-danger">
                                         <th>Ser No</th>
                                         <th class="text-nowrap">Army No</th>
                                         <th class="text-nowrap">Applicant Name</th>
                                         <th>Regt/Corps</th>
                                         <th class="text-nowrap text-center">Present Unit</th>
                                         <th class="text-nowrap">Applied Date</th>
-                                        @if (ViewBag.Status != null && ViewBag.Status == "4")
+                                        @if (ViewBag.Status != null && ViewBag.Status == "104")
                                         {
                                             <th class="text-nowrap text-center">Download Count</th>
                                             <th class="text-nowrap text-center">DownloadedOn</th>
@@ -182,7 +182,7 @@ else
 <div class="modal fade" id="AddBulkModel" data-bs-backdrop="static" tabindex="-1">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content shadow-lg rounded-4">
-            <div class="modal-header bg-primary text-white rounded-top-4">
+            <div class="modal-header  bg-danger  text-white rounded-top-4">
                 <h5 class="modal-title fw-bold"><i class="fas fa-upload me-2"></i> Bulk Status Update</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -274,7 +274,6 @@ else
 
 
 @section Scripts {
-    <!-- CSS: Bootstrap 5 and DataTables -->
     <link href="~/lib/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
     <link href="~/lib/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
 
@@ -288,6 +287,7 @@ else
     <!-- JS: DataTables Buttons extension -->
     <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
     <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+    <script src="~/lib/datatables.net-buttons/js/buttons.print.min.js"></script>
     <script src="~/devjs/ClaimUserApllicationList.js"></script>
 
 }
