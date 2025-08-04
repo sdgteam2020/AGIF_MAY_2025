@@ -1,4 +1,5 @@
 ﻿$(document).ready(function () {
+    addBlurEffect();
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
 
@@ -723,3 +724,15 @@ function rejectedApplication(applicationId, type) {
 }
 // Function to add blur effect when ApplicationAction modal opens
 
+function addBlurEffect() {
+    const $modal1 = $('#ViewPdf');
+    const $modal2 = $('#ApplicationAction');
+    
+    $modal2.on('show.bs.modal', function () {
+        $modal1.find('.modal-content').addClass('modal-blur');
+    });
+    
+    $modal2.on('hidden.bs.modal', function () {
+        $modal1.find('.modal-content').removeClass('modal-blur');
+    });
+}
