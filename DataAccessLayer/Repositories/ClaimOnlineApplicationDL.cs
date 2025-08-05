@@ -316,7 +316,7 @@ namespace DataAccessLayer.Repositories
                     await _Property.Add(model.PropertyRenovation);
                 }
 
-                else if (PurposeType == "SP")
+                else if (model.SplWaiver!=null)
                 {
                     SplWaiverModel splWaiver = new SplWaiverModel();
                     splWaiver = model.SplWaiver;
@@ -1067,7 +1067,7 @@ namespace DataAccessLayer.Repositories
                              DateOfRetirement = common.DateOfRetirement,
                              PanCardNo = common.PanCardNo ?? string.Empty,
                              MobileNo = common.MobileNo ?? string.Empty,
-                             Email = (common.Email ?? string.Empty) + "@" + (common.EmailDomain ?? string.Empty),
+                             Email = (common.Email ?? string.Empty)  ?? string.Empty,
                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,

@@ -37,6 +37,9 @@ namespace DataAccessLayer.Interfaces
 
         Task<(bool, string)> ProcessBulkApplicationUpdates(DataTable applicationUpdates);
         DataTable CreateApplicationUpdatesDataTable(List<DTOApplStatusBulkUpload> applications);
+        Task<List<string>> GetAllClaimStatusCode();
+        Task<List<string>> GetClaimNotApplId(List<string> applicationIds);
 
+        Task<(bool, string)> ClaimProcessBulkApplicationUpdates(System.Data.DataTable applicationUpdates);
     }
 }

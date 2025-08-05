@@ -591,16 +591,18 @@ namespace Agif_V2.Controllers
                 // Apply sorting - fixed to match JavaScript column names
                 if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
                 {
-                    bool ascending = request.sortDirection.ToLower() == "asc";
-                    query = request.sortColumn.ToLower() switch
-                    {
-                        "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
-                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                        "regtname" => ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps),
-                        "presentunit" => ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit),
-                        "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
-                        _ => query.OrderByDescending(x => x.UpdatedOn) // Default sorting
-                    };
+                    bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
+                    query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
+                    string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
+                    string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
+                    string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
+                    string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
+                        (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
+                        query.OrderByDescending(x => x.UpdatedOn); // Default sorting
                 }
                 else
                 {
@@ -1242,6 +1244,231 @@ namespace Agif_V2.Controllers
             return File(stream.ToArray(),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                 "RejectedRecords.xlsx");
+        }
+
+        public async Task<IActionResult> ClaimUploadExcelFile(IFormFile file)
+        {
+            // Initialize the list properly
+            DTOApplStatusBulkUploadlst lst = new DTOApplStatusBulkUploadlst
+            {
+                DTOApplStatusBulkUploadOK = new List<DTOApplStatusBulkUpload>(),
+                DTOApplStatusBulkUploadNotOk = new List<DTOApplStatusBulkUpload>()
+            };
+
+            if (file == null || file.Length == 0)
+            {
+                return Json(new { success = false, message = "Please select a valid Excel file." });
+            }
+
+            try
+            {
+                string tempPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimExcelTempUploads");
+                if (Directory.Exists(tempPath))
+                {
+                    var existingFiles = Directory.GetFiles(tempPath);
+                    foreach (var existingFile in existingFiles)
+                    {
+                        System.IO.File.Delete(existingFile); // Delete existing files
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(tempPath);
+                }
+
+                string filename = $"ExcelImport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+                string extension = Path.GetExtension(file.FileName);
+                string filePath = Path.Combine(tempPath, filename);
+
+                using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var requiredHeaders = new List<string> { "Army No", "Appln_ID", "ApplicationType", "Status_Code", "AGIF Remarks" };
+                var foundHeaders = new List<string>();
+
+                using (var workbook = new XLWorkbook(filePath))
+                {
+                    var worksheet = workbook.Worksheets.FirstOrDefault();
+                    if (worksheet == null)
+                    {
+                        return Json(new { success = false, message = "No worksheets found in the Excel file." });
+                    }
+
+                    var firstRow = worksheet.Row(1);
+                    if (firstRow == null)
+                    {
+                        return Json(new { success = false, message = "Excel file appears to be empty." });
+                    }
+
+                    foreach (var cell in firstRow.CellsUsed())
+                    {
+                        var header = cell.GetString()?.Trim();
+                        if (!string.IsNullOrEmpty(header))
+                        {
+                            foundHeaders.Add(header);
+                        }
+                    }
+                }
+
+                // Check missing headers
+                var missingHeaders = requiredHeaders
+                    .Where(required => !foundHeaders.Contains(required, StringComparer.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (missingHeaders.Any())
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "The following required columns are missing: " + string.Join(", ", missingHeaders)
+                    });
+                }
+
+                DataTable dt = ExcelToDatatable(filePath);
+                if (dt == null || dt.Rows.Count == 0)
+                {
+                    return Json(new { success = false, message = "No data found in Excel file." });
+                }
+
+                var AllStatusCode = await _userApplication.GetAllClaimStatusCode();
+                if (AllStatusCode == null)
+                {
+                    return Json(new { success = false, message = "Unable to retrieve status codes." });
+                }
+
+                var applicationIds = dt.AsEnumerable()
+                    .Select(row => row.Field<string>("Appln_ID"))
+                    .Where(id => !string.IsNullOrEmpty(id))
+                    .Distinct()
+                    .ToList();
+
+                var NotApp_id = await _userApplication.GetClaimNotApplId(applicationIds);
+
+                foreach (DataRow rw in dt.Rows)
+                {
+                    string applicationId = rw.Field<string>("Appln_ID");
+                    string statusCode = rw.Field<string>("Status_Code");
+
+                    if (string.IsNullOrEmpty(applicationId) || string.IsNullOrEmpty(statusCode))
+                    {
+                        continue;
+                    }
+
+                    // Validate that they can be converted to integers
+                    if (!int.TryParse(applicationId, out int applIdInt) || !int.TryParse(statusCode, out int statusCodeInt))
+                    {
+                        string reason = "";
+                        if (!int.TryParse(applicationId, out _))
+                        {
+                            reason += "Invalid Application ID format. ";
+                        }
+                        if (!int.TryParse(statusCode, out _))
+                        {
+                            reason += "Invalid Status Code format.";
+                        }
+
+                        lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
+                        {
+                            ApplId = 0, // Or skip setting
+                            Status_Code = 0, // Or skip setting
+                            ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
+                            Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                            Reason = reason.Trim(),
+                            Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
+                        });
+                        continue;
+                    }
+
+
+                    // Check if the application ID is valid
+                    if (NotApp_id.Contains(applicationId))
+                    {
+                        // Handle invalid application ID
+                        lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
+                        {
+                            ApplId = applIdInt,
+                            Status_Code = statusCodeInt,
+                            ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
+                            Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                            Reason = "Invalid Application ID",
+                            Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
+                        });
+                    }
+                    else
+                    {
+                        // Check if the status code is valid
+                        if (AllStatusCode.Contains(statusCode))
+                        {
+                            // Add to the valid list
+                            lst.DTOApplStatusBulkUploadOK.Add(new DTOApplStatusBulkUpload
+                            {
+                                ApplId = applIdInt,
+                                ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
+                                Status_Code = statusCodeInt,
+                                Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                                Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
+                            });
+                        }
+                        else
+                        {
+                            // Handle invalid status code
+                            lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
+                            {
+                                ApplId = applIdInt,
+                                Status_Code = statusCodeInt,
+                                ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
+                                Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
+                                Reason = "Invalid Status Code",
+                                Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
+                            });
+                        }
+                    }
+                }
+                TempData["ClaimBulkUploadOK"] = JsonConvert.SerializeObject(lst.DTOApplStatusBulkUploadOK);
+                return Json(new
+                {
+                    success = true,
+                    message = "File uploaded successfully.",
+                    Data = lst
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error uploading file: " + ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> ClaimProcessBulkApplications()
+        {
+            var tempDataOK = TempData["ClaimBulkUploadOK"]?.ToString();
+            if (string.IsNullOrEmpty(tempDataOK))
+            {
+                return Json(new { success = false, message = "No valid applications to process." });
+            }
+
+            var lst = JsonConvert.DeserializeObject<List<DTOApplStatusBulkUpload>>(tempDataOK);
+            if (lst == null || lst.Count == 0)
+            {
+                return Json(new { success = false, message = "No valid applications to process." });
+            }
+
+            DataTable applicationUpdatesTable = _userApplication.CreateApplicationUpdatesDataTable(lst);
+
+            // Call the bulk update method
+            var result = await _userApplication.ClaimProcessBulkApplicationUpdates(applicationUpdatesTable);
+
+            if (result.Item1) // Assuming result is a tuple (bool, string)
+            {
+                return Json(new { success = true, message = "Bulk applications processed successfully." });
+            }
+            else
+            {
+                return Json(new { success = false, message = result.Item2 });
+            }
+
+            // Unreachable code removed
         }
 
 

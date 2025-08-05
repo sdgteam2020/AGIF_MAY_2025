@@ -335,6 +335,14 @@ namespace DataAccessLayer.Repositories
                 .Select(s => s.StatusCode.ToString())
                 .ToListAsync();
         }
+        public async Task<List<string>> GetAllClaimStatusCode()
+        {
+            return await _db.StatusTable
+                .Select(s => s.ClaimStatusCode.ToString())
+                .ToListAsync();
+        }
+
+
         public async Task<List<string>> GetNotApplId(List<string> applicationIds)
         {
             if (applicationIds == null || !applicationIds.Any())
@@ -349,6 +357,22 @@ namespace DataAccessLayer.Repositories
 
             return notPresentApplicationIds;
         }
+
+        public async Task<List<string>> GetClaimNotApplId(List<string> applicationIds)
+        {
+            if (applicationIds == null || !applicationIds.Any())
+                return new List<string>();
+
+            var presentApplicationIds = await _db.trnClaim
+                .Where(a => applicationIds.Contains(a.ApplicationId.ToString()))
+                .Select(a => a.ApplicationId.ToString())
+                .ToListAsync();
+
+            var notPresentApplicationIds = applicationIds.Except(presentApplicationIds).ToList();
+
+            return notPresentApplicationIds;
+        }
+
 
         public async Task<(bool, string)> ProcessBulkApplicationUpdates(System.Data.DataTable applicationUpdates)
         {
@@ -403,6 +427,42 @@ namespace DataAccessLayer.Repositories
             }
 
             return table;
+        }
+
+        public async Task<(bool, string)> ClaimProcessBulkApplicationUpdates(System.Data.DataTable applicationUpdates)
+        {
+            var connection = _db.Database.GetDbConnection();
+
+            using (var command = connection.CreateCommand())
+            {
+                command.CommandText = "dbo.ClaimProcessBulkApplicationUpdates";
+                command.CommandType = CommandType.StoredProcedure;
+
+                // Add table-valued parameter
+                var parameter = new SqlParameter("@ApplicationUpdates", applicationUpdates)
+                {
+                    SqlDbType = SqlDbType.Structured,
+                    TypeName = "dbo.BulkApplicationUpdateType"
+                };
+                command.Parameters.Add(parameter);
+
+                // Ensure connection is open
+                if (connection.State != ConnectionState.Open)
+                    await connection.OpenAsync();
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        var result = reader["Result"].ToString();
+                        var message = reader["Message"].ToString();
+
+                        return (result == "Success", message);
+                    }
+                }
+            }
+
+            return (false, "No response from stored procedure");
         }
     }
 }

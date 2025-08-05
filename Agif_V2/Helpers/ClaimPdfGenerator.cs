@@ -162,12 +162,12 @@ namespace Agif_V2.Helpers
                         (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""));
                     AddRow("11. Civil Postal Address", common.CivilPostalAddress, "12. Date of Enrollment", common.DateOfCommission?.ToString("dd-MM-yyyy"));
                     AddRow("13. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"), "14. Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
-                    AddRow("15. Total Service (In Years)", common.TotalService.ToString(), "16. E-Mail", common.Email +"@"+ common.EmailDomain);
+                    AddRow("15. Total Service (In Years)", common.TotalService.ToString(), "16. E-Mail", common.Email + "@" + common.EmailDomain);
                     AddRow("17. Aadhaar No", common.AadharCardNo, "18. Pan No", common.PanCardNo);
                     AddRow("19. Mob No", common.MobileNo, "20. Salary Account No", common.SalaryAcctNo);
                     AddRow("21. IFSC Code", common.IfsCode, "22. Bank Branch", common.NameOfBankBranch);
                     AddRow("23. Purpose of Withdrawal", formType, "24. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString());
-                    AddRow("25. No of Withdrawals", common.NoOfwithdrwal,"","");
+                    AddRow("25. No of Withdrawals", common.NoOfwithdrwal, "", "");
 
                     document.Add(table);
 
@@ -218,12 +218,12 @@ namespace Agif_V2.Helpers
                         AddRow2("S/No & Type of Loan", "Date of Loan taken", " Duration of loan", "Amount Taken");
                     }
                     else
-                    counter= 25;
+                        counter = 25;
 
 
                     if (common.House_Building_Advance_Loan)
                     {
-                        AddRow2("House Building Advance", common.House_Building_Date_of_Loan_taken?.ToString("dd-MM-yyyy"),common.House_Building_Duration_of_Loan.ToString() , common.House_Building_Amount_Taken.ToString());
+                        AddRow2("House Building Advance", common.House_Building_Date_of_Loan_taken?.ToString("dd-MM-yyyy"), common.House_Building_Duration_of_Loan.ToString(), common.House_Building_Amount_Taken.ToString());
                     }
                     if (common.House_Repair_Advance_Loan)
                     {
@@ -248,7 +248,7 @@ namespace Agif_V2.Helpers
                        .SetMarginBottom(5)
                        .SetUnderline());
 
-                    if(data.EducationDetailsResponse!=null)
+                    if (data.EducationDetailsResponse != null)
                     {
                         var EducationDetailsDTO = data.EducationDetailsResponse;
 
@@ -291,7 +291,7 @@ namespace Agif_V2.Helpers
                         AddRow3("(a) Name of Child", EducationDetailsDTO.ChildName, "(b) Date of Birth", EducationDetailsDTO.DateOfBirth?.ToString("dd-MM-yyyy"));
                         AddRow3("(b) DO Part-II No", EducationDetailsDTO.DOPartIINo, "(d) DO Part-II Date ", EducationDetailsDTO.DoPartIIDate?.ToString("dd-MM-yyyy"));
                         AddRow3("(e) Course ", EducationDetailsDTO.CourseForWithdrawal, "(f)Name & Address of College", EducationDetailsDTO.CollegeInstitution);
-                        AddRow3("(h) Total Expenditure ", EducationDetailsDTO.TotalExpenditure.ToString(),"","");
+                        AddRow3("(h) Total Expenditure ", EducationDetailsDTO.TotalExpenditure.ToString(), "", "");
 
                         document.Add(table3);
 
@@ -427,13 +427,13 @@ namespace Agif_V2.Helpers
                                 .SetBorderRight(Border.NO_BORDER));
                         }
 
-                        AddRow5("(a) Other Reason", SplWaiverResponseDTO.OtherReasons, "","");
-                        
+                        AddRow5("(a) Other Reason", SplWaiverResponseDTO.OtherReasons, "", "");
+
 
                         document.Add(table5);
-                        Splreason="For Special Reason (Warranting waiver from competent authority *)";
+                        Splreason = "For Special Reason (Warranting waiver from competent authority *)";
                     }
-                 
+
 
                     Paragraph point18 = new Paragraph($"{++counter}. Certificate {Splreason}")
                                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
@@ -445,25 +445,25 @@ namespace Agif_V2.Helpers
                     {
                         document.Add(new Paragraph("* Claim process will take time and is subject to approval of competent authority").SetBold().SetFontSize(10));
                     }
-                            List<string> checkPara = new List<string>
+                    List<string> checkPara = new List<string>
                             {
                             "(a) Certified that the particulars given are correct & the amount will be utilized for the purpose mentioned in application",
                             "(b) I understand that , if I withdraw money from maturity amount , it will reduce my ultimate saving amount receivable at the time of retirement/release/discharge as Member Maturity Fund.",
                             "(c) Following documents signed by me are attached with the application:-"
                             };
-        
-                            for (int i = 0; i < checkPara.Count; i++)
-                            {
-                                var para = new Paragraph(checkPara[i])
-                                    .SetFont(normalFont)
-                                    .SetFontSize(10)
-                                    .SetTextAlignment(TextAlignment.JUSTIFIED)
-                                    .SetMarginLeft(20)
-                                    .SetMarginBottom(3);
-                                //if (i == checkPara.Count - 1)
-                                //    para.SetBold();
-                                document.Add(para);
-                            }
+
+                    for (int i = 0; i < checkPara.Count; i++)
+                    {
+                        var para = new Paragraph(checkPara[i])
+                            .SetFont(normalFont)
+                            .SetFontSize(10)
+                            .SetTextAlignment(TextAlignment.JUSTIFIED)
+                            .SetMarginLeft(20)
+                            .SetMarginBottom(3);
+                        //if (i == checkPara.Count - 1)
+                        //    para.SetBold();
+                        document.Add(para);
+                    }
 
 
 
@@ -505,7 +505,7 @@ namespace Agif_V2.Helpers
                         }
                     }
 
-                    
+
                     int counter2 = 1; // This will track the numbering for the matched documents
                     foreach (var entry in documentMap.Values.Distinct()) // Use Distinct() to avoid duplicates
                     {
@@ -536,7 +536,7 @@ namespace Agif_V2.Helpers
                     // Add part (d) and (e) after documentsRequired
                     List<string> checkParaDE = new List<string>
                     {
-                        "(d) If the withdrawal is for second time, gaps after first withdrawal should be more than six months.",                        
+                        "(d) If the withdrawal is for second time, gaps after first withdrawal should be more than six months.",
                     };
 
                     foreach (var paraText in checkParaDE)
@@ -562,42 +562,42 @@ namespace Agif_V2.Helpers
 
                     // Verified by and Date Time
                     string domainInfo = $"Verified by - {Name}   IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy HH:mm}";
-                            document.Add(new Paragraph(domainInfo)
-                                .SetFont(normalFont)
-                                .SetFontSize(12)
-                                .SetFontColor(ColorConstants.BLUE)
-                                .SetTextAlignment(TextAlignment.JUSTIFIED)
-                                .SetMarginBottom(10));
-                            document.Add(new Paragraph("\n"));
-        
-                            // Date & Signature Alignment using Table
-                            Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
-        
-                            // Left: Date
-                            signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + DateTime.Now.ToString("dd-MM-yyyy"))
-                                .SetFont(normalFont).SetFontSize(10))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.LEFT));
-        
-                            // Right: Signature (Army No)
-                            signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number ?? "")
-                                .SetFont(normalFont).SetFontSize(10))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-        
-                            // Left: Empty
-                            signatureTable.AddCell(new Cell().Add(new Paragraph("")
-                                .SetFont(normalFont).SetFontSize(10))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.LEFT));
-        
-                            // Right: Signature (Rank + Name)
-                            signatureTable.AddCell(new Cell().Add(new Paragraph((common.DdlRank?.ToString() ?? "") + " " + (common.ApplicantName ?? ""))
-                                .SetFont(normalFont).SetFontSize(10))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-        
-                            document.Add(signatureTable);
+                    document.Add(new Paragraph(domainInfo)
+                        .SetFont(normalFont)
+                        .SetFontSize(12)
+                        .SetFontColor(ColorConstants.BLUE)
+                        .SetTextAlignment(TextAlignment.JUSTIFIED)
+                        .SetMarginBottom(10));
+                    document.Add(new Paragraph("\n"));
+
+                    // Date & Signature Alignment using Table
+                    Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
+
+                    // Left: Date
+                    signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + DateTime.Now.ToString("dd-MM-yyyy"))
+                        .SetFont(normalFont).SetFontSize(10))
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.LEFT));
+
+                    // Right: Signature (Army No)
+                    signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number ?? "")
+                        .SetFont(normalFont).SetFontSize(10))
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT));
+
+                    // Left: Empty
+                    signatureTable.AddCell(new Cell().Add(new Paragraph("")
+                        .SetFont(normalFont).SetFontSize(10))
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.LEFT));
+
+                    // Right: Signature (Rank + Name)
+                    signatureTable.AddCell(new Cell().Add(new Paragraph((common.DdlRank?.ToString() ?? "") + " " + (common.ApplicantName ?? ""))
+                        .SetFont(normalFont).SetFontSize(10))
+                        .SetBorder(Border.NO_BORDER)
+                        .SetTextAlignment(TextAlignment.RIGHT));
+
+                    document.Add(signatureTable);
 
 
 
@@ -608,7 +608,7 @@ namespace Agif_V2.Helpers
 
                         document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
                             .SetFont(boldFont).SetFontSize(10).SetTextAlignment(TextAlignment.CENTER).SetUnderline().SetMarginTop(10).SetMarginBottom(5));
-                    
+
 
                         Paragraph para = new Paragraph();
                         para.Add(new Text("1.  I certify that above MAWD application ").SetFont(normalFont));
@@ -661,101 +661,100 @@ namespace Agif_V2.Helpers
 
                     }
 
-                    if (isApproved || isRejected)
+
+
+                    if (isRejected)
                     {
-                        
-                        if (isApproved || isRejected)
+                        if (isRejected)
                         {
-                            if (isRejected)
+                            document.Add(new Paragraph("\n\r\n\r"));
+                        }
+
+                        // Signature and Rank details table (iText7)
+                        Table signatureTable3 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
+
+                        // Left: Unit Stamp (empty)
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        // Right: Signature of CO with Stamp
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph("(Digital Signature of CO/OC Tps/Head of Adm Br)")
+                            .SetFont(normalFont).SetFontSize(11))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // Left: Date (empty)
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        // Right: Army No
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Armyno ?? ""}")
+                            .SetFont(normalFont).SetFontSize(11))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // Left: Empty
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
+                            .SetBorder(Border.NO_BORDER));
+
+                        // Right: Rank & Name
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Name ?? ""}")
+                            .SetFont(normalFont).SetFontSize(11))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // Left: Empty
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
+                            .SetBorder(Border.NO_BORDER));
+
+                        // Right: Mobile No
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"Mobile No: {Mobile ?? ""}")
+                            .SetFont(normalFont).SetFontSize(11))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // Left: Empty
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
+                            .SetBorder(Border.NO_BORDER));
+
+                        // Right: Digital Sign On
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"Digital Sign On: {dated}")
+                            .SetFont(normalFont).SetFontSize(11))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        document.Add(signatureTable3);
+
+                        //if (isApproved)
+                        //{
+                        //    document.Add(new Paragraph("\n\r"));
+                        //    string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                        //    if (File.Exists(imagePath))
+                        //    {
+
+                        //        ImageData imageData = ImageDataFactory.Create(imagePath);
+                        //        Image icon = new Image(imageData).ScaleToFit(60f, 60f);
+                        //        icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 180);
+                        //        document.Add(icon);
+                        //    }
+                        //}
+                        if (isRejected)
+                        {
+                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
+                            if (File.Exists(imagePath))
                             {
-                                document.Add(new Paragraph("\n\r\n\r"));
-                            }
 
-                            // Signature and Rank details table (iText7)
-                            Table signatureTable3 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
-
-                            // Left: Unit Stamp (empty)
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.LEFT));
-
-                            // Right: Signature of CO with Stamp
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph("(Digital Signature of CO/OC Tps/Head of Adm Br)")
-                                .SetFont(normalFont).SetFontSize(11))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-
-                            // Left: Date (empty)
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.LEFT));
-
-                            // Right: Army No
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Armyno ?? ""}")
-                                .SetFont(normalFont).SetFontSize(11))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-
-                            // Left: Empty
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
-                                .SetBorder(Border.NO_BORDER));
-
-                            // Right: Rank & Name
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Name ?? ""}")
-                                .SetFont(normalFont).SetFontSize(11))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-
-                            // Left: Empty
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
-                                .SetBorder(Border.NO_BORDER));
-
-                            // Right: Mobile No
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"Mobile No: {Mobile ?? ""}")
-                                .SetFont(normalFont).SetFontSize(11))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-
-                            // Left: Empty
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph(""))
-                                .SetBorder(Border.NO_BORDER));
-
-                            // Right: Digital Sign On
-                            signatureTable3.AddCell(new Cell().Add(new Paragraph($"Digital Sign On: {dated}")
-                                .SetFont(normalFont).SetFontSize(11))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.RIGHT));
-
-                            document.Add(signatureTable3);
-
-                            if (isApproved)
-                            {
-                                document.Add(new Paragraph("\n\r"));
-                                string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
-                                if (File.Exists(imagePath))
-                                {
-
-                                    ImageData imageData = ImageDataFactory.Create(imagePath);
-                                    Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                                    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 180);
-                                    document.Add(icon);
-                                }
-                            }
-                            if (isRejected)
-                            {
-                                string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
-                                if (File.Exists(imagePath))
-                                {
-
-                                    ImageData imageData = ImageDataFactory.Create(imagePath);
-                                    Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                                    icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 557);
-                                    document.Add(icon);
-                                }
+                                ImageData imageData = ImageDataFactory.Create(imagePath);
+                                Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                                icon.SetFixedPosition(pdf.GetNumberOfPages(), 480, 557);
+                                document.Add(icon);
                             }
                         }
-                       
                     }
+
+
 
 
 
@@ -765,7 +764,7 @@ namespace Agif_V2.Helpers
 
                     document.Close();
                 }
-           
+
 
                 return 1;
             }

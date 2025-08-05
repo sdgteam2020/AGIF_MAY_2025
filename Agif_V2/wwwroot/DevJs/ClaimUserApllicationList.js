@@ -77,7 +77,7 @@ $('#btnBulkUpload').on('click', function () {
     const formData = new FormData();
     formData.append('file', file);
     $.ajax({
-        url: '/ApplicationRequest/UploadExcelFile',
+        url: '/ApplicationRequest/ClaimUploadExcelFile',
         type: 'POST',
         data: formData,
         contentType: false,
@@ -197,7 +197,7 @@ function populateUploadTables(data) {
 
 $('#btnProcessBulk').on('click', function () {
     $.ajax({
-        url: '/ApplicationRequest/ProcessBulkApplications',
+        url: '/ApplicationRequest/ClaimProcessBulkApplications',
         type: 'Get',
         contentType: 'application/json',
         data: {},
@@ -262,7 +262,7 @@ $('#UploadExcel1').on('click', function () {
             const formData = new FormData();
             formData.append('file', file);
             $.ajax({
-                url: '/ApplicationRequest/UploadExcelFile',
+                url: '/ApplicationRequest/ClaimUploadExcelFile',
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -357,7 +357,8 @@ function BindUsersData(status) {
         }
     ];
 
-    // Add conditional columns for status = 4
+    // Add conditional columns for status = 104
+    
     if (status === '104') {
         columns.push(
             {
@@ -373,7 +374,7 @@ function BindUsersData(status) {
                 render: function (data, type, row) {
                     if (data) {
                         // Format the date if needed
-                        const date = new Date(data);
+                        var date = new Date(data);
                         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
                     }
                     return 'N/A';
@@ -396,9 +397,8 @@ function BindUsersData(status) {
             </button>`;
         }
     });
-
     // Initialize DataTable with server-side processing
-    const table = $('#tblReceivedApplications').DataTable({
+    var table = $('#tblReceivedApplications').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -408,7 +408,6 @@ function BindUsersData(status) {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: function (data) {
-                console.log(data);
                 return {
                     'request.Draw': data.draw,
                     'request.Start': data.start,
