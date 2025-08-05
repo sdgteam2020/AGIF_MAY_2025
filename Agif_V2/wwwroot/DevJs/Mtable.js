@@ -1,68 +1,50 @@
-﻿var errormsg002 = "Someting Went Wrong";
-function mMsater(sectid , ddl, TableId, ParentId) {
+﻿const errormsg002 = "Something Went Wrong";
 
-  
-    var userdata =
-    {
-        "id": TableId,
-        "ParentId": ParentId,
-
+function mMsater(sectid, ddl, TableId, ParentId) {
+    const userdata = {
+        id: TableId,
+        ParentId: ParentId
     };
+
     $.ajax({
         url: '/Master/GetAllMMaster',
         contentType: 'application/x-www-form-urlencoded',
         data: userdata,
         type: 'POST',
-
         success: function (response) {
-            if (response != "null" && response != null) {
-                if (response == 0) {
-                    Swal.fire({
-                        text: errormsg002
-                    });
-                } else if (response == -1) {
-                    Swal.fire({
-                        text: errormsg002
-                    });
-                }
+            if (response !== "null" && response != null) {
+                if (response === 0 || response === -1) {
+                    Swal.fire({ text: errormsg002 });
+                } else {
+                    let listItemddl = '<option value="">Please Select</option>';
 
-                else  {
-
-                    var listItemddl = "";
-                 
-                    listItemddl += '<option value="">Please Select</option>';
-                   
-                    for (var i = 0; i < response.length; i++) {
-                      
-                          listItemddl += '<option value=' + response[i].id + '>' + response[i].name +'</option>';
-                    }
-                    $("#" + ddl + "").html(listItemddl);
-              
-                    if (sectid != '') {
-                        $("#" + ddl + "").val(sectid);
-
+                    // Guard if response isn't iterable
+                    if (Array.isArray(response)) {
+                        response.forEach(item => {
+                            listItemddl += `<option value="${item.id}">${item.name}</option>`;
+                        });
                     }
 
+                    $("#" + ddl).html(listItemddl);
+
+                    if (sectid !== '') {
+                        $("#" + ddl).val(sectid);
+                    }
                 }
             }
-            else {
-                
-            }
+            // else: silently ignore null-like response (could add logging if needed)
         },
-        error: function (result) {
-            Swal.fire({
-                text: errormsg002
-            });
+        error: function () {
+            Swal.fire({ text: errormsg002 });
         }
     });
 }
 
-async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow) {
-
-
+async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow)
+{
     try {
         const response = await fetch("https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
-        //const response = await fetch("http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
+            //const response = await fetch("http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
             method: "GET",
             cache: "no-cache",
             headers: {

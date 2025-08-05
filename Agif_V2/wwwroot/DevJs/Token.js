@@ -1,4 +1,4 @@
-﻿var errormsg002 = "Someting Went Wrong";
+﻿const errormsg002 = "Someting Went Wrong";
 async function GetTokenDetails(txtArmyNo, txtName, msgid,btntoshow) {
   
 

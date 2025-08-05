@@ -3,6 +3,9 @@
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
 
+    if (value == 2) {
+        $('#tblApplications thead tr th').eq(6).before('<th>Digital Sign On</th>');
+    }
 
     GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
 
@@ -30,42 +33,41 @@
 
     //const GlobalApplnId;
     $('#acceptButton').on('click', function () {
-        var applnId = $("#spnapplicationId").html();
-        var icNo = $("#IcNo").data("id");
-        let value = true;
-        let type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
-        var remarkField = $("#txtRemark");
-        var remarkValue = remarkField.val().trim();
+        const applnId = $("#spnapplicationId").html();
+        const icNo = $("#IcNo").data("id");
+        const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
+        const $remarkField = $("#txtRemark");
+        let remarkValue = $remarkField.val().trim();
+
         if (remarkValue === "") {
-            remarkField.val("Accepted");
+            $remarkField.val("Accepted");
+            remarkValue = "Accepted";
         }
 
-        if (value == true) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Do you want to approve!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, approve it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    GetTokenvalidatepersid2fa(icNo, applnId, type);
-                }
-            });
-            
-
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, approve it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                GetTokenvalidatepersid2fa(icNo, applnId, type);
+            }
+        });
     });
+
     $("#RejectButton").on('click', function () {
-        var applnId = $("#spnapplicationId").html();
-        var icNo = $("#IcNo").data("id");
-        let type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
-        var remarkField = $("#txtRemark");
-        var remarkValue = remarkField.val().trim();
+        const applnId = $("#spnapplicationId").html();
+        const icNo = $("#IcNo").data("id"); // kept in case needed later
+        const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
+        const $remarkField = $("#txtRemark");
+        let remarkValue = $remarkField.val().trim();
         if (remarkValue === "") {
-            remarkField.val("Rejected");
+            $remarkField.val("Rejected");
+            remarkValue = "Rejected";
         }
         Swal.fire({
             title: "Are you sure?",
@@ -80,12 +82,15 @@
                 rejectedApplication(applnId, type);
             }
         });
-
     });
 
+
     function updateButtonState() {
-        var allChecked = $('input[name="instr"]').length === $('input[name="instr"]:checked').length;
+        const allChecked = $('input[name="instr"]').length === $('input[name="instr"]:checked').length;
         $('#acceptButton, #RejectButton').prop('disabled', !allChecked);
+        if (allChecked) {
+            $('#txtRemark').focus();
+        }
     }
     updateButtonState();
     $('input[name="instr"]').on('change', function () {
@@ -99,7 +104,7 @@
 });
 
 
-var currentApplicationData = {};
+let currentApplicationData = {};
 
 
 
@@ -114,32 +119,117 @@ function populateRecommendationModal(applicationData) {
         if (!template) return;
 
         let updatedText = template
-            .replace(/\[Applicant Name\]/g, `<strong class="text-primary">${applicationData.armyNo || 'N/A'} ${applicationData.rank || 'N/A'} ${applicationData.name || 'N/A'}</strong >`)
-            .replace(/\[Application type\]/g, `<strong class="text-primary">${applicationData.applicationType || 'N/A'}</strong>`)
-            .replace(/\[Unit Name\]/g, `<strong class="text-primary">${applicationData.unitName || 'N/A'}</strong>`)
-            .replace(/\[Account Number\]/g, `<strong class="text-primary">${applicationData.accountNumber || 'N/A'}</strong>`)
-            .replace(/\[IFSC Code\]/g, `<strong class="text-primary">${applicationData.ifscCode || 'N/A'}</strong>`)
-            .replace(/\[Bank\]/g, `<strong class="text-primary">${applicationData.bank || 'N/A'}</strong>`);
+            .replace(/\[Applicant Name\]/g, `<strong class="text-dark">${applicationData.armyNo || 'N/A'} ${applicationData.rank || 'N/A'} ${applicationData.name || 'N/A'}</strong >`)
+            .replace(/\[Application type\]/g, `<strong class="text-dark">${applicationData.applicationType || 'N/A'}</strong>`)
+            .replace(/\[Unit Name\]/g, `<strong class="text-dark">${applicationData.unitName || 'N/A'}</strong>`)
+            .replace(/\[Account Number\]/g, `<strong class="text-dark">${applicationData.accountNumber || 'N/A'}</strong>`)
+            .replace(/\[IFSC Code\]/g, `<strong class="text-dark">${applicationData.ifscCode || 'N/A'}</strong>`)
+            .replace(/\[Bank\]/g, `<strong class="text-dark">${applicationData.bank || 'N/A'}</strong>`);
 
         $(this).html(updatedText);
     });
 
     $('#ApplicationActionLabel').html(`
         <i class="bi bi-file-earmark-check me-2"></i>
-        Application Review & Approval - ${applicationData.name || 'Unknown Applicant'}
+        Application Review & Approval - ${applicationData.armyNo || 'N/A'} ${applicationData.rank || 'N/A'} ${applicationData.name || 'N/A'}
     `);
 }
 
 function GetApplicationList(status, endpoint) {
+    const dynamicColumns = [
+        {
+            data: null,
+            name: "SerialNumber",
+            orderable: false,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            data: "armyNo",
+            name: "ArmyNo",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "name",
+            name: "Name",
+            render: function (data, type, row) {
+                return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
+            }
+        },
+        {
+            data: "applicationType",
+            name: "ApplicationType",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "dateOfBirth",
+            name: "DateOfBirth",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "appliedDate",
+            name: "AppliedDate",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        }
+    ];
+    if (status == 2) {
+        dynamicColumns.push({
+            data: "digitalSignDate", // ✅ your server should return this
+            name: "Digital Sign On",
+            render: data => data || ' '
+        });
+    }
+    dynamicColumns.push(
+        {
+            data: null,
+            orderable: false,
+            className: 'noExport',
+            render: function (data, type, row) {
+                if (row.isMergePdf == false) {
+                    const categorytype = $("#UserType").val() || "Loan";
 
+                    return `
+                        <div class='action action-container d-flex'>
+                            <button class='btn btn-sm btn-outline-danger  align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="Merge Pdf">
+                                <i class="bi bi-pencil-square"></i>
+                        </div>
+                       
+                    `;
+                }
+                else {
+                    const category = $("#UserType").val() || "Loan";
+
+                    return `
+                        <div class='action action-container'>
+                            <button class='btn btn-sm btn-outline-danger d-flex align-items-center  mx-2' onclick='OpenAction(${row.applicationId}, "${category === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${category})' data-bs-toggle="tooltip" data-bs-placement="top" title="View Pdf">
+                                <i class="bi bi-pencil-square"></i>
+                               
+                            </button>
+                        </div>
+                    `;
+                }
+
+            }
+        }
+    );
+    
 
     if (status == 1 || status == 101) {
         $("#DigitalSignatureforaction").html(`
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
                             <i class="bi bi-x-lg me-2"></i>
                             Close
                         </button>
-                        <button type="button" class="btn btn-primary" id="btnProcess">
+                        <button type="button" class="btn btn-success" id="btnProcess">
                             <i class="bi bi-gear-fill me-2"></i>
                             Process Application
                         </button>`);
@@ -150,7 +240,7 @@ function GetApplicationList(status, endpoint) {
     }
 
     // Initialize DataTable with server-side processing
-    var table = $('#tblApplications').DataTable({
+    const table = $('#tblApplications').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -176,82 +266,7 @@ function GetApplicationList(status, endpoint) {
                 alert('Error loading data. Please try again.');
             }
         },
-        columns: [
-            {
-                data: null,
-                name: "SerialNumber",
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            {
-                data: "armyNo",
-                name: "ArmyNo",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "name",
-                name: "Name",
-                render: function (data, type, row) {
-                    return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
-                }
-            },
-            {
-                data: "applicationType",
-                name: "ApplicationType",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "dateOfBirth",
-                name: "DateOfBirth",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "appliedDate",
-                name: "AppliedDate",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: null,
-                orderable: false,
-                className: 'noExport',
-                render: function (data, type, row) {
-                    if (row.isMergePdf == false) {
-                        var categorytype = $("#UserType").val() || "Loan";
-
-                        return `
-                        <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-warning  align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})'>
-                                <i class="bi bi-eye"></i>
-                        </div>
-                       
-                    `;
-                    }
-                    else {
-                        var category = $("#UserType").val() || "Loan";
-
-                        return `
-                        <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-warning d-flex align-items-center  mx-2' onclick='OpenAction(${row.applicationId}, "${category === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${category})'>
-                                <i class="bi bi-eye"></i>
-                               
-                            </button>
-                        </div>
-                    `;
-                    }
-
-                }
-            }
-        ],
+        columns: dynamicColumns,
         language: {
             search: "",
             searchPlaceholder: "Search applications...",
@@ -281,7 +296,7 @@ function OpenAction(applicationId, endpoint, category) {
     //HBA_SL12345671Y_1007_Merged
     $("#spnapplicationId").html(applicationId);
 
-    var val = $("#UserType").val() || "Loan";
+    const val = $("#UserType").val() || "Loan";
 
     $.ajax({
         type: "POST",
@@ -294,7 +309,7 @@ function OpenAction(applicationId, endpoint, category) {
                 $("#pdfContainer").empty();
 
                 // Create a new object element dynamically
-                var objectElement = document.createElement('object');
+                const objectElement = document.createElement('object');
                 objectElement.id = 'PdfViwerFOrDigital'; // Optional: Set ID for the object
                 objectElement.type = 'application/pdf';
                 objectElement.classList.add('w-100', 'h-100', 'border-0', 'rounded'); // Add your styling classes
@@ -348,17 +363,16 @@ function fetchApplicationDetails(applicationId, endpoint) {
 }
 
 function updatePdfViewerInfo(applicationData) {
-    $('#ViewPdf .text-muted strong').text(applicationData.name || 'Unknown Applicant');
+    const applicantName = applicationData.armyNo + " " + applicationData.rank + " " + applicationData.name;
+    $('#ViewPdf .text-muted strong').text(applicantName);
     
-    $('#ViewPdf .badge.bg-info').html(`
-        <i class="bi bi-calendar3 me-1"></i>
-        ${applicationData.appliedDate || new Date().toLocaleDateString()}
-    `);
+    //$('#ViewPdf .badge.bg-info').html(`
+    //    <i class="bi bi-calendar3 me-1"></i>
+    //    ${applicationData.appliedDate || new Date().toLocaleDateString()}
+    //`);
 }
 function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
-    var val = $("#UserType").val() || "Loan";
-
-
+    const val = $("#UserType").val() || "Loan";
     $.ajax({
         type: "POST",
         url: endpoint,
@@ -367,13 +381,6 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
         success: function (response) {
             if (isApproved) {
                 DigitalSignByAPI(applicationId,val);
-                //Swal.fire({
-                //    title: "Approved!",
-                //    text: "Signed succesfull and Saved",
-                //    icon: "success"
-                //}).then(() => {
-                //    window.location.href = "/ApplicationRequest/UserApplicationList";
-                //});
             } else if (isRejected) {
                 Swal.fire({
                     title: "Rejected!",
@@ -409,10 +416,10 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
             console.error('Response Text:', xhr.responseText);
             console.error('Status Code:', xhr.status);
 
-            var errorMessage = 'An error occurred while generating the PDF.';
+            let errorMessage = 'An error occurred while generating the PDF.';
             if (xhr.responseText) {
                 try {
-                    var errorResponse = JSON.parse(xhr.responseText);
+                    const errorResponse = JSON.parse(xhr.responseText);
                     if (errorResponse.message) {
                         errorMessage += ' Details: ' + errorResponse.message;
                     }
@@ -425,11 +432,8 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
         }
     });
 }
-
-
-
 async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
-    var URL = '';
+    let URL = '';
     $.ajax({
         url: "https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ValidatePersID2FA",
         type: "POST",
@@ -498,7 +502,8 @@ function DataSignDigitaly(applicationId, endpoint, Usertype) {
 }
 
 function GetTokenSignXml(xml, Usertype, applicationId) {
-    var URL = '';
+
+    let URL = '';
 
     $.ajax({
        //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
@@ -508,7 +513,7 @@ function GetTokenSignXml(xml, Usertype, applicationId) {
         data: xml, // Set the XML data
         success: function (response) {
             if (response) {
-                var xmlContent = new XMLSerializer().serializeToString(response);
+                const xmlContent = new XMLSerializer().serializeToString(response);
 
                 // No Token Found
                 if (xmlContent.indexOf("<Root>No Token Found</Root>") == -1) {
@@ -544,7 +549,7 @@ function GetTokenSignXml(xml, Usertype, applicationId) {
 //tez code start
 function DigitalSignByAPI(applicationId, type) {
     GetThumbprint().then(function (tprint) {
-        var URL = '';
+        let URL = '';
         if (tprint) {
             if (type === "Loan")
                 URL = "/OnlineApplication/GetPdfFilePath";
@@ -586,7 +591,7 @@ function sendPDFToServer(filepath, thumbprint, type) {
 
     const baseUrl = window.location.origin;
     const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
-    var URL = '';
+    let URL = '';
 
     $.ajax({
         //url: 'http://localhost/Temporary_Listen_Addresses/ByteDigitalSignAsync',
@@ -670,32 +675,32 @@ function SaveSignedPdf(base64String, fn, endpoint) {
 
 
 //tez code end
-function SignXmlSendTOdatabase(xmlString, endpoint, Usertype) {
-    var applnId = $('#spnapplicationId').html();
-    var remarks = $('#txtRemark').val();
-    var URL = '';
+function SignXmlSendTOdatabase(xmlString, endpoint, userType) {
+    const applnId = $('#spnapplicationId').html();
+    const remarks = $('#txtRemark').val();
+    let url = '';
+
     $.ajax({
         url: endpoint,
-        data: { applId: applnId, xmlResString: xmlString, remarks: remarks },
         type: 'POST',
+        data: { applId: applnId, xmlResString: xmlString, remarks: remarks },
         success: function () {
-            if (Usertype === 'Loan')
-                URL = "/OnlineApplication/MergePdf";
-            else if (Usertype === 'Maturity')
-                URL = "/Claim/MergePdf";
+            if (userType === 'Loan') {
+                url = "/OnlineApplication/MergePdf";
+            } else if (userType === 'Maturity') {
+                url = "/Claim/MergePdf";
+            }
 
-            
-            mergePdf(applnId, false, true, URL, Usertype)
-
+            mergePdf(applnId, false, true, url, userType);
         },
         error: function () {
-            alert("Data Not Saved!")
+            alert("Data Not Saved!");
         }
     });
 }
 
 function rejectedApplication(applicationId, type) {
-    var URL = '';
+    let URL = '';
     let remarks = $("#txtRemark").val();
     if (type === 'Loan') {
         URL = "/ApplicationRequest/RejectXML";

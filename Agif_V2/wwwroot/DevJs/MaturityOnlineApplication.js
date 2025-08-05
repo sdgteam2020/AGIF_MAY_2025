@@ -1005,15 +1005,15 @@ function SetRetDate() {
 }
 
 function calculateResidualService() {
-    var retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
-    var purposetype = $('#Purpose').val();
+    const retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
+    const purposetype = $('#Purpose').val();
 
     if (!retirementDateStr) {
         return;
     }
 
-    var retirementDate = new Date(retirementDateStr);
-    var currentDate = new Date();
+    const retirementDate = new Date(retirementDateStr);
+    const currentDate = new Date();
 
     // Normalize both dates to remove time differences
     retirementDate.setHours(0, 0, 0, 0);
@@ -1023,13 +1023,13 @@ function calculateResidualService() {
         return;
     }
 
-    var years = retirementDate.getFullYear() - currentDate.getFullYear();
-    var months = retirementDate.getMonth() - currentDate.getMonth();
-    var days = retirementDate.getDate() - currentDate.getDate();
+    let years = retirementDate.getFullYear() - currentDate.getFullYear();
+    let months = retirementDate.getMonth() - currentDate.getMonth();
+    let days = retirementDate.getDate() - currentDate.getDate();
 
     if (days < 0) {
         months -= 1;
-        var prevMonth = new Date(retirementDate.getFullYear(), retirementDate.getMonth(), 0);
+        const prevMonth = new Date(retirementDate.getFullYear(), retirementDate.getMonth(), 0);
         days += prevMonth.getDate(); // Add days of the previous month
     }
 
@@ -1037,12 +1037,11 @@ function calculateResidualService() {
         years -= 1;
         months += 12;
     }
-    var totalmonths = years * 12 + months;
-    $("#totalResidualMonth").val(totalmonths);
-    $("#residualService").val(years);
+    const totalmonths = years * 12 + months;
+    $('#totalResidualMonth').val(totalmonths);
+    $('#residualService').val(years);
 
-    if (purposetype == "3") {
-
+    if (purposetype === "3") {
         if (years > 2) {
             Swal.fire({
                 title: 'Residual Service Calculated',
@@ -1056,14 +1055,11 @@ function calculateResidualService() {
                 }
             });
         }
-        // Show SweetAlert and redirect on "OK"
-      
     }
-        
-    
-    setOutlineActive("residualService");
 
+    setOutlineActive("residualService");
 }
+
 function enableDisablePromotionDate() {
     $('#ddlrank').on('change', function () {
         togglePromotionDate($(this).val());
@@ -1081,29 +1077,33 @@ function togglePromotionDate(rankValue) {
     }
 }
 function updateRetDateOnPromotionDateSelection() {
-    var promotionDate = $('#dateOfPromotion').val();
+    const promotionDate = $('#dateOfPromotion').val();
     if (!promotionDate) {
         alert("Please select the Date of Promotion.");
         return;
     }
-    var dateParts = promotionDate.split('/');
-    if (dateParts.length === 3) {
-        var year = dateParts[2];
-        var month = dateParts[1] - 1;
-        var day = dateParts[0];
 
-        var dob = new Date(year, month, day);
+    const dateParts = promotionDate.split('/');
+    if (dateParts.length === 3) {
+        const day = dateParts[0];
+        const month = Number(dateParts[1]) - 1; // zero-based month
+        const year = dateParts[2];
+
+        const dob = new Date(year, month, day);
         dob.setFullYear(dob.getFullYear() + 4);
-        var yyyy = dob.getFullYear();
-        var mm = String(dob.getMonth() + 1).padStart(2, '0');
-        var dd = String(dob.getDate()).padStart(2, '0');
-        var formattedDate = `${yyyy}-${mm}-${dd}`;
+
+        const yyyy = dob.getFullYear();
+        const mm = String(dob.getMonth() + 1).padStart(2, '0');
+        const dd = String(dob.getDate()).padStart(2, '0');
+        const formattedDate = `${yyyy}-${mm}-${dd}`;
+
         $('#dateOfRetirement').val(formattedDate);
         calculateResidualService();
     } else {
         console.error('Invalid date string.');
     }
 }
+
 function extensionOfService() {
     const prefix = $('#armyPrefix').val();
     const extension = $('#ExtnOfService').val();
@@ -1291,7 +1291,7 @@ function handleSubmitClick() {
 
         
 
-        var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
         $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
 
         if (hasError) {
@@ -1321,13 +1321,13 @@ function handleSubmitClick() {
 
 function checkCORegistration() {
     // Get Prefix, Number, and Suffix
-    var armyNumber = $("#armyPrefix option:selected").text();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
+    const armyNumber = $("#armyPrefix option:selected").text().trim();
+    const prefix = $("#armyNumber").val().trim();
+    const suffix = $("#txtSuffix").val().trim();
 
-    const ArmyNo = `${armyNumber}${Prefix}${Suffix}`.toUpperCase();
+    const ArmyNo = `${armyNumber}${prefix}${suffix}`.toUpperCase();
 
-    const unitValidation = document.querySelector("span[data-valmsg-for='Unit']");
+    //const $unitValidation = $("span[data-valmsg-for='Unit']");
 
     if (Prefix === "0" || armyNumber === "" || Suffix === "") {
         // Warn if Army No is incomplete
@@ -1367,9 +1367,9 @@ $('#unitSearchInput').on('input', function () {
 $("#unitSearchConfirmBtn").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
-    var value = $("#unitSearchInput").val()
+    const value = $("#unitSearchInput").val()?.trim();
 
-    if (value != 0) {
+    if (value && value !== "0") {
         Swal.fire({
             title: "Are you sure?",
             text: "Do You want to Submit!",
@@ -1380,14 +1380,14 @@ $("#unitSearchConfirmBtn").click(function (e) {
             confirmButtonText: "Yes, Submit it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                checkUnitSameOrNot(value)
+                checkUnitSameOrNot(value);
             }
         });
-    }
-    else {
+    } else {
         alert("Please select unit");
     }
 });
+
 
 $("#unitSearchCancelBtn").click(function (e) {
 
@@ -1414,17 +1414,18 @@ $("#unitSearchCancelBtn").click(function (e) {
 
 
 function checkUnitSameOrNot(ArmyNo) {
-    var armyNumber = $("#armyPrefix option:selected").text();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
+    const armyNumber = $("#armyPrefix option:selected").text().trim();
+    const prefix = $("#armyNumber").val().trim();
+    const suffix = $("#txtSuffix").val().trim();
 
-    var Value = armyNumber + Prefix + Suffix;
-    if (ArmyNo == Value.toUpperCase()) {
-        //console.log("Unit is same as Army No");
-        $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
-    }
+    const Value = (armyNumber + prefix + suffix).toUpperCase();
 
-    else {
+    if (ArmyNo === Value) {
+        // Unit is same as Army No
+        $('#unitSearchMessage').text(
+            "Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number."
+        );
+    } else {
         try {
             $.ajax({
                 url: '/OnlineApplication/CheckForCoRegister',
@@ -1436,23 +1437,23 @@ function checkUnitSameOrNot(ArmyNo) {
                         formSubmitting = true;
                         $('#myMaturityForm').submit();
                     } else if (result === false) {
-                        // If not registered, set unit input back to required
-                        $('#unitSearchMessage').text();
+                        // If not registered, reset message and flag
+                        $('#unitSearchMessage').text('');
                         formSubmitting = false;
-                        //$('#myMaturityForm').submit();
+
                         Swal.fire({
                             icon: 'info',
                             title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
                             html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
                             confirmButtonText: 'OK',
-                            cancelButtonText: 'Cancel', // Cancel button text
-                            showCancelButton: true, // Enable cancel button
-                            reverseButtons: true,  // Make Cancel button appear on the left
+                            cancelButtonText: 'Cancel',
+                            showCancelButton: true,
+                            reverseButtons: true,
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $('#unitSearchDialog').hide();
                             } else if (result.isDismissed) {
-                                $("unitSearchDialog").show();
+                                $('#unitSearchDialog').show();
                             }
                         });
                     }
@@ -1465,9 +1466,8 @@ function checkUnitSameOrNot(ArmyNo) {
             console.error("AJAX error", err);
         }
     }
-
-
 }
+
 function formatIndianNumber(input) {
 
     let num = input.value.replace(/[^0-9]/g, '');
@@ -1498,11 +1498,10 @@ function formatIndianNumber(input) {
 
 $("#ParenttxtUnit").autocomplete({
     source: function (request, response) {
-        //alert(1);
         $("input[name='ParentUnit']").val(0);
 
-        if (request.term.length > 2) {
-            var param = { "UnitName": request.term };
+        if (request.term && request.term.length > 2) {
+            const param = { UnitName: request.term };
             $("#ParentUnitId").val(0);
             $.ajax({
                 url: '/Account/GetALLByUnitName',
@@ -1510,26 +1509,22 @@ $("#ParenttxtUnit").autocomplete({
                 data: param,
                 type: 'POST',
                 success: function (data) {
-                    if (data.length != 0) {
+                    if (Array.isArray(data) && data.length !== 0) {
                         response($.map(data, function (item) {
-
-                            return { label: item.pcda_Pao + ' ' + item.name, value: item.id };
-
-                        }))
-                    }
-                    else {
+                            return {
+                                label: item.pcda_Pao + ' ' + item.name,
+                                value: item.id
+                            };
+                        }));
+                    } else {
                         $("#ParentUnitId").val(0);
                         $("#ParenttxtUnit").val("");
-
-                        showErrorMessage("Unit Not found.")
+                        showErrorMessage("Unit Not found.");
                     }
-
                 },
-                error: function (response) {
-                    alert(response.responseText);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
+                error: function (resp) {
+                    console.error("Autocomplete AJAX error:", resp.responseText);
+                    alert(resp.responseText);
                 }
             });
         }
@@ -1539,12 +1534,10 @@ $("#ParenttxtUnit").autocomplete({
         $("#ParenttxtUnit").val(i.item.label);
         $("#ParentUnitId").val(i.item.value);
         $("input[name='ClaimCommonData.ParentUnit']").val(i.item.value);
-        // $("#spnUnitMapId").html(i.item.value);
-        //alert(i.item.value)
-
     },
     appendTo: '#suggesstion-box'
 });
+
 
 $("#PresenttxtUnit").autocomplete({
     source: function (request, response) {
@@ -1552,7 +1545,7 @@ $("#PresenttxtUnit").autocomplete({
         $("input[name='PresentUnit']").val(0);
 
         if (request.term.length > 2) {
-            var param = { "UnitName": request.term };
+            const param = { "UnitName": request.term };
             $("#ParentUnitId").val(0);
             $.ajax({
                 url: '/Account/GetALLByUnitName',
@@ -1595,16 +1588,16 @@ $("#PresenttxtUnit").autocomplete({
     appendTo: '#suggesstion-box'
 });
 function CheckIsCoRegister(UnitId, UnitName) {
-    var param = { "UnitId": UnitId };
+    const param = { UnitId: UnitId };
     $("#PresentUnitId").val(0);
+
     $.ajax({
         url: '/Account/CheckIsCoRegister',
         contentType: 'application/x-www-form-urlencoded',
         data: param,
         type: 'POST',
         success: function (data) {
-
-            if (data == 1) {
+            if (Number(data) === 1) {
                 $("#PresenttxtUnit").val(UnitName);
                 $("#PresentUnitId").val(UnitId);
             } else {
@@ -1614,12 +1607,15 @@ function CheckIsCoRegister(UnitId, UnitName) {
                     icon: "error",
                     title: "Unit Cdr Not Registered on AGIF Web Appl",
                     text: "Please approach UNIT CDR to first Register on AGIF Web Appl.",
-                }).then(() => {
                 });
             }
+        },
+        error: function (xhr, status, error) {
+            console.error("CheckIsCoRegister AJAX error:", status, error);
         }
     });
 }
+
 
 $('#oldArmyNo').on('focus', function () {
     $(this).off('focus');
@@ -1645,11 +1641,11 @@ $("#OtherReasonPdf").on("click", function () {
 });
 
 $('#OtherReasons').on('input', function () {
-    var maxWords = 50;
-    var currentValue = $(this).val();
+    const maxWords = 50;
+    const currentValue = $(this).val();
 
     // Split the value into words by whitespace
-    var words = currentValue.trim().split(/\s+/);
+    let words = currentValue.trim().split(/\s+/);
 
     // If the number of words exceeds the limit, truncate the string
     if (words.length > maxWords) {

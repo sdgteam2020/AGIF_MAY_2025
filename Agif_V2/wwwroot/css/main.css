@@ -6636,3 +6636,7 @@ tbody, td, tfoot, th, thead, tr {
     filter: blur(5px);
     transition: filter 0.3s ease;
 }
+
+.RecomHeader{
+    background-color:#310;
+}

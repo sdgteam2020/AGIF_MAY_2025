@@ -8,14 +8,23 @@
     string loanType = string.Empty;
     var message = ViewBag.Message ?? string.Empty;
 
-    if(Model.EducationDetailsResponse!=null)
-    loanType= "EDUCATION OF WARD";
-    else if(Model.MarraigeWardResponse!=null)
-    loanType = "MARRAIGE OF WARD";
-    else if(Model.PropertyRenovationResponse!=null)
-    loanType = "RENOVATION-REPAIR OF HOSUE";
-    else if(Model.SplWaiverResponse!=null)
-    loanType = "SPECIAL WAIVER";    
+    if (Model.EducationDetailsResponse != null)
+    {
+        loanType = "EDUCATION OF WARD";
+    }
+    else if (Model.MarraigeWardResponse != null)
+    {
+        loanType = "MARRAIGE OF WARD";
+    }
+    else if (Model.PropertyRenovationResponse != null)
+    {
+        loanType = "RENOVATION-REPAIR OF HOSUE";
+    }
+    else if (Model.SplWaiverResponse != null)
+    {
+        loanType = "SPECIAL WAIVER";
+    }
+
 
 }
 

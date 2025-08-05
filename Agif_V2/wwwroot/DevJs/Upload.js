@@ -3,20 +3,21 @@
     checkUploadFiles();
 
     $('.file-upload-limited').on('change', function () {
-        var file = this.files[0];
-        var errorrMessage = $(this).next('.file-error-message'); // Find the error message container next to the input')
-        var previewSelector = $(this).data('preview');
+        const file = this.files[0];
+        const errorrMessage = $(this).next('.file-error-message'); // container for error
+        const previewSelector = $(this).data('preview');
+
         if (file && file.size > 150 * 1024) {
             errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
             this.value = ''; // Clear the input field
-        }
-        else {
-            errorrMessage.text(''); // Clear the error message if file size is valid)
+        } else {
+            errorrMessage.text(''); // Clear the error message if file size is valid
             if (previewSelector) {
                 previewFile(this, previewSelector);
             }
         }
-    })
+    });
+
     
 
     // Function to preview the file (PDF or Image)
@@ -162,7 +163,7 @@ function checkUploadFiles() {
 }
 
 function messageHandler() {
-    var message = $('#messageHolder').val();
+    const message = $('#messageHolder').val();
 
     if (message && message.trim() !== '') {
         Swal.fire({
