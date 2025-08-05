@@ -111,7 +111,7 @@ function checkUploadFiles() {
     const requiredFields = ['CancelledCheque', 'PaySlipPdf']; // Make these fields required
     let allFilled = true;
     let IsExtension = $('#isExtension').val() === 'true';  // Get the value for IsExtension
-    var type = $('#hiddenFormType').val(); // Get the value for type
+    const type = $('#hiddenFormType').val(); // Get the value for type
     // Check if the required fields have files selected
     requiredFields.forEach(function (fieldId) {
         const $fileInput = $('#' + fieldId);
@@ -174,7 +174,7 @@ function checkUploadFiles() {
 $('input[type="file"]').on('change', checkUploadFiles);
 
 function messageHandler() {
-    var message = $('#messageHolder').val();
+    let message = $('#messageHolder').val();
 
     if (message && message.trim() !== '') {
         Swal.fire({

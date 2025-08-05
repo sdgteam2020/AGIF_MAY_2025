@@ -79,6 +79,7 @@ else
                                         <th>Application Type</th>
                                         <th>Date of Birth</th>
                                         <th>Applied Date</th>
+                                        @* <th>Digital Sign On</th> *@
                                         <th class="noExport">Action</th>
                                     </tr>
                                 </thead>
@@ -103,7 +104,7 @@ else
                     <div class="d-flex align-items-center">
                         <i class="bi bi-file-earmark-pdf fs-4 me-3"></i>
                         <div>
-                            <h5 class="modal-title fw-bold mb-0" id="ViewPdfLabel">View Application</h5>
+                            <h5 class="modal-title text-white fw-bold mb-0" id="ViewPdfLabel">View Application</h5>
                             <span class="opacity-75 d-none" id="spnapplicationId"></span>
                         </div>
                     </div>
@@ -117,10 +118,6 @@ else
                         <div class="row align-items-center">
                             <div class="col-md-6">
                                 <div class="d-flex align-items-center">
-                                    <span class="badge bg-info me-3">
-                                        <i class="bi bi-calendar3 me-1"></i>
-                                        6/16/25, 2:11 PM
-                                    </span>
                                     <span class="text-muted small">
                                         <i class="bi bi-person-circle me-1"></i>
                                         Applicant: <strong>John Doe</strong>
@@ -171,7 +168,7 @@ else
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header text-white">
-                    <h5 class="modal-title fw-bold" id="ApplicationActionLabel">
+                    <h5 class="modal-title fw-bold text-white" id="ApplicationActionLabel">
                         <i class="bi bi-file-earmark-check me-2"></i>
                         Application Review & Approval
                     </h5>
@@ -180,8 +177,8 @@ else
 
                 <div class="modal-body">
                     <div class="card border-0">
-                        <div class="card-header bg-secondary border-bottom">
-                            <h4 class="card-title text-center mb-0 text-decoration-underline fw-bold text-uppercase">
+                        <div class="card-header RecomHeader border-bottom">
+                            <h4 class="card-title text-center mb-0 fw-bold text-uppercase">
                                 Recommendations and Countersignature
                             </h4>
                         </div>
@@ -254,30 +251,31 @@ else
                                     <div class="col-12">
                                         <div class="card bg-light">
                                             <div class="card-body">
-                                                <h6 class="card-title mb-3">Application Action</h6>
-                                                <div class="row g-3 align-items-end">
-                                                   
-                                                    <div class="col-md-3">
-                                                        <button type="button" class="btn btn-danger btn-sm w-100" id="RejectButton" disabled>
-                                                            <i class="bi bi-x-circle me-1"></i>
-                                                            Reject
-                                                        </button>
+                                                <div class="row align-items-center mb-3">
+                                                    <div class="col-auto">
+                                                        <h6 class="card-title mb-0">Add Remarks</h6>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <button type="button" class="btn btn-success btn-sm w-100 text-nowrap" id="acceptButton" disabled>
-                                                            <i class="bi bi-check-circle me-1"></i>
-                                                            Recom & E-sign
-                                                        </button>
+                                                    <div class="col">
+                                                        <textarea class="form-control form-control-sm" id="txtRemark" placeholder="Enter your remarks here..." rows="1"></textarea>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <label for="txtremark" class="form-label small">Remarks</label>
-                                                        <textarea class="form-control form-control-sm w-100" id="txtRemark" placeholder="Enter your remarks here..." rows="2"></textarea>
-                                                    </div>
-
-                                                   
-                                                    
-                                                    <span display="none" id="IcNo" data-id="@ViewBag.ArmyNo"></span>
                                                 </div>
+
+                                                <div class="row justify-content-center">
+                                                    <div class="col-auto">
+                                                        <div class="d-flex gap-2">
+                                                            <button type="button" class="btn btn-danger btn-sm" id="RejectButton" disabled>
+                                                                <i class="bi bi-x-circle me-1"></i> Reject
+                                                            </button>
+                                                            <button type="button" class="btn btn-success btn-sm text-nowrap" id="acceptButton" disabled>
+                                                                <i class="bi bi-check-circle me-1"></i> Recom & E-sign
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary btn-sm text-nowrap" data-bs-dismiss="modal">
+                                                                <i class="bi bi-x-lg me-1"></i> Cancel
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -285,13 +283,6 @@ else
                             </form>
                         </div>
                     </div>
-                </div>
-
-                <div class="modal-footer bg-light">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg me-1"></i>
-                        Cancel
-                    </button>
                 </div>
             </div>
         </div>

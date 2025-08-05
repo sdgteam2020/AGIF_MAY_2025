@@ -8,13 +8,18 @@
     string loanType = string.Empty;
     var message = ViewBag.Message ?? string.Empty;
 
-     if(Model.HbaApplicationResponse!=null)
-    loanType= "HBA";
+    if (Model.HbaApplicationResponse != null)
+    {
+        loanType = "HBA";
+    }
     else if(Model.CarApplicationResponse!=null)
-    loanType = "CAR";
+    {
+        loanType = "CAR";
+    }
     else if(Model.PcaApplicationResponse!=null)
-    loanType = "PCA";
-        
+    {
+        loanType = "PCA";
+    }
 }
 
 @if (Model != null)

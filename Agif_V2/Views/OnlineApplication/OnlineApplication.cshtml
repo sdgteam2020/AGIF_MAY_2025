@@ -295,7 +295,7 @@
                             </div>
                             <div class="col-md-1">
                                 <div class="input-group mb-2">
-                                    <select id="emailDomain" name="CommonData.EmailDomain" class="form-select" required>
+                                    <select id="emailDomain" name="CommonData.EmailDomain" class="form-select last-input" required>
                                         <option value="gmail.com">gmail.com</option>
                                         <option value="yahoo.com">yahoo.com</option>
                                         <option value="yahoo.co.in">yahoo.co.in</option>
@@ -443,7 +443,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏢</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nextFmnHQ" name="CommonData.NextFmnHQ" class="form-control" value="@Model.CommonData?.NextFmnHQ" required />
+                                        <input type="text" id="nextFmnHQ" name="CommonData.NextFmnHQ" class="form-control last-input" value="@Model.CommonData?.NextFmnHQ" required />
                                         <label class="form-label select-label ">Next Fmn HQ</label>
                                     </div>
                                 </div>
@@ -511,7 +511,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.AddressDetails?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt last-input" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
@@ -580,7 +580,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets last-input" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
@@ -802,7 +802,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="miscPay" name="CommonData.MiscPay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.MiscPay" />
+                                        <input type="text" id="miscPay" name="CommonData.MiscPay" class="form-control last-input" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.MiscPay" />
                                         <label class="form-label select-label ">MISC Pay(Regular Nature)</label>
                                     </div>
                                 </div>

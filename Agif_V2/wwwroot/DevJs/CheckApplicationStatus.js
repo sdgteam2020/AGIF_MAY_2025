@@ -32,7 +32,7 @@
         let selectedType = $('#typeSelect').val();
 
         // Determine the endpoint based on selected type
-        var searchEndpoint = getSearchEndpoint(selectedType);
+        const searchEndpoint = getSearchEndpoint(selectedType);
 
         $.ajax({
             url: searchEndpoint,
@@ -74,12 +74,12 @@
             const safeAppId = (app.applicationId !== undefined && app.applicationId !== null) ? app.applicationId : index;
             const rowHtml = `
                 <tr>
-                    <td>${app.applicationType || 'N/A'}</td>
+                    <td >${app.applicationType || 'N/A'}</td>
                     <td>
-                        <span class="badge ${getStatusBadgeClass(app.statusId)}">${app.status || 'Unknown'}</span>
+                        <span class=" ${getStatusBadgeClass(app.statusId)} statusList">${app.status || 'Unknown'}</span>
                     </td>
                     <td>
-                        <button class="btn btn-info timeline-btn" type="button"
+                        <button class="btn btn-custom timeline-btn " type="button"
                                 data-app-id="${safeAppId}" 
                                 data-bs-toggle="collapse" 
                                 data-bs-target="#timeline-${safeAppId}" 
@@ -215,6 +215,9 @@
         }
         else if (statusId == 5) {
             return 'bg-warning';
+        }
+        else {
+            return 'bg-primary';
         }
     }
 });

@@ -19,7 +19,25 @@ $(document).ready(function () {
     filterPCALoanFreqOptions();
     filterHBALoanFreqOptions();
     filterCALoanFreqOptions();
+    accordionAutoOpenClose();
 });
+function accordionAutoOpenClose() {
+    $('.accordion').on('keydown', '.last-input', function (e) {
+        if (e.key === 'Tab' && !e.shiftKey) {
+            e.preventDefault();
+            const currentAccordionItem = $(this).closest('.accordion-item');
+            const nextAccordionItem = currentAccordionItem.next('.accordion-item');
+            if (nextAccordionItem.length > 0) {
+                currentAccordionItem.find('.accordion-collapse').collapse('hide');
+                nextAccordionItem.find('.accordion-collapse').collapse('show');
+            }
+            setTimeout(() => {
+                nextAccordionItem.find('input:visible:first').focus();
+            }, 300);
+        }
+
+    });
+}
 function filterPCALoanFreqOptions() {
     $('#computer_Loan_Type').on('change', function () {
         const $dropdown = $('#PCA_LoanFreq');

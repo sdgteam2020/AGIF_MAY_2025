@@ -24,6 +24,7 @@ namespace DataTransferObject.Response
         public DateTime? UpdatedOn { get; set; }
         public DateTime? DownloadedOn { get; set; }
         public int? DownloadCount { get; set; }
-        
+        public string? DigitalSignDate { get; set; }
+
     }
 }
