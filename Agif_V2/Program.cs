@@ -117,6 +117,7 @@ builder.Services.AddScoped<IErrorLog, ErrorLogDL>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<FileUtility>();
 builder.Services.AddTransient<IClaimApplication, ClaimDigitalDL>();
+builder.Services.AddTransient<Watermark>();
 
 
 builder.Services.AddCors(options =>

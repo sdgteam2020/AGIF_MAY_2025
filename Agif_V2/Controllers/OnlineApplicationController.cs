@@ -4,8 +4,10 @@ using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -28,9 +30,10 @@ namespace Agif_V2.Controllers
         private readonly FileUtility _fileUtility;
         private readonly IAddress _address;
         private readonly IAccount _account;
+        private readonly Watermark _watermark;
 
          
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility)
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, Watermark watermark)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -43,6 +46,7 @@ namespace Agif_V2.Controllers
             _fileUtility = fileUtility;
             _address = address;
             _account = account;
+            _watermark = watermark;
         }
         public IActionResult OnlineApplication()
         {
@@ -509,6 +513,10 @@ namespace Agif_V2.Controllers
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
+                ReaderProperties readerProperties = new ReaderProperties();
+                PdfReader pdfReader = new PdfReader(mergedPdfPath, readerProperties);
+                _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
+
                 if (mergeResult)
                 {
                     // Get relative path for client
@@ -534,6 +542,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
             }
         }
+
 
         public async Task<JsonResult> GetPdfFilePath(int applicationId)
         {
