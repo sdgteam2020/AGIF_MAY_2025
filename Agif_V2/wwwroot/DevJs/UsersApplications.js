@@ -238,6 +238,18 @@ function GetApplicationList(status, endpoint) {
         tableOrder = [[0, 'desc']]; // Default sort by first column
     }
 
+    if (status == 1 || status == 101) {
+        $("#DigitalSignatureforaction").html(`
+        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
+                            <i class="bi bi-x-lg me-2"></i>
+                            Close
+                        </button>
+                        <button type="button" class="btn btn-success" id="btnProcess">
+                            <i class="bi bi-gear-fill me-2"></i>
+                            Process Application
+                        </button>`);
+    }
+
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblApplications')) {
         $('#tblApplications').DataTable().clear().destroy();
