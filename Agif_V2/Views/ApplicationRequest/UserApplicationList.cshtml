@@ -28,15 +28,23 @@ else
         <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
             <div class="row align-items-center">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="title">
                         <h2>
                             @Page
                         </h2>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="container title d-flex justify-content-center align-items-center">
+                        <div class="btn-group">
+                            <button type="button" id="Loan" class="btn btn-primary me-2" value="Loan">Loan</button>
+                            <button type="button" id="Maturity" class="btn btn-secondary" value="Maturity">Maturity</button>
+                        </div>
+                    </div>
+                </div>
                 <!-- end col -->
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
@@ -55,12 +63,12 @@ else
             <!-- end row -->
         </div>
 
-        <div class="container d-flex justify-content-center align-items-center">
+       @*  <div class="container d-flex justify-content-center align-items-center">
             <div class="btn-group">
                 <button type="button" id="Loan" class="btn btn-primary me-2" value="Loan">Loan</button>
                 <button type="button" id="Maturity" class="btn btn-secondary" value="Maturity">Maturity</button>
             </div>
-        </div>
+        </div> *@
 
         <input type="hidden" id="Status" value="@ViewBag.Status" />
 
