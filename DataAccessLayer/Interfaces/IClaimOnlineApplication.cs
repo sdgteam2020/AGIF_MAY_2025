@@ -43,5 +43,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<DTOClaimCommonOnlineResponse> GetUnitByApplicationId(int applicationId);
 
+        Task<bool> InsertStatusCounter(TrnClaimStatusCounter trnStatusCounter);
+
         }
 }

@@ -24,6 +24,7 @@
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
+
 <div class="container-fluid mt-2">
 
     <div class="pagetitletwo position-relative text-center mb-3">
@@ -52,7 +53,7 @@
                                                 <span class="input-group-text">👮</span>
                                             </div>
                                             <div class="col-md-10">
-                                                <select class="select form-select" data-mdb-filter="true" id="armyPrefix" name="CommonData.ArmyPrefix" required data-army-prefix="@if (Model.CommonData != null)
+                                                <select class="select form-select " data-mdb-filter="true" id="armyPrefix" name="CommonData.ArmyPrefix" required data-army-prefix="@if (Model.CommonData != null)
                                                     {
                                                         @Model.CommonData.ArmyPrefix
                                                         ;
@@ -154,9 +155,7 @@
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
-                                        <div class="invalid-feedback">
-                                            Please choose a username.
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.ApplicantName, "", new { @class = "text-danger" })
@@ -383,6 +382,8 @@
                                 </div>
                             </div>
 
+
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <div class="col-md-2">
@@ -606,7 +607,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗓️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control Payslippicker" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="Validate_Salary_Slip_date(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control Payslippicker" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="Validate_Salary_Slip_date(this)" placeholder="dd/mm/yyyy" autocomplete="off" required>
                                         <label class="form-label select-label ">Monthly Pay Slip</label>
                                     </div>
                                 </div>

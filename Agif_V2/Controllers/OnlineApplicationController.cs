@@ -44,7 +44,7 @@ namespace Agif_V2.Controllers
             _address = address;
             _account = account;
         }
-        public async Task<IActionResult> OnlineApplication()
+        public IActionResult OnlineApplication()
         {
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
@@ -212,7 +212,7 @@ namespace Agif_V2.Controllers
                 {
                     foreach (var result in addressValidationResults)
                     {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string? propertyName = result.MemberNames?.FirstOrDefault();
                         string errorKey = string.IsNullOrEmpty(propertyName)
                             ? "AddressDetails"
                             : $"AddressDetails.{propertyName}";
@@ -229,7 +229,7 @@ namespace Agif_V2.Controllers
                 {
                     foreach (var result in accountValidationResults)
                     {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string? propertyName = result.MemberNames?.FirstOrDefault();
                         string errorKey = string.IsNullOrEmpty(propertyName)
                             ? "AccountDetails"
                             : $"AccountDetails.{propertyName}";
@@ -247,7 +247,7 @@ namespace Agif_V2.Controllers
                 {
                     foreach (var result in carValidationResults)
                     {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string? propertyName = result.MemberNames?.FirstOrDefault();
                         string errorKey = string.IsNullOrEmpty(propertyName)
                             ? "CarApplication"
                             : $"CarApplication.{propertyName}";
@@ -263,7 +263,7 @@ namespace Agif_V2.Controllers
                 {
                     foreach (var result in pcaValidationResults)
                     {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string? propertyName = result.MemberNames?.FirstOrDefault();
                         string errorKey = string.IsNullOrEmpty(propertyName)
                             ? "PCAApplication"
                             : $"PCAApplication.{propertyName}";
@@ -279,7 +279,7 @@ namespace Agif_V2.Controllers
                 {
                     foreach (var result in hbaValidationResults)
                     {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string? propertyName = result.MemberNames?.FirstOrDefault();
                         string errorKey = string.IsNullOrEmpty(propertyName)
                             ? "HBAApplication"
                             : $"HBAApplication.{propertyName}";
@@ -297,7 +297,7 @@ namespace Agif_V2.Controllers
                 {
                     foreach (var result in commonDataValidationResults)
                     {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
+                        string? propertyName = result.MemberNames?.FirstOrDefault();
                         string errorKey = string.IsNullOrEmpty(propertyName)
                             ? "CommonData"
                             : $"CommonData.{propertyName}";
@@ -396,7 +396,7 @@ namespace Agif_V2.Controllers
         {
             try
             {
-                string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+                string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
                 if (string.IsNullOrEmpty(ip))
                 {
                     ip = HttpContext.Connection.RemoteIpAddress?.ToString();

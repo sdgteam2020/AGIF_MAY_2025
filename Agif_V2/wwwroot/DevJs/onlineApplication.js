@@ -1403,7 +1403,7 @@ function handleSubmitClick() {
     $("#btn-save").on("click", function (event) {
         event.preventDefault(); // Prevent form submission
         const form = $("#myForm");
-        const inputs = form.find("input, select");
+        const inputs = $('input[required], select[required]');
         // Clear previous error messages
         form.find(".error").each(function () {
             $(this).text("");
@@ -1475,6 +1475,9 @@ function handleSubmitClick() {
             }
 
             if (!inputElement.checkValidity()) {
+
+                input.addClass("is-invalid").removeClass("is-valid");
+
                 const errorSpan = input.parent().find(".error");
                 if (errorSpan.length) {
                     errorSpan.text(inputElement.validationMessage);
@@ -2124,6 +2127,8 @@ $("#ParenttxtUnit").autocomplete({
                         $("#ParenttxtUnit").val("");
 
                         showErrorMessage("Unit Not found.")
+                        $("#ParenttxtUnit").addClass("is-invalid");
+                        $("input[name='CommonData.ParentUnit']").addClass("is-invalid");
                     }
 
                 },
@@ -2141,6 +2146,11 @@ $("#ParenttxtUnit").autocomplete({
         $("#ParenttxtUnit").val(i.item.label);
         $("#ParentUnitId").val(i.item.value);
         $("input[name='CommonData.ParentUnit']").val(i.item.value);
+        $("#ParenttxtUnit").removeClass("is-invalid").addClass("is-valid");
+        $("input[name='CommonData.ParentUnit']").removeClass("is-invalid").addClass("is-valid");
+
+        // Hide validation message
+        $("#ParenttxtUnit").closest('.form-outline').find('.text-danger').hide();
     },
     appendTo: '#suggesstion-box'
 });
@@ -2171,6 +2181,8 @@ $("#PresenttxtUnit").autocomplete({
                         $("#PresenttxtUnit").val("");
 
                         showErrorMessage("Unit Not found.")
+                        $("#PresenttxtUnit").addClass("is-invalid");
+                        $("input[name='CommonData.PresentUnit']").addClass("is-invalid");
                     }
 
                 },
@@ -2186,6 +2198,12 @@ $("#PresenttxtUnit").autocomplete({
     select: function (e, i) {
         e.preventDefault();
         $("input[name='CommonData.PresentUnit']").val(i.item.value);
+
+        $("#PresenttxtUnit").removeClass("is-invalid").addClass("is-valid");
+        $("input[name='CommonData.PresentUnit']").removeClass("is-invalid").addClass("is-valid");
+
+        // Hide validation message
+        $("#PresenttxtUnit").closest('.form-outline').find('.text-danger').hide();
         CheckIsCoRegister(i.item.value, i.item.label)
 
     },
@@ -2266,3 +2284,20 @@ $("#PresenttxtUnit").on('input', function () {
     }
 });
 
+
+$('input[required], select[required]').on('input change blur', function () {
+    const input = $(this);
+    const inputElement = this;
+
+    if (inputElement.checkValidity()) {
+        input.removeClass("is-invalid").addClass("is-valid");
+
+        // Hide error message if validation passes
+        input.closest('.form-outline').find('.text-danger').hide();
+    } else {
+        input.removeClass("is-valid").addClass("is-invalid");
+
+        // Show error message if validation fails
+        input.closest('.form-outline').find('.text-danger').show();
+    }
+});

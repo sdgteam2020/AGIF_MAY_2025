@@ -147,23 +147,23 @@ namespace DataAccessLayer.Repositories
             return result > 0;
         }
 
-        public async Task<bool> InsertStatusCounter(DTOExportRequest dtoExport)
-        {
-            if (dtoExport == null || dtoExport.Id == null || !dtoExport.Id.Any())
-                return false;
+        //public async Task<bool> InsertStatusCounter(DTOExportRequest dtoExport)
+        //{
+        //    if (dtoExport == null || dtoExport.Id == null || !dtoExport.Id.Any())
+        //        return false;
 
-            var statusCounters = dtoExport.Id.Select(appId => new TrnStatusCounter
-            {
-                StatusId = 5, // Assuming status 4 means "Downloaded"
-                ApplicationId = appId,
-                ActionOn = DateTime.Now
-            }).ToList();
+        //    var statusCounters = dtoExport.Id.Select(appId => new TrnStatusCounter
+        //    {
+        //        StatusId = 5, // Assuming status 4 means "Downloaded"
+        //        ApplicationId = appId,
+        //        ActionOn = DateTime.Now
+        //    }).ToList();
 
-            await _db.TrnStatusCounter.AddRangeAsync(statusCounters);
-            int result = await _db.SaveChangesAsync();
+        //    await _db.TrnStatusCounter.AddRangeAsync(statusCounters);
+        //    int result = await _db.SaveChangesAsync();
 
-            return result > 0;
-        }
+        //    return result > 0;
+        //}
 
         public async Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status)
         {
