@@ -1420,7 +1420,7 @@ function checkUnitSameOrNot(ArmyNo) {
 
     const Value = (armyNumber + prefix + suffix).toUpperCase();
 
-    if (ArmyNo === Value) {
+    if (ArmyNo.toUpperCase() === Value) {
         // Unit is same as Army No
         $('#unitSearchMessage').text(
             "Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number."

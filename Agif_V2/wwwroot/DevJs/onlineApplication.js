@@ -1625,7 +1625,7 @@ function checkUnitSameOrNot(ArmyNo) {
 
     var Value = armyNumber + Prefix + Suffix;
     
-    if (ArmyNo == Value.toUpperCase()) {
+    if (ArmyNo.toUpperCase() == Value.toUpperCase()) {
         //console.log("Unit is same as Army No");
         $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
     }

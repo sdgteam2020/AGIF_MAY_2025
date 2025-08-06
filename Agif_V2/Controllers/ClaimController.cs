@@ -81,7 +81,7 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-           
+
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);

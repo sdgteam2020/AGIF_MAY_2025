@@ -199,7 +199,7 @@ namespace Agif_V2.Controllers
             return query.Where(x =>
                 (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
                 (x.DateOfBirth ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-                (x.AppliedDate ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+                (x.AppliedDate ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) 
             );
         }
 
@@ -215,6 +215,7 @@ namespace Agif_V2.Controllers
                 "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
                 "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
                 "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+                "digitalsigndate"=> ascending ? query.OrderBy(x => x.DigitalSignDate) : query.OrderByDescending(x => x.DigitalSignDate), 
                 _ => query // Default: no sorting if column not recognized
             };
         }

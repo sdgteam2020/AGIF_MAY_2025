@@ -64,9 +64,8 @@ namespace DataAccessLayer.Repositories
                                                   AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                   IsMergePdf = appl.IsMergePdf,
                                                   UpdatedOn = appl.UpdatedOn,
-                                                  DigitalSignDate = (status == 2 && digitalSign != null && digitalSign.SignOn.HasValue)
-                                     ? digitalSign.SignOn.Value.ToString("dd/MM/yyyy")
-                                     : null
+                                                  DigitalSignDate = (status == 2 && digitalSign != null && digitalSign.SignOn.HasValue)? digitalSign.SignOn.Value.ToString("dd/MM/yyyy")
+                                     : string.Empty
 
                                               }).ToListAsync();
 
@@ -88,7 +87,7 @@ namespace DataAccessLayer.Repositories
                                                AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                IsMergePdf = appl.IsMergePdf,
                                                UpdatedOn = appl.UpdatedOn,
-                                               DigitalSignDate = (status == 2 && digitalSign != null && digitalSign.SignOn.HasValue)? digitalSign.SignOn.Value.ToString("dd/MM/yyyy"): null
+                                               DigitalSignDate = (status == 2 && digitalSign != null && digitalSign.SignOn.HasValue)? digitalSign.SignOn.Value.ToString("dd/MM/yyyy") : string.Empty
                                            }).ToListAsync();
             var applicationList = UsersApplicationList
                           .Union(COApplicationList)
@@ -175,6 +174,8 @@ namespace DataAccessLayer.Repositories
                                               join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
                                               join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                               join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+                                              join digitalSign in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+                                              from digitalSign in ds.DefaultIfEmpty()
                                               where user.MappingId == Mapping && (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103)) && user.IsPrimary == true
                                               orderby appl.UpdatedOn descending
                                               select new DTOGetApplResponse
@@ -186,13 +187,18 @@ namespace DataAccessLayer.Repositories
                                                   DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                   AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                   IsMergePdf = appl.IsMergePdf,
-                                                  UpdatedOn = appl.UpdatedOn
+                                                  UpdatedOn = appl.UpdatedOn,
+                                                  DigitalSignDate = (status == 102 && digitalSign != null && digitalSign.SignOn.HasValue) ? digitalSign.SignOn.Value.ToString("dd/MM/yyyy")
+                              : string.Empty
+
                                               }).ToListAsync();
 
             var COApplicationList = await (from appl in _db.trnClaim
                                            join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
                                            join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                            join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+                                           join digitalSign in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+                                           from digitalSign in ds.DefaultIfEmpty()
                                            where (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103))
                                            orderby appl.UpdatedOn descending
                                            select new DTOGetApplResponse
@@ -204,7 +210,9 @@ namespace DataAccessLayer.Repositories
                                                DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                IsMergePdf = appl.IsMergePdf,
-                                               UpdatedOn = appl.UpdatedOn
+                                               UpdatedOn = appl.UpdatedOn,
+                                               DigitalSignDate = (status == 102 && digitalSign != null && digitalSign.SignOn.HasValue) ? digitalSign.SignOn.Value.ToString("dd/MM/yyyy")
+                              : string.Empty
                                            }).ToListAsync();
             var applicationList = UsersApplicationList
                           .Union(COApplicationList)

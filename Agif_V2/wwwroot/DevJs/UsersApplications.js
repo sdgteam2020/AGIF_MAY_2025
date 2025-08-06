@@ -186,19 +186,14 @@ function GetApplicationList(status, endpoint) {
     let digitalSignColumnIndex = -1;
 
     // Add "Digital Sign On" column dynamically if status == 2
-    if (status == 2) {
+    if (status == 2 || status == 102) {
         digitalSignColumnIndex = dynamicColumns.length; // This will be index 6
         dynamicColumns.push({
-            data: "digitalSignDate",
-            name: "DigitalSignOn", // Changed from "Digital Sign On" to avoid spaces
+            data: "digitalSignDate", 
+            name: "digitalSignDate", // Changed from "Digital Sign On" to avoid spaces
             orderable: true, // Make sure it's orderable
             render: function (data, type, row) {
-                // For sorting, return the raw data
-                if (type === 'type' || type === 'sort') {
-                    return data ? new Date(data).getTime() : 0; // Convert to timestamp for proper sorting
-                }
-                // For display, show formatted date or empty space
-                return data || ' ';
+                return data || 'N/A';
             }
         });
     }

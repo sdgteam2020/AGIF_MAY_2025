@@ -813,8 +813,10 @@ body {
 }
 
 .container {
-   max-width: 1500px;
+   max-width: 900px;
 }
+
+
 
 .card-wrapper {
     text-align: center;
@@ -827,5 +829,13 @@ body {
     border-radius: 15px !important;
     overflow: hidden;
     width: auto;
+}
+
+.ApplicationContainer {
+    max-width: 1500px;
+    margin: auto;
+}
+.Applicationcard {
+    width: 100%;
 }
 
