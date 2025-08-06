@@ -806,27 +806,6 @@ h1 {
     }
 
 
-/*.ApplicationStatusHeader {
-    background-color: #310;
-}
-
-.border-input{
-    border:2px solid #310;
-    border-radius:4px;
-    padding:8px;
-    outline:none;
-}
-    .border-input:focus {
-        border-color: #523b3b;
-        box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
-    }
-    .btn-custom {
-        background-color: #310;
-    }
-    .btn-custom:hover {
-        background-color: #523b3b;
-    }*/
-
 body {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

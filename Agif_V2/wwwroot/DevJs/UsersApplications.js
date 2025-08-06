@@ -181,59 +181,63 @@ function GetApplicationList(status, endpoint) {
             }
         }
     ];
+
+    // Track the index for Digital Sign On column
+    let digitalSignColumnIndex = -1;
+
+    // Add "Digital Sign On" column dynamically if status == 2
     if (status == 2) {
+        digitalSignColumnIndex = dynamicColumns.length; // This will be index 6
         dynamicColumns.push({
-            data: "digitalSignDate", // ✅ your server should return this
-            name: "Digital Sign On",
-            render: data => data || ' '
+            data: "digitalSignDate",
+            name: "DigitalSignOn", // Changed from "Digital Sign On" to avoid spaces
+            orderable: true, // Make sure it's orderable
+            render: function (data, type, row) {
+                // For sorting, return the raw data
+                if (type === 'type' || type === 'sort') {
+                    return data ? new Date(data).getTime() : 0; // Convert to timestamp for proper sorting
+                }
+                // For display, show formatted date or empty space
+                return data || ' ';
+            }
         });
     }
-    dynamicColumns.push(
-        {
-            data: null,
-            orderable: false,
-            className: 'noExport',
-            render: function (data, type, row) {
-                if (row.isMergePdf == false) {
-                    const categorytype = $("#UserType").val() || "Loan";
 
-                    return `
-                        <div class='action action-container d-flex'>
-                            <button class='btn btn-sm btn-outline-danger  align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="Merge Pdf">
-                                <i class="bi bi-pencil-square"></i>
-                        </div>
-                       
-                    `;
-                }
-                else {
-                    const category = $("#UserType").val() || "Loan";
-
-                    return `
-                        <div class='action action-container'>
-                            <button class='btn btn-sm btn-outline-danger d-flex align-items-center  mx-2' onclick='OpenAction(${row.applicationId}, "${category === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${category})' data-bs-toggle="tooltip" data-bs-placement="top" title="View Pdf">
-                                <i class="bi bi-pencil-square"></i>
-                               
-                            </button>
-                        </div>
-                    `;
-                }
-
+    // Add the "Action" column dynamically
+    dynamicColumns.push({
+        data: null,
+        orderable: false,
+        className: 'noExport',
+        render: function (data, type, row) {
+            const categorytype = $("#UserType").val() || "Loan";
+            if (row.isMergePdf == false) {
+                return `
+                    <div class='action action-container d-flex'>
+                        <button class='btn btn-sm btn-outline-danger align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="Merge Pdf">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class='action action-container'>
+                        <button class='btn btn-sm btn-outline-danger mx-2' onclick='OpenAction(${row.applicationId}, "${categorytype === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="View Pdf">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                    </div>
+                `;
             }
         }
-    );
-    
+    });
 
-    if (status == 1 || status == 101) {
-        $("#DigitalSignatureforaction").html(`
-        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">
-                            <i class="bi bi-x-lg me-2"></i>
-                            Close
-                        </button>
-                        <button type="button" class="btn btn-success" id="btnProcess">
-                            <i class="bi bi-gear-fill me-2"></i>
-                            Process Application
-                        </button>`);
+    // Set the correct sorting order
+    let tableOrder;
+    if (status == 2 && digitalSignColumnIndex !== -1) {
+        tableOrder = [[digitalSignColumnIndex, 'desc']]; // Sort by Digital Sign On column
+    } else {
+        tableOrder = [[0, 'desc']]; // Default sort by first column
     }
+
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblApplications')) {
         $('#tblApplications').DataTable().clear().destroy();
@@ -244,7 +248,7 @@ function GetApplicationList(status, endpoint) {
         processing: true,
         serverSide: true,
         filter: true,
-        order: [[0, 'desc']], // Default sorting on the first column
+        order: tableOrder,
         ajax: {
             url: endpoint,
             type: "POST",
@@ -257,9 +261,8 @@ function GetApplicationList(status, endpoint) {
                     searchValue: data.search.value,
                     sortColumn: data.order.length > 0 ? data.columns[data.order[0].column].data : '',
                     sortDirection: data.order.length > 0 ? data.order[0].dir : '',
-                    status: status // Pass the status parameter
+                    status: status
                 };
-
             },
             error: function (xhr, error, code) {
                 console.error('Error loading data:', error);
@@ -283,15 +286,11 @@ function GetApplicationList(status, endpoint) {
                 previous: "Previous"
             }
         },
-
-
         pageLength: 10,
         lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
-        //dom: 'lBfrtip',
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
     });
 }
-
 function OpenAction(applicationId, endpoint, category) {
     //HBA_SL12345671Y_1007_Merged
     $("#spnapplicationId").html(applicationId);
@@ -502,48 +501,12 @@ function DataSignDigitaly(applicationId, endpoint, Usertype) {
 }
 
 function GetTokenSignXml(xml, Usertype, applicationId) {
-
     let URL = '';
-
-    $.ajax({
-       //url: 'http://localhost/Temporary_Listen_Addresses/SignXml',
-        url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/SignXml',
-        type: "POST",
-        contentType: 'application/xml', // Set content type to XML
-        data: xml, // Set the XML data
-        success: function (response) {
-            if (response) {
-                const xmlContent = new XMLSerializer().serializeToString(response);
-
-                // No Token Found
-                if (xmlContent.indexOf("<Root>No Token Found</Root>") == -1) {
-
-                    if (Usertype === "Loan")
-                        URL = "/ApplicationRequest/SaveXML";
-                    else if (Usertype === "Maturity")
-                        URL = "/ApplicationRequest/SaveClaimXML";
-
-
-                    SignXmlSendTOdatabase(xmlContent, URL, Usertype, applicationId);
-                    //DigitalSignByAPI(applicationId);
-
-                } else {
-                    Swal.fire({
-                        title: "Error!",
-                        text: "No Token Found!",
-                        icon: "error"
-                    });
-                }
-            }
-        },
-        error: function (result) {
-            Swal.fire({
-                title: "Alert!",
-                text: "DGIS App Not running!",
-                icon: "error"
-            });
-        }
-    });
+    if (Usertype === "Loan")
+        URL = "/ApplicationRequest/SaveXML";
+    else if (Usertype === "Maturity")
+        URL = "/ApplicationRequest/SaveClaimXML";
+    SignXmlSendTOdatabase(xml, URL, Usertype, applicationId);
 }
 
 //tez code start
