@@ -122,8 +122,8 @@ namespace DataAccessLayer.Repositories
 
                 var PC = await _context.trnPropertyRenovation
                     .FirstOrDefaultAsync(p => p.ApplicationId == existingUser.ApplicationId);
-                
-                var Sp= await _context.trnSplWaiver
+
+                var Sp = await _context.trnSplWaiver
                     .FirstOrDefaultAsync(s => s.ApplicationId == existingUser.ApplicationId);
 
                 var documents = await _context.trnClaimDocumentUpload
@@ -146,15 +146,15 @@ namespace DataAccessLayer.Repositories
                 if (PC != null)
                     _context.trnPropertyRenovation.Remove(PC);
 
-                if(Sp != null)
+                if (Sp != null)
                     _context.trnSplWaiver.Remove(Sp);
 
                 if (documents.Any())
                     _context.trnClaimDocumentUpload.RemoveRange(documents);
 
-                if(AccountDetails != null)
+                if (AccountDetails != null)
                     _context.trnClaimAccountDetails.Remove(AccountDetails);
-                
+
                 if (AddressDetails != null)
                     _context.trnClaimAddressDetails.Remove(AddressDetails);
 
@@ -173,161 +173,161 @@ namespace DataAccessLayer.Repositories
         }
 
 
-        public async Task<bool> submitApplication(DTOClaimApplication model,string PurposeType ,int ApplicationId)
+        public async Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
             MArmyPrefix mArmyPrefix = new MArmyPrefix();
             string ArmyNo = string.Empty;
 
-                if (ApplicationId != 0)
-                {
-                    commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId); ;
-                    int id = commonDataModel.ArmyPrefix;
-                    mArmyPrefix = await _IArmyPrefixes.Get(id);
-                    ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
-                    ArmyNo = ArmyNo.Trim();
-                }
+            if (ApplicationId != 0)
+            {
+                commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId); ;
+                int id = commonDataModel.ArmyPrefix;
+                mArmyPrefix = await _IArmyPrefixes.Get(id);
+                ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
+                ArmyNo = ArmyNo.Trim();
+            }
 
-                var files = new List<IFormFile>();
-                if (model.EducationDetails != null)
-                {
-                    if (model.EducationDetails.AttachBonafideLetter != null) files.Add(model.EducationDetails.AttachBonafideLetter);
-                    if (model.EducationDetails.AttachPartIIOrder != null) files.Add(model.EducationDetails.AttachPartIIOrder);
-                    if (model.EducationDetails.TotalExpenditureFile != null) files.Add(model.EducationDetails.TotalExpenditureFile);
-                }
-                else if (model.Marriageward != null)
-                {
-                    if (model.Marriageward.AttachInvitationcard != null) files.Add(model.Marriageward.AttachInvitationcard);
-                    if (model.Marriageward.AttachPartIIOrder != null) files.Add(model.Marriageward.AttachPartIIOrder);
-                }
-                else if (model.PropertyRenovation != null)
-                {
-                    if (model.PropertyRenovation.TotalExpenditureFile != null) files.Add(model.PropertyRenovation.TotalExpenditureFile);
-                }
-                else if (model.SplWaiver != null)
-                {
-                    if (model.SplWaiver.OtherReasonPdf != null) files.Add(model.SplWaiver.OtherReasonPdf);
-                    if( model.SplWaiver.TotalExpenditureFile != null) files.Add(model.SplWaiver.TotalExpenditureFile);
-                }
+            var files = new List<IFormFile>();
+            if (model.EducationDetails != null)
+            {
+                if (model.EducationDetails.AttachBonafideLetter != null) files.Add(model.EducationDetails.AttachBonafideLetter);
+                if (model.EducationDetails.AttachPartIIOrder != null) files.Add(model.EducationDetails.AttachPartIIOrder);
+                if (model.EducationDetails.TotalExpenditureFile != null) files.Add(model.EducationDetails.TotalExpenditureFile);
+            }
+            else if (model.Marriageward != null)
+            {
+                if (model.Marriageward.AttachInvitationcard != null) files.Add(model.Marriageward.AttachInvitationcard);
+                if (model.Marriageward.AttachPartIIOrder != null) files.Add(model.Marriageward.AttachPartIIOrder);
+            }
+            else if (model.PropertyRenovation != null)
+            {
+                if (model.PropertyRenovation.TotalExpenditureFile != null) files.Add(model.PropertyRenovation.TotalExpenditureFile);
+            }
+            else if (model.SplWaiver != null)
+            {
+                if (model.SplWaiver.OtherReasonPdf != null) files.Add(model.SplWaiver.OtherReasonPdf);
+                if (model.SplWaiver.TotalExpenditureFile != null) files.Add(model.SplWaiver.TotalExpenditureFile);
+            }
 
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
-                if (!Directory.Exists(tempFolder))
+            if (!Directory.Exists(tempFolder))
+            {
+                Directory.CreateDirectory(tempFolder);
+            }
+
+            string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
+            string folderPath = Path.Combine(tempFolder, folderName);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            foreach (var file in files)
+            {
+                string fileExtension = Path.GetExtension(file.FileName);
+                string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
+                string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
+                string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension}";
+                string outputFile = Path.Combine(folderPath, fileName);
+
+                using (var fileStream = new FileStream(outputFile, FileMode.Create))
                 {
-                    Directory.CreateDirectory(tempFolder);
-                }
-
-                string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
-                string folderPath = Path.Combine(tempFolder, folderName);
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-
-                foreach (var file in files)
-                {
-                    string fileExtension = Path.GetExtension(file.FileName);
-                    string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
-                    string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
-                    string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension}";
-                    string outputFile = Path.Combine(folderPath, fileName);
-
-                    using (var fileStream = new FileStream(outputFile, FileMode.Create))
-                    {
-                        await file.CopyToAsync(fileStream);
-                    }
-
-                    if (model.EducationDetails != null)
-                    {
-                        if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
-                        {
-                            model.EducationDetails.AttachBonafideLetterPdf = fileName;
-                            model.EducationDetails.IsAttachBonafideLetterPdf = true;
-                        }
-                        else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
-                        {
-                            model.EducationDetails.AttachPartIIOrderPdf = fileName;
-                            model.EducationDetails.IsAttachPartIIOrderPdf = true;
-                        }
-                        else if (file.Name.Equals(model.EducationDetails.TotalExpenditureFile.Name))
-                        {
-                            model.EducationDetails.TotalExpenditureFilePdf = fileName;
-                            model.EducationDetails.IsTotalExpenditureFilePdf = true;
-                        }
-                    }
-
-                    if (model.Marriageward != null)
-                    {
-                        if (file.Name.Equals(model.Marriageward.AttachInvitationcard.Name))
-                        {
-                            model.Marriageward.AttachInvitationcardPdf = fileName;
-                            model.Marriageward.IsAttachInvitationcardPdf = true;
-                        }
-                        else if (file.Name.Equals(model.Marriageward.AttachPartIIOrder.Name))
-                        {
-                            model.Marriageward.AttachPartIIOrderPdf = fileName;
-                            model.Marriageward.IsAttachPartIIOrderPdf = true;
-                        }
-
-                    }
-                    if (model.PropertyRenovation != null)
-                    {
-                        if (file.Name.Equals(model.PropertyRenovation.TotalExpenditureFile.Name))
-                        {
-                            model.PropertyRenovation.TotalExpenditureFilePdf = fileName;
-                            model.PropertyRenovation.IsTotalExpenditureFilePdf = true;
-                        }
-                    }
-
-                    if(model.SplWaiver!=null)
-                    {
-                        if (file.Name.Equals(model.SplWaiver.OtherReasonPdf.Name))
-                        {
-                            model.SplWaiver.OtherReasonsPdf = fileName;
-                            model.SplWaiver.IsOtherReasonPdf = true;
-                        }
-                        else if (file.Name.Equals(model.SplWaiver.TotalExpenditureFile.Name))
-                        {
-                            model.SplWaiver.TotalExpenditureFilePdf = fileName;
-                            model.SplWaiver.IsTotalExpenditureFilePdf = true;
-                        }
-                }
-
+                    await file.CopyToAsync(fileStream);
                 }
 
                 if (model.EducationDetails != null)
                 {
-                    EducationDetailsModel educationDetails = new EducationDetailsModel();
-                    educationDetails = model.EducationDetails;
-                    educationDetails.ApplicationId = commonDataModel.ApplicationId;
-                    await _Education.Add(model.EducationDetails);
+                    if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
+                    {
+                        model.EducationDetails.AttachBonafideLetterPdf = fileName;
+                        model.EducationDetails.IsAttachBonafideLetterPdf = true;
+                    }
+                    else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
+                    {
+                        model.EducationDetails.AttachPartIIOrderPdf = fileName;
+                        model.EducationDetails.IsAttachPartIIOrderPdf = true;
+                    }
+                    else if (file.Name.Equals(model.EducationDetails.TotalExpenditureFile.Name))
+                    {
+                        model.EducationDetails.TotalExpenditureFilePdf = fileName;
+                        model.EducationDetails.IsTotalExpenditureFilePdf = true;
+                    }
                 }
-                else if (model.Marriageward != null)
+
+                if (model.Marriageward != null)
                 {
-                    MarriagewardModel marriageward = new MarriagewardModel();
-                    marriageward = model.Marriageward;
-                    marriageward.ApplicationId = commonDataModel.ApplicationId;
-                    await _Marraige.Add(model.Marriageward);
+                    if (file.Name.Equals(model.Marriageward.AttachInvitationcard.Name))
+                    {
+                        model.Marriageward.AttachInvitationcardPdf = fileName;
+                        model.Marriageward.IsAttachInvitationcardPdf = true;
+                    }
+                    else if (file.Name.Equals(model.Marriageward.AttachPartIIOrder.Name))
+                    {
+                        model.Marriageward.AttachPartIIOrderPdf = fileName;
+                        model.Marriageward.IsAttachPartIIOrderPdf = true;
+                    }
+
                 }
-                else if (model.PropertyRenovation != null)
+                if (model.PropertyRenovation != null)
                 {
-                    PropertyRenovationModel propertyRenovation = new PropertyRenovationModel();
-                    propertyRenovation = model.PropertyRenovation;
-                    propertyRenovation.ApplicationId = commonDataModel.ApplicationId;
-                    await _Property.Add(model.PropertyRenovation);
+                    if (file.Name.Equals(model.PropertyRenovation.TotalExpenditureFile.Name))
+                    {
+                        model.PropertyRenovation.TotalExpenditureFilePdf = fileName;
+                        model.PropertyRenovation.IsTotalExpenditureFilePdf = true;
+                    }
                 }
 
-                else if (model.SplWaiver!=null)
+                if (model.SplWaiver != null)
                 {
-                    SplWaiverModel splWaiver = new SplWaiverModel();
-                    splWaiver = model.SplWaiver;
-                    splWaiver.ApplicationId = commonDataModel.ApplicationId;
-                    await _Special.Add(model.SplWaiver);
+                    if (file.Name.Equals(model.SplWaiver.OtherReasonPdf.Name))
+                    {
+                        model.SplWaiver.OtherReasonsPdf = fileName;
+                        model.SplWaiver.IsOtherReasonPdf = true;
+                    }
+                    else if (file.Name.Equals(model.SplWaiver.TotalExpenditureFile.Name))
+                    {
+                        model.SplWaiver.TotalExpenditureFilePdf = fileName;
+                        model.SplWaiver.IsTotalExpenditureFilePdf = true;
+                    }
                 }
-           
+
+            }
+
+            if (model.EducationDetails != null)
+            {
+                EducationDetailsModel educationDetails = new EducationDetailsModel();
+                educationDetails = model.EducationDetails;
+                educationDetails.ApplicationId = commonDataModel.ApplicationId;
+                await _Education.Add(model.EducationDetails);
+            }
+            else if (model.Marriageward != null)
+            {
+                MarriagewardModel marriageward = new MarriagewardModel();
+                marriageward = model.Marriageward;
+                marriageward.ApplicationId = commonDataModel.ApplicationId;
+                await _Marraige.Add(model.Marriageward);
+            }
+            else if (model.PropertyRenovation != null)
+            {
+                PropertyRenovationModel propertyRenovation = new PropertyRenovationModel();
+                propertyRenovation = model.PropertyRenovation;
+                propertyRenovation.ApplicationId = commonDataModel.ApplicationId;
+                await _Property.Add(model.PropertyRenovation);
+            }
+
+            else if (model.SplWaiver != null)
+            {
+                SplWaiverModel splWaiver = new SplWaiverModel();
+                splWaiver = model.SplWaiver;
+                splWaiver.ApplicationId = commonDataModel.ApplicationId;
+                await _Special.Add(model.SplWaiver);
+            }
 
 
 
-                return true;
+
+            return true;
         }
 
 
@@ -416,7 +416,7 @@ namespace DataAccessLayer.Repositories
             string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
             string folderPath = Path.Combine(tempFolder, folderName);
 
-          //  Check if the folder exists
+            //  Check if the folder exists
             if (!Directory.Exists(folderPath))
             {
                 // Folder not found, return false or handle as needed
@@ -504,13 +504,13 @@ namespace DataAccessLayer.Repositories
 
             await UpdateApplicationStatus(ApplicationId, 101);
 
-            TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+            TrnClaimStatusCounter trnStatusCounter = new TrnClaimStatusCounter
             {
                 StatusId = 101,
                 ApplicationId = ApplicationId,
                 ActionOn = DateTime.Now,
             };
-            await _onlineApplication.InsertStatusCounter(trnStatusCounter);
+            await InsertStatusCounter(trnStatusCounter);
 
             var IOArmyNo = await GetIOArmyNoAsync(ApplicationId);
             if (IOArmyNo == null)
@@ -621,38 +621,38 @@ namespace DataAccessLayer.Repositories
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
                               AmountwithdrwalRequired = common.AmountOfWithdrawalRequired ?? 0,
-                              TotalService= common.TotalService ?? 0,
-                              NoOfwithdrwal=common.Noofwithdrawal ?? string.Empty,
+                              TotalService = common.TotalService ?? 0,
+                              NoOfwithdrwal = common.Noofwithdrawal ?? string.Empty,
 
                               House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
-                              
+
                               House_Repair_Advance_Loan = common.House_Repair_Advance_Loan ?? false,
-                              
-                              Conveyance_Advance_Loan= common.Conveyance_Advance_Loan ?? false,
-                              
-                              Computer_Advance_Loan= common.Computer_Advance_Loan ?? false,
+
+                              Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
+
+                              Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
 
                               House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
                               House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
                               House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
 
                               Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
-                              Conveyance_Date_of_Loan_taken= common.Conveyance_Date_of_Loan_taken,
-                              Conveyance_Duration_of_Loan= common.Conveyance_Duration_of_Loan ?? 0,
+                              Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
+                              Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
 
-                              House_Repair_Advance_Amount_Taken= common.House_Repair_Advance_Amount_Taken ?? 0,
-                              House_Repair_Advance_Date_of_Loan_taken=common.House_Repair_Advance_Date_of_Loan_taken,
-                              House_Repair_Advance_Duration_of_Loan= common.House_Repair_Advance_Duration_of_Loan ?? 0,
+                              House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
+                              House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
+                              House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
 
                               Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
-                              Computer_Date_of_Loan_taken= common.Computer_Date_of_Loan_taken,
-                              Computer_Duration_of_Loan= common.Computer_Duration_of_Loan ?? 0,
+                              Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
+                              Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
 
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
                               Distt = AddressDetails.Distt ?? string.Empty,
                               State = AddressDetails.State ?? string.Empty,
-                              Code= AddressDetails.Code ?? string.Empty,
+                              Code = AddressDetails.Code ?? string.Empty,
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
@@ -661,17 +661,17 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "ED";
                     var EDmodel = (from ED in _context.trnEducationDetails
-                                    where ED.ApplicationId == applicationId
-                                    select new DTOEducationDetailsResponse
-                                    {
-                                        ChildName = ED.ChildName,
-                                        DateOfBirth = ED.DateOfBirth,
-                                        DOPartIINo = ED.DOPartIINo,
-                                        DoPartIIDate = ED.DoPartIIDate,
-                                        CourseForWithdrawal = ED.CourseForWithdrawal,
-                                        CollegeInstitution = ED.CollegeInstitution,
-                                        TotalExpenditure = ED.TotalExpenditure
-                                    }).FirstOrDefault();
+                                   where ED.ApplicationId == applicationId
+                                   select new DTOEducationDetailsResponse
+                                   {
+                                       ChildName = ED.ChildName,
+                                       DateOfBirth = ED.DateOfBirth,
+                                       DOPartIINo = ED.DOPartIINo,
+                                       DoPartIIDate = ED.DoPartIIDate,
+                                       CourseForWithdrawal = ED.CourseForWithdrawal,
+                                       CollegeInstitution = ED.CollegeInstitution,
+                                       TotalExpenditure = ED.TotalExpenditure
+                                   }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
@@ -683,16 +683,16 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "MW";
                     var MWmodel = (from MW in _context.trnMarriageward
-                                    where MW.ApplicationId == applicationId
-                                    select new DTOMarraigeWardResponse
-                                    {
-                                        NameOfChild = MW.NameOfChild,
-                                        DateOfBirth = MW.DateOfBirth,
-                                        DOPartIINo = MW.DOPartIINo,
-                                        DoPartIIDate = MW.DoPartIIDate,
-                                        AgeOfWard = MW.AgeOfWard,
-                                        DateofMarriage = MW.DateofMarriage,
-                                    }).FirstOrDefault();
+                                   where MW.ApplicationId == applicationId
+                                   select new DTOMarraigeWardResponse
+                                   {
+                                       NameOfChild = MW.NameOfChild,
+                                       DateOfBirth = MW.DateOfBirth,
+                                       DOPartIINo = MW.DOPartIINo,
+                                       DoPartIIDate = MW.DoPartIIDate,
+                                       AgeOfWard = MW.AgeOfWard,
+                                       DateofMarriage = MW.DateofMarriage,
+                                   }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result;
 
@@ -703,13 +703,13 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "PR";
                     var PRModal = (from PR in _context.trnPropertyRenovation
-                                    where PR.ApplicationId == applicationId
-                                    select new DTOPropertyRenovationResponse
-                                    {
-                                        PropertyHolderName = PR.PropertyHolderName,
-                                        AddressOfProperty = PR.AddressOfProperty,
-                                        EstimatedCost= PR.EstimatedCost,
-                                    }).FirstOrDefault();
+                                   where PR.ApplicationId == applicationId
+                                   select new DTOPropertyRenovationResponse
+                                   {
+                                       PropertyHolderName = PR.PropertyHolderName,
+                                       AddressOfProperty = PR.AddressOfProperty,
+                                       EstimatedCost = PR.EstimatedCost,
+                                   }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
@@ -720,12 +720,12 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "SP";
                     var SPModal = (from sp in _context.trnSplWaiver
-                                    where sp.ApplicationId == applicationId
-                                    select new DTOSplWaiverResponse
-                                    {
+                                   where sp.ApplicationId == applicationId
+                                   select new DTOSplWaiverResponse
+                                   {
                                        OtherReasons = sp.OtherReasons,
 
-                                    }).FirstOrDefault();
+                                   }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
@@ -796,14 +796,14 @@ namespace DataAccessLayer.Repositories
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
-                   if(DocumentModel.IsSeviceExtnPdf)
+                    if (DocumentModel.IsSeviceExtnPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
-                   if(DocumentModel.IsOtherReasonPdf)
+                    if (DocumentModel.IsOtherReasonPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
                         dTODocumentFileView.FileName = DocumentModel.OtherReasonsPdf;
@@ -970,7 +970,7 @@ namespace DataAccessLayer.Repositories
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
-                              
+
                               House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
 
                               House_Repair_Advance_Loan = common.Computer_Advance_Loan ?? false,
@@ -999,7 +999,7 @@ namespace DataAccessLayer.Repositories
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
                               Distt = AddressDetails.Distt ?? string.Empty,
                               State = AddressDetails.State ?? string.Empty,
-                              Code= AddressDetails.Code ?? string.Empty,
+                              Code = AddressDetails.Code ?? string.Empty,
                           }).ToListAsync();
             data.OnlineApplicationResponse = result.Result; // Assuming result is already defined
 
@@ -1031,7 +1031,7 @@ namespace DataAccessLayer.Repositories
 
                          join MW in _context.trnMarriageward on common.ApplicationId equals MW.ApplicationId into MWGroup
                          from MW in MWGroup.DefaultIfEmpty()
-                         
+
                          join PR in _context.trnPropertyRenovation on common.ApplicationId equals PR.ApplicationId into PRGroup
                          from PR in PRGroup.DefaultIfEmpty()
 
@@ -1051,7 +1051,7 @@ namespace DataAccessLayer.Repositories
                              PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                              ApplicationId = common.ApplicationId,
                              ApplicationType = common.WithdrawPurpose,
-                             ApplicationTypeName= applicationType.Name ?? string.Empty,
+                             ApplicationTypeName = applicationType.Name ?? string.Empty,
                              ArmyNumber = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                              AadharCardNo = common.AadharCardNo ?? string.Empty,
                              OldArmyNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
@@ -1067,7 +1067,7 @@ namespace DataAccessLayer.Repositories
                              DateOfRetirement = common.DateOfRetirement,
                              PanCardNo = common.PanCardNo ?? string.Empty,
                              MobileNo = common.MobileNo ?? string.Empty,
-                             Email = (common.Email ?? string.Empty)  ?? string.Empty,
+                             Email = (common.Email ?? string.Empty) ?? string.Empty,
                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
@@ -1081,8 +1081,8 @@ namespace DataAccessLayer.Repositories
                              AmountwithdrwalRequired = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
                              NoOfwithdrwal = common.Noofwithdrawal ?? string.Empty,
                              TotalService = common.TotalService ?? 0,
-                             ResidualService=common.ResidualService ?? 0,
-                             ExtnOfService= common.ExtnOfService ?? string.Empty,   
+                             ResidualService = common.ResidualService ?? 0,
+                             ExtnOfService = common.ExtnOfService ?? string.Empty,
 
                              House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
 
@@ -1109,24 +1109,24 @@ namespace DataAccessLayer.Repositories
                              Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
 
 
-                             ChildName = common.WithdrawPurpose==1 ? ED.ChildName : common.ApplicantType==2 ? MW.NameOfChild : null,
+                             ChildName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,
                              ChildDateOfBirth = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,
-                             DOPartIINo= common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
-                             DoPartIIDate=common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
+                             DOPartIINo = common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
+                             DoPartIIDate = common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
 
-                             AgeOfWard= common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
+                             AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
 
                              DateofMarriage = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
 
-                             CourseForWithdrawal= common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
+                             CourseForWithdrawal = common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
 
-                             CollegeInstitution=common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
+                             CollegeInstitution = common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
 
-                             TotalExpenditure=common.WithdrawPurpose == 1 ? ED.TotalExpenditure: common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
+                             TotalExpenditure = common.WithdrawPurpose == 1 ? ED.TotalExpenditure : common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
 
-                             AddressOfProperty= common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
+                             AddressOfProperty = common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
 
-                             PropertyHolderName= common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
+                             PropertyHolderName = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
 
                              OtherReasons = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
 
@@ -1193,5 +1193,14 @@ namespace DataAccessLayer.Repositories
         }
 
 
+        public async Task<bool> InsertStatusCounter(TrnClaimStatusCounter trnStatusCounter)
+        {
+            if (trnStatusCounter == null)
+                return false;
+
+            await _context.TrnClaimStatusCounter.AddAsync(trnStatusCounter);
+            await SaveAsync(); // Make sure this saves changes
+            return true;
+        }
     }
 }

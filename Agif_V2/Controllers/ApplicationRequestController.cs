@@ -28,21 +28,22 @@ namespace Agif_V2.Controllers
         private readonly IApplication _application;
         private readonly IUserProfile _userProfile;
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
-
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication)
+        private readonly IClaimApplication _claimApplication;
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
             this._application = _application;
             this._userProfile = _userProfile;
             this._IClaimonlineApplication1 = claimOnlineApplication;
+            _claimApplication = claimApplication;
         }
         public IActionResult Index()
         {
             return View();
         }
         [Authorize(Roles = "CO")]
-        public async Task<IActionResult> UserApplicationList(int status)
+        public IActionResult UserApplicationList(int status)
         {
             ViewBag.Status = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -99,9 +100,64 @@ namespace Agif_V2.Controllers
             return View();
         }
 
+        //public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
+        //{
+
+        //    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+        //    if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
+        //    {
+        //        return Unauthorized("Session expired or invalid user session.");
+        //    }
+
+        //    var queryableData = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, status);
+
+        //    var totalRecords = queryableData.Count;
+
+        //    var query = queryableData.AsQueryable();
+
+        //    if (!string.IsNullOrEmpty(request.searchValue))
+        //    {
+        //        string searchValue = request.searchValue.ToLower();
+        //        query = query.Where(x =>
+        //            x.ArmyNo.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //            x.DateOfBirth.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //            x.AppliedDate.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)
+        //        );
+        //    }
+
+
+
+        //    var filteredRecords = query.Count();
+
+        //    if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+        //    {
+        //        bool ascending = request.sortDirection.ToLower() == "asc";
+
+        //        query = request.sortColumn.ToLower() switch
+        //        {
+        //            "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+        //            "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+        //            "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
+        //            "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+        //            _ => query // Default: no sorting if column not recognized
+        //        };
+        //    }
+
+        //    // Paginate the result
+        //    var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+        //    var responseData = new DTODataTablesResponse<DTOGetApplResponse>
+        //    {
+        //        draw = request.Draw,
+        //        recordsTotal = totalRecords,
+        //        recordsFiltered = filteredRecords,
+        //        data = paginatedData
+        //    };
+
+        //    return Json(responseData);
+        //}
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {
-
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
             {
@@ -109,38 +165,16 @@ namespace Agif_V2.Controllers
             }
 
             var queryableData = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, status);
-
-            var totalRecords = queryableData.Count();
-
             var query = queryableData.AsQueryable();
 
-            if (!string.IsNullOrEmpty(request.searchValue))
-            {
-                string searchValue = request.searchValue.ToLower();
-                query = query.Where(x =>
-                    x.ArmyNo.ToLower().Contains(searchValue) ||
-                    x.DateOfBirth.ToLower().Contains(searchValue) ||
-                    x.AppliedDate.ToLower().Contains(searchValue)
-                );
-            }
+            // Apply search filter if provided
+            query = ApplySearchFilter(query, request.searchValue);
 
+            // Apply sorting if needed
+            query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
-
+            var totalRecords = queryableData.Count;
             var filteredRecords = query.Count();
-
-            if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-            {
-                bool ascending = request.sortDirection.ToLower() == "asc";
-
-                query = request.sortColumn.ToLower() switch
-                {
-                    "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
-                    "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                    "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
-                    "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
-                    _ => query // Default: no sorting if column not recognized
-                };
-            }
 
             // Paginate the result
             var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
@@ -154,8 +188,37 @@ namespace Agif_V2.Controllers
             };
 
             return Json(responseData);
-
         }
+
+        // Updated method to handle potential null reference for 'searchValue'
+        private IQueryable<DTOGetApplResponse> ApplySearchFilter(IQueryable<DTOGetApplResponse> query, string? searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue)) return query;
+
+            string lowerSearchValue = searchValue.ToLower();
+            return query.Where(x =>
+                (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.DateOfBirth ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.AppliedDate ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+            );
+        }
+
+        // Separate method for sorting logic
+        private IQueryable<DTOGetApplResponse> ApplySorting(IQueryable<DTOGetApplResponse> query, string sortColumn, string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
+
+            bool ascending = sortDirection.ToLower() == "asc";
+            return sortColumn.ToLower() switch
+            {
+                "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
+                "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
+                "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
+                _ => query // Default: no sorting if column not recognized
+            };
+        }
+
 
         public async Task<IActionResult> GetMaturityUsersApplicationList(DTODataTableRequest request, int status)
         {
@@ -168,35 +231,16 @@ namespace Agif_V2.Controllers
 
             var queryableData = await _userApplication.GetMaturityUsersApplication(dTOTempSession.MappingId, status);
 
-            var totalRecords = queryableData.Count();
-
             var query = queryableData.AsQueryable();
 
-            if (!string.IsNullOrEmpty(request.searchValue))
-            {
-                string searchValue = request.searchValue.ToLower();
-                query = query.Where(x =>
-                    x.ArmyNo.ToLower().Contains(searchValue) ||
-                    x.DateOfBirth.ToLower().Contains(searchValue) ||
-                    x.AppliedDate.ToLower().Contains(searchValue)
-                );
-            }
+            // Apply search filter if provided
+            query = ApplySearchFilter(query, request.searchValue);
 
+            // Apply sorting if needed
+            query = ApplySorting(query, request.sortColumn, request.sortDirection);
+
+            var totalRecords = queryableData.Count;
             var filteredRecords = query.Count();
-
-            if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-            {
-                bool ascending = request.sortDirection.ToLower() == "asc";
-
-                query = request.sortColumn.ToLower() switch
-                {
-                    "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
-                    "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                    "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
-                    "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
-                    _ => query // Default: no sorting if column not recognized
-                };
-            }
 
             // Paginate the result
             var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
@@ -383,7 +427,7 @@ namespace Agif_V2.Controllers
 
 
 
-                var digitalSignRecords = new DigitalSignRecords
+                var digitalSignRecords = new ClaimDigitalSignRecords
                 {
                     ApplId = applId,
                     XMLSignResponse = xmlResString,
@@ -398,15 +442,15 @@ namespace Agif_V2.Controllers
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);
 
 
-                TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+                TrnClaimStatusCounter trnStatusCounter = new TrnClaimStatusCounter
                 {
                     StatusId = 102,
                     ApplicationId = applId,
                     ActionOn = DateTime.Now,
                 };
-                await _onlineApplication.InsertStatusCounter(trnStatusCounter);
+                await _IClaimonlineApplication1.InsertStatusCounter(trnStatusCounter);
 
-                await _application.Add(digitalSignRecords);
+                await _claimApplication.Add(digitalSignRecords);
 
                 DTOUserProfileResponse adminDetails = await _userProfile.GetAdminDetails();
                 var TrnFwd = new TrnFwd
@@ -455,7 +499,7 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> ClaimRejectXML(int applId, string rem)
         {
-            var digitalSignRecords = new DigitalSignRecords
+            var digitalSignRecords = new ClaimDigitalSignRecords
             {
                 ApplId = applId,
                 SignOn = DateTime.Now,
@@ -463,20 +507,23 @@ namespace Agif_V2.Controllers
                 IsSign = false,
                 IsRejectced = true,
             };
-            await _application.Add(digitalSignRecords);
+            await _claimApplication.Add(digitalSignRecords);
+
             await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 103);
-            TrnStatusCounter trnStatusCounter = new TrnStatusCounter
+
+            TrnClaimStatusCounter trnStatusCounter = new TrnClaimStatusCounter
             {
                 StatusId = 103,
                 ApplicationId = applId,
                 ActionOn = DateTime.Now,
             };
-            await _onlineApplication.InsertStatusCounter(trnStatusCounter);
+
+            await _IClaimonlineApplication1.InsertStatusCounter(trnStatusCounter);
 
             return Json(new { success = true, message = "Application rejected." });
         }
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UsersApplicationListAdmin(string status)
+        public IActionResult UsersApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -488,7 +535,7 @@ namespace Agif_V2.Controllers
             return View(dTOTempSession);
         }
         [Authorize(Roles = "MaturityAdmin")]
-        public async Task<IActionResult> ClaimApplicationListAdmin(string status)
+        public  IActionResult ClaimApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -501,50 +548,85 @@ namespace Agif_V2.Controllers
         }
 
 
+        //public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
+        //{
+        //    try
+        //    {
+        //        var queryableData = await _userApplication.GetUsersApplicationForAdmin(status);
+        //        var totalRecords = queryableData.Count();
+        //        var query = queryableData.AsQueryable();
+
+        //        // Apply search filter - fixed to match actual DTO properties
+        //        if (!string.IsNullOrEmpty(request.searchValue))
+        //        {
+        //            string searchValue = request.searchValue.ToLower();
+        //            query = query.Where(x =>
+        //                //(x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
+        //                (x.ArmyNo != null && x.ArmyNo.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)) ||
+        //                (x.RegtCorps != null && x.RegtCorps.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)) ||
+        //                (x.PresentUnit != null && x.PresentUnit.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)) ||
+        //                (x.AppliedDate != null && x.AppliedDate.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
+        //            );
+        //        }
+
+        //        var filteredRecords = query.Count();
+
+        //        // Apply sorting - fixed to match JavaScript column names
+        //        if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+        //        {
+        //            bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
+        //            query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
+        //                (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
+        //            string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
+        //                (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
+        //            string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
+        //                (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
+        //            string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
+        //                (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
+        //            string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
+        //                (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
+        //                query.OrderByDescending(x => x.UpdatedOn); // Default sorting
+        //        }
+        //        else
+        //        {
+        //            // Default sorting by UpdatedOn descending
+        //            query = query.OrderByDescending(x => x.UpdatedOn);
+        //        }
+
+        //        // Paginate the result
+        //        var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+        //        var responseData = new DTODataTablesResponse<DTOGetApplResponse>
+        //        {
+        //            draw = request.Draw,
+        //            recordsTotal = totalRecords,
+        //            recordsFiltered = filteredRecords,
+        //            data = paginatedData
+        //        };
+
+        //        return Json(responseData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Log the exception
+        //        return Json(new { error = "An error occurred while loading data: " + ex.Message });
+        //    }
+        //}
         public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
         {
             try
             {
                 var queryableData = await _userApplication.GetUsersApplicationForAdmin(status);
-                var totalRecords = queryableData.Count();
+                var totalRecords = queryableData.Count;
                 var query = queryableData.AsQueryable();
 
-                // Apply search filter - fixed to match actual DTO properties
-                if (!string.IsNullOrEmpty(request.searchValue))
-                {
-                    string searchValue = request.searchValue.ToLower();
-                    query = query.Where(x =>
-                        //(x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
-                        (x.ArmyNo != null && x.ArmyNo.ToLower().Contains(searchValue)) ||
-                        (x.RegtCorps != null && x.RegtCorps.ToLower().Contains(searchValue)) ||
-                        (x.PresentUnit != null && x.PresentUnit.ToLower().Contains(searchValue)) ||
-                        (x.AppliedDate != null && x.AppliedDate.ToLower().Contains(searchValue))
-                    );
-                }
+                // Apply search filter
+                query = AdminApplySearchFilter(query, request.searchValue);
 
                 var filteredRecords = query.Count();
 
-                // Apply sorting - fixed to match JavaScript column names
-                if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-                {
-                    bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
-                    query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
-                    string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
-                    string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
-                    string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
-                    string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
-                        query.OrderByDescending(x => x.UpdatedOn); // Default sorting
-                }
-                else
-                {
-                    // Default sorting by UpdatedOn descending
-                    query = query.OrderByDescending(x => x.UpdatedOn);
-                }
+                // Apply sorting
+                query = AdminApplySorting(query, request.sortColumn, request.sortDirection);
 
                 // Paginate the result
                 var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
@@ -565,50 +647,61 @@ namespace Agif_V2.Controllers
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
         }
+
+        // Method to apply search filter
+        private IQueryable<DTOGetApplResponse> AdminApplySearchFilter(IQueryable<DTOGetApplResponse> query, string? searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue)) return query;
+
+            string lowerSearchValue = searchValue.ToLower();
+            return query.Where(x =>
+                (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.RegtCorps ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.PresentUnit ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.AppliedDate ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+            );
+        }
+
+        // Method to apply sorting
+        private IQueryable<DTOGetApplResponse> AdminApplySorting(IQueryable<DTOGetApplResponse> query, string sortColumn, string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
+
+            bool ascending = string.Equals(sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
+
+            switch (sortColumn.ToLower())
+            {
+                case "name":
+                    return ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name);
+                case "armyno":
+                    return ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo);
+                case "regtname":
+                    return ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps);
+                case "presentunit":
+                    return ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit);
+                case "applieddate":
+                    return ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate);
+                default:
+                    return query.OrderByDescending(x => x.UpdatedOn); // Default sorting by UpdatedOn descending
+            }
+        }
+
+
         public async Task<IActionResult> GetClaimUsersApplicationListToAdmin(DTODataTableRequest request, int status)
         {
             try
             {
                 var queryableData = await _userApplication.GetClaimUsersApplicationForAdmin(status);
-                var totalRecords = queryableData.Count();
+                var totalRecords = queryableData.Count;
                 var query = queryableData.AsQueryable();
 
                 // Apply search filter - fixed to match actual DTO properties
-                if (!string.IsNullOrEmpty(request.searchValue))
-                {
-                    string searchValue = request.searchValue.ToLower();
-                    query = query.Where(x =>
-                        //(x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
-                        (x.ArmyNo != null && x.ArmyNo.ToLower().Contains(searchValue)) ||
-                        (x.RegtCorps != null && x.RegtCorps.ToLower().Contains(searchValue)) ||
-                        (x.PresentUnit != null && x.PresentUnit.ToLower().Contains(searchValue)) ||
-                        (x.AppliedDate != null && x.AppliedDate.ToLower().Contains(searchValue))
-                    );
-                }
+                query = AdminApplySearchFilter(query, request.searchValue);
 
                 var filteredRecords = query.Count();
 
-                // Apply sorting - fixed to match JavaScript column names
-                if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-                {
-                    bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
-                    query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
-                    string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
-                    string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
-                    string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
-                    string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
-                        (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
-                        query.OrderByDescending(x => x.UpdatedOn); // Default sorting
-                }
-                else
-                {
-                    // Default sorting by UpdatedOn descending
-                    query = query.OrderByDescending(x => x.UpdatedOn);
-                }
+                // Apply sorting
+                query = AdminApplySorting(query, request.sortColumn, request.sortDirection);
 
                 // Paginate the result
                 var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
@@ -861,7 +954,7 @@ namespace Agif_V2.Controllers
             string applicationTypeName = string.Empty;
 
 
-            foreach (var data in ret.OnlineApplicationResponse)
+            foreach (var data in ret.OnlineApplicationResponse ?? Enumerable.Empty<ClaimCommonDataOnlineResponse>())
             {
                 if (data.ApplicationType == 1)
                 {
@@ -1038,8 +1131,8 @@ namespace Agif_V2.Controllers
 
                 foreach (DataRow rw in dt.Rows)
                 {
-                    string applicationId = rw.Field<string>("Appln_ID");
-                    string statusCode = rw.Field<string>("Status_Code");
+                    string? applicationId = rw.Field<string>("Appln_ID");
+                    string? statusCode = rw.Field<string>("Status_Code");
 
                     if (string.IsNullOrEmpty(applicationId) || string.IsNullOrEmpty(statusCode))
                     {
@@ -1348,8 +1441,8 @@ namespace Agif_V2.Controllers
 
                 foreach (DataRow rw in dt.Rows)
                 {
-                    string applicationId = rw.Field<string>("Appln_ID");
-                    string statusCode = rw.Field<string>("Status_Code");
+                    string? applicationId = rw.Field<string>("Appln_ID");
+                    string? statusCode = rw.Field<string>("Status_Code");
 
                     if (string.IsNullOrEmpty(applicationId) || string.IsNullOrEmpty(statusCode))
                     {

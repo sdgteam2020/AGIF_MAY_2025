@@ -44,6 +44,131 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
+
+        //public async Task<IActionResult> Login(LoginViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+
+
+        //    var user = await _userManager.FindByNameAsync(model.UserName);
+        //    if (user == null)
+        //    {
+        //        ModelState.AddModelError(string.Empty, "Invalid username or password.");
+        //        TempData["UserName"] = model.UserName;
+        //        return RedirectToAction("Register","Account");
+        //    }
+
+        //    if (await _userManager.IsLockedOutAsync(user))
+        //    {
+        //        model = await PopulateLockoutInfo(model, user);
+        //        return View(model);
+        //    }
+
+        //    var currentFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+
+        //    var lockoutOptions = _userManager.Options.Lockout;
+        //    var maxAttempts = lockoutOptions.MaxFailedAccessAttempts;
+        //    var lockoutDuration = lockoutOptions.DefaultLockoutTimeSpan;
+
+        //    user.SecurityStamp = Guid.NewGuid().ToString();
+        //    await _userManager.UpdateAsync(user);
+
+        //    await _signInManager.SignOutAsync(); // Clear any existing session/cookies
+
+        //    var result = await _signInManager.PasswordSignInAsync(
+        //        model.UserName,
+        //        model.Password,
+        //        model.RememberMe,
+        //        lockoutOnFailure: true // Enable lockout on failure
+        //    );
+
+        //    if (result.Succeeded)
+        //    {
+        //        await _userManager.ResetAccessFailedCountAsync(user);
+
+        //        var roles = await _userManager.GetRolesAsync(user);
+        //        var profile = await _userProfile.GetUserAllDetails(model.UserName);
+
+        //        string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
+
+
+        //        SessionUserDTO sessionUserDTO = new SessionUserDTO
+        //        {
+        //            UserName = user.UserName,
+        //            UserId = user.Id,
+        //            ProfileId = profile.ProfileId,
+        //            MappingId = profile.MappingId,
+        //            Role = role,
+        //            DomainId = user.DomainId,
+        //            RankName = profile.RankName,
+        //            ArmyNo = profile.ArmyNo
+        //        };
+
+        //        Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
+
+        //        if (roles.Contains("Admin"))
+        //        {
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else if(roles.Contains("MaturityAdmin"))
+        //        {
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else if(roles.Contains("SuperAdmin"))
+        //        {
+        //            return RedirectToAction("Index", "Home");
+        //        }
+        //        else
+        //        {
+        //            if (profile == null)
+        //            {
+        //                return Json(new { success = false, message = "User mapping not found." });
+        //            }
+
+        //            bool isCOActive = profile.IsCOActive;
+        //            if (!isCOActive)
+        //            {
+        //                return RedirectToAction("COContactUs", "Default");
+        //            }
+        //        }
+
+        //        HttpContext.Session.SetString("UserGUID", user.Id.ToString());
+        //        return RedirectToAction("Index", "Default");
+        //    }
+        //    else if (result.IsLockedOut)
+        //    {
+        //        // User is now locked out
+        //        model = await PopulateLockoutInfo(model, user);
+        //        return View(model);
+        //    }
+        //    else if (result.IsNotAllowed)
+        //    {
+        //        ModelState.AddModelError(string.Empty, "Your account is not allowed to sign in.");
+        //        return View(model);
+        //    }
+        //    else
+        //    {
+        //        // Failed login attempt
+        //        var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+        //        var remainingAttempts = maxAttempts - updatedFailedAttempts;
+
+        //        if (remainingAttempts > 0)
+        //        {
+        //            ModelState.AddModelError(string.Empty,
+        //                $"Invalid username or password. {remainingAttempts} attempt(s) remaining before account lockout.");
+        //        }
+        //        else
+        //        {
+        //            model = await PopulateLockoutInfo(model, user);
+        //        }
+
+        //        return View(model);
+        //    }
+        //}
+
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -51,122 +176,27 @@ namespace Agif_V2.Controllers
                 return View(model);
             }
 
-
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            var user = await GetUserAsync(model.UserName);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                TempData["UserName"] = model.UserName;
-                return RedirectToAction("Register","Account");
+                return HandleInvalidUserName(model);
             }
 
             if (await _userManager.IsLockedOutAsync(user))
             {
-                model = await PopulateLockoutInfo(model, user);
-                return View(model);
+                return await HandleLockedOutUser(model, user);
             }
 
-            var currentFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
-
-            var lockoutOptions = _userManager.Options.Lockout;
-            var maxAttempts = lockoutOptions.MaxFailedAccessAttempts;
-            var lockoutDuration = lockoutOptions.DefaultLockoutTimeSpan;
-
-            user.SecurityStamp = Guid.NewGuid().ToString();
-            await _userManager.UpdateAsync(user);
-
-            await _signInManager.SignOutAsync(); // Clear any existing session/cookies
-
-            var result = await _signInManager.PasswordSignInAsync(
-                model.UserName,
-                model.Password,
-                model.RememberMe,
-                lockoutOnFailure: true // Enable lockout on failure
-            );
+            var result = await SignInUserAsync(model, user);
 
             if (result.Succeeded)
             {
-                await _userManager.ResetAccessFailedCountAsync(user);
-
-                var roles = await _userManager.GetRolesAsync(user);
-                var profile = await _userProfile.GetUserAllDetails(model.UserName);
-
-                string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
-                
-
-                SessionUserDTO sessionUserDTO = new SessionUserDTO
-                {
-                    UserName = user.UserName,
-                    UserId = user.Id,
-                    ProfileId = profile.ProfileId,
-                    MappingId = profile.MappingId,
-                    Role = role,
-                    DomainId = user.DomainId,
-                    RankName = profile.RankName,
-                    ArmyNo = profile.ArmyNo
-                };
-
-                Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
-
-                if (roles.Contains("Admin"))
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else if(roles.Contains("MaturityAdmin"))
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else if(roles.Contains("SuperAdmin"))
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    if (profile == null)
-                    {
-                        return Json(new { success = false, message = "User mapping not found." });
-                    }
-
-                    bool isCOActive = profile.IsCOActive;
-                    if (!isCOActive)
-                    {
-                        return RedirectToAction("COContactUs", "Default");
-                    }
-                }
-
-                HttpContext.Session.SetString("UserGUID", user.Id.ToString());
-                return RedirectToAction("Index", "Default");
+                return await HandleSuccessfulLogin(user, model);
             }
-            else if (result.IsLockedOut)
-            {
-                // User is now locked out
-                model = await PopulateLockoutInfo(model, user);
-                return View(model);
-            }
-            else if (result.IsNotAllowed)
-            {
-                ModelState.AddModelError(string.Empty, "Your account is not allowed to sign in.");
-                return View(model);
-            }
-            else
-            {
-                // Failed login attempt
-                var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
-                var remainingAttempts = maxAttempts - updatedFailedAttempts;
 
-                if (remainingAttempts > 0)
-                {
-                    ModelState.AddModelError(string.Empty,
-                        $"Invalid username or password. {remainingAttempts} attempt(s) remaining before account lockout.");
-                }
-                else
-                {
-                    model = await PopulateLockoutInfo(model, user);
-                }
-
-                return View(model);
-            }
+            return await HandleFailedLogin(result, model, user);
         }
+
 
         // Helper method to populate lockout information
         private async Task<LoginViewModel> PopulateLockoutInfo(LoginViewModel model, ApplicationUser user)
@@ -204,22 +234,204 @@ namespace Agif_V2.Controllers
         }
 
 
-        public async Task<IActionResult> Register()
+        private async Task<ApplicationUser?> GetUserAsync(string userName)
         {
-            var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            return await _userManager.FindByNameAsync(userName);
+        }
 
 
+        private IActionResult HandleInvalidUserName(LoginViewModel model)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid username or password.");
+            TempData["UserName"] = model.UserName;
+            return RedirectToAction("Register", "Account");
+        }
+
+
+        private async Task<IActionResult> HandleLockedOutUser(LoginViewModel model, ApplicationUser user)
+        {
+            model = await PopulateLockoutInfo(model, user);
+            return View(model);
+        }
+
+        private async Task<Microsoft.AspNetCore.Identity.SignInResult> SignInUserAsync(LoginViewModel model, ApplicationUser user)
+        {
+            user.SecurityStamp = Guid.NewGuid().ToString();
+            await _userManager.UpdateAsync(user);
+            await _signInManager.SignOutAsync(); // Clear any existing session/cookies
+
+            return await _signInManager.PasswordSignInAsync(
+                model.UserName,
+                model.Password,
+                model.RememberMe,
+                lockoutOnFailure: true // Enable lockout on failure
+            );
+        }
+
+
+        private async Task<IActionResult> HandleSuccessfulLogin(ApplicationUser user, LoginViewModel model)
+        {
+            await _userManager.ResetAccessFailedCountAsync(user);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var profile = await _userProfile.GetUserAllDetails(model.UserName);
+
+            string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
+
+
+            SessionUserDTO sessionUserDTO = new SessionUserDTO
+            {
+                UserName = user.UserName ?? string.Empty,
+                UserId = user.Id,
+                ProfileId = profile.ProfileId,
+                MappingId = profile.MappingId,
+                Role = role,
+                DomainId = user.DomainId,
+                RankName = profile.RankName ?? string.Empty,
+                ArmyNo = profile.ArmyNo ?? string.Empty
+            };
+
+            Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
+
+            if (roles.Contains("Admin") || roles.Contains("MaturityAdmin") || roles.Contains("SuperAdmin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (profile == null)
+            {
+                return Json(new { success = false, message = "User mapping not found." });
+            }
+
+            bool isCOActive = profile.IsCOActive;
+            if (!isCOActive)
+            {
+                return RedirectToAction("COContactUs", "Default");
+            }
+
+            HttpContext.Session.SetString("UserGUID", user.Id.ToString());
+            return RedirectToAction("Index", "Default");
+        }
+
+        private async Task<IActionResult> HandleFailedLogin(Microsoft.AspNetCore.Identity.SignInResult result, LoginViewModel model, ApplicationUser user)
+        {
+            if (result.IsLockedOut)
+            {
+                model = await PopulateLockoutInfo(model, user);
+                return View(model);
+            }
+
+            if (result.IsNotAllowed)
+            {
+                ModelState.AddModelError(string.Empty, "Your account is not allowed to sign in.");
+                return View(model);
+            }
+
+            var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+            var remainingAttempts = _userManager.Options.Lockout.MaxFailedAccessAttempts - updatedFailedAttempts;
+
+            if (remainingAttempts > 0)
+            {
+                ModelState.AddModelError(string.Empty, $"Invalid username or password. {remainingAttempts} attempt(s) remaining before account lockout.");
+            }
+            else
+            {
+                model = await PopulateLockoutInfo(model, user);
+            }
+
+            return View(model);
+        }
+
+
+        //public async Task<IActionResult> Register()
+        //{
+        //    var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+
+        //    DTOuserProfile userProfileDTO = new DTOuserProfile();
+
+        //    TempData.Keep("UserName");
+        //    return View(userProfileDTO);
+        //}
+
+        public IActionResult Register()
+        {
             DTOuserProfile userProfileDTO = new DTOuserProfile();
 
             TempData.Keep("UserName");
             return View(userProfileDTO);
         }
 
+
         [HttpPost]
         
+        //public async Task<IActionResult> Register(DTOuserProfile signUpDto)
+        //{
+        //    if(ModelState.IsValid)
+        //    {
+
+        //        var newUser = new ApplicationUser
+        //        {
+        //            UserName = signUpDto.userName,
+        //            Email = signUpDto.Email,
+        //            PhoneNumber = signUpDto.MobileNo,
+        //            Updatedby = 1,
+        //            UpdatedOn = DateTime.Now,
+        //        };
+
+        //        var Result = await _userManager.CreateAsync(newUser, "Admin123!");
+        //        if (!Result.Succeeded)
+        //        {
+        //            return Json(Result.Errors);
+        //        }
+        //        var RoleRet = await _userManager.AddToRoleAsync(newUser, "CO");
+
+        //        await _db.SaveChangesAsync();
+
+        //        UserProfile userProfile = new UserProfile
+        //        {
+        //            ArmyNo = signUpDto.ArmyNo,
+        //            userName = signUpDto.userName,
+        //            Name = signUpDto.Name,
+        //            Email = signUpDto.Email,
+        //            MobileNo = signUpDto.MobileNo,
+        //            rank = signUpDto.rank,
+        //            regtCorps = signUpDto.regtCorps,
+        //            ApptId = signUpDto.ApptId,
+        //            IsActive = false,
+        //            UpdatedOn = DateTime.Now
+        //        };
+        //        await _userProfile.Add(userProfile);
+
+        //        UserMapping user = new UserMapping();
+
+        //        user = await _userMapping.GetUnitDetails(signUpDto.UnitId);
+
+        //        bool IsPrimary  = user == null;
+
+        //        UserMapping userMapping = new UserMapping
+        //        {
+        //            UserId = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
+        //            IsActive = false,
+        //            ProfileId = userProfile.ProfileId,
+        //            UnitId = signUpDto.UnitId,
+        //            UpdatedOn = DateTime.Now,
+        //            IsFmn= signUpDto.DteFmn,
+        //            IsPrimary = IsPrimary ? true : false
+        //        };
+        //        await _userMapping.Add(userMapping);
+        //        return RedirectToAction("COContactUs", "Default");
+        //    }
+        //    else
+        //    {   
+        //        return View(signUpDto);
+        //    }
+         
+        //}
+
         public async Task<IActionResult> Register(DTOuserProfile signUpDto)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
 
                 var newUser = new ApplicationUser
@@ -236,7 +448,7 @@ namespace Agif_V2.Controllers
                 {
                     return Json(Result.Errors);
                 }
-                var RoleRet = await _userManager.AddToRoleAsync(newUser, "CO");
+                await _userManager.AddToRoleAsync(newUser, "CO");
 
                 await _db.SaveChangesAsync();
 
@@ -255,11 +467,9 @@ namespace Agif_V2.Controllers
                 };
                 await _userProfile.Add(userProfile);
 
-                UserMapping user = new UserMapping();
+                UserMapping user = await _userMapping.GetUnitDetails(signUpDto.UnitId);
 
-                user = await _userMapping.GetUnitDetails(signUpDto.UnitId);
-
-                bool IsPrimary  = user == null;
+                bool IsPrimary = user == null;
 
                 UserMapping userMapping = new UserMapping
                 {
@@ -268,22 +478,28 @@ namespace Agif_V2.Controllers
                     ProfileId = userProfile.ProfileId,
                     UnitId = signUpDto.UnitId,
                     UpdatedOn = DateTime.Now,
-                    IsFmn= signUpDto.DteFmn,
-                    IsPrimary = IsPrimary ? true : false
+                    IsFmn = signUpDto.DteFmn,
+                    IsPrimary = IsPrimary
                 };
                 await _userMapping.Add(userMapping);
                 return RedirectToAction("COContactUs", "Default");
             }
             else
-            {   
+            {
                 return View(signUpDto);
             }
-         
+
         }
 
         [Authorize(Roles = "SuperAdmin")]
         public IActionResult GetAllUsers(bool status)
         {
+            //if (!ModelState.IsValid)
+            //{
+            //    // If the model state is not valid, return an error message or handle accordingly
+            //    return BadRequest("Invalid request.");
+            //}
+
             ViewBag.UserStatus = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
@@ -292,83 +508,168 @@ namespace Agif_V2.Controllers
             }
             return View(dTOTempSession);
         }
+        //public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
+        //{
+        //    try
+        //    {
+        //        bool userStatus = false;
+        //        if (!string.IsNullOrEmpty(status))
+        //        {
+        //            userStatus = status.ToLower() == "true";
+        //        }
+
+        //        var queryableData = await _userProfile.GetAllUser(userStatus);
+
+        //        var totalRecords = queryableData.Count();
+
+        //        var query = queryableData.AsQueryable();
+
+        //        if (!string.IsNullOrEmpty(request.searchValue))
+        //        {
+        //            string searchValue = request.searchValue.ToLower();
+        //            query = query.Where(x =>
+        //                //x.ProfileName.ToLower().Contains(searchValue) ||
+        //                x.EmailId.ToLower().Contains(searchValue) ||
+        //                x.MobileNo.ToLower().Contains(searchValue) ||
+        //                x.ArmyNo.ToLower().Contains(searchValue) ||
+        //                x.UnitName.ToLower().Contains(searchValue) ||
+        //                x.AppointmentName.ToLower().Contains(searchValue) ||
+        //                x.RegtName.ToLower().Contains(searchValue)
+        //            );
+        //        }
+
+        //        var filteredRecords = query.Count();
+
+        //        if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
+        //        {
+        //            bool ascending = request.sortDirection.ToLower() == "asc";
+
+        //            query = request.sortColumn.ToLower() switch
+        //            {
+        //                "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
+        //                "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
+        //                "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
+        //                "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+        //                "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
+        //                "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
+        //                "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
+        //                "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
+        //                "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
+        //                "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
+        //                _ => query 
+        //            };
+        //        }
+
+        //        // Paginate the result
+        //        var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+        //        var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
+        //        {
+        //            draw = request.Draw,
+        //            recordsTotal = totalRecords,
+        //            recordsFiltered = filteredRecords,
+        //            data = paginatedData
+        //        };
+
+        //        return Json(responseData);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
+        //        {
+        //            draw = 0,
+        //            recordsTotal = 0,
+        //            recordsFiltered = 0,
+        //            data = new List<DTOUserProfileResponse>()
+        //        };
+        //        return Json(responseData);
+        //    }
+        //}
+
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
             try
             {
-                bool userStatus = false;
-                if (!string.IsNullOrEmpty(status))
-                {
-                    userStatus = status.ToLower() == "true";
-                }
+                bool userStatus = GetUserStatus(status);
 
                 var queryableData = await _userProfile.GetAllUser(userStatus);
 
-                var totalRecords = queryableData.Count();
-
+                var totalRecords = queryableData.Count;
                 var query = queryableData.AsQueryable();
 
-                if (!string.IsNullOrEmpty(request.searchValue))
-                {
-                    string searchValue = request.searchValue.ToLower();
-                    query = query.Where(x =>
-                        //x.ProfileName.ToLower().Contains(searchValue) ||
-                        x.EmailId.ToLower().Contains(searchValue) ||
-                        x.MobileNo.ToLower().Contains(searchValue) ||
-                        x.ArmyNo.ToLower().Contains(searchValue) ||
-                        x.UnitName.ToLower().Contains(searchValue) ||
-                        x.AppointmentName.ToLower().Contains(searchValue) ||
-                        x.RegtName.ToLower().Contains(searchValue)
-                    );
-                }
-
+                query = ApplySearchFilter(query, request.searchValue);
                 var filteredRecords = query.Count();
 
-                if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-                {
-                    bool ascending = request.sortDirection.ToLower() == "asc";
+                query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
-                    query = request.sortColumn.ToLower() switch
-                    {
-                        "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
-                        "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
-                        "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
-                        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                        "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
-                        "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
-                        "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
-                        "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
-                        "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
-                        "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
-                        _ => query 
-                    };
-                }
-
-                // Paginate the result
                 var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
-                var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
-                {
-                    draw = request.Draw,
-                    recordsTotal = totalRecords,
-                    recordsFiltered = filteredRecords,
-                    data = paginatedData
-                };
+                var responseData = CreateResponse(request.Draw, totalRecords, filteredRecords, paginatedData);
 
                 return Json(responseData);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
-                {
-                    draw = 0,
-                    recordsTotal = 0,
-                    recordsFiltered = 0,
-                    data = new List<DTOUserProfileResponse>()
-                };
+                var responseData = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
                 return Json(responseData);
             }
+
         }
+
+        private bool GetUserStatus(string status)
+        {
+            if (string.IsNullOrEmpty(status)) return false;
+            return string.Equals(status, "true", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private IQueryable<DTOUserProfileResponse> ApplySearchFilter(IQueryable<DTOUserProfileResponse> query, string searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue)) return query;
+
+            string lowerSearchValue = searchValue.ToLower();
+            return query.Where(x =>
+                (x.EmailId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.MobileNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.UnitName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.AppointmentName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.RegtName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+            );
+        }
+
+        private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
+
+            bool ascending = sortDirection.ToLower() == "asc";
+
+            return sortColumn.ToLower() switch
+            {
+                "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
+                "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
+                "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
+                "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+                "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
+                "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
+                "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
+                "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
+                "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
+                "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
+                _ => query // Default: no sorting if column not recognized
+            };
+        }
+
+        private DTODataTablesResponse<DTOUserProfileResponse> CreateResponse(int draw, int totalRecords, int filteredRecords, List<DTOUserProfileResponse> data)
+        {
+            return new DTODataTablesResponse<DTOUserProfileResponse>
+            {
+                draw = draw,
+                recordsTotal = totalRecords,
+                recordsFiltered = filteredRecords,
+                data = data
+            };
+        }
+
         [HttpPost]
         public async Task<IActionResult> ExportAllUsersToExcel(string status = "")
         {
@@ -377,7 +678,7 @@ namespace Agif_V2.Controllers
                 bool userStatus = true;
                 if (!string.IsNullOrEmpty(status))
                 {
-                    userStatus = status.ToLower() == "true";
+                    userStatus = status.Equals("true", StringComparison.CurrentCultureIgnoreCase);
                 }
 
                 // Get all users data
@@ -533,14 +834,19 @@ namespace Agif_V2.Controllers
             {
                 if (UnitId > 0)
                 {
-
-                    var ret = _db.MUnits.Where(i => i.UnitId == UnitId).FirstOrDefault().UnitName;
-                    return Json(ret);
-
+                    var unit = await _db.MUnits.FirstOrDefaultAsync(i => i.UnitId == UnitId);
+                    if (unit != null)
+                    {
+                        return Json(unit.UnitName);
+                    }
+                    else
+                    {
+                        return Json("Unit not found");
+                    }
                 }
                 return Json(0);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(0);
             }
