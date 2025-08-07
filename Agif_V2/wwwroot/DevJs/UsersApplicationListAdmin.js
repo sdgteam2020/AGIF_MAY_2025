@@ -400,7 +400,7 @@ function BindUsersData(status) {
         name: "Download",
         orderable: false,
         render: function (data, type, row) {
-            return `<button class="btn btn-primary btn-sm download-btn"
+            return `<button class="btn btn-outline-success btn-sm download-btn"
                 data-id="${row.applicationId}"
                 data-army="${row.armyNo}"
                 data-type="${row.applicationType}">

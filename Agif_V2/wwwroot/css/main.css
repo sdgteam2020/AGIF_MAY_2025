@@ -6649,3 +6649,67 @@ tbody, td, tfoot, th, thead, tr {
 .RecomHeader{
     background-color:#310;
 }
+
+.swal-success-theme {
+    background-color: #e6f9ec; /* light green background */
+    color: #155724; /* dark green text */
+    border: 1px solid #c3e6cb;
+}
+
+.swal-confirm-green {
+    background-color: #28a745 !important; /* Bootstrap success green */
+    color: white !important;
+    border: none;
+    padding: 6px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.2);
+    transition: background 0.3s;
+}
+
+    .swal-confirm-green:hover {
+        background-color: #218838 !important;
+    }
+
+.swal-success-theme .swal2-icon.swal2-success {
+    border-color: #1e7e34 !important; /* very dark green */
+    color: #1e7e34 !important;
+}
+
+    .swal-success-theme .swal2-icon.swal2-success [class^=swal2-success-line] {
+        background-color: #1e7e34 !important;
+    }
+
+    .swal-success-theme .swal2-icon.swal2-success .swal2-success-ring {
+        border-color: #1e7e34 !important;
+    }
+
+    .swal-success-theme .swal2-icon.swal2-success::before,
+    .swal-success-theme .swal2-icon.swal2-success::after {
+        background: #1e7e34 !important;
+    }
+/* Loan button - Military green */
+.btn-loan {
+    background-color: #28a745;
+    border-color: #1e7e34;
+    color: white;
+}
+
+    .btn-loan:hover {
+        background-color: #1e7e34;
+        border-color: #155724;
+        color: white;
+    }
+
+/* Maturity button - Navy blue */
+.btn-maturity {
+    background-color: #343a40;
+    border-color: #23272b;
+    color: white;
+}
+
+    .btn-maturity:hover {
+        background-color: #23272b;
+        border-color: #1d2124;
+        color: white;
+    }

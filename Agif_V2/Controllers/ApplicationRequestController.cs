@@ -7,6 +7,7 @@ using DataTransferObject.Request;
 using DataTransferObject.Response;
 using DocumentFormat.OpenXml.InkML;
 using DocumentFormat.OpenXml.Spreadsheet;
+using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ namespace Agif_V2.Controllers
         private readonly IUserProfile _userProfile;
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
         private readonly IClaimApplication _claimApplication;
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication)
+        private readonly Watermark _watermark;
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication, Watermark watermark)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
@@ -37,6 +39,7 @@ namespace Agif_V2.Controllers
             this._userProfile = _userProfile;
             this._IClaimonlineApplication1 = claimOnlineApplication;
             _claimApplication = claimApplication;
+            _watermark = watermark;
         }
         public IActionResult Index()
         {

@@ -48,10 +48,19 @@
             title: "Are you sure?",
             text: "Do you want to approve!",
             icon: "warning",
+            iconColor: "#f1c40f", // Yellow icon
+            background: "#fff8e1", // Light yellow background
+            color: "#333",         // Text color
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, approve it!"
+            confirmButtonColor: "#f39c12", // Enhanced yellow-orange for "Yes"
+            cancelButtonColor: "#d33",     // Red for cancel
+            confirmButtonText: "✅ Yes, approve it!",
+            cancelButtonText: "❌ Cancel",
+            customClass: {
+                popup: 'border border-yellow-500 shadow-lg rounded-xl',
+                confirmButton: 'swal2-confirm-button-custom',
+                cancelButton: 'swal2-cancel-button-custom'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 GetTokenvalidatepersid2fa(icNo, applnId, type);
@@ -580,13 +589,17 @@ function sendPDFToServer(filepath, thumbprint, type) {
         success: function (response) {
             if (response) {
                 Swal.fire({
-                    title: "Approved!",
-                    text: "Signed succesfull and Saved",
-                    icon: "success"
+                    title: "Application Approved",
+                    text: "The digital signature was successfully completed and the application has been approved.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    customClass: {
+                        popup: 'swal-success-theme',
+                        confirmButton: 'swal-confirm-green'
+                    },
+                    buttonsStyling: false
                 }).then(() => {
                     const fileName = filepath.split('/').pop();
-                    /* alert('filename' + fileName);*/
-
                     if (type === "Loan")
                         URL = "/OnlineApplication/SaveBase64ToFile";
                     else if (type === "Maturity")

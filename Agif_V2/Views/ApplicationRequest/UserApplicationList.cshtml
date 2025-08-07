@@ -22,7 +22,6 @@ else
 {
     Page = "Pending Applications";
 }
-
 <div class="container">
     <div class="container-fluid">
         <!-- ========== title-wrapper start ========== -->
@@ -38,8 +37,8 @@ else
                 <div class="col-md-4">
                     <div class="container title d-flex justify-content-center align-items-center">
                         <div class="btn-group">
-                            <button type="button" id="Loan" class="btn btn-primary me-2" value="Loan">Loan</button>
-                            <button type="button" id="Maturity" class="btn btn-secondary" value="Maturity">Maturity</button>
+                            <button type="button" id="Loan" class="btn btn-loan me-2 fw-bold" value="Loan">Loan</button>
+                            <button type="button" id="Maturity" class="btn btn-maturity fw-bold" value="Maturity">Maturity</button>
                         </div>
                     </div>
                 </div>
@@ -62,13 +61,6 @@ else
             </div>
             <!-- end row -->
         </div>
-
-       @*  <div class="container d-flex justify-content-center align-items-center">
-            <div class="btn-group">
-                <button type="button" id="Loan" class="btn btn-primary me-2" value="Loan">Loan</button>
-                <button type="button" id="Maturity" class="btn btn-secondary" value="Maturity">Maturity</button>
-            </div>
-        </div> *@
 
         <input type="hidden" id="Status" value="@ViewBag.Status" />
 
