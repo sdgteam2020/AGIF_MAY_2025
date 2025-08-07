@@ -17,6 +17,7 @@ namespace Agif_V2.Helpers
     {
         public void OpenPdf(PdfReader pdfReader, string ipAddress, string wwwRootPath)
         {
+
             using (var memoryStream = new MemoryStream())
             {
                 var writerProperties = new WriterProperties().UseSmartMode();

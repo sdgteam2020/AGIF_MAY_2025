@@ -10,7 +10,7 @@ namespace DataAccessLayer.Repositories
 {
     public class ClaimDigitalDL: GenericRepositoryDL<ClaimDigitalSignRecords>, IClaimApplication
     {
-        private readonly ApplicationDbContext _context;
+        private new readonly ApplicationDbContext _context;
         public ClaimDigitalDL(ApplicationDbContext context) : base(context)
         {
             _context = context;

@@ -124,11 +124,11 @@ namespace DataAccessLayer.Repositories
                                                          ApplicationId = appl.ApplicationId,
                                                          PresentStatus = statusName.StatusName,
                                                          ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                         Name = appl.ApplicantName,
+                                                         Name = appl.ApplicantName??string.Empty,
                                                          OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
                                                          RegtCorps = regt.RegtName,
                                                          PresentUnit = unit.UnitName,
-                                                         PcdaPao = appl.pcda_pao,
+                                                         PcdaPao = appl.pcda_pao??string.Empty,
                                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                          ApplicationType = appl.ApplicationType.ToString(),
                                                          UpdatedOn = appl.UpdatedOn,
@@ -196,7 +196,7 @@ namespace DataAccessLayer.Repositories
                                               {
                                                   ApplicationId = appl.ApplicationId,
                                                   ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                  Name = appl.ApplicantName,
+                                                  Name = appl.ApplicantName ?? string.Empty,
                                                   ApplicationType = applType.Name,
                                                   DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                   AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
@@ -218,8 +218,8 @@ namespace DataAccessLayer.Repositories
                                            {
                                                ApplicationId = appl.ApplicationId,
                                                ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                               Name = appl.ApplicantName,
-                                               ApplicationType = applType.Name,
+                                               Name = appl.ApplicantName ?? string.Empty,
+                                               ApplicationType = applType.Name ?? string.Empty,
                                                DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                IsMergePdf = appl.IsMergePdf,
@@ -261,13 +261,13 @@ namespace DataAccessLayer.Repositories
                                                          ApplicationId = appl.ApplicationId,
                                                          PresentStatus = statusName.StatusName,
                                                          ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                         Name = appl.ApplicantName,
+                                                         Name = appl.ApplicantName ?? string.Empty,
                                                          OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
                                                          RegtCorps = regt.RegtName,
                                                          PresentUnit = unit.UnitName,
-                                                         PcdaPao = appl.pcda_pao,
+                                                         PcdaPao = appl.pcda_pao ?? string.Empty,
                                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                                         ApplicationType = applType.Name,
+                                                         ApplicationType = applType.Name?? string.Empty,
                                                          UpdatedOn = appl.UpdatedOn,
                                                          DownloadedOn = appl.DownloadedOn,
                                                          DownloadCount = appl.DownloadCount,
@@ -320,10 +320,10 @@ namespace DataAccessLayer.Repositories
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (profile != null)
             {
-                profile.Name = sessionUserDTO.name;
-                profile.Email = sessionUserDTO.EmailId;
+                profile.Name = sessionUserDTO.name?? string.Empty;
+                profile.Email = sessionUserDTO.EmailId ?? string.Empty;
                 profile.rank = sessionUserDTO.RankId;
-                profile.MobileNo = sessionUserDTO.MobileNo;
+                profile.MobileNo = sessionUserDTO.MobileNo ?? string.Empty;
                 updated = true;
             }
 

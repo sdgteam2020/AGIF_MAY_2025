@@ -13,7 +13,7 @@ namespace DataAccessLayer.Repositories
 {
     public class Application : GenericRepositoryDL<DigitalSignRecords>, IApplication
     {
-        private readonly ApplicationDbContext _context;
+        private new readonly ApplicationDbContext _context;
         public Application(ApplicationDbContext context) : base(context)
         {
             _context = context;

@@ -11,7 +11,7 @@ namespace DataAccessLayer.Repositories
 {
     public class DefaultDL : IDefault
     {
-        protected new readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext _context;
         public DefaultDL(ApplicationDbContext _context)
         {
             this._context = _context;

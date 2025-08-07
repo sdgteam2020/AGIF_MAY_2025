@@ -12,7 +12,7 @@ namespace DataAccessLayer.Repositories
 {
     public class MasterOnlyTable : IMasterOnlyTable
     {
-        protected new readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext _context;
 
         public MasterOnlyTable(ApplicationDbContext context)
         {

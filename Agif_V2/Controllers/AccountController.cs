@@ -637,26 +637,50 @@ namespace Agif_V2.Controllers
             );
         }
 
-        private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
-        {
-            if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
+        //private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
+        //{
+        //    if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
 
-            bool ascending = sortDirection.ToLower() == "asc";
+        //    bool ascending = sortDirection.ToLower() == "asc";
 
-            return sortColumn.ToLower() switch
-            {
-                "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
-                "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
-                "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
-                "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-                "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
-                "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
-                "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
-                "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
-                "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
-                "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
-                _ => query // Default: no sorting if column not recognized
-            };
+        //    return sortColumn.ToLower() switch
+        //    {
+        //        "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
+        //        "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
+        //        "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
+        //        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
+        //        "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
+        //        "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
+        //        "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
+        //        "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
+        //        "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
+        //        "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
+        //        _ => query // Default: no sorting if column not recognized
+        //    };
+        //}
+           private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
+           {
+               if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
+
+               bool ascending = sortDirection.ToLower() == "asc";
+
+               // Define sorting logic in a dictionary
+               var sortMap = new Dictionary<string, Func<IQueryable<DTOUserProfileResponse>, IOrderedQueryable<DTOUserProfileResponse>>>
+          {
+           { "profilename", q => ascending ? q.OrderBy(x => x.ProfileName) : q.OrderByDescending(x => x.ProfileName) },
+           { "emailid", q => ascending ? q.OrderBy(x => x.EmailId) : q.OrderByDescending(x => x.EmailId) },
+           { "mobileno", q => ascending ? q.OrderBy(x => x.MobileNo) : q.OrderByDescending(x => x.MobileNo) },
+           { "armyno", q => ascending ? q.OrderBy(x => x.ArmyNo) : q.OrderByDescending(x => x.ArmyNo) },
+           { "unitname", q => ascending ? q.OrderBy(x => x.UnitName) : q.OrderByDescending(x => x.UnitName) },
+           { "appointmentname", q => ascending ? q.OrderBy(x => x.AppointmentName) : q.OrderByDescending(x => x.AppointmentName) },
+           { "regtname", q => ascending ? q.OrderBy(x => x.RegtName) : q.OrderByDescending(x => x.RegtName) },
+           { "isactive", q => ascending ? q.OrderBy(x => x.IsActive) : q.OrderByDescending(x => x.IsActive) },
+           { "isprimary", q => ascending ? q.OrderBy(x => x.IsPrimary) : q.OrderByDescending(x => x.IsPrimary) },
+           { "isfmn", q => ascending ? q.OrderBy(x => x.IsFmn) : q.OrderByDescending(x => x.IsFmn) }
+         };
+
+               // Use the dictionary to apply the sorting
+            return sortMap.ContainsKey(sortColumn.ToLower()) ? sortMap[sortColumn.ToLower()](query) : query;
         }
 
         private DTODataTablesResponse<DTOUserProfileResponse> CreateResponse(int draw, int totalRecords, int filteredRecords, List<DTOUserProfileResponse> data)

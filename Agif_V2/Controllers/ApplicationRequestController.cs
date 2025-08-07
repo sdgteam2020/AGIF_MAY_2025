@@ -727,100 +727,221 @@ namespace Agif_V2.Controllers
             }
         }
 
+        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        //{
+        //    DTOExportRequest dTOExport = new DTOExportRequest
+        //    {
+        //        Id = id,
+        //    };
+
+        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+        //    // Base path to clean and create new folder
+        //    string basePath = Path.Combine("wwwroot", "PdfDownloaded");
+
+        //    // Clean old folders/files
+        //    if (Directory.Exists(basePath))
+        //    {
+        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+        //        foreach (var dir in dirInfo.GetDirectories())
+        //        {
+        //            dir.Delete(true);
+        //        }
+
+        //        foreach (var file in dirInfo.GetFiles())
+        //        {
+        //            file.Delete();
+        //        }
+        //    }
+
+        //    // Create new time-based folder
+        //    string newFolderName = CreateFolder(basePath);
+        //    string newFolderPath = Path.Combine(basePath, newFolderName);
+        //    Directory.CreateDirectory(newFolderPath);
+
+        //    // Create subfolders HBA, CA, PCA inside new folder
+        //    string hbaFolder = Path.Combine(newFolderPath, "HBA");
+        //    string caFolder = Path.Combine(newFolderPath, "CA");
+        //    string pcaFolder = Path.Combine(newFolderPath, "PCA");
+
+
+
+
+        //    foreach (var data in ret.OnlineApplicationResponse)
+        //    {
+        //        var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
+
+        //        var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
+
+        //        if (System.IO.File.Exists(sourceFilePath))
+        //        {
+        //            string destinationFolder = data.ApplicationTypeAbbr switch
+        //            {
+        //                "HBA" => hbaFolder,
+        //                "CA" => caFolder,
+        //                "PCA" => pcaFolder,
+        //                _ => newFolderPath // fallback if unknown
+        //            };
+
+        //            if (data.ApplicationTypeAbbr == "HBA")
+        //            {
+        //                Directory.CreateDirectory(hbaFolder);
+        //            }
+
+        //            if (data.ApplicationTypeAbbr == "CA")
+        //            {
+        //                Directory.CreateDirectory(caFolder);
+        //            }
+
+        //            if (data.ApplicationTypeAbbr == "PCA")
+        //            {
+        //                Directory.CreateDirectory(pcaFolder);
+        //            }
+
+        //            var destinationFilePath = Path.Combine(destinationFolder, fileName);
+        //            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+        //        }
+        //    }
+        //    bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
+        //    if (!retexcel)
+        //    {
+        //        return Json(Constants.DataNotExport);
+        //    }
+        //    else
+        //    {
+        //        string zipFileName = $"{newFolderPath}.zip";
+        //        createZip(newFolderPath, zipFileName);
+        //        bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
+        //        if (!updateStatus)
+        //        {
+        //            return Json(Constants.DataNotExport);
+        //        }
+        //        return Json(newFolderName);
+
+        //    }
+
+        //}
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
-            DTOExportRequest dTOExport = new DTOExportRequest
-            {
-                Id = id,
-            };
-
+            DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
 
-            // Base path to clean and create new folder
+            // Define base path
             string basePath = Path.Combine("wwwroot", "PdfDownloaded");
 
-            // Clean old folders/files
+            // Clean previous files and folders
+            CleanExistingFiles(basePath);
+
+            // Create a new folder
+            string newFolderPath = CreateNewFolder(basePath);
+
+            // Create subfolders for file types
+            CreateSubfolders(newFolderPath);
+
+            // Process and copy files
+            bool isFilesCopied = CopyFilesToSubfolders(ret, newFolderPath);
+
+            // If file copy failed, return
+            if (!isFilesCopied)
+            {
+                return Json(Constants.DataNotExport);
+            }
+
+            // Export to Excel in the new folder
+            bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
+            if (!retexcel)
+            {
+                return Json(Constants.DataNotExport);
+            }
+
+            // Create a zip file
+            string zipFileName = CreateZipFile(newFolderPath);
+
+            // Update application status
+            bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
+            if (!updateStatus)
+            {
+                return Json(Constants.DataNotExport);
+            }
+
+            return Json(newFolderPath);
+        }
+
+        // Helper methods
+
+        private void CleanExistingFiles(string basePath)
+        {
             if (Directory.Exists(basePath))
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+                var dirInfo = new DirectoryInfo(basePath);
                 foreach (var dir in dirInfo.GetDirectories())
                 {
-                    dir.Delete(true);
+                    dir.Delete(true);  // Clean existing directories
                 }
 
                 foreach (var file in dirInfo.GetFiles())
                 {
-                    file.Delete();
+                    file.Delete();  // Clean existing files
                 }
             }
+        }
 
-            // Create new time-based folder
+        private string CreateNewFolder(string basePath)
+        {
             string newFolderName = CreateFolder(basePath);
             string newFolderPath = Path.Combine(basePath, newFolderName);
             Directory.CreateDirectory(newFolderPath);
+            return newFolderPath;
+        }
 
+        private void CreateSubfolders(string newFolderPath)
+        {
             // Create subfolders HBA, CA, PCA inside new folder
-            string hbaFolder = Path.Combine(newFolderPath, "HBA");
-            string caFolder = Path.Combine(newFolderPath, "CA");
-            string pcaFolder = Path.Combine(newFolderPath, "PCA");
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "HBA"));
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "CA"));
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "PCA"));
+        }
 
-
-
+        private bool CopyFilesToSubfolders(dynamic ret, string newFolderPath)
+        {
+            bool isFilesCopied = true;
 
             foreach (var data in ret.OnlineApplicationResponse)
             {
                 var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-
                 var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
 
                 if (System.IO.File.Exists(sourceFilePath))
                 {
                     string destinationFolder = data.ApplicationTypeAbbr switch
                     {
-                        "HBA" => hbaFolder,
-                        "CA" => caFolder,
-                        "PCA" => pcaFolder,
+                        "HBA" => Path.Combine(newFolderPath, "HBA"),
+                        "CA" => Path.Combine(newFolderPath, "CA"),
+                        "PCA" => Path.Combine(newFolderPath, "PCA"),
                         _ => newFolderPath // fallback if unknown
                     };
 
-                    if (data.ApplicationTypeAbbr == "HBA")
+                    try
                     {
-                        Directory.CreateDirectory(hbaFolder);
+                        var destinationFilePath = Path.Combine(destinationFolder, fileName);
+                        System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
                     }
-
-                    if (data.ApplicationTypeAbbr == "CA")
+                    catch (Exception)
                     {
-                        Directory.CreateDirectory(caFolder);
+                        isFilesCopied = false;
                     }
-
-                    if (data.ApplicationTypeAbbr == "PCA")
-                    {
-                        Directory.CreateDirectory(pcaFolder);
-                    }
-
-                    var destinationFilePath = Path.Combine(destinationFolder, fileName);
-                    System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
                 }
             }
-            bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
-            if (!retexcel)
-            {
-                return Json(Constants.DataNotExport);
-            }
-            else
-            {
-                string zipFileName = $"{newFolderPath}.zip";
-                createZip(newFolderPath, zipFileName);
-                bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
-                if (!updateStatus)
-                {
-                    return Json(Constants.DataNotExport);
-                }
-                return Json(newFolderName);
-
-            }
-
+            return isFilesCopied;
         }
+
+        private string CreateZipFile(string newFolderPath)
+        {
+            string zipFileName = $"{newFolderPath}.zip";
+            createZip(newFolderPath, zipFileName);
+            return zipFileName;
+        }
+
         public async Task<bool> ExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
         {
             DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
@@ -917,114 +1038,222 @@ namespace Agif_V2.Controllers
             return Json(result);
         }
 
+        //public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
+        //{
+        //    DTOExportRequest dTOExport = new DTOExportRequest
+        //    {
+        //        Id = id,
+        //    };
+
+        //    var ret = await _IClaimonlineApplication1.GetApplicationDetailsForExport(dTOExport);
+
+        //    // Base path to clean and create new folder
+        //    string basePath = Path.Combine("wwwroot", "ClaimPdfDownloaded");
+
+        //    // Clean old folders/files
+        //    if (Directory.Exists(basePath))
+        //    {
+        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
+        //        foreach (var dir in dirInfo.GetDirectories())
+        //        {
+        //            dir.Delete(true);
+        //        }
+
+        //        foreach (var file in dirInfo.GetFiles())
+        //        {
+        //            file.Delete();
+        //        }
+        //    }
+
+        //    // Create new time-based folder
+        //    string newFolderName = CreateFolder(basePath);
+        //    string newFolderPath = Path.Combine(basePath, newFolderName);
+        //    Directory.CreateDirectory(newFolderPath);
+
+        //    // Create subfolders ED, MW, PR and SP inside new folder
+        //    string EDFolder = Path.Combine(newFolderPath, "ED");
+        //    string MWFolder = Path.Combine(newFolderPath, "MW");
+        //    string PRFolder = Path.Combine(newFolderPath, "PR");
+        //    string SPFolder = Path.Combine(newFolderPath, "SP");
+
+        //    string applicationTypeName = string.Empty;
+
+
+        //    foreach (var data in ret.OnlineApplicationResponse ?? Enumerable.Empty<ClaimCommonDataOnlineResponse>())
+        //    {
+        //        if (data.ApplicationType == 1)
+        //        {
+        //            applicationTypeName = "ED";
+        //        }
+        //        else if (data.ApplicationType == 2)
+        //        {
+        //            applicationTypeName = "MW";
+        //        }
+        //        else if (data.ApplicationType == 3)
+        //        {
+        //            applicationTypeName = "PR";
+        //        }
+        //        else if (data.ApplicationType == 4)
+        //            applicationTypeName = "SP";
+
+        //        var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
+
+        //        var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
+
+
+        //        if (System.IO.File.Exists(sourceFilePath))
+        //        {
+        //            string destinationFolder = applicationTypeName switch
+        //            {
+        //                "ED" => EDFolder,
+        //                "MW" => MWFolder,
+        //                "PR" => PRFolder,
+        //                "SP" => SPFolder,
+        //                _ => newFolderPath // fallback if unknown
+        //            };
+
+        //            if (applicationTypeName == "ED")
+        //                Directory.CreateDirectory(EDFolder);
+        //            if (applicationTypeName == "MW")
+        //                Directory.CreateDirectory(MWFolder);
+        //            if (applicationTypeName == "PR")
+        //                Directory.CreateDirectory(PRFolder);
+        //            if (applicationTypeName == "SP")
+        //                Directory.CreateDirectory(SPFolder);
+
+        //            var destinationFilePath = Path.Combine(destinationFolder, fileName);
+        //            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+        //        }
+        //    }
+
+        //    bool retexcel = await ClaimExportToExcelInFolder(dTOExport, newFolderPath);
+        //    if (!retexcel)
+        //    {
+        //        return Json(Constants.DataNotExport);
+        //    }
+        //    else
+        //    {
+        //        string zipFileName = $"{newFolderPath}.zip";
+        //        createZip(newFolderPath, zipFileName);
+        //        bool updateStatus = await _userApplication.UpdateClaimStatus(dTOExport);
+        //        if (!updateStatus)
+        //        {
+        //            return Json(Constants.DataNotExport);
+        //        }
+        //        return Json(newFolderName);
+
+        //    }
+
+
+        //}
         public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
         {
-            DTOExportRequest dTOExport = new DTOExportRequest
-            {
-                Id = id,
-            };
-
+            DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _IClaimonlineApplication1.GetApplicationDetailsForExport(dTOExport);
 
-            // Base path to clean and create new folder
+            // Define base path
             string basePath = Path.Combine("wwwroot", "ClaimPdfDownloaded");
 
             // Clean old folders/files
-            if (Directory.Exists(basePath))
-            {
-                DirectoryInfo dirInfo = new DirectoryInfo(basePath);
-                foreach (var dir in dirInfo.GetDirectories())
-                {
-                    dir.Delete(true);
-                }
+            CleanExistingFiles(basePath);
 
-                foreach (var file in dirInfo.GetFiles())
-                {
-                    file.Delete();
-                }
+            // Create new folder and subfolders
+            string newFolderPath = CreateNewFolder(basePath);
+            // Create subfolders ED, MW, PR, and SP inside the new folder
+            CreateClaimSubfolders(newFolderPath);
+
+            // Process and copy files to subfolders
+            bool isFilesCopied = CopyClaimFilesToSubfolders(ret, newFolderPath);
+
+            if (!isFilesCopied)
+            {
+                return Json(Constants.DataNotExport);
             }
 
-            // Create new time-based folder
-            string newFolderName = CreateFolder(basePath);
-            string newFolderPath = Path.Combine(basePath, newFolderName);
-            Directory.CreateDirectory(newFolderPath);
-
-            // Create subfolders ED, MW, PR and SP inside new folder
-            string EDFolder = Path.Combine(newFolderPath, "ED");
-            string MWFolder = Path.Combine(newFolderPath, "MW");
-            string PRFolder = Path.Combine(newFolderPath, "PR");
-            string SPFolder = Path.Combine(newFolderPath, "SP");
-
-            string applicationTypeName = string.Empty;
-
-
-            foreach (var data in ret.OnlineApplicationResponse ?? Enumerable.Empty<ClaimCommonDataOnlineResponse>())
-            {
-                if (data.ApplicationType == 1)
-                {
-                    applicationTypeName = "ED";
-                }
-                else if (data.ApplicationType == 2)
-                {
-                    applicationTypeName = "MW";
-                }
-                else if (data.ApplicationType == 3)
-                {
-                    applicationTypeName = "PR";
-                }
-                else if (data.ApplicationType == 4)
-                    applicationTypeName = "SP";
-
-                var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-
-                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
-
-
-                if (System.IO.File.Exists(sourceFilePath))
-                {
-                    string destinationFolder = applicationTypeName switch
-                    {
-                        "ED" => EDFolder,
-                        "MW" => MWFolder,
-                        "PR" => PRFolder,
-                        "SP" => SPFolder,
-                        _ => newFolderPath // fallback if unknown
-                    };
-
-                    if (applicationTypeName == "ED")
-                        Directory.CreateDirectory(EDFolder);
-                    if (applicationTypeName == "MW")
-                        Directory.CreateDirectory(MWFolder);
-                    if (applicationTypeName == "PR")
-                        Directory.CreateDirectory(PRFolder);
-                    if (applicationTypeName == "SP")
-                        Directory.CreateDirectory(SPFolder);
-
-                    var destinationFilePath = Path.Combine(destinationFolder, fileName);
-                    System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
-                }
-            }
-
+            // Export to Excel
             bool retexcel = await ClaimExportToExcelInFolder(dTOExport, newFolderPath);
             if (!retexcel)
             {
                 return Json(Constants.DataNotExport);
             }
-            else
-            {
-                string zipFileName = $"{newFolderPath}.zip";
-                createZip(newFolderPath, zipFileName);
-                bool updateStatus = await _userApplication.UpdateClaimStatus(dTOExport);
-                if (!updateStatus)
-                {
-                    return Json(Constants.DataNotExport);
-                }
-                return Json(newFolderName);
 
+            // Create a zip file
+            string zipFileName = CreateZipFile(newFolderPath);
+
+            // Update claim application status
+            bool updateStatus = await _userApplication.UpdateClaimStatus(dTOExport);
+            if (!updateStatus)
+            {
+                return Json(Constants.DataNotExport);
             }
 
-
+            return Json(newFolderPath);
         }
+
+        // Helper Methods
+
+        private string CreateClaimNewFolder(string basePath)
+        {
+            string newFolderName = CreateFolder(basePath);
+            string newFolderPath = Path.Combine(basePath, newFolderName);
+            Directory.CreateDirectory(newFolderPath);
+            return newFolderPath;
+        }
+
+        private void CreateClaimSubfolders(string newFolderPath)
+        {
+            // Create subfolders ED, MW, PR, and SP inside the new folder
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "ED"));
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "MW"));
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "PR"));
+            Directory.CreateDirectory(Path.Combine(newFolderPath, "SP"));
+        }
+
+        private bool CopyClaimFilesToSubfolders(dynamic ret, string newFolderPath)
+        {
+            bool isFilesCopied = true;
+
+            foreach (var data in ret.OnlineApplicationResponse)
+            {
+                string applicationTypeName = data.ApplicationType switch
+                {
+                    1 => "ED",
+                    2 => "MW",
+                    3 => "PR",
+                    4 => "SP",
+                    _ => string.Empty
+                };
+
+                var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
+                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
+
+                if (System.IO.File.Exists(sourceFilePath))
+                {
+                    string destinationFolder = applicationTypeName switch
+                    {
+                        "ED" => Path.Combine(newFolderPath, "ED"),
+                        "MW" => Path.Combine(newFolderPath, "MW"),
+                        "PR" => Path.Combine(newFolderPath, "PR"),
+                        "SP" => Path.Combine(newFolderPath, "SP"),
+                        _ => newFolderPath // fallback if unknown
+                    };
+
+                    try
+                    {
+                        var destinationFilePath = Path.Combine(destinationFolder, fileName);
+                        System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+                    }
+                    catch (Exception)
+                    {
+                        isFilesCopied = false;
+                    }
+                }
+            }
+
+            return isFilesCopied;
+        }
+
+
 
         public async Task<IActionResult> GetClaimApplicationByDate(string date)
         {

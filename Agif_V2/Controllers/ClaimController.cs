@@ -5,6 +5,7 @@ using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,9 +26,10 @@ namespace Agif_V2.Controllers
         private readonly IClaimAddress _ClaimAddress;
         private readonly IClaimAccount _ClaimAccount;
         private readonly FileUtility _fileUtility;
+        private readonly Watermark _watermark;
 
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark)
         {
             _IClaimonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -42,6 +44,7 @@ namespace Agif_V2.Controllers
             _ClaimAddress = claimAddress;
             _ClaimAccount = claimAccount;
             _fileUtility = fileUtility;
+            _watermark = watermark;
         }
 
         public IActionResult MaturityLoanType()
@@ -707,6 +710,10 @@ namespace Agif_V2.Controllers
                 ViewBag.MergedPdfPath = mergedPdfPath;
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+                ReaderProperties readerProperties = new ReaderProperties();
+                PdfReader pdfReader = new PdfReader(mergedPdfPath, readerProperties);
+                _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
 
                 if (mergeResult)
                 {
