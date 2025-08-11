@@ -12,6 +12,7 @@ $(document).ready(function () {
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
     resetFieldsOnRankRegtChange();
+
 });
 
 function resetCivilPostalAddress() {
@@ -202,16 +203,69 @@ function addLoanToGrid() {
     
 }
 
+//function validateLoanData(loanType, date, duration, amount) {
+//    //const datePattern = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/; // Matches dd-mm-yyyy format
+
+//    //if (!datePattern.test(date)) {
+//    //    showErrorMessage('Invalid date format. Please use dd-mm-yyyy.');
+//    //    return false;
+//    //}
+//    // Date validation
+//    const loanDate = new Date(date);
+//    const currentDate = new Date();
+//    const minDate = new Date('1990-01-01');
+
+//    if (loanDate > currentDate) {
+//        showErrorMessage('Loan date cannot be in the future.');
+//        return false;
+//    }
+//    // Amount validation
+//    const amountNum = parseFloat(amount);
+//    if (isNaN(amountNum) || amountNum <= 0 || amountNum > 10000000) {
+//        showErrorMessage('Please enter a valid amount (₹1 - ₹1,00,00,000).');
+//        return false;
+//    }
+
+//    return true;
+//}
 function validateLoanData(loanType, date, duration, amount) {
-    // Date validation
-    const loanDate = new Date(date);
+    // Date validation (yyyy-dd-mm format)
+    const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/; // Matches yyyy-dd-mm format
+
+    if (!datePattern.test(date)) {
+        showErrorMessage('Invalid date format. Please use dd-mm-yyyy.');
+        return false;
+    }
+
+    // Reformat date from yyyy-dd-mm to yyyy-mm-dd
+    const parts = date.split('-'); // Split into [yyyy, dd, mm]
+    const year = parts[0];
+    const day = parts[2]; // day
+    const month = parts[1]; // month
+
+    // Create a new valid date string in yyyy-mm-dd format
+    const validDateString = `${year}-${month}-${day}`;
+    const loanDate = new Date(validDateString);
+
+    // Validate if the constructed date is valid
+    if (loanDate.getDate() !== parseInt(day) || loanDate.getMonth() + 1 !== parseInt(month) || loanDate.getFullYear() !== parseInt(year)) {
+        showErrorMessage('Invalid date. Please enter a valid day, month, and year.');
+        return false;
+    }
+
     const currentDate = new Date();
-    const minDate = new Date('1990-01-01');
+    const minDate = new Date('1900-01-01');
 
     if (loanDate > currentDate) {
         showErrorMessage('Loan date cannot be in the future.');
         return false;
     }
+
+    if (loanDate < minDate) {
+        showErrorMessage('Invalid Date');
+        return false;
+    }
+
     // Amount validation
     const amountNum = parseFloat(amount);
     if (isNaN(amountNum) || amountNum <= 0 || amountNum > 10000000) {
@@ -221,6 +275,8 @@ function validateLoanData(loanType, date, duration, amount) {
 
     return true;
 }
+
+
 
 function formatDateofloan(dateString) {
     const date = new Date(dateString);
