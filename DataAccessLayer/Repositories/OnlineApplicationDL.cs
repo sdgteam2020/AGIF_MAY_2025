@@ -332,7 +332,7 @@ namespace DataAccessLayer.Repositories
 
                 else if (result.ApplicationType == 2)
                 {
-                    formtype = "CA";
+                    formtype = "CAR";
                     var Carmodel = (from car in _context.trnCar
                                     join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
@@ -384,7 +384,7 @@ namespace DataAccessLayer.Repositories
 
                 if (DocumentModel != null)
                 {
-                    if (formtype == "CA")
+                    if (formtype == "CAR")
                     {
                         if(data.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
                         {
