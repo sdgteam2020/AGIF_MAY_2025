@@ -30,8 +30,7 @@
         GetApplicationList(Mvalue, "/ApplicationRequest/GetMaturityUsersApplicationList");
     });
 
-
-    //const GlobalApplnId;
+    
     $('#acceptButton').on('click', function () {
         const applnId = $("#spnapplicationId").html();
         const icNo = $("#IcNo").data("id");
@@ -41,7 +40,6 @@
 
         if (remarkValue === "") {
             $remarkField.val("Accepted");
-            remarkValue = "Accepted";
         }
 
         Swal.fire({
@@ -70,13 +68,11 @@
 
     $("#RejectButton").on('click', function () {
         const applnId = $("#spnapplicationId").html();
-        const icNo = $("#IcNo").data("id"); // kept in case needed later
         const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
         const $remarkField = $("#txtRemark");
         let remarkValue = $remarkField.val().trim();
         if (remarkValue === "") {
             $remarkField.val("Rejected");
-            remarkValue = "Rejected";
         }
         Swal.fire({
             title: "Are you sure?",
@@ -260,7 +256,7 @@ function GetApplicationList(status, endpoint) {
     }
 
     // Initialize DataTable with server-side processing
-    const table = $('#tblApplications').DataTable({
+    $('#tblApplications').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -380,11 +376,6 @@ function fetchApplicationDetails(applicationId, endpoint) {
 function updatePdfViewerInfo(applicationData) {
     const applicantName = applicationData.armyNo + " " + applicationData.rank + " " + applicationData.name;
     $('#ViewPdf .text-muted strong').text(applicantName);
-    
-    //$('#ViewPdf .badge.bg-info').html(`
-    //    <i class="bi bi-calendar3 me-1"></i>
-    //    ${applicationData.appliedDate || new Date().toLocaleDateString()}
-    //`);
 }
 function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
     const val = $("#UserType").val() || "Loan";
@@ -395,7 +386,7 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
         dataType: 'json',
         success: function (response) {
             if (isApproved) {
-                DigitalSignByAPI(applicationId,val);
+                DigitalSignByAPI(applicationId, val);
             } else if (isRejected) {
                 Swal.fire({
                     title: "Rejected!",
@@ -404,25 +395,24 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
                 }).then(() => {
                     window.location.href = "/ApplicationRequest/UserApplicationList";
                 });
-            } else {
-                if (response.success) {
-                    let url = "";
+            } else if (response.success) {
+                let url = "";
 
-                    if (val === "Maturity") {
-                        url = "/Claim/GetPdfFilePath";
-                    } else if (val === "Loan") {
-                        url = "/OnlineApplication/GetPdfFilePath";
-                    } else {
-                        console.warn("Unknown value for 'val':", val);
-                        return;
-                    }
-
-                    OpenAction(applicationId, url, val);
+                if (val === "Maturity") {
+                    url = "/Claim/GetPdfFilePath";
+                } else if (val === "Loan") {
+                    url = "/OnlineApplication/GetPdfFilePath";
                 } else {
-                    alert('Error generating PDF: ' + response.message);
-                    console.error('PDF merge failed:', response.message);
+                    console.warn("Unknown value for 'val':", val);
+                    return;
                 }
+
+                OpenAction(applicationId, url, val);
+            } else {
+                alert('Error generating PDF: ' + response.message);
+                console.error('PDF merge failed:', response.message);
             }
+
         },
         error: function (xhr, status, error) {
             console.error('AJAX Error Details:');
@@ -491,30 +481,26 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
     });
 }
 
-function DataSignDigitaly(applicationId, endpoint, Usertype) {
+function DataSignDigitaly(applicationId, endpoint, userType) {
     $.ajax({
-        type: "get",
         url: endpoint,
-        data: { applicationId: applicationId },
-        type: 'POST',
-
+        type: "POST",
+        data: { applicationId },
         success: function (data) {
-
-            if (data != null) {
-                GetTokenSignXml(data, Usertype, applicationId);
-                //DigitalSignByAPI(applicationId);
+            if (data) { 
+                GetTokenSignXml(data, userType, applicationId);
             }
         },
         error: function () {
             Swal.fire({
                 title: "Alert!",
-                text: "Please Ensure that DGIS App has been installed and running at the time of Digital Signature.",
+                text: "Please ensure that DGIS App is installed and running during the digital signature process.",
                 icon: "error"
             });
         }
     });
-
 }
+
 
 function GetTokenSignXml(xml, Usertype, applicationId) {
     let URL = '';
@@ -522,7 +508,7 @@ function GetTokenSignXml(xml, Usertype, applicationId) {
         URL = "/ApplicationRequest/SaveXML";
     else if (Usertype === "Maturity")
         URL = "/ApplicationRequest/SaveClaimXML";
-    SignXmlSendTOdatabase(xml, URL, Usertype, applicationId);
+    SignXmlSendTOdatabase(xml, URL, Usertype);
 }
 
 //tez code start

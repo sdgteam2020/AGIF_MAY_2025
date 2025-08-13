@@ -80,7 +80,7 @@ namespace DataAccessLayer.Repositories
                 .Where(a => a.ApplicationId == ApplicationID)
                 .Select(a => a.WithdrawPurpose)
                 .FirstOrDefaultAsync();
-            if (application != null && application != 0)
+            if (application != 0)
             {
                 return application switch
                 {
@@ -105,8 +105,7 @@ namespace DataAccessLayer.Repositories
                                           ApplicationId = app.ApplicationId
                                       }).FirstOrDefaultAsync();
 
-
-            return existingUser;
+            return existingUser ?? new ClaimCommonDataOnlineResponse();
         }
 
         public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
@@ -347,18 +346,19 @@ namespace DataAccessLayer.Repositories
             return true;
         }
 
-        public Task<string?> GetIOArmyNoAsync(int applicationId)
+        public async Task<string?> GetIOArmyNoAsync(int applicationId)
         {
-            var application = _context.trnClaim
-                .FirstOrDefault(i => i.ApplicationId == applicationId);
+            var application = await _context.trnClaim
+                .FirstOrDefaultAsync(i => i.ApplicationId == applicationId);
 
             if (application == null || string.IsNullOrWhiteSpace(application.IOArmyNo))
             {
-                return Task.FromResult<string?>(null);
+                return null; // matches string? return type
             }
 
-            return Task.FromResult(application.IOArmyNo);
+            return application.IOArmyNo;
         }
+
 
         public async Task<UserMapping?> GetCoDetails(int applicationId)
         {

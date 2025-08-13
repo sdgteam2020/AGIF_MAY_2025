@@ -59,7 +59,7 @@
                                                         ;
                                                     }">
                                                     </select>
-                                                    <label class="form-label select-label ">Prefix</label>
+                                                <label class="form-label select-label " for="armyPrefix">Prefix</label>
                                                 
                                                 @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
@@ -102,7 +102,7 @@
                                                     ;
                                                 }">
                                                 </select>
-                                                <label class="form-label select-label ">Prefix</label>
+                                                <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.OldArmyPrefix, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -143,7 +143,7 @@
                                         }">
 
                                         </select>
-                                        <label class="form-label select-label ">Rank & Trade</label>
+                                        <label class="form-label select-label " for="ddlrank">Rank & Trade</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.DdlRank, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
                                             ;
                                         }">
                                         </select>
-                                        <label class="form-label select-label ">Regt/Corps</label>
+                                        <label class="form-label select-label" for="regtCorps">Regt/Corps</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.RegtCorps, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -183,7 +183,7 @@
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("dd-MM-yyyy")"
                                                required oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
-                                        <label class="form-label select-label ">DOB</label>
+                                        <label class="form-label select-label " for="dateOfBirth">DOB</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.DateOfBirth, "", new { @class = "text-danger" })
@@ -195,7 +195,7 @@
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"
                                                required value="@Model.CommonData?.DateOfCommission?.ToString("dd-MM-yyyy")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
-                                        <label class="form-label select-label ">DOC/DOE</label>
+                                        <label class="form-label select-label " for="dateOfCommission">DOC/DOE</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.DateOfCommission, "", new { @class = "text-danger" })
@@ -223,7 +223,7 @@
                                                      disabled = true // this is the preferred way
                                                  })
 
-                                        <label class="form-label select-label ">Extn of Service in Present Rank</label>
+                                        <label class="form-label select-label " for="ExtnOfService">Extn of Service in Present Rank</label>
                                     </div>
                                 </div>
                             </div>
@@ -234,7 +234,7 @@
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled"
                                                oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
-                                        <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
+                                        <label class="form-label select-label " for="dateOfPromotion">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
                             </div>
@@ -244,7 +244,7 @@
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="date" class="form-control " id="dateOfRetirement" aria-label="Date of Retirement" value="@Model.CommonData?.DateOfRetirement?.ToString("yyyy-MM-dd")" name="CommonData.DateOfRetirement" tabindex="-1" readonly>
-                                        <label class="form-label select-label ">Date of Retirement</label>
+                                        <label class="form-label select-label " for="dateOfRetirement">Date of Retirement</label>
                                     </div>
                                 </div>
                             </div>
@@ -254,7 +254,7 @@
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="aadharCardNo" name="CommonData.AadharCardNo" class="form-control" oninput="formatAadhar(this)" value="@Model.CommonData?.AadharCardNo" onkeyup="ValInAadhar(this)" maxlength="14" required />
-                                        <label class="form-label select-label ">Aadhar Card No</label>
+                                        <label class="form-label select-label " for="aadharCardNo">Aadhar Card No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.AadharCardNo, "", new { @class = "text-danger" })
@@ -264,7 +264,7 @@
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="panCardNo" name="CommonData.PanCardNo" data-inputmask="'mask': 'AAAAA9999A', 'placeholder': 'AAAAA0000A'" class="form-control" value="@Model.CommonData?.PanCardNo" placeholder="AAAAA0000A" required />
-                                        <label class="form-label select-label ">PAN No</label>
+                                        <label class="form-label select-label " for="panCardNo">PAN No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.PanCardNo, "", new { @class = "text-danger" })
@@ -276,7 +276,7 @@
                                     <span class="input-group-text">📱</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="mobileNo" name="CommonData.MobileNo" class="form-control" maxlength="10" onblur="verifyMobileNo(this)" oninput="ValInDataNo(this)" value="@Model.CommonData?.MobileNo" required />
-                                        <label class="form-label select-label ">Mobile No</label>
+                                        <label class="form-label select-label " for="mobileNo">Mobile No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.MobileNo, "", new { @class = "text-danger" })
@@ -287,7 +287,7 @@
                                     <span class="input-group-text">📧</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="emailId" name="CommonData.Email" class="form-control" maxlength="64" value="@Model.CommonData?.Email" required />
-                                        <label class="form-label select-label ">Email ID</label>
+                                        <label class="form-label select-label" for="emailId">Email ID</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Email, "", new { @class = "text-danger" })
@@ -313,7 +313,7 @@
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="totalService" name="CommonData.TotalService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.TotalService" required />
-                                        <label class="form-label select-label ">Total Service(Years)</label>
+                                        <label class="form-label select-label " for="totalService">Total Service(Years)</label>
                                         <span class="error text-danger small"></span>
                                     </div>
                                 </div>
@@ -325,7 +325,7 @@
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="residualService" name="CommonData.ResidualService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.ResidualService" required />
-                                        <label class="form-label select-label ">Residual Service(Years)</label>
+                                        <label class="form-label select-label " for="residualService">Residual Service(Years)</label>
                                         <span class="error text-danger small"></span>
                                     </div>
                                 </div>
@@ -351,7 +351,7 @@
                                     <span class="input-group-text">💼</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="pcda_pao" name="CommonData.pcda_pao" class="form-control readonly-blocked" required readonly tabindex="-1" />
-                                        <label class="form-label select-label ">PCDA(O)/PAO(OR)</label>
+                                        <label class="form-label select-label " for="pcda_pao">PCDA(O)/PAO(OR)</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.pcda_pao, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -361,7 +361,7 @@
                                     <span class="input-group-text">📒</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="pcda_AcctNo" name="CommonData.pcda_AcctNo" class="form-control" data-inputmask="'mask': '99/999/999999A', 'placeholder': '99/999/999999A'" placeholder="99/999/999999A" required readonly />
-                                        <label class="form-label select-label ">PCDA(O) Acct No</label>
+                                        <label class="form-label select-label " for="pcda_AcctNo">PCDA(O) Acct No</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.pcda_AcctNo, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
@@ -904,7 +904,7 @@
                                                     ;
                                                 }">
                                                 </select>
-                                                <label class="form-label select-label ">Frequency of Loan</label>
+                                                <label class="form-label select-label " for="HBA_LoanFreq">Frequency of Loan</label>
                                                 @Html.ValidationMessageFor(m => m.HBAApplication.HBA_LoanFreq, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -914,7 +914,7 @@
                                             <span class="input-group-text">💰</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.HBAApplication?.PropertyCost" />
-                                                <label class="form-label select-label ">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
+                                                <label class="form-label select-label " for="propertyCost">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.PropertyCost, "", new { @class = "text-danger" })
@@ -925,7 +925,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_repayingCapacity" name="HBAApplication.HBA_repayingCapacity" class="form-control readonly-blocked" required readonly value="@Model.HBAApplication?.HBA_repayingCapacity" />
-                                                <label class="form-label select-label ">Your max EMI Repaying Capacity</label>
+                                                <label class="form-label select-label " for="HBA_repayingCapacity">Your max EMI Repaying Capacity</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_repayingCapacity, "", new { @class = "text-danger" })
@@ -937,7 +937,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_Amt_Eligible_for_loan" name="HBAApplication.HBA_Amt_Eligible_for_loan" class="form-control readonly-blocked" required readonly value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
-                                                <label class="form-label select-label ">Max Eligible Loan Amount</label>
+                                                <label class="form-label select-label " for="HBA_Amt_Eligible_for_loan">Max Eligible Loan Amount</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_Amt_Eligible_for_loan, "", new { @class = "text-danger" })
@@ -948,7 +948,7 @@
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_EMI_Eligible" name="HBAApplication.HBA_EMI_Eligible" class="form-control readonly-blocked" readonly required value="@Model.HBAApplication?.HBA_EMI_Eligible" />
-                                                <label class="form-label select-label ">Max EMI Eligible</label>
+                                                <label class="form-label select-label " for="HBA_EMI_Eligible">Max EMI Eligible</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_EMI_Eligible, "", new { @class = "text-danger" })
@@ -961,7 +961,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_Amount_Applied_For_Loan" name="HBAApplication.HBA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_HBA(this)" required value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
-                                                <label class="form-label select-label ">Amount Applied For Loan</label>
+                                                <label class="form-label select-label " for="HBA_Amount_Applied_For_Loan">Amount Applied For Loan</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_Amount_Applied_For_Loan, "", new { @class = "text-danger" })
@@ -971,7 +971,7 @@
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('HBA')" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
-                                                <label class="form-label select-label ">No of EMI Applied</label>
+                                                <label class="form-label select-label " for="HBA_EMI_Applied">No of EMI Applied</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_EMI_Applied, "", new { @class = "text-danger" })
@@ -983,7 +983,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_approxEMIAmount" name="HBAApplication.HBA_approxEMIAmount" class="form-control readonly-blocked" readonly required value="@Model.HBAApplication?.HBA_approxEMIAmount" />
-                                                <label class="form-label select-label ">Your Approx EMI Amount will be</label>
+                                                <label class="form-label select-label " for="HBA_approxEMIAmount">Your Approx EMI Amount will be</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_approxEMIAmount, "", new { @class = "text-danger" })
@@ -993,7 +993,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="HBA_approxDisbursementAmt" name="HBAApplication.HBA_approxDisbursementAmt" class="form-control readonly-blocked" readonly required value="@Model.HBAApplication?.HBA_approxDisbursementAmt" />
-                                                <label class="form-label select-label ">Approx Disbursement Amount</label>
+                                                <label class="form-label select-label " for="HBA_approxDisbursementAmt">Approx Disbursement Amount</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_approxDisbursementAmt, "", new { @class = "text-danger" })
@@ -1102,7 +1102,7 @@
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="CA_EMI_Eligible" name="CarApplication.CA_EMI_Eligible" class="form-control readonly-blocked" required readonly value="@Model.CarApplication?.CA_EMI_Eligible" />
-                                                <label class="form-label select-label ">Max EMI Eligible</label>
+                                                <label class="form-label select-label " for="CA_EMI_Eligible">Max EMI Eligible</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_EMI_Eligible, "", new { @class = "text-danger" })
@@ -1112,7 +1112,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="CA_repayingCapacity" name="CarApplication.CA_repayingCapacity" class="form-control readonly-blocked" required readonly value="@Model.CarApplication?.CA_repayingCapacity" />
-                                                <label class="form-label select-label ">Your max EMI Repaying Capacity</label>
+                                                <label class="form-label select-label " for="CA_repayingCapacity">Your max EMI Repaying Capacity</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_repayingCapacity, "", new { @class = "text-danger" })
@@ -1132,7 +1132,7 @@
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control"  onchange="validateEMIForRepayingCapacity('CA')" oninput="validateEMI_CA(this);calculateEMI_CA()" required value="@Model.CarApplication?.CA_EMI_Applied" />
-                                                <label class="form-label select-label ">No of EMI Applied</label>
+                                                <label class="form-label select-label " for="CA_EMI_Applied">No of EMI Applied</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_EMI_Applied, "", new { @class = "text-danger" })
@@ -1182,7 +1182,7 @@
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="CA_approxDisbursementAmt" name="CarApplication.CA_approxDisbursementAmt" class="form-control readonly-blocked" required readonly value="@Model.CarApplication?.CA_approxDisbursementAmt" />
-                                                <label class="form-label select-label ">Approx Disbursement Amount</label>
+                                                <label class="form-label select-label " for="CA_approxDisbursementAmt">Approx Disbursement Amount</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_approxDisbursementAmt, "", new { @class = "text-danger" })
@@ -1266,7 +1266,7 @@
                                                 }">
                                                     ">
                                                 </select>
-                                                <label class="form-label select-label ">Frequency of Loan</label>
+                                                <label class="form-label select-label " for="PCA_LoanFreq">Frequency of Loan</label>
                                             </div>
 
                                         </div>
@@ -1277,7 +1277,7 @@
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.PCAApplication?.computerCost" />
-                                                <label class="form-label select-label ">Total Price of Computer</label>
+                                                <label class="form-label select-label " for="computerCost">Total Price of Computer</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.computerCost, "", new { @class = "text-danger" })
@@ -1288,7 +1288,7 @@
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="PCA_Amt_Eligible_for_loan" name="PCAApplication.PCA_Amt_Eligible_for_loan" class="form-control readonly-blocked" required readonly value="@Model.PCAApplication?.PCA_Amt_Eligible_for_loan" />
-                                                <label class="form-label select-label ">Max Eligible Loan Amount</label>
+                                                <label class="form-label select-label " for="PCA_Amt_Eligible_for_loan">Max Eligible Loan Amount</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_Amt_Eligible_for_loan, "", new { @class = "text-danger" })
@@ -1308,7 +1308,7 @@
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="PCA_repayingCapacity" name="PCAApplication.PCA_repayingCapacity" class="form-control readonly-blocked" readonly required value="@Model.PCAApplication?.PCA_repayingCapacity" />
-                                                <label class="form-label select-label ">Your max EMI Repaying Capacity</label>
+                                                <label class="form-label select-label " for="PCA_repayingCapacity">Your max EMI Repaying Capacity</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_repayingCapacity, "", new { @class = "text-danger" })
@@ -1318,7 +1318,7 @@
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan"  class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
-                                                <label class="form-label select-label ">Amount Applied For Loan</label>
+                                                <label class="form-label select-label " for="PCA_Amount_Applied_For_Loan">Amount Applied For Loan</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_Amount_Applied_For_Loan, "", new { @class = "text-danger" })
@@ -1339,7 +1339,7 @@
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" id="PCA_approxEMIAmount" name="PCAApplication.PCA_approxEMIAmount" class="form-control readonly-blocked" readonly required value="@Model.PCAApplication?.PCA_approxEMIAmount" />
-                                                <label class="form-label select-label ">Your Approx EMI Amount will be</label>
+                                                <label class="form-label select-label " for="PCA_approxEMIAmount">Your Approx EMI Amount will be</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_approxEMIAmount, "", new { @class = "text-danger" })

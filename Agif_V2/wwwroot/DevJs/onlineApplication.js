@@ -146,7 +146,6 @@ resetFieldsOnChange('#dateOfBirth,#dateOfCommission', [
 resetFieldsOnChange('#dateOfBirth', [
     '#dateOfCommission'
 ]);
-// Bind once when DOM is ready
 
 
 function bindMinAmountValidation() {
@@ -200,7 +199,6 @@ function resetCivilPostalAddress() {
 }
 function expandAccordions() {
 
-    //$('#dateOfRetirement').val("2044-10-12");
     let $toggleButton = $('#toggleAll');
 
     $toggleButton.on('click', function () {
@@ -247,7 +245,7 @@ function loadDropdown() {
     const loanTypeFromInput = document.getElementById('loanType')?.value || null;
 
     const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
-    
+
 
     const applicantCategoryFromUrl = params.get("applicantCategory");
 
@@ -255,20 +253,20 @@ function loadDropdown() {
 
     const applicantCategory = applicantCategoryFromUrl ? applicantCategoryFromUrl : applicantCategoryFromInput;
 
-    var armyPrefixValue = $('#armyPrefix').data('army-prefix');  // Access the data-attribute value
-    var OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');
-    var Rank = $('#ddlrank').data('rank-prefix');
-    var regtcorps = $('#regtCorps').data('regt-prefix');
-    var parentunit = $('#parentUnit').data('parent-prefix');
-    var presentunit = $('#presentUnit').data('present-prefix');
-    var Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
-    var propertytype = $('#propertyType').data('propertytype-prefix');
-    var hbaloanfreq = $('#HBA_LoanFreq').data('hbaloanfreq-prefix');
-    var vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
-    var Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
-    var computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
-    var Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
-    var VehType = $('#VehTypeId').data('vehicletypeId-prefix');
+    const armyPrefixValue = $('#armyPrefix').data('army-prefix');
+    const OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');
+    const Rank = $('#ddlrank').data('rank-prefix');
+    const regtcorps = $('#regtCorps').data('regt-prefix');
+    const parentunit = $('#parentUnit').data('parent-prefix');
+    const presentunit = $('#presentUnit').data('present-prefix');
+    const Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
+    const propertytype = $('#propertyType').data('propertytype-prefix');
+    const hbaloanfreq = $('#HBA_LoanFreq').data('hbaloanfreq-prefix');
+    const vehicletype = $('#veh_Loan_Type').data('vehicletype-prefix');
+    const Cavehicleloanfreq = $('#CA_LoanFreq').data('vehicleloanfreq-prefix');
+    const computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
+    const Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
+    const VehType = $('#VehTypeId').data('vehicletypeId-prefix');
 
     if (applicantCategory == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -303,8 +301,8 @@ function loadDropdown() {
 }
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
-        var accountNo = $('#salaryAcctNo').val();
-        var reEnterAccountNo = $('#confirmSalaryAcctNo').val();
+        const accountNo = $('#salaryAcctNo').val();
+        const reEnterAccountNo = $('#confirmSalaryAcctNo').val();
         if (accountNo !== reEnterAccountNo) {
             Swal.fire({
                 title: "Alert",
@@ -320,98 +318,102 @@ function confirmAccountNo() {
     });
 }
 function SetSuffixLetter(obj) {
-    var arr1 = [], arr2 = [];
-    var ArmyNumber = $(obj).val();
-    var fixed = "98765432";
+    let arr1 = [], arr2 = [];
+    let ArmyNumber = $(obj).val();
+    const fixed = "98765432";
     arr1 = ArmyNumber.split('');
     arr2 = fixed.split('');
-    var len = arr2.length - arr1.length;
-    if (len == 1) {
+    const len = arr2.length - arr1.length;
+
+    if (len === 1) {
         ArmyNumber = "0" + ArmyNumber;
     }
-    if (len == 2) {
+    if (len === 2) {
         ArmyNumber = "00" + ArmyNumber;
     }
-    if (len == 3) {
+    if (len === 3) {
         ArmyNumber = "000" + ArmyNumber;
     }
-    if (len == 4) {
+    if (len === 4) {
         ArmyNumber = "0000" + ArmyNumber;
     }
-    if (len == 5) {
+    if (len === 5) {
         ArmyNumber = "00000" + ArmyNumber;
     }
-    if (len == 6) {
+    if (len === 6) {
         ArmyNumber = "000000" + ArmyNumber;
     }
-    if (len == 7) {
+    if (len === 7) {
         ArmyNumber = "0000000" + ArmyNumber;
     }
 
-    var total = 0;
+    let total = 0;
     arr1 = ArmyNumber.split('');
-    for (var i = 0; i < arr1.length; i++) {
-        var val1 = arr1[i];
-        var val2 = arr2[i];
+    for (let i = 0; i < arr1.length; i++) {
+        const val1 = arr1[i];
+        const val2 = arr2[i];
         total += parseInt(val1) * parseInt(val2);
     }
-    var rem = total % 11;
-    var Sletter = '';
+
+    const rem = total % 11;
+    let Sletter = '';
     switch (rem.toString()) {
         case '0':
-            Sletter = 'A'
+            Sletter = 'A';
             break;
         case '1':
-            Sletter = 'F'
+            Sletter = 'F';
             break;
         case '2':
-            Sletter = 'H'
+            Sletter = 'H';
             break;
         case '3':
-            Sletter = 'K'
+            Sletter = 'K';
             break;
         case '4':
-            Sletter = 'L'
+            Sletter = 'L';
             break;
         case '5':
-            Sletter = 'M'
+            Sletter = 'M';
             break;
         case '6':
-            Sletter = 'N'
+            Sletter = 'N';
             break;
         case '7':
-            Sletter = 'P'
+            Sletter = 'P';
             break;
         case '8':
-            Sletter = 'W'
+            Sletter = 'W';
             break;
         case '9':
-            Sletter = 'X'
+            Sletter = 'X';
             break;
         case '10':
-            Sletter = 'Y'
+            Sletter = 'Y';
             break;
     }
-    var sourceId = $(obj).attr('id');
-    var targetSuffixId;
+
+    const sourceId = $(obj).attr('id');
+    let targetSuffixId;
 
     if (sourceId === 'armyNumber') {
         targetSuffixId = 'txtSuffix';
     } else if (sourceId === 'oldArmyNo') {
         targetSuffixId = 'txtOldSuffix';
     }
+
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
-
 }
+
 
 
 function getApplicantDetalis() {
 
-    var armyNumber = $("#armyPrefix").val();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
-    var appType = parseInt($("#loanType").val(), 10);
+    const armyNumber = $("#armyPrefix").val();
+    const Prefix = $("#armyNumber").val();
+    const Suffix = $("#txtSuffix").val();
+    const appType = parseInt($("#loanType").val(), 10);
 
     $.ajax({
         type: "get",
@@ -458,10 +460,10 @@ function DeleteConfirmation() {
 }
 
 function DeleteExistingLoan() {
-    var armyNumber = $("#armyPrefix").val();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
-    var appType = parseInt($("#loanType").val(), 10);
+    const armyNumber = $("#armyPrefix").val();
+    const Prefix = $("#armyNumber").val();
+    const Suffix = $("#txtSuffix").val();
+    const appType = parseInt($("#loanType").val(), 10);
     $.ajax({
         type: "get",
         url: "/OnlineApplication/DeleteExistingLoan",
@@ -510,11 +512,10 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();
     if (!value) {
-        //alert("Please select a Date of Commission.");
         return;
     }
     calculateDifferenceBetweenDOBAndDOC(value);
-    
+
 
     const commissionDate = new Date(my_date(value));
     const today = new Date();
@@ -539,29 +540,23 @@ $('.monthPicker').datepicker({
     changeYear: true,
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
-    maxDate: 0, // This restricts to today and past dates only (no future dates)
-    yearRange: "1900:+0", // Allow years from 1900 to current year only
-    defaultDate: null, // Default to today
-    
+    maxDate: 0,
+    yearRange: "1900:+0",
+    defaultDate: null,
+
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
-        var dt = $('#dateOfBirth').val();
+        const dt = $('#dateOfBirth').val();
 
-        // Call the custom functions on select
-        formatDate(this); // Ensure the function formats the date
-        validateDateFormat(this); // Ensure validation is handled 
+        formatDate(this);
+        validateDateFormat(this);
 
-        // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        let newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
-
-        // Optional: Set the calculated date back to the field or use as needed
 
     },
     beforeShowDay: function (date) {
-        // Additional check to disable future dates
-        var today = new Date();
-        today.setHours(23, 59, 59, 999); // Set to end of today
+        const today = new Date();
+        today.setHours(23, 59, 59, 999);
         return [date <= today];
     }
 });
@@ -571,26 +566,21 @@ $('.DocPicker').datepicker({
     changeYear: true,
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
-    maxDate: 0, // This restricts to today and past dates only (no future dates)
-    yearRange: "1900:+0", // Allow years from 1900 to current year only
-    defaultDate: null, // Default to today
-    
+    maxDate: 0,
+    yearRange: "1900:+0",
+    defaultDate: null,
+
 
 
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
-        var dt = $('#dateOfCommission').val();
+        const dt = $('#dateOfCommission').val();
 
-        // Call the custom functions on select
-        formatDate(this); // Ensure the function formats the date
-        validateDateFormat(this); // Ensure validation is handled
-        calculateYearDifference(); // Calculate the year difference (if needed)
+        formatDate(this);
+        validateDateFormat(this);
+        calculateYearDifference();
 
-        // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        let newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
-
-        // Optional: Set the calculated date back to the field or use as needed
 
     }
 });
@@ -600,20 +590,18 @@ $('.DopPicker').datepicker({
     changeYear: true,
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
-    yearRange: "1900:2100", // Allow years from 1900 to current year only
-    defaultDate: null, // Default to today
-    
-    onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
-        var dt = $('#dateOfPromotion').val();
+    yearRange: "1900:2100",
+    defaultDate: null,
 
-        // Call the custom functions on select
-        formatDate(this); // Ensure the function formats the date
-        updateRetDateOnPromotionDateSelection(); // Calculate the year difference (if needed)
-        
-        var newdt = new Date(my_date(dt));
+    onSelect: function (dateText, inst) {
+        const dt = $('#dateOfPromotion').val();
+
+        formatDate(this);
+        updateRetDateOnPromotionDateSelection();
+
+        let newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
-        
+
 
     }
 });
@@ -623,22 +611,19 @@ $('.Payslippicker').datepicker({
     changeYear: true,
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
-    yearRange: "1900:2100", // Allow years from 1900 to current year only
-    defaultDate: null, // Default to today
-    
+    yearRange: "1900:2100",
+    defaultDate: null,
+
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
-        var dt = $('#monthlyPaySlip').val();
+        const dt = $('#monthlyPaySlip').val();
 
-        // Call the custom functions on select
-        formatDate(this); // Ensure the function formats the date
-        Validate_Salary_Slip_date(this); // Calculate the year difference (if needed)
 
-        // Calculate new date by adding 18 years
-        var newdt = new Date(my_date(dt));
+        formatDate(this);
+        Validate_Salary_Slip_date(this);
+
+        let newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
-        // Optional: Set the calculated date back to the field or use as needed
 
     }
 });
@@ -649,43 +634,39 @@ $('.LicencePicker').datepicker({
     showButtonPanel: true,
     dateFormat: 'dd/mm/yy',
     yearRange: "1900:2100",
-    minDate:1,
-    defaultDate: null, // Default to today
+    minDate: 1,
+    defaultDate: null,
 
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
-        var dt = $('#validity_Date_DL').val();
-        
-        formatDate(this); // Ensure the function formats the date
-        
-        var newdt = new Date(my_date(dt));
+        const dt = $('#validity_Date_DL').val();
+
+        formatDate(this);
+
+        let newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
     }
 
 });
 $('.LicencePicker').on('blur change', function () {
-    var inputDate = $(this).val();
+    const inputDate = $(this).val();
 
     if (inputDate) {
-        // Parse the date (assuming dd/mm/yyyy format)
-        var parts = inputDate.split('/');
+        const parts = inputDate.split('/');
         if (parts.length === 3) {
-            var day = parseInt(parts[0], 10);
-            var month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
-            var year = parseInt(parts[2], 10);
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1;
+            const year = parseInt(parts[2], 10);
 
-            var selectedDate = new Date(year, month, day);
-            var today = new Date();
-            today.setHours(0, 0, 0, 0); // Set to start of day for comparison
-
-            // If selected date is in the past, clear the field and show alert
+            const selectedDate = new Date(year, month, day);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
             if (selectedDate < today) {
                 $(this).val('');
                 Swal.fire({
                     title: "Alert",
                     text: "Your Driving Licence has Expired!",
-                    icon:"warning"
+                    icon: "warning"
                 })
                 $(this).focus();
             }
@@ -693,14 +674,11 @@ $('.LicencePicker').on('blur change', function () {
     }
 });
 function formatDate(input) {
-    // Get the current value and remove any non-numeric characters except existing slashes
     let value = input.value.replace(/[^\d]/g, '');
 
-    // Store cursor position
     let cursorPosition = input.selectionStart;
     let oldLength = input.value.length;
 
-    // Format the value with slashes
     if (value.length >= 2) {
         value = value.substring(0, 2) + '/' + value.substring(2);
     }
@@ -708,79 +686,31 @@ function formatDate(input) {
         value = value.substring(0, 5) + '/' + value.substring(5);
     }
 
-    // Limit to 10 characters (dd/mm/yyyy)
     if (value.length > 10) {
         value = value.substring(0, 10);
     }
 
-    // Update the input value
     input.value = value;
 
-    // Adjust cursor position
     let newLength = input.value.length;
     if (newLength > oldLength) {
         cursorPosition++;
     }
 
-    // Set cursor position
     input.setSelectionRange(cursorPosition, cursorPosition);
 }
 
 function formatDateToString(date) {
-    var day = ("0" + date.getDate()).slice(-2);
-    var month = ("0" + (date.getMonth() + 1)).slice(-2);
-    var year = date.getFullYear();
+    const day = ("0" + date.getDate()).slice(-2);
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
     return day + "/" + month + "/" + year;
 }
-
-//function validateDateFormat(input) {
-//    const value = input.value;
-//    const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
-
-//    // Check if the value matches the date format
-//    if (value && !datePattern.test(value)) {
-//        Swal.fire({
-//            icon: "error",
-//            title: "Invalid date",
-//            text: "Invalid date format. Please select a valid date.",
-//        });
-//        input.focus();
-//        input.value = ""; // Clear the invalid input
-//        return;
-//    }
-
-//    // Additional validation to check date validity and reasonable year range
-//    if (value && datePattern.test(value)) {
-//        const parts = value.split('/');
-//        const day = parseInt(parts[0], 10);
-//        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
-//        const year = parseInt(parts[2], 10);
-
-//        // Check for reasonable year range (e.g., 1900 to current year)
-//        const currentYear = new Date().getFullYear();
-//        if (year < 1900 || year > currentYear) {
-//            Swal.fire({
-//                icon: "error",
-//                title: "Invalid year",
-//                text: `Please enter a year between 1900 and ${currentYear}.`,
-//            });
-//            input.focus();
-//            input.value = ""; // Clear the invalid input
-//            return;
-//        }
-
-//        // Check if it's a valid date
-
-//    }
-
-//    SetRetDate();
-//}
 
 function validateDateFormat(input) {
     const value = input.value;
     const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
 
-    // Check if the value matches the date format
     if (value && !datePattern.test(value)) {
         Swal.fire({
             icon: "error",
@@ -788,21 +718,19 @@ function validateDateFormat(input) {
             text: "Invalid date format. Please select a valid date.",
         });
         input.focus();
-        input.value = ""; // Clear the invalid input
+        input.value = "";
         return;
     }
 
-    // Additional validation to check date validity and reasonable year range
     if (value && datePattern.test(value)) {
         const parts = value.split('/');
         const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
+        const month = parseInt(parts[1], 10) - 1;
         const year = parseInt(parts[2], 10);
 
-        // Check for reasonable year range (e.g., 1900 to current year)
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
-        const currentMonth = currentDate.getMonth(); // 0-indexed month
+        const currentMonth = currentDate.getMonth();
         const currentDay = currentDate.getDate();
 
         if (year < 1900 || year > currentYear) {
@@ -812,11 +740,10 @@ function validateDateFormat(input) {
                 text: `Please enter a year between 1900 and ${currentYear}.`,
             });
             input.focus();
-            input.value = ""; // Clear the invalid input
+            input.value = "";
             return;
         }
 
-        // Check if the entered date's month and day are not in the future
         if (year === currentYear && month > currentMonth) {
             Swal.fire({
                 icon: "error",
@@ -824,11 +751,10 @@ function validateDateFormat(input) {
                 text: "Month cannot be in the future.",
             });
             input.focus();
-            input.value = ""; // Clear the invalid input
+            input.value = "";
             return;
         }
 
-        // Check if the entered day is greater than today's day for the same month and year
         if (year === currentYear && month === currentMonth && day > currentDay) {
             Swal.fire({
                 icon: "error",
@@ -836,11 +762,10 @@ function validateDateFormat(input) {
                 text: "Day cannot be in the future.",
             });
             input.focus();
-            input.value = ""; // Clear the invalid input
+            input.value = "";
             return;
         }
 
-        // Check if it's a valid date (for example, handle February 30th, etc.)
         const inputDate = new Date(year, month, day);
         if (inputDate.getDate() !== day) {
             Swal.fire({
@@ -849,7 +774,7 @@ function validateDateFormat(input) {
                 text: "The date you entered does not exist.",
             });
             input.focus();
-            input.value = ""; // Clear the invalid input
+            input.value = "";
             return;
         }
     }
@@ -857,20 +782,21 @@ function validateDateFormat(input) {
     SetRetDate();
 }
 function my_date(date_string) {
-    var date_components = date_string.split("/");
-    var day = date_components[0];
-    var month = date_components[1];
-    var year = date_components[2];
+    const date_components = date_string.split("/");
+    const day = date_components[0];
+    const month = date_components[1];
+    const year = date_components[2];
     return new Date(year, month - 1, day);
 }
 
 function SetRetDate() {
-    var Prefix = $('#armyPrefix').val();
-    var ranks = $('#ddlrank').val();
-    var rankId = parseInt(ranks);
-    var EnrollDate = $('#dateOfCommission').val();
-    var regtCorps = $('#regtCorps').val();
-    var regtId = parseInt(regtCorps);
+    const Prefix = $('#armyPrefix').val();
+    const ranks = $('#ddlrank').val();
+    const rankId = parseInt(ranks);
+    const EnrollDate = $('#dateOfCommission').val();
+    const regtCorps = $('#regtCorps').val();
+    const regtId = parseInt(regtCorps);
+
     if (!regtCorps) {
         Swal.fire({
             title: 'Warning!',
@@ -891,46 +817,43 @@ function SetRetDate() {
         $('#dateOfBirth').val('');
         return;
     }
-    if (Prefix == "0" || Prefix == "") {
+    if (Prefix === "0" || Prefix === "") {
         Swal.fire({
             title: 'Warning!',
             html: '<p style="font-size: 18px;">Please select Prefix.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
-
-
         $('#dateOfBirth').val('');
         return;
     }
 
-    var dateOfBirthString = $('#dateOfBirth').val();
-    var dateParts = dateOfBirthString.split('/');
+    const dateOfBirthString = $('#dateOfBirth').val();
+    const dateParts = dateOfBirthString.split('/');
     if (dateParts.length === 3) {
-        if (EnrollDate == "" || EnrollDate == undefined || dateOfBirthString == "" || dateOfBirthString == undefined) {
-            console.log('EnrollDate or dateOfBirthString is empty or undefined.')
-        }
-        else {
+        if (EnrollDate === "" || EnrollDate === undefined || dateOfBirthString === "" || dateOfBirthString === undefined) {
+            console.log('EnrollDate or dateOfBirthString is empty or undefined.');
+        } else {
             $.ajax({
                 type: "get",
                 url: "/OnlineApplication/GetRetirementDate",
                 data: { rankId: rankId, Prefix: Prefix, regtId: regtId },
                 success: function (data) {
                     if (data.userTypeId == 1) {
-                        //userTypeId == 1 => Officers
-                        var dateOfBirth = $('#dateOfBirth').val();
-                        var dateParts = dateOfBirth.split('/');
+                        // userTypeId == 1 => Officers
+                        const dateOfBirth = $('#dateOfBirth').val();
+                        const dateParts = dateOfBirth.split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[2];
-                            var month = dateParts[1] - 1;
-                            var day = dateParts[0];
+                            const year = dateParts[2];
+                            const month = dateParts[1] - 1;
+                            const day = dateParts[0];
 
-                            var dob = new Date(year, month, day);
+                            const dob = new Date(year, month, day);
                             dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                            var yyyy = dob.getFullYear();
-                            var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                            var dd = String(dob.getDate()).padStart(2, '0');
-                            var formattedDate = `${yyyy}-${mm}-${dd}`;
+                            const yyyy = dob.getFullYear();
+                            const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                            const dd = String(dob.getDate()).padStart(2, '0');
+                            const formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
                             setOutlineActive("dateOfRetirement");
                             globleRetirementDate.value = formattedDate;
@@ -939,22 +862,21 @@ function SetRetDate() {
                             $('#dateOfRetirement').val('');
                             console.warn("Invalid retirement age or date of birth.");
                         }
-                    }
-                    else if (data.userTypeId == 2) {
-                        //userTypeId == 2 => Short Service Officers
-                        var dateOfCommission = $('#dateOfCommission').val();
-                        var dateParts = dateOfCommission.split('/');
+                    } else if (data.userTypeId == 2) {
+                        // userTypeId == 2 => Short Service Officers
+                        const dateOfCommission = $('#dateOfCommission').val();
+                        const dateParts = dateOfCommission.split('/');
                         if (data != 0 && dateParts.length == 3) {
-                            var year = dateParts[2];
-                            var month = dateParts[1] - 1;
-                            var day = dateParts[0];
+                            const year = dateParts[2];
+                            const month = dateParts[1] - 1;
+                            const day = dateParts[0];
 
-                            var dob = new Date(year, month, day);
+                            const dob = new Date(year, month, day);
                             dob.setFullYear(dob.getFullYear() + 10);
-                            var yyyy = dob.getFullYear();
-                            var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                            var dd = String(dob.getDate()).padStart(2, '0');
-                            var formattedDate = `${yyyy}-${mm}-${dd}`;
+                            const yyyy = dob.getFullYear();
+                            const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                            const dd = String(dob.getDate()).padStart(2, '0');
+                            const formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
                             setOutlineActive("dateOfRetirement");
                             globleRetirementDate.value = formattedDate;
@@ -963,27 +885,49 @@ function SetRetDate() {
                             $('#dateOfRetirement').val('');
                             console.warn("Invalid retirement age or date of birth.");
                         }
-                    }
-                    else if (data.userTypeId == 3 || data.userTypeId == 4) {
-                        //userTypeId == 3 => JCOs     userTypeId == 4 => ORs
-                        var rankType = $('#ddlrank').val();
+                    } else if (data.userTypeId == 3 || data.userTypeId == 4) {
+                        // userTypeId == 3 => JCOs     userTypeId == 4 => ORs
+                        const rankType = $('#ddlrank').val();
                         if (rankType == 0) {
                             alert("Please select Rank Type.");
                         }
                         if (rankType == 31 || rankType == 32 || rankType == 33) {
-                            var dateOfBirth = $('#dateOfBirth').val();
-                            var dateParts = dateOfBirth.split('/');
+                            const dateOfBirth = $('#dateOfBirth').val();
+                            const dateParts = dateOfBirth.split('/');
                             if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[2];
-                                var month = dateParts[1] - 1;
-                                var day = dateParts[0];
+                                const year = dateParts[2];
+                                const month = dateParts[1] - 1;
+                                const day = dateParts[0];
 
-                                var dob = new Date(year, month, day);
+                                const dob = new Date(year, month, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                                var yyyy = dob.getFullYear();
-                                var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                                var dd = String(dob.getDate()).padStart(2, '0');
-                                var formattedDate = `${yyyy}-${mm}-${dd}`;
+                                const yyyy = dob.getFullYear();
+                                const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                                const dd = String(dob.getDate()).padStart(2, '0');
+                                const formattedDate = `${yyyy}-${mm}-${dd}`;
+                                $('#dateOfRetirement').val(formattedDate);
+                                setOutlineActive("dateOfRetirement");
+                                globleRetirementDate.value = formattedDate;
+                                calculateResidualService();
+                                ExtensionOfServiceAccess();
+                            } else {
+                                $('#dateOfRetirement').val('');
+                                console.warn("Invalid retirement age or date of birth.");
+                            }
+                        } else {
+                            const dateOfCommission = $('#dateOfCommission').val();
+                            const dateParts = dateOfCommission.split('/');
+                            if (data != 0 && dateParts.length == 3) {
+                                const year = dateParts[2];
+                                const month = dateParts[1] - 1;
+                                const day = dateParts[0];
+
+                                const dob = new Date(year, month, day);
+                                dob.setFullYear(dob.getFullYear() + data.retirementAge);
+                                const yyyy = dob.getFullYear();
+                                const mm = String(dob.getMonth() + 1).padStart(2, '0');
+                                const dd = String(dob.getDate()).padStart(2, '0');
+                                const formattedDate = `${yyyy}-${mm}-${dd}`;
                                 $('#dateOfRetirement').val(formattedDate);
                                 setOutlineActive("dateOfRetirement");
                                 globleRetirementDate.value = formattedDate;
@@ -994,64 +938,38 @@ function SetRetDate() {
                                 console.warn("Invalid retirement age or date of birth.");
                             }
                         }
-                        else {
-                            var dateOfCommission = $('#dateOfCommission').val();
-                            var dateParts = dateOfCommission.split('/');
-                            if (data != 0 && dateParts.length == 3) {
-                                var year = dateParts[2];
-                                var month = dateParts[1] - 1;
-                                var day = dateParts[0];
-
-                                var dob = new Date(year, month, day);
-                                dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                                var yyyy = dob.getFullYear();
-                                var mm = String(dob.getMonth() + 1).padStart(2, '0');
-                                var dd = String(dob.getDate()).padStart(2, '0');
-                                var formattedDate = `${yyyy}-${mm}-${dd}`;
-                                $('#dateOfRetirement').val(formattedDate);
-                                setOutlineActive("dateOfRetirement")
-                                globleRetirementDate.value = formattedDate;
-                                calculateResidualService();
-                                ExtensionOfServiceAccess();
-                            } else {
-                                $('#dateOfRetirement').val('');
-                                console.warn("Invalid retirement age or date of birth.");
-                            }
-                        }
-
                     }
                 },
                 error: function () {
-                    alert("Data Not loaded!")
+                    alert("Data Not loaded!");
                 }
             });
         }
-    }
-    else {
+    } else {
         console.error('Invalid date string.');
     }
 }
+
 function calculateResidualService() {
-    var retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
+    const retirementDateStr = $('#dateOfRetirement').val();
     if (!retirementDateStr) {
         return;
     }
 
-    var retirementDate = new Date(retirementDateStr);
-    var currentDate = new Date();
+    const retirementDate = new Date(retirementDateStr);
+    const currentDate = new Date();
 
-    // Normalize both dates to remove time differences
     retirementDate.setHours(0, 0, 0, 0);
     currentDate.setHours(0, 0, 0, 0);
 
-    var years = retirementDate.getFullYear() - currentDate.getFullYear();
-    var months = retirementDate.getMonth() - currentDate.getMonth();
-    var days = retirementDate.getDate() - currentDate.getDate();
+    let years = retirementDate.getFullYear() - currentDate.getFullYear();
+    let months = retirementDate.getMonth() - currentDate.getMonth();
+    let days = retirementDate.getDate() - currentDate.getDate();
 
     if (days < 0) {
         months -= 1;
-        var prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
-        days += prevMonth.getDate(); // Add days of the previous month
+        const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+        days += prevMonth.getDate();
     }
 
     if (months < 0) {
@@ -1059,15 +977,11 @@ function calculateResidualService() {
         months += 12;
     }
 
-    // Calculate total months (can be negative)
-    var totalMonths = years * 12 + months;
-    var totalYears = years;
+    let totalMonths = years * 12 + months;
+    let totalYears = years;
 
-    // If retirement is before current date, show negative values
     if (retirementDate < currentDate) {
-        // Recalculate in reverse to maintain negative residual
-        var diffInMs = retirementDate - currentDate;
-        var diffDate = new Date(Math.abs(diffInMs));
+        const diffInMs = retirementDate - currentDate;
         totalYears = -Math.abs(years);
         totalMonths = -Math.abs(totalMonths);
     }
@@ -1082,7 +996,6 @@ function enableDisablePromotionDate() {
         togglePromotionDate($(this).val());
     });
 
-    // Run once on load
     togglePromotionDate($('#ddlrank').val());
 }
 
@@ -1095,58 +1008,50 @@ function togglePromotionDate(rankValue) {
 }
 
 function updateRetDateOnPromotionDateSelection() {
-    var promotionDate = $('#dateOfPromotion').val();
+    const promotionDate = $('#dateOfPromotion').val();
     if (!promotionDate) {
-        //alert("Please select the Date of Promotion.");
         return;
     }
-    var dateParts = promotionDate.split('/');
+    const dateParts = promotionDate.split('/');
     if (dateParts.length === 3) {
-        var year = dateParts[2];
-        var month = dateParts[1] - 1;
-        var day = dateParts[0];
+        const year = dateParts[2];
+        const month = dateParts[1] - 1;
+        const day = dateParts[0];
 
-        var dob = new Date(year, month, day);
+        const dob = new Date(year, month, day);
         dob.setFullYear(dob.getFullYear() + 4);
-        var yyyy = dob.getFullYear();
-        var mm = String(dob.getMonth() + 1).padStart(2, '0');
-        var dd = String(dob.getDate()).padStart(2, '0');
-        var formattedDate = `${yyyy}-${mm}-${dd}`;
+        const yyyy = dob.getFullYear();
+        const mm = String(dob.getMonth() + 1).padStart(2, '0');
+        const dd = String(dob.getDate()).padStart(2, '0');
+        const formattedDate = `${yyyy}-${mm}-${dd}`;
         $('#dateOfRetirement').val(formattedDate);
         calculateResidualService();
     } else {
         console.error('Invalid date string.');
     }
 }
-function extensionOfService() {
-    var prefix = $('#armyPrefix').val();
-    var extension = $('#ExtnOfService').val();
-    var dop = $('#dateOfPromotion').val();
 
-    // Debug log
+function extensionOfService() {
+    const prefix = $('#armyPrefix').val();
+    const extension = $('#ExtnOfService').val();
+    const dop = $('#dateOfPromotion').val();
+
     console.log('DoP value:', dop);
 
-    // Validate prefix selection
     if (!prefix) {
         Swal.fire({
             title: 'Warning!',
             html: '<p style="font-size: 18px;">Please select Prefix.</p>',
             icon: 'warning',
         });
-        return; // Exit early if no prefix selected
+        return;
     }
 
-    // Check if prefix qualifies for extension (13 or 14)
     if (prefix == 13 || prefix == 14) {
         if (extension == "Yes") {
-            // If DoP is not set (empty, null, or undefined), calculate extension
             if (!dop || dop.trim() === "") {
                 console.log('DoP not set, calculating service extension...');
-
-                var currentRetDate = $('#dateOfRetirement').val();
-                var currentResidualService = parseInt($('#residualService').val());
-
-                // Validate current retirement date exists
+                const currentRetDate = $('#dateOfRetirement').val();
                 if (!currentRetDate) {
                     Swal.fire({
                         title: 'Error!',
@@ -1156,26 +1061,22 @@ function extensionOfService() {
                     return;
                 }
 
-                var dateParts = currentRetDate.split('-');
+                const dateParts = currentRetDate.split('-');
                 if (dateParts.length === 3) {
-                    var year = parseInt(dateParts[0]);
-                    var month = parseInt(dateParts[1]) - 1; // JavaScript months are 0-indexed
-                    var day = parseInt(dateParts[2]);
+                    const year = parseInt(dateParts[0]);
+                    const month = parseInt(dateParts[1]) - 1;
+                    const day = parseInt(dateParts[2]);
 
-                    // Create date object and add 2 years for extension
-                    var dateOfRetirement = new Date(year, month, day);
+                    const dateOfRetirement = new Date(year, month, day);
                     dateOfRetirement.setFullYear(dateOfRetirement.getFullYear() + 2);
 
-                    // Format the new retirement date
-                    var yyyy = dateOfRetirement.getFullYear();
-                    var mm = String(dateOfRetirement.getMonth() + 1).padStart(2, '0');
-                    var dd = String(dateOfRetirement.getDate()).padStart(2, '0');
-                    var formattedDate = `${yyyy}-${mm}-${dd}`;
+                    const yyyy = dateOfRetirement.getFullYear();
+                    const mm = String(dateOfRetirement.getMonth() + 1).padStart(2, '0');
+                    const dd = String(dateOfRetirement.getDate()).padStart(2, '0');
+                    const formattedDate = `${yyyy}-${mm}-${dd}`;
 
-                    // Update the retirement date field
                     $('#dateOfRetirement').val(formattedDate);
 
-                    // Recalculate residual service
                     calculateResidualService();
 
                     console.log('Service extended by 2 years. New retirement date:', formattedDate);
@@ -1190,39 +1091,32 @@ function extensionOfService() {
                     });
                 }
             } else {
-                // DoP is set, handle accordingly
                 console.log('DoP is set:', dop);
+            }
+        } else if (!dop || dop.trim() === "") {
+            if (globleRetirementDate?.value) {
+                $('#dateOfRetirement').val(globleRetirementDate.value);
+                calculateResidualService();
+                console.log('Extension not selected, reverted to original retirement date');
+            } else {
+                console.error('Global retirement date not available');
             }
         } else {
-            if (!dop || dop.trim() === "") {
-                // Extension not selected, revert to original retirement date
-                if (typeof globleRetirementDate !== 'undefined' && globleRetirementDate.value) {
-                    $('#dateOfRetirement').val(globleRetirementDate.value);
-                    calculateResidualService();
-                    console.log('Extension not selected, reverted to original retirement date');
-                } else {
-                    console.error('Global retirement date not available');
-                }
-            } else {
-                // DoP is set, handle accordingly
-                console.log('DoP is set:', dop);
-            }
-
-
+            console.log('DoP is set:', dop);
         }
+
     } else {
         console.log('Prefix does not qualify for extension (not 13 or 14)');
     }
 }
 
-// Helper function to validate date format
 function isValidDate(dateString) {
     if (!dateString) return false;
-    var regex = /^\d{4}-\d{2}-\d{2}$/;
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
     if (!regex.test(dateString)) return false;
 
-    var date = new Date(dateString);
-    var timestamp = date.getTime();
+    const date = new Date(dateString);
+    const timestamp = date.getTime();
 
     if (typeof timestamp !== 'number' || Number.isNaN(timestamp)) {
         return false;
@@ -1231,10 +1125,9 @@ function isValidDate(dateString) {
     return dateString === date.toISOString().split('T')[0];
 }
 function ExtensionOfServiceAccess() {
-    var prefix = $('#armyPrefix').val();
-    var yearOfService = parseFloat($('#residualService').val());
-    var extensionDropdown = $('#ExtnOfService');
-    // Enable only if Year of Service < 2 and Prefix is JC or OR
+    const prefix = $('#armyPrefix').val();
+    const yearOfService = parseFloat($('#residualService').val());
+    let extensionDropdown = $('#ExtnOfService');
     if ((prefix == 13 || prefix == 14) && yearOfService < 2 && yearOfService >= 0) {
         extensionDropdown.prop('disabled', false);
     } else {
@@ -1243,7 +1136,7 @@ function ExtensionOfServiceAccess() {
     }
 }
 function fetchPCDA_PAO() {
-    var regt = $('#regtCorps').val();
+    const regt = $('#regtCorps').val();
     if (!regt) {
         alert("Please select Regt/Corps.");
         return;
@@ -1255,7 +1148,7 @@ function fetchPCDA_PAO() {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json(); // assuming the server returns JSON
+            return response.json();
         })
         .then(data => {
             if (data != null) {
@@ -1280,7 +1173,7 @@ function setOutlineActive(id) {
 }
 function EnableDisablePCDA() {
     $("#armyPrefix").on("change", function () {
-        var Prefix = $('#armyPrefix').val();
+        const Prefix = $('#armyPrefix').val();
 
         if (Prefix == "13" || Prefix == "14") {
             $('#pcda_AcctNo').val("00/000/000000A");
@@ -1292,7 +1185,7 @@ function EnableDisablePCDA() {
 }
 function EnableDisableCivilPostalAdd() {
     $("#armyPostOffice").on("change", function () {
-        var apo = $('#armyPostOffice').val();
+        const apo = $('#armyPostOffice').val();
 
         if (apo == "3") {
             $('#civilPostalAddress')
@@ -1316,16 +1209,14 @@ function Validate_Salary_Slip_date(inputElement) {
         });
         return;
     }
-        
+
     const selectedDate = new Date(my_date(value));
     const currentDate = new Date();
     const threeMonthsAgo = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, 1);
 
-    // Normalize selectedDate to the 1st of its month
     const normalizedSelectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
     const normalizedCurrentMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
 
-    // Validate range
     if (normalizedSelectedDate < threeMonthsAgo || normalizedSelectedDate > normalizedCurrentMonth) {
         const minAllowed = threeMonthsAgo.toLocaleString("default", { month: "long", year: "numeric" });
         const maxAllowed = normalizedCurrentMonth.toLocaleString("default", { month: "long", year: "numeric" });
@@ -1346,7 +1237,7 @@ function textChange() {
     function parseValue(value) {
         return value === "" ? 0 : parseInt(value);
     }
-    var cr = parseValue($('#basicPay').val().replace(/,/g, ''))
+    const cr = parseValue($('#basicPay').val().replace(/,/g, ''))
         + parseValue($('#rank_gradePay').val().replace(/,/g, ''))
         + parseValue($('#msp').val().replace(/,/g, ''))
         + parseValue($('#CI_Pay').val().replace(/,/g, ''))
@@ -1357,7 +1248,7 @@ function textChange() {
         + parseValue($('#lra').val().replace(/,/g, ''))
         + parseValue($('#miscPay').val().replace(/,/g, ''));
 
-    var debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
+    const debt = parseValue($('#dsop_afpp').val().replace(/,/g, ''))
         + parseValue($('#agif_Subs').val().replace(/,/g, ''))
         + parseValue($('#incomeTaxMonthly').val().replace(/,/g, ''))
         + parseValue($('#educationCess').val().replace(/,/g, ''))
@@ -1365,7 +1256,7 @@ function textChange() {
         + parseValue($('#misc_Deduction').val().replace(/,/g, ''))
         + parseValue($('#loanEMI_Outside').val().replace(/,/g, ''))
         + parseValue($('#loanEMI').val().replace(/,/g, ''));
-    var totalDebit = debt.toLocaleString('en-IN');
+    const totalDebit = debt.toLocaleString('en-IN');
     $('#totalDeductions').val(totalDebit);
     $('#totalCredit').val(cr.toLocaleString('en-IN'));
     $('#salary_After_Deductions').val((cr - debt).toLocaleString('en-IN'));
@@ -1388,29 +1279,20 @@ function filterAmountText(loanType) {
         const VehicleCost = $('#vehicleCost');
         const cleanedValue = VehicleCost.val().replace(/,/g, '');
         VehicleCost.val(cleanedValue);
-        //alert(cleanedValue);
     }
 }
 
 
-$('#dateOfBirth').on('change', function () {
-    var dob = $(this).val();
-    console.log('Current Date of Birth input: ' + dob);
-});
-
-
 function handleSubmitClick() {
     $("#btn-save").on("click", function (event) {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
         const form = $("#myForm");
         const inputs = $('input[required], select[required]');
-        // Clear previous error messages
         form.find(".error").each(function () {
             $(this).text("");
         });
 
-        // let errorlist = "";
-        let errorlist = []; // Use an array to store individual error messages
+        let errorlist = [];
         let hasError = false;
 
         const params = new URLSearchParams(window.location.search);
@@ -1462,17 +1344,21 @@ function handleSubmitClick() {
 
         inputs.each(function () {
             const input = $(this);
-            const inputElement = this; // Get the DOM element for checkValidity()
+            const inputElement = this;
 
-            if (loanType === "1" && ($("#pcaAccordianWrapper").find(input).length || $("#caAccordianWrapper").find(input).length)) {
+            const loanWrappers = {
+                "1": ["#pcaAccordianWrapper", "#caAccordianWrapper"],
+                "2": ["#pcaAccordianWrapper", "#hbaAccordianWrapper"],
+                "3": ["#caAccordianWrapper", "#hbaAccordianWrapper"]
+            };
+
+            if (loanWrappers[loanType] && (
+                $(loanWrappers[loanType][0]).find(input).length ||
+                $(loanWrappers[loanType][1]).find(input).length
+            )) {
                 return;
             }
-            else if (loanType === "2" && ($("#pcaAccordianWrapper").find(input).length || $("#hbaAccordianWrapper").find(input).length)) {
-                return;
-            }
-            else if (loanType === "3" && ($("#caAccordianWrapper").find(input).length || $("#hbaAccordianWrapper").find(input).length)) {
-                return;
-            }
+
 
             if (!inputElement.checkValidity()) {
 
@@ -1482,9 +1368,8 @@ function handleSubmitClick() {
                 if (errorSpan.length) {
                     errorSpan.text(inputElement.validationMessage);
                 }
-                // errorlist += input.name + ", ";
                 let errorText = input.attr("name");
-                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication.", "AddressDetails.","AccountDetails."];
+                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication.", "AddressDetails.", "AccountDetails."];
                 prefixes.forEach(prefix => {
                     if (errorText.includes(prefix)) {
                         errorText = errorText.replace(prefix, "");
@@ -1497,49 +1382,41 @@ function handleSubmitClick() {
                 }
             }
         });
-        
 
-        var errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+
+        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
         $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
 
         if (hasError) {
             return false;
         }
         else {
-            //form.submit();
-            $("#msgerror").html(''); // Clear error message
-            if (formSubmitting) return; // Allow submission after confirmation
+            $("#msgerror").html('');
+            if (formSubmitting) return;
             if (formCancelled) {
-                formCancelled = false; // Reset flag
+                formCancelled = false;
                 e.preventDefault();
                 return;
             }
 
             let unitVal = $('#PresenttxtUnit').val();
             if (unitVal && unitVal.trim() !== '') {
-                event.preventDefault(); // Stop form submission
-                checkCORegistration(); // First check CO registration
+                event.preventDefault();
+                checkCORegistration();
             }
         }
     });
 }
 
 function checkCORegistration() {
-    // Get Prefix, Number, and Suffix
-    var armyNumber = $("#armyPrefix option:selected").text();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
-
+    const armyNumber = $("#armyPrefix option:selected").text();
+    const Prefix = $("#armyNumber").val();
+    const Suffix = $("#txtSuffix").val();
     const ArmyNo = `${armyNumber}${Prefix}${Suffix}`.toUpperCase();
-
-    const unitValidation = document.querySelector("span[data-valmsg-for='Unit']");
-
     if (Prefix === "0" || armyNumber === "" || Suffix === "") {
-        // Warn if Army No is incomplete
         console.warn("Incomplete Army No");
         return;
     }
-
     try {
         $.ajax({
             url: '/OnlineApplication/CheckForCoRegister',
@@ -1549,7 +1426,6 @@ function checkCORegistration() {
                 if (result === true) {
                     $('#unitSearchDialog').removeClass('d-none');
                 } else if (result === false) {
-                    // If not registered, set unit input back to required
                     formSubmitting = true;
                     $('#myForm').submit();
                 }
@@ -1572,7 +1448,7 @@ $('#unitSearchInput').on('input', function () {
 $("#unitSearchConfirmBtn").click(function (e) {
     e.preventDefault();
     e.stopPropagation();
-    var value = $("#unitSearchInput").val()
+    const value = $("#unitSearchInput").val()
 
     if (value != 0) {
         Swal.fire({
@@ -1603,33 +1479,27 @@ $("#unitSearchCancelBtn").click(function (e) {
 
     formSubmitting = false;
     formCancelled = true;
-
-    // Hide the message when Cancel is clicked
     const $message = $('#unitSearchMessage');
     if ($message.length) {
         $message.text('');
     }
 
     $(unitSearchInput).val('');
-
-    // Also clear any previous search results and reset form stat
-
     $('#unitSearchConfirmBtn').prop('disabled', true);
 });
 
 
 function checkUnitSameOrNot(ArmyNo) {
-    var armyNumber = $("#armyPrefix option:selected").text();
-    var Prefix = $("#armyNumber").val();
-    var Suffix = $("#txtSuffix").val();
+    const armyNumber = $("#armyPrefix option:selected").text();
+    const Prefix = $("#armyNumber").val();
+    const Suffix = $("#txtSuffix").val();
 
-    var Value = armyNumber + Prefix + Suffix;
-    
+    const Value = armyNumber + Prefix + Suffix;
+
     if (ArmyNo.toUpperCase() == Value.toUpperCase()) {
-        //console.log("Unit is same as Army No");
         $('#unitSearchMessage').text("Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number.");
     }
-    
+
     else {
         try {
             $.ajax({
@@ -1649,9 +1519,9 @@ function checkUnitSameOrNot(ArmyNo) {
                             title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
                             html: '<span style="font-size: 18px;">Please approach your IO/Superior ath for Regn or contact AGIF.</span>',
                             confirmButtonText: 'OK',
-                            cancelButtonText: 'Cancel', // Cancel button text
-                            showCancelButton: true, // Enable cancel button
-                            reverseButtons: true,  // Make Cancel button appear on the left
+                            cancelButtonText: 'Cancel',
+                            showCancelButton: true,
+                            reverseButtons: true,
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $('#unitSearchDialog').addClass('d-none');
@@ -1699,18 +1569,17 @@ function formatIndianNumber(input) {
     input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
 }
 
-//PCA Calculations
 function RefreshMaxAmt_PCA() {
     $("#computerCost").on('change', function () {
-        var rawValue = $('#computerCost').val().replace(/,/g, '');
-        var PcCost = parseFloat(rawValue);
+        const rawValue = $('#computerCost').val().replace(/,/g, '');
+        let PcCost = parseFloat(rawValue);
 
         PcCost = Math.round(PcCost * 0.9);
         if (isNaN(PcCost)) {
             alert("Please enter a valid computer cost.");
             return;
         }
-        var Amount = 200000;
+        const Amount = 200000;
         if (Amount > PcCost) {
             $('#PCA_Amt_Eligible_for_loan').val(PcCost.toLocaleString('en-IN'));
         }
@@ -1724,13 +1593,13 @@ function RefreshMaxAmt_PCA() {
     });
 }
 function calculateEMIRepayingCapacity_PCA() {
-    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
+    const credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
+    const debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
     if (isNaN(credit) || isNaN(debit)) {
         alert("Please enter valid credit and debit amounts.");
         return;
     }
-    var repayingCapacity = credit * 0.75 - debit;
+    let repayingCapacity = credit * 0.75 - debit;
     if (repayingCapacity < 0) {
         repayingCapacity = 0;
     }
@@ -1753,38 +1622,37 @@ function calculateMaxEMI_PCA() {
     setOutlineActive("PCA_EMI_Eligible");
 }
 function validateAmount_PCA(input) {
-    var $input = $(input);
-    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-    var eligibleAmount = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-    var disbusermentAmt = enteredAmount * 0.99;
+    const $input = $(input);
+    const enteredAmount = parseFloat($input.val().replace(/,/g, ''));
+    const eligibleAmount = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
+
+    let disbusermentAmt = enteredAmount * 0.99;
+
     if (isNaN(enteredAmount)) {
         $input.val('');
-    } else {
-        if (enteredAmount > eligibleAmount) {
-            $input.val($("#PCA_Amt_Eligible_for_loan").val());
-            disbusermentAmt = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-        }
+    } else if (enteredAmount > eligibleAmount) {
+        $input.val($("#PCA_Amt_Eligible_for_loan").val());
+        disbusermentAmt = parseFloat($("#PCA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
     }
-
     $('#PCA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
     setOutlineActive("PCA_approxDisbursementAmt");
 }
+
 function validateEMI_PCA(input) {
-    var $input = $(input);
-    var enteredEMI = parseFloat($input.val());
-    var eligibleEMI = parseFloat($("#PCA_EMI_Eligible").val());
+    const $input = $(input);
+    const enteredEMI = parseFloat($input.val());
+    const eligibleEMI = parseFloat($("#PCA_EMI_Eligible").val());
 
     if (isNaN(enteredEMI)) {
         $input.val('');
-    } else {
-        if (enteredEMI > eligibleEMI) {
-            $input.val(eligibleEMI);
-        }
+    } else if (enteredEMI > eligibleEMI) {
+        $input.val(eligibleEMI);
     }
+
 }
 function calculateEMI_PCA() {
-    let P = parseFloat($("#PCA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-    let N = parseInt($("#PCA_EMI_Applied").val()); // Number of EMIs
+    let P = parseFloat($("#PCA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
+    let N = parseInt($("#PCA_EMI_Applied").val());
     let R = (8.50 / 12) / 100;
 
     if (!P || !N || !R) {
@@ -1798,16 +1666,15 @@ function calculateEMI_PCA() {
     setOutlineActive("PCA_approxEMIAmount");
 }
 
-//CA Calculations
 function RefreshMaxAmt_CA() {
     $("#vehicleCost").on('change', function () {
-        var vehicalType = $('#veh_Loan_Type').val();
-        var CarEngineType = $('#VehTypeId').val();
-        var rawValue = $('#vehicleCost').val().replace(/,/g, '');
-        var carCost = parseFloat(rawValue);
-        var prefix = $('#armyPrefix').val();
+        const vehicalType = $('#veh_Loan_Type').val();
+        const CarEngineType = $('#VehTypeId').val();
+        const rawValue = $('#vehicleCost').val().replace(/,/g, '');
+        let carCost = parseFloat(rawValue);
+        const prefix = $('#armyPrefix').val();
         carCost = Math.round(carCost * 0.9);
-        var Amount = 0;
+        let Amount = 0;
         if (isNaN(carCost)) {
             alert("Please enter a valid car cost.");
             return;
@@ -1838,13 +1705,13 @@ function RefreshMaxAmt_CA() {
     });
 }
 function calculateEMIRepayingCapacity_CA() {
-    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
+    const credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
+    const debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
     if (isNaN(credit) || isNaN(debit)) {
         alert("Please enter valid credit and debit amounts.");
         return;
     }
-    var repayingCapacity = credit * 0.75 - debit;
+    let repayingCapacity = credit * 0.75 - debit;
     if (repayingCapacity < 0) {
         repayingCapacity = 0;
     }
@@ -1854,10 +1721,10 @@ function calculateEMIRepayingCapacity_CA() {
 }
 function calculateMaxEMI_CA(vehicalType) {
 
-    var Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
+    let Residual = parseInt($('#totalResidualMonth').val().trim()) || 0;
     Residual -= 6;
-    var freqOfLoan = parseInt($('#CA_LoanFreq').val().trim()) || 0;
-    var EMI = 0;
+    const freqOfLoan = parseInt($('#CA_LoanFreq').val().trim()) || 0;
+    let EMI = 0;
     if (vehicalType == 2) {
         EMI = 96;
         if (freqOfLoan == 2) {
@@ -1893,27 +1760,28 @@ function calculateMaxEMI_CA(vehicalType) {
 
 }
 function validateAmount_CA(input) {
-    var $input = $(input);
-    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-    var eligibleAmount = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-    var disbusermentAmt = enteredAmount * 0.99;
+    const $input = $(input);
+    let enteredAmount = parseFloat($input.val().replace(/,/g, ''));
+    const eligibleAmount = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
+    let disbusermentAmt = enteredAmount * 0.99;
+
     if (isNaN(enteredAmount)) {
         $input.val('');
-    } else {
-        if (enteredAmount > eligibleAmount) {
-            $input.val($("#CA_Amt_Eligible_for_loan").val());
-            disbusermentAmt = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-        }
+    } else if (enteredAmount > eligibleAmount) {
+        $input.val($("#CA_Amt_Eligible_for_loan").val());
+        disbusermentAmt = parseFloat($("#CA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
+
     }
 
     $('#CA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
 
     setOutlineActive("CA_approxDisbursementAmt");
 }
+
 function validateEMI_CA(input) {
-    var $input = $(input);
-    var enteredEMI = parseFloat($input.val());
-    var eligibleEMI = parseFloat($("#CA_EMI_Eligible").val());
+    const $input = $(input);
+    let enteredEMI = parseFloat($input.val());
+    const eligibleEMI = parseFloat($("#CA_EMI_Eligible").val());
 
     if (isNaN(enteredEMI)) {
         $input.val('');
@@ -1923,9 +1791,10 @@ function validateEMI_CA(input) {
         }
     }
 }
+
 function calculateEMI_CA() {
-    let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-    let N = parseInt($("#CA_EMI_Applied").val()); // Number of EMIs
+    let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
+    let N = parseInt($("#CA_EMI_Applied").val());
     let R = (8.50 / 12) / 100;
 
     if (!P || !N || !R) {
@@ -1939,64 +1808,48 @@ function calculateEMI_CA() {
     setOutlineActive("CA_approxEMIAmount");
 }
 
-//HBA Calculations
 function RefreshMaxAmt_HBA() {
     $("#propertyCost").on('change', function () {
-        var propType = $('#propertyType').val();
+        const propType = $('#propertyType').val();
         if (!propType || propType == "0") {
             alert("Please select Property Type.");
             return;
         }
-        var rawValue = $('#propertyCost').val().replace(/,/g, '');
-        var propertyCost = parseFloat(rawValue);
+
+        const rawValue = $('#propertyCost').val().replace(/,/g, '');
+        let propertyCost = parseFloat(rawValue);
 
         propertyCost = Math.round(propertyCost * 0.85);
         if (isNaN(propertyCost)) {
-            alert("Please enter a valid car cost.");
+            alert("Please enter a valid property cost.");
             return;
         }
+
+        let Amount; // ✅ declared once
+
         if (propType == 5) {
-            var Amount = 2000000;
-            if (Amount > propertyCost) {
-                $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-            }
-            else {
-                $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-            }
-        }
-        else {
-            var prefix = $('#armyPrefix').val();
+            Amount = 2000000;
+        } else {
+            const prefix = $('#armyPrefix').val();
             if (!prefix || prefix == "0") {
                 alert("Please select Prefix.");
                 return;
             }
+
             if (prefix == 13) {
-                var Amount = 5000000;
-                if (Amount > propertyCost) {
-                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-                }
-                else {
-                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-                }
+                Amount = 5000000;
+            } else if (prefix == 14) {
+                Amount = 4000000;
+            } else {
+                Amount = 10000000;
             }
-            else if (prefix == 14) {
-                var Amount = 4000000;
-                if (Amount > propertyCost) {
-                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-                }
-                else {
-                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-                }
-            }
-            else {
-                var Amount = 10000000;
-                if (Amount > propertyCost) {
-                    $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
-                }
-                else {
-                    $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
-                }
-            }
+        }
+
+        // ✅ use Amount in one place
+        if (Amount > propertyCost) {
+            $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
+        } else {
+            $('#HBA_Amt_Eligible_for_loan').val(Amount.toLocaleString('en-IN'));
         }
 
         setOutlineActive("HBA_Amt_Eligible_for_loan");
@@ -2004,14 +1857,15 @@ function RefreshMaxAmt_HBA() {
         calculateEMIRepayingCapacity_HBA();
     });
 }
+
 function calculateEMIRepayingCapacity_HBA() {
-    var credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
-    var debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
+    const credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
+    const debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
     if (isNaN(credit) || isNaN(debit)) {
         alert("Please enter valid credit and debit amounts.");
         return;
     }
-    var repayingCapacity = credit * 0.75 - debit;
+    let repayingCapacity = credit * 0.75 - debit;
     if (repayingCapacity < 0) {
         repayingCapacity = 0;
     }
@@ -2035,27 +1889,27 @@ function calculateMaxEMI_HBA(propType) {
     setOutlineActive("HBA_EMI_Eligible");
 }
 function validateAmount_HBA(input) {
-    var $input = $(input);
-    var enteredAmount = parseFloat($input.val().replace(/,/g, ''));
-    var eligibleAmount = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
-    var disbusermentAmt = enteredAmount * 0.99;
+    const $input = $(input);
+    let enteredAmount = parseFloat($input.val().replace(/,/g, ''));
+    const eligibleAmount = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, ''));
+    let disbusermentAmt = enteredAmount * 0.99;
+
     if (isNaN(enteredAmount)) {
         $input.val('');
-    } else {
-        if (enteredAmount > eligibleAmount) {
-            $input.val($("#HBA_Amt_Eligible_for_loan").val());
-            disbusermentAmt = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
-        }
+    } else if (enteredAmount > eligibleAmount) {
+        $input.val($("#HBA_Amt_Eligible_for_loan").val());
+        disbusermentAmt = parseFloat($("#HBA_Amt_Eligible_for_loan").val().replace(/,/g, '')) * 0.99;
     }
 
-    $('#HBA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
 
+    $('#HBA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
     setOutlineActive("HBA_approxDisbursementAmt");
 }
+
 function validateEMI_HBA(input) {
-    var $input = $(input);
-    var enteredEMI = parseFloat($input.val());
-    var eligibleEMI = parseFloat($("#HBA_EMI_Eligible").val());
+    const $input = $(input);
+    let enteredEMI = parseFloat($input.val());
+    const eligibleEMI = parseFloat($("#HBA_EMI_Eligible").val());
 
     if (isNaN(enteredEMI)) {
         $input.val('');
@@ -2065,9 +1919,10 @@ function validateEMI_HBA(input) {
         }
     }
 }
+
 function calculateEMI_HBA() {
-    let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, '')); // Loan amount
-    let N = parseInt($("#HBA_EMI_Applied").val()); // Number of EMIs
+    let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
+    let N = parseInt($("#HBA_EMI_Applied").val());
     let R = (8.50 / 12) / 100;
 
     if (!P || !N || !R) {
@@ -2082,8 +1937,8 @@ function calculateEMI_HBA() {
 }
 
 function validateEMIHba() {
-    var hbaApproxEmi = parseFloat($("#HBA_approxEMIAmount").val().replace(/,/g, ''));
-    var hbaEmiRepayingCapacity = parseFloat($("#HBA_repayingCapacity").val().replace(/,/g, ''));
+    const hbaApproxEmi = parseFloat($("#HBA_approxEMIAmount").val().replace(/,/g, ''));
+    const hbaEmiRepayingCapacity = parseFloat($("#HBA_repayingCapacity").val().replace(/,/g, ''));
     if (isNaN(hbaApproxEmi) || isNaN(hbaEmiRepayingCapacity)) {
         alert("Please ensure all fields are filled correctly.");
         return false;
@@ -2107,7 +1962,7 @@ $("#ParenttxtUnit").autocomplete({
         $("input[name='ParentUnit']").val(0);
 
         if (request.term.length > 2) {
-            var param = { "UnitName": request.term };
+            const param = { "UnitName": request.term };
             $("#ParentUnitId").val(0);
             $.ajax({
                 url: '/Account/GetALLByUnitName',
@@ -2149,7 +2004,6 @@ $("#ParenttxtUnit").autocomplete({
         $("#ParenttxtUnit").removeClass("is-invalid").addClass("is-valid");
         $("input[name='CommonData.ParentUnit']").removeClass("is-invalid").addClass("is-valid");
 
-        // Hide validation message
         $("#ParenttxtUnit").closest('.form-outline').find('.text-danger').hide();
     },
     appendTo: '#suggesstion-box'
@@ -2157,11 +2011,10 @@ $("#ParenttxtUnit").autocomplete({
 
 $("#PresenttxtUnit").autocomplete({
     source: function (request, response) {
-        //alert(1);
         $("input[name='PresentUnit']").val(0);
 
         if (request.term.length > 2) {
-            var param = { "UnitName": request.term };
+            const param = { "UnitName": request.term };
             $("#ParentUnitId").val(0);
             $.ajax({
                 url: '/Account/GetALLByUnitName',
@@ -2202,7 +2055,6 @@ $("#PresenttxtUnit").autocomplete({
         $("#PresenttxtUnit").removeClass("is-invalid").addClass("is-valid");
         $("input[name='CommonData.PresentUnit']").removeClass("is-invalid").addClass("is-valid");
 
-        // Hide validation message
         $("#PresenttxtUnit").closest('.form-outline').find('.text-danger').hide();
         CheckIsCoRegister(i.item.value, i.item.label)
 
@@ -2211,7 +2063,7 @@ $("#PresenttxtUnit").autocomplete({
 });
 
 function CheckIsCoRegister(UnitId, UnitName) {
-    var param = { "UnitId": UnitId };
+    const param = { "UnitId": UnitId };
     $("#PresentUnitId").val(0);
     $.ajax({
         url: '/Account/CheckIsCoRegister',
@@ -2247,8 +2099,8 @@ $('#oldArmyNo').on('focus', function () {
 });
 
 function validateEMIForRepayingCapacity(prefix) {
-    var approxEmi = parseFloat($(`#${prefix}_approxEMIAmount`).val().replace(/,/g, ''));
-    var repayingCapacity = parseFloat($(`#${prefix}_repayingCapacity`).val().replace(/,/g, ''));
+    const approxEmi = parseFloat($(`#${prefix}_approxEMIAmount`).val().replace(/,/g, ''));
+    const repayingCapacity = parseFloat($(`#${prefix}_repayingCapacity`).val().replace(/,/g, ''));
 
     if (isNaN(approxEmi) || isNaN(repayingCapacity)) {
         alert("Please ensure all fields are filled correctly.");
@@ -2292,12 +2144,10 @@ $('input[required], select[required]').on('input change blur', function () {
     if (inputElement.checkValidity()) {
         input.removeClass("is-invalid").addClass("is-valid");
 
-        // Hide error message if validation passes
         input.closest('.form-outline').find('.text-danger').hide();
     } else {
         input.removeClass("is-valid").addClass("is-invalid");
 
-        // Show error message if validation fails
         input.closest('.form-outline').find('.text-danger').show();
     }
 });
