@@ -973,7 +973,10 @@ namespace Agif_V2.Controllers
         public async Task<bool> ClaimExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
         {
             DataTable dataTable = await _IClaimonlineApplication1.GetApplicationDetailsForExcel(dTOExport);
-
+            if (dataTable.Columns.Contains("EmailDomain"))
+            {
+                dataTable.Columns.Remove("EmailDomain");
+            }
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("ExportedData");

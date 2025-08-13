@@ -441,6 +441,7 @@ namespace Agif_V2.Controllers
                     PhoneNumber = signUpDto.MobileNo,
                     Updatedby = 1,
                     UpdatedOn = DateTime.Now,
+                    DomainId=signUpDto.userName
                 };
 
                 var Result = await _userManager.CreateAsync(newUser, "Admin123!");

@@ -4,6 +4,7 @@ using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -940,7 +941,7 @@ namespace DataAccessLayer.Repositories
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new ClaimCommonDataOnlineResponse
                           {
-                              ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                              //ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.WithdrawPurpose,
@@ -1047,95 +1048,159 @@ namespace DataAccessLayer.Repositories
                          where dTOExport.Id.Contains(common.ApplicationId)
                          select new DTOClaimExcelResponse
                          {
-                             ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
-                             PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
-                             ApplicationId = common.ApplicationId,
-                             ApplicationType = common.WithdrawPurpose,
-                             ApplicationTypeName = applicationType.Name ?? string.Empty,
+                             //ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                             Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                             //ApplicationId = common.ApplicationId,
+                             //ApplicationType = common.WithdrawPurpose,
+                             ApplicationType = applicationType.Name ?? string.Empty,
                              ArmyNumber = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
-                             AadharCardNo = common.AadharCardNo ?? string.Empty,
+                             AadharNo = common.AadharCardNo ?? string.Empty,
                              OldArmyNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
                              Rank = rank != null ? rank.RankName : string.Empty,
-                             ApplicantName = common.ApplicantName ?? string.Empty,
-                             DateOfBirth = common.DateOfBirth,
-                             DateOfCommission = common.DateOfCommission,
-                             NextFmnHQ = common.NextFmnHQ ?? string.Empty,
-                             ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                             MaturityHolder_Name = common.ApplicantName ?? string.Empty,
+                             Date_Of_Birth = common.DateOfBirth,
+                             Enrollment_Date = common.DateOfCommission,
+                             //NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                             //ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
                              RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
-                             PresentUnitPin = common.PresentUnitPin ?? string.Empty,
-                             DateOfPromotion = common.DateOfPromotion,
-                             DateOfRetirement = common.DateOfRetirement,
-                             PanCardNo = common.PanCardNo ?? string.Empty,
+                             //PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                             //DateOfPromotion = common.DateOfPromotion,
+                             Retirement_Date = common.DateOfRetirement,
+                             PANNo = common.PanCardNo ?? string.Empty,
                              MobileNo = common.MobileNo ?? string.Empty,
-                             Email = (common.Email ?? string.Empty) ?? string.Empty,
-                             SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
-                             IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                             NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
-                             NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
-                             pcda_pao = common.pcda_pao ?? string.Empty,
-                             pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                             E_Mail_Id = (common.Email ?? string.Empty) ?? string.Empty,
+                             Payee_Account_No = AccountDetails.SalaryAcctNo ?? string.Empty,
+                             IFSC_Code = AccountDetails.IfsCode ?? string.Empty,
+                             //NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                             //NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
+                             CDA_PAO = common.pcda_pao ?? string.Empty,
+                             CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
                              Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
                              Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
                              Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
                              Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
-                             AmountwithdrwalRequired = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
-                             NoOfwithdrwal = common.Noofwithdrawal ?? string.Empty,
-                             TotalService = common.TotalService ?? 0,
-                             ResidualService = common.ResidualService ?? 0,
-                             ExtnOfService = common.ExtnOfService ?? string.Empty,
+                             Pin_Code = AddressDetails.Code ?? string.Empty,
 
-                             House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
+                             Amount_Applied_For_MAWD = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
+                             NoofWithdrawal = common.Noofwithdrawal ?? string.Empty,
+                             Year_Of_Service = common.TotalService ?? 0,
+                             Residual_Service = common.ResidualService ?? 0,
+                             Suffix=common.Suffix ?? string.Empty,
+                             opfx=common.OldArmyPrefix,
+                             ono=common.OldNumber,
+                             OldSuffix=common.OldSuffix ?? string.Empty,
 
-                             House_Repair_Advance_Loan = common.Computer_Advance_Loan ?? false,
+                             //ExtnOfService = common.ExtnOfService ?? string.Empty,
 
-                             Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
+                             //House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
 
-                             Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
+                             //House_Repair_Advance_Loan = common.House_Repair_Advance_Loan ?? false,
 
-                             House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
-                             House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
-                             House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
+                             //Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
 
-                             Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
-                             Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
-                             Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
+                             //Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
 
-                             House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
-                             House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
-                             House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
+                             //House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
+                             //House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
+                             //House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
 
-                             Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
-                             Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
-                             Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
+                             //Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
+                             //Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
+                             //Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
+
+                             //House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
+                             //House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
+                             //House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
+
+                             //Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
+                             //Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
+                             //Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
+                             // Corrected logic for AnyloantakenformAGIF assignment
+                             AnyloantakenformAGIF = common.House_Building_Advance_Loan == true ? "House Building Advance Loan" :
+                                                    common.House_Repair_Advance_Loan == true ? "House Repair Advance Loan" :
+                                                    common.Conveyance_Advance_Loan == true ? "Conveyance Advance Loan" :
+                                                    common.Computer_Advance_Loan == true ? "Computer Advance Loan" : string.Empty,
+
+                             Dtofloantaken = common.House_Building_Advance_Loan == true ? common.House_Building_Date_of_Loan_taken :
+                                            common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Date_of_Loan_taken :
+                                            common.Conveyance_Advance_Loan == true ? common.Conveyance_Date_of_Loan_taken :
+                                            common.Computer_Advance_Loan == true ? common.Computer_Date_of_Loan_taken :
+                                            (DateTime?)null,
+
+                             DurationMonths = common.House_Building_Advance_Loan == true ? common.House_Building_Duration_of_Loan :
+                                 common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Duration_of_Loan :
+                                 common.Conveyance_Advance_Loan == true ? common.Conveyance_Duration_of_Loan :
+                                 common.Computer_Advance_Loan == true ? common.Computer_Duration_of_Loan :
+                                 0,
+
+                             AmountTaken = common.House_Building_Advance_Loan == true ? (common.House_Building_Amount_Taken ?? 0) :
+                                 common.House_Repair_Advance_Loan == true ? (common.House_Repair_Advance_Amount_Taken ?? 0) :
+                                 common.Conveyance_Advance_Loan == true ? (common.Conveyance_Amount_Taken ?? 0) :
+                                 common.Computer_Advance_Loan == true ? (common.Computer_Amount_Taken ?? 0) :
+                                 0,
+
+                             ChldrenName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,
+                             ChildrenDOB = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,
+                             //DOPartIINo = common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
+                             //DoPartIIDate = common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
+
+                             ChildbirthDOPartIIOrderNoAndDt = (common.WithdrawPurpose == 1 ? (ED.DoPartIIDate.HasValue ? ED.DOPartIINo + " " + ED.DoPartIIDate.Value.ToString("dd/MM/yyyy") : ED.DOPartIINo)
+    : (common.ApplicantType == 2 ? (MW.DoPartIIDate.HasValue ? MW.DOPartIINo + " " + MW.DoPartIIDate.Value.ToString("dd/MM/yyyy") : MW.DOPartIINo) : null)),
 
 
-                             ChildName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,
-                             ChildDateOfBirth = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,
-                             DOPartIINo = common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
-                             DoPartIIDate = common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
+                            //AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
 
-                             AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
+                             Marriagedt = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
 
-                             DateofMarriage = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
+                             Course = common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
 
-                             CourseForWithdrawal = common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
+                             NameofInstitute = common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
 
-                             CollegeInstitution = common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
+                             Total_Cost = common.WithdrawPurpose == 1 ? ED.TotalExpenditure : common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
 
-                             TotalExpenditure = common.WithdrawPurpose == 1 ? ED.TotalExpenditure : common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
+                             AddressofProperty = common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
 
-                             AddressOfProperty = common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
+                             NameofPropertyHolder = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
 
-                             PropertyHolderName = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
+                             SpecialReason = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
 
-                             OtherReasons = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
-
-                             StatusCode = common.StatusCode
+                             StatusCode = common.StatusCode,
+                             EmailDomain=common.EmailDomain?? string.Empty,
+                             dateandtimedownload =common.DownloadedOn
                          }).ToList();
 
+            foreach (var item in query)
+            {
+                // Concatenate Email + EmailId
+                item.E_Mail_Id = $"{item.E_Mail_Id??string.Empty}@{item.EmailDomain??string.Empty}".Trim();
+            }
             dataTable = query.ToDataTable();
             return Task.FromResult(dataTable);
         }
+
+            public string Getloantype(bool? houseBuilding, bool? houseRepair, bool? conveyance, bool? computer)
+            {
+                if (houseBuilding == true)
+                {
+                    return "House Building Advance Loan";
+                }
+                else if (houseRepair == true)
+                {
+                    return "House Repair Advance Loan";
+                }
+                else if (conveyance == true)
+                {
+                    return "Conveyance Advance Loan";
+                }
+                else if (computer == true)
+                {
+                    return "Computer Advance Loan";
+                }
+                else
+                    return "";
+            }
+
+    
 
         public Task<DTOClaimCommonOnlineResponse> GetUnitByApplicationId(int applicationId)
         {
