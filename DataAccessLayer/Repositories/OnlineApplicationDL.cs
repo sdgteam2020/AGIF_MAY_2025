@@ -758,7 +758,7 @@ namespace DataAccessLayer.Repositories
 
                                     select new DTOExcelResponse
                                     {
-                                        Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                                        Unit = presentUnit != null ? presentUnit.UnitId : 0,
                                        
                                         apfx = prefix.Prefix,
                                         ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),

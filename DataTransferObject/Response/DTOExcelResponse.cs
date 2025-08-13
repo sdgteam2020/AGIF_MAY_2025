@@ -11,7 +11,7 @@ namespace DataTransferObject.Response
         public string Loanee_Name { get; set; }
         public string Rank { get; set; }
         public string Regt_Corps { get; set; }
-        public string Unit { get; set; }
+        public int Unit { get; set; }
         public string CDA_PAO { get; set; }
         public DateTime? Date_Of_Birth { get; set; }
         public DateTime? Enrollment_Date { get; set; }
