@@ -7,12 +7,10 @@ namespace Agif_V2.Controllers
 {
     public class DefaultController : Controller
     {
-        private readonly IWebHostEnvironment _env;
         private readonly IDefault _default;
-        public DefaultController(IWebHostEnvironment env, IDefault _default)
+        public DefaultController(IDefault _default)
         {
             this._default = _default;
-            _env = env;
         }
 
         public IActionResult Index()

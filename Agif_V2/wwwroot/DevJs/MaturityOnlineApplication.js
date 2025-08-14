@@ -1382,7 +1382,10 @@ function checkCORegistration() {
     const suffix = $("#txtSuffix").val().trim();
 
     const ArmyNo = `${armyNumber}${prefix}${suffix}`.toUpperCase();
-    if (Prefix === "0" || armyNumber === "" || Suffix === "") {
+
+    //const $unitValidation = $("span[data-valmsg-for='Unit']");
+
+    if (prefix === "0" || armyNumber === "" || suffix === "") {
         // Warn if Army No is incomplete
         console.warn("Incomplete Army No");
         return;
