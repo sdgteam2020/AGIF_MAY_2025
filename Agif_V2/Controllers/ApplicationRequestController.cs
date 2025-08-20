@@ -161,6 +161,10 @@ namespace Agif_V2.Controllers
         //}
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
             {
@@ -226,7 +230,10 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetMaturityUsersApplicationList(DTODataTableRequest request, int status)
         {
-
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
             {
@@ -263,6 +270,10 @@ namespace Agif_V2.Controllers
 
         public string DataDigitalXmlSign(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return "<Root><Error>Invalid application ID</Error></Root>";
+            }
             var data = SignDocument(applicationId);
             var jsonObject = new
             {

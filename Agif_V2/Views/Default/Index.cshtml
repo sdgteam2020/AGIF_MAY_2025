@@ -5,7 +5,7 @@
     var samlRole = Context.Session.GetString("SAMLRole");
 }
 
-<link href="~/css/Font/all.min.css" rel="stylesheet" />
+@* <link href="~/css/Font/all.min.css" rel="stylesheet" /> *@
  <link href="~/css/home-index.css" rel="stylesheet" />
 
 
@@ -172,7 +172,7 @@
     </div>
 </div>
 
-<div class="bg-gray-100 h-screen p-4 relative">
+@* <div class="bg-gray-100 h-screen p-4 relative">
 <div onclick="toggleModal();" id="chatToggleButton"
      class="fixed bottom-6 right-6 z-50 cursor-pointer bg-white rounded-full shadow-lg p-3">
     <!-- <img id="chatToggleImg" src="static/images/chatbot-icon.jpg" alt="Chat" class="w-10 h-10"> -->
@@ -216,9 +216,8 @@
         </button>
     </div>
 </div>
-</div>
+</div> *@
 
 @section Scripts {
     <script src="~/devjs/home-index.js"></script>
-    <script src="~/lib/tailwind.js"></script>
 }

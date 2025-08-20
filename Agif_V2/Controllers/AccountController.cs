@@ -495,11 +495,11 @@ namespace Agif_V2.Controllers
         [Authorize(Roles = "SuperAdmin")]
         public IActionResult GetAllUsers(bool status)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    // If the model state is not valid, return an error message or handle accordingly
-            //    return BadRequest("Invalid request.");
-            //}
+            if (!ModelState.IsValid)
+            {
+                // If the model state is not valid, return an error message or handle accordingly
+                return BadRequest("Invalid request.");
+            }
 
             ViewBag.UserStatus = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -591,6 +591,12 @@ namespace Agif_V2.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    // If the request is invalid, return an empty response or a proper error message
+                    var invalidResponse = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
+                    return Json(invalidResponse);
+                }
                 bool userStatus = GetUserStatus(status);
 
                 var queryableData = await _userProfile.GetAllUser(userStatus);
@@ -766,27 +772,30 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateUserStatus(string domainId, bool isActive)
         {
-            if(string.IsNullOrEmpty(domainId))
+            if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
             }
-            var userProfile = _userProfile.GetByUserName(domainId).Result;
-            if(userProfile == null)
+
+            var userProfile = await _userProfile.GetByUserName(domainId);
+            if (userProfile == null)
             {
                 return Json(new { success = false, message = "User not found." });
             }
-            int profileId = userProfile.ProfileId;
 
-            var userMapping = _userMapping.GetByProfileId(userProfile.ProfileId).Result.FirstOrDefault();
+            var userMapping = (await _userMapping.GetByProfileId(userProfile.ProfileId)).FirstOrDefault();
             if (userMapping == null)
             {
                 return Json(new { success = false, message = "User mapping not found." });
             }
+
             userMapping.IsActive = isActive;
             userMapping.UpdatedOn = DateTime.Now;
             await _userMapping.Update(userMapping);
+
             return Json(new { success = true });
         }
+
         public async Task<IActionResult> FinalLogout()
         {
             await _signInManager.SignOutAsync();
@@ -796,26 +805,33 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateUserPrimary(string domainId, bool isPrimary)
         {
-            if(string.IsNullOrEmpty(domainId))
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
+
+            if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
             }
-            var userProfile = _userProfile.GetByUserName(domainId).Result;
-            if(userProfile == null)
+
+            var userProfile = await _userProfile.GetByUserName(domainId);
+            if (userProfile == null)
             {
                 return Json(new { success = false, message = "User not found." });
             }
-            int profileId = userProfile.ProfileId;
 
-            var userMapping = _userMapping.GetByProfileId(userProfile.ProfileId).Result.FirstOrDefault();
+            var userMapping = (await _userMapping.GetByProfileId(userProfile.ProfileId)).FirstOrDefault();
             if (userMapping == null)
             {
                 return Json(new { success = false, message = "User mapping not found." });
             }
+
             var unitId = userMapping.UnitId;
+
             if (isPrimary)
             {
-                var allUserMappings = _userMapping.GetByUnitId(unitId).Result;
+                var allUserMappings = await _userMapping.GetByUnitId(unitId);
                 foreach (var mapping in allUserMappings)
                 {
                     if (mapping.MappingId != userMapping.MappingId)
@@ -824,25 +840,30 @@ namespace Agif_V2.Controllers
                         await _userMapping.Update(mapping);
                     }
                 }
-                userMapping.IsPrimary = isPrimary;
+
+                userMapping.IsPrimary = true;
                 await _userMapping.Update(userMapping);
             }
-            //userMapping.IsPrimary = isPrimary;
-            //await _userMapping.Update(userMapping);
+
             return Json(new { success = true });
         }
+
         public async Task<IActionResult> CheckIsCoRegister(int unitId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(0);
+            }
             try
             {
                 var ret = await _userMapping.GetActiveUnitId(unitId);
                 if (ret == null || !ret.Any())
                 {
-                    return Json(0); // No user mapping found for the given unitId
+                    return Json(0); 
                 }
                 else
                 {
-                    return Json(1); // User mapping exists for the given unitId
+                    return Json(1); 
                 }
             }
             catch (Exception)
@@ -855,6 +876,11 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<ActionResult> GetUnitById(int UnitId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid request");
+            }
+
             try
             {
                 if (UnitId > 0)

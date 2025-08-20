@@ -1036,8 +1036,6 @@ function extensionOfService() {
     const extension = $('#ExtnOfService').val();
     const dop = $('#dateOfPromotion').val();
 
-    console.log('DoP value:', dop);
-
     if (!prefix) {
         Swal.fire({
             title: 'Warning!',
@@ -1050,7 +1048,6 @@ function extensionOfService() {
     if (prefix == 13 || prefix == 14) {
         if (extension == "Yes") {
             if (!dop || dop.trim() === "") {
-                console.log('DoP not set, calculating service extension...');
                 const currentRetDate = $('#dateOfRetirement').val();
                 if (!currentRetDate) {
                     Swal.fire({
@@ -1078,11 +1075,9 @@ function extensionOfService() {
                     $('#dateOfRetirement').val(formattedDate);
 
                     calculateResidualService();
-
-                    console.log('Service extended by 2 years. New retirement date:', formattedDate);
+                    
                 } else {
                     $('#dateOfRetirement').val('');
-                    console.error("Invalid retirement date format. Expected YYYY-MM-DD format.");
 
                     Swal.fire({
                         title: 'Error!',
@@ -1097,7 +1092,6 @@ function extensionOfService() {
             if (globleRetirementDate?.value) {
                 $('#dateOfRetirement').val(globleRetirementDate.value);
                 calculateResidualService();
-                console.log('Extension not selected, reverted to original retirement date');
             } else {
                 console.error('Global retirement date not available');
             }
