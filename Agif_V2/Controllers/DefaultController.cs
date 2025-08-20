@@ -90,9 +90,26 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetTimeline(int ApplicationId)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var data = await _default.GetTimeLine(ApplicationId);
             return Json(data);
         }
+
+        public async Task<IActionResult> GetClaimTimeline(int ApplicationId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var data = await _default.GetClaimTimeLine(ApplicationId);
+            return Json(data);
+        }
+
 
     }
 }

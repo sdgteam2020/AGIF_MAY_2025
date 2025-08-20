@@ -47,6 +47,10 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             var existingUser = await _IClaimonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
 
             if (existingUser != null) // Check if the user exists
@@ -61,6 +65,10 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             bool result = await _IClaimonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
 
             if (result == true)
@@ -857,6 +865,10 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             try
             {
                 string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -994,6 +1006,10 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> GetPdfFilePath(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             var userData = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
             if (userData == null)
             {
@@ -1041,6 +1057,11 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> GetApplicationDetails(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
+
             try
             {
                 var applicationDetails = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);

@@ -12,13 +12,13 @@ namespace Agif_V2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
         private readonly IHome home;
         
-        public HomeController(ILogger<HomeController> logger, IHome home)
+        public HomeController(IHome home)
         {
             this.home = home;
-            _logger = logger;
+            //_logger = logger;
         }
 
         public async Task<IActionResult> Index()

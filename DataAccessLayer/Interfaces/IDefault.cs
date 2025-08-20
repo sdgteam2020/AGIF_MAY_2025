@@ -11,7 +11,7 @@ namespace DataAccessLayer.Interfaces
     {
         Task<List<DTOApplicationStatusResponse>> GetUserApplicationStatusByArmyNo(string armyNo);
         Task<List<DTOApplicationStatusResponse>> GetTimeLine(int applicationId);
-
+        Task<List<DTOApplicationStatusResponse>> GetClaimTimeLine(int applicationId);
         Task<List<DTOApplicationStatusResponse>> GetClaimUserApplicationStatusByArmyNo(string armyNo);
     }
 }

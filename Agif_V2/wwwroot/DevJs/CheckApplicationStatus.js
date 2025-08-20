@@ -109,7 +109,8 @@
         const timelineRow = $('#timeline-' + appId);
         const timelineContent = $('#timeline-content-' + appId);
         const loadingDiv = $('#loading-' + appId);
-
+        let selectedType = $('#typeSelect').val();
+        let endpoint = '';
         // Check if timeline is already loaded
         if (timelineContent.children().length > 0) {
             return; // Timeline already loaded, just toggle
@@ -121,9 +122,14 @@
         loadingDiv.show();
         timelineContent.hide();
 
+        if (selectedType === 'Loan')
+            endpoint = '/Default/GetTimeline';
+        else if (selectedType === 'Maturity')
+            endpoint = '/Default/GetClaimTimeline';
+
         // Get the appropriate timeline endpoint
         $.ajax({
-            url: '/Default/GetTimeline',
+            url: endpoint,
             type: 'GET',
             data: { applicationId: appId },
             success: function (response) {

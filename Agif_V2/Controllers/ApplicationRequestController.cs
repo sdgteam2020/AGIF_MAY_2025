@@ -62,24 +62,25 @@ namespace Agif_V2.Controllers
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
-            DTOUserProfileResponse dTOUserProfileResponse = new DTOUserProfileResponse();
+            DTOUserProfileResponse? dTOUserProfileResponse = null;
 
-            if (dTOTempSession != null)
-                dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
-
-            if (dTOUserProfileResponse != null)
+            if (dTOTempSession != null && !string.IsNullOrEmpty(sessionUser?.UserName))
             {
-                // Map properties as needed. Example:
-                dTOTempSession.ArmyNo = dTOUserProfileResponse.ArmyNo;
-                dTOTempSession.MobileNo = dTOUserProfileResponse.MobileNo;
-                dTOTempSession.ProfileName = dTOUserProfileResponse.ProfileName;
-                dTOTempSession.UserName = dTOUserProfileResponse.DomainId;
-                dTOTempSession.EmailId = dTOUserProfileResponse.EmailId;
+                dTOUserProfileResponse = await _userProfile.GetUserAllDetails(sessionUser.UserName);
+            }
+
+            if (dTOUserProfileResponse != null && dTOTempSession != null)
+            {
+                dTOTempSession.ArmyNo = dTOUserProfileResponse.ArmyNo ?? string.Empty;
+                dTOTempSession.MobileNo = dTOUserProfileResponse.MobileNo ?? string.Empty;
+                dTOTempSession.ProfileName = dTOUserProfileResponse.ProfileName ?? string.Empty;
+                dTOTempSession.UserName = dTOUserProfileResponse.DomainId ?? string.Empty;
+                dTOTempSession.EmailId = dTOUserProfileResponse.EmailId ?? string.Empty;
                 dTOTempSession.RankId = dTOUserProfileResponse.RankId;
                 dTOTempSession.RegtId = dTOUserProfileResponse.RegtId;
                 dTOTempSession.ApptId = dTOUserProfileResponse.ApptId;
                 dTOTempSession.UnitId = dTOUserProfileResponse.UnitId;
-                dTOTempSession.name = dTOUserProfileResponse.username;
+                dTOTempSession.name = dTOUserProfileResponse.username ?? string.Empty;
                 dTOTempSession.DteFmn = dTOUserProfileResponse.IsFmn;
                 dTOTempSession.MappingId = dTOUserProfileResponse.MappingId;
             }
@@ -994,7 +995,7 @@ namespace Agif_V2.Controllers
                 if (dataTable.Rows.Count > 0)
                 {
                     worksheet.Cell(1, 1).InsertTable(dataTable);
-                    string excelFilePath = Path.Combine(folderPath, "loanDetails.xlsx");
+                    string excelFilePath = Path.Combine(folderPath, "MAWD_Details.xlsx");
                     workbook.SaveAs(excelFilePath);
                     return true;
                 }

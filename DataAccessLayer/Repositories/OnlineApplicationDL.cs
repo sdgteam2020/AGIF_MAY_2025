@@ -315,7 +315,7 @@ namespace DataAccessLayer.Repositories
                                     select new DTOHbaApplicationresponse
                                     {
                                         PropertyType = loanType != null ? loanType.LoanType : string.Empty, // Getting LoanType from MLoanTypes
-                                        PropertySeller = hba.PropertySeller.ToString(),
+                                        PropertySeller = hba.PropertySeller ?? string.Empty,
                                         PropertyAddress = hba.PropertyAddress,
                                         PropertyCost = hba.PropertyCost,
                                         HBA_LoanFreq = hba.HBA_LoanFreq,

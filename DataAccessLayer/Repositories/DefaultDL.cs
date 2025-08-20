@@ -34,7 +34,23 @@ namespace DataAccessLayer.Repositories
 
             return timeLine;
         }
+        public async Task<List<DTOApplicationStatusResponse>> GetClaimTimeLine(int applicationId)
+        {
+            var timeLine = await (from statusCtr in _context.TrnClaimStatusCounter
+                                  join status in _context.StatusTable on statusCtr.StatusId equals status.ClaimStatusCode
+                                  where statusCtr.ApplicationId == applicationId
+                                  orderby statusCtr.ActionOn
+                                  select new DTOApplicationStatusResponse
+                                  {
+                                      StatusId = status.StatusId,
+                                      Status = status.StatusName,
+                                      timeLine = statusCtr.ActionOn.HasValue
+                                          ? statusCtr.ActionOn.Value.ToString("dd-MM-yyyy")
+                                          : ""
+                                  }).ToListAsync();
 
+            return timeLine;
+        }
 
         public async Task<List<DTOApplicationStatusResponse>> GetUserApplicationStatusByArmyNo(string armyNo)
         {
