@@ -77,6 +77,7 @@ namespace DataAccessLayer
         public virtual DbSet<ClaimDigitalSignRecords> trnClaimDigitalSignRecords { get; set; }
 
         public virtual DbSet<TrnClaimStatusCounter> TrnClaimStatusCounter { get; set; }
+        public virtual DbSet<TrnApprovedLog> TrnApprovedLogs { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CommonDataModel>()

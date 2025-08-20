@@ -131,5 +131,32 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
         }
+
+        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive)
+        {
+            var user = await _context.UserProfiles
+                .Where(u => u.userName == DomainId)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var approvedLog = new TrnApprovedLog   // Entity mapped to table `trnApprovedLogs`
+            {
+                Name = user.Name,
+                DomainId = user.userName,
+                IpAddress = Ip,
+                IsApproved = isActive,
+                UpdatedOn = DateTime.Now
+            };
+
+            _context.TrnApprovedLogs.Add(approvedLog);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

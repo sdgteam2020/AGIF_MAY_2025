@@ -772,6 +772,13 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateUserStatus(string domainId, bool isActive)
         {
+            var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            
+            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(ip))
+            {
+                ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            }
             if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
@@ -789,9 +796,14 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "User mapping not found." });
             }
 
+            bool result = await _userProfile.SaveApprovedLogs(sessionUser.DomainId, ip, isActive);
+
+
             userMapping.IsActive = isActive;
             userMapping.UpdatedOn = DateTime.Now;
             await _userMapping.Update(userMapping);
+
+
 
             return Json(new { success = true });
         }
