@@ -180,5 +180,7 @@ namespace DataTransferObject.Model
 
         public string? AGIFRemarks { get; set; } = string.Empty;
 
+        public string? IPAddress { get; set; } = string.Empty;
+
     }
 }

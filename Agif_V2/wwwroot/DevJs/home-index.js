@@ -107,7 +107,7 @@ function toggleModal() {
     }
     // showWelcomeMessage();
     sendQuery("hi", true);     // Silent repeat call
-
+      
     setInterval(() => {
         console.log("⏰ Sending heartbeat 'hi' to API...");
         sendQuery("hi", true);     // Silent repeat call

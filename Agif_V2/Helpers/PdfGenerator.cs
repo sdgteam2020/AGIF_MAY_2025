@@ -75,8 +75,6 @@ namespace Agif_V2.Helpers
                     document.SetMargins(30f, 25f, 40f, 25f);
 
                     //Define Fonts
-                    PdfFont titleFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-                    PdfFont subtitleFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                     PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
                     PdfFont normalFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                     float smallFontSize = 9f;
@@ -108,7 +106,6 @@ namespace Agif_V2.Helpers
                     void AddRow(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                     {
                         Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
-                        Border bottomBorder = new SolidBorder(1); // Always apply bottom border
                         table.AddCell(new Cell().Add(new Paragraph(label1).SetFont(normalFont).SetFontSize(smallFontSize))
                             .SetBorderTop(topBorder)
                             .SetBorderBottom(new SolidBorder(1))

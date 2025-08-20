@@ -629,7 +629,7 @@ namespace Agif_V2.Controllers
             return string.Equals(status, "true", StringComparison.OrdinalIgnoreCase);
         }
 
-        private IQueryable<DTOUserProfileResponse> ApplySearchFilter(IQueryable<DTOUserProfileResponse> query, string searchValue)
+        private IQueryable<DTOUserProfileResponse> ApplySearchFilter(IQueryable<DTOUserProfileResponse> query, string? searchValue)
         {
             if (string.IsNullOrEmpty(searchValue)) return query;
 

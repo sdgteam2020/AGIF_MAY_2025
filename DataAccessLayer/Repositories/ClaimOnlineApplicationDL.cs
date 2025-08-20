@@ -26,8 +26,7 @@ namespace DataAccessLayer.Repositories
         private readonly IProperty _Property;
         private readonly ISpecial _Special;
         private readonly IClaimDocumentUpload _DocumentUpload;
-        private readonly IOnlineApplication _onlineApplication;
-        public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special, IClaimDocumentUpload documentUpload, IOnlineApplication onlineApplication) : base(context)
+        public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special, IClaimDocumentUpload documentUpload) : base(context)
         {
             _context = context;
             _IArmyPrefixes = iArmyPrefixes;
@@ -36,7 +35,6 @@ namespace DataAccessLayer.Repositories
             _Property = property;
             _Special = special;
             _DocumentUpload = documentUpload;
-            _onlineApplication = onlineApplication;
         }
 
         public bool ValidateFileUpload(IFormFile file, out string errorMessage)
@@ -108,71 +106,106 @@ namespace DataAccessLayer.Repositories
             return existingUser;
         }
 
+        //public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        //{
+        //    var existingUser = await GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+
+        //    if (existingUser != null)
+        //    {
+        //        var ED = await _context.trnEducationDetails
+        //            .FirstOrDefaultAsync(c => c.ApplicationId == existingUser.ApplicationId);
+
+        //        var MW = await _context.trnMarriageward
+        //            .FirstOrDefaultAsync(h => h.ApplicationId == existingUser.ApplicationId);
+
+        //        var PC = await _context.trnPropertyRenovation
+        //            .FirstOrDefaultAsync(p => p.ApplicationId == existingUser.ApplicationId);
+
+        //        var Sp = await _context.trnSplWaiver
+        //            .FirstOrDefaultAsync(s => s.ApplicationId == existingUser.ApplicationId);
+
+        //        var documents = await _context.trnClaimDocumentUpload
+        //            .Where(d => d.ApplicationId == existingUser.ApplicationId)
+        //            .ToListAsync();
+
+        //        var AccountDetails = await _context.trnClaimAccountDetails
+        //            .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+        //        var AddressDetails = await _context.trnClaimAddressDetails
+        //            .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+
+        //        if (ED != null)
+        //            _context.trnEducationDetails.Remove(ED);
+
+        //        if (MW != null)
+        //            _context.trnMarriageward.Remove(MW);
+
+        //        if (PC != null)
+        //            _context.trnPropertyRenovation.Remove(PC);
+
+        //        if (Sp != null)
+        //            _context.trnSplWaiver.Remove(Sp);
+
+        //        if (documents.Any())
+        //            _context.trnClaimDocumentUpload.RemoveRange(documents);
+
+        //        if (AccountDetails != null)
+        //            _context.trnClaimAccountDetails.Remove(AccountDetails);
+
+        //        if (AddressDetails != null)
+        //            _context.trnClaimAddressDetails.Remove(AddressDetails);
+
+        //        var applicationEntity = await _context.trnClaim
+        //            .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
+
+        //        if (applicationEntity != null)
+        //            _context.trnClaim.Remove(applicationEntity);
+
+        //        await _context.SaveChangesAsync();
+        //        return true;
+
+        //    }
+
+        //    return false;
+        //}
+
         public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
         {
             var existingUser = await GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+            if (existingUser == null) return false;
 
-            if (existingUser != null)
-            {
-                var ED = await _context.trnEducationDetails
-                    .FirstOrDefaultAsync(c => c.ApplicationId == existingUser.ApplicationId);
+            int appId = existingUser.ApplicationId;
 
-                var MW = await _context.trnMarriageward
-                    .FirstOrDefaultAsync(h => h.ApplicationId == existingUser.ApplicationId);
+            // Delete single entities
+            await DeleteEntityIfExists(_context.trnEducationDetails, appId);
+            await DeleteEntityIfExists(_context.trnMarriageward, appId);
+            await DeleteEntityIfExists(_context.trnPropertyRenovation, appId);
+            await DeleteEntityIfExists(_context.trnSplWaiver, appId);
+            await DeleteEntityIfExists(_context.trnClaimAccountDetails, appId);
+            await DeleteEntityIfExists(_context.trnClaimAddressDetails, appId);
 
-                var PC = await _context.trnPropertyRenovation
-                    .FirstOrDefaultAsync(p => p.ApplicationId == existingUser.ApplicationId);
+            // Delete document uploads
+            var documents = await _context.trnClaimDocumentUpload
+                .Where(d => d.ApplicationId == appId)
+                .ToListAsync();
+            if (documents.Any())
+                _context.trnClaimDocumentUpload.RemoveRange(documents);
 
-                var Sp = await _context.trnSplWaiver
-                    .FirstOrDefaultAsync(s => s.ApplicationId == existingUser.ApplicationId);
+            // Delete main application
+            await DeleteEntityIfExists(_context.trnClaim, appId);
 
-                var documents = await _context.trnClaimDocumentUpload
-                    .Where(d => d.ApplicationId == existingUser.ApplicationId)
-                    .ToListAsync();
-
-                var AccountDetails = await _context.trnClaimAccountDetails
-                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
-
-                var AddressDetails = await _context.trnClaimAddressDetails
-                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
-
-
-                if (ED != null)
-                    _context.trnEducationDetails.Remove(ED);
-
-                if (MW != null)
-                    _context.trnMarriageward.Remove(MW);
-
-                if (PC != null)
-                    _context.trnPropertyRenovation.Remove(PC);
-
-                if (Sp != null)
-                    _context.trnSplWaiver.Remove(Sp);
-
-                if (documents.Any())
-                    _context.trnClaimDocumentUpload.RemoveRange(documents);
-
-                if (AccountDetails != null)
-                    _context.trnClaimAccountDetails.Remove(AccountDetails);
-
-                if (AddressDetails != null)
-                    _context.trnClaimAddressDetails.Remove(AddressDetails);
-
-                var applicationEntity = await _context.trnClaim
-                    .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
-
-                if (applicationEntity != null)
-                    _context.trnClaim.Remove(applicationEntity);
-
-                await _context.SaveChangesAsync();
-                return true;
-
-            }
-
-            return false;
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-
+        // ===== Helper Method =====
+        private async Task DeleteEntityIfExists<TEntity>(DbSet<TEntity> dbSet, int applicationId) where TEntity : class
+        {
+            var entity = await dbSet.FirstOrDefaultAsync(e => EF.Property<int>(e, "ApplicationId") == applicationId);
+            if (entity != null)
+                dbSet.Remove(entity);
+        }
         public async Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
@@ -1045,41 +1078,32 @@ namespace DataAccessLayer.Repositories
                          join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
+                         join DigitalSignRecords in _context.trnClaimDigitalSignRecords on common.ApplicationId equals DigitalSignRecords.ApplId into DigitalSignRecordsGroup
+                         from DigitalSignRecords in DigitalSignRecordsGroup.DefaultIfEmpty()
+
                          where dTOExport.Id.Contains(common.ApplicationId)
                          select new DTOClaimExcelResponse
                          {
-                             //ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
                              Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
-                             //ApplicationId = common.ApplicationId,
-                             //ApplicationType = common.WithdrawPurpose,
-                             ApplicationType = applicationType.Name ?? string.Empty,
-                             ArmyNumber = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                             
+                             ApplicationType = applicationType.Id,
+                             armyno = common.Number ?? string.Empty,
                              AadharNo = common.AadharCardNo ?? string.Empty,
-                             OldArmyNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
                              Rank = rank != null ? rank.RankName : string.Empty,
                              MaturityHolder_Name = common.ApplicantName ?? string.Empty,
                              Date_Of_Birth = common.DateOfBirth,
                              Enrollment_Date = common.DateOfCommission,
-                             //NextFmnHQ = common.NextFmnHQ ?? string.Empty,
-                             //ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
-                             RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
-                             //PresentUnitPin = common.PresentUnitPin ?? string.Empty,
-                             //DateOfPromotion = common.DateOfPromotion,
+
+                             Regt_Cps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                            
                              Retirement_Date = common.DateOfRetirement,
                              PANNo = common.PanCardNo ?? string.Empty,
-                             MobileNo = common.MobileNo ?? string.Empty,
+                             MobNo = common.MobileNo ?? string.Empty,
                              E_Mail_Id = (common.Email ?? string.Empty) ?? string.Empty,
-                             Payee_Account_No = AccountDetails.SalaryAcctNo ?? string.Empty,
+                             Salary_Account_No = AccountDetails.SalaryAcctNo ?? string.Empty,
                              IFSC_Code = AccountDetails.IfsCode ?? string.Empty,
-                             //NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
-                             //NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
-                             CDA_PAO = common.pcda_pao ?? string.Empty,
-                             CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
-                             Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
-                             Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
-                             Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
-                             Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
-                             Pin_Code = AddressDetails.Code ?? string.Empty,
+                             
+                             CDA_PAO = common.pcda_pao ?? string.Empty,                            
 
                              Amount_Applied_For_MAWD = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
                              NoofWithdrawal = common.Noofwithdrawal ?? string.Empty,
@@ -1088,7 +1112,52 @@ namespace DataAccessLayer.Repositories
                              Suffix=common.Suffix ?? string.Empty,
                              opfx=common.OldArmyPrefix,
                              ono=common.OldNumber,
-                             OldSuffix=common.OldSuffix ?? string.Empty,
+                             suffix_= common.OldSuffix ?? string.Empty,
+                             Bank_Branch=AccountDetails.NameOfBankBranch ?? string.Empty,
+                             ChldrenName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,
+                             ChildrenDOB = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,                             
+                             ChildbirthDOPartIIOrderNoAndDt = (common.WithdrawPurpose == 1 ? (ED.DoPartIIDate.HasValue ? ED.DOPartIINo + " " + ED.DoPartIIDate.Value.ToString("dd/MM/yyyy") : ED.DOPartIINo)
+    : (common.ApplicantType == 2 ? (MW.DoPartIIDate.HasValue ? MW.DOPartIINo + " " + MW.DoPartIIDate.Value.ToString("dd/MM/yyyy") : MW.DOPartIINo) : null)),
+
+                            AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
+
+                             Marriagedt = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
+
+                             Course = common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
+
+                             NameofInstitute = common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
+
+                             Total_Cost = common.WithdrawPurpose == 1 ? ED.TotalExpenditure : common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
+
+                             AddressofProperty = common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
+
+                             NameofPropertyHolder = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
+
+                             SpecialReason = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
+
+                             EmailDomain=common.EmailDomain?? string.Empty,
+                             dateandtimeofdocuuploadfrosanctioningauth = DigitalSignRecords.SignOn ?? null,
+                             IPaddress=common.IPAddress ?? string.Empty
+                             //NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                             //ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                             //OldArmyNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                             //ApplicationId = common.ApplicationId,
+                             //ApplicationType = common.WithdrawPurpose,
+                             //PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                             //DateOfPromotion = common.DateOfPromotion,
+                             //ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                             //NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                             //NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
+                             //CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
+                             //Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
+                             //Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
+                             //Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
+                             //Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
+                             // Pin_Code = AddressDetails.Code ?? string.Empty,
+                             //DOPartIINo = common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
+                             //DoPartIIDate = common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
+
+                             //StatusCode = common.StatusCode,
 
                              //ExtnOfService = common.ExtnOfService ?? string.Empty,
 
@@ -1116,57 +1185,28 @@ namespace DataAccessLayer.Repositories
                              //Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
                              //Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
                              // Corrected logic for AnyloantakenformAGIF assignment
-                             AnyloantakenformAGIF = common.House_Building_Advance_Loan == true ? "House Building Advance Loan" :
-                                                    common.House_Repair_Advance_Loan == true ? "House Repair Advance Loan" :
-                                                    common.Conveyance_Advance_Loan == true ? "Conveyance Advance Loan" :
-                                                    common.Computer_Advance_Loan == true ? "Computer Advance Loan" : string.Empty,
+                             //AnyloantakenformAGIF = common.House_Building_Advance_Loan == true ? "House Building Advance Loan" :
+                             //                       common.House_Repair_Advance_Loan == true ? "House Repair Advance Loan" :
+                             //                       common.Conveyance_Advance_Loan == true ? "Conveyance Advance Loan" :
+                             //                       common.Computer_Advance_Loan == true ? "Computer Advance Loan" : string.Empty,
 
-                             Dtofloantaken = common.House_Building_Advance_Loan == true ? common.House_Building_Date_of_Loan_taken :
-                                            common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Date_of_Loan_taken :
-                                            common.Conveyance_Advance_Loan == true ? common.Conveyance_Date_of_Loan_taken :
-                                            common.Computer_Advance_Loan == true ? common.Computer_Date_of_Loan_taken :
-                                            (DateTime?)null,
+                             //Dtofloantaken = common.House_Building_Advance_Loan == true ? common.House_Building_Date_of_Loan_taken :
+                             //               common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Date_of_Loan_taken :
+                             //               common.Conveyance_Advance_Loan == true ? common.Conveyance_Date_of_Loan_taken :
+                             //               common.Computer_Advance_Loan == true ? common.Computer_Date_of_Loan_taken :
+                             //               (DateTime?)null,
 
-                             DurationMonths = common.House_Building_Advance_Loan == true ? common.House_Building_Duration_of_Loan :
-                                 common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Duration_of_Loan :
-                                 common.Conveyance_Advance_Loan == true ? common.Conveyance_Duration_of_Loan :
-                                 common.Computer_Advance_Loan == true ? common.Computer_Duration_of_Loan :
-                                 0,
+                             //DurationMonths = common.House_Building_Advance_Loan == true ? common.House_Building_Duration_of_Loan :
+                             //    common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Duration_of_Loan :
+                             //    common.Conveyance_Advance_Loan == true ? common.Conveyance_Duration_of_Loan :
+                             //    common.Computer_Advance_Loan == true ? common.Computer_Duration_of_Loan :
+                             //    0,
 
-                             AmountTaken = common.House_Building_Advance_Loan == true ? (common.House_Building_Amount_Taken ?? 0) :
-                                 common.House_Repair_Advance_Loan == true ? (common.House_Repair_Advance_Amount_Taken ?? 0) :
-                                 common.Conveyance_Advance_Loan == true ? (common.Conveyance_Amount_Taken ?? 0) :
-                                 common.Computer_Advance_Loan == true ? (common.Computer_Amount_Taken ?? 0) :
-                                 0,
-
-                             ChldrenName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,
-                             ChildrenDOB = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,
-                             //DOPartIINo = common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
-                             //DoPartIIDate = common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
-
-                             ChildbirthDOPartIIOrderNoAndDt = (common.WithdrawPurpose == 1 ? (ED.DoPartIIDate.HasValue ? ED.DOPartIINo + " " + ED.DoPartIIDate.Value.ToString("dd/MM/yyyy") : ED.DOPartIINo)
-    : (common.ApplicantType == 2 ? (MW.DoPartIIDate.HasValue ? MW.DOPartIINo + " " + MW.DoPartIIDate.Value.ToString("dd/MM/yyyy") : MW.DOPartIINo) : null)),
-
-
-                            //AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
-
-                             Marriagedt = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
-
-                             Course = common.WithdrawPurpose == 1 ? ED.CourseForWithdrawal : null,
-
-                             NameofInstitute = common.WithdrawPurpose == 1 ? ED.CollegeInstitution : null,
-
-                             Total_Cost = common.WithdrawPurpose == 1 ? ED.TotalExpenditure : common.WithdrawPurpose == 3 ? PR.EstimatedCost : 0,
-
-                             AddressofProperty = common.WithdrawPurpose == 3 ? PR.AddressOfProperty : null,
-
-                             NameofPropertyHolder = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
-
-                             SpecialReason = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
-
-                             StatusCode = common.StatusCode,
-                             EmailDomain=common.EmailDomain?? string.Empty,
-                             dateandtimedownload =common.DownloadedOn
+                             //AmountTaken = common.House_Building_Advance_Loan == true ? (common.House_Building_Amount_Taken ?? 0) :
+                             //    common.House_Repair_Advance_Loan == true ? (common.House_Repair_Advance_Amount_Taken ?? 0) :
+                             //    common.Conveyance_Advance_Loan == true ? (common.Conveyance_Amount_Taken ?? 0) :
+                             //    common.Computer_Advance_Loan == true ? (common.Computer_Amount_Taken ?? 0) :
+                             //    0,
                          }).ToList();
 
             foreach (var item in query)

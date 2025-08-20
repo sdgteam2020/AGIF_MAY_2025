@@ -552,6 +552,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("IOArmyNo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
