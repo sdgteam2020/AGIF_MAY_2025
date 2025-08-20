@@ -247,6 +247,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Account\GetAllUsers.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\chatbot.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\home-index.css" />
     <_ContentIncludedByDefault Remove="wwwroot\DevJs\Login.js" />
   </ItemGroup>
