@@ -105,7 +105,7 @@ namespace DataAccessLayer.Repositories
                                           ApplicationId = app.ApplicationId
                                       }).FirstOrDefaultAsync();
 
-            return existingUser ?? new ClaimCommonDataOnlineResponse();
+            return existingUser;
         }
 
         public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)

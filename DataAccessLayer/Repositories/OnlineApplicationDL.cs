@@ -102,7 +102,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public async Task<CommonDataonlineResponse?> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType)
+        public async Task<CommonDataonlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType)
         {
             var existingUser = await (from app in _context.trnApplications
                                       join doc in _context.trnDocumentUpload on app.ApplicationId equals doc.ApplicationId into docGroup
