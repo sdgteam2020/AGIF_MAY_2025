@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Agif_V2.Models;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -63,6 +64,54 @@ namespace Agif_V2.Controllers
                 ViewBag.Metrics = metrics;
             }
             return View(sessionUser);
+        }
+
+        public  IActionResult LogViewer()
+        {
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+            {
+                return Unauthorized("Session expired or invalid user session.");
+            }
+            var res = home.GetApprovedLogs();
+            ViewBag.ArmyNo = dTOTempSession.ArmyNo;
+            return View(dTOTempSession);
+        }
+
+        public async Task<IActionResult> GetApprovedLogs(DTODataTableRequest request)
+        {
+            try
+            {
+                var queryableData = await home.GetApprovedLogs();
+                var totalRecords = queryableData.Count;
+                var query = queryableData.AsQueryable();
+
+                //// Apply search filter
+                //query = AdminApplySearchFilter(query, request.searchValue);
+
+                var filteredRecords = query.Count();
+
+                //// Apply sorting
+                //query = AdminApplySorting(query, request.sortColumn, request.sortDirection);
+
+                // Paginate the result
+                var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+                var responseData = new DTODataTablesResponse<DTOApprovedLogs>
+                {
+                    draw = request.Draw,
+                    recordsTotal = totalRecords,
+                    recordsFiltered = filteredRecords,
+                    data = paginatedData
+                };
+
+                return Json(responseData);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { error = "An error occurred while loading data: " + ex.Message });
+            }
         }
 
         public IActionResult Privacy()

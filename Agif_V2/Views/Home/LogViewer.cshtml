@@ -1,0 +1,84 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container">
+    <div class="container-fluid">
+        <div class="title-wrapper pt-30">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="title">
+                        <h2>
+                            Log Viewer
+                        </h2>
+                    </div>
+                </div>
+                <!-- end col -->
+                <div class="col-md-4">
+                    <div class="breadcrumb-wrapper">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="#0">Applications</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    Log Viewer
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+
+
+        <div class="card mt-2">
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="table-wrapper table-responsive">
+                            <table class="table table-striped border border-purple table-hover" id="tblApprovedLog">
+                                <thead>
+                                    <tr>
+                                        <th>Ser No</th>
+                                        <th>Name</th>
+                                        <th>Domain Id</th>
+                                        <th>IpAddress</th>
+                                        <th>IsApproved</th>
+                                        <th>UpdatedOn</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+
+    <!-- CSS: Bootstrap 5 and DataTables -->
+    <link href="~/lib/datatables.net-bs5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+    <link href="~/lib/datatables.net-buttons-bs5/css/buttons.bootstrap5.min.css" rel="stylesheet" />
+
+    <!-- JS: jQuery (must come before DataTables) -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- JS: DataTables core -->
+    <script src="~/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- JS: DataTables Buttons extension -->
+    <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
+
+}
+<script src="~/devjs/logviewer.js"></script>

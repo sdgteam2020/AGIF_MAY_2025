@@ -136,7 +136,7 @@
 }
 .asdc-chat-header-left{ display: flex; align-items: center; gap: var(--sp-3); }
 .asdc-chat-logo{ width: 28px; height: 28px; border-radius: 6px; }
-.asdc-chat-title{ margin:0; font-size: 29px; line-height: 1.2; font-weight: 600; color:white; }
+.asdc-chat-title{ margin:0; font-size: 24px; line-height: 1.2; font-weight: 600; color:white; }
 .asdc-chat-close{
   border: none; background: transparent; font-size: 22px; line-height: 1; cursor: pointer;
   width: 36px; height: 36px; border-radius: 8px; color: #ebeff3;

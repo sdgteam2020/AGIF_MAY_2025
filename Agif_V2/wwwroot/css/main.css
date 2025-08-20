@@ -6589,7 +6589,7 @@ tbody, td, tfoot, th, thead, tr {
 }
 
     thead tr {
-        background-color: #932a6b !important;
+        background-color: #794444 !important;
         color: #fff;
     }
 
@@ -6713,3 +6713,7 @@ tbody, td, tfoot, th, thead, tr {
         border-color: #1d2124;
         color: white;
     }
+   /*Log Viewer*/
+   #ViewLog:hover{
+       cursor:pointer;
+   }

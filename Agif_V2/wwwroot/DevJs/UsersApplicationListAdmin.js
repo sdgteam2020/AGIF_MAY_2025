@@ -73,7 +73,6 @@ $('#btnExportNotOk').on('click', function () {
     });
 });
 
-
 $('#UploadExcel').on('click', function () {
     $("#AddBulkModel").modal('show');
 });
@@ -142,31 +141,7 @@ function populateUploadTables(data) {
             `;
         });
         $('#OkBody').html(okTableBody);
-
-        //let val = $('#OkBody').html();
-        //if (val) {
-        //    // Initialize the DataTable after content is loaded
-        //    $('#tblOk').DataTable({
-        //        dom: 'Bfrtip', // Place the buttons above the table
-        //        buttons: [
-        //            {
-        //                extend: 'print',
-        //                text: 'Print Table',
-        //                className: 'btn btn-success', // Customize button styling
-        //                title: 'Data Table', // The title of the printed page
-        //                messageTop: 'Table Print', // Additional message at the top of the print page
-        //            }
-        //        ],
-        //        initComplete: function (settings, json) {
-        //            // This ensures the table and buttons are properly rendered
-        //            console.log('DataTable initialized');
-        //        }
-        //    });
-        //} else {
-        //    console.log('Table body is empty');
-        //}
-      
-
+        
         $('#lblTotalOk').text(data.dtoApplStatusBulkUploadOK.length);
         $('#tblOk').DataTable({
             paging: true,
@@ -497,7 +472,6 @@ function downloadApplication(applicationId, armyNo, applicationType) {
 
 }
 
-
 function getAllApplicationByDateWise() {
     const date = $('#toDate').val();
     if (!date) {
@@ -528,7 +502,6 @@ function getAllApplicationByDateWise() {
         }
     });
 }
-
 
 function downloadApplications(applicationIds) {
     $.ajax({
