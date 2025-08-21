@@ -52,6 +52,21 @@ function BindUsersData() {
             }
         },
         {
+            data: "coDomainId",
+            name: "CoDomainId",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "coProfileId",
+            name: "CoProfileId",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        
+        {
             data: "isApproved",
             name: "IsApproved",
             render: function (data, type, row) {
@@ -78,6 +93,7 @@ function BindUsersData() {
     $('#tblApprovedLog').DataTable({
         processing: true,
         serverSide: true,
+        searching : true,
         filter: true,
         order: [[0, 'desc']], // Default sorting on the first column
         ajax: {
@@ -85,7 +101,6 @@ function BindUsersData() {
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: function (data) {
-                console.log(data)
                 return {
                     'request.Draw': data.draw,
                     'request.Start': data.start,

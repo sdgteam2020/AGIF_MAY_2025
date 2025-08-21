@@ -65,7 +65,7 @@ namespace Agif_V2.Controllers
             }
             return View(sessionUser);
         }
-
+        [Authorize(Roles = "SuperAdmin")]
         public  IActionResult LogViewer()
         {
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
@@ -86,15 +86,10 @@ namespace Agif_V2.Controllers
                 var totalRecords = queryableData.Count;
                 var query = queryableData.AsQueryable();
 
-                //// Apply search filter
-                //query = AdminApplySearchFilter(query, request.searchValue);
+                query = AdminApplySearchFilter(query, request.searchValue);
 
                 var filteredRecords = query.Count();
 
-                //// Apply sorting
-                //query = AdminApplySorting(query, request.sortColumn, request.sortDirection);
-
-                // Paginate the result
                 var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
                 var responseData = new DTODataTablesResponse<DTOApprovedLogs>
@@ -112,6 +107,19 @@ namespace Agif_V2.Controllers
                 // Log the exception
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
+        }
+        private IQueryable<DTOApprovedLogs> AdminApplySearchFilter(IQueryable<DTOApprovedLogs> query, string? searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue)) return query;
+
+            string lowerSearchValue = searchValue.ToLower();
+            return query.Where(x =>
+                
+                (x.DomainId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.Name ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.UpdatedOn.ToString() ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.CoDomainId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+            );
         }
 
         public IActionResult Privacy()

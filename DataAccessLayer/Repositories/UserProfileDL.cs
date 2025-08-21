@@ -132,7 +132,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive)
+        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive, string coDomainId, int coProfileId)
         {
             var user = await _context.UserProfiles
                 .Where(u => u.userName == DomainId)
@@ -149,7 +149,9 @@ namespace DataAccessLayer.Repositories
                 DomainId = user.userName,
                 IpAddress = Ip,
                 IsApproved = isActive,
-                UpdatedOn = DateTime.Now
+                UpdatedOn = DateTime.Now,
+                coDomainId = coDomainId,
+                coProfileId = coProfileId
             };
 
             _context.TrnApprovedLogs.Add(approvedLog);

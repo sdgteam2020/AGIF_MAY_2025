@@ -14,6 +14,9 @@ namespace DataTransferObject.Model
         public string DomainId { get; set; }
         public string Name {  get; set; }
         public string IpAddress { get; set; }
+        public string coDomainId { get; set; }
+
+        public int coProfileId { get; set; }
         public bool IsApproved { get; set; }
         public DateTime UpdatedOn { get; set; }
     }

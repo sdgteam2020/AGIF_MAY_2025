@@ -49,6 +49,8 @@ namespace DataAccessLayer.Repositories
                     Name = logs.Name,
                     DomainId = logs.DomainId,
                     IpAddress = logs.IpAddress,
+                    CoDomainId = logs.coDomainId,
+                    CoProfileId = logs.coProfileId,
                     IsApproved = logs.IsApproved,
                     UpdatedOn=logs.UpdatedOn
                 }).ToListAsync();
