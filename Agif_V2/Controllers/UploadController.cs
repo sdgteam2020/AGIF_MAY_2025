@@ -269,8 +269,10 @@ namespace Agif_V2.Controllers
         //    return RedirectToAction("ApplicationDetails","Upload");
         //}
 
-        public async Task<IActionResult> ProcessUpload(FileUploadViewModel model, string formType, int applicationId)
+        public async Task<IActionResult> Upload(FileUploadViewModel model, string formType, int applicationId)
         {
+            TempData.Keep("applicationId");
+
             var ArmyNo = await GetArmyNumber(applicationId);
             if (string.IsNullOrEmpty(ArmyNo)) ArmyNo = string.Empty;
 

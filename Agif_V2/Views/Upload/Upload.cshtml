@@ -75,7 +75,7 @@
                             <strong>Note:</strong> Total size of each file should not be more than <strong>150 kb </strong>.
                         </div>
                     </div>
-                    <form id="uploadForm" action="@Url.Action("ProcessUpload", "Upload")" method="post" enctype="multipart/form-data">
+                    <form id="uploadForm" action="@Url.Action("Upload", "Upload")" method="post" enctype="multipart/form-data">
                         <!-- Hidden field to pass form type to controller -->
                         <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
                         <input type="hidden" id="hiddenApplicationId" name="applicationId" value="@applicationId" />

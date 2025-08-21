@@ -51,7 +51,7 @@
                             <strong>Note:</strong> Total file size of file after merging pdf including application should not be more than <strong>1 MB</strong>.
                         </div>
                     </div>
-                    <form id="uploadForm" action="@Url.Action("SubmitDocuments", "Claim")" method="post" enctype="multipart/form-data">
+                    <form id="uploadForm" action="@Url.Action("Upload", "Claim")" method="post" enctype="multipart/form-data">
                         <!-- Hidden field to pass form type to controller -->
                         <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
                         <input type="hidden" id="hiddenApplicationId" name="applicationId" value="@applicationId" />

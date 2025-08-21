@@ -733,11 +733,7 @@ namespace Agif_V2.Controllers
         //}
 
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
-        {
-            if (!ModelState.IsValid)
-            {
-                return JsonError("Invalid Request.");
-            }
+        {           
 
             try
             {

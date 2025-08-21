@@ -129,6 +129,7 @@ namespace Agif_V2.Controllers
 
             return View(application);
         }
+        [HttpGet]
         public async Task<IActionResult> OnlineApplication()
         {
             var Category = TempData["Category"] as string;
@@ -532,8 +533,8 @@ namespace Agif_V2.Controllers
 
 
         //}
-
-        public async Task<IActionResult> SubmitApplication(DTOClaimApplication model)
+        [HttpPost]
+        public async Task<IActionResult> OnlineApplication(DTOClaimApplication model)
         {
             if (!await ValidateModelAsync(model))
                 return View("OnlineApplication", model);
@@ -784,8 +785,10 @@ namespace Agif_V2.Controllers
         //    return RedirectToAction("ApplicationDetails", "Claim");
         //}
 
-        public async Task<IActionResult> SubmitDocuments(ClaimFileUploadViewModel model, string formType, int applicationId)
+        public async Task<IActionResult> Upload(ClaimFileUploadViewModel model, string formType, int applicationId)
         {
+            TempData.Keep("ClaimapplicationId");
+
             var files = GetUploadedFiles(model);
 
             if (!files.Any())
@@ -865,10 +868,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json("Invalid Request.");
-            }
+           
             try
             {
                 string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
