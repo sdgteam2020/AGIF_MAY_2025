@@ -84,9 +84,9 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> Upload()
         {
-            //int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
 
-            int applicationId = 14;
+            //int applicationId = 14;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
@@ -94,11 +94,11 @@ namespace Agif_V2.Controllers
 
             TempData.Keep("ClaimapplicationId");
 
-            //if (application)
-            //{
-            //    TempData["Message"] = "You have already uploaded the Documents for this Application.";
-            //    return RedirectToAction("ApplicationDetails", "Claim");
-            //}
+            if (application)
+            {
+                TempData["Message"] = "You have already uploaded the Documents for this Application.";
+                return RedirectToAction("ApplicationDetails", "Claim");
+            }
 
             bool IsextensionOfService = await _IClaimonlineApplication1.CheckExtensionofservice(applicationId);
 
