@@ -94,3 +94,7 @@
         GetTokenDetails("ArmyNo", "name", "errormsg", "btnsignup")
     });
 });
+
+$("input, textarea").on("paste", function (e) {
+    e.preventDefault();
+});

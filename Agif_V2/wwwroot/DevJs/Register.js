@@ -98,3 +98,6 @@ $("#btnTokenDetails").on('click', function () {
     GetTokenDetails("ArmyNo", "Name", "errormsg", "btnsignup")
 });
 
+$("input, textarea").on("paste", function (e) {
+    e.preventDefault();
+});

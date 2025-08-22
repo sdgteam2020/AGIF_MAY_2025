@@ -3,22 +3,39 @@
     checkUploadFiles();
 
 
-    $('#CancelledCheque').change(function () {
-        previewFile(this, '#cancelledChequePreview');
+    //$('#CancelledCheque').change(function () {
+    //    previewFile(this, '#cancelledChequePreview');
+    //});
+
+    //$('#PaySlipPdf').change(function () {
+    //    previewFile(this, '#paySlipPreview');
+    //});
+
+
+    //$('#SpdocusPdf').change(function () {
+    //    previewFile(this, '#SpdocusPre');
+    //});
+
+    //$('#SeviceExtnPdf').change(function () {
+    //    previewFile(this, '#SeviceExtnPre');
+    //});
+
+    $('.file-upload-limited').on('change', function () {
+        const file = this.files[0];
+        const errorrMessage = $(this).next('.file-error-message'); // container for error
+        const previewSelector = $(this).data('preview');
+
+        if (file && file.size > 150 * 1024) {
+            errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
+            this.value = ''; // Clear the input field
+        } else {
+            errorrMessage.text(''); // Clear the error message if file size is valid
+            if (previewSelector) {
+                previewFile(this, previewSelector);
+            }
+        }
     });
 
-    $('#PaySlipPdf').change(function () {
-        previewFile(this, '#paySlipPreview');
-    });
-
-
-    $('#SpdocusPdf').change(function () {
-        previewFile(this, '#SpdocusPre');
-    });
-
-    $('#SeviceExtnPdf').change(function () {
-        previewFile(this, '#SeviceExtnPre');
-    });
 
     // Function to preview the file (PDF or Image)
     function previewFile(input, previewSelector) {
