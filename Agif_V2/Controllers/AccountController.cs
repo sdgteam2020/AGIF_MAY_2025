@@ -44,131 +44,6 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
-
-        //public async Task<IActionResult> Login(LoginViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-
-        //    var user = await _userManager.FindByNameAsync(model.UserName);
-        //    if (user == null)
-        //    {
-        //        ModelState.AddModelError(string.Empty, "Invalid username or password.");
-        //        TempData["UserName"] = model.UserName;
-        //        return RedirectToAction("Register","Account");
-        //    }
-
-        //    if (await _userManager.IsLockedOutAsync(user))
-        //    {
-        //        model = await PopulateLockoutInfo(model, user);
-        //        return View(model);
-        //    }
-
-        //    var currentFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
-
-        //    var lockoutOptions = _userManager.Options.Lockout;
-        //    var maxAttempts = lockoutOptions.MaxFailedAccessAttempts;
-        //    var lockoutDuration = lockoutOptions.DefaultLockoutTimeSpan;
-
-        //    user.SecurityStamp = Guid.NewGuid().ToString();
-        //    await _userManager.UpdateAsync(user);
-
-        //    await _signInManager.SignOutAsync(); // Clear any existing session/cookies
-
-        //    var result = await _signInManager.PasswordSignInAsync(
-        //        model.UserName,
-        //        model.Password,
-        //        model.RememberMe,
-        //        lockoutOnFailure: true // Enable lockout on failure
-        //    );
-
-        //    if (result.Succeeded)
-        //    {
-        //        await _userManager.ResetAccessFailedCountAsync(user);
-
-        //        var roles = await _userManager.GetRolesAsync(user);
-        //        var profile = await _userProfile.GetUserAllDetails(model.UserName);
-
-        //        string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
-
-
-        //        SessionUserDTO sessionUserDTO = new SessionUserDTO
-        //        {
-        //            UserName = user.UserName,
-        //            UserId = user.Id,
-        //            ProfileId = profile.ProfileId,
-        //            MappingId = profile.MappingId,
-        //            Role = role,
-        //            DomainId = user.DomainId,
-        //            RankName = profile.RankName,
-        //            ArmyNo = profile.ArmyNo
-        //        };
-
-        //        Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
-
-        //        if (roles.Contains("Admin"))
-        //        {
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        else if(roles.Contains("MaturityAdmin"))
-        //        {
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        else if(roles.Contains("SuperAdmin"))
-        //        {
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        else
-        //        {
-        //            if (profile == null)
-        //            {
-        //                return Json(new { success = false, message = "User mapping not found." });
-        //            }
-
-        //            bool isCOActive = profile.IsCOActive;
-        //            if (!isCOActive)
-        //            {
-        //                return RedirectToAction("COContactUs", "Default");
-        //            }
-        //        }
-
-        //        HttpContext.Session.SetString("UserGUID", user.Id.ToString());
-        //        return RedirectToAction("Index", "Default");
-        //    }
-        //    else if (result.IsLockedOut)
-        //    {
-        //        // User is now locked out
-        //        model = await PopulateLockoutInfo(model, user);
-        //        return View(model);
-        //    }
-        //    else if (result.IsNotAllowed)
-        //    {
-        //        ModelState.AddModelError(string.Empty, "Your account is not allowed to sign in.");
-        //        return View(model);
-        //    }
-        //    else
-        //    {
-        //        // Failed login attempt
-        //        var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
-        //        var remainingAttempts = maxAttempts - updatedFailedAttempts;
-
-        //        if (remainingAttempts > 0)
-        //        {
-        //            ModelState.AddModelError(string.Empty,
-        //                $"Invalid username or password. {remainingAttempts} attempt(s) remaining before account lockout.");
-        //        }
-        //        else
-        //        {
-        //            model = await PopulateLockoutInfo(model, user);
-        //        }
-
-        //        return View(model);
-        //    }
-        //}
-
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -341,19 +216,6 @@ namespace Agif_V2.Controllers
 
             return View(model);
         }
-
-
-        //public async Task<IActionResult> Register()
-        //{
-        //    var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-
-
-        //    DTOuserProfile userProfileDTO = new DTOuserProfile();
-
-        //    TempData.Keep("UserName");
-        //    return View(userProfileDTO);
-        //}
-
         public IActionResult Register()
         {
             DTOuserProfile userProfileDTO = new DTOuserProfile();
@@ -364,71 +226,6 @@ namespace Agif_V2.Controllers
 
 
         [HttpPost]
-        
-        //public async Task<IActionResult> Register(DTOuserProfile signUpDto)
-        //{
-        //    if(ModelState.IsValid)
-        //    {
-
-        //        var newUser = new ApplicationUser
-        //        {
-        //            UserName = signUpDto.userName,
-        //            Email = signUpDto.Email,
-        //            PhoneNumber = signUpDto.MobileNo,
-        //            Updatedby = 1,
-        //            UpdatedOn = DateTime.Now,
-        //        };
-
-        //        var Result = await _userManager.CreateAsync(newUser, "Admin123!");
-        //        if (!Result.Succeeded)
-        //        {
-        //            return Json(Result.Errors);
-        //        }
-        //        var RoleRet = await _userManager.AddToRoleAsync(newUser, "CO");
-
-        //        await _db.SaveChangesAsync();
-
-        //        UserProfile userProfile = new UserProfile
-        //        {
-        //            ArmyNo = signUpDto.ArmyNo,
-        //            userName = signUpDto.userName,
-        //            Name = signUpDto.Name,
-        //            Email = signUpDto.Email,
-        //            MobileNo = signUpDto.MobileNo,
-        //            rank = signUpDto.rank,
-        //            regtCorps = signUpDto.regtCorps,
-        //            ApptId = signUpDto.ApptId,
-        //            IsActive = false,
-        //            UpdatedOn = DateTime.Now
-        //        };
-        //        await _userProfile.Add(userProfile);
-
-        //        UserMapping user = new UserMapping();
-
-        //        user = await _userMapping.GetUnitDetails(signUpDto.UnitId);
-
-        //        bool IsPrimary  = user == null;
-
-        //        UserMapping userMapping = new UserMapping
-        //        {
-        //            UserId = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
-        //            IsActive = false,
-        //            ProfileId = userProfile.ProfileId,
-        //            UnitId = signUpDto.UnitId,
-        //            UpdatedOn = DateTime.Now,
-        //            IsFmn= signUpDto.DteFmn,
-        //            IsPrimary = IsPrimary ? true : false
-        //        };
-        //        await _userMapping.Add(userMapping);
-        //        return RedirectToAction("COContactUs", "Default");
-        //    }
-        //    else
-        //    {   
-        //        return View(signUpDto);
-        //    }
-         
-        //}
-
         public async Task<IActionResult> Register(DTOuserProfile signUpDto)
         {
             if (ModelState.IsValid)
@@ -513,78 +310,36 @@ namespace Agif_V2.Controllers
         //{
         //    try
         //    {
-        //        bool userStatus = false;
-        //        if (!string.IsNullOrEmpty(status))
+        //        if (!ModelState.IsValid)
         //        {
-        //            userStatus = status.ToLower() == "true";
+        //            // If the request is invalid, return an empty response or a proper error message
+        //            var invalidResponse = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
+        //            return Json(invalidResponse);
         //        }
+        //        bool userStatus = GetUserStatus(status);
 
         //        var queryableData = await _userProfile.GetAllUser(userStatus);
 
-        //        var totalRecords = queryableData.Count();
-
+        //        var totalRecords = queryableData.Count;
         //        var query = queryableData.AsQueryable();
 
-        //        if (!string.IsNullOrEmpty(request.searchValue))
-        //        {
-        //            string searchValue = request.searchValue.ToLower();
-        //            query = query.Where(x =>
-        //                //x.ProfileName.ToLower().Contains(searchValue) ||
-        //                x.EmailId.ToLower().Contains(searchValue) ||
-        //                x.MobileNo.ToLower().Contains(searchValue) ||
-        //                x.ArmyNo.ToLower().Contains(searchValue) ||
-        //                x.UnitName.ToLower().Contains(searchValue) ||
-        //                x.AppointmentName.ToLower().Contains(searchValue) ||
-        //                x.RegtName.ToLower().Contains(searchValue)
-        //            );
-        //        }
-
+        //        query = ApplySearchFilter(query, request.searchValue);
         //        var filteredRecords = query.Count();
 
-        //        if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-        //        {
-        //            bool ascending = request.sortDirection.ToLower() == "asc";
+        //        query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
-        //            query = request.sortColumn.ToLower() switch
-        //            {
-        //                "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
-        //                "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
-        //                "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
-        //                "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-        //                "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
-        //                "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
-        //                "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
-        //                "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
-        //                "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
-        //                "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
-        //                _ => query 
-        //            };
-        //        }
-
-        //        // Paginate the result
         //        var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
-        //        var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
-        //        {
-        //            draw = request.Draw,
-        //            recordsTotal = totalRecords,
-        //            recordsFiltered = filteredRecords,
-        //            data = paginatedData
-        //        };
+        //        var responseData = CreateResponse(request.Draw, totalRecords, filteredRecords, paginatedData);
 
         //        return Json(responseData);
         //    }
-        //    catch (Exception ex)
+        //    catch (Exception)
         //    {
-        //        var responseData = new DTODataTablesResponse<DTOUserProfileResponse>
-        //        {
-        //            draw = 0,
-        //            recordsTotal = 0,
-        //            recordsFiltered = 0,
-        //            data = new List<DTOUserProfileResponse>()
-        //        };
+        //        var responseData = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
         //        return Json(responseData);
         //    }
+
         //}
 
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
@@ -599,17 +354,16 @@ namespace Agif_V2.Controllers
                 }
                 bool userStatus = GetUserStatus(status);
 
-                var queryableData = await _userProfile.GetAllUser(userStatus);
+                var query = _userProfile.GetAllUser(userStatus);
 
-                var totalRecords = queryableData.Count;
-                var query = queryableData.AsQueryable();
+                var totalRecords =await query.CountAsync();
 
                 query = ApplySearchFilter(query, request.searchValue);
-                var filteredRecords = query.Count();
+                var filteredRecords =await query.CountAsync();
 
                 query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
-                var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+                var paginatedData = await query.Skip(request.Start).Take(request.Length).ToListAsync();
 
                 var responseData = CreateResponse(request.Draw, totalRecords, filteredRecords, paginatedData);
 
@@ -629,42 +383,51 @@ namespace Agif_V2.Controllers
             return string.Equals(status, "true", StringComparison.OrdinalIgnoreCase);
         }
 
-        private IQueryable<DTOUserProfileResponse> ApplySearchFilter(IQueryable<DTOUserProfileResponse> query, string? searchValue)
-        {
-            if (string.IsNullOrEmpty(searchValue)) return query;
+        private static string EscapeLike(string input)
+{
+    // Escape %, _ and [ which have special meaning in SQL LIKE
+    return input.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+}
 
-            string lowerSearchValue = searchValue.ToLower();
-            return query.Where(x =>
-                (x.EmailId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-                (x.MobileNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-                (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-                (x.UnitName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-                (x.AppointmentName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-                (x.RegtName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
-            );
-        }
+private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
+    IQueryable<DTOUserProfileResponse> query, string? searchValue)
+{
+    if (string.IsNullOrWhiteSpace(searchValue)) return query;
 
-        //private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
+    var s = EscapeLike(searchValue.Trim());
+    var pattern = $"%{s}%";
+
+    // If your DB/columns are case-sensitive, force CI collation per field:
+    // var ci = "SQL_Latin1_General_CP1_CI_AS";
+
+    return query.Where(x =>
+        EF.Functions.Like(x.EmailId         ?? "", pattern) ||
+        EF.Functions.Like(x.MobileNo        ?? "", pattern) ||
+        EF.Functions.Like(x.ArmyNo          ?? "", pattern) ||
+        EF.Functions.Like(x.UnitName        ?? "", pattern) ||
+        EF.Functions.Like(x.AppointmentName ?? "", pattern) ||
+        EF.Functions.Like(x.RegtName        ?? "", pattern)
+        // Example if your columns are CS and you need CI:
+        // EF.Functions.Like(EF.Functions.Collate(x.EmailId ?? "", ci), pattern) || ...
+    );
+}
+
+
+        //private IQueryable<DTOUserProfileResponse> ApplySearchFilter(IQueryable<DTOUserProfileResponse> query, string? searchValue)
         //{
-        //    if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
+        //    if (string.IsNullOrEmpty(searchValue)) return query;
 
-        //    bool ascending = sortDirection.ToLower() == "asc";
-
-        //    return sortColumn.ToLower() switch
-        //    {
-        //        "profilename" => ascending ? query.OrderBy(x => x.ProfileName) : query.OrderByDescending(x => x.ProfileName),
-        //        "emailid" => ascending ? query.OrderBy(x => x.EmailId) : query.OrderByDescending(x => x.EmailId),
-        //        "mobileno" => ascending ? query.OrderBy(x => x.MobileNo) : query.OrderByDescending(x => x.MobileNo),
-        //        "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-        //        "unitname" => ascending ? query.OrderBy(x => x.UnitName) : query.OrderByDescending(x => x.UnitName),
-        //        "appointmentname" => ascending ? query.OrderBy(x => x.AppointmentName) : query.OrderByDescending(x => x.AppointmentName),
-        //        "regtname" => ascending ? query.OrderBy(x => x.RegtName) : query.OrderByDescending(x => x.RegtName),
-        //        "isactive" => ascending ? query.OrderBy(x => x.IsActive) : query.OrderByDescending(x => x.IsActive),
-        //        "isprimary" => ascending ? query.OrderBy(x => x.IsPrimary) : query.OrderByDescending(x => x.IsPrimary),
-        //        "isfmn" => ascending ? query.OrderBy(x => x.IsFmn) : query.OrderByDescending(x => x.IsFmn),
-        //        _ => query // Default: no sorting if column not recognized
-        //    };
+        //    string lowerSearchValue = searchValue.ToLower();
+        //    return query.Where(x =>
+        //        (x.EmailId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //        (x.MobileNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //        (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //        (x.UnitName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //        (x.AppointmentName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+        //        (x.RegtName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+        //    );
         //}
+
            private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
            {
                if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
@@ -713,7 +476,7 @@ namespace Agif_V2.Controllers
                 }
 
                 // Get all users data
-                var queryableData = await _userProfile.GetAllUser(userStatus);
+                var queryableData = _userProfile.GetAllUser(userStatus);
                 var userList = queryableData.ToList();
 
                 using (var workbook = new XLWorkbook())

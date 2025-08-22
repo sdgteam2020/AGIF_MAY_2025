@@ -5,7 +5,6 @@
     var samlRole = Context.Session.GetString("SAMLRole");
 }
 
- <link href="~/css/Font/all.min.css" rel="stylesheet" />
   <link href="~/css/home-index.css" rel="stylesheet" />
 
 
@@ -171,52 +170,6 @@
         </div>
     </div>
 </div>
-
-@* <div class="bg-gray-100 h-screen p-4 relative">
-<div onclick="toggleModal();" id="chatToggleButton"
-     class="fixed bottom-6 right-6 z-50 cursor-pointer bg-white rounded-full shadow-lg p-3">
-    <!-- <img id="chatToggleImg" src="static/images/chatbot-icon.jpg" alt="Chat" class="w-10 h-10"> -->
-    <button id="chat-toggle-btn" class="chat-toggle-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" height="26" width="32" viewBox="0 0 640 512">
-            <path fill="#ffffff"
-                  d="M320 0c17.7 0 32 14.3 32 32l0 64 120 0c39.8 0 72 32.2 72 72l0 272c0 39.8-32.2 72-72 72l-304 0c-39.8 0-72-32.2-72-72l0-272c0-39.8 32.2-72 72-72l120 0 0-64c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l32 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-32 0zM264 256a40 40 0 1 0 -80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224l16 0 0 192-16 0c-26.5 0-48-21.5-48-48l0-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48l0 96c0 26.5-21.5 48-48 48l-16 0 0-192 16 0z" />
-        </svg>
-    </button>
-</div>
-
-<!-- Chatbot Modal -->
-<div id="modal"
-     class="chatModal fixed top-2 right-[-40vw] w-[400px] max-w-full h-[50vh] bg-white shadow-2xl rounded-lg opacity-1 z-50 flex flex-col overflow-hidden">
-    <!-- Title -->
-    <div class="bg-blue-600 text-white text-center py-3 text-xl font-semibold">
-        <!-- 📘 ASDC Assistant -->
-        <div class="popup-header">
-            <img src="~/images/Icon/favicon.png" alt="" style="height: 3rem;">
-            <h3 style="color:white; text-decoration: none;  font-weight: 800;">AGIF Assistant</h3>
-        </div>
-    </div>
-
-    <!-- Loading Indicator -->
-    <div id="loading"
-         class="absolute top-5 right-5 bg-white px-3 py-1 rounded shadow text-blue-600 font-semibold hidden">
-        ⏳ Generating response...
-    </div>
-
-    <!-- Chat Area -->
-    <div id="chatbox" class="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50"></div>
-
-    <!-- Input -->
-    <div class="flex items-center border-t px-4 py-3 gap-2">
-        <input id="query" type="text" placeholder="Type your question..."
-               class="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-               onkeydown="if(event.key === 'Enter') sendQuery()">
-        <button onclick="sendQuery()"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
-            Send
-        </button>
-    </div>
-</div>
-</div> *@
 
 @section Scripts {
     <script src="~/devjs/home-index.js"></script>

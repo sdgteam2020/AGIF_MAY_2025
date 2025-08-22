@@ -2,8 +2,6 @@
 @model SessionUserDTO;
 @{
     var role = Model.Role;
-    string status2Encrypted = EncryptDecrypt.EncryptionData("2");
-    string status4Encrypted = EncryptDecrypt.EncryptionData("4");
 }
 
 <!DOCTYPE html>
@@ -21,7 +19,6 @@
     <link href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/lineicons.css" />
     <link rel="stylesheet" href="~/css/materialdesignicons.min.css" />
-    @* <link rel="stylesheet" href="~/css/fullcalendar.css" /> *@
     <link rel="stylesheet" href="~/css/main.css" />
     <link href="~/lib/datatable/css/datatable.min.css" rel="stylesheet" />
     <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
@@ -108,29 +105,6 @@
                         </ul>
                     </li>
 
-                    @* <li class="nav-item nav-item-has-children">
-                        <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ddmenu_2"
-                           aria-controls="ddmenu_2"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
-                            <i class="bi bi-list-check"></i>
-                            <span class="text">User Approval List</span>
-                        </a>
-                        <ul id="ddmenu_2" class="collapse show dropdown-nav">
-                            <li>
-
-                                 <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="true"><i class="bi bi-hourglass"></i>Active Users</a>
-
-                            </li>
-                            <li>
-                               
-                                 <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="false"><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
-
-                            </li>
-                        </ul>
-                    </li> *@
                 }
 
                 else if (Model?.Role == "Admin")
@@ -159,28 +133,6 @@
                         </ul>
                     </li>
 
-                    @* <li class="nav-item nav-item-has-children">
-                        <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ddmenu_2"
-                           aria-controls="ddmenu_2"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
-                            <i class="bi bi-list-check"></i>
-                            <span class="text">User Approval List</span>
-                        </a>
-                         <ul id="ddmenu_2" class="collapse show dropdown-nav">
-                            <li>
-                                <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="true"><i class="bi bi-hourglass"></i>Active Users</a>
-
-                            </li>
-                            <li>
-                               
-                                <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="false"><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
-
-                            </li>
-                        </ul>
-                    </li> *@
                 }
                 else if (Model?.Role == "SuperAdmin")
                 {
@@ -262,12 +214,7 @@
                                         </div>
                                     </li>
                                     <li class="divider"></li>
-                                    <li>
-                                        <a href="#0">
-                                            <i class="lni lni-user"></i> View Profile
-                                        </a>
-                                    </li>
-                                     <li class="divider"></li>
+                                    
                                     <li>
                                         <a href="~/ApplicationRequest/EditUser"> <i class="lni lni-pencil-alt"></i> Edit Profile </a>
                                     </li>
