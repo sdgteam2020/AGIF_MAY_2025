@@ -5,6 +5,7 @@ using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,26 +15,20 @@ namespace Agif_V2.Controllers
     {
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
         private readonly IClaimDocumentUpload _IclaimDocumentUpload;
-        private readonly IMasterOnlyTable _IMasterOnlyTable;
         private readonly ClaimPdfGenerator _pdfGenerator;
         private readonly MergePdf _mergePdf;
         private readonly IWebHostEnvironment _env;
-        private readonly ICar _car;
-        private readonly IHba _Hba;
-        private readonly IPca _Pca;
+ 
         private readonly PdfUpload _pdfUpload;
         private readonly IClaimAddress _ClaimAddress;
         private readonly IClaimAccount _ClaimAccount;
         private readonly FileUtility _fileUtility;
+        private readonly Watermark _watermark;
 
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark)
         {
-            _IClaimonlineApplication1 = OnlineApplication;
-            _IMasterOnlyTable = MasterOnlyTable;
-            this._car = _car;
-            this._Hba = _Hba;
-            this._Pca = _Pca;
+            _IClaimonlineApplication1 = OnlineApplication;      
             _pdfGenerator = pdfGenerator;
             _env = env;
             _mergePdf = mergePdf;
@@ -42,6 +37,7 @@ namespace Agif_V2.Controllers
             _ClaimAddress = claimAddress;
             _ClaimAccount = claimAccount;
             _fileUtility = fileUtility;
+            _watermark = watermark;
         }
 
         public IActionResult MaturityLoanType()
@@ -51,6 +47,10 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             var existingUser = await _IClaimonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
 
             if (existingUser != null) // Check if the user exists
@@ -65,6 +65,10 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             bool result = await _IClaimonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
 
             if (result == true)
@@ -81,7 +85,8 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-           
+
+            //int applicationId = 14;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
@@ -125,6 +130,7 @@ namespace Agif_V2.Controllers
 
             return View(application);
         }
+        [HttpGet]
         public async Task<IActionResult> OnlineApplication()
         {
             var Category = TempData["Category"] as string;
@@ -154,393 +160,639 @@ namespace Agif_V2.Controllers
         }
 
 
-        public async Task<IActionResult> SubmitApplication(DTOClaimApplication model)
+        //public async Task<IActionResult> SubmitApplication(DTOClaimApplication model)
+        //{
+        //    string formType = string.Empty;
+        //    if (model.EducationDetails != null)
+        //    {
+        //        var educationContext = new ValidationContext(model.EducationDetails);
+        //        var educationValidationResults = new List<ValidationResult>();
+
+        //        if (!Validator.TryValidateObject(model.EducationDetails, educationContext, educationValidationResults, true))
+        //        {
+        //            foreach (var result in educationValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "EducationDetails"
+        //                    : $"EducationDetails.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //        // File Upload Validation for EducationDetails
+
+        //        if (model.EducationDetails.AttachPartIIOrder != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.AttachPartIIOrder, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
+        //            }
+        //            if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.AttachPartIIOrder))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.AttachPartIIOrder))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
+        //            }
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.AttachPartIIOrder))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "PDF contains potentially malicious content.");
+        //            }
+
+        //        }
+
+        //        if (model.EducationDetails.AttachBonafideLetter != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.AttachBonafideLetter, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachInvitationcard", errorMessage);
+        //            }
+
+        //            if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.AttachBonafideLetter))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachInvitationcard", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.AttachBonafideLetter))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachInvitationcard", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.AttachBonafideLetter))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachInvitationcard", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+
+        //        if (model.EducationDetails.TotalExpenditureFile != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.TotalExpenditureFile, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
+        //            }
+        //            if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+
+
+        //    }
+        //    else if (model.Marriageward != null)
+        //    {
+        //        var pcaValidationContext = new ValidationContext(model.Marriageward);
+        //        var pcaValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.Marriageward, pcaValidationContext, pcaValidationResults, true))
+        //        {
+        //            foreach (var result in pcaValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "Marriageward"
+        //                    : $"Marriageward.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+
+        //        }
+        //        if (model.Marriageward.AttachPartIIOrder != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.Marriageward.AttachPartIIOrder, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachPartIIOrder", errorMessage);
+        //            }
+
+        //            if (!await _pdfUpload.IsValidPdfFile(model.Marriageward.AttachPartIIOrder))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.Marriageward.AttachPartIIOrder))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.Marriageward.AttachPartIIOrder))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachPartIIOrder", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+
+        //        if (model.Marriageward.AttachInvitationcard != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.Marriageward.AttachInvitationcard, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachInvitationcard", errorMessage);
+        //            }
+        //            if (!await _pdfUpload.IsValidPdfFile(model.Marriageward.AttachInvitationcard))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachInvitationcard", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.Marriageward.AttachInvitationcard))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachInvitationcard", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.Marriageward.AttachInvitationcard))
+        //            {
+        //                ModelState.AddModelError("Marriageward.AttachInvitationcard", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+        //    }
+        //    else if (model.PropertyRenovation != null)
+        //    {
+        //        var hbaValidationContext = new ValidationContext(model.PropertyRenovation);
+        //        var hbaValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.PropertyRenovation, hbaValidationContext, hbaValidationResults, true))
+        //        {
+        //            foreach (var result in hbaValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "PropertyRenovation"
+        //                    : $"PropertyRenovation.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+
+        //        if (model.PropertyRenovation.TotalExpenditureFile != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.PropertyRenovation.TotalExpenditureFile, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", errorMessage);
+        //            }
+
+        //            if (!await _pdfUpload.IsValidPdfFile(model.PropertyRenovation.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.PropertyRenovation.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.PropertyRenovation.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+        //    }
+        //    else if (model.SplWaiver != null)
+        //    {
+        //        var splWaiverValidationContext = new ValidationContext(model.SplWaiver);
+        //        var splWaiverValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.SplWaiver, splWaiverValidationContext, splWaiverValidationResults, true))
+        //        {
+        //            foreach (var result in splWaiverValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "SplWaiver"
+        //                    : $"SplWaiver.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //        if (model.SplWaiver.TotalExpenditureFile != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.SplWaiver.TotalExpenditureFile, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.TotalExpenditureFile", errorMessage);
+        //            }
+
+        //            if (!await _pdfUpload.IsValidPdfFile(model.SplWaiver.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.SplWaiver.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.SplWaiver.TotalExpenditureFile))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+
+        //        if (model.SplWaiver.OtherReasonPdf != null)
+        //        {
+        //            string errorMessage;
+        //            if (!_IClaimonlineApplication1.ValidateFileUpload(model.SplWaiver.OtherReasonPdf, out errorMessage))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.OtherReasonPdf", errorMessage);
+        //            }
+
+        //            if (!await _pdfUpload.IsValidPdfFile(model.SplWaiver.OtherReasonPdf))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.OtherReasonPdf", "File is not a valid PDF or appears to be a disguised file type.");
+        //            }
+
+        //            if (await _pdfUpload.IsPdfPasswordProtected(model.SplWaiver.OtherReasonPdf))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.OtherReasonPdf", "Password-protected PDFs are not allowed.");
+        //            }
+
+        //            if (await _pdfUpload.ContainsMaliciousPdfContent(model.SplWaiver.OtherReasonPdf))
+        //            {
+        //                ModelState.AddModelError("SplWaiver.OtherReasonPdf", "PDF contains potentially malicious content.");
+        //            }
+        //        }
+
+        //    }
+
+
+        //    if (model.ClaimCommonData != null)
+        //    {
+        //        var commonDataValidationContext = new ValidationContext(model.ClaimCommonData);
+        //        var commonDataValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.ClaimCommonData, commonDataValidationContext, commonDataValidationResults, true))
+        //        {
+        //            foreach (var result in commonDataValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "ClaimCommonData"
+        //                    : $"ClaimCommonData.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+
+        //    if (model.AddressDetails != null)
+        //    {
+        //        var addressValidationContext = new ValidationContext(model.AddressDetails);
+        //        var addressValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.AddressDetails, addressValidationContext, addressValidationResults, true))
+        //        {
+        //            foreach (var result in addressValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "AddressDetails"
+        //                    : $"AddressDetails.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+
+        //    if (model.AccountDetails != null)
+        //    {
+        //        var accountValidationContext = new ValidationContext(model.AccountDetails);
+        //        var accountValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.AccountDetails, accountValidationContext, accountValidationResults, true))
+        //        {
+        //            foreach (var result in accountValidationResults)
+        //            {
+        //                string propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "AccountDetails"
+        //                    : $"AccountDetails.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //        return View("OnlineApplication", model);
+        //    else
+        //    {
+        //        ClaimCommonModel claimCommonModel = new ClaimCommonModel();
+        //        ClaimAddressDetailsModel addressDetails = new ClaimAddressDetailsModel();
+        //        ClaimAccountDetailsModel accountDetails = new ClaimAccountDetailsModel();
+
+        //        if (model.ClaimCommonData != null)
+        //        {
+        //            model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
+        //            model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
+        //            model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
+        //            claimCommonModel = await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
+        //        }
+
+        //        if (model.AddressDetails != null)
+        //        {
+        //            model.AddressDetails.ApplicationId = claimCommonModel.ApplicationId;
+        //            await _ClaimAddress.Add(model.AddressDetails);
+        //        }
+
+        //        if (model.AccountDetails != null)
+        //        {
+        //            model.AccountDetails.ApplicationId = claimCommonModel.ApplicationId;
+        //            await _ClaimAccount.Add(model.AccountDetails);
+        //        }
+
+
+        //        if (model.EducationDetails != null)
+        //        {
+        //            formType = "ED";
+        //            bool result = await _IClaimonlineApplication1.submitApplication(model, "ED", claimCommonModel.ApplicationId);
+
+
+        //        }
+        //        else if (model.Marriageward != null)
+        //        {
+        //            formType = "MW";
+        //            bool result = await _IClaimonlineApplication1.submitApplication(model, "MW", claimCommonModel.ApplicationId);
+        //        }
+        //        else if (model.PropertyRenovation != null)
+        //        {
+        //            formType = "PR";
+        //            bool result = await _IClaimonlineApplication1.submitApplication(model, "PR", claimCommonModel.ApplicationId);
+        //        }
+        //        else
+        //        {
+        //            formType = "SP";
+        //            bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", claimCommonModel.ApplicationId);
+
+        //        }
+
+        //        TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
+        //        TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+        //        return RedirectToAction("Upload", "Claim");
+
+        //    }
+
+
+
+        //}
+        [HttpPost]
+        public async Task<IActionResult> OnlineApplication(DTOClaimApplication model)
         {
-            string formType = string.Empty;
+            if (!await ValidateModelAsync(model))
+                return View("OnlineApplication", model);
+
+            // Save common data
+            var claimCommonModel = await SaveClaimCommonDataAsync(model);
+
+            // Save address & account details
+            await SaveAddressAndAccountDetailsAsync(model, claimCommonModel.ApplicationId);
+
+            // Submit the specific form type
+            string formType = await SubmitFormAsync(model, claimCommonModel.ApplicationId);
+
+            TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
+            TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+            return RedirectToAction("Upload", "Claim");
+        }
+
+        private async Task<bool> ValidateModelAsync(DTOClaimApplication model)
+        {
+            bool isValid = true;
+
+            // Validate each section
+            isValid &= ValidateSection(model.ClaimCommonData, "ClaimCommonData");
+            isValid &= ValidateSection(model.AddressDetails, "AddressDetails");
+            isValid &= ValidateSection(model.AccountDetails, "AccountDetails");
+            isValid &= ValidateSection(model.EducationDetails, "EducationDetails");
+            isValid &= ValidateSection(model.Marriageward, "Marriageward");
+            isValid &= ValidateSection(model.PropertyRenovation, "PropertyRenovation");
+            isValid &= ValidateSection(model.SplWaiver, "SplWaiver");
+
+
+            // Form-specific validation
             if (model.EducationDetails != null)
+                isValid &= await ValidateFormFilesAsync(model.EducationDetails, "EducationDetails", new Dictionary<string, string>
             {
-                var educationContext = new ValidationContext(model.EducationDetails);
-                var educationValidationResults = new List<ValidationResult>();
-
-                if (!Validator.TryValidateObject(model.EducationDetails, educationContext, educationValidationResults, true))
-                {
-                    foreach (var result in educationValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "EducationDetails"
-                            : $"EducationDetails.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-                // File Upload Validation for EducationDetails
-
-                if (model.EducationDetails.AttachPartIIOrder != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.AttachPartIIOrder, out errorMessage))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
-                    }
-                    if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.AttachPartIIOrder))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.AttachPartIIOrder))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
-                    }
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.AttachPartIIOrder))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "PDF contains potentially malicious content.");
-                    }
-
-                }
-
-                if (model.EducationDetails.AttachBonafideLetter != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.AttachBonafideLetter, out errorMessage))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", errorMessage);
-                    }
-
-                    if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.AttachBonafideLetter))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.AttachBonafideLetter))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.AttachBonafideLetter))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachInvitationcard", "PDF contains potentially malicious content.");
-                    }
-                }
-
-                if (model.EducationDetails.TotalExpenditureFile != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.EducationDetails.TotalExpenditureFile, out errorMessage))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", errorMessage);
-                    }
-                    if (!await _pdfUpload.IsValidPdfFile(model.EducationDetails.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.EducationDetails.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.EducationDetails.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("EducationDetails.AttachPartIIOrder", "PDF contains potentially malicious content.");
-                    }
-                }
-
-
-            }
-            else if (model.Marriageward != null)
+                {"AttachPartIIOrder", "AttachPartIIOrder"},
+                {"AttachBonafideLetter", "AttachBonafideLetter"},
+                {"TotalExpenditureFile", "AttachPartIIOrder"}
+            });
+                else if (model.Marriageward != null)
+                    isValid &= await ValidateFormFilesAsync(model.Marriageward, "Marriageward", new Dictionary<string, string>
             {
-                var pcaValidationContext = new ValidationContext(model.Marriageward);
-                var pcaValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.Marriageward, pcaValidationContext, pcaValidationResults, true))
-                {
-                    foreach (var result in pcaValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "Marriageward"
-                            : $"Marriageward.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-
-                }
-                if (model.Marriageward.AttachPartIIOrder != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.Marriageward.AttachPartIIOrder, out errorMessage))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", errorMessage);
-                    }
-
-                    if (!await _pdfUpload.IsValidPdfFile(model.Marriageward.AttachPartIIOrder))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.Marriageward.AttachPartIIOrder))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.Marriageward.AttachPartIIOrder))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachPartIIOrder", "PDF contains potentially malicious content.");
-                    }
-                }
-
-                if (model.Marriageward.AttachInvitationcard != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.Marriageward.AttachInvitationcard, out errorMessage))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachInvitationcard", errorMessage);
-                    }
-                    if (!await _pdfUpload.IsValidPdfFile(model.Marriageward.AttachInvitationcard))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachInvitationcard", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.Marriageward.AttachInvitationcard))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachInvitationcard", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.Marriageward.AttachInvitationcard))
-                    {
-                        ModelState.AddModelError("Marriageward.AttachInvitationcard", "PDF contains potentially malicious content.");
-                    }
-                }
-            }
-            else if (model.PropertyRenovation != null)
+                {"AttachPartIIOrder", "AttachPartIIOrder"},
+                {"AttachInvitationcard", "AttachInvitationcard"}
+            });
+                else if (model.PropertyRenovation != null)
+                    isValid &= await ValidateFormFilesAsync(model.PropertyRenovation, "PropertyRenovation", new Dictionary<string, string>
             {
-                var hbaValidationContext = new ValidationContext(model.PropertyRenovation);
-                var hbaValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.PropertyRenovation, hbaValidationContext, hbaValidationResults, true))
-                {
-                    foreach (var result in hbaValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "PropertyRenovation"
-                            : $"PropertyRenovation.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-
-                if (model.PropertyRenovation.TotalExpenditureFile != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.PropertyRenovation.TotalExpenditureFile, out errorMessage))
-                    {
-                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", errorMessage);
-                    }
-
-                    if (!await _pdfUpload.IsValidPdfFile(model.PropertyRenovation.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.PropertyRenovation.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.PropertyRenovation.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("PropertyRenovation.TotalExpenditureFile", "PDF contains potentially malicious content.");
-                    }
-                }
-            }
-            else if (model.SplWaiver != null)
+                {"TotalExpenditureFile", "TotalExpenditureFile"}
+            });
+                else if (model.SplWaiver != null)
+                    isValid &= await ValidateFormFilesAsync(model.SplWaiver, "SplWaiver", new Dictionary<string, string>
             {
-                var splWaiverValidationContext = new ValidationContext(model.SplWaiver);
-                var splWaiverValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.SplWaiver, splWaiverValidationContext, splWaiverValidationResults, true))
+                {"TotalExpenditureFile", "TotalExpenditureFile"},
+                {"OtherReasonPdf", "OtherReasonPdf"}
+            });
+
+            return isValid;
+        }
+
+        private bool ValidateSection(object section, string sectionName)
+        {
+            if (section == null) return true;
+
+            var context = new ValidationContext(section);
+            var results = new List<ValidationResult>();
+
+            if (!Validator.TryValidateObject(section, context, results, true))
+            {
+                foreach (var result in results)
                 {
-                    foreach (var result in splWaiverValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "SplWaiver"
-                            : $"SplWaiver.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
+                    string propertyName = result.MemberNames?.FirstOrDefault();
+                    string errorKey = string.IsNullOrEmpty(propertyName)
+                        ? sectionName
+                        : $"{sectionName}.{propertyName}";
+                    ModelState.AddModelError(errorKey, result.ErrorMessage);
                 }
-                if (model.SplWaiver.TotalExpenditureFile != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.SplWaiver.TotalExpenditureFile, out errorMessage))
-                    {
-                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", errorMessage);
-                    }
-
-                    if (!await _pdfUpload.IsValidPdfFile(model.SplWaiver.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.SplWaiver.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.SplWaiver.TotalExpenditureFile))
-                    {
-                        ModelState.AddModelError("SplWaiver.TotalExpenditureFile", "PDF contains potentially malicious content.");
-                    }
-                }
-
-                if (model.SplWaiver.OtherReasonPdf != null)
-                {
-                    string errorMessage;
-                    if (!_IClaimonlineApplication1.ValidateFileUpload(model.SplWaiver.OtherReasonPdf, out errorMessage))
-                    {
-                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", errorMessage);
-                    }
-
-                    if (!await _pdfUpload.IsValidPdfFile(model.SplWaiver.OtherReasonPdf))
-                    {
-                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", "File is not a valid PDF or appears to be a disguised file type.");
-                    }
-
-                    if (await _pdfUpload.IsPdfPasswordProtected(model.SplWaiver.OtherReasonPdf))
-                    {
-                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", "Password-protected PDFs are not allowed.");
-                    }
-
-                    if (await _pdfUpload.ContainsMaliciousPdfContent(model.SplWaiver.OtherReasonPdf))
-                    {
-                        ModelState.AddModelError("SplWaiver.OtherReasonPdf", "PDF contains potentially malicious content.");
-                    }
-                }
-
+                return false;
             }
 
+            return true;
+        }
 
-            if (model.ClaimCommonData != null)
+        private async Task<bool> ValidateFormFilesAsync(object form, string formPrefix, Dictionary<string, string> files)
+        {
+            bool isValid = true;
+
+            foreach (var fileProp in files)
             {
-                var commonDataValidationContext = new ValidationContext(model.ClaimCommonData);
-                var commonDataValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.ClaimCommonData, commonDataValidationContext, commonDataValidationResults, true))
+                var file = form.GetType().GetProperty(fileProp.Key)?.GetValue(form) as IFormFile;
+                if (file == null) continue;
+
+                string errorMessage;
+                if (!_IClaimonlineApplication1.ValidateFileUpload(file, out errorMessage))
                 {
-                    foreach (var result in commonDataValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "ClaimCommonData"
-                            : $"ClaimCommonData.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
+                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", errorMessage);
+                    isValid = false;
+                }
+
+                if (!await _pdfUpload.IsValidPdfFile(file))
+                {
+                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", "File is not a valid PDF or appears to be a disguised file type.");
+                    isValid = false;
+                }
+
+                if (await _pdfUpload.IsPdfPasswordProtected(file))
+                {
+                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", "Password-protected PDFs are not allowed.");
+                    isValid = false;
+                }
+
+                if (await _pdfUpload.ContainsMaliciousPdfContent(file))
+                {
+                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", "PDF contains potentially malicious content.");
+                    isValid = false;
                 }
             }
 
+            return isValid;
+        }
+
+        private async Task<ClaimCommonModel> SaveClaimCommonDataAsync(DTOClaimApplication model)
+        {
+            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(ip))
+            {
+                ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            }
+
+            if (model.ClaimCommonData == null) return new ClaimCommonModel();
+
+            model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
+            model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
+            model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
+            model.ClaimCommonData.IPAddress = ip;
+            return await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
+        }
+
+        private async Task SaveAddressAndAccountDetailsAsync(DTOClaimApplication model, int applicationId)
+        {
             if (model.AddressDetails != null)
             {
-                var addressValidationContext = new ValidationContext(model.AddressDetails);
-                var addressValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.AddressDetails, addressValidationContext, addressValidationResults, true))
-                {
-                    foreach (var result in addressValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "AddressDetails"
-                            : $"AddressDetails.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
+                model.AddressDetails.ApplicationId = applicationId;
+                await _ClaimAddress.Add(model.AddressDetails);
             }
 
             if (model.AccountDetails != null)
             {
-                var accountValidationContext = new ValidationContext(model.AccountDetails);
-                var accountValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.AccountDetails, accountValidationContext, accountValidationResults, true))
-                {
-                    foreach (var result in accountValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "AccountDetails"
-                            : $"AccountDetails.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
+                model.AccountDetails.ApplicationId = applicationId;
+                await _ClaimAccount.Add(model.AccountDetails);
             }
-
-            if (!ModelState.IsValid)
-                return View("OnlineApplication", model);
-            else
-            {
-                ClaimCommonModel claimCommonModel = new ClaimCommonModel();
-                ClaimAddressDetailsModel addressDetails = new ClaimAddressDetailsModel();
-                ClaimAccountDetailsModel accountDetails = new ClaimAccountDetailsModel();
-
-                if (model.ClaimCommonData != null)
-                {
-                    model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
-                    model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
-                    model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
-                    claimCommonModel = await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
-                }
-
-                if (model.AddressDetails != null)
-                {
-                    model.AddressDetails.ApplicationId = claimCommonModel.ApplicationId;
-                    await _ClaimAddress.Add(model.AddressDetails);
-                }
-
-                if (model.AccountDetails != null)
-                {
-                    model.AccountDetails.ApplicationId = claimCommonModel.ApplicationId;
-                    await _ClaimAccount.Add(model.AccountDetails);
-                }
-
-
-                if (model.EducationDetails != null)
-                {
-                    formType = "ED";
-                    bool result = await _IClaimonlineApplication1.submitApplication(model, "ED", claimCommonModel.ApplicationId);
-                 
-
-                }
-                else if (model.Marriageward != null)
-                {
-                    formType = "MW";
-                    bool result = await _IClaimonlineApplication1.submitApplication(model, "MW", claimCommonModel.ApplicationId);
-                }
-                else if (model.PropertyRenovation != null)
-                {
-                    formType = "PR";
-                    bool result = await _IClaimonlineApplication1.submitApplication(model, "PR", claimCommonModel.ApplicationId);
-                }
-                else
-                {
-                    formType = "SP";
-                    bool result = await _IClaimonlineApplication1.submitApplication(model, "SP", claimCommonModel.ApplicationId);
-
-                }
-
-                TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
-                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
-                return RedirectToAction("Upload", "Claim");
-
-            }
-
-
-
         }
 
-    
+        private async Task<string> SubmitFormAsync(DTOClaimApplication model, int applicationId)
+        {
+            if (model.EducationDetails != null)
+            {
+                await _IClaimonlineApplication1.submitApplication(model, "ED", applicationId);
+                return "ED";
+            }
+
+            if (model.Marriageward != null)
+            {
+                await _IClaimonlineApplication1.submitApplication(model, "MW", applicationId);
+                return "MW";
+            }
+
+            if (model.PropertyRenovation != null)
+            {
+                await _IClaimonlineApplication1.submitApplication(model, "PR", applicationId);
+                return "PR";
+            }
+
+            await _IClaimonlineApplication1.submitApplication(model, "SP", applicationId);
+            return "SP";
+        }
+
+
+
 
         [HttpPost]
-        public async Task<IActionResult> SubmitDocuments(ClaimFileUploadViewModel model, string formType, int applicationId)
-        {
-            var files = new List<IFormFile>();
-            if (model.CancelledCheque != null) files.Add(model.CancelledCheque);
-            if (model.PaySlipPdf != null) files.Add(model.PaySlipPdf);            
-            if (model.SpdocusPdf != null) files.Add(model.SpdocusPdf);
-            if(model.SeviceExtnPdf != null) files.Add(model.SeviceExtnPdf);
+        //public async Task<IActionResult> SubmitDocuments(ClaimFileUploadViewModel model, string formType, int applicationId)
+        //{
+        //    var files = new List<IFormFile>();
+        //    if (model.CancelledCheque != null) files.Add(model.CancelledCheque);
+        //    if (model.PaySlipPdf != null) files.Add(model.PaySlipPdf);            
+        //    if (model.SpdocusPdf != null) files.Add(model.SpdocusPdf);
+        //    if(model.SeviceExtnPdf != null) files.Add(model.SeviceExtnPdf);
 
-            if (files.Count == 0)
+        //    if (files.Count == 0)
+        //    {
+        //        ModelState.AddModelError("", "Please upload at least one file.");
+        //        return View("Upload", model);
+        //    }
+
+        //    foreach (var file in files)
+        //    {
+        //        if (file.ContentType != "application/pdf")
+        //        {
+        //            ModelState.AddModelError(file.Name, "Only PDF files are allowed.");
+        //        }
+
+        //        if (file.Length > 150 * 1024)
+        //        {
+        //            ModelState.AddModelError(file.Name, "File size must not exceed 150 KB.");
+        //            return View();
+        //        }
+
+        //        if (file.Length > 1 * 1024 * 1024)
+        //        {
+        //            ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
+        //        }
+
+        //        if (!await _pdfUpload.IsValidPdfFile(file))
+        //        {
+        //            ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
+        //        }
+
+        //        if (await _pdfUpload.IsPdfPasswordProtected(file))
+        //        {
+        //            ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
+        //        }
+
+        //        if (await _pdfUpload.ContainsMaliciousPdfContent(file))
+        //        {
+        //            ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
+        //        }
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View("Upload", model);
+        //    }
+
+
+
+        //    bool success = await _IClaimonlineApplication1.ProcessFileUploads(files, formType, applicationId);
+
+
+        //    if (!success)
+        //    {
+        //        ModelState.AddModelError("", "File upload failed. Please try again.");
+        //        return View("Upload");
+        //    }
+
+        //    // Return a success message or redirect after successful upload
+        //    return RedirectToAction("ApplicationDetails", "Claim");
+        //}
+
+        public async Task<IActionResult> Upload(ClaimFileUploadViewModel model, string formType, int applicationId)
+        {
+            TempData.Keep("ClaimapplicationId");
+
+            var files = GetUploadedFiles(model);
+
+            if (!files.Any())
             {
                 ModelState.AddModelError("", "Please upload at least one file.");
                 return View("Upload", model);
@@ -548,36 +800,7 @@ namespace Agif_V2.Controllers
 
             foreach (var file in files)
             {
-                if (file.ContentType != "application/pdf")
-                {
-                    ModelState.AddModelError(file.Name, "Only PDF files are allowed.");
-                }
-
-                if (file.Length > 150 * 1024)
-                {
-                    ModelState.AddModelError(file.Name, "File size must not exceed 150 KB.");
-                    return View();
-                }
-
-                if (file.Length > 1 * 1024 * 1024)
-                {
-                    ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
-                }
-
-                if (!await _pdfUpload.IsValidPdfFile(file))
-                {
-                    ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
-                }
-
-                if (await _pdfUpload.IsPdfPasswordProtected(file))
-                {
-                    ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
-                }
-
-                if (await _pdfUpload.ContainsMaliciousPdfContent(file))
-                {
-                    ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
-                }
+                await ValidateFile(file);
             }
 
             if (!ModelState.IsValid)
@@ -585,24 +808,68 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
-
-
             bool success = await _IClaimonlineApplication1.ProcessFileUploads(files, formType, applicationId);
-
 
             if (!success)
             {
                 ModelState.AddModelError("", "File upload failed. Please try again.");
-                return View("Upload");
+                return View("Upload", model);
             }
 
             // Return a success message or redirect after successful upload
             return RedirectToAction("ApplicationDetails", "Claim");
         }
 
+        // Helper to gather uploaded files
+        private List<IFormFile> GetUploadedFiles(ClaimFileUploadViewModel model)
+        {
+            var files = new List<IFormFile>();
+            if (model.CancelledCheque != null) files.Add(model.CancelledCheque);
+            if (model.PaySlipPdf != null) files.Add(model.PaySlipPdf);
+            if (model.SpdocusPdf != null) files.Add(model.SpdocusPdf);
+            if (model.SeviceExtnPdf != null) files.Add(model.SeviceExtnPdf);
+            return files;
+        }
+
+        // Helper to validate a single file
+        private async Task ValidateFile(IFormFile file)
+        {
+            if (file.ContentType != "application/pdf")
+            {
+                ModelState.AddModelError(file.Name, "Only PDF files are allowed.");
+            }
+
+            if (file.Length > 150 * 1024)
+            {
+                ModelState.AddModelError(file.Name, "File size must not exceed 150 KB.");
+            }
+
+            if (file.Length > 1 * 1024 * 1024)
+            {
+                ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
+            }
+
+            if (!await _pdfUpload.IsValidPdfFile(file))
+            {
+                ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
+            }
+
+            if (await _pdfUpload.IsPdfPasswordProtected(file))
+            {
+                ModelState.AddModelError(file.Name, "Password-protected PDFs are not allowed.");
+            }
+
+            if (await _pdfUpload.ContainsMaliciousPdfContent(file))
+            {
+                ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
+            }
+        }
+
+
         [HttpPost]
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
         {
+           
             try
             {
                 string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -708,6 +975,10 @@ namespace Agif_V2.Controllers
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
+                ReaderProperties readerProperties = new ReaderProperties();
+                PdfReader pdfReader = new PdfReader(mergedPdfPath, readerProperties);
+                _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
+
                 if (mergeResult)
                 {
                     // Get relative path for client
@@ -736,6 +1007,10 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> GetPdfFilePath(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             var userData = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
             if (userData == null)
             {
@@ -783,6 +1058,11 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> GetApplicationDetails(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
+
             try
             {
                 var applicationDetails = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);

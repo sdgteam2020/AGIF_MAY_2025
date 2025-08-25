@@ -7,12 +7,10 @@ namespace Agif_V2.Controllers
 {
     public class DefaultController : Controller
     {
-        private readonly IWebHostEnvironment _env;
         private readonly IDefault _default;
-        public DefaultController(IWebHostEnvironment env, IDefault _default)
+        public DefaultController(IDefault _default)
         {
             this._default = _default;
-            _env = env;
         }
 
         public IActionResult Index()
@@ -92,9 +90,26 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetTimeline(int ApplicationId)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var data = await _default.GetTimeLine(ApplicationId);
             return Json(data);
         }
+
+        public async Task<IActionResult> GetClaimTimeline(int ApplicationId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var data = await _default.GetClaimTimeLine(ApplicationId);
+            return Json(data);
+        }
+
 
     }
 }

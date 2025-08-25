@@ -1,5 +1,7 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -10,11 +12,6 @@ html {
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
 }
 
 body {
@@ -621,6 +618,7 @@ h1 {
     letter-spacing: 1px;
     font-family: "Playfair Display", serif;
     font-weight: 400;
+    padding-top:40px;
 }
 
     .pagetitletwo h1 span {
@@ -726,7 +724,7 @@ h1 {
     background-color: #e9ecef;
 }
 .renderbody {
-    margin-top: 13rem !important
+    margin-top: 11rem !important
 }
 /* Mobile-specific styles */
 @media (max-width: 768px) {
@@ -805,4 +803,37 @@ h1 {
         font-style: italic;
     }
 
+
+body {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 2rem 0;
+}
+
+.container {
+   max-width: 900px;
+}
+
+
+
+.card-wrapper {
+    text-align: center;
+}
+
+.card {
+    display: inline-block;
+    border: none !important;
+    box-shadow: 0 10px 30px rgba(51, 17, 0, 0.15) !important;
+    border-radius: 15px !important;
+    overflow: hidden;
+    width: auto;
+}
+
+.ApplicationContainer {
+    max-width: 1500px;
+    margin: auto;
+}
+.Applicationcard {
+    width: 100%;
+}
 

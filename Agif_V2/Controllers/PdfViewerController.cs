@@ -18,11 +18,11 @@ namespace Agif_V2.Controllers
     public class PdfViewerController : Controller
     {
         private readonly IWebHostEnvironment _env;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public PdfViewerController(IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+        //private readonly IHttpContextAccessor _httpContextAccessor;
+        public PdfViewerController(IWebHostEnvironment env)
         {
             _env = env;
-            _httpContextAccessor = httpContextAccessor;
+            //_httpContextAccessor = httpContextAccessor;
         }
         public IActionResult AGIJournal()
         {

@@ -11,5 +11,7 @@ namespace DataAccessLayer.Interfaces
     {
         Task<List<DTOUserCountResponse>> GetUserCount();
         Task<List<DTOUserCountResponse>> GetApplicationCount(int userId);
+
+        Task<List<DTOApprovedLogs>> GetApprovedLogs();
     }
 }

@@ -4,8 +4,10 @@ using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -28,9 +30,10 @@ namespace Agif_V2.Controllers
         private readonly FileUtility _fileUtility;
         private readonly IAddress _address;
         private readonly IAccount _account;
+        private readonly Watermark _watermark;
 
          
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility)
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, Watermark watermark)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -43,8 +46,10 @@ namespace Agif_V2.Controllers
             _fileUtility = fileUtility;
             _address = address;
             _account = account;
+            _watermark = watermark;
         }
-        public async Task<IActionResult> OnlineApplication()
+        [HttpGet]
+        public IActionResult OnlineApplication()
         {
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
@@ -65,57 +70,107 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        //public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix, int regtId)
+        //{
+        //    if (Prefix == 11 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - NTR prefix
+        //    {
+        //        return Json(new { retirementAge = 57, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 11 && new[] { 26 }.Contains(rankId))// For - NTR prefix
+        //    {
+        //        return Json(new { retirementAge = 59, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 11 && new[] { 27 }.Contains(rankId))// For - NTR prefix
+        //    {
+        //        return Json(new { retirementAge = 60, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 11 && new[] { 28 }.Contains(rankId))// For - NTR prefix
+        //    {
+        //        return Json(new { retirementAge = 61, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 3 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - SC prefix
+        //    {
+        //        return Json(new { retirementAge = 57, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 3 && new[] { 26 }.Contains(rankId))// For - SC prefix
+        //    {
+        //        return Json(new { retirementAge = 58, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 3 && new[] { 27 }.Contains(rankId))// For - SC prefix
+        //    {
+        //        return Json(new { retirementAge = 59, userTypeId = 1 });
+        //    }
+        //    else if (Prefix == 3 && new[] { 28 }.Contains(rankId))// For - SC prefix
+        //    {
+        //        return Json(new { retirementAge = 60, userTypeId = 1 });
+        //    }
+        //    var userType = await _IMasterOnlyTable.GetUserType(Prefix);
+        //    var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
+        //    var retirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0;
+        //    var userTypeId = userType.FirstOrDefault()?.UserType ?? 0;
+        //    if (retirementAge > 0 && userTypeId != 0)
+        //    {
+
+        //        return Json(new { retirementAge = retirementAge, userTypeId = userTypeId });
+
+        //    }
+        //    else
+        //    {
+        //        return Json("0");
+        //    }
+        //}
+
         public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix, int regtId)
         {
-            if (Prefix == 11 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - NTR prefix
+            if(!ModelState.IsValid)
             {
-                return Json(new { retirementAge = 57, userTypeId = 1 });
+                return Json("Invalid Request.");
             }
-            else if (Prefix == 11 && new[] { 26 }.Contains(rankId))// For - NTR prefix
+            // Map of (Prefix, RankId) to RetirementAge
+            var prefixRankRetirementMap = new Dictionary<(int prefix, int rank), int>
             {
-                return Json(new { retirementAge = 59, userTypeId = 1 });
-            }
-            else if (Prefix == 11 && new[] { 27 }.Contains(rankId))// For - NTR prefix
+                // NTR prefix = 11
+                { (11, 21), 57 },
+                { (11, 22), 57 },
+                { (11, 23), 57 },
+                { (11, 24), 57 },
+                { (11, 29), 57 },
+                { (11, 26), 59 },
+                { (11, 27), 60 },
+                { (11, 28), 61 },
+
+                // SC prefix = 3
+                { (3, 21), 57 },
+                { (3, 22), 57 },
+                { (3, 23), 57 },
+                { (3, 24), 57 },
+                { (3, 29), 57 },
+                { (3, 26), 58 },
+                { (3, 27), 59 },
+                { (3, 28), 60 },
+            };
+
+            if (prefixRankRetirementMap.TryGetValue((Prefix, rankId), out int retirementAge))
             {
-                return Json(new { retirementAge = 60, userTypeId = 1 });
+                return Json(new { retirementAge, userTypeId = 1 });
             }
-            else if (Prefix == 11 && new[] { 28 }.Contains(rankId))// For - NTR prefix
-            {
-                return Json(new { retirementAge = 61, userTypeId = 1 });
-            }
-            else if (Prefix == 3 && new[] { 24, 23, 29, 22, 21 }.Contains(rankId))// For - SC prefix
-            {
-                return Json(new { retirementAge = 57, userTypeId = 1 });
-            }
-            else if (Prefix == 3 && new[] { 26 }.Contains(rankId))// For - SC prefix
-            {
-                return Json(new { retirementAge = 58, userTypeId = 1 });
-            }
-            else if (Prefix == 3 && new[] { 27 }.Contains(rankId))// For - SC prefix
-            {
-                return Json(new { retirementAge = 59, userTypeId = 1 });
-            }
-            else if (Prefix == 3 && new[] { 28 }.Contains(rankId))// For - SC prefix
-            {
-                return Json(new { retirementAge = 60, userTypeId = 1 });
-            }
+
             var userType = await _IMasterOnlyTable.GetUserType(Prefix);
             var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
-            var retirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0;
+
+            retirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0;
             var userTypeId = userType.FirstOrDefault()?.UserType ?? 0;
-            if (retirementAge > 0 && userTypeId != 0)
-            {
 
-                return Json(new { retirementAge = retirementAge, userTypeId = userTypeId });
-
-            }
-            else
-            {
-                return Json("0");
-            }
+            return (retirementAge > 0 && userTypeId != 0)
+                ? Json(new { retirementAge, userTypeId })
+                : Json("0");
         }
         public async Task<JsonResult> GetPCDA_PAO(int regt)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             var pcda = await _IMasterOnlyTable.GetPCDA_PAO(regt);
             var pcdaPao = pcda.FirstOrDefault()?.Pcda_Pao ?? string.Empty;
             if (!string.IsNullOrEmpty(pcdaPao))
@@ -130,6 +185,11 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
+
             var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
 
             if (existingUser != null) // Check if the user exists
@@ -144,6 +204,12 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
+
             bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
 
             if (result == true)
@@ -179,309 +245,583 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> CheckIsCoRegister(int UnitId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             return Json(await _IonlineApplication1.CheckIsCoRegister(UnitId));
         }
-        public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
+        //public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
+        //{
+        //    string formType = string.Empty;
+
+
+        //    // First, determine the form type
+        //    if (model.CarApplication != null)
+        //    {
+        //        formType = "CA";
+        //    }
+        //    else if (model.PCAApplication != null)
+        //    {
+        //        formType = "PCA";
+        //    }
+        //    else if (model.HBAApplication != null)
+        //    {
+        //        formType = "HBA";
+        //    }
+        //    else
+        //    {
+        //        ModelState.AddModelError("", "Please select an application type.");
+        //    }
+
+        //    if (model.AddressDetails != null)
+        //    {
+        //        var addressValidationContext = new ValidationContext(model.AddressDetails);
+        //        var addressValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.AddressDetails, addressValidationContext, addressValidationResults, true))
+        //        {
+        //            foreach (var result in addressValidationResults)
+        //            {
+        //                string? propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "AddressDetails"
+        //                    : $"AddressDetails.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+
+        //    if(model.AccountDetails != null)
+        //    {
+        //        var accountValidationContext = new ValidationContext(model.AccountDetails);
+        //        var accountValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.AccountDetails, accountValidationContext, accountValidationResults, true))
+        //        {
+        //            foreach (var result in accountValidationResults)
+        //            {
+        //                string? propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "AccountDetails"
+        //                    : $"AccountDetails.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+
+        //    // Validate nested objects more specifically based on form type
+        //    if (formType == "CA" && model.CarApplication != null)
+        //    {
+        //        var carValidationContext = new ValidationContext(model.CarApplication);
+        //        var carValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.CarApplication, carValidationContext, carValidationResults, true))
+        //        {
+        //            foreach (var result in carValidationResults)
+        //            {
+        //                string? propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "CarApplication"
+        //                    : $"CarApplication.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+        //    else if (formType == "PCA" && model.PCAApplication != null)
+        //    {
+        //        var pcaValidationContext = new ValidationContext(model.PCAApplication);
+        //        var pcaValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.PCAApplication, pcaValidationContext, pcaValidationResults, true))
+        //        {
+        //            foreach (var result in pcaValidationResults)
+        //            {
+        //                string? propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "PCAApplication"
+        //                    : $"PCAApplication.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+        //    else if (formType == "HBA" && model.HBAApplication != null)
+        //    {
+        //        var hbaValidationContext = new ValidationContext(model.HBAApplication);
+        //        var hbaValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.HBAApplication, hbaValidationContext, hbaValidationResults, true))
+        //        {
+        //            foreach (var result in hbaValidationResults)
+        //            {
+        //                string? propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "HBAApplication"
+        //                    : $"HBAApplication.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+
+        //    // Also validate the CommonData if it exists
+        //    if (model.CommonData != null)
+        //    {
+        //        var commonDataValidationContext = new ValidationContext(model.CommonData);
+        //        var commonDataValidationResults = new List<ValidationResult>();
+        //        if (!Validator.TryValidateObject(model.CommonData, commonDataValidationContext, commonDataValidationResults, true))
+        //        {
+        //            foreach (var result in commonDataValidationResults)
+        //            {
+        //                string? propertyName = result.MemberNames?.FirstOrDefault();
+        //                string errorKey = string.IsNullOrEmpty(propertyName)
+        //                    ? "CommonData"
+        //                    : $"CommonData.{propertyName}";
+        //                ModelState.AddModelError(errorKey, result.ErrorMessage);
+        //            }
+        //        }
+        //    }
+        //    if (!ModelState.IsValid)
+        //    {
+
+        //        // Preserve the loan type for the view
+        //        return View("OnlineApplication", model);
+        //    }
+
+
+        //    else
+        //    {
+        //        CommonDataModel common = new CommonDataModel();
+        //        AddressDetailsModel addressDetails = new AddressDetailsModel();
+        //        AccountDetailsModel accountDetails = new AccountDetailsModel();
+        //        try
+        //        {
+
+        //            if (model.CommonData != null)
+        //            {
+        //                model.CommonData.ApplicationType = int.Parse(model.loantype);
+        //                model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
+        //                model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
+        //                common = await _IonlineApplication1.AddWithReturn(model.CommonData);
+        //            }
+
+        //            if (model.AddressDetails != null)
+        //            {
+        //                model.AddressDetails.ApplicationId = common.ApplicationId;
+        //                await _address.Add(model.AddressDetails);
+        //            }
+
+        //            if(model.AccountDetails!=null)
+        //            {
+        //                model.AccountDetails.ApplicationId = common.ApplicationId;
+        //                await _account.Add(model.AccountDetails);
+        //            }
+
+        //            if (formType == "HBA" && model.HBAApplication != null)
+        //            {
+        //                HBAApplicationModel HBA = new HBAApplicationModel();
+
+        //                HBA = model.HBAApplication;
+
+        //                HBA.ApplicationId = common.ApplicationId;
+
+        //                await _Hba.Add(HBA);
+        //            }
+
+        //            else if (formType == "CA" && model.CarApplication != null)
+        //            {
+        //                CarApplicationModel Car = new CarApplicationModel();
+
+        //                Car = model.CarApplication;
+
+        //                Car.ApplicationId = common.ApplicationId;
+
+        //                await _car.Add(Car);
+        //            }
+
+        //            else if (formType == "PCA" && model.PCAApplication != null)
+        //            {
+        //                PCAApplicationModel PCA = new PCAApplicationModel();
+
+        //                PCA = model.PCAApplication;
+
+        //                PCA.ApplicationId = common.ApplicationId;
+
+        //                await _Pca.Add(PCA);
+        //            }
+
+        //        }
+
+        //        catch (Exception ex)
+        //        {
+
+        //            ModelState.AddModelError("", "An error occurred while processing your application.");
+        //        }
+
+        //       TempData["applicationId"] = common.ApplicationId;
+        //        //TempData["applicationId"] = 2039; // For testing purposes, replace with actual ApplicationId from common.ApplicationId
+        //        TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+
+        //        TempData["COArmyNumber"] = model.COArmyNo;
+        //        return RedirectToAction("Upload", "Upload");
+        //    }
+
+        //}
+        [HttpPost]
+        public async Task<IActionResult> OnlineApplication(DTOOnlineApplication model)
         {
-            string formType = string.Empty;
-
-
-            // First, determine the form type
-            if (model.CarApplication != null)
-            {
-                formType = "CA";
-            }
-            else if (model.PCAApplication != null)
-            {
-                formType = "PCA";
-            }
-            else if (model.HBAApplication != null)
-            {
-                formType = "HBA";
-            }
-            else
+            string formType = GetFormType(model);
+            if (formType == null)
             {
                 ModelState.AddModelError("", "Please select an application type.");
             }
 
-            if (model.AddressDetails != null)
+            // Validate all nested objects
+            ValidateModel(model.AddressDetails, "AddressDetails");
+            ValidateModel(model.AccountDetails, "AccountDetails");
+            ValidateModel(model.CommonData, "CommonData");
+
+            // Form-specific validation
+            switch (formType)
             {
-                var addressValidationContext = new ValidationContext(model.AddressDetails);
-                var addressValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.AddressDetails, addressValidationContext, addressValidationResults, true))
-                {
-                    foreach (var result in addressValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "AddressDetails"
-                            : $"AddressDetails.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
+                case "CA":
+                    ValidateModel(model.CarApplication, "CarApplication");
+                    break;
+                case "PCA":
+                    ValidateModel(model.PCAApplication, "PCAApplication");
+                    break;
+                case "HBA":
+                    ValidateModel(model.HBAApplication, "HBAApplication");
+                    break;
             }
 
-            if(model.AccountDetails != null)
-            {
-                var accountValidationContext = new ValidationContext(model.AccountDetails);
-                var accountValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.AccountDetails, accountValidationContext, accountValidationResults, true))
-                {
-                    foreach (var result in accountValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "AccountDetails"
-                            : $"AccountDetails.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-            }
-
-            // Validate nested objects more specifically based on form type
-            if (formType == "CA" && model.CarApplication != null)
-            {
-                var carValidationContext = new ValidationContext(model.CarApplication);
-                var carValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.CarApplication, carValidationContext, carValidationResults, true))
-                {
-                    foreach (var result in carValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "CarApplication"
-                            : $"CarApplication.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-            }
-            else if (formType == "PCA" && model.PCAApplication != null)
-            {
-                var pcaValidationContext = new ValidationContext(model.PCAApplication);
-                var pcaValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.PCAApplication, pcaValidationContext, pcaValidationResults, true))
-                {
-                    foreach (var result in pcaValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "PCAApplication"
-                            : $"PCAApplication.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-            }
-            else if (formType == "HBA" && model.HBAApplication != null)
-            {
-                var hbaValidationContext = new ValidationContext(model.HBAApplication);
-                var hbaValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.HBAApplication, hbaValidationContext, hbaValidationResults, true))
-                {
-                    foreach (var result in hbaValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "HBAApplication"
-                            : $"HBAApplication.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-            }
-
-            // Also validate the CommonData if it exists
-            if (model.CommonData != null)
-            {
-                var commonDataValidationContext = new ValidationContext(model.CommonData);
-                var commonDataValidationResults = new List<ValidationResult>();
-                if (!Validator.TryValidateObject(model.CommonData, commonDataValidationContext, commonDataValidationResults, true))
-                {
-                    foreach (var result in commonDataValidationResults)
-                    {
-                        string propertyName = result.MemberNames?.FirstOrDefault();
-                        string errorKey = string.IsNullOrEmpty(propertyName)
-                            ? "CommonData"
-                            : $"CommonData.{propertyName}";
-                        ModelState.AddModelError(errorKey, result.ErrorMessage);
-                    }
-                }
-            }
             if (!ModelState.IsValid)
             {
-
-                // Preserve the loan type for the view
                 return View("OnlineApplication", model);
             }
 
-
-            else
+            // Insert into database
+            CommonDataModel common = new CommonDataModel();
+            try
             {
-                CommonDataModel common = new CommonDataModel();
-                AddressDetailsModel addressDetails = new AddressDetailsModel();
-                AccountDetailsModel accountDetails = new AccountDetailsModel();
-                try
+                if (model.CommonData != null)
                 {
-
-                    if (model.CommonData != null)
-                    {
-                        model.CommonData.ApplicationType = int.Parse(model.loantype);
-                        model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
-                        model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
-                        common = await _IonlineApplication1.AddWithReturn(model.CommonData);
-                    }
-
-                    if (model.AddressDetails != null)
-                    {
-                        model.AddressDetails.ApplicationId = common.ApplicationId;
-                        await _address.Add(model.AddressDetails);
-                    }
-
-                    if(model.AccountDetails!=null)
-                    {
-                        model.AccountDetails.ApplicationId = common.ApplicationId;
-                        await _account.Add(model.AccountDetails);
-                    }
-
-                    if (formType == "HBA" && model.HBAApplication != null)
-                    {
-                        HBAApplicationModel HBA = new HBAApplicationModel();
-
-                        HBA = model.HBAApplication;
-
-                        HBA.ApplicationId = common.ApplicationId;
-
-                        await _Hba.Add(HBA);
-                    }
-
-                    else if (formType == "CA" && model.CarApplication != null)
-                    {
-                        CarApplicationModel Car = new CarApplicationModel();
-
-                        Car = model.CarApplication;
-
-                        Car.ApplicationId = common.ApplicationId;
-
-                        await _car.Add(Car);
-                    }
-
-                    else if (formType == "PCA" && model.PCAApplication != null)
-                    {
-                        PCAApplicationModel PCA = new PCAApplicationModel();
-
-                        PCA = model.PCAApplication;
-
-                        PCA.ApplicationId = common.ApplicationId;
-
-                        await _Pca.Add(PCA);
-                    }
-
+                    model.CommonData.ApplicationType = int.Parse(model.loantype);
+                    model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
+                    model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
+                    common = await _IonlineApplication1.AddWithReturn(model.CommonData);
                 }
 
-                catch (Exception ex)
+                if (model.AddressDetails != null)
                 {
-
-                    ModelState.AddModelError("", "An error occurred while processing your application.");
+                    model.AddressDetails.ApplicationId = common.ApplicationId;
+                    await _address.Add(model.AddressDetails);
                 }
 
-               TempData["applicationId"] = common.ApplicationId;
-                //TempData["applicationId"] = 2039; // For testing purposes, replace with actual ApplicationId from common.ApplicationId
-                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+                if (model.AccountDetails != null)
+                {
+                    model.AccountDetails.ApplicationId = common.ApplicationId;
+                    await _account.Add(model.AccountDetails);
+                }
 
-                TempData["COArmyNumber"] = model.COArmyNo;
-                return RedirectToAction("Upload", "Upload");
+                // Form-specific insert mapping
+                var formModelMap = new Dictionary<string, object>
+                 {
+                     { "HBA", model.HBAApplication },
+                     { "CA", model.CarApplication },
+                     { "PCA", model.PCAApplication }
+                 };
+
+                if (formModelMap.TryGetValue(formType, out var formModel) && formModel != null)
+                {
+                    dynamic appModel = formModel;
+                    appModel.ApplicationId = common.ApplicationId;
+
+                    switch (formType)
+                    {
+                        case "HBA":
+                            await _Hba.Add(appModel);
+                            break;
+                        case "CA":
+                            await _car.Add(appModel);
+                            break;
+                        case "PCA":
+                            await _Pca.Add(appModel);
+                            break;
+                    }
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "An error occurred while processing your application.");
             }
 
+            TempData["applicationId"] = common.ApplicationId;
+            TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+            TempData["COArmyNumber"] = model.COArmyNo;
+
+            return RedirectToAction("Upload", "Upload");
         }
 
-        public async Task<JsonResult> MergePdf(int applicationId,bool isRejected,bool isApproved)
+        // Helper method to determine form type
+        private string? GetFormType(DTOOnlineApplication model)
+        {
+            if (model.CarApplication != null) return "CA";
+            if (model.PCAApplication != null) return "PCA";
+            if (model.HBAApplication != null) return "HBA";
+            return null;
+        }
+
+        // Helper method to validate any object
+        private void ValidateModel(object model, string prefix)
+        {
+            if (model == null) return;
+
+            var context = new ValidationContext(model);
+            var results = new List<ValidationResult>();
+
+            if (!Validator.TryValidateObject(model, context, results, true))
+            {
+                foreach (var result in results)
+                {
+                    string? propertyName = result.MemberNames?.FirstOrDefault();
+                    string errorKey = string.IsNullOrEmpty(propertyName) ? prefix : $"{prefix}.{propertyName}";
+                    ModelState.AddModelError(errorKey, result.ErrorMessage);
+                }
+            }
+        }
+
+
+        //public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
+        //{
+        //    try
+        //    {
+        //        string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        //        if (string.IsNullOrEmpty(ip))
+        //        {
+        //            ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+        //        }
+        //        var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
+        //        if (userData == null)
+        //        {
+        //            return Json(new { success = false, message = "Application not found." });
+        //        }
+
+        //        string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
+        //        string applicationTypeName = "";
+        //        if (string.IsNullOrEmpty(applicationType))
+        //        {
+        //            return Json(new { success = false, message = "Application type is not specified." });
+        //        }
+        //        else
+        //        {
+        //            if (applicationType == "1")
+        //            {
+        //                applicationTypeName = "HBA";
+        //            }
+        //            else if (applicationType == "2")
+        //            {
+        //                if (userData.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
+        //                {
+        //                    applicationTypeName = "TW";
+        //                }
+        //                else
+        //                {
+        //                    applicationTypeName = "CAR";
+        //                }
+        //            }
+        //            else
+        //            {
+        //                applicationTypeName = "PCA";
+        //            }
+        //        }
+
+        //        string armyNo = userData.OnlineApplicationResponse.Number;
+        //        if (string.IsNullOrEmpty(armyNo))
+        //        {
+        //            return Json(new { success = false, message = "Army number is not specified." });
+        //        }
+
+        //        string applicationIdStr = applicationId.ToString();
+        //        string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
+        //        string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+        //        if (!Directory.Exists(sourceFolderPath))
+        //        {
+        //            return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
+        //        }
+
+        //        string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+
+        //        if (pdfFiles.Length == 0)
+        //        {
+        //            return Json(new { success = false, message = "No PDF files found in the specified folder." });
+        //        }
+
+        //        // Generate the new PDF first (if needed)
+        //        string pdfName = folderPath + "_Application";
+        //        var generatedPdfPath = Path.Combine(sourceFolderPath, pdfName + ".pdf");
+
+        //        try
+        //        {
+        //            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+        //            if (dTOTempSession == null)
+        //            {
+        //                return Json(new { success = false, message = "Session expired or invalid user context." });
+        //            }
+
+        //            var (name, mobile, armyno) = await _IonlineApplication1.GetCODetails(dTOTempSession.ProfileId);
+
+        //            var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, name, mobile, armyno);
+
+        //            //if (data == 1)
+        //            //{
+        //            //    pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
+        //            //             .ToArray();
+        //            //}
+        //            if (data == 1)
+        //            {
+        //                pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf")
+        //                    .OrderBy(file =>
+        //                    {
+        //                        bool containsApplication = Path.GetFileName(file).Contains("Application");
+        //                        // Return a tuple where the first item is the priority (true/false) for sorting
+        //                        // We want "application" files to come first, so we return a boolean
+        //                        return containsApplication ? 0 : 1;
+        //                    })
+        //                    .ThenBy(file => Path.GetFileName(file))  // After prioritizing, order by the filename
+        //                    .ToArray();
+        //            }
+
+        //        }
+        //        catch (Exception pdfGenEx)
+        //        {
+        //            Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
+        //        }
+        //        string tempUploadsPath = Path.Combine(_env.WebRootPath, "MergePdf");
+        //        if (!Directory.Exists(tempUploadsPath))
+        //        {
+        //            Directory.CreateDirectory(tempUploadsPath);
+        //        }
+        //        string MergePdfName = "App" + applicationIdStr + armyNo;
+        //        string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
+        //        ViewBag.MergedPdfPath = mergedPdfPath;
+        //        // Merge all PDFs using iText7
+        //        bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+        //        ReaderProperties readerProperties = new ReaderProperties();
+        //        PdfReader pdfReader = new PdfReader(mergedPdfPath, readerProperties);
+        //        _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
+
+        //        if (mergeResult)
+        //        {
+        //            // Get relative path for client
+        //            string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
+
+        //            await _IonlineApplication1.UpdateMergePdfStatus(applicationId, true);
+        //            return Json(new
+        //            {
+        //                success = true,
+        //                message = "PDFs merged successfully.",
+        //                mergedFilePath = relativePath,
+        //                fullPath = mergedPdfPath,
+        //                totalFiles = pdfFiles.Length
+        //            });
+        //        }
+        //        else
+        //        {
+        //            return Json(new { success = false, message = "Failed to merge PDF files." });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
+        //    }
+        //}
+
+        public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
+        {           
+
+            try
+            {
+                string ip = GetClientIp();
+                var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
+                if (userData == null) return JsonError("Application not found.");
+
+                string applicationTypeName = GetApplicationTypeName(userData);
+                if (string.IsNullOrEmpty(applicationTypeName)) return JsonError("Application type is not specified.");
+
+                string armyNo = userData.OnlineApplicationResponse.Number;
+                if (string.IsNullOrEmpty(armyNo)) return JsonError("Army number is not specified.");
+
+                string applicationIdStr = applicationId.ToString();
+                string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
+                string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
+                if (!Directory.Exists(sourceFolderPath))
+                    return JsonError($"Source folder not found: {sourceFolderPath}");
+
+                string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
+                if (pdfFiles.Length == 0) return JsonError("No PDF files found in the specified folder.");
+
+                // Generate new PDF if needed
+                pdfFiles = await GeneratePdfIfNeeded(applicationId, sourceFolderPath, folderPath, isRejected, isApproved, pdfFiles, ip);
+
+                string mergedPdfPath = PrepareMergedPdfPath(applicationId, armyNo);
+                ViewBag.MergedPdfPath = mergedPdfPath;
+
+                bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
+
+                PdfReader pdfReader = new PdfReader(mergedPdfPath, new ReaderProperties());
+                _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
+
+                if (!mergeResult) return JsonError("Failed to merge PDF files.");
+
+                string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
+                await _IonlineApplication1.UpdateMergePdfStatus(applicationId, true);
+
+                return Json(new
+                {
+                    success = true,
+                    message = "PDFs merged successfully.",
+                    mergedFilePath = relativePath,
+                    fullPath = mergedPdfPath,
+                    totalFiles = pdfFiles.Length
+                });
+            }
+            catch (Exception ex)
+            {
+                return JsonError($"Error occurred while merging PDFs: {ex.Message}");
+            }
+        }
+
+        #region Helper Methods
+        private string GetClientIp()
+        {
+            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            return string.IsNullOrEmpty(ip) ? HttpContext.Connection.RemoteIpAddress?.ToString() ?? "" : ip;
+        }
+
+        private string? GetApplicationTypeName(dynamic userData)
+        {
+            string? type = userData.OnlineApplicationResponse.ApplicationType?.ToString();
+            return type switch
+            {
+                "1" => "HBA",
+                "2" => userData.CarApplicationResponse?.Veh_Loan_Type == "Two Wheeler" ? "TW" : "CAR",
+                "3" => "PCA",
+                _ => null
+            };
+        }
+
+        private async Task<string[]> GeneratePdfIfNeeded(int applicationId, string sourceFolderPath, string folderPath, bool isRejected, bool isApproved, string[] pdfFiles, string ip)
         {
             try
             {
-                string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-                if (string.IsNullOrEmpty(ip))
+                var session = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+                if (session == null) throw new Exception("Session expired or invalid user context.");
+
+                var (name, mobile, armyno) = await _IonlineApplication1.GetCODetails(session.ProfileId);
+                string generatedPdfPath = Path.Combine(sourceFolderPath, folderPath + "_Application.pdf");
+
+                int result = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, session.UserName, ip, name, mobile, armyno);
+
+                if (result == 1)
                 {
-                    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-                }
-                var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
-                if (userData == null)
-                {
-                    return Json(new { success = false, message = "Application not found." });
-                }
-
-                string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
-                string applicationTypeName = "";
-                if (string.IsNullOrEmpty(applicationType))
-                {
-                    return Json(new { success = false, message = "Application type is not specified." });
-                }
-                else
-                {
-                    if (applicationType == "1")
-                    {
-                        applicationTypeName = "HBA";
-                    }
-                    else if (applicationType == "2")
-                    {
-                        if (userData.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
-                        {
-                            applicationTypeName = "TW";
-                        }
-                        else
-                        {
-                            applicationTypeName = "CAR";
-                        }
-                    }
-                    else
-                    {
-                        applicationTypeName = "PCA";
-                    }
-                }
-
-                string armyNo = userData.OnlineApplicationResponse.Number;
-                if (string.IsNullOrEmpty(armyNo))
-                {
-                    return Json(new { success = false, message = "Army number is not specified." });
-                }
-
-                string applicationIdStr = applicationId.ToString();
-                string folderPath = applicationTypeName  + armyNo + "_" + applicationIdStr;
-                string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
-                if (!Directory.Exists(sourceFolderPath))
-                {
-                    return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
-                }
-
-                string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
-
-                if (pdfFiles.Length == 0)
-                {
-                    return Json(new { success = false, message = "No PDF files found in the specified folder." });
-                }
-
-                // Generate the new PDF first (if needed)
-                string pdfName = folderPath + "_Application";
-                var generatedPdfPath = Path.Combine(sourceFolderPath, pdfName + ".pdf");
-
-                try
-                {
-                    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-
-                    if (dTOTempSession == null)
-                    {
-                        return Json(new { success = false, message = "Session expired or invalid user context." });
-                    }
-
-                    var (name, mobile,armyno) = await _IonlineApplication1.GetCODetails(dTOTempSession.ProfileId);
-
-                    var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath,isRejected,isApproved,dTOTempSession.UserName,ip, name,mobile,armyno);
-
-                    //if (data == 1)
-                    //{
-                    //    pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
-                    //             .ToArray();
-                    //}
-                    if (data == 1)
-                    {
-                        pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf")
+                    pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf")
                             .OrderBy(file =>
                             {
                                 bool containsApplication = Path.GetFileName(file).Contains("Application");
@@ -491,52 +831,33 @@ namespace Agif_V2.Controllers
                             })
                             .ThenBy(file => Path.GetFileName(file))  // After prioritizing, order by the filename
                             .ToArray();
-                    }
-
-                }
-                catch (Exception pdfGenEx)
-                {
-                    Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
-                }
-                string tempUploadsPath = Path.Combine(_env.WebRootPath, "MergePdf");
-                if (!Directory.Exists(tempUploadsPath))
-                {
-                    Directory.CreateDirectory(tempUploadsPath);
-                }
-                string MergePdfName = "App" + applicationIdStr + armyNo;
-                string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
-                ViewBag.MergedPdfPath = mergedPdfPath;
-                // Merge all PDFs using iText7
-                bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
-
-                if (mergeResult)
-                {
-                    // Get relative path for client
-                    string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
-
-                    await _IonlineApplication1.UpdateMergePdfStatus(applicationId, true);
-                    return Json(new
-                    {
-                        success = true,
-                        message = "PDFs merged successfully.",
-                        mergedFilePath = relativePath,
-                        fullPath = mergedPdfPath,
-                        totalFiles = pdfFiles.Length
-                    });
-                }
-                else
-                {
-                    return Json(new { success = false, message = "Failed to merge PDF files." });
                 }
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
+                Console.WriteLine($"Error generating PDF: {ex.Message}");
             }
+            return pdfFiles;
         }
+
+        private string PrepareMergedPdfPath(int applicationId, string armyNo)
+        {
+            string path = Path.Combine(_env.WebRootPath, "MergePdf");
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+
+            return Path.Combine(path, $"App{applicationId}{armyNo}.pdf");
+        }
+
+        private JsonResult JsonError(string message) => Json(new { success = false, message });
+        #endregion
+
 
         public async Task<JsonResult> GetPdfFilePath(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return JsonError("Invalid Request.");
+            }
             var userData = await _IonlineApplication1.GetApplicationDetails(applicationId);
             if (userData == null)
             {
@@ -591,6 +912,12 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> GetApplicationDetails(int applicationId)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
+
             try
             {
                 var applicationDetails = await _IonlineApplication1.GetApplicationDetails(applicationId);
@@ -631,6 +958,10 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> GetPdfFileByteByApplicationId(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid Request." });
+            }
             try
             {
                 // Fetch the PDF file path

@@ -552,6 +552,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("IOArmyNo")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -661,6 +664,51 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("WithdrawPurpose");
 
                     b.ToTable("trnClaim");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.ClaimDigitalSignRecords", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ArmyNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DomainId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsRejectced")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSign")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RankName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("SignOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("XMLSignResponse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("trnClaimDigitalSignRecords");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ClaimDocumentUpload", b =>
@@ -1823,6 +1871,66 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("ApplicationId");
 
                     b.ToTable("trnSplWaiver");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.TrnApprovedLog", b =>
+                {
+                    b.Property<int>("ApprovedLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovedLogId"));
+
+                    b.Property<string>("DomainId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("coDomainId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("coProfileId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ApprovedLogId");
+
+                    b.ToTable("TrnApprovedLogs");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.TrnClaimStatusCounter", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ActionOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrnClaimStatusCounter");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.TrnFwd", b =>

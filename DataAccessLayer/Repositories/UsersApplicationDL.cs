@@ -43,78 +43,157 @@ namespace DataAccessLayer.Repositories
         }
 
 
+        //public async Task<List<DTOGetApplResponse>> GetUsersApplication(int Mapping, int status)
+        //{
+        //    int actualStatus = (status == 2 || status > 3) ? 2 : status;
+
+        //    var UsersApplicationList = await (
+        //        from appl in _db.trnApplications
+        //        join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
+        //        join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+        //        join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+        //        join digitalSign in _db.trnDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+        //        from digitalSign in ds.DefaultIfEmpty()
+        //        where user.MappingId == Mapping
+        //              && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
+        //              && user.IsPrimary == true
+        //        select new DTOGetApplResponse
+        //        {
+        //            ApplicationId = appl.ApplicationId,
+        //            ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+        //            Name = appl.ApplicantName,
+        //            ApplicationType = applType.ApplicationTypeName,
+        //            DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //            AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //            IsMergePdf = appl.IsMergePdf,
+        //            UpdatedOn = appl.UpdatedOn,
+        //            DigitalSignDate = digitalSign != null && digitalSign.SignOn.HasValue ? digitalSign.SignOn.Value : (DateTime?)null
+        //        }).ToListAsync();
+
+        //    var COApplicationList = await (
+        //        from appl in _db.trnApplications
+        //        join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
+        //        join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+        //        join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+        //        join digitalSign in _db.trnDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+        //        from digitalSign in ds.DefaultIfEmpty()
+        //        where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
+        //        select new DTOGetApplResponse
+        //        {
+        //            ApplicationId = appl.ApplicationId,
+        //            ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+        //            Name = appl.ApplicantName,
+        //            ApplicationType = applType.ApplicationTypeName,
+        //            DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //            AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //            IsMergePdf = appl.IsMergePdf,
+        //            UpdatedOn = appl.UpdatedOn,
+        //            DigitalSignDate = digitalSign != null && digitalSign.SignOn.HasValue ? digitalSign.SignOn.Value : (DateTime?)null
+        //        }).ToListAsync();
+
+        //    // Merge
+        //    var applicationList = UsersApplicationList.Union(COApplicationList);
+
+        //    // Conditional order
+        //    if (status == 2)
+        //    {
+        //        applicationList = applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue);
+        //    }
+        //    else
+        //    {
+        //        applicationList = applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
+        //    }
+
+        //    return applicationList.ToList();
+        //}
         public async Task<List<DTOGetApplResponse>> GetUsersApplication(int Mapping, int status)
         {
             int actualStatus = (status == 2 || status > 3) ? 2 : status;
-            var UsersApplicationList = await (from appl in _db.trnApplications
-                                   join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
-                                   join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                   join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                   where user.MappingId == Mapping && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3)) && user.IsPrimary == true
-                                   orderby appl.UpdatedOn descending
-                                   select new DTOGetApplResponse
-                                   {
-                                       ApplicationId = appl.ApplicationId,
-                                       ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                       Name = appl.ApplicantName,
-                                       ApplicationType = applType.ApplicationTypeName,
-                                       DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                       AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                       IsMergePdf = appl.IsMergePdf,
-                                       UpdatedOn = appl.UpdatedOn
-                                   }).ToListAsync();
 
-            var COApplicationList = await (from appl in _db.trnApplications
-                                   join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
-                                   join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                   join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                           where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
-                                           orderby appl.UpdatedOn descending
-                                   select new DTOGetApplResponse
-                                   {
-                                       ApplicationId = appl.ApplicationId,
-                                       ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                       Name = appl.ApplicantName,
-                                       ApplicationType = applType.ApplicationTypeName,
-                                       DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                       AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                       IsMergePdf = appl.IsMergePdf,
-                                       UpdatedOn = appl.UpdatedOn
-                                   }).ToListAsync();
-            var applicationList = UsersApplicationList
-                          .Union(COApplicationList)
-                          .OrderByDescending(a => a.UpdatedOn)
-                          .ToList();
-            return applicationList!;
+            // Local function to get queryable
+            IQueryable<DTOGetApplResponse> GetApplications(bool isUserMapped)
+            {
+                var query = from appl in _db.trnApplications
+                            join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+                            join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+                            join digitalSign in _db.trnDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+                            from digitalSign in ds.DefaultIfEmpty()
+                            select new { appl, prefix, applType, digitalSign };
+
+                if (isUserMapped)
+                {
+                    query = from q in query
+                            join user in _db.trnUserMappings on q.appl.PresentUnit equals user.UnitId
+                            where user.MappingId == Mapping && user.IsPrimary == true
+                                  && (q.appl.StatusCode == status || (status == 2 && q.appl.StatusCode > 3))
+                            select q;
+                }
+                else
+                {
+                    query = from q in query
+                            join profile in _db.UserProfiles on q.appl.IOArmyNo equals profile.ArmyNo
+                            where (q.appl.StatusCode == status || (status == 2 && q.appl.StatusCode > 3))
+                            select q;
+                }
+
+                return query.Select(q => new DTOGetApplResponse
+                {
+                    ApplicationId = q.appl.ApplicationId,
+                    ArmyNo = q.prefix.Prefix + q.appl.Number + q.appl.Suffix,
+                    Name = q.appl.ApplicantName ?? string.Empty,
+                    ApplicationType = q.applType.ApplicationTypeName,
+                    DateOfBirth = q.appl.DateOfBirth.HasValue ? q.appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+                    AppliedDate = q.appl.UpdatedOn.HasValue ? q.appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                    IsMergePdf = q.appl.IsMergePdf,
+                    UpdatedOn = q.appl.UpdatedOn,
+                    DigitalSignDate = q.digitalSign != null && q.digitalSign.SignOn.HasValue ? q.digitalSign.SignOn.Value : (DateTime?)null
+                });
+            }
+
+            // Execute queries
+            var usersApplicationList = await GetApplications(true).ToListAsync();
+            var coApplicationList = await GetApplications(false).ToListAsync();
+
+            // Merge
+            var applicationList = usersApplicationList.Union(coApplicationList);
+
+            // Conditional order
+            applicationList = (status == 2)
+                ? applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue)
+                : applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
+
+            return applicationList.ToList();
         }
+
+
 
         public async Task<List<DTOGetApplResponse>> GetUsersApplicationForAdmin(int status)
         {
-            var UsersApplicationListToAdmin = await(from appl in _db.trnApplications
-                                                    where appl.StatusCode == status
-                                                    join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                                    join oldPrefix in _db.MArmyPrefixes on appl.OldArmyPrefix equals oldPrefix.Id
-                                                    join regt in _db.MRegtCorps on appl.RegtCorps equals regt.Id
-                                                    join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
-                                                    join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
-                                             join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                             orderby appl.UpdatedOn descending
-                                             select new DTOGetApplResponse
-                                             {
-                                                 ApplicationId = appl.ApplicationId,
-                                                 PresentStatus = statusName.StatusName,
-                                                 ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                 Name = appl.ApplicantName,
-                                                 OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
-                                                 RegtCorps = regt.RegtName,
-                                                 PresentUnit = unit.UnitName,
-                                                 PcdaPao = appl.pcda_pao,
-                                                 AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                                 ApplicationType = appl.ApplicationType.ToString(),
-                                                 UpdatedOn = appl.UpdatedOn,
-                                                 DownloadedOn = appl.DownloadedOn,
-                                                 DownloadCount = appl.DownloadCount,
-                                             }).ToListAsync();
+            var UsersApplicationListToAdmin = await (from appl in _db.trnApplications
+                                                     where appl.StatusCode == status
+                                                     join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+                                                     join oldPrefix in _db.MArmyPrefixes on appl.OldArmyPrefix equals oldPrefix.Id
+                                                     join regt in _db.MRegtCorps on appl.RegtCorps equals regt.Id
+                                                     join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
+                                                     join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
+                                                     join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+                                                     orderby appl.UpdatedOn descending
+                                                     select new DTOGetApplResponse
+                                                     {
+                                                         ApplicationId = appl.ApplicationId,
+                                                         PresentStatus = statusName.StatusName,
+                                                         ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+                                                         Name = appl.ApplicantName??string.Empty,
+                                                         OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
+                                                         RegtCorps = regt.RegtName,
+                                                         PresentUnit = unit.UnitName,
+                                                         PcdaPao = appl.pcda_pao??string.Empty,
+                                                         AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                                         ApplicationType = appl.ApplicationType.ToString(),
+                                                         UpdatedOn = appl.UpdatedOn,
+                                                         DownloadedOn = appl.DownloadedOn,
+                                                         DownloadCount = appl.DownloadCount,
+                                                     }).ToListAsync();
             return UsersApplicationListToAdmin!;
         }
 
@@ -141,68 +220,151 @@ namespace DataAccessLayer.Repositories
             return result > 0;
         }
 
-        public async Task<bool> InsertStatusCounter(DTOExportRequest dtoExport)
-        {
-            if (dtoExport == null || dtoExport.Id == null || !dtoExport.Id.Any())
-                return false;
+        //public async Task<bool> InsertStatusCounter(DTOExportRequest dtoExport)
+        //{
+        //    if (dtoExport == null || dtoExport.Id == null || !dtoExport.Id.Any())
+        //        return false;
 
-            var statusCounters = dtoExport.Id.Select(appId => new TrnStatusCounter
-            {
-                StatusId = 5, // Assuming status 4 means "Downloaded"
-                ApplicationId = appId,
-                ActionOn = DateTime.Now
-            }).ToList();
+        //    var statusCounters = dtoExport.Id.Select(appId => new TrnStatusCounter
+        //    {
+        //        StatusId = 5, // Assuming status 4 means "Downloaded"
+        //        ApplicationId = appId,
+        //        ActionOn = DateTime.Now
+        //    }).ToList();
 
-            await _db.TrnStatusCounter.AddRangeAsync(statusCounters);
-            int result = await _db.SaveChangesAsync();
+        //    await _db.TrnStatusCounter.AddRangeAsync(statusCounters);
+        //    int result = await _db.SaveChangesAsync();
 
-            return result > 0;
-        }
+        //    return result > 0;
+        //}
+
+        //public async Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status)
+        //{
+        //    int actualStatus = (status == 102 || status > 103) ? 102 : status;
+
+        //    var UsersApplicationList = await (from appl in _db.trnClaim
+        //                                      join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
+        //                                      join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+        //                                      join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+        //                                      join digitalSign in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+        //                                      from digitalSign in ds.DefaultIfEmpty()
+        //                                      where user.MappingId == Mapping &&
+        //                                            (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103)) &&
+        //                                            user.IsPrimary == true
+        //                                      select new DTOGetApplResponse
+        //                                      {
+        //                                          ApplicationId = appl.ApplicationId,
+        //                                          ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+        //                                          Name = appl.ApplicantName ?? string.Empty,
+        //                                          ApplicationType = applType.Name?? string.Empty,
+        //                                          DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //                                          IsMergePdf = appl.IsMergePdf,
+        //                                          UpdatedOn = appl.UpdatedOn,
+        //                                          DigitalSignDate = digitalSign != null && digitalSign.SignOn.HasValue
+        //                                              ? digitalSign.SignOn.Value
+        //                                              : (DateTime?)null
+        //                                      }).ToListAsync();
+
+        //    var COApplicationList = await (from appl in _db.trnClaim
+        //                                   join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
+        //                                   join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+        //                                   join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+        //                                   join digitalSign in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+        //                                   from digitalSign in ds.DefaultIfEmpty()
+        //                                   where (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103))
+        //                                   select new DTOGetApplResponse
+        //                                   {
+        //                                       ApplicationId = appl.ApplicationId,
+        //                                       ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
+        //                                       Name = appl.ApplicantName ?? string.Empty,
+        //                                       ApplicationType = applType.Name ?? string.Empty,
+        //                                       DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //                                       AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //                                       IsMergePdf = appl.IsMergePdf,
+        //                                       UpdatedOn = appl.UpdatedOn,
+        //                                       DigitalSignDate = digitalSign != null && digitalSign.SignOn.HasValue
+        //                                           ? digitalSign.SignOn.Value
+        //                                           : (DateTime?)null
+        //                                   }).ToListAsync();
+
+        //    // Merge both lists
+        //    var applicationList = UsersApplicationList.Union(COApplicationList);
+
+        //    // Apply conditional sorting
+        //    if (status == 102)
+        //    {
+        //        applicationList = applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue);
+        //    }
+        //    else
+        //    {
+        //        applicationList = applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
+        //    }
+
+        //    return applicationList.ToList();
+        //}
 
         public async Task<List<DTOGetApplResponse>> GetMaturityUsersApplication(int Mapping, int status)
         {
             int actualStatus = (status == 102 || status > 103) ? 102 : status;
-            var UsersApplicationList = await (from appl in _db.trnClaim
-                                              join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
-                                              join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                              join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
-                                              where user.MappingId == Mapping && (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103)) && user.IsPrimary == true
-                                              orderby appl.UpdatedOn descending
-                                              select new DTOGetApplResponse
-                                              {
-                                                  ApplicationId = appl.ApplicationId,
-                                                  ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                  Name = appl.ApplicantName,
-                                                  ApplicationType = applType.Name,
-                                                  DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                                  AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                                  IsMergePdf = appl.IsMergePdf,
-                                                  UpdatedOn = appl.UpdatedOn
-                                              }).ToListAsync();
 
-            var COApplicationList = await (from appl in _db.trnClaim
-                                           join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
-                                           join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-                                           join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
-                                           where (appl.StatusCode == status || (status == 102 && appl.StatusCode > 103))
-                                           orderby appl.UpdatedOn descending
-                                           select new DTOGetApplResponse
-                                           {
-                                               ApplicationId = appl.ApplicationId,
-                                               ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                               Name = appl.ApplicantName,
-                                               ApplicationType = applType.Name,
-                                               DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                               AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                               IsMergePdf = appl.IsMergePdf,
-                                               UpdatedOn = appl.UpdatedOn
-                                           }).ToListAsync();
-            var applicationList = UsersApplicationList
-                          .Union(COApplicationList)
-                          .OrderByDescending(a => a.UpdatedOn)
-                          .ToList();
-            return applicationList!;
+            // Local function to get queryable
+            IQueryable<DTOGetApplResponse> GetApplications(bool isUserMapped)
+            {
+                var query = from appl in _db.trnClaim
+                            join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
+                            join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
+                            join digitalSign in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
+                            from digitalSign in ds.DefaultIfEmpty()
+                            select new { appl, prefix, applType, digitalSign };
+
+                if (isUserMapped)
+                {
+                    query = from q in query
+                            join user in _db.trnUserMappings on q.appl.PresentUnit equals user.UnitId
+                            where user.MappingId == Mapping && user.IsPrimary == true
+                                  && (q.appl.StatusCode == status || (status == 102 && q.appl.StatusCode > 103))
+                            select q;
+                }
+                else
+                {
+                    query = from q in query
+                            join profile in _db.UserProfiles on q.appl.IOArmyNo equals profile.ArmyNo
+                            where (q.appl.StatusCode == status || (status == 102 && q.appl.StatusCode > 103))
+                            select q;
+                }
+
+                return query.Select(q => new DTOGetApplResponse
+                {
+                    ApplicationId = q.appl.ApplicationId,
+                    ArmyNo = q.prefix.Prefix + q.appl.Number + q.appl.Suffix,
+                    Name = q.appl.ApplicantName ?? string.Empty,
+                    ApplicationType = q.applType.Name ?? string.Empty,
+                    DateOfBirth = q.appl.DateOfBirth.HasValue ? q.appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+                    AppliedDate = q.appl.UpdatedOn.HasValue ? q.appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                    IsMergePdf = q.appl.IsMergePdf,
+                    UpdatedOn = q.appl.UpdatedOn,
+                    DigitalSignDate = q.digitalSign != null && q.digitalSign.SignOn.HasValue
+                        ? q.digitalSign.SignOn.Value
+                        : (DateTime?)null
+                });
+            }
+
+            // Execute queries
+            var usersApplicationList = await GetApplications(true).ToListAsync();
+            var coApplicationList = await GetApplications(false).ToListAsync();
+
+            // Merge
+            var applicationList = usersApplicationList.Union(coApplicationList);
+
+            // Conditional order
+            applicationList = (status == 102)
+                ? applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue)
+                : applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
+
+            return applicationList.ToList();
         }
+
 
         public async Task<List<DTOGetApplResponse>> GetClaimUsersApplicationForAdmin(int status)
         {
@@ -220,13 +382,13 @@ namespace DataAccessLayer.Repositories
                                                          ApplicationId = appl.ApplicationId,
                                                          PresentStatus = statusName.StatusName,
                                                          ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                         Name = appl.ApplicantName,
+                                                         Name = appl.ApplicantName ?? string.Empty,
                                                          OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
                                                          RegtCorps = regt.RegtName,
                                                          PresentUnit = unit.UnitName,
-                                                         PcdaPao = appl.pcda_pao,
+                                                         PcdaPao = appl.pcda_pao ?? string.Empty,
                                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                                         ApplicationType = applType.Name,
+                                                         ApplicationType = applType.Name?? string.Empty,
                                                          UpdatedOn = appl.UpdatedOn,
                                                          DownloadedOn = appl.DownloadedOn,
                                                          DownloadCount = appl.DownloadCount,
@@ -279,10 +441,10 @@ namespace DataAccessLayer.Repositories
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (profile != null)
             {
-                profile.Name = sessionUserDTO.name;
-                profile.Email = sessionUserDTO.EmailId;
+                profile.Name = sessionUserDTO.name?? string.Empty;
+                profile.Email = sessionUserDTO.EmailId ?? string.Empty;
                 profile.rank = sessionUserDTO.RankId;
-                profile.MobileNo = sessionUserDTO.MobileNo;
+                profile.MobileNo = sessionUserDTO.MobileNo ?? string.Empty;
                 updated = true;
             }
 

@@ -75,7 +75,7 @@
                             <strong>Note:</strong> Total size of each file should not be more than <strong>150 kb </strong>.
                         </div>
                     </div>
-                    <form id="uploadForm" action="@Url.Action("ProcessUpload", "Upload")" method="post" enctype="multipart/form-data">
+                    <form id="uploadForm" action="@Url.Action("Upload", "Upload")" method="post" enctype="multipart/form-data">
                         <!-- Hidden field to pass form type to controller -->
                         <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
                         <input type="hidden" id="hiddenApplicationId" name="applicationId" value="@applicationId" />
@@ -85,7 +85,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- Cancelled Cheque -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <label for="CancelledCheque" class="form-label fw-bold">
@@ -97,7 +97,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="cancelledChequePreview"></label>
                                                 <div id="cancelledChequePreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -109,7 +109,7 @@
 
                                 <div class="row">
                                     <!-- Pay Slip -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -123,7 +123,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="paySlipPreview"></label>
                                                 <div id="paySlipPreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -143,7 +143,7 @@
 
                                 <div class="row">
                                     <!-- Quotation -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -157,7 +157,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="quotationPreview"></label>
                                                 <div id="quotationPreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -175,7 +175,7 @@
 
                                 <div class="row">
                                     <!-- Valid Driving License -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -189,7 +189,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="DrivingLicensePreview"></label>
                                                 <div id="DrivingLicensePreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -206,7 +206,7 @@
 
                                 <div class="row">
                                     <!-- Service Extn -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -220,7 +220,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="SeviceExtnPre"></label>
                                                 <div id="SeviceExtnPre" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -238,7 +238,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- Cancelled Cheque -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <label for="CancelledCheque" class="form-label fw-bold">
@@ -250,7 +250,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="cancelledChequePreview"></label>
                                                 <div id="cancelledChequePreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -262,7 +262,7 @@
 
                                 <div class="row">
                                     <!-- Pay Slip -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -276,7 +276,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="paySlipPreview"></label>
                                                 <div id="paySlipPreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -296,7 +296,7 @@
 
                                 <div class="row">
                                     <!-- Quotation -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -310,7 +310,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="quotationPreview"></label>
                                                 <div id="quotationPreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -327,7 +327,7 @@
 
                                 <div class="row">
                                     <!-- Service Extn -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -341,7 +341,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="SeviceExtnPre"></label>
                                                 <div id="SeviceExtnPre" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -358,7 +358,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- Cancelled Cheque -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <label for="CancelledCheque" class="form-label fw-bold">
@@ -370,7 +370,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="cancelledChequePreview"></label>
                                                 <div id="cancelledChequePreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>
@@ -382,7 +382,7 @@
 
                                 <div class="row">
                                     <!-- Pay Slip -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -396,7 +396,7 @@
                                             </div>
 
                                             <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
+                                                <label class="form-label fw-bold" for="paySlipPreview"></label>
                                                 <div id="paySlipPreview" class="file-preview-container">
                                                     <i class="bi bi-eye icon-clickable" ></i>
                                                 </div>

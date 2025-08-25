@@ -25,33 +25,64 @@ namespace DataAccessLayer.Repositories
             return await _context.UserProfiles.FirstOrDefaultAsync(x => x.userName == userName);
         }
 
-        public async Task<List<DTOUserProfileResponse>> GetAllUser(bool status)
+        //public async Task<List<DTOUserProfileResponse>> GetAllUser(bool status)
+        //{
+        //    var users = await (from user in _context.Users
+        //                       join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
+        //                       join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
+        //                       join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+        //                       join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
+        //                       join rank in _context.MRanks on profile.rank equals rank.RankId
+        //                       join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
+        //                       join role in _context.UserRoles on user.Id equals role.UserId
+        //                       where mapping.IsActive == status && role.RoleId == 2
+        //                       orderby user.UpdatedOn
+        //                       select new DTOUserProfileResponse
+        //                       {
+        //                           DomainId = profile.userName,
+        //                           ProfileName = rank.RankName + " " + profile.Name,
+        //                           AppointmentName = appt.AppointmentName,
+        //                           ArmyNo = profile.ArmyNo,
+        //                           EmailId = profile.Email,
+        //                           MobileNo = profile.MobileNo,
+        //                           UnitName = unit.UnitName,
+        //                           RankName = rank.RankName,
+        //                           RegtName = regt.RegtName,
+        //                           IsActive = status,
+        //                           IsPrimary = mapping.IsPrimary,
+        //                           IsFmn = mapping.IsFmn,
+        //                       }).ToListAsync();
+
+        //    return users;
+        //}
+
+        public IQueryable<DTOUserProfileResponse> GetAllUser(bool status)
         {
-            var users = await (from user in _context.Users
-                               join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
-                               join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
-                               join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
-                               join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
-                               join rank in _context.MRanks on profile.rank equals rank.RankId
-                               join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
-                               join role in _context.UserRoles on user.Id equals role.UserId
-                               where mapping.IsActive == status && role.RoleId == 2
-                               orderby user.UpdatedOn
-                               select new DTOUserProfileResponse
-                               {
-                                   DomainId = profile.userName,
-                                   ProfileName = rank.RankName + " " + profile.Name,
-                                   AppointmentName = appt.AppointmentName,
-                                   ArmyNo = profile.ArmyNo,
-                                   EmailId = profile.Email,
-                                   MobileNo = profile.MobileNo,
-                                   UnitName = unit.UnitName,
-                                   RankName = rank.RankName,
-                                   RegtName = regt.RegtName,
-                                   IsActive = status,
-                                   IsPrimary = mapping.IsPrimary,
-                                   IsFmn = mapping.IsFmn,
-                               }).ToListAsync();
+            var users = from user in _context.Users
+                        join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
+                        join unit in _context.MUnits on mapping.UnitId equals unit.UnitId
+                        join profile in _context.UserProfiles on mapping.ProfileId equals profile.ProfileId
+                        join appt in _context.MAppointments on profile.ApptId equals appt.ApptId
+                        join rank in _context.MRanks on profile.rank equals rank.RankId
+                        join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
+                        join role in _context.UserRoles on user.Id equals role.UserId
+                        where mapping.IsActive == status && role.RoleId == 2
+                        orderby user.UpdatedOn
+                        select new DTOUserProfileResponse
+                        {
+                            DomainId = profile.userName,
+                            ProfileName = rank.RankName + " " + profile.Name,
+                            AppointmentName = appt.AppointmentName,
+                            ArmyNo = profile.ArmyNo,
+                            EmailId = profile.Email,
+                            MobileNo = profile.MobileNo,
+                            UnitName = unit.UnitName,
+                            RankName = rank.RankName,
+                            RegtName = regt.RegtName,
+                            IsActive = status,
+                            IsPrimary = mapping.IsPrimary,
+                            IsFmn = mapping.IsFmn,
+                        };
 
             return users;
         }
@@ -131,5 +162,34 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
         }
+
+        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive, string coDomainId, int coProfileId)
+        {
+            var user = await _context.UserProfiles
+                .Where(u => u.userName == DomainId)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var approvedLog = new TrnApprovedLog   // Entity mapped to table `trnApprovedLogs`
+            {
+                Name = user.Name,
+                DomainId = user.userName,
+                IpAddress = Ip,
+                IsApproved = isActive,
+                UpdatedOn = DateTime.Now,
+                coDomainId = coDomainId,
+                coProfileId = coProfileId
+            };
+
+            _context.TrnApprovedLogs.Add(approvedLog);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
     }
 }

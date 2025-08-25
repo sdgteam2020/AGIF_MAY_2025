@@ -48,10 +48,10 @@
                        
 
                         <div class="alert alert-warning mt-3 mb-0">
-                            <strong>Note:</strong> Total file size of file after merging pdf including application should not be more than <strong>1 MB</strong>.
+                            <strong>Note:</strong> Total size of each file should not be more than <strong>150 kb </strong>.
                         </div>
                     </div>
-                    <form id="uploadForm" action="@Url.Action("SubmitDocuments", "Claim")" method="post" enctype="multipart/form-data">
+                    <form id="uploadForm" action="@Url.Action("Upload", "Claim")" method="post" enctype="multipart/form-data">
                         <!-- Hidden field to pass form type to controller -->
                         <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
                         <input type="hidden" id="hiddenApplicationId" name="applicationId" value="@applicationId" />
@@ -66,7 +66,7 @@
                                                 <label for="CancelledCheque" class="form-label fw-bold">
                                                     1. Cancelled Cheque
                                                 </label>
-                                                <input class="form-control" type="file" id="CancelledCheque" name="CancelledCheque" accept=".pdf" required>
+                                            <input class="form-control file-upload-limited" type="file" id="CancelledCheque" name="CancelledCheque" data-preview="#cancelledChequePreview" accept=".pdf" required>
                                             <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.CancelledCheque, "", new { @class = "text-danger" })
                                             </div>
@@ -92,7 +92,7 @@
                                                 <label for="PaySlipPdf" class="form-label fw-bold">
                                                     2. First Page of Pay Slip
                                                 </label>
-                                                <input class="form-control" type="file" id="PaySlipPdf" name="PaySlipPdf" accept=".pdf" required>
+                                            <input class="form-control file-upload-limited" type="file" id="PaySlipPdf" name="PaySlipPdf" data-preview="#paySlipPreview" accept=".pdf" required>
                                             <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.PaySlipPdf, "", new { @class = "text-danger" })
                                             </div>
@@ -129,7 +129,7 @@
                                             <label for="SpdocusPdf" class="form-label fw-bold">
                                                 3. sp docus (for seeking of spl waiver)
                                                 </label>
-                                            <input class="form-control" type="file" id="SpdocusPdf" name="SpdocusPdf" accept=".pdf" disabled required>
+                                            <input class="form-control file-upload-limited" type="file" id="SpdocusPdf" name="SpdocusPdf" data-preview="#SpdocusPre" accept=".pdf" disabled required>
                                             <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.SpdocusPdf, "", new { @class = "text-danger" })
                                             </div>

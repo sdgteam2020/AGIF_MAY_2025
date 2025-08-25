@@ -32,7 +32,7 @@
         let selectedType = $('#typeSelect').val();
 
         // Determine the endpoint based on selected type
-        var searchEndpoint = getSearchEndpoint(selectedType);
+        const searchEndpoint = getSearchEndpoint(selectedType);
 
         $.ajax({
             url: searchEndpoint,
@@ -74,12 +74,12 @@
             const safeAppId = (app.applicationId !== undefined && app.applicationId !== null) ? app.applicationId : index;
             const rowHtml = `
                 <tr>
-                    <td>${app.applicationType || 'N/A'}</td>
+                    <td >${app.applicationType || 'N/A'}</td>
                     <td>
-                        <span class="badge ${getStatusBadgeClass(app.statusId)}">${app.status || 'Unknown'}</span>
+                        <span class=" ${getStatusBadgeClass(app.statusId)} statusList">${app.status || 'Unknown'}</span>
                     </td>
                     <td>
-                        <button class="btn btn-info timeline-btn" type="button"
+                        <button class="btn btn-custom timeline-btn " type="button"
                                 data-app-id="${safeAppId}" 
                                 data-bs-toggle="collapse" 
                                 data-bs-target="#timeline-${safeAppId}" 
@@ -109,7 +109,8 @@
         const timelineRow = $('#timeline-' + appId);
         const timelineContent = $('#timeline-content-' + appId);
         const loadingDiv = $('#loading-' + appId);
-
+        let selectedType = $('#typeSelect').val();
+        let endpoint = '';
         // Check if timeline is already loaded
         if (timelineContent.children().length > 0) {
             return; // Timeline already loaded, just toggle
@@ -121,9 +122,14 @@
         loadingDiv.show();
         timelineContent.hide();
 
+        if (selectedType === 'Loan')
+            endpoint = '/Default/GetTimeline';
+        else if (selectedType === 'Maturity')
+            endpoint = '/Default/GetClaimTimeline';
+
         // Get the appropriate timeline endpoint
         $.ajax({
-            url: '/Default/GetTimeline',
+            url: endpoint,
             type: 'GET',
             data: { applicationId: appId },
             success: function (response) {
@@ -215,6 +221,9 @@
         }
         else if (statusId == 5) {
             return 'bg-warning';
+        }
+        else {
+            return 'bg-primary';
         }
     }
 });

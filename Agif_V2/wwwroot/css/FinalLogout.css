@@ -1,4 +1,5 @@
-﻿.headerText {
+﻿@import url('finallogout.css');
+.headerText {
     font-size: 30px;
     font-weight: bold;
     color: white;
@@ -36,8 +37,3 @@ header {
     box-sizing: border-box;
 }
 
-.headerText {
-    font-size: 30px;
-    font-weight: bold;
-    color: white;
-}

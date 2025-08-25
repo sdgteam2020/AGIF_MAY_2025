@@ -97,7 +97,7 @@ $('#btnDownloadExcel').on('click', function () {
         success: function (response) {
             Swal.close();
             
-            var link = document.createElement('a');
+            const link = document.createElement('a');
             link.href = URL.createObjectURL(response);
             link.download = "UsersList.xlsx";
             link.click();

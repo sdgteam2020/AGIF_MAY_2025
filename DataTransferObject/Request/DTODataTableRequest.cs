@@ -24,7 +24,7 @@ namespace DataTransferObject.Request
 
         // Valid column names: ensure the sortColumn is in the allowed columns list
         [RegularExpression(@"^[a-zA-Z0-9_]*$", ErrorMessage = "Only alphabets, numbers, and underscores allowed.")]
-        public string sortColumn { get; set; } = string.Empty;
+        public string? sortColumn { get; set; }
 
         // Only "asc" or "desc" for sort direction
         [RegularExpression("^(asc|desc)$", ErrorMessage = "Only 'asc' or 'desc' are allowed.")]

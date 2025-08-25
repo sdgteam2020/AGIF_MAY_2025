@@ -5,10 +5,10 @@
 
 function loadDropdown() {
 
-    var Rank = $('#rank').data('rank-prefix');
+    const Rank = $('#rank').data('rank-prefix');
   //  var UnitId = $('#UnitId').val();
-    var regtCorps = $('#regtCorps').data('regtcorps-prefix');
-    var ApptId = $('#ApptId').data('apptid-prefix');
+    const regtCorps = $('#regtCorps').data('regtcorps-prefix');
+    const ApptId = $('#ApptId').data('apptid-prefix');
 
     mMsater(Rank, "rank", 3, 0);
     mMsater(regtCorps, "regtCorps", 8, 0);
@@ -53,7 +53,7 @@ $("#txtUnit").autocomplete({
         $("input[name='UnitId']").val(0);
 
         if (request.term.length > 2) {
-            var param = { "UnitName": request.term };
+            const param = { "UnitName": request.term };
             $("#UnitId").val(0);
             $.ajax({
                 url: '/Account/GetALLByUnitName',
@@ -98,3 +98,6 @@ $("#btnTokenDetails").on('click', function () {
     GetTokenDetails("ArmyNo", "Name", "errormsg", "btnsignup")
 });
 
+$("input, textarea").on("paste", function (e) {
+    e.preventDefault();
+});

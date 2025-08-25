@@ -223,6 +223,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -246,6 +247,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Account\GetAllUsers.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\chatbot.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\home-index.css" />
     <_ContentIncludedByDefault Remove="wwwroot\DevJs\Login.js" />
   </ItemGroup>

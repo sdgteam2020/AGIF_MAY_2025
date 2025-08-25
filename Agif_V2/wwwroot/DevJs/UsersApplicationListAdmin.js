@@ -73,7 +73,6 @@ $('#btnExportNotOk').on('click', function () {
     });
 });
 
-
 $('#UploadExcel').on('click', function () {
     $("#AddBulkModel").modal('show');
 });
@@ -142,31 +141,7 @@ function populateUploadTables(data) {
             `;
         });
         $('#OkBody').html(okTableBody);
-
-        //let val = $('#OkBody').html();
-        //if (val) {
-        //    // Initialize the DataTable after content is loaded
-        //    $('#tblOk').DataTable({
-        //        dom: 'Bfrtip', // Place the buttons above the table
-        //        buttons: [
-        //            {
-        //                extend: 'print',
-        //                text: 'Print Table',
-        //                className: 'btn btn-success', // Customize button styling
-        //                title: 'Data Table', // The title of the printed page
-        //                messageTop: 'Table Print', // Additional message at the top of the print page
-        //            }
-        //        ],
-        //        initComplete: function (settings, json) {
-        //            // This ensures the table and buttons are properly rendered
-        //            console.log('DataTable initialized');
-        //        }
-        //    });
-        //} else {
-        //    console.log('Table body is empty');
-        //}
-      
-
+        
         $('#lblTotalOk').text(data.dtoApplStatusBulkUploadOK.length);
         $('#tblOk').DataTable({
             paging: true,
@@ -323,7 +298,7 @@ function BindUsersData(status) {
         $('#tblReceivedApplications').DataTable().destroy();
     }
 
-    var columns = [
+    const columns = [
         {
             data: null,
             name: "SerialNumber",
@@ -385,7 +360,7 @@ function BindUsersData(status) {
                 render: function (data, type, row) {
                     if (data) {
                         // Format the date if needed
-                        var date = new Date(data);
+                        const date = new Date(data);
                         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
                     }
                     return 'N/A';
@@ -400,7 +375,7 @@ function BindUsersData(status) {
         name: "Download",
         orderable: false,
         render: function (data, type, row) {
-            return `<button class="btn btn-primary btn-sm download-btn"
+            return `<button class="btn btn-outline-success btn-sm download-btn"
                 data-id="${row.applicationId}"
                 data-army="${row.armyNo}"
                 data-type="${row.applicationType}">
@@ -410,7 +385,7 @@ function BindUsersData(status) {
     });
 
     // Initialize DataTable with server-side processing
-    var table = $('#tblReceivedApplications').DataTable({
+    const table = $('#tblReceivedApplications').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
@@ -469,10 +444,8 @@ function downloadApplication(applicationId, armyNo, applicationType) {
         return;
     }
 
-    var applicationIds = [];
+    let applicationIds = [];
     applicationIds.push(applicationId);
-
-    // Option 2: Using AJAX if you need to handle response differently
 
     $.ajax({
         url: '/ApplicationRequest/DownloadApplication',
@@ -499,9 +472,8 @@ function downloadApplication(applicationId, armyNo, applicationType) {
 
 }
 
-
 function getAllApplicationByDateWise() {
-    var date = $('#toDate').val();
+    const date = $('#toDate').val();
     if (!date) {
         alert('Please select a date to filter applications.');
         return;
@@ -517,7 +489,7 @@ function getAllApplicationByDateWise() {
                 return;
             }
 
-            var applicationIds = [];
+            let applicationIds = [];
             response.forEach(function (item) {
                 applicationIds.push(item.applicationId);
             });
@@ -530,7 +502,6 @@ function getAllApplicationByDateWise() {
         }
     });
 }
-
 
 function downloadApplications(applicationIds) {
     $.ajax({
@@ -545,7 +516,7 @@ function downloadApplications(applicationIds) {
             }
 
             // Automatically trigger download of the zip file
-            var downloadUrl = `/PdfDownloaded/${folderName}.zip`;
+            const downloadUrl = `/PdfDownloaded/${folderName}.zip`;
             window.location.href = downloadUrl; // triggers file download
         },
         error: function (xhr, status, error) {

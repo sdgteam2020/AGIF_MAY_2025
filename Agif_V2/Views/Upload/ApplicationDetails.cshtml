@@ -8,22 +8,27 @@
     string loanType = string.Empty;
     var message = ViewBag.Message ?? string.Empty;
 
-     if(Model.HbaApplicationResponse!=null)
-    loanType= "HBA";
+    if (Model.HbaApplicationResponse != null)
+    {
+        loanType = "HBA";
+    }
     else if(Model.CarApplicationResponse!=null)
-    loanType = "CAR";
+    {
+        loanType = "CAR";
+    }
     else if(Model.PcaApplicationResponse!=null)
-    loanType = "PCA";
-        
+    {
+        loanType = "PCA";
+    }
 }
 
 @if (Model != null)
 {
 
 
-    <div class="container mt-4">
+    <div class="ApplicationContainer mt-4">
         <div class="card shadow-lg border-0">
-            <div class="card-header bg-primary text-white text-center">
+            <div class="card-header bg-danger text-white text-center">
                 <h3 class="mb-0"><i class="bi bi-file-earmark-text"></i> ARMY GROUP INSURANCE FUND APPLICATION FORM:@loanType</h3>
             </div>
             <div class="card-body">
@@ -363,7 +368,7 @@
 
                     <div class="row mt-4">
                         <div class="col-12">
-                            <div class="card border-info">
+                            <div class="card border-info Applicationcard">
                                 <div class="card-header bg-info text-white">
                                     <i class="bi bi-file-earmark-pdf"></i> Document View
                                 </div>

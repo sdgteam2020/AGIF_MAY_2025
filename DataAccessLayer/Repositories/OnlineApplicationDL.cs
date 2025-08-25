@@ -60,7 +60,7 @@ namespace DataAccessLayer.Repositories
                 .Where(a => a.ApplicationId == ApplicationID)
                 .Select(a => a.ApplicationType)
                 .FirstOrDefaultAsync();
-            if(application!=null && application!=0)
+            if (application != null && application != 0)
             {
                 return application switch
                 {
@@ -315,7 +315,7 @@ namespace DataAccessLayer.Repositories
                                     select new DTOHbaApplicationresponse
                                     {
                                         PropertyType = loanType != null ? loanType.LoanType : string.Empty, // Getting LoanType from MLoanTypes
-                                        PropertySeller = hba.PropertySeller.ToString(),
+                                        PropertySeller = hba.PropertySeller ?? string.Empty,
                                         PropertyAddress = hba.PropertyAddress,
                                         PropertyCost = hba.PropertyCost,
                                         HBA_LoanFreq = hba.HBA_LoanFreq,
@@ -332,7 +332,7 @@ namespace DataAccessLayer.Repositories
 
                 else if (result.ApplicationType == 2)
                 {
-                    formtype = "CA";
+                    formtype = "CAR";
                     var Carmodel = (from car in _context.trnCar
                                     join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
@@ -384,7 +384,7 @@ namespace DataAccessLayer.Repositories
 
                 if (DocumentModel != null)
                 {
-                    if (formtype == "CA")
+                    if (formtype == "CAR")
                     {
                         if(data.CarApplicationResponse.Veh_Loan_Type == "Two Wheeler")
                         {
@@ -758,7 +758,7 @@ namespace DataAccessLayer.Repositories
 
                                     select new DTOExcelResponse
                                     {
-                                        Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                                        Unit = presentUnit != null ? presentUnit.UnitId : 0,
                                        
                                         apfx = prefix.Prefix,
                                         ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),

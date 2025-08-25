@@ -39,6 +39,23 @@ namespace DataAccessLayer.Repositories
             return counts;
         }
 
+        public async Task<List<DTOApprovedLogs>> GetApprovedLogs()
+        {
+            var res = await(
+                from logs in _context.TrnApprovedLogs
+                orderby logs.UpdatedOn descending
+                select new DTOApprovedLogs
+                {
+                    Name = logs.Name,
+                    DomainId = logs.DomainId,
+                    IpAddress = logs.IpAddress,
+                    CoDomainId = logs.coDomainId,
+                    CoProfileId = logs.coProfileId,
+                    IsApproved = logs.IsApproved,
+                    UpdatedOn=logs.UpdatedOn
+                }).ToListAsync();
+            return res;
+        }
 
         public async Task<List<DTOUserCountResponse>> GetUserCount()
         {

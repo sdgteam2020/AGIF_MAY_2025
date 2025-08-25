@@ -2,6 +2,7 @@
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -42,6 +43,8 @@ namespace DataAccessLayer.Interfaces
         Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType);
 
         Task<DTOClaimCommonOnlineResponse> GetUnitByApplicationId(int applicationId);
+
+        Task<bool> InsertStatusCounter(TrnClaimStatusCounter trnStatusCounter);
 
         }
 }

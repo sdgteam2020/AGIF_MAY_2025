@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Agif_V2.Models;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +12,13 @@ namespace Agif_V2.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
         private readonly IHome home;
         
-        public HomeController(ILogger<HomeController> logger, IHome home)
+        public HomeController(IHome home)
         {
             this.home = home;
-            _logger = logger;
+            //_logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -63,6 +64,62 @@ namespace Agif_V2.Controllers
                 ViewBag.Metrics = metrics;
             }
             return View(sessionUser);
+        }
+        [Authorize(Roles = "SuperAdmin")]
+        public  IActionResult LogViewer()
+        {
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+            {
+                return Unauthorized("Session expired or invalid user session.");
+            }
+            var res = home.GetApprovedLogs();
+            ViewBag.ArmyNo = dTOTempSession.ArmyNo;
+            return View(dTOTempSession);
+        }
+
+        public async Task<IActionResult> GetApprovedLogs(DTODataTableRequest request)
+        {
+            try
+            {
+                var queryableData = await home.GetApprovedLogs();
+                var totalRecords = queryableData.Count;
+                var query = queryableData.AsQueryable();
+
+                query = AdminApplySearchFilter(query, request.searchValue);
+
+                var filteredRecords = query.Count();
+
+                var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
+
+                var responseData = new DTODataTablesResponse<DTOApprovedLogs>
+                {
+                    draw = request.Draw,
+                    recordsTotal = totalRecords,
+                    recordsFiltered = filteredRecords,
+                    data = paginatedData
+                };
+
+                return Json(responseData);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { error = "An error occurred while loading data: " + ex.Message });
+            }
+        }
+        private IQueryable<DTOApprovedLogs> AdminApplySearchFilter(IQueryable<DTOApprovedLogs> query, string? searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue)) return query;
+
+            string lowerSearchValue = searchValue.ToLower();
+            return query.Where(x =>
+                
+                (x.DomainId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.Name ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.UpdatedOn.ToString() ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
+                (x.CoDomainId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
+            );
         }
 
         public IActionResult Privacy()
