@@ -270,7 +270,7 @@ namespace Agif_V2.Controllers
         }
 
         public string DataDigitalXmlSign(int applicationId)
-        {
+           {
             if (!ModelState.IsValid)
             {
                 return "<Root><Error>Invalid application ID</Error></Root>";
@@ -835,9 +835,16 @@ namespace Agif_V2.Controllers
         //}
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
+            
             DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
 
+            var armyNo = ret.OnlineApplicationResponse.FirstOrDefault()?.Number ?? "UnknownArmyNo";
+            int applicationId = ret.OnlineApplicationResponse.FirstOrDefault()?.ApplicationId ?? 0;
+            string fileName = "App"+ applicationId.ToString()+ armyNo+".pdf";
+            var mergedPdfPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
+
+            _watermark.AddAnnotationAfterDigitalSign("ip", mergedPdfPath);
             // Define base path
             string basePath = Path.Combine("wwwroot", "PdfDownloaded");
 

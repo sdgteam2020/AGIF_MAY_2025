@@ -767,6 +767,9 @@ namespace Agif_V2.Controllers
                 PdfReader pdfReader = new PdfReader(mergedPdfPath, new ReaderProperties());
                 _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
 
+                //PdfReader pdfReader = new PdfReader(mergedPdfPath, new ReaderProperties());
+                //_watermark.OpenPdf1(ip, mergedPdfPath);
+
                 if (!mergeResult) return JsonError("Failed to merge PDF files.");
 
                 string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
