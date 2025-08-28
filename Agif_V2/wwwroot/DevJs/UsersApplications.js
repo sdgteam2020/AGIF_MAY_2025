@@ -319,6 +319,7 @@ function OpenAction(applicationId, endpoint, category) {
             if (response != null) {
                 $("#pdfContainer").empty();
 
+
                 // Create a new object element dynamically
                 const objectElement = document.createElement('object');
                 objectElement.id = 'PdfViwerFOrDigital'; // Optional: Set ID for the object
@@ -326,7 +327,10 @@ function OpenAction(applicationId, endpoint, category) {
                 objectElement.classList.add('w-100', 'h-100', 'border-0', 'rounded'); // Add your styling classes
 
                 // Set the 'data' attribute to load the PDF
-                objectElement.setAttribute('data', response);
+                const pdfUrl = response + '#toolbar=0&navpanes=0&scrollbar=0';
+
+                //objectElement.setAttribute('data', response);
+                objectElement.setAttribute('data', pdfUrl);
 
                 // Append the object element to the container
                 document.getElementById('pdfContainer').appendChild(objectElement);

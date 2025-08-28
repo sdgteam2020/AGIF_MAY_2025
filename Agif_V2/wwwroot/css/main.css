@@ -6606,3 +6606,31 @@ tbody, td, tfoot, th, thead, tr {
    #ViewLog:hover{
        cursor:pointer;
    }
+
+/* Firefox-specific hiding */
+@-moz-document url-prefix() {
+    #pdfContainer iframe {
+        margin-top: -41px; /* Hide toolbar by shifting content up */
+        height: calc(100% + 41px);
+    }
+}
+
+/* Alternative approach - overlay to hide toolbar area */
+#pdfContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: white;
+    z-index: 10;
+    display: none;
+}
+
+/* Show overlay only in Firefox */
+@-moz-document url-prefix() {
+    #pdfContainer::before {
+        display: block;
+    }
+}
