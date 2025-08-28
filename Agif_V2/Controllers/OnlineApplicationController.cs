@@ -764,11 +764,9 @@ namespace Agif_V2.Controllers
 
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
-                PdfReader pdfReader = new PdfReader(mergedPdfPath, new ReaderProperties());
-                _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
-
                 //PdfReader pdfReader = new PdfReader(mergedPdfPath, new ReaderProperties());
-                //_watermark.OpenPdf1(ip, mergedPdfPath);
+                //_watermark.AddAnnotationAfterDigitalSign(ip, mergedPdfPath);
+
 
                 if (!mergeResult) return JsonError("Failed to merge PDF files.");
 

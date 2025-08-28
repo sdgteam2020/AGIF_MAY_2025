@@ -835,7 +835,11 @@ namespace Agif_V2.Controllers
         //}
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
-            
+            string? ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(ipAddress))
+            {
+                ipAddress = "IpAddress";
+            }
             DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
 
@@ -844,29 +848,33 @@ namespace Agif_V2.Controllers
             string fileName = "App"+ applicationId.ToString()+ armyNo+".pdf";
             var mergedPdfPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
 
-            _watermark.AddAnnotationAfterDigitalSign("ip", mergedPdfPath);
-            // Define base path
             string basePath = Path.Combine("wwwroot", "PdfDownloaded");
-
-            // Clean previous files and folders
             CleanExistingFiles(basePath);
-
-            // Create a new folder
             string newFolderName = CreateFolder(basePath);
-
             string newFolderPath = Path.Combine(basePath, newFolderName);
             Directory.CreateDirectory(newFolderPath);
 
-            // Create subfolders for file types
-            // CreateSubfolders(newFolderPath);
+            // Optional: keep the download/watermarked copy in a subfolder
+            string downloadFolder = Path.Combine(newFolderPath, "Downloads");
+            Directory.CreateDirectory(downloadFolder);
+
+            // Make a copy of the merged PDF in the export folder
+            string watermarkedCopyPath = Path.Combine(downloadFolder, fileName);
+            System.IO.File.Copy(mergedPdfPath, watermarkedCopyPath, overwrite: true);
+
+            // Watermark the copy (not the original)
+            _watermark.AddAnnotationAfterDigitalSign(ipAddress, watermarkedCopyPath);
+
 
             string hbaFolder = Path.Combine(newFolderPath, "HBA");
             string caFolder = Path.Combine(newFolderPath, "CA");
             string pcaFolder = Path.Combine(newFolderPath, "PCA");
 
-            // Process and copy files
-            bool isFilesCopied = CopyFilesToSubfolders(ret, newFolderPath,hbaFolder,caFolder,pcaFolder);
 
+            // Process and copy files
+            bool isFilesCopied = CopyFilesToSubfolders(ret, newFolderPath,hbaFolder,caFolder,pcaFolder, downloadFolder);
+
+            //_watermark.AddAnnotationAfterDigitalSign(ipAddress, newFolderPath);
             // If file copy failed, return
             if (!isFilesCopied)
             {
@@ -914,14 +922,15 @@ namespace Agif_V2.Controllers
 
      
 
-        private bool CopyFilesToSubfolders(dynamic ret, string newFolderPath,string hbaFolder,string caFolder,string pcaFolder)
+        private bool CopyFilesToSubfolders(dynamic ret, string newFolderPath,string hbaFolder,string caFolder,string pcaFolder,string watermarkFolderPath)
         {
             bool isFilesCopied = true;
 
             foreach (var data in ret.OnlineApplicationResponse)
             {
                 var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-                var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
+                //var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
+                var sourceFilePath = Path.Combine(watermarkFolderPath, fileName);
 
                 if (System.IO.File.Exists(sourceFilePath))
                 {
