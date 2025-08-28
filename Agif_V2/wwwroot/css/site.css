@@ -10,6 +10,16 @@ html {
   }
 }
 
+.btn-dark-brown {
+    background-color: #310;
+    color: #fff;
+}
+
+    .btn-dark-brown:hover {
+        background-color: #4b3328;
+        color: #fff;
+    }
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
@@ -36,18 +46,18 @@ body {
 .agi-title-font-size {
     font-size: 50px;
     font-weight: 600;
-    
 }
 
 #headerText {
     color: rgb(199, 0, 57);
     font-weight: 800;
     text-shadow: 1px 1px 2px yellow, 0 0 25px white, 0 0 5px yellow;
-    font-size: 50px;
+    font-size: clamp(18px, 5vw, 50px);
 }
 #headerLI, #headerRI {
-    height: 100px;
-    max-width: 100px;
+    height: clamp(40px, 10vw, 100px); /* min 40px, scales with screen, max 100px */
+    width: auto; /* keep aspect ratio */
+    max-width: 100%; /* don’t overflow */
     object-fit: cover;
 }
 .nav-center {
