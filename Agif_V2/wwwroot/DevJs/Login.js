@@ -118,3 +118,6 @@ $(document).ready(() => {
         console.warn("loginConfig element not found.");
     }
 });
+$("input, textarea").on("paste", function (e) {
+    e.preventDefault();
+});

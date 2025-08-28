@@ -2145,3 +2145,7 @@ $('input[required], select[required]').on('input change blur', function () {
         input.closest('.form-outline').find('.text-danger').show();
     }
 });
+
+$("input, textarea").on("paste", function (e) {
+    e.preventDefault();
+});

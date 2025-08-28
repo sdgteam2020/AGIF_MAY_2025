@@ -30,8 +30,7 @@ namespace Agif_V2.Controllers
         private readonly IUserProfile _userProfile;
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
         private readonly IClaimApplication _claimApplication;
-        private readonly Watermark _watermark;
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication, Watermark watermark)
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
@@ -39,7 +38,6 @@ namespace Agif_V2.Controllers
             this._userProfile = _userProfile;
             this._IClaimonlineApplication1 = claimOnlineApplication;
             _claimApplication = claimApplication;
-            _watermark = watermark;
         }
         public IActionResult Index()
         {
@@ -48,6 +46,10 @@ namespace Agif_V2.Controllers
         [Authorize(Roles = "CO")]
         public IActionResult UserApplicationList(int status)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
             ViewBag.Status = status;
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
@@ -91,6 +93,10 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(SessionUserDTO sessionUserDTO)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest("Invalid request data.");
+            }
             var result = await _userApplication.UpdateUserDetails(sessionUserDTO);
             if (result)
             {

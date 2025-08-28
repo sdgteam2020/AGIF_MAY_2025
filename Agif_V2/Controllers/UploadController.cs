@@ -28,7 +28,7 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
-
+           // int applicationId = 7;
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
@@ -38,7 +38,7 @@ namespace Agif_V2.Controllers
             if (application)
             {
                 TempData["Message"] = "You have already uploaded the Documents for this Application.";
-                return RedirectToAction("ApplicationDetails","Upload");
+                return RedirectToAction("ApplicationDetails", "Upload");
             }
 
             bool IsextensionOfService = await _IonlineApplication1.CheckExtensionofservice(applicationId);

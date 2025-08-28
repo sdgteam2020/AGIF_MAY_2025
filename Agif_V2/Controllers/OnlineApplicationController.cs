@@ -48,6 +48,7 @@ namespace Agif_V2.Controllers
             _account = account;
             _watermark = watermark;
         }
+        [HttpGet]
         public IActionResult OnlineApplication()
         {
             var loanType = TempData["LoanType"] as string;
@@ -460,8 +461,8 @@ namespace Agif_V2.Controllers
         //    }
 
         //}
-
-        public async Task<IActionResult> SubmitApplication(DTOOnlineApplication model)
+        [HttpPost]
+        public async Task<IActionResult> OnlineApplication(DTOOnlineApplication model)
         {
             string formType = GetFormType(model);
             if (formType == null)
