@@ -60,77 +60,7 @@ namespace Agif_V2.Helpers
             }
             pdfReader.Close();
         }
-        public void OpenPdf1(string ipAddress, string wwwRootPath)
-        {
-            string directory = Path.GetDirectoryName(wwwRootPath);
-            string tempOutputPath = Path.Combine(directory, "temp_" + Path.GetFileName(wwwRootPath));
-
-            using (var reader = new PdfReader(wwwRootPath))
-            using (var writer = new PdfWriter(tempOutputPath))
-            using (var pdfDoc = new PdfDocument(reader, writer))
-            {
-                var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-                string ipDisplay = string.IsNullOrEmpty(ipAddress) ? "IP Address Not Found!" : ipAddress.Replace(" ", "\u00A0");
-                string dateTimeDisplay = DateTime.Now.ToString("dd/MM/yyyy HH:mm").Replace(" ", "\u00A0");
-
-                for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
-                {
-                    PdfPage page = pdfDoc.GetPage(i);
-                    var annotation = new PdfFreeTextAnnotation(
-                        new iText.Kernel.Geom.Rectangle(100, 100, 400, 100),
-                        new PdfString($"{ipDisplay}\n{dateTimeDisplay}"))
-                        .SetDefaultAppearance(new PdfString("/Helv 12 Tf 0.5 g"))
-                        .SetColor(ColorConstants.LIGHT_GRAY)
-                        .SetFlags(PdfAnnotation.PRINT);
-
-                    page.AddAnnotation(annotation);
-                }
-            } // <-- everything disposed here
-
-            // Now safe to overwrite
-            if (File.Exists(wwwRootPath))
-            {
-                File.Delete(wwwRootPath);
-            }
-
-            File.Move(tempOutputPath, wwwRootPath);
-        }
-
-        //public void AddAnnotationAfterDigitalSign(string ipAddress, string wwwRootPath)
-        //{
-        //    string tempOutputPath = wwwRootPath + ".tmp";
-
-        //    using (var reader = new PdfReader(wwwRootPath))
-        //    using (var writer = new PdfWriter(tempOutputPath, new WriterProperties().SetPdfVersion(PdfVersion.PDF_1_7)))
-        //    using (var pdfDoc = new PdfDocument(reader, writer, new StampingProperties().UseAppendMode()))
-        //    {
-        //        var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-        //        string ipDisplay = string.IsNullOrEmpty(ipAddress) ? "IP Address Not Found!" : ipAddress.Replace(" ", "\u00A0");
-        //        string dateTimeDisplay = DateTime.Now.ToString("dd/MM/yyyy HH:mm").Replace(" ", "\u00A0");
-
-        //        for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
-        //        {
-        //            PdfPage page = pdfDoc.GetPage(i);
-        //            var annotation = new PdfFreeTextAnnotation(
-        //                new iText.Kernel.Geom.Rectangle(100, 100, 400, 100),
-        //                new PdfString($"{ipDisplay}\n{dateTimeDisplay}"))
-        //                .SetDefaultAppearance(new PdfString("/Helv 12 Tf 0.5 g"))
-        //                .SetColor(ColorConstants.LIGHT_GRAY)
-        //                .SetFlags(PdfAnnotation.PRINT);
-
-        //            page.AddAnnotation(annotation);
-        //        }
-        //    }
-
-        //    // Safely replace old file
-        //    if (File.Exists(wwwRootPath))
-        //    {
-        //        File.Delete(wwwRootPath);
-        //    }
-        //    File.Move(tempOutputPath, wwwRootPath);
-        //}
-
-
+        
         public void AddAnnotationAfterDigitalSign(string ipAddress, string wwwRootPath)
         {
             string tempOutputPath = wwwRootPath + ".tmp";
@@ -228,7 +158,6 @@ namespace Agif_V2.Helpers
             if (File.Exists(wwwRootPath)) File.Delete(wwwRootPath);
             File.Move(tempOutputPath, wwwRootPath);
         }
-
 
     }
 }
