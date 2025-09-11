@@ -28,7 +28,7 @@ function handleNavbarClick() {
         $(this).addClass("active fw-bold");
     });
 }
-
+/*
 let isOpen = false;
 let isSending = false;
 let welcomeShown = false;
@@ -407,3 +407,4 @@ async function sendQuery(optionalQuery = null, silent = false) {
         }
     }
 }
+*/

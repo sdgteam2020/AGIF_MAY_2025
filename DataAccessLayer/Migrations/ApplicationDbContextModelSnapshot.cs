@@ -238,6 +238,62 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("trnAddressDetails");
                 });
 
+            modelBuilder.Entity("DataTransferObject.Model.BonusJCO_OR", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("AnnualBonus")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("CumulativeBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrnBonusJCO_OR");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.BonusOfficers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("AnnualBonus")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("CumulativeBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrnBonusOfficers");
+                });
+
             modelBuilder.Entity("DataTransferObject.Model.CarApplicationModel", b =>
                 {
                     b.Property<int>("CarId")
@@ -1309,6 +1365,68 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("HBA_LoanFreq");
 
                     b.ToTable("trnHBA");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.InvestmentChange_JCO_OR", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ChangeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("InvestmentAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrAmount")
+                        .HasColumnType("decimal(7,2)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrnInvestmentChange_JCO_OR");
+                });
+
+            modelBuilder.Entity("DataTransferObject.Model.InvestmentChange_Officers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ChangeDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("InterestRate")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("InvestmentAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PrAmount")
+                        .HasColumnType("decimal(7,2)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TrnInvestmentChange_Officers");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MAgeMapping", b =>

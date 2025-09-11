@@ -118,7 +118,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<FileUtility>();
 builder.Services.AddTransient<IClaimApplication, ClaimDigitalDL>();
 builder.Services.AddTransient<Watermark>();
-
+builder.Services.AddTransient<IClaimCalculator, ClaimCalculatorDL>();
 
 builder.Services.AddCors(options =>
 {

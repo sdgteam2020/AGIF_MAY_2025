@@ -78,6 +78,14 @@ namespace DataAccessLayer
 
         public virtual DbSet<TrnClaimStatusCounter> TrnClaimStatusCounter { get; set; }
         public virtual DbSet<TrnApprovedLog> TrnApprovedLogs { get; set; }
+
+        public virtual DbSet<InvestmentChange_JCO_OR> TrnInvestmentChange_JCO_OR { get; set; }
+
+        public virtual DbSet<BonusJCO_OR> TrnBonusJCO_OR { get; set; }
+
+        public virtual DbSet<InvestmentChange_Officers> TrnInvestmentChange_Officers { get; set; }
+
+        public virtual DbSet<BonusOfficers> TrnBonusOfficers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CommonDataModel>()

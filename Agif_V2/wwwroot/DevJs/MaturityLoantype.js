@@ -8,7 +8,7 @@ $(document).ready(function () {
         const PurposeOfWithdrwal = $('#PurposeOfWithdrwal').val();
         const applicantCategory = $('#Category').val();
 
-        if (PurposeOfWithdrwal !== "" && applicantCategory !== "") {
+        if (PurposeOfWithdrwal !== "" && applicantCategory !== "" && PurposeOfWithdrwal !== null && applicantCategory !== null) {
             document.getElementById('loanForm').submit(); // Submit the form
         } else {
             $('.errormessage').html('<div class="alert alert-danger" role="alert">⚠️ Please Select Category and Withdrawal Purpose Both!</div>');

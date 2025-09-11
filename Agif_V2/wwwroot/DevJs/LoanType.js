@@ -8,7 +8,7 @@ $(document).ready(function () {
         const loanType = $('#loanType').val();
         const applicantCategory = $('#applicantCategory').val();
 
-        if (loanType !== "" && applicantCategory !== "") {
+        if (loanType !== "" && applicantCategory !== "" && loanType !== null && applicantCategory !==null) {
             document.getElementById('loanForm').submit(); // Submit the form
         } else {
             $('.errormessage').html('<div class="alert alert-danger" role="alert">⚠️ Please Select Loan Type and Category Both!</div>');
