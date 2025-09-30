@@ -80,6 +80,10 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetApprovedLogs(DTODataTableRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             try
             {
                 var queryableData = await home.GetApprovedLogs();
@@ -131,6 +135,32 @@ namespace Agif_V2.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult AnalyticsDashBoard()
+        {
+            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+            {
+                return Unauthorized("Session expired or invalid user session.");
+            }
+            ViewBag.ArmyNo = dTOTempSession.ArmyNo;
+            return View(dTOTempSession);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetApplicationAnalytics(int year)
+        {
+            try
+            {
+                var analyticsData = await home.GetTotalMonthlyApplications(year);
+                return Json(new { success = true, data = analyticsData });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
+            }
         }
 
     }

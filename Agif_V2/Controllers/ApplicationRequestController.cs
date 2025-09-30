@@ -112,62 +112,7 @@ namespace Agif_V2.Controllers
             return View();
         }
 
-        //public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
-        //{
-
-        //    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-        //    if (dTOTempSession == null || dTOTempSession.MappingId <= 0)
-        //    {
-        //        return Unauthorized("Session expired or invalid user session.");
-        //    }
-
-        //    var queryableData = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, status);
-
-        //    var totalRecords = queryableData.Count;
-
-        //    var query = queryableData.AsQueryable();
-
-        //    if (!string.IsNullOrEmpty(request.searchValue))
-        //    {
-        //        string searchValue = request.searchValue.ToLower();
-        //        query = query.Where(x =>
-        //            x.ArmyNo.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //            x.DateOfBirth.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //            x.AppliedDate.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)
-        //        );
-        //    }
-
-
-
-        //    var filteredRecords = query.Count();
-
-        //    if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-        //    {
-        //        bool ascending = request.sortDirection.ToLower() == "asc";
-
-        //        query = request.sortColumn.ToLower() switch
-        //        {
-        //            "name" => ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name),
-        //            "armyno" => ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo),
-        //            "dateofbirth" => ascending ? query.OrderBy(x => x.DateOfBirth) : query.OrderByDescending(x => x.DateOfBirth),
-        //            "applieddate" => ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate),
-        //            _ => query // Default: no sorting if column not recognized
-        //        };
-        //    }
-
-        //    // Paginate the result
-        //    var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
-
-        //    var responseData = new DTODataTablesResponse<DTOGetApplResponse>
-        //    {
-        //        draw = request.Draw,
-        //        recordsTotal = totalRecords,
-        //        recordsFiltered = filteredRecords,
-        //        data = paginatedData
-        //    };
-
-        //    return Json(responseData);
-        //}
+        
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {
             if(!ModelState.IsValid)
@@ -354,6 +299,11 @@ namespace Agif_V2.Controllers
 
         public async Task<DTODigitalSignDataResponse?> SignDocument(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return null; // or handle the invalid model state as needed
+            }
+
             DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applicationId);
             DTODigitalSignDataResponse digitalSignDTO = new DTODigitalSignDataResponse();
 
@@ -382,6 +332,10 @@ namespace Agif_V2.Controllers
 
         public async Task SaveXML(int applId, string xmlResString, string remarks)
         {
+            if (!ModelState.IsValid)
+            {
+                return ;
+            }
             try
             {
                 DTOCommonOnlineApplicationResponse data = await _onlineApplication.GetApplicationDetails(applId);
@@ -500,6 +454,10 @@ namespace Agif_V2.Controllers
         }
         public async Task<JsonResult> RejectXML(int applId, string rem)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             var digitalSignRecords = new DigitalSignRecords
             {
                 ApplId = applId,
@@ -572,72 +530,12 @@ namespace Agif_V2.Controllers
         }
 
 
-        //public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
-        //{
-        //    try
-        //    {
-        //        var queryableData = await _userApplication.GetUsersApplicationForAdmin(status);
-        //        var totalRecords = queryableData.Count();
-        //        var query = queryableData.AsQueryable();
-
-        //        // Apply search filter - fixed to match actual DTO properties
-        //        if (!string.IsNullOrEmpty(request.searchValue))
-        //        {
-        //            string searchValue = request.searchValue.ToLower();
-        //            query = query.Where(x =>
-        //                //(x.Name != null && x.Name.ToLower().Contains(searchValue)) ||
-        //                (x.ArmyNo != null && x.ArmyNo.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)) ||
-        //                (x.RegtCorps != null && x.RegtCorps.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)) ||
-        //                (x.PresentUnit != null && x.PresentUnit.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase)) ||
-        //                (x.AppliedDate != null && x.AppliedDate.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
-        //            );
-        //        }
-
-        //        var filteredRecords = query.Count();
-
-        //        // Apply sorting - fixed to match JavaScript column names
-        //        if (!string.IsNullOrEmpty(request.sortColumn) && !string.IsNullOrEmpty(request.sortDirection))
-        //        {
-        //            bool ascending = string.Equals(request.sortDirection, "asc", StringComparison.OrdinalIgnoreCase); // Case-insensitive comparison for sort direction
-        //            query = string.Equals(request.sortColumn, "name", StringComparison.OrdinalIgnoreCase) ?
-        //                (ascending ? query.OrderBy(x => x.Name) : query.OrderByDescending(x => x.Name)) :
-        //            string.Equals(request.sortColumn, "armyno", StringComparison.OrdinalIgnoreCase) ?
-        //                (ascending ? query.OrderBy(x => x.ArmyNo) : query.OrderByDescending(x => x.ArmyNo)) :
-        //            string.Equals(request.sortColumn, "regtname", StringComparison.OrdinalIgnoreCase) ?
-        //                (ascending ? query.OrderBy(x => x.RegtCorps) : query.OrderByDescending(x => x.RegtCorps)) :
-        //            string.Equals(request.sortColumn, "presentunit", StringComparison.OrdinalIgnoreCase) ?
-        //                (ascending ? query.OrderBy(x => x.PresentUnit) : query.OrderByDescending(x => x.PresentUnit)) :
-        //            string.Equals(request.sortColumn, "applieddate", StringComparison.OrdinalIgnoreCase) ?
-        //                (ascending ? query.OrderBy(x => x.AppliedDate) : query.OrderByDescending(x => x.AppliedDate)) :
-        //                query.OrderByDescending(x => x.UpdatedOn); // Default sorting
-        //        }
-        //        else
-        //        {
-        //            // Default sorting by UpdatedOn descending
-        //            query = query.OrderByDescending(x => x.UpdatedOn);
-        //        }
-
-        //        // Paginate the result
-        //        var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
-
-        //        var responseData = new DTODataTablesResponse<DTOGetApplResponse>
-        //        {
-        //            draw = request.Draw,
-        //            recordsTotal = totalRecords,
-        //            recordsFiltered = filteredRecords,
-        //            data = paginatedData
-        //        };
-
-        //        return Json(responseData);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Log the exception
-        //        return Json(new { error = "An error occurred while loading data: " + ex.Message });
-        //    }
-        //}
         public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             try
             {
                 var queryableData = await _userApplication.GetUsersApplicationForAdmin(status);
@@ -747,102 +645,13 @@ namespace Agif_V2.Controllers
             }
         }
 
-        //public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
-        //{
-        //    DTOExportRequest dTOExport = new DTOExportRequest
-        //    {
-        //        Id = id,
-        //    };
-
-        //    var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
-
-        //    // Base path to clean and create new folder
-        //    string basePath = Path.Combine("wwwroot", "PdfDownloaded");
-
-        //    // Clean old folders/files
-        //    if (Directory.Exists(basePath))
-        //    {
-        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
-        //        foreach (var dir in dirInfo.GetDirectories())
-        //        {
-        //            dir.Delete(true);
-        //        }
-
-        //        foreach (var file in dirInfo.GetFiles())
-        //        {
-        //            file.Delete();
-        //        }
-        //    }
-
-        //    // Create new time-based folder
-        //    string newFolderName = CreateFolder(basePath);
-        //    string newFolderPath = Path.Combine(basePath, newFolderName);
-        //    Directory.CreateDirectory(newFolderPath);
-
-        //    // Create subfolders HBA, CA, PCA inside new folder
-        //    string hbaFolder = Path.Combine(newFolderPath, "HBA");
-        //    string caFolder = Path.Combine(newFolderPath, "CA");
-        //    string pcaFolder = Path.Combine(newFolderPath, "PCA");
-
-
-
-
-        //    foreach (var data in ret.OnlineApplicationResponse)
-        //    {
-        //        var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-
-        //        var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName);
-
-        //        if (System.IO.File.Exists(sourceFilePath))
-        //        {
-        //            string destinationFolder = data.ApplicationTypeAbbr switch
-        //            {
-        //                "HBA" => hbaFolder,
-        //                "CA" => caFolder,
-        //                "PCA" => pcaFolder,
-        //                _ => newFolderPath // fallback if unknown
-        //            };
-
-        //            if (data.ApplicationTypeAbbr == "HBA")
-        //            {
-        //                Directory.CreateDirectory(hbaFolder);
-        //            }
-
-        //            if (data.ApplicationTypeAbbr == "CA")
-        //            {
-        //                Directory.CreateDirectory(caFolder);
-        //            }
-
-        //            if (data.ApplicationTypeAbbr == "PCA")
-        //            {
-        //                Directory.CreateDirectory(pcaFolder);
-        //            }
-
-        //            var destinationFilePath = Path.Combine(destinationFolder, fileName);
-        //            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
-        //        }
-        //    }
-        //    bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
-        //    if (!retexcel)
-        //    {
-        //        return Json(Constants.DataNotExport);
-        //    }
-        //    else
-        //    {
-        //        string zipFileName = $"{newFolderPath}.zip";
-        //        createZip(newFolderPath, zipFileName);
-        //        bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
-        //        if (!updateStatus)
-        //        {
-        //            return Json(Constants.DataNotExport);
-        //        }
-        //        return Json(newFolderName);
-
-        //    }
-
-        //}
+        
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             string? ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
             if (string.IsNullOrEmpty(ipAddress))
             {
@@ -986,6 +795,10 @@ namespace Agif_V2.Controllers
 
         public async Task<bool> ExportToExcelInFolder(DTOExportRequest dTOExport, string folderPath)
         {
+            if (!ModelState.IsValid)
+            {
+                return false;
+            }
             DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
 
             using (var workbook = new XLWorkbook())
@@ -1033,6 +846,10 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> ExportToExcel(DTOExportRequest dTOExport)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             DataTable dataTable = await _onlineApplication.GetApplicationDetailsForExcel(dTOExport);
 
             using (var workbook = new XLWorkbook())
@@ -1083,114 +900,7 @@ namespace Agif_V2.Controllers
             return Json(result);
         }
 
-        //public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
-        //{
-        //    DTOExportRequest dTOExport = new DTOExportRequest
-        //    {
-        //        Id = id,
-        //    };
-
-        //    var ret = await _IClaimonlineApplication1.GetApplicationDetailsForExport(dTOExport);
-
-        //    // Base path to clean and create new folder
-        //    string basePath = Path.Combine("wwwroot", "ClaimPdfDownloaded");
-
-        //    // Clean old folders/files
-        //    if (Directory.Exists(basePath))
-        //    {
-        //        DirectoryInfo dirInfo = new DirectoryInfo(basePath);
-        //        foreach (var dir in dirInfo.GetDirectories())
-        //        {
-        //            dir.Delete(true);
-        //        }
-
-        //        foreach (var file in dirInfo.GetFiles())
-        //        {
-        //            file.Delete();
-        //        }
-        //    }
-
-        //    // Create new time-based folder
-        //    string newFolderName = CreateFolder(basePath);
-        //    string newFolderPath = Path.Combine(basePath, newFolderName);
-        //    Directory.CreateDirectory(newFolderPath);
-
-        //    // Create subfolders ED, MW, PR and SP inside new folder
-        //    string EDFolder = Path.Combine(newFolderPath, "ED");
-        //    string MWFolder = Path.Combine(newFolderPath, "MW");
-        //    string PRFolder = Path.Combine(newFolderPath, "PR");
-        //    string SPFolder = Path.Combine(newFolderPath, "SP");
-
-        //    string applicationTypeName = string.Empty;
-
-
-        //    foreach (var data in ret.OnlineApplicationResponse ?? Enumerable.Empty<ClaimCommonDataOnlineResponse>())
-        //    {
-        //        if (data.ApplicationType == 1)
-        //        {
-        //            applicationTypeName = "ED";
-        //        }
-        //        else if (data.ApplicationType == 2)
-        //        {
-        //            applicationTypeName = "MW";
-        //        }
-        //        else if (data.ApplicationType == 3)
-        //        {
-        //            applicationTypeName = "PR";
-        //        }
-        //        else if (data.ApplicationType == 4)
-        //            applicationTypeName = "SP";
-
-        //        var fileName = $"App{data.ApplicationId}{data.Number}.pdf";
-
-        //        var sourceFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimMergePdf", fileName);
-
-
-        //        if (System.IO.File.Exists(sourceFilePath))
-        //        {
-        //            string destinationFolder = applicationTypeName switch
-        //            {
-        //                "ED" => EDFolder,
-        //                "MW" => MWFolder,
-        //                "PR" => PRFolder,
-        //                "SP" => SPFolder,
-        //                _ => newFolderPath // fallback if unknown
-        //            };
-
-        //            if (applicationTypeName == "ED")
-        //                Directory.CreateDirectory(EDFolder);
-        //            if (applicationTypeName == "MW")
-        //                Directory.CreateDirectory(MWFolder);
-        //            if (applicationTypeName == "PR")
-        //                Directory.CreateDirectory(PRFolder);
-        //            if (applicationTypeName == "SP")
-        //                Directory.CreateDirectory(SPFolder);
-
-        //            var destinationFilePath = Path.Combine(destinationFolder, fileName);
-        //            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
-        //        }
-        //    }
-
-        //    bool retexcel = await ClaimExportToExcelInFolder(dTOExport, newFolderPath);
-        //    if (!retexcel)
-        //    {
-        //        return Json(Constants.DataNotExport);
-        //    }
-        //    else
-        //    {
-        //        string zipFileName = $"{newFolderPath}.zip";
-        //        createZip(newFolderPath, zipFileName);
-        //        bool updateStatus = await _userApplication.UpdateClaimStatus(dTOExport);
-        //        if (!updateStatus)
-        //        {
-        //            return Json(Constants.DataNotExport);
-        //        }
-        //        return Json(newFolderName);
-
-        //    }
-
-        //}
-
+        
         public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
         {
             DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
@@ -1315,202 +1025,13 @@ namespace Agif_V2.Controllers
             return Json(result);
         }
 
-        //public async Task<IActionResult> UploadExcelFile(IFormFile file)
-        //{
-        //    // Initialize the list properly
-        //    DTOApplStatusBulkUploadlst lst = new DTOApplStatusBulkUploadlst
-        //    {
-        //        DTOApplStatusBulkUploadOK = new List<DTOApplStatusBulkUpload>(),
-        //        DTOApplStatusBulkUploadNotOk = new List<DTOApplStatusBulkUpload>()
-        //    };
-
-        //    if (file == null || file.Length == 0)
-        //    {
-        //        return Json(new { success = false, message = "Please select a valid Excel file." });
-        //    }
-
-        //    try
-        //    {
-        //        string tempPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ExcelTempUploads");
-        //        if (Directory.Exists(tempPath))
-        //        {
-        //            var existingFiles = Directory.GetFiles(tempPath);
-        //            foreach (var existingFile in existingFiles)
-        //            {
-        //                System.IO.File.Delete(existingFile); // Delete existing files
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Directory.CreateDirectory(tempPath);
-        //        }
-
-        //        string filename = $"ExcelImport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
-        //        string extension = Path.GetExtension(file.FileName);
-        //        string filePath = Path.Combine(tempPath, filename);
-
-        //        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-        //        {
-        //            await file.CopyToAsync(stream);
-        //        }
-
-        //        var requiredHeaders = new List<string> { "Army No", "Appln_ID", "ApplicationType", "Status_Code", "AGIF Remarks" };
-        //        var foundHeaders = new List<string>();
-
-        //        using (var workbook = new XLWorkbook(filePath))
-        //        {
-        //            var worksheet = workbook.Worksheets.FirstOrDefault();
-        //            if (worksheet == null)
-        //            {
-        //                return Json(new { success = false, message = "No worksheets found in the Excel file." });
-        //            }
-
-        //            var firstRow = worksheet.Row(1);
-        //            if (firstRow == null)
-        //            {
-        //                return Json(new { success = false, message = "Excel file appears to be empty." });
-        //            }
-
-        //            foreach (var cell in firstRow.CellsUsed())
-        //            {
-        //                var header = cell.GetString()?.Trim();
-        //                if (!string.IsNullOrEmpty(header))
-        //                {
-        //                    foundHeaders.Add(header);
-        //                }
-        //            }
-        //        }
-
-        //        // Check missing headers
-        //        var missingHeaders = requiredHeaders
-        //            .Where(required => !foundHeaders.Contains(required, StringComparer.OrdinalIgnoreCase))
-        //            .ToList();
-
-        //        if (missingHeaders.Any())
-        //        {
-        //            return Json(new
-        //            {
-        //                success = false,
-        //                message = "The following required columns are missing: " + string.Join(", ", missingHeaders)
-        //            });
-        //        }
-
-        //        DataTable dt = ExcelToDatatable(filePath);
-        //        if (dt == null || dt.Rows.Count == 0)
-        //        {
-        //            return Json(new { success = false, message = "No data found in Excel file." });
-        //        }
-
-        //        var AllStatusCode = await _userApplication.GetAllStatusCode();
-        //        if (AllStatusCode == null)
-        //        {
-        //            return Json(new { success = false, message = "Unable to retrieve status codes." });
-        //        }
-
-        //        var applicationIds = dt.AsEnumerable()
-        //            .Select(row => row.Field<string>("Appln_ID"))
-        //            .Where(id => !string.IsNullOrEmpty(id))
-        //            .Distinct()
-        //            .ToList();
-
-        //        var NotApp_id = await _userApplication.GetNotApplId(applicationIds);
-
-        //        foreach (DataRow rw in dt.Rows)
-        //        {
-        //            string? applicationId = rw.Field<string>("Appln_ID");
-        //            string? statusCode = rw.Field<string>("Status_Code");
-
-        //            if (string.IsNullOrEmpty(applicationId) || string.IsNullOrEmpty(statusCode))
-        //            {
-        //                continue;
-        //            }
-
-        //            // Validate that they can be converted to integers
-        //            if (!int.TryParse(applicationId, out int applIdInt) || !int.TryParse(statusCode, out int statusCodeInt))
-        //            {
-        //                string reason = "";
-        //                if (!int.TryParse(applicationId, out _))
-        //                {
-        //                    reason += "Invalid Application ID format. ";
-        //                }
-        //                if (!int.TryParse(statusCode, out _))
-        //                {
-        //                    reason += "Invalid Status Code format.";
-        //                }
-
-        //                lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
-        //                {
-        //                    ApplId = 0, // Or skip setting
-        //                    Status_Code = 0, // Or skip setting
-        //                    ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                    Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                    Reason = reason.Trim(),
-        //                    Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                });
-        //                continue;
-        //            }
-
-
-        //            // Check if the application ID is valid
-        //            if (NotApp_id.Contains(applicationId))
-        //            {
-        //                // Handle invalid application ID
-        //                lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
-        //                {
-        //                    ApplId = applIdInt,
-        //                    Status_Code = statusCodeInt,
-        //                    ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                    Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                    Reason = "Invalid Application ID",
-        //                    Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                });
-        //            }
-        //            else
-        //            {
-        //                // Check if the status code is valid
-        //                if (AllStatusCode.Contains(statusCode))
-        //                {
-        //                    // Add to the valid list
-        //                    lst.DTOApplStatusBulkUploadOK.Add(new DTOApplStatusBulkUpload
-        //                    {
-        //                        ApplId = applIdInt,
-        //                        ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                        Status_Code = statusCodeInt,
-        //                        Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                        Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    // Handle invalid status code
-        //                    lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
-        //                    {
-        //                        ApplId = applIdInt,
-        //                        Status_Code = statusCodeInt,
-        //                        ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                        Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                        Reason = "Invalid Status Code",
-        //                        Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                    });
-        //                }
-        //            }
-        //        }
-        //        TempData["BulkUploadOK"] = JsonConvert.SerializeObject(lst.DTOApplStatusBulkUploadOK);
-        //        return Json(new
-        //        {
-        //            success = true,
-        //            message = "File uploaded successfully.",
-        //            Data = lst
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { success = false, message = "Error uploading file: " + ex.Message });
-        //    }
-        //}
-
+        
         public async Task<IActionResult> UploadExcelFile(IFormFile file)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             if (file == null || file.Length == 0)
                 return Json(new { success = false, message = "Please select a valid Excel file." });
 
@@ -1739,6 +1260,10 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public IActionResult ExportValidatedExcel([FromBody] List<DTOApplStatusBulkUpload> data)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Validated");
 
@@ -1767,6 +1292,10 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public IActionResult ExportRejectedExcel([FromBody] List<DTOApplStatusBulkUpload> data)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
             using var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Rejected");
 
@@ -1794,202 +1323,14 @@ namespace Agif_V2.Controllers
                 "RejectedRecords.xlsx");
         }
 
-        //public async Task<IActionResult> ClaimUploadExcelFile(IFormFile file)
-        //{
-        //    // Initialize the list properly
-        //    DTOApplStatusBulkUploadlst lst = new DTOApplStatusBulkUploadlst
-        //    {
-        //        DTOApplStatusBulkUploadOK = new List<DTOApplStatusBulkUpload>(),
-        //        DTOApplStatusBulkUploadNotOk = new List<DTOApplStatusBulkUpload>()
-        //    };
-
-        //    if (file == null || file.Length == 0)
-        //    {
-        //        return Json(new { success = false, message = "Please select a valid Excel file." });
-        //    }
-
-        //    try
-        //    {
-        //        string tempPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimExcelTempUploads");
-        //        if (Directory.Exists(tempPath))
-        //        {
-        //            var existingFiles = Directory.GetFiles(tempPath);
-        //            foreach (var existingFile in existingFiles)
-        //            {
-        //                System.IO.File.Delete(existingFile); // Delete existing files
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Directory.CreateDirectory(tempPath);
-        //        }
-
-        //        string filename = $"ExcelImport_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
-        //        string extension = Path.GetExtension(file.FileName);
-        //        string filePath = Path.Combine(tempPath, filename);
-
-        //        using (var stream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-        //        {
-        //            await file.CopyToAsync(stream);
-        //        }
-
-        //        var requiredHeaders = new List<string> { "Army No", "Appln_ID", "ApplicationType", "Status_Code", "AGIF Remarks" };
-        //        var foundHeaders = new List<string>();
-
-        //        using (var workbook = new XLWorkbook(filePath))
-        //        {
-        //            var worksheet = workbook.Worksheets.FirstOrDefault();
-        //            if (worksheet == null)
-        //            {
-        //                return Json(new { success = false, message = "No worksheets found in the Excel file." });
-        //            }
-
-        //            var firstRow = worksheet.Row(1);
-        //            if (firstRow == null)
-        //            {
-        //                return Json(new { success = false, message = "Excel file appears to be empty." });
-        //            }
-
-        //            foreach (var cell in firstRow.CellsUsed())
-        //            {
-        //                var header = cell.GetString()?.Trim();
-        //                if (!string.IsNullOrEmpty(header))
-        //                {
-        //                    foundHeaders.Add(header);
-        //                }
-        //            }
-        //        }
-
-        //        // Check missing headers
-        //        var missingHeaders = requiredHeaders
-        //            .Where(required => !foundHeaders.Contains(required, StringComparer.OrdinalIgnoreCase))
-        //            .ToList();
-
-        //        if (missingHeaders.Any())
-        //        {
-        //            return Json(new
-        //            {
-        //                success = false,
-        //                message = "The following required columns are missing: " + string.Join(", ", missingHeaders)
-        //            });
-        //        }
-
-        //        DataTable dt = ExcelToDatatable(filePath);
-        //        if (dt == null || dt.Rows.Count == 0)
-        //        {
-        //            return Json(new { success = false, message = "No data found in Excel file." });
-        //        }
-
-        //        var AllStatusCode = await _userApplication.GetAllClaimStatusCode();
-        //        if (AllStatusCode == null)
-        //        {
-        //            return Json(new { success = false, message = "Unable to retrieve status codes." });
-        //        }
-
-        //        var applicationIds = dt.AsEnumerable()
-        //            .Select(row => row.Field<string>("Appln_ID"))
-        //            .Where(id => !string.IsNullOrEmpty(id))
-        //            .Distinct()
-        //            .ToList();
-
-        //        var NotApp_id = await _userApplication.GetClaimNotApplId(applicationIds);
-
-        //        foreach (DataRow rw in dt.Rows)
-        //        {
-        //            string? applicationId = rw.Field<string>("Appln_ID");
-        //            string? statusCode = rw.Field<string>("Status_Code");
-
-        //            if (string.IsNullOrEmpty(applicationId) || string.IsNullOrEmpty(statusCode))
-        //            {
-        //                continue;
-        //            }
-
-        //            // Validate that they can be converted to integers
-        //            if (!int.TryParse(applicationId, out int applIdInt) || !int.TryParse(statusCode, out int statusCodeInt))
-        //            {
-        //                string reason = "";
-        //                if (!int.TryParse(applicationId, out _))
-        //                {
-        //                    reason += "Invalid Application ID format. ";
-        //                }
-        //                if (!int.TryParse(statusCode, out _))
-        //                {
-        //                    reason += "Invalid Status Code format.";
-        //                }
-
-        //                lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
-        //                {
-        //                    ApplId = 0, // Or skip setting
-        //                    Status_Code = 0, // Or skip setting
-        //                    ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                    Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                    Reason = reason.Trim(),
-        //                    Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                });
-        //                continue;
-        //            }
-
-
-        //            // Check if the application ID is valid
-        //            if (NotApp_id.Contains(applicationId))
-        //            {
-        //                // Handle invalid application ID
-        //                lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
-        //                {
-        //                    ApplId = applIdInt,
-        //                    Status_Code = statusCodeInt,
-        //                    ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                    Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                    Reason = "Invalid Application ID",
-        //                    Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                });
-        //            }
-        //            else
-        //            {
-        //                // Check if the status code is valid
-        //                if (AllStatusCode.Contains(statusCode))
-        //                {
-        //                    // Add to the valid list
-        //                    lst.DTOApplStatusBulkUploadOK.Add(new DTOApplStatusBulkUpload
-        //                    {
-        //                        ApplId = applIdInt,
-        //                        ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                        Status_Code = statusCodeInt,
-        //                        Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                        Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                    });
-        //                }
-        //                else
-        //                {
-        //                    // Handle invalid status code
-        //                    lst.DTOApplStatusBulkUploadNotOk.Add(new DTOApplStatusBulkUpload
-        //                    {
-        //                        ApplId = applIdInt,
-        //                        Status_Code = statusCodeInt,
-        //                        ArmyNo = rw.Field<string>("Army No")?.Trim() ?? string.Empty,
-        //                        Remarks = rw.Field<string>("AGIF Remarks")?.Trim() ?? string.Empty,
-        //                        Reason = "Invalid Status Code",
-        //                        Name = rw.Field<string>("Name")?.Trim() ?? string.Empty
-        //                    });
-        //                }
-        //            }
-        //        }
-        //        TempData["ClaimBulkUploadOK"] = JsonConvert.SerializeObject(lst.DTOApplStatusBulkUploadOK);
-        //        return Json(new
-        //        {
-        //            success = true,
-        //            message = "File uploaded successfully.",
-        //            Data = lst
-        //        });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { success = false, message = "Error uploading file: " + ex.Message });
-        //    }
-        //}
-
+        
         public async Task<IActionResult> ClaimUploadExcelFile(IFormFile file)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
+
             if (file == null || file.Length == 0)
                 return Json(new { success = false, message = "Please select a valid Excel file." });
 

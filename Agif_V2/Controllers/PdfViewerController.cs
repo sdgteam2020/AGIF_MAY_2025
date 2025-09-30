@@ -18,11 +18,9 @@ namespace Agif_V2.Controllers
     public class PdfViewerController : Controller
     {
         private readonly IWebHostEnvironment _env;
-        //private readonly IHttpContextAccessor _httpContextAccessor;
         public PdfViewerController(IWebHostEnvironment env)
         {
             _env = env;
-            //_httpContextAccessor = httpContextAccessor;
         }
         public IActionResult AGIJournal()
         {
@@ -455,6 +453,10 @@ namespace Agif_V2.Controllers
         
         public void OpenPdf(PdfReader pdfReader)
         {
+            if(ModelState.IsValid == false)
+            {
+                return;
+            }
             string ipAddress = HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
             string wwwRootPath = _env.WebRootPath;
             string outputPath = System.IO.Path.Combine(wwwRootPath, "ImportantPdfFiles", "TempPdf.pdf");

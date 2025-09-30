@@ -29,7 +29,7 @@ namespace Agif_V2.Controllers
         private readonly IMasterOnlyTable _masterOnlyTable;
 
         public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping, IMasterOnlyTable _masterOnlyTable)
-        {   
+        {
             _signInManager = signInManager;
             _userManager = userManager;
             _userProfile = userProfile;
@@ -238,7 +238,7 @@ namespace Agif_V2.Controllers
                     PhoneNumber = signUpDto.MobileNo,
                     Updatedby = 1,
                     UpdatedOn = DateTime.Now,
-                    DomainId=signUpDto.userName
+                    DomainId = signUpDto.userName
                 };
 
                 var Result = await _userManager.CreateAsync(newUser, "Admin123!");
@@ -306,41 +306,6 @@ namespace Agif_V2.Controllers
             }
             return View(dTOTempSession);
         }
-        //public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            // If the request is invalid, return an empty response or a proper error message
-        //            var invalidResponse = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
-        //            return Json(invalidResponse);
-        //        }
-        //        bool userStatus = GetUserStatus(status);
-
-        //        var queryableData = await _userProfile.GetAllUser(userStatus);
-
-        //        var totalRecords = queryableData.Count;
-        //        var query = queryableData.AsQueryable();
-
-        //        query = ApplySearchFilter(query, request.searchValue);
-        //        var filteredRecords = query.Count();
-
-        //        query = ApplySorting(query, request.sortColumn, request.sortDirection);
-
-        //        var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
-
-        //        var responseData = CreateResponse(request.Draw, totalRecords, filteredRecords, paginatedData);
-
-        //        return Json(responseData);
-        //    }
-        //    catch (Exception)
-        //    {
-        //        var responseData = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
-        //        return Json(responseData);
-        //    }
-
-        //}
 
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
@@ -356,10 +321,10 @@ namespace Agif_V2.Controllers
 
                 var query = _userProfile.GetAllUser(userStatus);
 
-                var totalRecords =await query.CountAsync();
+                var totalRecords = await query.CountAsync();
 
                 query = ApplySearchFilter(query, request.searchValue);
-                var filteredRecords =await query.CountAsync();
+                var filteredRecords = await query.CountAsync();
 
                 query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
@@ -384,58 +349,39 @@ namespace Agif_V2.Controllers
         }
 
         private static string EscapeLike(string input)
-{
-    // Escape %, _ and [ which have special meaning in SQL LIKE
-    return input.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
-}
+        {
+            // Escape %, _ and [ which have special meaning in SQL LIKE
+            return input.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+        }
 
-private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
-    IQueryable<DTOUserProfileResponse> query, string? searchValue)
-{
-    if (string.IsNullOrWhiteSpace(searchValue)) return query;
+        private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
+            IQueryable<DTOUserProfileResponse> query, string? searchValue)
+        {
+            if (string.IsNullOrWhiteSpace(searchValue)) return query;
 
-    var s = EscapeLike(searchValue.Trim());
-    var pattern = $"%{s}%";
+            var s = EscapeLike(searchValue.Trim()); 
+            var pattern = $"%{s}%";
 
-    // If your DB/columns are case-sensitive, force CI collation per field:
-    // var ci = "SQL_Latin1_General_CP1_CI_AS";
+            // If your DB/columns are case-sensitive, force CI collation per field:
+            // var ci = "SQL_Latin1_General_CP1_CI_AS";
 
-    return query.Where(x =>
-        EF.Functions.Like(x.EmailId         ?? "", pattern) ||
-        EF.Functions.Like(x.MobileNo        ?? "", pattern) ||
-        EF.Functions.Like(x.ArmyNo          ?? "", pattern) ||
-        EF.Functions.Like(x.UnitName        ?? "", pattern) ||
-        EF.Functions.Like(x.AppointmentName ?? "", pattern) ||
-        EF.Functions.Like(x.RegtName        ?? "", pattern)
-        // Example if your columns are CS and you need CI:
-        // EF.Functions.Like(EF.Functions.Collate(x.EmailId ?? "", ci), pattern) || ...
-    );
-}
+            return query.Where(x =>
+                EF.Functions.Like(x.EmailId ?? "", pattern) ||
+                EF.Functions.Like(x.MobileNo ?? "", pattern) ||
+                EF.Functions.Like(x.ArmyNo ?? "", pattern) ||
+                EF.Functions.Like(x.UnitName ?? "", pattern) ||
+                EF.Functions.Like(x.AppointmentName ?? "", pattern) ||
+                EF.Functions.Like(x.RegtName ?? "", pattern)
+            );
+        }
+        private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
+        {
+            if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
 
+            bool ascending = sortDirection.ToLower() == "asc";
 
-        //private IQueryable<DTOUserProfileResponse> ApplySearchFilter(IQueryable<DTOUserProfileResponse> query, string? searchValue)
-        //{
-        //    if (string.IsNullOrEmpty(searchValue)) return query;
-
-        //    string lowerSearchValue = searchValue.ToLower();
-        //    return query.Where(x =>
-        //        (x.EmailId ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //        (x.MobileNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //        (x.ArmyNo ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //        (x.UnitName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //        (x.AppointmentName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase) ||
-        //        (x.RegtName ?? string.Empty).Contains(lowerSearchValue, StringComparison.CurrentCultureIgnoreCase)
-        //    );
-        //}
-
-           private IQueryable<DTOUserProfileResponse> ApplySorting(IQueryable<DTOUserProfileResponse> query, string sortColumn, string sortDirection)
-           {
-               if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
-
-               bool ascending = sortDirection.ToLower() == "asc";
-
-               // Define sorting logic in a dictionary
-               var sortMap = new Dictionary<string, Func<IQueryable<DTOUserProfileResponse>, IOrderedQueryable<DTOUserProfileResponse>>>
+            // Define sorting logic in a dictionary
+            var sortMap = new Dictionary<string, Func<IQueryable<DTOUserProfileResponse>, IOrderedQueryable<DTOUserProfileResponse>>>
           {
            { "profilename", q => ascending ? q.OrderBy(x => x.ProfileName) : q.OrderByDescending(x => x.ProfileName) },
            { "emailid", q => ascending ? q.OrderBy(x => x.EmailId) : q.OrderByDescending(x => x.EmailId) },
@@ -449,7 +395,7 @@ private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
            { "isfmn", q => ascending ? q.OrderBy(x => x.IsFmn) : q.OrderByDescending(x => x.IsFmn) }
          };
 
-               // Use the dictionary to apply the sorting
+            // Use the dictionary to apply the sorting
             return sortMap.ContainsKey(sortColumn.ToLower()) ? sortMap[sortColumn.ToLower()](query) : query;
         }
 
@@ -477,7 +423,8 @@ private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
 
                 // Get all users data
                 var queryableData = _userProfile.GetAllUser(userStatus);
-                var userList = queryableData.ToList();
+                var userList =  await queryableData.ToListAsync();
+                //var userList = queryableData.ToList();
 
                 using (var workbook = new XLWorkbook())
                 {
@@ -526,17 +473,22 @@ private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
 
         public async Task<ActionResult> GetALLByUnitName(string UnitName)
         {
-           
-                var ret = await _masterOnlyTable.GetALLByUnitName(UnitName);
-                return Json(ret);         
-           
+
+            var ret = await _masterOnlyTable.GetALLByUnitName(UnitName);
+            return Json(ret);
+
         }
 
         [HttpPost]
         public async Task<JsonResult> UpdateUserStatus(string domainId, bool isActive)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
+
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-            
+
             string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
             if (string.IsNullOrEmpty(ip))
             {
@@ -559,14 +511,11 @@ private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
                 return Json(new { success = false, message = "User mapping not found." });
             }
 
-            bool result = await _userProfile.SaveApprovedLogs(sessionUser.DomainId, ip, isActive,domainId,userProfile.ProfileId);
-
+            bool result = await _userProfile.SaveApprovedLogs(sessionUser.DomainId, ip, isActive, domainId, userProfile.ProfileId);
 
             userMapping.IsActive = isActive;
             userMapping.UpdatedOn = DateTime.Now;
             await _userMapping.Update(userMapping);
-
-
 
             return Json(new { success = true });
         }
@@ -634,18 +583,18 @@ private IQueryable<DTOUserProfileResponse> ApplySearchFilter(
                 var ret = await _userMapping.GetActiveUnitId(unitId);
                 if (ret == null || !ret.Any())
                 {
-                    return Json(0); 
+                    return Json(0);
                 }
                 else
                 {
-                    return Json(1); 
+                    return Json(1);
                 }
             }
             catch (Exception)
             {
                 return Json(0);
             }
-            
+
         }
 
         [HttpPost]

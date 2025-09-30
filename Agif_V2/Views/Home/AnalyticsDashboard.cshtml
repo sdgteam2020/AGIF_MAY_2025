@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Analytics Dashboard";
+}
+<link href="~/css/analyticsdashboard.css" rel="stylesheet" />
+<script src="~/js/chart.min.js"></script>
+<script src="~/devjs/analyticsdashboard.js"></script>
+
+<div class="container-fluid">
+    <div class="text-center my-4">
+        <h2 class="fw-bold">Analytics Dashboard</h2>
+    </div>
+    <div class="bg-light p-4 rounded mb-4">
+        <!-- Title + Year Dropdown -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">Applications by Month</h4>
+            <div class="d-flex align-items-center">
+                <label for="yearSelect" class="me-2 mb-0">Select Year:</label>
+                <select id="yearSelect" class="form-select" style="width: auto; min-width: 120px;">
+                    <!-- Years will be filled dynamically -->
+                </select>
+            </div>
+        </div>
+        <!-- Chart Container -->
+        <div class="canvasDiv" style="position: relative; height: 400px;">
+            <canvas id="applicationByMonth"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Ranks Section -->
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <div class="bg-light p-4 rounded">
+                <h4 class="mb-3">Top Ranks</h4>
+                <!-- Chart Container -->
+                <div class="canvasTopRanks">
+                    <canvas id="topRanksChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <div class="bg-light p-4 rounded">
+                <h4 class="mb-3">Top Regt/Corps</h4>
+                <!-- Chart Container -->
+                <div class="canvasTopRegtCorps">
+                    <canvas id="topRegtChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

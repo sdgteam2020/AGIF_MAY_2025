@@ -380,3 +380,6 @@ async function sendQuery(optionalQuery = null, silent = false) {
 $("#ViewLog").on('click', function () {
     window.location.href = '/Home/LogViewer'
 })
+$("#AnalyticsDashBoard").on('click', function () {
+    window.location.href = '/Home/AnalyticsDashBoard'
+})
