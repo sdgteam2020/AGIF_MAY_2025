@@ -130,6 +130,7 @@ namespace Agif_V2.Controllers
 
             return View(application);
         }
+
         [HttpGet]
         public async Task<IActionResult> OnlineApplication()
         {
@@ -163,7 +164,14 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> OnlineApplication(DTOClaimApplication model)
         {
-            if (!await ValidateModelAsync(model))
+            //if (!await ValidateModelAsync(model))
+            //    return View("OnlineApplication", model);
+
+            // Perform custom validation (adds errors to ModelState)
+            await ValidateModelAsync(model);
+
+            // Check ModelState.IsValid
+            if (!ModelState.IsValid)
                 return View("OnlineApplication", model);
 
             // Save common data
@@ -181,7 +189,7 @@ namespace Agif_V2.Controllers
         }
 
         private async Task<bool> ValidateModelAsync(DTOClaimApplication model)
-        {
+        {            
             bool isValid = true;
 
             // Validate each section

@@ -247,6 +247,10 @@ namespace Agif_V2.Controllers
         }
         public string ClaimDataDigitalXmlSign(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return "<Root><Error>Invalid application ID</Error></Root>";
+            }
             var data = ClaimSignDocument(applicationId);
             var jsonObject = new
             {
@@ -268,6 +272,10 @@ namespace Agif_V2.Controllers
 
         public async Task<DTODigitalSignDataResponse?> ClaimSignDocument(int applicationId)
         {
+            if(!ModelState.IsValid)
+            {
+                return null;
+            }
             DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
             DTODigitalSignDataResponse digitalSignDTO = new DTODigitalSignDataResponse();
 
@@ -395,6 +403,10 @@ namespace Agif_V2.Controllers
 
         public async Task SaveClaimXML(int applId, string xmlResString, string remarks)
         {
+            if(!ModelState.IsValid)
+            {
+                throw new ArgumentException("Invalid input parameters.");
+            }
             try
             {
                 DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetails(applId);
@@ -481,6 +493,11 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> ClaimRejectXML(int applId, string rem)
         {
+            if(!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request data." });
+            }
+
             var digitalSignRecords = new ClaimDigitalSignRecords
             {
                 ApplId = applId,
@@ -534,7 +551,7 @@ namespace Agif_V2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { success = false, message = "Invalid request." });
+                return Json("Invalid request");
             }
             try
             {
@@ -611,6 +628,10 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> GetClaimUsersApplicationListToAdmin(DTODataTableRequest request, int status)
         {
+            if(!ModelState.IsValid)
+            {
+               return Json("Invalid request");
+            }
             try
             {
                 var queryableData = await _userApplication.GetClaimUsersApplicationForAdmin(status);
@@ -903,6 +924,10 @@ namespace Agif_V2.Controllers
         
         public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
         {
+            if(!ModelState.IsValid)
+            {
+              return Json("Invalid request");
+            }
             DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _IClaimonlineApplication1.GetApplicationDetailsForExport(dTOExport);
 
@@ -1326,11 +1351,10 @@ namespace Agif_V2.Controllers
         
         public async Task<IActionResult> ClaimUploadExcelFile(IFormFile file)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
             {
-                return Json(new { success = false, message = "Invalid request." });
+                return Json("Invalid request");
             }
-
             if (file == null || file.Length == 0)
                 return Json(new { success = false, message = "Please select a valid Excel file." });
 

@@ -9,6 +9,6 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IClaimCalculator :IGenericRepositoryDL<InvestmentChange_JCO_OR>
     {
-        public Task<decimal> CalculateTotalInvestment(int month, int year, int categoryValue);
+        public Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(int month, int year, int categoryValue);
     }
 }

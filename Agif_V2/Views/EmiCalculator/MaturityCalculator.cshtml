@@ -9,6 +9,10 @@
         content: "\25BC"; /* Unicode escape for ▼             */
     }
 
+    div:where(.swal2-container) div:where(.swal2-popup) {
+      
+        width: 650px;
+    }
    
 
     .ui-datepicker {
@@ -190,6 +194,8 @@
 
     .calculator-body {
         background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0d0d0d 100%);
         border-radius: 20px;
         padding: 2.0rem;
         box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 153, 0, 0.1), inset 0 -2px 0 rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 153, 0, 0.2);
@@ -199,6 +205,48 @@
         position: relative;
         overflow: hidden;
         border: 3px solid rgba(255, 153, 0, 0.3);
+    }
+
+    .army-header {
+        background: linear-gradient(145deg, #1a3829, #0f2419);
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0d0d0d 100%);
+        border-radius: 15px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8), inset 0 -2px 5px rgba(255, 153, 0, 0.1), 0 0 20px rgba(255, 153, 0, 0.2);
+        border: 2px solid rgba(255, 153, 0, 0.4);
+        position: relative;
+        text-align: center;
+    }
+
+    .input-section {
+        background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0d0d0d 100%);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+        border: 2px solid rgba(0, 128, 0, 0.3);
+        transform: translateZ(15px);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .form-control, .form-select {
+        background: linear-gradient(145deg, #1a3829, #0f2419);
+        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+
+        border: 2px solid rgba(0, 128, 0, 0.4);
+        border-radius: 8px;
+        color: #ffffff;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
     }
 
         .calculator-body::before {
@@ -234,16 +282,7 @@
         box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 2px 0 rgba(255, 153, 0, 0.2), 0 0 0 3px rgba(255, 153, 0, 0.4);
     }
 
-    .army-header {
-        background: linear-gradient(145deg, #1a3829, #0f2419);
-        border-radius: 15px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8), inset 0 -2px 5px rgba(255, 153, 0, 0.1), 0 0 20px rgba(255, 153, 0, 0.2);
-        border: 2px solid rgba(255, 153, 0, 0.4);
-        position: relative;
-        text-align: center;
-    }
+   
 
     @@keyframes twinkle {
         0%, 100%
@@ -266,8 +305,8 @@
         font-family: 'Orbitron', monospace;
         font-size: 1.4rem;
         font-weight: 1000;
-        text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
-        animation: titleGlow 3s ease-in-out infinite alternate;
+       /*  text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
+        animation: titleGlow 3s ease-in-out infinite alternate; */
         letter-spacing: 2px;
         margin-bottom: 0.5rem;
     }
@@ -293,17 +332,7 @@
 
     }
 
-    .input-section {
-        background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
-        border-radius: 12px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-        border: 2px solid rgba(0, 128, 0, 0.3);
-        transform: translateZ(15px);
-        transition: all 0.3s ease;
-        position: relative;
-    }
+   
 
         .input-section::before {
             content: '';
@@ -332,6 +361,7 @@
         letter-spacing: 1.5px;
         text-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
         position: relative;
+
     }
 
         .section-label::after {
@@ -344,21 +374,11 @@
             background: linear-gradient(90deg, #ff9900, transparent);
         }
 
-    .form-control, .form-select {
-        background: linear-gradient(145deg, #1a3829, #0f2419);
-        border: 2px solid rgba(0, 128, 0, 0.4);
-        border-radius: 8px;
-        color: #ffffff;
-        font-family: 'Rajdhani', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 600;
-        padding: 0.5rem;
-        transition: all 0.3s ease;
-        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
-    }
+ 
 
         .form-control:focus, .form-select:focus {
-            background: linear-gradient(145deg, #2a4a3a, #1a3829);
+   /*          background: linear-gradient(145deg, #2a4a3a, #1a3829);
+            background: #310; */
             border-color: #ff9900;
             box-shadow: 0 0 0 0.2rem rgba(255, 153, 0, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 153, 0, 0.3);
             color: #ffffff;
@@ -395,7 +415,8 @@
         flex-direction: column;
         align-items: center;
 /*         padding: 1.5rem 1rem;
- */        background: linear-gradient(145deg, #1a3829, #0f2419);
+ */        
+        /* background: linear-gradient(145deg, #1a3829, #0f2419); */
         border: 2px solid rgba(0, 128, 0, 0.4);
         border-radius: 15px;
         cursor: pointer;
@@ -403,7 +424,8 @@
         color: #ffffff;
         text-align: center;
         position: relative;
-        overflow: hidden;
+        overflow:hidden;
+        height:130px;
     }
 
         .rank-label::before {
@@ -616,13 +638,13 @@
             <div class="col-12 col-md-12 col-lg-4 col-xl-4">
                 <div class="calculator-body">
                     <div class="army-header">
-                        <div class="army-title">🧮 SERVICE MATURITY CALCULATOR</div>
+                        <div class="army-title">🧮 MATURITY BENEFIT CALCULATOR</div>
                     </div>
 
                     <div id="loanForm">
                         <!-- Date Of Joining -->
                         <div class="input-section">
-                            <div class="section-label">📅 Enrollement/Commissioned of AGIF subscription</div>
+                            <div class="section-label">📅 Enrolment/Start Date of AGIF subscription</div>
                             <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" required
                                    oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="DD/MM/YYYY" autocomplete="off">
                         </div>
@@ -643,10 +665,10 @@
                             <div class="rank-selection">
                                 <div class="rank-option">
                                     <input type="radio" id="officers" name="category" value="1" class="rank-radio">
-                                    <label for="officers" class="rank-label">
+                                    <label for="officers" class="rank-label officers">
                                         <div class="rank-icon">👨‍✈️</div>
                                         <div class="rank-title">OFFICERS</div>
-                                        <div class="rank-description">Commissioned Officers<br>Leadership & Command</div>
+                                        <div class="rank-description">Commissioned Officers</div>
                                     </label>
                                 </div>
                                 <div class="rank-option">

@@ -23,6 +23,10 @@ namespace Agif_V2.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAllMMaster(DTOMasterRequest data)
         {
+            if (ModelState.IsValid)
+            {
+                return Json("Invalid request");
+            }
             try
             {
                 var result = await _unitOfWork.GetAllMMaster(data);

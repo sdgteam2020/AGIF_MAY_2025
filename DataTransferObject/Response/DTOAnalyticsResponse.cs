@@ -17,5 +17,14 @@ namespace DataTransferObject.Response
         public string Rank { get; set; } = string.Empty;
         public string Regt { get; set; } = string.Empty;
         public int RegtCount { get; set; }
+        public string VehLoanType { get; set; } = string.Empty;
+        public string LoanType { get; set; } = string.Empty;
+        public int LoanCount { get; set; }
+        public string UnitName { get; set; } = string.Empty;
+        public decimal TotalHbaLoan { get; set; }
+        public decimal TotalCarLoan { get; set; }
+        public decimal TotalPcaLoan { get; set; }
+        public decimal TotalLoanAmount { get; set; }
+        public string DealerName { get; set; } = string.Empty;
     }
 }

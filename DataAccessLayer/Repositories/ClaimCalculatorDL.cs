@@ -12,7 +12,7 @@ namespace DataAccessLayer.Repositories
         {
             _context = context;
         }
-        public async Task<decimal>  CalculateTotalInvestment(int month, int year,int categoryValue)
+        public async Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(int month, int year,int categoryValue)
         {
             var investmentRates = new List<InvestmentChange_JCO_OR>();
             var officersInvestmentRates = new List<InvestmentChange_Officers>();
@@ -39,7 +39,7 @@ namespace DataAccessLayer.Repositories
             var today = DateTime.Today;
             var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            //var today = new DateTime(2000, 6, 1); // Set the date manually to 01/04/1993
+            //var today = new DateTime(1991, 4, 01); // Set the date manually to 01/04/1993
             //var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1); // Adjust the tillDate accordingly
 
             // Validate joining date
@@ -51,9 +51,9 @@ namespace DataAccessLayer.Repositories
             decimal currentBalance = 0;
             decimal previousBalance = 0;   
             decimal Balcount = 0;
-            decimal Balamount = 100;
             decimal newbalance = 0;
             decimal newcurrentbalance = 0;
+            decimal SaveEL = 0;
             var currentDate = joiningDate;
 
             // Calculate month by month until till date
@@ -70,11 +70,12 @@ namespace DataAccessLayer.Repositories
                 else
                 {
                     applicableRate = GetApplicableRate(investmentRates, currentDate);
-
+                   
                 }
 
                 if (applicableRate != null)
                 {
+                    SaveEL = applicableRate.InvestmentAmount + SaveEL;
                     // Add monthly investment amount
                     previousBalance = currentBalance;
                     currentBalance += applicableRate.InvestmentAmount;
@@ -118,6 +119,7 @@ namespace DataAccessLayer.Repositories
                 else if (applicableRateOfficers != null)
                 {
                     // Add monthly investment amount
+                    SaveEL = applicableRateOfficers.InvestmentAmount + SaveEL;
 
                     previousBalance = currentBalance;
                     currentBalance += applicableRateOfficers.InvestmentAmount;
@@ -161,8 +163,12 @@ namespace DataAccessLayer.Repositories
                 currentDate = currentDate.AddMonths(1);
             }
 
-            return Math.Round(currentBalance, 2);
-            
+            //return Math.Round(currentBalance, 2);
+            return (
+                    currentBalance: Math.Round(currentBalance, 2),
+                    balCount: Math.Round(Balcount, 2),
+                    saveEL: Math.Round(SaveEL, 2)
+                    );
         }
 
         private InvestmentChange_JCO_OR? GetApplicableRate(List<InvestmentChange_JCO_OR> rates, DateTime forDate)

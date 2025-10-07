@@ -24,9 +24,7 @@ document.getElementById('loanForm').addEventListener('submit', function (e) {
         return false;
     }
 });
-$(document).ready(function () {
-    mMsater(0, "Category", 6, 0);
-});
+
 $('.monthPicker').datepicker({
     changeMonth: true,
     changeYear: true,
@@ -160,20 +158,45 @@ function my_date(date_string) {
     const year = date_components[2];
     return new Date(year, month - 1, day);
 }
+//function setTillDateToPreviousMonth() {
+//    const today = new Date();
+//    const previousMonth = new Date(today);
+
+//    // Go to previous month
+//    previousMonth.setMonth(today.getMonth() - 1);
+
+//    // If we're in January, setMonth(-1) will correctly go to December of previous year
+//    // Set to the 1st day of the previous month
+//    previousMonth.setDate(1);
+
+//    // Format as YYYY-MM-DD for date input
+//    const formattedTillDate = previousMonth.toISOString().split('T')[0];
+
+//    const tillDateInput = document.getElementById('tillDate');
+//    tillDateInput.value = formattedTillDate;
+//}
+//function setTillDateToPreviousMonth() {
+//    const today = new Date();
+
+//    // Create date for last day of previous month
+//    // new Date(year, month, 0) gives last day of the previous month
+//    const lastDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+
+//    // Format as YYYY-MM-DD for date input
+//    const formattedTillDate = lastDayOfPreviousMonth.toISOString().split('T')[0];
+//    const tillDateInput = document.getElementById('tillDate');
+//    tillDateInput.value = formattedTillDate;
+//}
 function setTillDateToPreviousMonth() {
     const today = new Date();
-    const previousMonth = new Date(today);
+    const lastDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth(), 0);
 
-    // Go to previous month
-    previousMonth.setMonth(today.getMonth() - 1);
+    // Use local date methods to avoid timezone conversion
+    const year = lastDayOfPreviousMonth.getFullYear();
+    const month = String(lastDayOfPreviousMonth.getMonth() + 1).padStart(2, '0');
+    const day = String(lastDayOfPreviousMonth.getDate()).padStart(2, '0');
 
-    // If we're in January, setMonth(-1) will correctly go to December of previous year
-    // Set to the 1st day of the previous month
-    previousMonth.setDate(1);
-
-    // Format as YYYY-MM-DD for date input
-    const formattedTillDate = previousMonth.toISOString().split('T')[0];
-
+    const formattedTillDate = `${year}-${month}-${day}`;
     const tillDateInput = document.getElementById('tillDate');
     tillDateInput.value = formattedTillDate;
 }
@@ -367,53 +390,69 @@ $('input[name="category"]').on('click', function () {
             method: 'POST',
             data: { month: month, year: year, categoryValue: categoryValue }, // Send month and year
             success: function (response) {
-                //if (response.success) {
-                //    console.log("Maturity calculated:", response.value);
-                //    // You can update the page with the result
-                //    $('#result').html(`Maturity Value: ${response.value}`);
-                //} else {
-                //    console.log("Calculation failed:", response.message);
-                //    // Optionally, you can display the error message
-                //    $('#result').html("An error occurred while calculating the maturity.");
-                //}
-                //$.LoadingOverlay("hide");
 
                 if (response.success) {
                     console.log("Maturity calculated:", response.value);
 
-                    //        // Show result in SweetAlert
-                    //        Swal.fire({
-                    //            title: '',
-                    //            html: `
-                    //    <div style="text-align: justify;">
-                    //        <h3 style="color: #28a745; margin-bottom: 15px;">ASSUMING ALL YOUR PREMIUMS HAVE BEER RECEVIVED AT AGIF, YOUR APPROX ACCUMULATION IN MATURITY  TILL PREVIOUS MONTH IS</h3>
-                    //        <div style="font-size: 2rem; font-weight: bold; color: #2c3e50; margin: 20px 0;">
-                    //            ₹${parseFloat(response.value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    //        </div>
-
-                    //    </div>
-                    //`,
-                    //            icon: 'success',
-                    //            confirmButtonText: 'Great!',
-                    //            confirmButtonColor: '#28a745',
-                    //            showCloseButton: true,
-                    //            timer: 20000, // Auto close after 20 seconds
-                    //            timerProgressBar: true
-                    //        });
+                    let joiningDate = formatDateToReadable($('#dateOfBirth').val());
+                    let tilldate = formatDateToReadable($('#tillDate').val());
                     Swal.fire({
                         title: '', // Empty title as it's not needed
                         html: `
-            <div style="text-align: center;">
-                <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-                    Assuming all your premiums have been received at AGIF, your approximate accumulation in maturity till previous month is
-                </h3>
-                 <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-                    This is for serving Personals only and E.I. amount will be deducted from final maturity amount.
-                </h3>
-                <div style="font-size: 2.5rem; font-weight: bold; color: #2c3e50; margin: 20px 0;">
-                    ₹${parseFloat(response.value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </div>
+             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <!-- Joining Date Section -->
+        <div style="border: 2px solid #28a745; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #f8fff9;">
+            <h4 style="color: #28a745; margin: 0; font-size: 1.2rem; font-weight: 600;">
+                📅 Your Month of Joining Indian Army is
+            </h4>
+            <div style="color: #2c3e50; font-size: 1.5rem; font-weight: bold; margin-top: 8px;">
+                ${joiningDate}
             </div>
+        </div>
+
+        <!-- Information Section 1 -->
+        <div style="border: 2px solid #007bff; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #f8f9ff;">
+            <p style="color: #007bff; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
+               💵 Contribution Made Presuming All Payments Deducted By CDA(O) And Paid to AGIF
+            </p>
+            <div style="font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin: 0;">
+                ₹${parseFloat(response.balCount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+        </div>
+
+        <!-- Information Section 2 -->
+        <div style="border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #fffef8;">
+            <p style="color: #856404; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
+                💵 Saving Element From Your Contributed Amount
+            </p>
+              <div style="font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin: 0;">
+                ₹${parseFloat(response.saveEL).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+        </div>
+
+        <!-- Information Section 3 -->
+        <div style="border: 2px solid #dc3545; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #fff8f8;">
+            <p style="color: #dc3545; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
+               📞 For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
+            </p>
+        </div>
+
+        <!-- Amount Section -->
+        <div style="border: 3px solid #2c3e50; border-radius: 12px; padding: 25px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.1);margin-bottom: 10px;">
+            <div style="color: #6c757d; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
+               💰 Maturity Amount That Your Saving Element has Grown As on ${tilldate}
+            </div>
+            <div style="font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin: 0;">
+                ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+        </div>
+          <!-- Note Section -->
+        <div style="border: 2px solid #17a2b8; border-radius: 8px; padding: 15px; background-color: #f0f9ff; border-left: 5px solid #17a2b8;">
+            <p style="color: #0c5460; margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.4;">
+                📝 <strong>NOTE:</strong> Tax free return for FY 2025-2026 is 8.7%
+            </p>
+        </div>
+    </div>
         `,
                         icon: 'success',
                         confirmButtonText: 'OK',
@@ -453,3 +492,29 @@ $('input[name="category"]').on('click', function () {
             }
         });
 });
+
+function formatDateToReadable(dateString) {
+    if (!dateString) return '';
+
+    try {
+        let dateParts = dateString.split('/');
+        if (dateParts.length === 3) {
+            let day = parseInt(dateParts[0]);
+            let month = parseInt(dateParts[1]) - 1;
+            let year = parseInt(dateParts[2]);
+
+            let dateObj = new Date(year, month, day);
+
+            return dateObj.toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return dateString; // Return original if formatting fails
+    }
+
+    return dateString;
+}

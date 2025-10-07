@@ -484,9 +484,8 @@ namespace Agif_V2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { success = false, message = "Invalid request." });
+                return Json("Invalid request");
             }
-
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
             string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();

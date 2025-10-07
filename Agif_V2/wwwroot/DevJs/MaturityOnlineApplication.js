@@ -1713,7 +1713,7 @@ $('#OtherReasons').on('input', function () {
 
 function maturityInfo() {
     Swal.fire({
-        title: 'MAWD Application Instructions',
+        title: '<u>MAWD APPLICATION INSTRUCTIONS</u>',
         html: `
             <div class="mawd-container">
                 <!-- Instructions for Member Section -->
@@ -1727,7 +1727,7 @@ function maturityInfo() {
                 <div class="guidelines-section">
                     <div class="guideline-header">
                         <h4 class="guideline-title">
-                            1. Guidelines for applying MAWD application:
+                            📚 1. Guidelines for applying MAWD application:
                         </h4>
                     </div>
 
