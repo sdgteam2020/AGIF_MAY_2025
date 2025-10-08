@@ -208,8 +208,12 @@
                         display: true,
                         text: 'Number of Applications'
                     },
-                    ticks: {
-                        stepSize: 1
+                     ticks: {
+                        maxRotation: 0,
+                        minRotation: 0,
+                         autoSkip: false,
+                         stepSize:2,
+                        font: { size: 10 }  // Slightly smaller font to fit better
                     }
                 },
                 y: {
@@ -306,7 +310,13 @@
                 },
                 x: {
                     title: { display: true, text: 'Unit Name' },
-                    stacked: false
+                    stacked: false,
+                    ticks: {
+                        maxRotation: 0,
+                        minRotation: 0,
+                        autoSkip: false,
+                        font: { size: 10 }  // Slightly smaller font to fit better
+                    }
                 }
             },
             animation: { duration: 2000, easing: 'easeInOutQuart' }
@@ -368,16 +378,114 @@
 
     //chart 8 Loan Amount for Top 10 Dealers
 
+    //const topLoanDealers = $('#topLoanDealersChart')[0].getContext('2d');
+
+    //const topLoanDealersChart = new Chart(topLoanDealers, {
+    //    type: 'bar',
+    //    data: {
+    //        labels: [],   // Dealer names
+    //        datasets: [{
+    //            label: 'Loan Amount',
+    //            data: [],   // Loan amounts
+    //            backgroundColor: '#007bff',
+    //            borderColor: '#ffffff',
+    //            borderWidth: 2
+    //        }]
+    //    },
+    //    options: {
+    //        responsive: true,
+    //        maintainAspectRatio: false,
+    //        plugins: {
+    //            title: {
+    //                display: true,
+    //                text: 'Top 10 Dealers by Loan Amount',
+    //                font: { size: 16 }
+    //            },
+    //            legend: { display: false },
+    //            tooltip: {
+    //                callbacks: {
+    //                    label: function (context) {
+    //                        return 'Loan Amount: ' + context.parsed.y.toLocaleString();
+    //                    }
+    //                }
+    //            }
+    //        },
+    //        scales: {
+    //            x: {
+    //                title: {
+    //                    display: true, text: 'Dealer Name'
+                       
+    //                },
+    //                ticks: {
+    //                    maxRotation: 0,
+    //                    minRotation: 0,
+    //                    autoSkip: false,
+    //                    font: { size: 8 }  // Slightly smaller font to fit better
+    //                }
+    //            },
+    //            y: {
+    //                beginAtZero: true,
+    //                title: { display: true, text: 'Loan Amount (₹)' }
+    //            }
+    //        },
+    //        animation: { duration: 1500, easing: 'easeInOutQuart' }
+    //    }
+    //});
+
     const topLoanDealers = $('#topLoanDealersChart')[0].getContext('2d');
 
+    //const topLoanDealersChart = new Chart(topLoanDealers, {
+    //    type: 'doughnut',  // Change chart type to doughnut
+    //    data: {
+    //        labels: [],   // Dealer names
+    //        datasets: [{
+    //            label: 'Loan Amount',
+    //            data: [],   // Loan amounts
+    //            backgroundColor: [], // Array of colors for each section
+    //            borderColor: '#ffffff',
+    //            borderWidth: 2
+    //        }]
+    //    },
+    //    options: {
+    //        responsive: true,
+    //        maintainAspectRatio: false,
+    //        plugins: {
+    //            title: {
+    //                display: true,
+    //                text: 'Top 10 Dealers by Loan Amount',
+    //                font: { size: 16 }
+    //            },
+    //            legend: {
+    //                position: 'top',  // Show legend at the top
+    //                labels: {
+    //                    boxWidth: 12,  // Set the box width for the legend
+    //                    font: {
+    //                        size: 10  // Set font size for legend
+    //                    }
+    //                }
+    //            },
+    //            tooltip: {
+    //                callbacks: {
+    //                    label: function (context) {
+    //                        return 'Loan Amount: ₹' + context.raw.toLocaleString();  // Display loan amount in tooltip
+    //                    }
+    //                }
+    //            }
+    //        },
+    //        animation: { duration: 1500, easing: 'easeInOutQuart' },
+    //        cutoutPercentage: 60,  // Adjust this for doughnut size (higher = thicker ring)
+    //        rotation: -0.5 * Math.PI,  // Rotate the doughnut chart to start from the top
+    //    }
+    //});
+
     const topLoanDealersChart = new Chart(topLoanDealers, {
-        type: 'bar',
+        type: 'pie',  // Change chart type to pie
         data: {
             labels: [],   // Dealer names
             datasets: [{
                 label: 'Loan Amount',
                 data: [],   // Loan amounts
-                backgroundColor: '#007bff',
+                backgroundColor: [], // Array of colors for each section
                 borderColor: '#ffffff',
                 borderWidth: 2
             }]
@@ -391,28 +499,26 @@
                     text: 'Top 10 Dealers by Loan Amount',
                     font: { size: 16 }
                 },
-                legend: { display: false },
+                legend: {
+                    position: 'right',  // Show legend at the top
+                    labels: {
+                        boxWidth: 12,  // Set the box width for the legend
+                        font: {
+                            size: 10  // Set font size for legend
+                        }
+                    }
+                },
                 tooltip: {
                     callbacks: {
                         label: function (context) {
-                            return 'Loan Amount: ' + context.parsed.y.toLocaleString();
+                            return 'Loan Amount: ₹' + context.raw.toLocaleString();  // Display loan amount in tooltip
                         }
                     }
-                }
-            },
-            scales: {
-                x: {
-                    title: { display: true, text: 'Dealer Name' }
-                },
-                y: {
-                    beginAtZero: true,
-                    title: { display: true, text: 'Loan Amount (₹)' }
                 }
             },
             animation: { duration: 1500, easing: 'easeInOutQuart' }
         }
     });
-
     // ---- Data loader (both charts) ----
 
 
@@ -589,17 +695,18 @@
                 .slice(0, 10);
 
             const dealerColors = [
-                'rgba(0, 123, 255, 0.9)',   // Top 1 - Bold Blue
-                'rgba(0, 123, 255, 0.85)',  // Top 2
-                'rgba(0, 123, 255, 0.8)',   // Top 3
-                'rgba(40, 167, 69, 0.8)',   // Top 4 - Green
-                'rgba(40, 167, 69, 0.75)',  // Top 5
-                'rgba(255, 193, 7, 0.8)',   // Top 6 - Yellow
-                'rgba(255, 193, 7, 0.75)',  // Top 7
-                'rgba(220, 53, 69, 0.8)',   // Top 8 - Red
-                'rgba(23, 162, 184, 0.8)',  // Top 9 - Cyan
-                'rgba(108, 117, 125, 0.8)'  // Top 10 - Gray
+                'rgba(255, 99, 132, 0.8)',   // Top 1 - Light Red
+                'rgba(54, 162, 235, 0.8)',   // Top 2 - Blue
+                'rgba(255, 159, 64, 0.8)',   // Top 3 - Orange
+                'rgba(75, 192, 192, 0.8)',   // Top 4 - Teal
+                'rgba(153, 102, 255, 0.8)',  // Top 5 - Purple
+                'rgba(255, 205, 86, 0.8)',   // Top 6 - Light Yellow
+                'rgba(255, 99, 132, 0.6)',   // Top 7 - Soft Red
+                'rgba(255, 159, 64, 0.6)',   // Top 8 - Soft Orange
+                'rgba(75, 192, 192, 0.6)',   // Top 9 - Soft Teal
+                'rgba(153, 102, 255, 0.6)'   // Top 10 - Soft Purple
             ];
+
             topLoanDealersChart.data.labels = Loandealers.map(d => d.name);
             topLoanDealersChart.data.datasets[0].data = Loandealers.map(d => d.loanAmount);
             topLoanDealersChart.data.datasets[0].backgroundColor = Loandealers.map((_, index) => dealerColors[index]);;

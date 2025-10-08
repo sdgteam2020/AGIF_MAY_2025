@@ -430,12 +430,6 @@ $('input[name="category"]').on('click', function () {
             </div>
         </div>
 
-        <!-- Information Section 3 -->
-        <div style="border: 2px solid #dc3545; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #fff8f8;">
-            <p style="color: #dc3545; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
-               📞 For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
-            </p>
-        </div>
 
         <!-- Amount Section -->
         <div style="border: 3px solid #2c3e50; border-radius: 12px; padding: 25px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.1);margin-bottom: 10px;">
@@ -447,9 +441,16 @@ $('input[name="category"]').on('click', function () {
             </div>
         </div>
           <!-- Note Section -->
-        <div style="border: 2px solid #17a2b8; border-radius: 8px; padding: 15px; background-color: #f0f9ff; border-left: 5px solid #17a2b8;">
+        <div style="border: 2px solid #17a2b8; border-radius: 8px; padding: 15px; margin-bottom: 10px;  background-color: #f0f9ff; border-left: 5px solid #17a2b8;">
             <p style="color: #0c5460; margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.4;">
                 📝 <strong>NOTE:</strong> Tax free return for FY 2025-2026 is 8.7%
+            </p>
+        </div>
+        
+        <!-- Information Section 3 -->
+        <div style="border: 2px solid #dc3545; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #fff8f8;">
+            <p style="color: #dc3545; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
+               📞 For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
             </p>
         </div>
     </div>

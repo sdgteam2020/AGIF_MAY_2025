@@ -254,7 +254,7 @@ namespace DataAccessLayer.Repositories
             var hbaDealers = await (
                 from h in _context.trnHBA
                 join t in _context.trnApplications on h.ApplicationId equals t.ApplicationId
-                where h.IsActive && h.UpdatedOn.Value.Year == year
+                where h.IsActive && h.UpdatedOn.Value.Year == year && !string.IsNullOrEmpty(h.PropertySeller)
                 group h by h.PropertySeller into g
                 select new DTOAnalyticsResponse
                 {
