@@ -26,5 +26,13 @@ namespace DataTransferObject.Response
         public decimal TotalPcaLoan { get; set; }
         public decimal TotalLoanAmount { get; set; }
         public string DealerName { get; set; } = string.Empty;
+
+        public string ApplicantName { get; set; }=string.Empty;
+
+        public int PendingCount { get; set; }
+        public int ApprovedCount { get; set; }
+        public int RejectedCount { get; set; }
+
+        public string AgeGroup { get; set; } = string.Empty;
     }
 }

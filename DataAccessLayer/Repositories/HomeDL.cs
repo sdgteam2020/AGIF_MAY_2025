@@ -77,6 +77,7 @@ namespace DataAccessLayer.Repositories
 
         public async Task<DTOAnalyticsResult> GetTotalMonthlyApplications(int year)
         {
+            //chart 1
             var carCounts = await (
                 from car in _context.trnCar
                 where car.UpdatedOn.HasValue && car.UpdatedOn.Value.Year == year
@@ -135,9 +136,11 @@ namespace DataAccessLayer.Repositories
             .OrderBy(m => int.Parse(m.Month))
             .ToList();
 
+            //chart 2
             var topRanks = await (
                 from app in _context.trnApplications
                 join rank in _context.MRanks on app.DdlRank equals rank.RankId
+                where app.UpdatedOn.HasValue && app.UpdatedOn.Value.Year == year
                 group app by new { app.DdlRank, rank.RankName } into g
                 orderby g.Count() descending
                 select new DTOAnalyticsResponse
@@ -149,9 +152,11 @@ namespace DataAccessLayer.Repositories
             .Take(10)
             .ToListAsync();
 
+            //chart 3
             var topRegt = await (
                 from app in _context.trnApplications
                 join regt in _context.MRegtCorps on app.RegtCorps equals regt.Id
+                where app.UpdatedOn.HasValue && app.UpdatedOn.Value.Year == year
                 group app by new { app.RegtCorps, regt.RegtName } into g
                 orderby g.Count() descending
                 select new DTOAnalyticsResponse
@@ -163,6 +168,7 @@ namespace DataAccessLayer.Repositories
             .Take(10)
             .ToListAsync();
 
+            //chart 4
             var loanStats = await (from app in _context.trnApplications
                              join car in _context.trnCar
                              on app.ApplicationId equals car.ApplicationId
@@ -178,7 +184,7 @@ namespace DataAccessLayer.Repositories
                                  LoanCount = g.Count()
                              }).ToListAsync();
 
-
+            //chart 5
                 var topUnits = await (from app in _context.trnApplications
                             join u in _context.MUnits
                             on app.PresentUnit equals u.UnitId
@@ -193,6 +199,7 @@ namespace DataAccessLayer.Repositories
                            .Take(10)
                            .ToListAsync();
 
+            //chart 6
             // Step 1: Get all loan data in one query
             var loanData = await (
                 from a in _context.trnApplications.AsNoTracking()
@@ -249,7 +256,7 @@ namespace DataAccessLayer.Repositories
                 })
                 .ToList();
 
-
+            //chart 7
             // Step 1: Get top HBA dealers
             var hbaDealers = await (
                 from h in _context.trnHBA
@@ -267,7 +274,7 @@ namespace DataAccessLayer.Repositories
             var carDealers = await (
                 from c in _context.trnCar
                 join t in _context.trnApplications on c.ApplicationId equals t.ApplicationId
-                where c.IsActive && c.UpdatedOn.Value.Year == year
+                where c.IsActive && c.UpdatedOn.Value.Year == year && !string.IsNullOrEmpty(c.DealerName)
                 group c by c.DealerName into g
                 select new DTOAnalyticsResponse
                 {
@@ -280,7 +287,7 @@ namespace DataAccessLayer.Repositories
             var pcaDealers = await (
                 from p in _context.trnPCA
                 join t in _context.trnApplications on p.ApplicationId equals t.ApplicationId
-                where p.IsActive && p.UpdatedOn.Value.Year == year
+                where p.IsActive && p.UpdatedOn.Value.Year == year && !string.IsNullOrEmpty(p.PCA_dealerName)
                 group p by p.PCA_dealerName into g
                 select new DTOAnalyticsResponse
                 {
@@ -303,6 +310,7 @@ namespace DataAccessLayer.Repositories
                 .Take(10)
                 .ToList();
 
+            //chart 8
             // Step 1: Car Loans
             var carLoans = await (
                 from c in _context.trnCar
@@ -356,6 +364,82 @@ namespace DataAccessLayer.Repositories
                 .Take(10)
                 .ToList();
 
+            //chart 9
+           var topApplicantsByRank = await (
+                                             from app in _context.trnApplications
+                                             join rank in _context.MRanks
+                                                 on app.DdlRank equals rank.RankId
+                                             where app.IsActive && app.StatusCode == 2
+                                             select new
+                                             {
+                                                 ApplicantRank = rank.RankName,
+                                                 ApplicantName= app.ApplicantName,
+                                                 // Loan counts
+                                                 CarLoanCount = _context.trnCar.Count(c => c.ApplicationId == app.ApplicationId && c.IsActive && c.IsActive && c.UpdatedOn.Value.Year == year),
+                                                 PcaLoanCount = _context.trnPCA.Count(p => p.ApplicationId == app.ApplicationId && p.IsActive && p.IsActive && p.UpdatedOn.Value.Year == year),
+                                                 HbaLoanCount = _context.trnHBA.Count(h => h.ApplicationId == app.ApplicationId && h.IsActive && h.IsActive && h.UpdatedOn.Value.Year == year),
+
+                                                 // Loan amounts applied
+                                                 TotalCarLoanAmount = _context.trnCar
+                                                                         .Where(c => c.ApplicationId == app.ApplicationId && c.IsActive && c.UpdatedOn.Value.Year == year)
+                                                                         .Sum(c => (decimal?)c.CA_Amount_Applied_For_Loan) ?? 0m,
+
+                                                 TotalPcaLoanAmount = _context.trnPCA
+                                                                         .Where(p => p.ApplicationId == app.ApplicationId && p.IsActive && p.UpdatedOn.Value.Year == year)
+                                                                         .Sum(p => (decimal?)p.PCA_Amount_Applied_For_Loan) ?? 0m,
+
+                                                 TotalHbaLoanAmount = _context.trnHBA
+                                                                         .Where(h => h.ApplicationId == app.ApplicationId && h.IsActive && h.UpdatedOn.Value.Year == year)
+                                                                         .Sum(h => (decimal?)h.HBA_Amount_Applied_For_Loan) ?? 0m
+                                             }
+                                             )
+                                             .Select(x => new DTOAnalyticsResponse
+                                             {
+                                                 Rank= x.ApplicantRank,
+                                                 CACount=x.CarLoanCount,
+                                                 PCACount=x.PcaLoanCount,
+                                                 HBACount=x.HbaLoanCount,
+                                                 LoanCount =x.CarLoanCount + x.PcaLoanCount + x.HbaLoanCount,
+                                                 TotalLoanAmount = x.TotalCarLoanAmount + x.TotalPcaLoanAmount + x.TotalHbaLoanAmount,                                                   
+                                                 ApplicantName=x.ApplicantName,
+                                                 TotalCarLoan = x.TotalCarLoanAmount,
+                                                 TotalPcaLoan = x.TotalPcaLoanAmount,
+                                                 TotalHbaLoan = x.TotalHbaLoanAmount
+                                             })
+                                             .OrderByDescending(x => x.TotalLoanAmount)
+                                             .Take(20)
+                                             .ToListAsync();
+
+            //chart 10
+            var statuslist = await _context.trnApplications
+                              .Where(a => a.IsActive && a.UpdatedOn.Value.Year==year)
+                              .GroupBy(a => 1) // Single group to aggregate all rows
+                              .Select(g => new DTOAnalyticsResponse
+                              {
+                                  PendingCount = g.Count(a => a.StatusCode == 1),
+                                  ApprovedCount = g.Count(a => a.StatusCode == 2),
+                                  RejectedCount = g.Count(a => a.StatusCode == 3)
+                              })
+                              .ToListAsync();
+            
+            var ageGroupsData = await _context.trnApplications
+                                .Where(a => a.IsActive && a.UpdatedOn.Value.Year == year)
+                                .Select(a => new {
+                                    Age = EF.Functions.DateDiffYear(a.DateOfBirth, DateTime.Now)
+                                })
+                                .GroupBy(a => a.Age < 25 ? "<25" :
+                                              a.Age >= 25 && a.Age <= 34 ? "25-34" :
+                                              a.Age >= 35 && a.Age <= 44 ? "35-44" :
+                                              a.Age >= 45 && a.Age <= 54 ? "45-54" :
+                                              "55+")
+                                .Select(g => new DTOAnalyticsResponse
+                                {
+                                    AgeGroup = g.Key,
+                                    TotalApplications = g.Count()
+                                })
+                                 .OrderBy(x => x.AgeGroup)
+                                 .ToListAsync();
+
             return new DTOAnalyticsResult
             {
                 MonthlyApplications = combined,
@@ -365,7 +449,10 @@ namespace DataAccessLayer.Repositories
                 topUnits=topUnits,
                 topUnitsByLoanAmount = result,
                 topDealers=dealers,
-                topLoanDealers= combinedLoans
+                topLoanDealers= combinedLoans,
+                topPersonnel= topApplicantsByRank,
+                statusCounts= statuslist,
+                AgeGroups= ageGroupsData
             };
         }
     }
