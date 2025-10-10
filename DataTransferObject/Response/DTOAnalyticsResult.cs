@@ -16,6 +16,10 @@ namespace DataTransferObject.Response
         public List<DTOAnalyticsResponse> topUnitsByLoanAmount { get; set; }  
         public List<DTOAnalyticsResponse> topDealers { get; set; }  
         public List<DTOAnalyticsResponse> topLoanDealers { get; set; }  
+        public List<DTOAnalyticsResponse> topPersonnel { get; set; }  
+        public List<DTOAnalyticsResponse> statusCounts { get; set; }  
+        public List<DTOAnalyticsResponse> AgeGroups { get; set; }  
+
 
     }
 }
