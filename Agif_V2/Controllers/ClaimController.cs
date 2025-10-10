@@ -436,10 +436,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, message = "Invalid input parameters." });
-            }
+            
 
             try
             {

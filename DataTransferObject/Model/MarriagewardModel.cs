@@ -54,6 +54,8 @@ namespace DataTransferObject.Model
         public bool IsAttachPartIIOrderPdf { get; set; }
 
         public bool IsAttachInvitationcardPdf { get;set; }
+        [Required]
+        public string Gender { get; set; } = string.Empty;
 
     }
 }

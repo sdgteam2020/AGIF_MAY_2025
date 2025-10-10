@@ -66,6 +66,8 @@ namespace DataTransferObject.Model
         public bool IsAttachBonafideLetterPdf { get; set; } // Flag to check if Bonafide Letter is attached
 
         public bool IsTotalExpenditureFilePdf { get; set; }
+        [Required]
+        public string Gender { get; set; } = string.Empty;
 
     }
 }

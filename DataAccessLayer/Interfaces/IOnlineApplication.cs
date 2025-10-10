@@ -16,6 +16,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);
         Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId);
+        Task<DTOCommonOnlineApplicationResponse> GetApplicationDetailsByApplicationId(int applicationId);
 
         Task<CommonDataonlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType);
 
@@ -47,5 +48,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<UserMapping?> GetCoDetails(int applicationId);
         Task<int> GetVehicleType(int applicationId, string formType);
+
+        Task<int?> GetLatestApplicationIdByArmyNo(string armyNo);
     }
 }

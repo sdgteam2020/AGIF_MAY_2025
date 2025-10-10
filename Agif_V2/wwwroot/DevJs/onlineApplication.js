@@ -20,6 +20,7 @@ $(document).ready(function () {
     filterHBALoanFreqOptions();
     filterCALoanFreqOptions();
     accordionAutoOpenClose();
+    findDataWithArmyNumber();
 });
 function accordionAutoOpenClose() {
     $('.accordion').on('keydown', '.last-input', function (e) {
@@ -2149,3 +2150,71 @@ $('input[required], select[required]').on('input change blur', function () {
 $("input, textarea").on("paste", function (e) {
     e.preventDefault();
 });
+
+function findDataWithArmyNumber() {
+    $('#armyNumber').on('blur', function () {
+        const armyNumber = $('#armyNumber').val().trim();
+        const armyPrefix = $('#armyPrefix').val().trim();
+        const armySuffix = $('#txtSuffix').val().trim();
+
+        // Validate required fields
+        if (!armyPrefix) {
+            alert('Please select an Army Prefix.');
+            $('#armyPrefix').focus();
+            return;
+        }
+
+        if (!armyNumber) {
+            alert('Army Number is required.');
+            $('#armyNumber').focus();
+            return;
+        }
+
+        if (!armySuffix) {
+            alert('Army Suffix is required.');
+            $('#txtSuffix').focus();
+            return;
+        }
+
+        const fullArmyNumber = `${armyPrefix}-${armyNumber}-${armySuffix}`.toUpperCase();
+        if (fullArmyNumber) {
+            $.ajax({
+                url: '/OnlineApplication/GetDataByArmyNumber',
+                type: 'GET',
+                data: { ArmyNo: fullArmyNumber },
+                success: function (data) {
+                    if (data) {
+                        $('#txtApplicantName').val(data.applicantName);
+                        $('#armyNumber').val(data.number);
+                        $('#txtSuffix').val(data.suffix);
+                        $('#oldArmyNo').val(data.oldNumber);
+                        $('#txtOldSuffix').val(data.oldSuffix);
+                        $('#dateOfBirth').val(data.dateOfBirth);
+                        $('#dateOfCommission').val(data.dateOfCommission);
+                        $('#dateOfPromotion').val(data.dateOfPromotion);
+                        $('#dateOfRetirement').val(data.dateOfRetirement);
+                        $('#dateOfRetirement').val(data.dateOfRetirement);
+                        $('#aadharCardNo').val(data.aadharCardNo);
+                        $('#panCardNo').val(data.panCardNo);
+                        $('#mobileNo').val(data.mobileNo);
+                        $('#emailId').val(data.email);
+                        $('#totalService').val(data.totalService);
+                        $('#residualService').val(data.residualService);
+                        $('#pcda_pao').val(data.residualService);
+
+
+
+                        
+                        console.log(data);
+                    }
+                    else {
+                        console.log("Data not found for the provided Army Number.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+    });
+}

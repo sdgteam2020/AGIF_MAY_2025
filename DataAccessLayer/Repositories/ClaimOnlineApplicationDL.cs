@@ -704,7 +704,8 @@ namespace DataAccessLayer.Repositories
                                        DoPartIIDate = ED.DoPartIIDate,
                                        CourseForWithdrawal = ED.CourseForWithdrawal,
                                        CollegeInstitution = ED.CollegeInstitution,
-                                       TotalExpenditure = ED.TotalExpenditure
+                                       TotalExpenditure = ED.TotalExpenditure,
+                                       Gender = ED.Gender
                                    }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
@@ -726,6 +727,7 @@ namespace DataAccessLayer.Repositories
                                        DoPartIIDate = MW.DoPartIIDate,
                                        AgeOfWard = MW.AgeOfWard,
                                        DateofMarriage = MW.DateofMarriage,
+                                       Gender = MW.Gender
                                    }).FirstOrDefault();
 
                     data.OnlineApplicationResponse = result;

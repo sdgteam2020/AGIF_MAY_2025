@@ -18,5 +18,6 @@ namespace DataTransferObject.Response
         public string CourseForWithdrawal { get; set; }
         public string CollegeInstitution { get; set; }
         public double TotalExpenditure { get; set; }
+        public string Gender { get; set; }
     }
 }

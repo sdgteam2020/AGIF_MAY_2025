@@ -4,6 +4,7 @@ using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using DataTransferObject.Response;
 using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -602,6 +603,17 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
             }
+        }
+        public async Task<JsonResult> GetDataByArmyNumber(string ArmyNo)
+        {
+            var applicationId = await _IonlineApplication1.GetLatestApplicationIdByArmyNo(ArmyNo);
+            if (applicationId == null)
+            {
+                return Json(new { success = false, message = "Application ID not found." });
+            }
+
+            DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
+            return Json(data);
         }
     }
 

@@ -17,6 +17,6 @@ namespace DataTransferObject.Response
         public DateTime? DoPartIIDate { get; set; }
         public int AgeOfWard { get; set; }
         public DateTime? DateofMarriage { get; set; }
-
+        public string Gender { get; set; }
     }
 }

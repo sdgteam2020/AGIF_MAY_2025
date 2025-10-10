@@ -210,6 +210,7 @@ function GetApplicationList(status, endpoint) {
         className: 'noExport',
         render: function (data, type, row) {
             const categorytype = $("#UserType").val() || "Loan";
+            console.log(categorytype);
             if (row.isMergePdf == false) {
                 return `
                     <div class='action action-container d-flex'>

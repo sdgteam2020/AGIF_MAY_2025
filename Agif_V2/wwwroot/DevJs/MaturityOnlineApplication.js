@@ -12,7 +12,8 @@ $(document).ready(function () {
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
     resetFieldsOnRankRegtChange();
-
+    EduGenderDisplay();
+    MarrGenderDisplay();
 });
 
 function resetCivilPostalAddress() {
@@ -973,9 +974,12 @@ function SetRetDate() {
                             const [day, month, year] = dateParts;
                             const dob = new Date(year, month - 1, day);
                             dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                            const yyyy = dob.getFullYear();
-                            const mm = String(dob.getMonth() + 1).padStart(2, '0');
-                            const dd = String(dob.getDate()).padStart(2, '0');
+                            const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
+
+                            // Format date as yyyy-mm-dd
+                            const yyyy = lastDay.getFullYear();
+                            const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
+                            const dd = String(lastDay.getDate()).padStart(2, '0');
                             const formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
                             setOutlineActive("dateOfRetirement");
@@ -991,9 +995,12 @@ function SetRetDate() {
                             const [day, month, year] = dateParts;
                             const dob = new Date(year, month - 1, day);
                             dob.setFullYear(dob.getFullYear() + 10);
-                            const yyyy = dob.getFullYear();
-                            const mm = String(dob.getMonth() + 1).padStart(2, '0');
-                            const dd = String(dob.getDate()).padStart(2, '0');
+                            const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
+
+                            // Format date as yyyy-mm-dd
+                            const yyyy = lastDay.getFullYear();
+                            const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
+                            const dd = String(lastDay.getDate()).padStart(2, '0');
                             const formattedDate = `${yyyy}-${mm}-${dd}`;
                             $('#dateOfRetirement').val(formattedDate);
                             setOutlineActive("dateOfRetirement");
@@ -1015,9 +1022,12 @@ function SetRetDate() {
                                 const [day, month, year] = dateParts;
                                 const dob = new Date(year, month - 1, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                                const yyyy = dob.getFullYear();
-                                const mm = String(dob.getMonth() + 1).padStart(2, '0');
-                                const dd = String(dob.getDate()).padStart(2, '0');
+                                const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
+
+                                // Format date as yyyy-mm-dd
+                                const yyyy = lastDay.getFullYear();
+                                const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
+                                const dd = String(lastDay.getDate()).padStart(2, '0');
                                 const formattedDate = `${yyyy}-${mm}-${dd}`;
                                 $('#dateOfRetirement').val(formattedDate);
                                 setOutlineActive("dateOfRetirement");
@@ -1034,9 +1044,12 @@ function SetRetDate() {
                                 const [day, month, year] = dateParts;
                                 const dob = new Date(year, month - 1, day);
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
-                                const yyyy = dob.getFullYear();
-                                const mm = String(dob.getMonth() + 1).padStart(2, '0');
-                                const dd = String(dob.getDate()).padStart(2, '0');
+                                const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
+
+                                // Format date as yyyy-mm-dd
+                                const yyyy = lastDay.getFullYear();
+                                const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
+                                const dd = String(lastDay.getDate()).padStart(2, '0');
                                 const formattedDate = `${yyyy}-${mm}-${dd}`;
                                 $('#dateOfRetirement').val(formattedDate);
                                 setOutlineActive("dateOfRetirement");
@@ -1867,3 +1880,47 @@ $('#ifsCode').on('blur', function () {
 $("input, textarea").on("paste", function (e) {
     e.preventDefault();
 });
+
+function EduGenderDisplay() {
+    // Show gender options on input click
+    $('#EducationGenderDisplay').on('focus', function () {
+        $('#genderRadioGroup').addClass('show');
+        $(this).closest('.form-outline').find('.form-label').addClass('active');
+    });
+
+    // Handle radio button selection
+    $('.gender-radio').on('change', function () {
+        var selectedGender = $(this).val();
+        $('#EducationGenderDisplay').val(selectedGender);
+        $('#genderRadioGroup').removeClass('show');
+    });
+
+    // Optional: Close dropdown when clicking outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.form-outline').length) {
+            $('#genderRadioGroup').removeClass('show');
+        }
+    });
+}
+
+function MarrGenderDisplay() {
+    // Show gender options on input click
+    $('#MarriageGenderDisplay').on('focus', function () {
+        $('#genderRadioGroup').addClass('show');
+        $(this).closest('.form-outline').find('.form-label').addClass('active');
+    });
+
+    // Handle radio button selection
+    $('.gender-radio').on('change', function () {
+        var selectedGender = $(this).val();
+        $('#MarriageGenderDisplay').val(selectedGender);
+        $('#genderRadioGroup').removeClass('show');
+    });
+
+    // Optional: Close dropdown when clicking outside
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.form-outline').length) {
+            $('#genderRadioGroup').removeClass('show');
+        }
+    });
+}

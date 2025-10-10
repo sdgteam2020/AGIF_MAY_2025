@@ -855,5 +855,96 @@ namespace DataAccessLayer.Repositories
             
             return vehicleType;
         }
+
+        public async Task<int?> GetLatestApplicationIdByArmyNo(string armyNo)
+        {
+            var parts = armyNo.Split('-');
+            if (parts.Length != 3) return null;
+
+            var prefixId = parts[0];
+            var armyNumber = parts[1];
+            var suffix = parts[2];
+            int applicationId = await _context.trnApplications
+                .Where(a => a.ArmyPrefix == Convert.ToInt32(prefixId) && a.Number == armyNumber && a.Suffix == suffix)
+                .OrderByDescending(a => a.ApplicationId)
+                .Select(a => a.ApplicationId)
+                .FirstOrDefaultAsync();
+                return applicationId;
+        }
+        public Task<DTOCommonOnlineApplicationResponse> GetApplicationDetailsByApplicationId(int applicationId)
+        {
+            DTOCommonOnlineApplicationResponse data = new DTOCommonOnlineApplicationResponse();
+
+            var result = (from common in _context.trnApplications
+                          join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                          from prefix in prefixGroup.DefaultIfEmpty()
+                          join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                          from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                          join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                          from rank in rankGroup.DefaultIfEmpty()
+                          join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                          from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                          join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                          from regCorps in regCorpsGroup.DefaultIfEmpty()
+                          join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                          from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                          join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                          from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                          join applicationType in _context.MApplicationTypes on common.ApplicationType equals applicationType.ApplicationTypeId
+
+                          join AddressDetails in _context.trnAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+                          join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
+                          where common.ApplicationId == applicationId
+                          select new CommonDataonlineResponse
+                          {
+                              ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
+                              PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                              ApplicationId = common.ApplicationId,
+                              ApplicationType = common.ApplicationType,
+                              ApplicationTypeName = applicationType.ApplicationTypeName,
+                              ArmyPrefix = common.ArmyPrefix,
+                              Number =common.Number,
+                              AadharCardNo = common.AadharCardNo ?? string.Empty,
+                              Suffix = common.Suffix ?? string.Empty,
+                              OldArmyPrefix = common.OldArmyPrefix,
+                              OldNumber = common.OldNumber,
+                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              DdlRank = rank != null ? rank.RankName : string.Empty,
+                              ApplicantName = common.ApplicantName ?? string.Empty,
+                              DateOfBirth = common.DateOfBirth,
+                              DateOfCommission = common.DateOfCommission,
+                              NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                              ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                              RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                              PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                              Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
+                              PostOffice = AddressDetails.PostOffice ?? string.Empty,
+                              Distt = AddressDetails.Distt ?? string.Empty,
+                              State = AddressDetails.State ?? string.Empty,
+                              DateOfPromotion = common.DateOfPromotion,
+                              DateOfRetirement = common.DateOfRetirement,
+                              PanCardNo = common.PanCardNo ?? string.Empty,
+                              MobileNo = common.MobileNo ?? string.Empty,
+                              Email = common.Email ?? string.Empty,
+                              Code = AddressDetails.Code ?? string.Empty,
+                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
+                              pcda_pao = common.pcda_pao ?? string.Empty,
+                              pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                              CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
+                              ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo,
+                              UpdatedOn = common.UpdatedOn.ToString(),
+                              EmailDomain = common.EmailDomain ?? string.Empty,
+
+
+                          }).FirstOrDefault();
+            data.OnlineApplicationResponse = result;
+                    return Task.FromResult(data);
+        }
     }
 }

@@ -30,6 +30,71 @@
 
 
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
+<style>
+    /* Form outline positioning */
+    .form-outline {
+        position: relative;
+    }
+
+    /* Gender dropdown styling */
+    .gender-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 0.5rem;
+        z-index: 1000;
+        margin-top: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    }
+
+        /* Show dropdown when active */
+        .gender-dropdown.show {
+            display: block;
+        }
+
+    /* Floating label */
+    .form-label.active {
+        transform: translateY(-1rem);
+        font-size: 0.875rem;
+    }
+
+    /* Male button - Blue theme */
+    .gender-male {
+        border-color: #007bff !important;
+        color: #007bff !important;
+    }
+
+        .gender-male:hover {
+            background-color: #e7f3ff !important;
+        }
+
+    .btn-check:checked + .gender-male {
+        background-color: #007bff !important;
+        color: white !important;
+        border-color: #007bff !important;
+    }
+
+    /* Female button - Pink theme */
+    .gender-female {
+        border-color: #ff69b4 !important;
+        color: #ff69b4 !important;
+    }
+
+        .gender-female:hover {
+            background-color: #ffe6f2 !important;
+        }
+
+    .btn-check:checked + .gender-female {
+        background-color: #ff69b4 !important;
+        color: white !important;
+        border-color: #ff69b4 !important;
+    }
+</style>
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -914,6 +979,35 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.DateOfBirth, "", new { @class = "text-danger" })
                                     </div>
 
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🚻</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control" id="EducationGenderDisplay" readonly
+                                                       value="@Model.EducationDetails?.Gender"
+                                                       placeholder=" "
+                                                       autocomplete="off">
+                                                <label class="form-label select-label">Gender of Child</label>
+
+                                                <!-- Hidden radio group that appears on click -->
+                                                <div id="genderRadioGroup" class="gender-dropdown">
+                                                    <div class="btn-group w-100" role="group" aria-label="Gender of Child">
+                                                        @Html.RadioButtonFor(m => m.EducationDetails.Gender, "Male",
+                                                             new { @class = "btn-check gender-radio", id = "EduGenderMale", required = "required", autocomplete = "off", data_gender = "Male" })
+                                                        <label class="btn btn-outline-primary gender-male mb-0" for="EduGenderMale">Male</label>
+
+                                                        @Html.RadioButtonFor(m => m.EducationDetails.Gender, "Female",
+                                                             new { @class = "btn-check gender-radio", id = "EduGenderFemale", autocomplete = "off", data_gender = "Female" })
+                                                        <label class="btn btn-outline-danger gender-female mb-0" for="EduGenderFemale">Female</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.EducationDetails.Gender, "", new { @class = "text-danger" })
+                                    </div>
+
+
+
                                     @if (Category == "1")
                                     {
                                         <div class="col-md-2">
@@ -974,7 +1068,7 @@
 
 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">📚</span>
@@ -1098,7 +1192,32 @@
                                         @Html.ValidationMessageFor(m => m.Marriageward.DateOfBirth, "", new { @class = "text-danger" })
                                     </div>
 
+                                    <div class="col-md-2">
+                                        <div class="input-group mb-2">
+                                            <span class="input-group-text">🚻</span>
+                                            <div class="form-outline" data-mdb-input-init>
+                                                <input type="text" class="form-control" id="MarriageGenderDisplay" readonly
+                                                       value="@Model.Marriageward?.Gender"
+                                                       placeholder=" "
+                                                       autocomplete="off">
+                                                <label class="form-label select-label">Gender of Child</label>
 
+                                                <!-- Hidden radio group that appears on click -->
+                                                <div id="genderRadioGroup" class="gender-dropdown">
+                                                    <div class="btn-group w-100" role="group" aria-label="Gender of Child">
+                                                        @Html.RadioButtonFor(m => m.Marriageward.Gender, "Male",
+                                                             new { @class = "btn-check gender-radio", id = "MarrGenderMale", required = "required", autocomplete = "off", data_gender = "Male" })
+                                                        <label class="btn btn-outline-primary gender-male mb-0" for="MarrGenderMale">Male</label>
+
+                                                        @Html.RadioButtonFor(m => m.Marriageward.Gender, "Female",
+                                                             new { @class = "btn-check gender-radio", id = "MarrGenderFemale", autocomplete = "off", data_gender = "Female" })
+                                                        <label class="btn btn-outline-danger gender-female mb-0" for="MarrGenderFemale">Female</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @Html.ValidationMessageFor(m => m.Marriageward.Gender, "", new { @class = "text-danger" })
+                                    </div>
                                     @if (Category == "1")
                                     {
                                         <div class="col-md-2">
