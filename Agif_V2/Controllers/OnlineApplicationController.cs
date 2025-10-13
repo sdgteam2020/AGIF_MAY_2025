@@ -613,7 +613,7 @@ namespace Agif_V2.Controllers
             }
 
             DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
-            return Json(data);
+            return Json(data.OnlineApplicationResponse);
         }
     }
 

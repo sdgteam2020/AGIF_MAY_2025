@@ -32,7 +32,8 @@ namespace DataTransferObject.Response
         public int PendingCount { get; set; }
         public int ApprovedCount { get; set; }
         public int RejectedCount { get; set; }
-
         public string AgeGroup { get; set; } = string.Empty;
+        public List<DateTime?> LoanDates { get; set; }  // List of loan dates (CA, PCA, HBA)
+
     }
 }

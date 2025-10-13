@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Response;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -440,6 +441,126 @@ namespace DataAccessLayer.Repositories
                                  .OrderBy(x => x.AgeGroup)
                                  .ToListAsync();
 
+
+            // Get top 20 applicants by number of loans
+            var carApplicantLoans = await (
+                                  from app in _context.trnApplications
+                                  join car in _context.trnCar on app.ApplicationId equals car.ApplicationId
+                                  where app.IsActive && car.IsActive
+                                  select new
+                                  {
+                                      app.ApplicationId,
+                                      app.ApplicantName,
+                                      Rank = _context.MRanks.FirstOrDefault(r => r.RankId == app.DdlRank).RankName,
+                                      LoanDate = car.UpdatedOn
+                                  }
+                                 ).ToListAsync();
+
+            // 2️⃣ Get PCA loans per applicant
+            var pcaApplicantLoans = await (
+                from app in _context.trnApplications
+                join pca in _context.trnPCA on app.ApplicationId equals pca.ApplicationId
+                where app.IsActive && pca.IsActive
+                select new
+                {
+                    app.ApplicationId,
+                    app.ApplicantName,
+                    Rank = _context.MRanks.FirstOrDefault(r => r.RankId == app.DdlRank).RankName,
+                    LoanDate = pca.UpdatedOn
+                }
+            ).ToListAsync();
+
+            // 3️⃣ Get HBA loans per applicant
+            var hbaApplicantLoans = await (
+                from app in _context.trnApplications
+                join hba in _context.trnHBA on app.ApplicationId equals hba.ApplicationId
+                where app.IsActive && hba.IsActive
+                select new
+                {
+                    app.ApplicationId,
+                    app.ApplicantName,
+                    Rank = _context.MRanks.FirstOrDefault(r => r.RankId == app.DdlRank).RankName,
+                    LoanDate = hba.UpdatedOn
+                }
+            ).ToListAsync();
+
+            // 4️⃣ Combine all loan types
+            var combinedApplicantLoans = carApplicantLoans
+                .Concat(pcaApplicantLoans)
+                .Concat(hbaApplicantLoans)
+                .GroupBy(x => new { x.ApplicantName, x.Rank })
+                .Select(g => new DTOAnalyticsResponse
+                {
+                    ApplicantName = g.Key.ApplicantName,
+                    Rank = g.Key.Rank,
+                    LoanDates = g.Select(x => x.LoanDate).OrderBy(d => d).ToList(),
+                    LoanCount = g.Count()
+                })
+                .OrderByDescending(x => x.LoanCount)
+                .Take(20)
+                .ToList();
+            
+            var carLoanCountsByUnit = await (
+                from unit in _context.MUnits
+                join app in _context.trnApplications on unit.UnitId equals app.PresentUnit
+                join car in _context.trnCar on app.ApplicationId equals car.ApplicationId
+                where app.IsActive && car.IsActive
+                group car by unit.UnitName into g
+                select new DTOAnalyticsResponse
+                {
+                    UnitName = g.Key,
+                    CACount = g.Count(),
+                    PCACount = 0,
+                    HBACount = 0
+                }
+            ).ToListAsync();
+
+            var pcaLoanCountsByUnit = await (
+                from unit in _context.MUnits
+                join app in _context.trnApplications on unit.UnitId equals app.PresentUnit
+                join pca in _context.trnPCA on app.ApplicationId equals pca.ApplicationId
+                where app.IsActive && pca.IsActive
+                group pca by unit.UnitName into g
+                select new DTOAnalyticsResponse
+                {
+                    UnitName = g.Key,
+                    CACount = 0,
+                    PCACount = g.Count(),
+                    HBACount = 0
+                }
+            ).ToListAsync();
+
+            var hbaLoanCountsByUnit = await (
+                from unit in _context.MUnits
+                join app in _context.trnApplications on unit.UnitId equals app.PresentUnit
+                join hba in _context.trnHBA on app.ApplicationId equals hba.ApplicationId
+                where app.IsActive && hba.IsActive
+                group hba by unit.UnitName into g
+                select new DTOAnalyticsResponse
+                {
+                    UnitName = g.Key,
+                    CACount = 0,
+                    PCACount = 0,
+                    HBACount = g.Count()
+                }
+            ).ToListAsync();
+
+            // Combine: Merge the results by UnitName
+            var combinedLoanCountsByUnit = carLoanCountsByUnit
+                .Concat(pcaLoanCountsByUnit)
+                .Concat(hbaLoanCountsByUnit)
+                .GroupBy(x => x.UnitName)
+                .Select(g => new DTOAnalyticsResponse
+                {
+                    UnitName = g.Key,
+                    CACount = g.Sum(x => x.CACount),
+                    PCACount = g.Sum(x => x.PCACount),
+                    HBACount = g.Sum(x => x.HBACount)
+                })
+                .OrderBy(x => x.UnitName)
+                .ToList();
+         
+
             return new DTOAnalyticsResult
             {
                 MonthlyApplications = combined,
@@ -452,7 +573,9 @@ namespace DataAccessLayer.Repositories
                 topLoanDealers= combinedLoans,
                 topPersonnel= topApplicantsByRank,
                 statusCounts= statuslist,
-                AgeGroups= ageGroupsData
+                AgeGroups= ageGroupsData,
+                MultipleLoans= combinedApplicantLoans,
+                LoanTypes= combinedLoanCountsByUnit
             };
         }
     }

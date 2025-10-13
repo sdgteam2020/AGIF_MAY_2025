@@ -1307,6 +1307,207 @@
             }
         }]
     });
+
+
+    //chart 12
+    const MultipleLoansChartCtx = $('#TopApplicantsMultipleLoansChart')[0].getContext('2d');
+
+    const topApplicantsChart = new Chart(MultipleLoansChartCtx, {
+        type: 'line',
+        data: { datasets: [] },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Top 20 Applicants with Multiple Loans Over Time',
+                    font: { size: 16 }
+                },
+                legend: {
+                    position: 'right',
+                    labels: {
+                        boxWidth: 12,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const point = context.raw;
+                            return `${context.dataset.label}: Loan #${point.y} on ${point.dateString}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    type: 'linear',
+                    title: {
+                        display: true,
+                        text: 'Year',
+                        font: { weight: 'bold', size: 14 }
+                    },
+                    ticks: {
+                        stepSize: 1,
+                        callback: function (value) {
+                            return Math.floor(value);
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Cumulative Loan Count',
+                        font: { weight: 'bold', size: 14 }
+                    },
+                    ticks: { stepSize: 1 }
+                }
+            },
+            animation: {
+                duration: 1500,
+                easing: 'easeInOutQuart'
+            }
+        }
+    });
+
+    //chart 13
+    const comparisonChartCtx = $('#LoancomparisonChart')[0].getContext('2d');
+
+    //const comparisonChart = new Chart(comparisonChartCtx, {
+    //    type: 'bar',
+    //    data: { datasets: [] },  // The datasets will be populated dynamically
+    //    options: {
+    //        responsive: true,
+    //        maintainAspectRatio: false,
+    //        plugins: {
+    //            title: {
+    //                display: true,
+    //                text: 'Comparison of Loan Types by Unit',
+    //                font: { size: 16 }
+    //            },
+    //            legend: {
+    //                position: 'top',
+    //                labels: {
+    //                    boxWidth: 12,
+    //                    font: { size: 10 }
+    //                }
+    //            },
+    //            tooltip: {
+    //                callbacks: {
+    //                    label: function (context) {
+    //                        const point = context.raw;
+    //                        return `${context.dataset.label}: ${point}`;
+    //                    }
+    //                }
+    //            }
+    //        },
+    //        scales: {
+    //            x: {
+    //                stacked: true,
+    //                title: { display: true, text: 'Unit Name' }
+    //            },
+    //            y: {
+    //                stacked: true,
+    //                beginAtZero: true,
+    //                title: { display: true, text: 'Loan Count' }
+    //            }
+    //        },
+    //        animation: { duration: 1500, easing: 'easeInOutQuart' }
+    //    }
+    //});
+
+    const comparisonChart = new Chart(comparisonChartCtx, {
+        type: 'bar',
+        data: { datasets: [] },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparison of Loan Types by Unit',
+                    font: { size: 16 }
+                },
+                legend: {
+                    position: 'top',
+                    labels: {
+                        boxWidth: 12,
+                        font: { size: 12 }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.dataset.label}: ${context.parsed.y}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    title: {
+                        display: true,
+                        text: 'Unit Name',
+                        font: { weight: 'bold', size: 14 }
+                    },
+                    //ticks: {
+                    //    maxRotation: 45,
+                    //    minRotation: 45,
+                    //    font: { size: 11 }
+                    //}
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Loan Count',
+                        font: { weight: 'bold', size: 14 }
+                    },
+                    ticks: {
+                        stepSize: 0
+                    }
+                }
+            },
+            animation: { duration: 1500, easing: 'easeInOutQuart' }
+        },
+        plugins: [{
+            id: 'stackedBarLabels',
+            afterDatasetsDraw: function (chart) {
+                const ctx = chart.ctx;
+
+                chart.data.datasets.forEach((dataset, datasetIndex) => {
+                    const meta = chart.getDatasetMeta(datasetIndex);
+
+                    if (!meta.hidden) {
+                        meta.data.forEach((bar, index) => {
+                            const value = dataset.data[index];
+
+                            // Only show label if value > 0
+                            if (value > 0) {
+                                // Calculate position
+                                const x = bar.x;
+                                const y = bar.y + (bar.height / 2); // Center of the bar segment
+
+                                // Set text style
+                                ctx.fillStyle = '#000'; // White text
+                                ctx.font = 'bold 11px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.textBaseline = 'middle';
+
+                                // Draw text
+                                ctx.fillText(value.toString(), x, y);
+                            }
+                        });
+                    }
+                });
+            }
+        }]
+    });
+    
     // ---- Data loader (both charts) ----
 
 
@@ -1607,6 +1808,141 @@
             ageGroupsChart.data.datasets[0].backgroundColor = agecolors;
 
             ageGroupsChart.update();
+
+
+            //chart 12
+            const multipleLoans = resp.data.multipleLoans;
+
+            //const datasets = multipleLoans.map((app, idx) => ({
+            //    label: `${app.rank} ${app.applicantName}`,
+            //    data: app.loanDates.map((d, i) => ({ x: new Date(d), y: i + 1 })),
+            //    fill: false,
+            //    borderColor: `hsl(${idx * 18}, 70%, 50%)`,
+            //    backgroundColor: `hsl(${idx * 18}, 70%, 50%)`,
+            //    tension: 0.3
+            //}));
+
+            ////// Update chart
+            //topApplicantsChart.data.datasets = datasets;
+            //topApplicantsChart.update();
+            const datasets = multipleLoans.map((app, idx) => {
+                console.log(`Processing applicant ${idx}:`, app);
+                console.log('Loan Dates:', app.loanDates);
+
+                // Filter and parse valid dates only
+                const points = (app.loanDates || [])
+                    .filter(dateStr => dateStr != null && dateStr !== '')  // Remove null/empty
+                    .map((dateStr, i) => {
+                        // Try to parse the date
+                        let date;
+
+                        // Handle different date formats
+                        if (typeof dateStr === 'string') {
+                            // ISO format: "2023-05-15T10:30:00"
+                            date = new Date(dateStr);
+                        } else if (typeof dateStr === 'object' && dateStr !== null) {
+                            // Already a date object
+                            date = dateStr;
+                        } else {
+                            console.warn('Invalid date format:', dateStr);
+                            return null;
+                        }
+
+                        // Validate the date
+                        if (isNaN(date.getTime())) {
+                            console.warn('Invalid date:', dateStr);
+                            return null;
+                        }
+
+                        const year = date.getFullYear() + (date.getMonth() / 12);
+                        const dateString = date.toLocaleDateString('en-IN', {
+                            day: '2-digit',
+                            month: 'short',
+                            year: 'numeric'
+                        });
+
+                        console.log(`Date ${i}: ${dateStr} -> ${dateString} (year: ${year.toFixed(2)})`);
+
+                        return {
+                            x: year,
+                            y: i + 1,
+                            dateString: dateString
+                        };
+                    })
+                    .filter(point => point !== null);  // Remove invalid dates
+
+                console.log(`Valid points for ${app.applicantName}:`, points);
+
+                if (points.length === 0) {
+                    console.warn(`No valid dates for applicant: ${app.applicantName}`);
+                }
+
+                return {
+                    label: `${app.rank || ''} ${app.applicantName}`,
+                    data: points,
+                    fill: false,
+                    borderColor: `hsl(${idx * 18}, 70%, 50%)`,
+                    backgroundColor: `hsl(${idx * 18}, 70%, 50%)`,
+                    borderWidth: 2,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                };
+            }).filter(dataset => dataset.data.length > 0);  // Only include datasets with data
+
+            console.log('Final Datasets:', datasets);
+
+            if (datasets.length === 0) {
+                console.error('No valid datasets to display');
+                return;
+            }
+
+            topApplicantsChart.data.datasets = datasets;
+            topApplicantsChart.update();
+
+
+            //chart 13
+            const loanDataByUnit = resp.data.loanTypes;  // Assuming `resp.data` contains the loan data
+
+            // Prepare the datasets
+            const Compdatasets = [
+                {
+                    label: 'Car Loans',
+                    data: loanDataByUnit.map(unit => unit.caCount),
+                    backgroundColor: 'rgba(0, 123, 255, 0.8)',
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    stack: 'LoanTypes'
+                },
+                {
+                    label: 'PCA Loans',
+                    data: loanDataByUnit.map(unit => unit.pcaCount),
+                    backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    stack: 'LoanTypes'
+                },
+                {
+                    label: 'HBA Loans',
+                    data: loanDataByUnit.map(unit => unit.hbaCount),
+                    backgroundColor: 'rgba(255, 193, 7, 0.8)',
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    stack: 'LoanTypes'
+                }
+            ];
+
+            // Prepare labels (unit names)
+            const labels = loanDataByUnit.map(unit => unit.unitName);
+
+            // Update chart data
+            comparisonChart.data.labels = labels;
+
+        
+            comparisonChart.data.datasets = Compdatasets;
+
+            // Update the chart
+            comparisonChart.update();
         });
     }
 
