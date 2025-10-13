@@ -9,6 +9,8 @@ namespace DataTransferObject.Response
     public class CommonDataonlineResponse
     {
         public int ApplicationType;
+
+        public int ApplicantType;
         public string ApplicationTypeName { get; set; }
         public string ApplicationTypeAbbr { get; set; }
 

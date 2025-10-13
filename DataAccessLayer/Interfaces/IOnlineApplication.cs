@@ -50,5 +50,7 @@ namespace DataAccessLayer.Interfaces
         Task<int> GetVehicleType(int applicationId, string formType);
 
         Task<int?> GetLatestApplicationIdByArmyNo(string armyNo);
+
+        DTOCommonOnlineApplicationResponse GetApplicationAndApplicantType(int applicationId);
     }
 }

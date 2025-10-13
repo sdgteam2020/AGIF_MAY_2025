@@ -4,9 +4,12 @@
     ViewData["Title"] = "Application Form";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 
+
+
     string loanType = Model?.loantype ?? TempData["loantypeNew"] as string ?? "CA";
     string applicantCategory = Model?.applicantCategory ?? TempData["applicantcategoryNew"] as string ?? "Officer";
     string loanTypeText = "";
+    int applicationid = TempData["applicationid"] != null ? (int)TempData["applicationid"] : 0;
     if(loanType == "1")
     {
         loanTypeText = "House Loan (HBA)";
@@ -1376,6 +1379,7 @@
             <input type="hidden" id="loanType" name="loanType" value=@loanType />
             <input type="hidden" id="applicantCategory" name="applicantCategory" value=@applicantCategory />
             <input type="hidden" id="COArmyNo" name="COArmyNo" value=@Model.COArmyNo />
+            <input type="hidden" id="applicationid" name="applicationid" value=@applicationid />
 
             <div id="unitSearchDialog" class="uploadDialog d-none">
                 <div class="dialog-box w-668">

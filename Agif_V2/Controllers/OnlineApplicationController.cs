@@ -50,21 +50,36 @@ namespace Agif_V2.Controllers
             _watermark = watermark;
         }
         [HttpGet]
-        public IActionResult OnlineApplication()
+        public IActionResult OnlineApplication(int id)
         {
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
+            TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType ?? string.Empty);
+            TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory ?? string.Empty);
+            TempData["applicationId"] = id;
+            var response= new DTOCommonOnlineApplicationResponse();
+            response = null;
 
-            TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType);
+            DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
 
-            TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory);
+            if (id!=0)
+            {
+                response = _IonlineApplication1.GetApplicationAndApplicantType(id);
+            }
 
-
+            if(response!=null)
+            {
+                DTOOnlineapplication.loantype = response.OnlineApplicationResponse.ApplicationType.ToString();
+                DTOOnlineapplication.applicantCategory = response.OnlineApplicationResponse.ApplicantType.ToString();
+            }
+         
+            
             TempData.Keep("LoanType");
             TempData.Keep("ApplicantCategory");
 
-            DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
+
+          
             return View(DTOOnlineapplication);
         }
         public IActionResult LoanType()
@@ -613,6 +628,12 @@ namespace Agif_V2.Controllers
             }
 
             DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
+            return Json(data.OnlineApplicationResponse);
+        }
+
+        public async Task<JsonResult> GetDataByApplicationId(int applicationId)
+        {
+           DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
             return Json(data.OnlineApplicationResponse);
         }
     }

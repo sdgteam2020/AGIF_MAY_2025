@@ -21,6 +21,7 @@ $(document).ready(function () {
     filterCALoanFreqOptions();
     accordionAutoOpenClose();
     findDataWithArmyNumber();
+    findDataWithApplicationId();
 });
 function accordionAutoOpenClose() {
     $('.accordion').on('keydown', '.last-input', function (e) {
@@ -2254,4 +2255,75 @@ function findDataWithArmyNumber() {
             });
         }
     });
+}
+
+function findDataWithApplicationId() {
+
+    const applicationid = $('#applicationid').val();
+
+    if (applicationid!= 0) {
+            $.ajax({
+                url: '/OnlineApplication/GetDataByApplicationId',
+                type: 'GET',
+                data: { applicationid: applicationid },
+                success: function (data) {
+                    if (data) {
+                        setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
+                        setInputValueWithFloatingLabel('armyNumber', data.number);
+                        setInputValueWithFloatingLabel('txtSuffix', data.suffix);
+                        setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
+                        setInputValueWithFloatingLabel('oldArmyNo', data.oldNumber);
+                        setInputValueWithFloatingLabel('txtOldSuffix', data.oldSuffix);
+                        setInputValueWithFloatingLabel('dateOfCommission', data.dateOfCommission);
+                        setInputValueWithFloatingLabel('dateOfPromotion', data.dateOfPromotion);
+                        setInputValueWithFloatingLabel('dateOfRetirement', data.dateOfRetirement);
+                        setInputValueWithFloatingLabel('aadharCardNo', data.aadharCardNo);
+                        setInputValueWithFloatingLabel('panCardNo', data.panCardNo);
+                        setInputValueWithFloatingLabel('mobileNo', data.mobileNo);
+                        setInputValueWithFloatingLabel('emailId', data.emailId);
+                        setInputValueWithFloatingLabel('totalService', data.totalService);
+                        setInputValueWithFloatingLabel('residualService', data.residualService);
+                        setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
+                        setInputValueWithFloatingLabel('dateOfBirth', data.dateOfBirth);
+
+                        //$('#txtApplicantName').val(data.applicantName);
+                        //$('#armyNumber').val(data.number);
+                        //$('#txtSuffix').val(data.txtSuffix);
+
+                        $('#armyPrefix').val(data.armyPrefix).trigger('change');
+                        $('#oldArmyPrefix').val(data.oldArmyPrefix).trigger('change');
+
+                        //$('#oldArmyNo').val(data.oldNumber);
+                        //$('#txtOldSuffix').val(data.oldSuffix);
+                        //$('#dateOfBirth').val(data.dateOfBirth);
+                        //$('#dateOfBirth').addClass('active');
+
+
+                        //$('#dateOfCommission').val(data.dateOfCommission);
+                        //$('#dateOfPromotion').val(data.dateOfPromotion);
+                        //$('#dateOfRetirement').val(data.dateOfRetirement);
+                        //$('#dateOfRetirement').val(data.dateOfRetirement);
+                        //$('#aadharCardNo').val(data.aadharCardNo);
+                        //$('#panCardNo').val(data.panCardNo);
+                        //$('#mobileNo').val(data.mobileNo);
+                        //$('#emailId').val(data.email);
+                        //$('#totalService').val(data.totalService);
+                        //$('#residualService').val(data.residualService);
+                        //$('#pcda_pao').val(data.residualService);
+
+
+
+
+                        console.log(data);
+                    }
+                    else {
+                        console.log("Data not found for the provided Army Number.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
+
 }

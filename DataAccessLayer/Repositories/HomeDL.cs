@@ -199,6 +199,8 @@ namespace DataAccessLayer.Repositories
                             })
                            .Take(10)
                            .ToListAsync();
+      
+
 
             //chart 6
             // Step 1: Get all loan data in one query

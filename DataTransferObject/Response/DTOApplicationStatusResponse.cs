@@ -18,5 +18,7 @@ namespace DataTransferObject.Response
 
         public int StatusId { get; set; }
 
+        public string Remarks { get; set; }=string.Empty;
+
     }
 }

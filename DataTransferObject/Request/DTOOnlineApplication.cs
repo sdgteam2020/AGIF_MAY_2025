@@ -14,7 +14,7 @@ namespace DataTransferObject.Request
         public HBAApplicationModel? HBAApplication { get; set; }
         public AccountDetailsModel? AccountDetails { get; set; }
         public AddressDetailsModel? AddressDetails { get; set; }
-        public CommonDataModel CommonData { get; set; }
+        public CommonDataModel? CommonData { get; set; }
 
         public string? loantype { get; set; }
 

@@ -65,6 +65,7 @@ namespace DataAccessLayer.Repositories
                                     ApplicationType = applicationType.ApplicationTypeName,
                                     Status = status.StatusName.ToString(),
                                     StatusId = status.StatusId,
+                                    Remarks= appl.AGIFRemarks ?? string.Empty
                                 }).ToListAsync();
 
             return await Task.FromResult(applications);

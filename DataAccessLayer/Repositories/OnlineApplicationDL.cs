@@ -42,7 +42,7 @@ namespace DataAccessLayer.Repositories
 
             return table;
         }
-
+        
     }
     public class OnlineApplicationDL : GenericRepositoryDL<CommonDataModel>, IOnlineApplication
     {
@@ -946,5 +946,27 @@ namespace DataAccessLayer.Repositories
             data.OnlineApplicationResponse = result;
                     return Task.FromResult(data);
         }
+        public DTOCommonOnlineApplicationResponse GetApplicationAndApplicantType(int applicationId)
+        {
+            var result = _context.trnApplications
+                .Where(a => a.ApplicationId == applicationId)
+                .Select(a => new { a.ApplicationType, a.ApplicantType })
+                .FirstOrDefault(); // ❌ no await / async needed
+
+            var response = new DTOCommonOnlineApplicationResponse();
+
+            if (result != null)
+            {
+                response.OnlineApplicationResponse = new CommonDataonlineResponse
+                {
+                    ApplicationType = result.ApplicationType,
+                    ApplicantType = result.ApplicantType
+                };
+            }
+
+            return response;
+        }
+
+
     }
 }

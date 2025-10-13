@@ -72,13 +72,25 @@
 
         $.each(applications, function (index, app) {
             const safeAppId = (app.applicationId !== undefined && app.applicationId !== null) ? app.applicationId : index;
+
+            // Conditional extra button for statusId = 103
+            let extraButtonHtml = '';
+            if (app.statusId === 1003) {
+                extraButtonHtml = `
+                <button class="btn btn-warning ms-2 extra-btn btn-custom editapp" type="button"
+                        data-app-id="${safeAppId}">
+                    Edit Application
+                </button>
+            `;
+            }
+
             const rowHtml = `
                 <tr>
                     <td >${app.applicationType || 'N/A'}</td>
                     <td>
                         <span class=" ${getStatusBadgeClass(app.statusId)} statusList">${app.status || 'Unknown'}</span>
                     </td>
-                    <td>
+                    <td class="d-flex align-items-center">
                         <button class="btn btn-custom timeline-btn " type="button"
                                 data-app-id="${safeAppId}" 
                                 data-bs-toggle="collapse" 
@@ -87,7 +99,10 @@
                                 aria-controls="timeline-${safeAppId}">
                             <i class="fas fa-calendar-check"></i> Application Timeline
                         </button>
+                         ${extraButtonHtml}
                     </td>
+                                        <td class="statusList">${app.remarks || 'N/A'}</td>
+
                 </tr>
                 <tr class="collapse" id="timeline-${safeAppId}">
                     <td colspan="3">
@@ -103,6 +118,15 @@
             tbody.append(rowHtml);
         });
     }
+
+
+    $(document).on('click', '.editapp', function () {
+        // Adjust the URL according to your routing
+        const appId = $(this).data('app-id');  // Get application ID from button
+        if (!appId) return;
+
+        window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
+      });
 
     $(document).on('click', '.timeline-btn', function () {
         const appId = $(this).data('app-id');
