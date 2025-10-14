@@ -274,6 +274,9 @@ else
                                                             <button type="button" class="btn btn-secondary btn-sm text-nowrap" data-bs-dismiss="modal">
                                                                 <i class="bi bi-x-lg me-1"></i> Cancel
                                                             </button>
+                                                            <button type="button" id="applicantsHistory" class="btn btn-info btn-sm text-nowrap">
+                                                                <i class="bi bi-eye-fill me-1"></i>Applicant History
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -283,6 +286,70 @@ else
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ApplicantHistoryModal" tabindex="-1" aria-labelledby="ApplicantHistoryLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header text-white">
+                    <h5 class="modal-title fw-bold text-white" id="ApplicantHistoryLabel">
+                        <i class="bi bi-clock-history me-2"></i>
+                        Applicant History
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-0">
+                    <div class="card border-0">
+                        <div class="card-header bg-light border-bottom">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-person-badge me-2 text-primary"></i>
+                                        <strong>Name:</strong> <span id="applicantName">John Doe</span> |
+                                        <strong>Army No:</strong> <span id="applicantArmyNo">12345678</span>
+                                    </h6>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="text" id="searchHistory" class="form-control form-control-sm" placeholder="Search history...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped mb-0" id="historyTable">
+                                    <thead class="table-dark sticky-top">
+                                        <tr>
+                                            <th style="width: 8%;">Ser No.</th>
+                                            <th style="width: 15%;">Army No</th>
+                                            <th style="width: 20%;">Name</th>
+                                            <th style="width: 20%;">Application Type</th>
+                                            <th style="width: 15%;">Status</th>
+                                            <th style="width: 22%;">Date & Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="historyTableBody">
+                                        <!-- Data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Total Records: <strong id="totalRecords">0</strong>
+                                </small>
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+                                    <i class="bi bi-x-lg me-1"></i> Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -309,6 +376,130 @@ else
     <script src="~/lib/datatables.net-buttons-bs5/js/buttons.bootstrap5.min.js"></script>
 
 }
+<script>
+    $(document).ready(function () {
+        // Sample data - Replace this with your actual data source
+        const applicantHistoryData = [
+            {
+                serNo: 1,
+                armyNo: "12345678",
+                name: "John Doe",
+                applicationType: "Leave Application",
+                status: "Approved",
+                datetime: "2025-10-12 14:30:00"
+            },
+            {
+                serNo: 2,
+                armyNo: "12345678",
+                name: "John Doe",
+                applicationType: "Medical Reimbursement",
+                status: "Pending",
+                datetime: "2025-10-10 09:15:00"
+            },
+            {
+                serNo: 3,
+                armyNo: "12345678",
+                name: "John Doe",
+                applicationType: "Travel Allowance",
+                status: "Approved",
+                datetime: "2025-10-08 16:45:00"
+            },
+            {
+                serNo: 4,
+                armyNo: "12345678",
+                name: "John Doe",
+                applicationType: "Advance Payment",
+                status: "Rejected",
+                datetime: "2025-10-05 11:20:00"
+            },
+            {
+                serNo: 5,
+                armyNo: "12345678",
+                name: "John Doe",
+                applicationType: "Housing Application",
+                status: "Approved",
+                datetime: "2025-10-01 10:00:00"
+            }
+        ];
+
+        // Function to get status badge class
+        function getStatusClass(status) {
+            switch (status.toLowerCase()) {
+                case 'approved':
+                    return 'status-approved';
+                case 'pending':
+                    return 'status-pending';
+                case 'rejected':
+                    return 'status-rejected';
+                default:
+                    return 'status-pending';
+            }
+        }
+
+        // Function to populate table
+        function populateHistoryTable(data) {
+            const $tbody = $('#historyTableBody');
+            $tbody.empty();
+
+            if (data.length === 0) {
+                $tbody.html('<tr><td colspan="6" class="text-center py-4 text-muted">No records found</td></tr>');
+                return;
+            }
+
+            $.each(data, function (index, record) {
+                const row = `
+                        <tr>
+                            <td class="text-center">${record.serNo}</td>
+                            <td>${record.armyNo}</td>
+                            <td>${record.name}</td>
+                            <td>${record.applicationType}</td>
+                            <td>
+                                <span class="status-badge ${getStatusClass(record.status)}">
+                                    ${record.status}
+                                </span>
+                            </td>
+                            <td>${record.datetime}</td>
+                        </tr>
+                    `;
+                $tbody.append(row);
+            });
+
+            $('#totalRecords').text(data.length);
+        }
+
+        // Search functionality
+        $('#searchHistory').on('input', function () {
+            const searchTerm = $(this).val().toLowerCase();
+            const filteredData = applicantHistoryData.filter(record => {
+                return record.armyNo.toLowerCase().includes(searchTerm) ||
+                    record.name.toLowerCase().includes(searchTerm) ||
+                    record.applicationType.toLowerCase().includes(searchTerm) ||
+                    record.status.toLowerCase().includes(searchTerm);
+            });
+            populateHistoryTable(filteredData);
+        });
+
+        // Open modal when clicking Applicant History button
+        $('#applicantsHistory').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Populate table with data
+            populateHistoryTable(applicantHistoryData);
+
+            // Show the modal without hiding the current one
+            const historyModal = new bootstrap.Modal($('#ApplicantHistoryModal')[0], {
+                backdrop: 'static'
+            });
+            historyModal.show();
+        });
+
+        // Load initial data when modal is shown
+        $('#ApplicantHistoryModal').on('shown.bs.modal', function () {
+            populateHistoryTable(applicantHistoryData);
+        });
+    });
+</script>
 
 
 <script src="~/devjs/usersapplications.js"></script>

@@ -880,8 +880,6 @@ namespace DataAccessLayer.Repositories
                           from prefix in prefixGroup.DefaultIfEmpty()
                           join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
                           from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
-                          join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
-                          from rank in rankGroup.DefaultIfEmpty()
                           join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
                           from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
                           join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
@@ -912,13 +910,13 @@ namespace DataAccessLayer.Repositories
                               OldArmyPrefix = common.OldArmyPrefix,
                               OldNumber = common.OldNumber,
                               OldSuffix = common.OldSuffix ?? string.Empty,
-                              DdlRank = rank != null ? rank.RankName : string.Empty,
+                              RankId = common.DdlRank,
                               ApplicantName = common.ApplicantName ?? string.Empty,
                               DateOfBirth = common.DateOfBirth,
                               DateOfCommission = common.DateOfCommission,
                               NextFmnHQ = common.NextFmnHQ ?? string.Empty,
-                              ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
-                              RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                              ArmyPostOfficeId = common.ArmyPostOffice,
+                              RegtCorpsId = common.RegtCorps,
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
@@ -940,7 +938,27 @@ namespace DataAccessLayer.Repositories
                               ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo,
                               UpdatedOn = common.UpdatedOn.ToString(),
                               EmailDomain = common.EmailDomain ?? string.Empty,
-
+                              BasicPay = common.BasicPay,
+                              rank_gradePay = common.rank_gradePay,
+                              Msp = common.Msp,
+                              npax_Pay = common.npax_Pay,
+                              Da = common.Da,
+                              MiscPay = common.MiscPay,
+                              Pli = common.Pli,
+                              agif_Subs = common.agif_Subs,
+                              IncomeTaxMonthly = common.IncomeTaxMonthly,
+                              EducationCess = common.EducationCess,
+                              LoanEmi = common.LoanEmi,
+                              loanEMI_Outside = common.loanEMI_Outside,
+                              misc_Deduction = common.misc_Deduction,
+                              TotalCredit = common.TotalCredit,
+                              salary_After_Deductions = common.salary_After_Deductions,
+                              CI_Pay = common.CI_Pay,
+                              TechPay = common.TechPay,
+                              Pmha = common.Pmha,
+                              Lra = common.Lra,
+                              dsop_afpp = common.dsop_afpp,
+                              TotalDeductions = common.TotalDeductions,
 
                           }).FirstOrDefault();
             data.OnlineApplicationResponse = result;

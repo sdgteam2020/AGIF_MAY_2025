@@ -2203,46 +2203,74 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
                         setInputValueWithFloatingLabel('oldArmyNo', data.oldNumber);
                         setInputValueWithFloatingLabel('txtOldSuffix', data.oldSuffix);
-                        setInputValueWithFloatingLabel('dateOfCommission', data.dateOfCommission);
-                        setInputValueWithFloatingLabel('dateOfPromotion', data.dateOfPromotion);
-                        setInputValueWithFloatingLabel('dateOfRetirement', data.dateOfRetirement);
                         setInputValueWithFloatingLabel('aadharCardNo', data.aadharCardNo);
                         setInputValueWithFloatingLabel('panCardNo', data.panCardNo);
                         setInputValueWithFloatingLabel('mobileNo', data.mobileNo);
-                        setInputValueWithFloatingLabel('emailId', data.emailId);
+                        setInputValueWithFloatingLabel('emailId', data.email);
                         setInputValueWithFloatingLabel('totalService', data.totalService);
                         setInputValueWithFloatingLabel('residualService', data.residualService);
+                        //Unit Details
                         setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
+                        setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
+                        setInputValueWithFloatingLabel('presentUnitPin', data.presentUnitPin);
+                        setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
+                        setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
+                        //Permanent Address Details
+                        setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
+                        setInputValueWithFloatingLabel('postOffice', data.postOffice);
+                        setInputValueWithFloatingLabel('distt', data.distt);
+                        setInputValueWithFloatingLabel('state', data.state);
+                        setInputValueWithFloatingLabel('Code', data.code);
+                        //Salary Account Details
+                        setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
+                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
+                        setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
+                        setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
+                        setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
+                        //salary details
+                        //setInputValueWithFloatingLabel('basicPay', data.basicPay);
+                        //setInputValueWithFloatingLabel('rank_gradePay', data.rank_gradePay);
+                        //setInputValueWithFloatingLabel('msp', data.msp);
+                        //setInputValueWithFloatingLabel('npax_Pay', data.npax_Pay);
+                        //setInputValueWithFloatingLabel('da', data.da);
+                        //setInputValueWithFloatingLabel('miscPay', data.miscPay);
+                        //setInputValueWithFloatingLabel('pli', data.pli);
+                        //setInputValueWithFloatingLabel('agif_Subs', data.agif_Subs);
+                        //setInputValueWithFloatingLabel('incomeTaxMonthly', data.incomeTaxMonthly);
+                        //setInputValueWithFloatingLabel('educationCess', data.educationCess);
+                        //setInputValueWithFloatingLabel('loanEmi', data.loanEmi);
+                        //setInputValueWithFloatingLabel('loanEMI_Outside', data.loanEMI_Outside);
+                        //setInputValueWithFloatingLabel('misc_Deduction', data.misc_Deduction);
+                        //setInputValueWithFloatingLabel('totalCredit', data.totalCredit);
+                        //setInputValueWithFloatingLabel('salary_After_Deductions', data.salary_After_Deductions);
+                        //setInputValueWithFloatingLabel('cI_Pay', data.cI_Pay);
+                        //setInputValueWithFloatingLabel('techPay', data.techPay);
+                        //setInputValueWithFloatingLabel('pmha', data.pmha);
+                        //setInputValueWithFloatingLabel('lra', data.lra);
+                        //setInputValueWithFloatingLabel('dsop_afpp', data.dsop_afpp);
+                        //setInputValueWithFloatingLabel('totalDeductions', data.totalDeductions);
 
-
-                        //$('#txtApplicantName').val(data.applicantName);
-                        //$('#armyNumber').val(data.number);
-                        //$('#txtSuffix').val(data.txtSuffix);
 
 
                         $('#oldArmyPrefix').val(data.oldArmyPrefix).trigger('change');
+                        $('#ddlrank').val(data.rankId).trigger('change');
+                        $('#regtCorps').val(data.regtCorpsId).trigger('change');
+                        $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
+                        $('#emailDomain').val(data.emailDomain).trigger('change');
+                        //const formattedDOB = formatDateToDDMMYYYY(data.dateOfBirth);
+                        //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
+                        ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
+                        ////$('#dateOfCommission').val(formatDateToDDMMYYYY(data.dateOfCommission));
+                        //const formattedDOC = formatDateToDDMMYYYY(data.dateOfCommission);
+                        //setInputValueWithFloatingLabel('dateOfCommission', formattedDOC);
+                        ////$('#dateOfPromotion').val(formatDateToDDMMYYYY(data.dateOfPromotion));
+                        //const formattedDOP = formatDateToDDMMYYYY(data.dateOfPromotion);
+                        //setInputValueWithFloatingLabel('dateOfPromotion', formattedDOP);
+                        ////$('#dateOfRetirement').val(formatDateToDDMMYYYY(data.dateOfRetirement));
+                        //const dateOfRetirement = formatDateToDDMMYYYY(data.dateOfRetirement);
+                        //console.log(dateOfRetirement);
+                        //setInputValueWithFloatingLabel('dateOfRetirement', dateOfRetirement);
 
-                        //$('#oldArmyNo').val(data.oldNumber);
-                        //$('#txtOldSuffix').val(data.oldSuffix);
-                        //$('#dateOfBirth').val(data.dateOfBirth);
-                        //$('#dateOfBirth').addClass('active');
-
-
-                        //$('#dateOfCommission').val(data.dateOfCommission);
-                        //$('#dateOfPromotion').val(data.dateOfPromotion);
-                        //$('#dateOfRetirement').val(data.dateOfRetirement);
-                        //$('#dateOfRetirement').val(data.dateOfRetirement);
-                        //$('#aadharCardNo').val(data.aadharCardNo);
-                        //$('#panCardNo').val(data.panCardNo);
-                        //$('#mobileNo').val(data.mobileNo);
-                        //$('#emailId').val(data.email);
-                        //$('#totalService').val(data.totalService);
-                        //$('#residualService').val(data.residualService);
-                        //$('#pcda_pao').val(data.residualService);
-
-
-
-                        
                         console.log(data);
                     }
                     else {
@@ -2268,51 +2296,80 @@ function findDataWithApplicationId() {
                 data: { applicationid: applicationid },
                 success: function (data) {
                     if (data) {
+                        
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
                         setInputValueWithFloatingLabel('armyNumber', data.number);
                         setInputValueWithFloatingLabel('txtSuffix', data.suffix);
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
                         setInputValueWithFloatingLabel('oldArmyNo', data.oldNumber);
                         setInputValueWithFloatingLabel('txtOldSuffix', data.oldSuffix);
-                        setInputValueWithFloatingLabel('dateOfCommission', data.dateOfCommission);
-                        setInputValueWithFloatingLabel('dateOfPromotion', data.dateOfPromotion);
-                        setInputValueWithFloatingLabel('dateOfRetirement', data.dateOfRetirement);
                         setInputValueWithFloatingLabel('aadharCardNo', data.aadharCardNo);
                         setInputValueWithFloatingLabel('panCardNo', data.panCardNo);
                         setInputValueWithFloatingLabel('mobileNo', data.mobileNo);
-                        setInputValueWithFloatingLabel('emailId', data.emailId);
+                        setInputValueWithFloatingLabel('emailId', data.email);
                         setInputValueWithFloatingLabel('totalService', data.totalService);
                         setInputValueWithFloatingLabel('residualService', data.residualService);
+                        //Unit Details
                         setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
-                        setInputValueWithFloatingLabel('dateOfBirth', data.dateOfBirth);
+                        setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
+                        setInputValueWithFloatingLabel('presentUnitPin', data.presentUnitPin);
+                        setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
+                        setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
+                        //Permanent Address Details
+                        setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
+                        setInputValueWithFloatingLabel('postOffice', data.postOffice);
+                        setInputValueWithFloatingLabel('distt', data.distt);
+                        setInputValueWithFloatingLabel('state', data.state);
+                        setInputValueWithFloatingLabel('Code', data.code);
+                        //Salary Account Details
+                        setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
+                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
+                        setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
+                        setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
+                        setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
+                        //salary details
+                        //setInputValueWithFloatingLabel('basicPay', data.basicPay);
+                        //setInputValueWithFloatingLabel('rank_gradePay', data.rank_gradePay);
+                        //setInputValueWithFloatingLabel('msp', data.msp);
+                        //setInputValueWithFloatingLabel('npax_Pay', data.npax_Pay);
+                        //setInputValueWithFloatingLabel('da', data.da);
+                        //setInputValueWithFloatingLabel('miscPay', data.miscPay);
+                        //setInputValueWithFloatingLabel('pli', data.pli);
+                        //setInputValueWithFloatingLabel('agif_Subs', data.agif_Subs);
+                        //setInputValueWithFloatingLabel('incomeTaxMonthly', data.incomeTaxMonthly);
+                        //setInputValueWithFloatingLabel('educationCess', data.educationCess);
+                        //setInputValueWithFloatingLabel('loanEmi', data.loanEmi);
+                        //setInputValueWithFloatingLabel('loanEMI_Outside', data.loanEMI_Outside);
+                        //setInputValueWithFloatingLabel('misc_Deduction', data.misc_Deduction);
+                        //setInputValueWithFloatingLabel('totalCredit', data.totalCredit);
+                        //setInputValueWithFloatingLabel('salary_After_Deductions', data.salary_After_Deductions);
+                        //setInputValueWithFloatingLabel('cI_Pay', data.cI_Pay);
+                        //setInputValueWithFloatingLabel('techPay', data.techPay);
+                        //setInputValueWithFloatingLabel('pmha', data.pmha);
+                        //setInputValueWithFloatingLabel('lra', data.lra);
+                        //setInputValueWithFloatingLabel('dsop_afpp', data.dsop_afpp);
+                        //setInputValueWithFloatingLabel('totalDeductions', data.totalDeductions);
 
-                        //$('#txtApplicantName').val(data.applicantName);
-                        //$('#armyNumber').val(data.number);
-                        //$('#txtSuffix').val(data.txtSuffix);
 
                         $('#armyPrefix').val(data.armyPrefix).trigger('change');
                         $('#oldArmyPrefix').val(data.oldArmyPrefix).trigger('change');
-
-                        //$('#oldArmyNo').val(data.oldNumber);
-                        //$('#txtOldSuffix').val(data.oldSuffix);
-                        //$('#dateOfBirth').val(data.dateOfBirth);
-                        //$('#dateOfBirth').addClass('active');
-
-
-                        //$('#dateOfCommission').val(data.dateOfCommission);
-                        //$('#dateOfPromotion').val(data.dateOfPromotion);
-                        //$('#dateOfRetirement').val(data.dateOfRetirement);
-                        //$('#dateOfRetirement').val(data.dateOfRetirement);
-                        //$('#aadharCardNo').val(data.aadharCardNo);
-                        //$('#panCardNo').val(data.panCardNo);
-                        //$('#mobileNo').val(data.mobileNo);
-                        //$('#emailId').val(data.email);
-                        //$('#totalService').val(data.totalService);
-                        //$('#residualService').val(data.residualService);
-                        //$('#pcda_pao').val(data.residualService);
-
-
-
+                        $('#ddlrank').val(data.rankId).trigger('change');
+                        $('#regtCorps').val(data.regtCorpsId).trigger('change');
+                        $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
+                        $('#emailDomain').val(data.emailDomain).trigger('change');
+                        //const formattedDOB = formatDateToDDMMYYYY(data.dateOfBirth);
+                        //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
+                        ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
+                        ////$('#dateOfCommission').val(formatDateToDDMMYYYY(data.dateOfCommission));
+                        //const formattedDOC = formatDateToDDMMYYYY(data.dateOfCommission);
+                        //setInputValueWithFloatingLabel('dateOfCommission', formattedDOC);
+                        ////$('#dateOfPromotion').val(formatDateToDDMMYYYY(data.dateOfPromotion));
+                        //const formattedDOP = formatDateToDDMMYYYY(data.dateOfPromotion);
+                        //setInputValueWithFloatingLabel('dateOfPromotion', formattedDOP);
+                        ////$('#dateOfRetirement').val(formatDateToDDMMYYYY(data.dateOfRetirement));
+                        //const dateOfRetirement = formatDateToDDMMYYYY(data.dateOfRetirement);
+                        //console.log(dateOfRetirement);
+                        //setInputValueWithFloatingLabel('dateOfRetirement', dateOfRetirement);
 
                         console.log(data);
                     }
@@ -2325,5 +2382,16 @@ function findDataWithApplicationId() {
                 }
             });
         }
+}
+function formatDateToDDMMYYYY(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
 
+    if (isNaN(date)) return ''; // invalid date check
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
 }

@@ -708,12 +708,16 @@ function rejectedApplication(applicationId, type) {
 function addBlurEffect() {
     const $modal1 = $('#ViewPdf');
     const $modal2 = $('#ApplicationAction');
+    const $modal3 = $('#ApplicantHistoryModal');
     
     $modal2.on('show.bs.modal', function () {
         $modal1.find('.modal-content').addClass('modal-blur');
     });
     
     $modal2.on('hidden.bs.modal', function () {
+        $modal1.find('.modal-content').removeClass('modal-blur');
+    });
+    $modal3.on('hidden.bs.modal', function () {
         $modal1.find('.modal-content').removeClass('modal-blur');
     });
 }

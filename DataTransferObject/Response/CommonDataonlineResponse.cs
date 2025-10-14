@@ -195,5 +195,8 @@ namespace DataTransferObject.Response
 
         public string? NoOfwithdrwal { get; set; }
         public string? UpdatedOn { get; set; }
+        public int RankId { get; set; }
+        public int ArmyPostOfficeId { get; set; }
+        public int RegtCorpsId { get; set; }
     }
 }
