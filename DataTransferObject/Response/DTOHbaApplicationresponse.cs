@@ -10,6 +10,7 @@ namespace DataTransferObject.Response
     {
         public string PropertyType { get; set; }
 
+        public int PropertyTypeId { get; set; }
 
         public string? PropertySeller { get; set; }
 

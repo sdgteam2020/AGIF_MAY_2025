@@ -634,7 +634,7 @@ namespace Agif_V2.Controllers
         public async Task<JsonResult> GetDataByApplicationId(int applicationId)
         {
            DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
-            return Json(data.OnlineApplicationResponse);
+            return Json(data);
         }
     }
 

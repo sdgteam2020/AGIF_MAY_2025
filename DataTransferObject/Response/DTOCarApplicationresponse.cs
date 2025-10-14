@@ -11,6 +11,8 @@ namespace DataTransferObject.Response
 
         public string? DealerName { get; set; }
         public string Veh_Loan_Type { get; set; }
+        public int Veh_Loan_TypeId { get; set; }
+        public int Vehical_Type { get; set; }
         public string? CompanyName { get; set; }
         public string? ModelName { get; set; }
         public int? VehicleCost { get; set; }

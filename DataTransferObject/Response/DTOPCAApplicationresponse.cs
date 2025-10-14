@@ -10,6 +10,8 @@ namespace DataTransferObject.Response
     {
         public string? PCA_dealerName { get; set; }
         public string computer_Loan_Type { get; set; }
+
+        public int computer_Loan_TypeId { get; set; }
         public string? PCA_companyName { get; set; }
         public string? PCA_modelName { get; set; }
 

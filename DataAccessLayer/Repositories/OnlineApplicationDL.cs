@@ -898,8 +898,10 @@ namespace DataAccessLayer.Repositories
                           where common.ApplicationId == applicationId
                           select new CommonDataonlineResponse
                           {
-                              ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
-                              PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
+                              ParentUnit = parentUnit != null ? $"{(parentUnit.Suffix ?? string.Empty)}{(parentUnit.Sus_no ?? string.Empty)}{' '}{parentUnit.UnitName}" : string.Empty,
+                              ParentUnitId=parentUnit != null ? parentUnit.UnitId : 0,
+                              PresentUnit = presentUnit != null ? $"{(presentUnit.Suffix ?? string.Empty)}{(presentUnit.Sus_no ?? string.Empty)}{' '}{presentUnit.UnitName}" : string.Empty,
+                              PresentUnitId = presentUnit != null ? presentUnit.UnitId : 0,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.ApplicationType,
                               ApplicationTypeName = applicationType.ApplicationTypeName,
@@ -961,15 +963,109 @@ namespace DataAccessLayer.Repositories
                               TotalDeductions = common.TotalDeductions,
 
                           }).FirstOrDefault();
-            data.OnlineApplicationResponse = result;
-                    return Task.FromResult(data);
+
+            if (result != null)
+            {
+                if (result.ApplicationType == 1)
+                {
+                    var Hbamodel = (from hba in _context.trnHBA
+                                    join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.Id into loanTypeGroup
+                                    from loanType in loanTypeGroup.DefaultIfEmpty()
+                                    where hba.ApplicationId == applicationId
+                                    select new DTOHbaApplicationresponse
+                                    {
+                                        PropertyType = loanType != null ? loanType.LoanType : string.Empty, // Getting LoanType from MLoanTypes
+                                        PropertyTypeId=hba.PropertyType,
+                                        PropertySeller = hba.PropertySeller ?? string.Empty,
+                                        PropertyAddress = hba.PropertyAddress,
+                                        PropertyCost = hba.PropertyCost,
+                                        HBA_LoanFreq = hba.HBA_LoanFreq,
+                                        HBA_Amt_Eligible_for_loan=hba.HBA_Amt_Eligible_for_loan,
+                                        HBA_Amount_Applied_For_Loan = hba.HBA_Amount_Applied_For_Loan,
+                                        HBA_EMI_Applied = hba.HBA_EMI_Applied,
+                                        HBA_approxEMIAmount = hba.HBA_approxEMIAmount,
+                                        HBA_repayingCapacity=hba.HBA_repayingCapacity,
+                                        HBA_EMI_Eligible=hba.HBA_EMI_Eligible,
+                                        HBA_approxDisbursementAmt=hba.HBA_approxDisbursementAmt
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.HbaApplicationResponse = Hbamodel;
+                }
+
+                else if (result.ApplicationType == 2)
+                {
+                    var Carmodel = (from car in _context.trnCar
+                                    join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
+                                    from loanType in loanTypeGroup.DefaultIfEmpty()
+                                    where car.ApplicationId == applicationId
+                                    select new DTOCarApplicationresponse
+                                    {
+                                        DealerName = car.DealerName,
+                                        Veh_Loan_Type = loanType != null ? loanType.LoanType : string.Empty, // Get LoanType from MLoanTypes
+                                        Veh_Loan_TypeId=car.Veh_Loan_Type,
+                                        Vehical_Type=car.VehTypeId,
+                                        CompanyName = car.CompanyName,
+                                        ModelName = car.ModelName,
+                                        CA_LoanFreq = car.CA_LoanFreq,
+                                        CA_Amount_Applied_For_Loan = car.CA_Amount_Applied_For_Loan,
+                                        VehicleCost = car.VehicleCost,
+                                        CA_approxEMIAmount = car.CA_approxEMIAmount,
+                                        DrivingLicenseNo=car.DrivingLicenseNo,
+                                        DL_IssuingAuth=car.DL_IssuingAuth,
+                                        Validity_Date_DL=car.Validity_Date_DL,
+                                        CA_Amt_Eligible_for_loan=car.CA_Amt_Eligible_for_loan,
+                                        CA_EMI_Eligible=car.CA_EMI_Eligible,
+                                        CA_repayingCapacity=car.CA_repayingCapacity,
+                                        CA_EMI_Applied=car.CA_EMI_Applied,
+                                        CA_approxDisbursementAmt=car.CA_approxDisbursementAmt
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result;
+                    data.CarApplicationResponse = Carmodel;
+                }
+                else if (result.ApplicationType == 3)
+                {
+                    var PcaModal = (from pca in _context.trnPCA
+                                    join loanType in _context.MLoanTypes on pca.computer_Loan_Type equals loanType.Id into loanTypeGroup
+                                    from loanType in loanTypeGroup.DefaultIfEmpty()
+                                    where pca.ApplicationId == applicationId
+                                    select new DTOPCAApplicationresponse
+                                    {
+                                        computer_Loan_Type = loanType != null ? loanType.LoanType : string.Empty, // Getting LoanType from MLoanTypes
+                                        computer_Loan_TypeId=pca.computer_Loan_Type,
+                                        PCA_dealerName = pca.PCA_dealerName,
+                                        PCA_companyName = pca.PCA_companyName,
+                                        computerCost = pca.computerCost,
+                                        PCA_LoanFreq = pca.PCA_LoanFreq,
+                                        PCA_modelName = pca.PCA_modelName,
+                                        PCA_Amount_Applied_For_Loan = pca.PCA_Amount_Applied_For_Loan,
+                                        PCA_EMI_Applied = pca.PCA_EMI_Applied,
+                                        PCA_approxEMIAmount = pca.PCA_approxEMIAmount,
+                                        PCA_Amt_Eligible_for_loan=pca.PCA_Amt_Eligible_for_loan,
+                                        PCA_EMI_Eligible=pca.PCA_EMI_Eligible,
+                                        PCA_repayingCapacity=pca.PCA_repayingCapacity,
+                                        PCA_approxDisbursementAmt=pca.PCA_approxDisbursementAmt
+                                        
+                                    }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.PcaApplicationResponse = PcaModal;
+                }
+                data.OnlineApplicationResponse = result;
+            }
+            return Task.FromResult(data);
         }
         public DTOCommonOnlineApplicationResponse GetApplicationAndApplicantType(int applicationId)
         {
             var result = _context.trnApplications
                 .Where(a => a.ApplicationId == applicationId)
                 .Select(a => new { a.ApplicationType, a.ApplicantType })
-                .FirstOrDefault(); // ❌ no await / async needed
+                .FirstOrDefault(); 
 
             var response = new DTOCommonOnlineApplicationResponse();
 

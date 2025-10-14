@@ -2210,11 +2210,17 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('totalService', data.totalService);
                         setInputValueWithFloatingLabel('residualService', data.residualService);
                         //Unit Details
+
                         setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
                         setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
+                        setInputValueWithFloatingLabel('ParenttxtUnit', data.parentUnit);
+                        setInputValueWithFloatingLabel('CommonData_ParentUnit', data.parentUnitId);
+                        setInputValueWithFloatingLabel('PresenttxtUnit', data.presentUnit);
+                        setInputValueWithFloatingLabel('CommonData_PresentUnit', data.presentUnitId);
                         setInputValueWithFloatingLabel('presentUnitPin', data.presentUnitPin);
                         setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
                         setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
+
                         //Permanent Address Details
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
@@ -2276,12 +2282,15 @@ function findDataWithArmyNumber() {
                     else {
                         console.log("Data not found for the provided Army Number.");
                     }
+
                 },
                 error: function (xhr, status, error) {
                     console.error("Error fetching data:", error);
                 }
             });
         }
+             getApplicantDetalis();
+
     });
 }
 
@@ -2297,36 +2306,42 @@ function findDataWithApplicationId() {
                 success: function (data) {
                     if (data) {
                         
-                        setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
-                        setInputValueWithFloatingLabel('armyNumber', data.number);
-                        setInputValueWithFloatingLabel('txtSuffix', data.suffix);
-                        setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
-                        setInputValueWithFloatingLabel('oldArmyNo', data.oldNumber);
-                        setInputValueWithFloatingLabel('txtOldSuffix', data.oldSuffix);
-                        setInputValueWithFloatingLabel('aadharCardNo', data.aadharCardNo);
-                        setInputValueWithFloatingLabel('panCardNo', data.panCardNo);
-                        setInputValueWithFloatingLabel('mobileNo', data.mobileNo);
-                        setInputValueWithFloatingLabel('emailId', data.email);
-                        setInputValueWithFloatingLabel('totalService', data.totalService);
-                        setInputValueWithFloatingLabel('residualService', data.residualService);
+                        setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
+                        setInputValueWithFloatingLabel('armyNumber', data.onlineApplicationResponse.number);
+                        setInputValueWithFloatingLabel('txtSuffix', data.onlineApplicationResponse.suffix);
+                        setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
+                        setInputValueWithFloatingLabel('oldArmyNo', data.onlineApplicationResponse.oldNumber);
+                        setInputValueWithFloatingLabel('txtOldSuffix', data.onlineApplicationResponse.oldSuffix);
+                        setInputValueWithFloatingLabel('aadharCardNo', data.onlineApplicationResponse.aadharCardNo);
+                        setInputValueWithFloatingLabel('panCardNo', data.onlineApplicationResponse.panCardNo);
+                        setInputValueWithFloatingLabel('mobileNo', data.onlineApplicationResponse.mobileNo);
+                        setInputValueWithFloatingLabel('emailId', data.onlineApplicationResponse.email);
+                        setInputValueWithFloatingLabel('totalService', data.onlineApplicationResponse.totalService);
+                        setInputValueWithFloatingLabel('residualService', data.onlineApplicationResponse.residualService);
                         //Unit Details
-                        setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
-                        setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
-                        setInputValueWithFloatingLabel('presentUnitPin', data.presentUnitPin);
-                        setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
-                        setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
+
+                        setInputValueWithFloatingLabel('pcda_pao', data.onlineApplicationResponse.pcda_pao);
+                        setInputValueWithFloatingLabel('pcda_AcctNo', data.onlineApplicationResponse.pcda_AcctNo);
+                        setInputValueWithFloatingLabel('ParenttxtUnit', data.onlineApplicationResponse.parentUnit);
+                        setInputValueWithFloatingLabel('CommonData_ParentUnit', data.onlineApplicationResponse.parentUnitId);
+                        setInputValueWithFloatingLabel('PresenttxtUnit', data.onlineApplicationResponse.presentUnit);
+                        setInputValueWithFloatingLabel('CommonData_PresentUnit', data.onlineApplicationResponse.presentUnitId);
+                        setInputValueWithFloatingLabel('presentUnitPin', data.onlineApplicationResponse.presentUnitPin);
+                        setInputValueWithFloatingLabel('civilPostalAddress', data.onlineApplicationResponse.civilPostalAddress);
+                        setInputValueWithFloatingLabel('nextFmnHQ', data.onlineApplicationResponse.nextFmnHQ);
+
                         //Permanent Address Details
-                        setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
-                        setInputValueWithFloatingLabel('postOffice', data.postOffice);
-                        setInputValueWithFloatingLabel('distt', data.distt);
-                        setInputValueWithFloatingLabel('state', data.state);
-                        setInputValueWithFloatingLabel('Code', data.code);
+                        setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
+                        setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
+                        setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
+                        setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
+                        setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
                         //Salary Account Details
-                        setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
-                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
-                        setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
-                        setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
-                        setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
+                        setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
+                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
+                        setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
+                        setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
+                        setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
                         //salary details
                         //setInputValueWithFloatingLabel('basicPay', data.basicPay);
                         //setInputValueWithFloatingLabel('rank_gradePay', data.rank_gradePay);
@@ -2351,12 +2366,12 @@ function findDataWithApplicationId() {
                         //setInputValueWithFloatingLabel('totalDeductions', data.totalDeductions);
 
 
-                        $('#armyPrefix').val(data.armyPrefix).trigger('change');
-                        $('#oldArmyPrefix').val(data.oldArmyPrefix).trigger('change');
-                        $('#ddlrank').val(data.rankId).trigger('change');
-                        $('#regtCorps').val(data.regtCorpsId).trigger('change');
-                        $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
-                        $('#emailDomain').val(data.emailDomain).trigger('change');
+                        $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
+                        $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).trigger('change');
+                        $('#ddlrank').val(data.onlineApplicationResponse.rankId).trigger('change');
+                        $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
+                        $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
+                        $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
                         //const formattedDOB = formatDateToDDMMYYYY(data.dateOfBirth);
                         //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
                         ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
@@ -2370,6 +2385,60 @@ function findDataWithApplicationId() {
                         //const dateOfRetirement = formatDateToDDMMYYYY(data.dateOfRetirement);
                         //console.log(dateOfRetirement);
                         //setInputValueWithFloatingLabel('dateOfRetirement', dateOfRetirement);
+                        if (data.carApplicationResponse != null) {
+                            $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');
+                            $('#VehTypeId').val(data.carApplicationResponse.vehical_Type).trigger('change');
+                            $('#CA_LoanFreq').val(data.carApplicationResponse.cA_LoanFreq).trigger('change');
+
+
+                            setInputValueWithFloatingLabel('dealerName', data.carApplicationResponse.dealerName);
+                            setInputValueWithFloatingLabel('companyName', data.carApplicationResponse.companyName);
+                            setInputValueWithFloatingLabel('modelName', data.carApplicationResponse.modelName);
+                            setInputValueWithFloatingLabel('vehicleCost', data.carApplicationResponse.vehicleCost);
+                            setInputValueWithFloatingLabel('CA_Amt_Eligible_for_loan', data.carApplicationResponse.cA_Amt_Eligible_for_loan);
+                            setInputValueWithFloatingLabel('CA_Amount_Applied_For_Loan', data.carApplicationResponse.cA_Amount_Applied_For_Loan);
+                            setInputValueWithFloatingLabel('CA_EMI_Eligible', data.carApplicationResponse.cA_EMI_Eligible);
+                            setInputValueWithFloatingLabel('CA_repayingCapacity', data.carApplicationResponse.cA_repayingCapacity);
+                            setInputValueWithFloatingLabel('CA_EMI_Applied', data.carApplicationResponse.cA_EMI_Applied);
+                            setInputValueWithFloatingLabel('CA_approxEMIAmount', data.carApplicationResponse.cA_approxEMIAmount);
+                            setInputValueWithFloatingLabel('drivingLicenseNo', data.carApplicationResponse.drivingLicenseNo);
+                            setInputValueWithFloatingLabel('validity_Date_DL', data.carApplicationResponse.validity_Date_DL);
+                            setInputValueWithFloatingLabel('DL_IssuingAuth', data.carApplicationResponse.dL_IssuingAuth);
+                            setInputValueWithFloatingLabel('CA_approxDisbursementAmt', data.carApplicationResponse.cA_approxDisbursementAmt);
+                        }
+                        else if (data.hbaApplicationResponse != null) {
+                            $('#propertyType').val(data.hbaApplicationResponse.propertyTypeId).trigger('change');
+                            $('#HBA_LoanFreq').val(data.hbaApplicationResponse.hbA_LoanFreq).trigger('change');
+
+                            setInputValueWithFloatingLabel('propertySeller', data.hbaApplicationResponse.propertySeller);
+                            setInputValueWithFloatingLabel('propertyAddress', data.hbaApplicationResponse.propertyAddress);
+                            setInputValueWithFloatingLabel('propertyCost', data.hbaApplicationResponse.propertyCost);
+                            setInputValueWithFloatingLabel('HBA_repayingCapacity', data.hbaApplicationResponse.hbA_repayingCapacity);
+                            setInputValueWithFloatingLabel('HBA_Amt_Eligible_for_loan', data.hbaApplicationResponse.hbA_Amt_Eligible_for_loan);
+                            setInputValueWithFloatingLabel('HBA_EMI_Eligible', data.hbaApplicationResponse.hbA_EMI_Eligible);
+                            setInputValueWithFloatingLabel('HBA_Amount_Applied_For_Loan', data.hbaApplicationResponse.hbA_Amount_Applied_For_Loan);
+                            setInputValueWithFloatingLabel('HBA_EMI_Applied', data.hbaApplicationResponse.hbA_EMI_Applied);
+                            setInputValueWithFloatingLabel('HBA_approxEMIAmount', data.hbaApplicationResponse.hbA_approxEMIAmount);
+                            setInputValueWithFloatingLabel('HBA_approxDisbursementAmt', data.hbaApplicationResponse.hbA_approxDisbursementAmt);
+                        }
+                        else if (data.pcaApplicationResponse != null) {
+
+                            $('#computer_Loan_Type').val(data.pcaApplicationResponse.computer_Loan_TypeId).trigger('change');
+                            $('#PCA_LoanFreq').val(data.pcaApplicationResponse.pcA_LoanFreq).trigger('change');
+
+                            setInputValueWithFloatingLabel('PCA_dealerName', data.pcaApplicationResponse.pcA_dealerName);
+                            setInputValueWithFloatingLabel('PCA_companyName', data.pcaApplicationResponse.pcA_companyName);
+                            setInputValueWithFloatingLabel('PCA_modelName', data.pcaApplicationResponse.pcA_modelName);
+                            setInputValueWithFloatingLabel('computerCost', data.pcaApplicationResponse.computerCost);
+                            setInputValueWithFloatingLabel('PCA_Amt_Eligible_for_loan', data.pcaApplicationResponse.pcA_Amt_Eligible_for_loan);
+                            setInputValueWithFloatingLabel('PCA_EMI_Eligible', data.pcaApplicationResponse.pcA_EMI_Eligible);
+                            setInputValueWithFloatingLabel('PCA_repayingCapacity', data.pcaApplicationResponse.pcA_repayingCapacity);
+                            setInputValueWithFloatingLabel('PCA_Amount_Applied_For_Loan', data.pcaApplicationResponse.pcA_Amount_Applied_For_Loan);
+                            setInputValueWithFloatingLabel('PCA_EMI_Applied', data.pcaApplicationResponse.pcA_EMI_Applied);
+                            setInputValueWithFloatingLabel('PCA_approxEMIAmount', data.pcaApplicationResponse.pcA_approxEMIAmount);
+                            setInputValueWithFloatingLabel('PCA_approxDisbursementAmt', data.pcaApplicationResponse.pcA_approxDisbursementAmt);
+
+                        }
 
                         console.log(data);
                     }

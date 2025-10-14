@@ -84,10 +84,11 @@ namespace DataTransferObject.Response
 
         public string ParentUnit { get; set; }
 
+        public int ParentUnitId { get; set; }
 
         public string PresentUnit { get; set; }
 
-
+        public int PresentUnitId { get; set; }
 
         public string? PresentUnitPin { get; set; }
 
