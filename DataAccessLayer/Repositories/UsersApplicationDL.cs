@@ -13,6 +13,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -23,6 +24,9 @@ namespace DataAccessLayer.Repositories
     {
         protected readonly ApplicationDbContext _db;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
+        private static readonly Regex ArmyNoRegex =
+        new(@"^(?<prefix>[A-Za-z]{1,3})(?<number>\d{3,8})(?<suffix>[A-Za-z]?)$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
         public UsersApplicationDL(ApplicationDbContext db, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
@@ -183,11 +187,11 @@ namespace DataAccessLayer.Repositories
                                                          ApplicationId = appl.ApplicationId,
                                                          PresentStatus = statusName.StatusName,
                                                          ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-                                                         Name = appl.ApplicantName??string.Empty,
+                                                         Name = appl.ApplicantName ?? string.Empty,
                                                          OldArmyNo = oldPrefix.Prefix + appl.OldNumber + appl.OldSuffix,
                                                          RegtCorps = regt.RegtName,
                                                          PresentUnit = unit.UnitName,
-                                                         PcdaPao = appl.pcda_pao??string.Empty,
+                                                         PcdaPao = appl.pcda_pao ?? string.Empty,
                                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                          ApplicationType = appl.ApplicationType.ToString(),
                                                          UpdatedOn = appl.UpdatedOn,
@@ -388,7 +392,7 @@ namespace DataAccessLayer.Repositories
                                                          PresentUnit = unit.UnitName,
                                                          PcdaPao = appl.pcda_pao ?? string.Empty,
                                                          AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-                                                         ApplicationType = applType.Name?? string.Empty,
+                                                         ApplicationType = applType.Name ?? string.Empty,
                                                          UpdatedOn = appl.UpdatedOn,
                                                          DownloadedOn = appl.DownloadedOn,
                                                          DownloadCount = appl.DownloadCount,
@@ -441,7 +445,7 @@ namespace DataAccessLayer.Repositories
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (profile != null)
             {
-                profile.Name = sessionUserDTO.name?? string.Empty;
+                profile.Name = sessionUserDTO.name ?? string.Empty;
                 profile.Email = sessionUserDTO.EmailId ?? string.Empty;
                 profile.rank = sessionUserDTO.RankId;
                 profile.MobileNo = sessionUserDTO.MobileNo ?? string.Empty;
@@ -625,6 +629,141 @@ namespace DataAccessLayer.Repositories
             }
 
             return (false, "No response from stored procedure");
+        }
+
+        //public async Task<List<DTOGetApplResponse>> GetApplicantHistory(string armyNo)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrEmpty(armyNo))
+        //        {
+        //            return await Task.FromResult(new List<DTOGetApplResponse>());
+        //        }
+        //        var match = Regex.Match(armyNo, @"^(?<prefix>[A-Za-z]{1,3})(?<number>\d{3,8})(?<suffix>[A-Za-z]?)$");
+        //        if (!match.Success)
+        //        {
+        //            return await Task.FromResult(new List<DTOGetApplResponse>());
+        //        }
+        //        string prefix = match.Groups["prefix"].Value;
+        //        string number = match.Groups["number"].Value;
+        //        string suffix = match.Groups["suffix"].Value;
+        //        var result = await (from appl in _db.trnApplications
+        //                            join prefixTable in _db.MArmyPrefixes on appl.ArmyPrefix equals prefixTable.Id
+        //                            join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
+        //                            join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
+        //                            join rank in _db.MRanks on appl.DdlRank equals rank.RankId
+        //                            where prefixTable.Prefix == prefix && appl.Number == number && appl.Suffix == suffix
+        //                            select new DTOGetApplResponse
+        //                            {
+        //                                ApplicationId = appl.ApplicationId,
+        //                                ArmyNo = prefixTable.Prefix + appl.Number + appl.Suffix,
+        //                                Name = rank.RankName + " " + appl.ApplicantName ?? string.Empty,
+        //                                ApplicationType = applType.ApplicationTypeName,
+        //                                //DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //                                //AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+        //                                PresentStatus = statusName.StatusName,
+        //                                UpdatedOn = appl.UpdatedOn,
+        //                            }).OrderByDescending(a => a.UpdatedOn).ToListAsync();
+        //        return result;
+        //    }
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+
+        //}
+        public async Task<IReadOnlyList<DTOGetApplResponse>> GetApplicantHistoryAsync(string armyNo, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(armyNo))
+                return Array.Empty<DTOGetApplResponse>();
+
+            var normalized = armyNo.Trim().ToUpperInvariant();
+            var match = ArmyNoRegex.Match(normalized);
+
+            if (!match.Success)
+                return Array.Empty<DTOGetApplResponse>();
+
+            var prefix = match.Groups["prefix"].Value;
+            var number = match.Groups["number"].Value;
+            var suffix = match.Groups["suffix"].Value;
+
+            var query =
+                from appl in _db.trnApplications.AsNoTracking()
+                join prefixTable in _db.MArmyPrefixes.AsNoTracking() on appl.ArmyPrefix equals prefixTable.Id
+                join statusName in _db.StatusTable.AsNoTracking() on appl.StatusCode equals statusName.StatusCode
+                join applType in _db.MApplicationTypes.AsNoTracking() on appl.ApplicationType equals applType.ApplicationTypeId
+                join rank in _db.MRanks.AsNoTracking() on appl.DdlRank equals rank.RankId
+                where prefixTable.Prefix == prefix
+                      && appl.Number == number
+                      && (appl.Suffix ?? "") == suffix
+                orderby appl.UpdatedOn descending
+                select new DTOGetApplResponse
+                {
+                    ApplicationId = appl.ApplicationId,
+                    ArmyNo = (prefixTable.Prefix ?? "") + (appl.Number ?? "") + (appl.Suffix ?? ""),
+                    Name = $"{rank.RankName ?? string.Empty} {appl.ApplicantName ?? string.Empty}".Trim(),
+                    ApplicationType = applType.ApplicationTypeName,
+                    PresentStatus = statusName.StatusName,
+                    UpdatedOn = appl.UpdatedOn
+                };
+
+            return await query.ToListAsync(cancellationToken);
+        }
+        public async Task<IReadOnlyList<DTOGetApplResponse>> GetApplicantHistoryMaturityAsync(string armyNo, CancellationToken cancellationToken = default)
+        {
+            if (string.IsNullOrWhiteSpace(armyNo))
+                return Array.Empty<DTOGetApplResponse>();
+
+            var normalized = armyNo.Trim().ToUpperInvariant();
+            var match = ArmyNoRegex.Match(normalized);
+
+            if (!match.Success)
+                return Array.Empty<DTOGetApplResponse>();
+
+            var prefix = match.Groups["prefix"].Value;
+            var number = match.Groups["number"].Value;
+            var suffix = match.Groups["suffix"].Value;
+
+            //var query =
+            //    from appl in _db.trnClaim.AsNoTracking()
+            //    join statusName in _db.StatusTable.AsNoTracking() on appl.StatusCode equals statusName.StatusCode
+            //    join applType in _db.WithdrawalPurpose.AsNoTracking() on appl.WithdrawPurpose equals applType.Id
+            //    join rank in _db.MRanks.AsNoTracking() on appl.DdlRank equals rank.RankId
+            //    where 
+            //           appl.Number == number
+
+            //    orderby appl.UpdatedOn descending
+            //    select new DTOGetApplResponse
+            //    {
+            //        ApplicationId = appl.ApplicationId,
+            //        //ArmyNo = (prefixTable.Prefix ?? "") + (appl.Number ?? "") + (appl.Suffix ?? ""),
+            //        Name = $"{rank.RankName ?? string.Empty} {appl.ApplicantName ?? string.Empty}".Trim(),
+            //        ApplicationType = applType.Name,
+            //        PresentStatus = statusName.StatusName,
+            //        UpdatedOn = appl.UpdatedOn
+            //    };
+
+            var query =
+                from appl in _db.trnClaim.AsNoTracking()
+                join prefixTable in _db.MArmyPrefixes.AsNoTracking() on appl.ArmyPrefix equals prefixTable.Id
+                join statusName in _db.StatusTable.AsNoTracking() on appl.StatusCode equals statusName.StatusCode
+                join applType in _db.WithdrawalPurpose.AsNoTracking() on appl.WithdrawPurpose equals applType.Id
+                where prefixTable.Prefix == prefix
+                     && appl.Number == number
+                     && (appl.Suffix ?? "") == suffix
+                orderby appl.UpdatedOn descending
+                select new DTOGetApplResponse
+                {
+                    ApplicationId = appl.ApplicationId,
+                    ArmyNo = (prefixTable.Prefix ?? "") + (appl.Number ?? "") + (appl.Suffix ?? ""),
+                    Name =  appl.ApplicantName,
+                    ApplicationType = applType.Name,
+                    PresentStatus = statusName.StatusName,
+                    UpdatedOn = appl.UpdatedOn
+                };
+
+            return await query.ToListAsync(cancellationToken);
         }
     }
 }

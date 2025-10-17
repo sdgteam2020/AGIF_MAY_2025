@@ -29,19 +29,15 @@
 
         GetApplicationList(Mvalue, "/ApplicationRequest/GetMaturityUsersApplicationList");
     });
-
-    
     $('#acceptButton').on('click', function () {
         const applnId = $("#spnapplicationId").html();
         const icNo = $("#IcNo").data("id");
         const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
         const $remarkField = $("#txtRemark");
         let remarkValue = $remarkField.val().trim();
-
         if (remarkValue === "") {
             $remarkField.val("Accepted");
         }
-
         Swal.fire({
             title: "Are you sure?",
             text: "Do you want to approve!",
@@ -65,7 +61,6 @@
             }
         });
     });
-
     $("#RejectButton").on('click', function () {
         const applnId = $("#spnapplicationId").html();
         const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
@@ -88,8 +83,6 @@
             }
         });
     });
-
-
     function updateButtonState() {
         const allChecked = $('input[name="instr"]').length === $('input[name="instr"]:checked').length;
         $('#acceptButton, #RejectButton').prop('disabled', !allChecked);
@@ -106,13 +99,20 @@
         $("#ApplicationAction").modal("show");
         populateRecommendationModal(currentApplicationData);
     });
+    $('#applicantsHistory').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!currentApplicationData.armyNo) {
+            return;
+        }
+        const historyModal = new bootstrap.Modal($('#ApplicantHistoryModal')[0], {
+            backdrop: 'static'
+        });
+        historyModal.show();
+        fetchApplicantData(currentApplicationData.armyNo);
+    })
 });
-
-
 let currentApplicationData = {};
-
-
-
 function populateRecommendationModal(applicationData) {
     if (!applicationData || Object.keys(applicationData).length === 0) {
         console.warn('No application data available for binding');
@@ -139,7 +139,6 @@ function populateRecommendationModal(applicationData) {
         Application Review & Approval - ${applicationData.armyNo || 'N/A'} ${applicationData.rank || 'N/A'} ${applicationData.name || 'N/A'}
     `);
 }
-
 function GetApplicationList(status, endpoint) {
     const dynamicColumns = [
         {
@@ -354,8 +353,6 @@ function OpenAction(applicationId, endpoint, category) {
 
 
 }
-
-// Function to fetch application details from server
 function fetchApplicationDetails(applicationId, endpoint) {
     currentApplicationData = {};// Clear previous application data
     $.ajax({
@@ -377,7 +374,6 @@ function fetchApplicationDetails(applicationId, endpoint) {
         }
     });
 }
-
 function updatePdfViewerInfo(applicationData) {
     const applicantName = applicationData.armyNo + " " + applicationData.rank + " " + applicationData.name;
     $('#ViewPdf .text-muted strong').text(applicantName);
@@ -507,8 +503,6 @@ function DataSignDigitaly(applicationId, endpoint, userType) {
         }
     });
 }
-
-
 function GetTokenSignXml(xml, Usertype, applicationId) {
     let URL = '';
     if (Usertype === "Loan")
@@ -517,7 +511,6 @@ function GetTokenSignXml(xml, Usertype, applicationId) {
         URL = "/ApplicationRequest/SaveClaimXML";
     SignXmlSendTOdatabase(xml, URL, Usertype);
 }
-
 //tez code start
 function DigitalSignByAPI(applicationId, type) {
     GetThumbprint().then(function (tprint) {
@@ -535,7 +528,6 @@ function DigitalSignByAPI(applicationId, type) {
         console.error('Failed to fetch thumbprint:', error);
     });
 }
-
 function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
 
     console.log(JSON.stringify({ applicationId: applicationId }));
@@ -557,7 +549,6 @@ function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
         }
     });
 }
-
 function sendPDFToServer(filepath, thumbprint, type) {
     console.log("Thumbprint used:", thumbprint);
 
@@ -613,7 +604,6 @@ function sendPDFToServer(filepath, thumbprint, type) {
         }
     });
 }
-
 function GetThumbprint() {
     return $.ajax({
         //url: 'http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails',
@@ -630,7 +620,6 @@ function GetThumbprint() {
         return null;
     });
 }
-
 function SaveSignedPdf(base64String, fn, endpoint) {
     $.ajax({
         url: endpoint,
@@ -648,8 +637,6 @@ function SaveSignedPdf(base64String, fn, endpoint) {
         }
     });
 }
-
-
 //tez code end
 function SignXmlSendTOdatabase(xmlString, endpoint, userType) {
     const applnId = $('#spnapplicationId').html();
@@ -674,7 +661,6 @@ function SignXmlSendTOdatabase(xmlString, endpoint, userType) {
         }
     });
 }
-
 function rejectedApplication(applicationId, type) {
     let URL = '';
     let remarks = $("#txtRemark").val();
@@ -704,7 +690,6 @@ function rejectedApplication(applicationId, type) {
     });
 }
 // Function to add blur effect when ApplicationAction modal opens
-
 function addBlurEffect() {
     const $modal1 = $('#ViewPdf');
     const $modal2 = $('#ApplicationAction');
@@ -717,7 +702,68 @@ function addBlurEffect() {
     $modal2.on('hidden.bs.modal', function () {
         $modal1.find('.modal-content').removeClass('modal-blur');
     });
-    $modal3.on('hidden.bs.modal', function () {
-        $modal1.find('.modal-content').removeClass('modal-blur');
+
+    $modal3.on('show.bs.modal', function () {
+        $modal2.find('.modal-content').addClass('modal-blur');
     });
+    $modal3.on('hidden.bs.modal', function () {
+        $modal2.find('.modal-content').removeClass('modal-blur');
+    });
+}
+function fetchApplicantData(armyNo) {
+    console.log(armyNo);
+    const usertype = $("#UserType").val();
+    console.log(usertype);
+    $.ajax({
+        url: '/ApplicationRequest/GetApplicantHistory',
+        type: 'POST',
+        data: { armyNo: armyNo, usertype: usertype },
+        dataType: 'json',
+        success: function (response) {
+            if (response.success) {
+                console.log(response.data);
+                const applicantData = response.data[0] || {};
+                $('#applicantName').text(applicantData.name || 'N/A');
+                $('#applicantArmyNo').text(applicantData.armyNo || 'N/A');
+                populateHistoryTable(response.data);
+                //$('#ApplicantHistoryModal').modal('show');
+               
+            } else {
+                console.error('Failed to fetch applicant history:', response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching applicant history:', error);
+        }
+    });
+}
+
+function populateHistoryTable(data) {
+    const $tbody = $('#historyTableBody');
+    $tbody.empty();
+
+    if (data.length === 0) {
+        $tbody.html('<tr><td colspan="6" class="text-center py-4 text-muted">No records found</td></tr>');
+        return;
+    }
+
+    $.each(data, function (index, record) {
+        const row = `
+                        <tr>
+                            <td class="text-center">${index + 1}.</td>
+                            <td>${record.armyNo}</td>
+                            <td>${record.name}</td>
+                            <td>${record.applicationType}</td>
+                            <td>
+                                <span>
+                                    ${record.presentStatus}
+                                </span>
+                            </td>
+                            <td>${record.updatedOn}</td>
+                        </tr>
+                    `;
+        $tbody.append(row);
+    });
+
+    $('#totalRecords').text(data.length);
 }

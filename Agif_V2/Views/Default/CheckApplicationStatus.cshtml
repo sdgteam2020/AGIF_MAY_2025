@@ -50,6 +50,7 @@
                             <table class="table table-responsive table-striped table-bordered">
                                 <thead class="thead-dark bg-primary text-white">
                                     <tr>
+                                        <th>Ser No</th>
                                         <th class="w-25">Application Name</th>
                                         <th class="w-25">Status</th>
                                         <th class="w-25">Action</th>
@@ -83,28 +84,3 @@
 
 
 <script src="~/devjs/checkapplicationstatus.js"></script>
-@* <script>
-    $(document).ready(function () {
-        // Show the results table for demonstration
-        $('#resultsTable').removeClass('d-none');
-
-        // Add form submission handler
-        $('#searchByArmyNo').on('submit', function (e) {
-            e.preventDefault();
-            const armyNo = $('#armyNoInput').val();
-            const type = $('#typeSelect').val();
-
-            if (armyNo.trim()) {
-                // Hide no results message
-                $('#noResultsMessage').addClass('d-none');
-                // Show results table
-                $('#resultsTable').removeClass('d-none');
-                console.log(`Searching for ${type} applications for Army No: ${armyNo}`);
-            } else {
-                // Show no results message
-                $('#noResultsMessage').removeClass('d-none');
-                $('#resultsTable').addClass('d-none');
-            }
-        });
-    });
-</script> *@
