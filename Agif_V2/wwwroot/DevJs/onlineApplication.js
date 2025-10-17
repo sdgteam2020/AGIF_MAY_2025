@@ -2372,8 +2372,8 @@ function findDataWithApplicationId() {
                         $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
-                        const formattedDOB = formatDateToDDMMYYYY(data.onlineApplicationResponse.dateOfBirth);
-                        setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
+                        //const formattedDOB = formatDateToDDMMYYYY(data.onlineApplicationResponse.dateOfBirth);
+                        //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
                         ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
                         ////$('#dateOfCommission').val(formatDateToDDMMYYYY(data.dateOfCommission));
                         //const formattedDOC = formatDateToDDMMYYYY(data.dateOfCommission);

@@ -2161,6 +2161,55 @@ function findDataWithApplicationId() {
                         setInputValueWithFloatingLabel('EstimatedCost', data.propertyRenovationResponse.estimatedCost);
 
                     }
+
+
+                    const loanMapping = {
+                        'hba': {
+                            flag: data.onlineApplicationResponse.house_Building_Advance_Loan,
+                            date: data.onlineApplicationResponse.house_Building_Date_of_Loan_taken,
+                            duration: data.onlineApplicationResponse.house_Building_Duration_of_Loan,
+                            amount: data.onlineApplicationResponse.house_Building_Amount_Taken,
+                            displayName: 'HBA (House Building Advance)'
+                        },
+                        'hra': {
+                            flag: data.onlineApplicationResponse.house_Repair_Advance_Loan,
+                            date: data.onlineApplicationResponse.house_Repair_Advance_Date_of_Loan_taken,
+                            duration: data.onlineApplicationResponse.house_Repair_Advance_Duration_of_Loan,
+                            amount: data.onlineApplicationResponse.house_Repair_Advance_Amount_Taken,
+                            displayName: 'HRA (House Repair Advance)'
+                        },
+                        'ca': {
+                            flag: data.onlineApplicationResponse.conveyance_Advance_Loan,
+                            date: data.onlineApplicationResponse.conveyance_Date_of_Loan_taken,
+                            duration: data.onlineApplicationResponse.conveyance_Duration_of_Loan,
+                            amount: data.onlineApplicationResponse.conveyance_Amount_Taken,
+                            displayName: 'CA (Conveyance Advance)'
+                        },
+                        'pca': {
+                            flag: data.onlineApplicationResponse.computer_Advance_Loan,
+                            date: data.onlineApplicationResponse.computer_Date_of_Loan_taken,
+                            duration: data.onlineApplicationResponse.computer_Duration_of_Loan,
+                            amount: data.onlineApplicationResponse.computer_Amount_Taken,
+                            displayName: 'PCA (Personal Computer Advance)'
+                        }
+                    };
+
+                    let hasExistingLoans = false;
+
+                    // Loop through each loan type and add if flag is true
+                    $.each(loanMapping, function (loanType, loanData) {
+                        if (loanData.flag === true && loanData.amount > 0) {
+                            addExistingLoanToGrid(loanType, loanData);
+                            hasExistingLoans = true;
+                        }
+                    });
+
+                    // If there are existing loans, show the grid and update dropdown
+                    if (hasExistingLoans) {
+                        $('#loanGridContainer').removeClass('d-none');
+                        $('#loanGrid').removeClass('d-none');
+                        updateLoanTypeDropdown();
+                    }
                    
                     console.log(data);
                     
@@ -2174,6 +2223,20 @@ function findDataWithApplicationId() {
             }
         });
     }
+}
+
+function addExistingLoanToGrid(loanType, loanData) {
+    const newRow = `
+        <tr data-loan-type="${loanType}">
+            <td>${loanData.displayName}</td>
+            <td>${loanData.date ? formatDateofloan(loanData.date) : 'N/A'}</td>
+            <td>${loanData.duration} months</td>
+            <td>₹${formatAmount(loanData.amount)}</td>
+            <td><button type="button" class="btn btn-danger btn-sm" onclick="removeLoanRow(this)">Remove</button></td>
+        </tr>
+    `;
+
+    $('#loanGrid tbody').append(newRow);
 }
 function formatDateToDDMMYYYY(dateString) {
     if (!dateString) return '';
