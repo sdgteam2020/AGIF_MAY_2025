@@ -46,5 +46,9 @@ namespace DataAccessLayer.Interfaces
 
         Task<bool> InsertStatusCounter(TrnClaimStatusCounter trnStatusCounter);
 
+        DTOClaimCommonOnlineResponse GetApplicationAndApplicantType(int applicationId);
+        Task<DTOClaimCommonOnlineResponse> GetApplicationDetailsByApplicationId(int applicationId);
+
+        Task<int?> GetLatestApplicationIdByArmyNo(string armyNo);
         }
 }

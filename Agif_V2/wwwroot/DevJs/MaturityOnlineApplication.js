@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(function () {
-    maturityInfo();
+    //maturityInfo();
     expandAccordions();
     confirmAccountNo();
     loadDropdown();
@@ -12,8 +12,10 @@ $(document).ready(function () {
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
     resetFieldsOnRankRegtChange();
-    EduGenderDisplay();
-    MarrGenderDisplay();
+    //EduGenderDisplay();
+    //MarrGenderDisplay();
+    findDataWithArmyNumber();
+    findDataWithApplicationId();
 });
 
 function resetCivilPostalAddress() {
@@ -109,6 +111,7 @@ function showLoanTypeFields(loanType) {
 
     }
 }
+
 
 function checkFieldsForLoan() {
     const loanType = $('#loanType').val();
@@ -388,17 +391,17 @@ function loadDropdown() {
 
     if (loanType == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
-        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 9, 0);
+        //mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 9, 0);
         mMsater(Rank, "ddlrank", 3, 0);
     }
     else if (loanType == 2) {
         mMsater(armyPrefixValue, "armyPrefix", 10, 0);
-        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 10, 0);
+        //mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 10, 0);
         mMsater(Rank, "ddlrank", 4, 0);
     }
     else if (loanType == 3) {
         mMsater(armyPrefixValue, "armyPrefix", 11, 0);
-        mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
+      // mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
         mMsater(Rank, "ddlrank", 13, 0);
     }
     
@@ -1881,27 +1884,29 @@ $("input, textarea").on("paste", function (e) {
     e.preventDefault();
 });
 
-function EduGenderDisplay() {
-    // Show gender options on input click
-    $('#EducationGenderDisplay').on('focus', function () {
-        $('#genderRadioGroup').addClass('show');
-        $(this).closest('.form-outline').find('.form-label').addClass('active');
-    });
+//function EduGenderDisplay() {
+//    // Show gender options on input click
+//    $('#EducationGenderDisplay').on('focus', function () {
+//        $('#genderRadioGroup').addClass('show');
+//        $(this).closest('.form-outline').find('.form-label').addClass('active');
+//    });
 
-    // Handle radio button selection
-    $('.gender-radio').on('change', function () {
-        var selectedGender = $(this).val();
-        $('#EducationGenderDisplay').val(selectedGender);
-        $('#genderRadioGroup').removeClass('show');
-    });
+//    // Handle radio button selection
+//    $('.gender-radio').on('change', function () {
+//        var selectedGender = $(this).val();
+//        $('#EducationGenderDisplay').val(selectedGender);
+//        $('#genderRadioGroup').removeClass('show');
+//    });
 
-    // Optional: Close dropdown when clicking outside
-    $(document).on('click', function (e) {
-        if (!$(e.target).closest('.form-outline').length) {
-            $('#genderRadioGroup').removeClass('show');
-        }
-    });
-}
+//    // Optional: Close dropdown when clicking outside
+//    $(document).on('click', function (e) {
+//        if (!$(e.target).closest('.form-outline').length) {
+//            $('#genderRadioGroup').removeClass('show');
+//        }
+//    });
+//}
+
+
 
 function MarrGenderDisplay() {
     // Show gender options on input click
@@ -1924,3 +1929,268 @@ function MarrGenderDisplay() {
         }
     });
 }
+
+function initGenderDropdown(inputId, dropdownId) {
+    const input = document.getElementById(inputId);
+    const dropdown = document.getElementById(dropdownId);
+
+    // Preselect radio if input has value
+    if (input != null) {
+        if (input.value) {
+            const radio = dropdown.querySelector(`input[value="${input.value}"]`);
+            if (radio) radio.checked = true;
+            input.closest('.form-outline').querySelector('.form-label').classList.add('active');
+        }
+
+        // Show dropdown on click/focus
+        input.addEventListener('click', () => {
+            dropdown.style.display = 'block';
+        });
+
+        // Update input and hide dropdown on selection
+        dropdown.querySelectorAll('.gender-radio').forEach(radio => {
+            radio.addEventListener('change', () => {
+                input.value = radio.value;
+                dropdown.style.display = 'none';
+                input.closest('.form-outline').querySelector('.form-label').classList.add('active');
+            });
+        });
+
+        // Close dropdown if clicking outside
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.form-outline') && !e.target.closest(`#${dropdownId}`)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+    
+}
+function setInputValueWithFloatingLabel(inputId, value) {
+    const $input = $('#' + inputId);
+
+    if (!$input.length) return; // Exit if element not found
+
+    // Set the value
+    $input.val(value);
+
+    $input.addClass('active');
+}
+
+function findDataWithArmyNumber() {
+
+    $('#armyNumber').on('blur', function () {
+        const armyNumber = $('#armyNumber').val().trim();
+        const armyPrefix = $('#armyPrefix').val().trim();
+        const armySuffix = $('#txtSuffix').val().trim();
+
+        // Validate required fields
+        if (!armyPrefix) {
+            //alert('Please select an Army Prefix.');
+            $('#armyPrefix').focus();
+            return;
+        }
+
+        if (!armyNumber) {
+           // alert('Army Number is required.');
+            $('#armyNumber').focus();
+            return;
+        }
+
+        if (!armySuffix) {
+           // alert('Army Suffix is required.');
+            $('#txtSuffix').focus();
+            return;
+        }
+
+        const fullArmyNumber = `${armyPrefix}-${armyNumber}-${armySuffix}`.toUpperCase();
+        if (fullArmyNumber) {
+            $.ajax({
+                url: '/Claim/GetDataByArmyNumber',
+                type: 'GET',
+                data: { ArmyNo: fullArmyNumber },
+                success: function (data) {
+                    if (data) {
+
+                        setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
+                        setInputValueWithFloatingLabel('armyNumber', data.number);
+                        setInputValueWithFloatingLabel('txtSuffix', data.suffix);
+                        setInputValueWithFloatingLabel('oldArmyNo', data.oldNumber);
+                        setInputValueWithFloatingLabel('txtOldSuffix', data.oldSuffix);
+                        setInputValueWithFloatingLabel('aadharCardNo', data.aadharCardNo);
+                        setInputValueWithFloatingLabel('panCardNo', data.panCardNo);
+                        setInputValueWithFloatingLabel('mobileNo', data.mobileNo);
+                        setInputValueWithFloatingLabel('emailId', data.email);
+
+                        ////Unit Details
+
+                        setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
+                        setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
+                        setInputValueWithFloatingLabel('ParenttxtUnit', data.parentUnit);
+                        setInputValueWithFloatingLabel('ClaimCommonData_ParentUnit', data.parentUnitId);
+                        setInputValueWithFloatingLabel('PresenttxtUnit', data.presentUnit);
+                        setInputValueWithFloatingLabel('ClaimCommonData_PresentUnit', data.presentUnitId);
+                        setInputValueWithFloatingLabel('presentUnitPin', data.presentUnitPin);
+                        setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
+                        setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
+
+                        ////Permanent Address Details
+                        setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
+                        setInputValueWithFloatingLabel('postOffice', data.postOffice);
+                        setInputValueWithFloatingLabel('distt', data.distt);
+                        setInputValueWithFloatingLabel('state', data.state);
+                        setInputValueWithFloatingLabel('Code', data.code);
+                        ////Salary Account Details
+                        setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
+                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
+                        setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
+                        setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
+                        setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
+
+                        // dropdown values
+                        $('#armyPrefix').val(data.armyPrefix).addClass("d-none").trigger('change');
+                        $('#oldArmyPrefix').val(data.oldArmyPrefix).addClass("d-none").trigger('change');
+                        $('#ddlrank').val(data.rankId).addClass("d-none").trigger('change');
+                        $('#regtCorps').val(data.regtCorpsId).addClass("d-none").trigger('change');
+                        $('#armyPostOffice').val(data.armyPostOfficeId).addClass("d-none").trigger('change');
+                        $('#emailDomain').val(data.emailDomain).trigger('change');
+
+
+                        console.log(data);
+
+                    }
+                    else {
+                        console.log("Data not found for the provided Army Number.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+
+        }
+        getApplicantDetalis();
+
+    });
+}
+
+function findDataWithApplicationId() {
+
+    const applicationid = $('#applicationid').val();
+
+    if (applicationid != 0) {
+        $.ajax({
+            url: '/Claim/GetDataByApplicationId',
+            type: 'GET',
+            data: { applicationid: applicationid },
+            success: function (data) {
+                if (data) {
+
+                    setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
+                    setInputValueWithFloatingLabel('armyNumber', data.onlineApplicationResponse.number);
+                    setInputValueWithFloatingLabel('txtSuffix', data.onlineApplicationResponse.suffix);
+                    setInputValueWithFloatingLabel('oldArmyNo', data.onlineApplicationResponse.oldNumber);
+                    setInputValueWithFloatingLabel('txtOldSuffix', data.onlineApplicationResponse.oldSuffix);
+                    setInputValueWithFloatingLabel('aadharCardNo', data.onlineApplicationResponse.aadharCardNo);
+                    setInputValueWithFloatingLabel('panCardNo', data.onlineApplicationResponse.panCardNo);
+                    setInputValueWithFloatingLabel('mobileNo', data.onlineApplicationResponse.mobileNo);
+                    setInputValueWithFloatingLabel('emailId', data.onlineApplicationResponse.email);
+                  
+                    ////Unit Details
+
+                    setInputValueWithFloatingLabel('pcda_pao', data.onlineApplicationResponse.pcda_pao);
+                    setInputValueWithFloatingLabel('pcda_AcctNo', data.onlineApplicationResponse.pcda_AcctNo);
+                    setInputValueWithFloatingLabel('ParenttxtUnit', data.onlineApplicationResponse.parentUnit);
+                    setInputValueWithFloatingLabel('ClaimCommonData_ParentUnit', data.onlineApplicationResponse.parentUnitId);
+                    setInputValueWithFloatingLabel('PresenttxtUnit', data.onlineApplicationResponse.presentUnit);
+                    setInputValueWithFloatingLabel('ClaimCommonData_PresentUnit', data.onlineApplicationResponse.presentUnitId);
+                    setInputValueWithFloatingLabel('presentUnitPin', data.onlineApplicationResponse.presentUnitPin);
+                    setInputValueWithFloatingLabel('civilPostalAddress', data.onlineApplicationResponse.civilPostalAddress);
+                    setInputValueWithFloatingLabel('nextFmnHQ', data.onlineApplicationResponse.nextFmnHQ);
+
+                    ////Permanent Address Details
+                    setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
+                    setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
+                    setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
+                    setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
+                    setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
+
+                    ////Salary Account Details
+                    setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
+                    setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
+                    setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
+                    setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
+                    setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
+                    setInputValueWithFloatingLabel('AmountOfWithdrawalRequired', data.onlineApplicationResponse.amountwithdrwalRequired);
+                  
+                    // dropdown value bind
+                    $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).addClass("d-none").trigger('change');
+                    $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).addClass("d-none").trigger('change');
+                    $('#ddlrank').val(data.onlineApplicationResponse.rankId).addClass("d-none").trigger('change');
+                    $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).addClass("d-none").trigger('change');
+                    $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).addClass("d-none").trigger('change');
+                    $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
+            
+                    $('#Noofwithdrawal').val(data.onlineApplicationResponse.noOfwithdrwal).addClass("d-none").trigger('change');
+
+                    if (data.splWaiverResponse != null) {
+                        setInputValueWithFloatingLabel('OtherReasons', data.splWaiverResponse.otherReasons);
+                    }
+                    else if (data.marraigeWardResponse != null) {
+                        setInputValueWithFloatingLabel('txtNameOfChild', data.marraigeWardResponse.nameOfChild);
+                        setInputValueWithFloatingLabel('MarriagewarddateOfBirth', formatDateToDDMMYYYY(data.marraigeWardResponse.dateOfBirth));
+                        setInputValueWithFloatingLabel('MarriageGenderDisplay', data.marraigeWardResponse.gender);
+                        setInputValueWithFloatingLabel('MDOPartIINo', data.marraigeWardResponse.doPartIINo);
+                        setInputValueWithFloatingLabel('MarriagewardDOPartIIDate', formatDateToDDMMYYYY(data.marraigeWardResponse.doPartIIDate));
+                        setInputValueWithFloatingLabel('AgeOfWard', data.marraigeWardResponse.ageOfWard);
+                        setInputValueWithFloatingLabel('DateOfMarriage', formatDateToDDMMYYYY(data.marraigeWardResponse.dateofMarriage));
+                    }
+                    else if (data.educationDetailsResponse != null) {
+                        setInputValueWithFloatingLabel('txtChildName', data.educationDetailsResponse.childName);
+                        setInputValueWithFloatingLabel('EducationdateOfBirth', formatDateToDDMMYYYY(data.educationDetailsResponse.dateOfBirth));
+                        setInputValueWithFloatingLabel('EducationGenderDisplay', data.educationDetailsResponse.gender);
+                        setInputValueWithFloatingLabel('DOPartIINo', data.educationDetailsResponse.doPartIINo);
+                        setInputValueWithFloatingLabel('DOPartIIDate', formatDateToDDMMYYYY(data.educationDetailsResponse.doPartIIDate));
+                        $('#CourseForWithdrawal').val(data.educationDetailsResponse.courseForWithdrawal).addClass("d-none").trigger('change');
+                        setInputValueWithFloatingLabel('NameOfcollege', data.educationDetailsResponse.collegeInstitution);
+                        setInputValueWithFloatingLabel('TotalExpenditure', data.educationDetailsResponse.totalExpenditure);
+                    }
+
+                    else if (data.propertyRenovationResponse != null) {
+                        setInputValueWithFloatingLabel('AddressOfProperty', data.propertyRenovationResponse.addressOfProperty);
+                        setInputValueWithFloatingLabel('PropertyHolderName', data.propertyRenovationResponse.propertyHolderName);
+                        setInputValueWithFloatingLabel('EstimatedCost', data.propertyRenovationResponse.estimatedCost);
+
+                    }
+                   
+                    console.log(data);
+                    
+                }
+                else {
+                    console.log("Data not found for the provided Army Number.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
+}
+function formatDateToDDMMYYYY(dateString) {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+
+    if (isNaN(date)) return ''; // invalid date check
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    initGenderDropdown('EducationGenderDisplay', 'genderRadioGroup');
+    initGenderDropdown('MarriageGenderDisplay', 'genderRadioGroup');
+});
+

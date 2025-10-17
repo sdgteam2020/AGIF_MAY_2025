@@ -2365,15 +2365,15 @@ function findDataWithApplicationId() {
                         //setInputValueWithFloatingLabel('dsop_afpp', data.dsop_afpp);
                         //setInputValueWithFloatingLabel('totalDeductions', data.totalDeductions);
 
-
+                       // alert(typeof (data.onlineApplicationResponse.armyPrefix));
                         $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
                         $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).trigger('change');
                         $('#ddlrank').val(data.onlineApplicationResponse.rankId).trigger('change');
                         $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
-                        //const formattedDOB = formatDateToDDMMYYYY(data.dateOfBirth);
-                        //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
+                        const formattedDOB = formatDateToDDMMYYYY(data.onlineApplicationResponse.dateOfBirth);
+                        setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
                         ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
                         ////$('#dateOfCommission').val(formatDateToDDMMYYYY(data.dateOfCommission));
                         //const formattedDOC = formatDateToDDMMYYYY(data.dateOfCommission);

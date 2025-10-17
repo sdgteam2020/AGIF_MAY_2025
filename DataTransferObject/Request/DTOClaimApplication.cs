@@ -14,7 +14,7 @@ namespace DataTransferObject.Request
         public PropertyRenovationModel? PropertyRenovation { get; set; }
         public SplWaiverModel? SplWaiver { get; set; }
 
-        public ClaimCommonModel ClaimCommonData { get; set; }
+        public ClaimCommonModel? ClaimCommonData { get; set; }
 
         public ClaimAccountDetailsModel? AccountDetails { get; set; }
         public ClaimAddressDetailsModel? AddressDetails { get; set; }

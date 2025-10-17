@@ -5,6 +5,7 @@ using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
+using DataTransferObject.Response;
 using iText.Kernel.Pdf;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -132,21 +133,37 @@ namespace Agif_V2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OnlineApplication()
+        public async Task<IActionResult> OnlineApplication(int id)
         {
             var Category = TempData["Category"] as string;
             var WithdrwalPurpose = TempData["WithdrwalPurpose"] as string;
 
 
-            TempData["CategoryNew"] = EncryptDecrypt.DecryptionData(Category);
+            TempData["CategoryNew"] = EncryptDecrypt.DecryptionData(Category?? string.Empty);
 
-            TempData["WithdrwalPurposeNew"] = EncryptDecrypt.DecryptionData(WithdrwalPurpose);
+            TempData["WithdrwalPurposeNew"] = EncryptDecrypt.DecryptionData(WithdrwalPurpose?? string.Empty);
 
+            TempData["ClaimapplicationId"] = id;
+
+            var response = new DTOClaimCommonOnlineResponse();
+            response = null;
+
+            DTOClaimApplication DTOClaimApplication = new DTOClaimApplication();
+
+            if (id != 0)
+            {
+                response = _IClaimonlineApplication1.GetApplicationAndApplicantType(id);
+            }
+
+            if (response != null)
+            {
+                DTOClaimApplication.Purpose = response.OnlineApplicationResponse.ApplicationType.ToString();
+                DTOClaimApplication.Category = response.OnlineApplicationResponse.ApplicantType.ToString();                
+            }
 
             TempData.Keep("Category");
             TempData.Keep("WithdrwalPurpose");
 
-            DTOClaimApplication DTOClaimApplication = new DTOClaimApplication();
             return View(DTOClaimApplication);
         }
 
@@ -708,6 +725,23 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
             }
+        }
+
+        public async Task<JsonResult> GetDataByArmyNumber(string ArmyNo)
+        {
+            var applicationId = await _IClaimonlineApplication1.GetLatestApplicationIdByArmyNo(ArmyNo);
+            if (applicationId == null)
+            {
+                return Json(new { success = false, message = "Application ID not found." });
+            }
+
+            DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
+            return Json(data.OnlineApplicationResponse);
+        }
+        public async Task<JsonResult> GetDataByApplicationId(int applicationId)
+        {
+            DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
+            return Json(data);
         }
     }
 }

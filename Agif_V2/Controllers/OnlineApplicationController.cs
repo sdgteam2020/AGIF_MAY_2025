@@ -58,6 +58,7 @@ namespace Agif_V2.Controllers
             TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType ?? string.Empty);
             TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory ?? string.Empty);
             TempData["applicationId"] = id;
+
             var response= new DTOCommonOnlineApplicationResponse();
             response = null;
 

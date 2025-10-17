@@ -12,6 +12,8 @@ namespace DataTransferObject.Response
 
         public int ApplicationType;
 
+        public int ApplicantType;
+
         public int ApplicationId { get; set; }
 
 
@@ -33,7 +35,7 @@ namespace DataTransferObject.Response
         public string? OldSuffix { get; set; }
 
 
-
+        public int RankId { get; set; }
         public string DdlRank { get; set; }
 
         public string? ApplicantName { get; set; }
@@ -74,13 +76,17 @@ namespace DataTransferObject.Response
 
         public string RegtCorps { get; set; }
 
-
+        public int RegtCorpsId { get; set; }
         public string? pcda_pao { get; set; }
 
         public string? pcda_AcctNo { get; set; }
 
 
         public string ParentUnit { get; set; }
+
+        public int ParentUnitId { get; set; }
+
+        public int PresentUnitId { get; set; }
 
 
         public string PresentUnit { get; set; }
@@ -90,6 +96,7 @@ namespace DataTransferObject.Response
         public string? PresentUnitPin { get; set; }
 
         public string ArmyPostOffice { get; set; }
+        public int ArmyPostOfficeId { get; set; }
 
 
 

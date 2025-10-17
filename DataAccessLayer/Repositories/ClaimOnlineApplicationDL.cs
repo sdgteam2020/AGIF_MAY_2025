@@ -1309,5 +1309,225 @@ namespace DataAccessLayer.Repositories
             await SaveAsync(); // Make sure this saves changes
             return true;
         }
+
+        public DTOClaimCommonOnlineResponse GetApplicationAndApplicantType(int applicationId)
+        {
+            var result = _context.trnClaim
+                .Where(a => a.ApplicationId == applicationId)
+                .Select(a => new { a.WithdrawPurpose, a.ApplicantType })
+                .FirstOrDefault();
+
+            var response = new DTOClaimCommonOnlineResponse();
+
+            if (result != null)
+            {
+                response.OnlineApplicationResponse = new ClaimCommonDataOnlineResponse
+                {
+                    ApplicationType = result.WithdrawPurpose,
+                    ApplicantType = result.ApplicantType
+                };
+            }
+
+            return response;
+        }
+
+        public async Task<int?> GetLatestApplicationIdByArmyNo(string armyNo)
+        {
+            var parts = armyNo.Split('-');
+            if (parts.Length != 3) return null;
+
+            var prefixId = parts[0];
+            var armyNumber = parts[1];
+            var suffix = parts[2];
+            int applicationId = await _context.trnClaim
+                .Where(a => a.ArmyPrefix == Convert.ToInt32(prefixId) && a.Number == armyNumber && a.Suffix == suffix)
+                .OrderByDescending(a => a.ApplicationId)
+                .Select(a => a.ApplicationId)
+                .FirstOrDefaultAsync();
+            return applicationId;
+        }
+
+        public Task<DTOClaimCommonOnlineResponse> GetApplicationDetailsByApplicationId(int applicationId)
+        {
+            DTOClaimCommonOnlineResponse data = new DTOClaimCommonOnlineResponse();
+
+            var result = (from common in _context.trnClaim
+                          join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
+                          from prefix in prefixGroup.DefaultIfEmpty()
+                          join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                          from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
+                          join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
+                          from rank in rankGroup.DefaultIfEmpty()
+                          join armyPostOffice in _context.MArmyPostOffices on common.ArmyPostOffice equals armyPostOffice.Id into armyPostOfficeGroup
+                          from armyPostOffice in armyPostOfficeGroup.DefaultIfEmpty()
+                          join regCorps in _context.MRegtCorps on common.RegtCorps equals regCorps.Id into regCorpsGroup
+                          from regCorps in regCorpsGroup.DefaultIfEmpty()
+                          join parentUnit in _context.MUnits on common.ParentUnit equals parentUnit.UnitId into parentUnitGroup
+                          from parentUnit in parentUnitGroup.DefaultIfEmpty()
+                          join presentUnit in _context.MUnits on common.PresentUnit equals presentUnit.UnitId into presentUnitGroup
+                          from presentUnit in presentUnitGroup.DefaultIfEmpty()
+                          join applicationType in _context.WithdrawalPurpose on common.WithdrawPurpose equals applicationType.Id
+
+                          join AddressDetails in _context.trnClaimAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
+                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
+
+                          join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
+                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+
+                          where common.ApplicationId == applicationId
+                          select new ClaimCommonDataOnlineResponse
+                          {
+                              ParentUnit = parentUnit != null ? $"{(parentUnit.Suffix ?? string.Empty)}{(parentUnit.Sus_no ?? string.Empty)}{' '}{parentUnit.UnitName}" : string.Empty,
+                              ParentUnitId = parentUnit != null ? parentUnit.UnitId : 0,
+                              PresentUnit = presentUnit != null ? $"{(presentUnit.Suffix ?? string.Empty)}{(presentUnit.Sus_no ?? string.Empty)}{' '}{presentUnit.UnitName}" : string.Empty,
+                              PresentUnitId = presentUnit != null ? presentUnit.UnitId : 0,
+                              ApplicationId = common.ApplicationId,
+                              ApplicationType = common.WithdrawPurpose,
+                              ArmyPrefix = common.ArmyPrefix,
+                              Number = common.Number,
+                              AadharCardNo = common.AadharCardNo ?? string.Empty,
+                              Suffix = common.Suffix ?? string.Empty,
+                              OldArmyPrefix = common.OldArmyPrefix,
+                              OldNumber =common.OldNumber,
+                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              RankId = common.DdlRank,
+                              DdlRank = rank != null ? rank.RankName : string.Empty,
+                              ApplicantName = common.ApplicantName ?? string.Empty,
+                              DateOfBirth = common.DateOfBirth,
+                              DateOfCommission = common.DateOfCommission,
+                              NextFmnHQ = common.NextFmnHQ ?? string.Empty,
+                              ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
+                              ArmyPostOfficeId = common.ArmyPostOffice,
+                              RegtCorpsId = common.RegtCorps,
+                              RegtCorps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
+                              PresentUnitPin = common.PresentUnitPin ?? string.Empty,
+                              DateOfPromotion = common.DateOfPromotion,
+                              DateOfRetirement = common.DateOfRetirement,
+                              PanCardNo = common.PanCardNo ?? string.Empty,
+                              MobileNo = common.MobileNo ?? string.Empty,
+                              Email = common.Email ?? string.Empty,
+                              EmailDomain = common.EmailDomain ?? string.Empty,
+                              SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
+                              ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo ?? string.Empty,
+                              IfsCode = AccountDetails.IfsCode ?? string.Empty,
+                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
+                              pcda_pao = common.pcda_pao ?? string.Empty,
+                              pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
+                              CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
+                              AmountwithdrwalRequired = common.AmountOfWithdrawalRequired ?? 0,
+                              TotalService = common.TotalService ?? 0,
+                              NoOfwithdrwal = common.Noofwithdrawal ?? string.Empty,
+
+                              House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
+
+                              House_Repair_Advance_Loan = common.House_Repair_Advance_Loan ?? false,
+
+                              Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
+
+                              Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
+
+                              House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
+                              House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
+                              House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
+
+                              Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
+                              Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
+                              Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
+
+                              House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
+                              House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
+                              House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
+
+                              Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
+                              Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
+                              Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
+
+                              Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
+                              PostOffice = AddressDetails.PostOffice ?? string.Empty,
+                              Distt = AddressDetails.Distt ?? string.Empty,
+                              State = AddressDetails.State ?? string.Empty,
+                              Code = AddressDetails.Code ?? string.Empty,
+                          }).FirstOrDefault();
+            if (result != null)
+            {
+                if (result.ApplicationType == 1)
+                {
+                    var EDmodel = (from ED in _context.trnEducationDetails
+                                   where ED.ApplicationId == applicationId
+                                   select new DTOEducationDetailsResponse
+                                   {
+                                       ChildName = ED.ChildName,
+                                       DateOfBirth = ED.DateOfBirth,
+                                       DOPartIINo = ED.DOPartIINo,
+                                       DoPartIIDate = ED.DoPartIIDate,
+                                       CourseForWithdrawal = ED.CourseForWithdrawal,
+                                       CollegeInstitution = ED.CollegeInstitution,
+                                       TotalExpenditure = ED.TotalExpenditure,
+                                       Gender = ED.Gender
+                                   }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.EducationDetailsResponse = EDmodel;
+                }
+
+                else if (result.ApplicationType == 2)
+                {
+                    var MWmodel = (from MW in _context.trnMarriageward
+                                   where MW.ApplicationId == applicationId
+                                   select new DTOMarraigeWardResponse
+                                   {
+                                       NameOfChild = MW.NameOfChild,
+                                       DateOfBirth = MW.DateOfBirth,
+                                       DOPartIINo = MW.DOPartIINo,
+                                       DoPartIIDate = MW.DoPartIIDate,
+                                       AgeOfWard = MW.AgeOfWard,
+                                       DateofMarriage = MW.DateofMarriage,
+                                       Gender = MW.Gender
+                                   }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result;
+
+                    data.MarraigeWardResponse = MWmodel;
+                }
+
+                else if (result.ApplicationType == 3)
+                {
+                    var PRModal = (from PR in _context.trnPropertyRenovation
+                                   where PR.ApplicationId == applicationId
+                                   select new DTOPropertyRenovationResponse
+                                   {
+                                       PropertyHolderName = PR.PropertyHolderName,
+                                       AddressOfProperty = PR.AddressOfProperty,
+                                       EstimatedCost = PR.EstimatedCost,
+                                   }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.PropertyRenovationResponse = PRModal;
+                }
+                else if (result.ApplicationType == 4)
+                {
+                    var SPModal = (from sp in _context.trnSplWaiver
+                                   where sp.ApplicationId == applicationId
+                                   select new DTOSplWaiverResponse
+                                   {
+                                       OtherReasons = sp.OtherReasons,
+
+                                   }).FirstOrDefault();
+
+                    data.OnlineApplicationResponse = result; // Assuming result is already defined
+
+                    // Directly assign the DTO
+                    data.SplWaiverResponse = SPModal;
+                }
+
+            }
+
+            return Task.FromResult(data);
+        }
     }
 }

@@ -75,7 +75,7 @@
 
             // Conditional extra button for statusId = 103
             let extraButtonHtml = '';
-            if (app.statusId === 1003) {
+            if (app.statusId === 1003 || app.statusId === 2003) {
                 extraButtonHtml = `
                 <button class="btn btn-warning ms-2 extra-btn btn-custom editapp" type="button"
                         data-app-id="${safeAppId}">
@@ -123,10 +123,18 @@
 
     $(document).on('click', '.editapp', function () {
         // Adjust the URL according to your routing
+        const type = $('#typeSelect').val();
+
         const appId = $(this).data('app-id');  // Get application ID from button
         if (!appId) return;
 
-        window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
+        if(type === 'Loan')
+            window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
+        else if (type === 'Maturity')
+            window.location.href = `/Claim/OnlineApplication/${appId}`;
+
+
+        //window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
       });
 
     $(document).on('click', '.timeline-btn', function () {
