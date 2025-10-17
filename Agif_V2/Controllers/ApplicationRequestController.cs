@@ -1449,10 +1449,22 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = result.Item2 });
             }
-
             // Unreachable code removed
         }
-
-
+        [HttpPost]
+        public async Task<IActionResult> GetApplicantHistory(string armyNo,string usertype)
+         {
+            var armyNumber = armyNo?.Trim();
+            if (usertype == "Maturity")
+            {
+                var applicantHistory = await _userApplication.GetApplicantHistoryMaturityAsync(armyNumber);
+                return Json(new { success = true, data = applicantHistory });
+            }
+            else
+            {
+                var applicantHistory = await _userApplication.GetApplicantHistoryAsync(armyNumber);
+                return Json(new { success = true, data = applicantHistory });
+            }
+        }
     }
 }

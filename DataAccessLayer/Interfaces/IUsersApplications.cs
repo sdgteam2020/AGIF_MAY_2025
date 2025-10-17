@@ -41,5 +41,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<string>> GetClaimNotApplId(List<string> applicationIds);
 
         Task<(bool, string)> ClaimProcessBulkApplicationUpdates(System.Data.DataTable applicationUpdates);
+        Task<IReadOnlyList<DTOGetApplResponse>> GetApplicantHistoryAsync(string armyNo,CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<DTOGetApplResponse>> GetApplicantHistoryMaturityAsync(string armyNo,CancellationToken cancellationToken = default);
     }
 }

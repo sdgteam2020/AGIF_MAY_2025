@@ -241,6 +241,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetPurposeOfWithdrawal()
         {
             var ret = await (from WithdrawalPurpose in _context.WithdrawalPurpose
+                             where WithdrawalPurpose.IsActive == true
                              select new DTOMasterResponse
                              {
                                  Id = WithdrawalPurpose.Id,

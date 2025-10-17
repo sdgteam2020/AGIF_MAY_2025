@@ -86,6 +86,7 @@
 
             const rowHtml = `
                 <tr>
+                <td>${index+1}.</td>
                     <td >${app.applicationType || 'N/A'}</td>
                     <td>
                         <span class=" ${getStatusBadgeClass(app.statusId)} statusList">${app.status || 'Unknown'}</span>
