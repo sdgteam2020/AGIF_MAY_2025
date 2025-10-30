@@ -22,7 +22,7 @@ namespace DataAccessLayer.Repositories
             var timeLine = await (from statusCtr in _context.TrnStatusCounter
                                   join status in _context.StatusTable on statusCtr.StatusId equals status.StatusCode
                                   where statusCtr.ApplicationId == applicationId
-                                  orderby statusCtr.ActionOn
+                                  orderby statusCtr.ActionOn descending
                                   select new DTOApplicationStatusResponse
                                   {
                                       StatusId = status.StatusId,
@@ -39,7 +39,7 @@ namespace DataAccessLayer.Repositories
             var timeLine = await (from statusCtr in _context.TrnClaimStatusCounter
                                   join status in _context.StatusTable on statusCtr.StatusId equals status.ClaimStatusCode
                                   where statusCtr.ApplicationId == applicationId
-                                  orderby statusCtr.ActionOn
+                                  orderby statusCtr.ActionOn descending
                                   select new DTOApplicationStatusResponse
                                   {
                                       StatusId = status.StatusId,
