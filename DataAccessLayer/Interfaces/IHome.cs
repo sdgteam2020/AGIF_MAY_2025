@@ -14,5 +14,7 @@ namespace DataAccessLayer.Interfaces
 
         Task<List<DTOApprovedLogs>> GetApprovedLogs();
         Task<DTOAnalyticsResult> GetTotalMonthlyApplications(int year);
+
+        Task<DTOAnalyticsResult> GetTotalClaimMonthlyApplications(int year);
     }
 }

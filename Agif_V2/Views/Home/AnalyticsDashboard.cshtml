@@ -10,6 +10,14 @@
     <div class="text-center my-4">
         <h2 class="fw-bold">Analytics Dashboard</h2>
     </div>
+
+    <div class="d-flex justify-content-center my-3">
+        <div class="btn-group gap-3" role="group" aria-label="Mode">
+                <button id="btnLoan" type="button" class="btn btn-primary active">Loan</button>
+                <button id="btnMaturity" type="button" class="btn btn-outline-primary">Maturity</button>
+            </div>
+    </div>
+
     <div class="bg-light p-4 rounded mb-4">
         <!-- Title + Year Dropdown -->
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -24,6 +32,8 @@
         <!-- Chart Container -->
         <div class="canvasDiv" style="position: relative; height: 400px;">
             <canvas id="applicationByMonth"></canvas>
+            <canvas id="maturityChartCanvas" class="d-none"></canvas>
+
         </div>
     </div>
 

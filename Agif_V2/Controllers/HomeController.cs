@@ -162,6 +162,19 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
             }
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetClaimApplicationAnalytics(int year)
+        {
+            try
+            {
+                var analyticsData = await home.GetTotalClaimMonthlyApplications(year);
+                return Json(new { success = true, data = analyticsData });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
+            }
+        }
     }
 }

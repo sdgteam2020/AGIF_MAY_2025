@@ -1,6 +1,6 @@
 ﻿
 $(document).ready(function () {
-    //maturityInfo();
+    maturityInfo();
     expandAccordions();
     confirmAccountNo();
     loadDropdown();

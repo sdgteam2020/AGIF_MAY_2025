@@ -448,7 +448,7 @@ namespace DataAccessLayer.Repositories
             var carApplicantLoans = await (
                                   from app in _context.trnApplications
                                   join car in _context.trnCar on app.ApplicationId equals car.ApplicationId
-                                  where app.IsActive && car.IsActive
+                                  where app.IsActive && car.IsActive && car.UpdatedOn.Value.Year == year
                                   select new
                                   {
                                       app.ApplicationId,
@@ -462,7 +462,7 @@ namespace DataAccessLayer.Repositories
             var pcaApplicantLoans = await (
                 from app in _context.trnApplications
                 join pca in _context.trnPCA on app.ApplicationId equals pca.ApplicationId
-                where app.IsActive && pca.IsActive
+                where app.IsActive && pca.IsActive && pca.UpdatedOn.Value.Year == year
                 select new
                 {
                     app.ApplicationId,
@@ -476,7 +476,7 @@ namespace DataAccessLayer.Repositories
             var hbaApplicantLoans = await (
                 from app in _context.trnApplications
                 join hba in _context.trnHBA on app.ApplicationId equals hba.ApplicationId
-                where app.IsActive && hba.IsActive
+                where app.IsActive && hba.IsActive && hba.UpdatedOn.Value.Year == year
                 select new
                 {
                     app.ApplicationId,
@@ -506,7 +506,7 @@ namespace DataAccessLayer.Repositories
                 from unit in _context.MUnits
                 join app in _context.trnApplications on unit.UnitId equals app.PresentUnit
                 join car in _context.trnCar on app.ApplicationId equals car.ApplicationId
-                where app.IsActive && car.IsActive
+                where app.IsActive && car.IsActive && car.UpdatedOn.Value.Year == year
                 group car by unit.UnitName into g
                 select new DTOAnalyticsResponse
                 {
@@ -521,7 +521,7 @@ namespace DataAccessLayer.Repositories
                 from unit in _context.MUnits
                 join app in _context.trnApplications on unit.UnitId equals app.PresentUnit
                 join pca in _context.trnPCA on app.ApplicationId equals pca.ApplicationId
-                where app.IsActive && pca.IsActive
+                where app.IsActive && pca.IsActive && pca.UpdatedOn.Value.Year == year
                 group pca by unit.UnitName into g
                 select new DTOAnalyticsResponse
                 {
@@ -536,7 +536,7 @@ namespace DataAccessLayer.Repositories
                 from unit in _context.MUnits
                 join app in _context.trnApplications on unit.UnitId equals app.PresentUnit
                 join hba in _context.trnHBA on app.ApplicationId equals hba.ApplicationId
-                where app.IsActive && hba.IsActive
+                where app.IsActive && hba.IsActive && hba.UpdatedOn.Value.Year == year
                 group hba by unit.UnitName into g
                 select new DTOAnalyticsResponse
                 {
@@ -580,6 +580,126 @@ namespace DataAccessLayer.Repositories
                 LoanTypes= combinedLoanCountsByUnit
             };
         }
-    }
+
+        public async Task<DTOAnalyticsResult> GetTotalClaimMonthlyApplications(int year)
+        {
+            //chart 1
+            var carCounts = await (
+                from car in _context.trnEducationDetails
+                where car.UpdatedOn.HasValue && car.UpdatedOn.Value.Year == year
+                group car by car.UpdatedOn.Value.Month into g
+                select new DTOAnalyticsResponse
+                {
+                    Month = g.Key.ToString(),
+                    CACount = g.Count(),
+                    PCACount = 0,
+                    HBACount = 0,
+                    TotalApplications = 0
+                }
+            ).ToListAsync();
+
+            var pcCounts = await (
+                from pca in _context.trnMarriageward
+                where pca.UpdatedOn.HasValue && pca.UpdatedOn.Value.Year == year
+                group pca by pca.UpdatedOn.Value.Month into g
+                select new DTOAnalyticsResponse
+                {
+                    Month = g.Key.ToString(),
+                    CACount = 0,
+                    PCACount = g.Count(),
+                    HBACount = 0,
+                    TotalApplications = 0
+                }
+            ).ToListAsync();
+
+            var hbaCounts = await (
+                from hba in _context.trnPropertyRenovation
+                where hba.UpdatedOn.HasValue && hba.UpdatedOn.Value.Year == year
+                group hba by hba.UpdatedOn.Value.Month into g
+                select new DTOAnalyticsResponse
+                {
+                    Month = g.Key.ToString(),
+                    CACount = 0,
+                    PCACount = 0,
+                    HBACount = g.Count(),
+                    TotalApplications = 0
+                }
+            ).ToListAsync();
+
+            // Merge the data
+            var combined = carCounts
+                .Union(pcCounts)
+                .Union(hbaCounts)
+                .GroupBy(m => m.Month)
+                .Select(g => new DTOAnalyticsResponse
+                {
+                    Month = g.Key,
+                    CACount = g.Sum(x => x.CACount),
+                    PCACount = g.Sum(x => x.PCACount),
+                    HBACount = g.Sum(x => x.HBACount),
+                    TotalApplications = g.Sum(x => x.CACount + x.PCACount + x.HBACount)
+                })
+            .OrderBy(m => int.Parse(m.Month))
+            .ToList();
+
+
+            //chart 2
+            var topRanks = await (
+                from app in _context.trnClaim
+                join rank in _context.MRanks on app.DdlRank equals rank.RankId
+                where app.UpdatedOn.HasValue && app.UpdatedOn.Value.Year == year
+                group app by new { app.DdlRank, rank.RankName } into g
+                orderby g.Count() descending
+                select new DTOAnalyticsResponse
+                {
+                    Rank = g.Key.RankName,
+                    RankCount = g.Count()
+                }
+            )
+            .Take(10)
+            .ToListAsync();
+
+            //chart 3
+            var topRegt = await (
+                from app in _context.trnClaim
+                join regt in _context.MRegtCorps on app.RegtCorps equals regt.Id
+                where app.UpdatedOn.HasValue && app.UpdatedOn.Value.Year == year
+                group app by new { app.RegtCorps, regt.RegtName } into g
+                orderby g.Count() descending
+                select new DTOAnalyticsResponse
+                {
+                    Regt = g.Key.RegtName,
+                    RegtCount = g.Count()
+                }
+            )
+            .Take(10)
+            .ToListAsync();
+
+
+            //chart 5
+            var topUnits = await (from app in _context.trnClaim
+                                  join u in _context.MUnits
+                                  on app.PresentUnit equals u.UnitId
+                                  where app.IsActive == true && app.UpdatedOn.Value.Year == year
+                                  group app by u.UnitName into g
+                                  orderby g.Count() descending
+                                  select new DTOAnalyticsResponse
+                                  {
+                                      UnitName = g.Key,
+                                      TotalApplications = g.Count()
+                                  })
+                       .Take(10)
+                       .ToListAsync();
+
+            return new DTOAnalyticsResult
+            {
+                MonthlyApplications = combined,
+                TopRanks = topRanks,
+                TopRegiments = topRegt,
+                topUnits = topUnits
+            };
+        }
+
+        }
 
 }
