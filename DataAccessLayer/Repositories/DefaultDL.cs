@@ -20,7 +20,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOApplicationStatusResponse>> GetTimeLine(int applicationId)
         {
             var timeLine = await (from statusCtr in _context.TrnStatusCounter
-                                  join status in _context.StatusTable on statusCtr.StatusId equals status.StatusId
+                                  join status in _context.StatusTable on statusCtr.StatusId equals status.StatusCode
                                   where statusCtr.ApplicationId == applicationId
                                   orderby statusCtr.ActionOn descending
                                   select new DTOApplicationStatusResponse
@@ -28,7 +28,7 @@ namespace DataAccessLayer.Repositories
                                       StatusId = status.StatusId,
                                       Status = status.StatusName,
                                       timeLine = statusCtr.ActionOn.HasValue
-                                          ? statusCtr.ActionOn.Value.ToString("dd-MM-yyyy")
+                                  ? statusCtr.ActionOn.Value.ToString("dd MMM yyyy, hh:mm tt")
                                           : ""
                                   }).ToListAsync();
 
@@ -45,7 +45,7 @@ namespace DataAccessLayer.Repositories
                                       StatusId = status.StatusId,
                                       Status = status.StatusName,
                                       timeLine = statusCtr.ActionOn.HasValue
-                                          ? statusCtr.ActionOn.Value.ToString("dd-MM-yyyy")
+                                          ? statusCtr.ActionOn.Value.ToString("dd MMM yyyy, hh:mm tt")
                                           : ""
                                   }).ToListAsync();
 
@@ -60,7 +60,7 @@ namespace DataAccessLayer.Repositories
                                 join status in _context.StatusTable on appl.StatusCode equals status.StatusCode
                                 where (prefix.Prefix + appl.Number + appl.Suffix) == armyNo
                                 select new DTOApplicationStatusResponse
-                                {
+                                { 
                                     ApplicationId = appl.ApplicationId,
                                     ApplicationType = applicationType.ApplicationTypeName,
                                     Status = status.StatusName.ToString(),
