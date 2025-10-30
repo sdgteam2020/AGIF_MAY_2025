@@ -1824,6 +1824,7 @@
         activeMode = 'loan';
         $btnLoan.addClass('btn-primary active').removeClass('btn-outline-primary');
         $btnMaturity.addClass('btn-outline-primary').removeClass('btn-primary active');
+        $('.loan').removeClass('d-none');
         refreshActive($yearSelect.val());
     });
 
@@ -1832,6 +1833,7 @@
         activeMode = 'maturity';
         $btnMaturity.addClass('btn-primary active').removeClass('btn-outline-primary');
         $btnLoan.addClass('btn-outline-primary').removeClass('btn-primary active');
+        $('.loan').addClass('d-none');
         refreshActive($yearSelect.val());
     });
 });
