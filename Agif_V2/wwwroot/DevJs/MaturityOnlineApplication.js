@@ -1515,8 +1515,8 @@ function checkUnitSameOrNot(ArmyNo) {
 
                         Swal.fire({
                             icon: 'info',
-                            title: '<span style="font-size: 20px;">Unit Registration Pending/Not Activated</span>',
-                            html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to Agif.</span>',
+                            title: '<span style="font-size: 20px;">Registration Pending/Not Activated</span>',
+                            html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to AGIF.</span>',
                             confirmButtonText: 'OK',
                             cancelButtonText: 'Cancel',
                             showCancelButton: true,

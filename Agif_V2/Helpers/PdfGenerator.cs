@@ -137,9 +137,9 @@ namespace Agif_V2.Helpers
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
                     AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email + "@" + common.EmailDomain);
                     AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.pcda_pao);
-                    AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. Pan Card", common.PanCardNo);
+                    AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN Card", common.PanCardNo);
                     AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);
-                    AddRow("17. Present Unit", common.PresentUnit, "18.Unit Pin", common.PresentUnitPin);
+                    AddRow("17. Present Unit", common.PresentUnit, "18.Unit PIN", common.PresentUnitPin);
                     AddRow("19. Unit Address", common.ArmyPostOffice, "20. Civil Postal Address", common.CivilPostalAddress);
                     AddRow("21. Fmn HQ", common.NextFmnHQ, "22. Date of Prom", common.DateOfPromotion?.ToString("dd-MM-yyyy"));
 
@@ -239,13 +239,13 @@ namespace Agif_V2.Helpers
                         document.Add(para30);
                         document.Add(new Paragraph("\n"));
 
-                        string domainInfo = $"Verified by - {UserName}   IP Address – {IpAddress}   Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
-                        document.Add(new Paragraph(domainInfo)
-                            .SetFont(normalFont)
-                            .SetFontColor(ColorConstants.BLUE)
-                            .SetFontSize(12)
-                            .SetTextAlignment(TextAlignment.JUSTIFIED)
-                            .SetMarginBottom(10));
+                        //string domainInfo = $"Verified by - {UserName}   IP Address – {IpAddress}   Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                        //document.Add(new Paragraph(domainInfo)
+                        //    .SetFont(normalFont)
+                        //    .SetFontColor(ColorConstants.BLUE)
+                        //    .SetFontSize(12)
+                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
+                        //    .SetMarginBottom(10));
 
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number))
@@ -326,6 +326,13 @@ namespace Agif_V2.Helpers
                             }
 
                             document.Add(new Paragraph("\n"));
+                            string domainInfo = $"Verified by - {UserName}   IP Address – {IpAddress}   Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                            document.Add(new Paragraph(domainInfo)
+                                .SetFont(normalFont)
+                                .SetFontColor(ColorConstants.BLUE)
+                                .SetFontSize(12)
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(10));
                         }
 
                         if (isApproved || isRejected)
@@ -483,15 +490,15 @@ namespace Agif_V2.Helpers
                         document.Add(titleParagraph31);
 
 
-                        string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
-                        document.Add(new Paragraph(domainInfo)
-                            .SetFont(normalFont)
-                            .SetFontColor(ColorConstants.BLUE)
-                            .SetFontSize(12)
-                            .SetTextAlignment(TextAlignment.JUSTIFIED)
-                            .SetMarginBottom(10));
+                        //string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                        //document.Add(new Paragraph(domainInfo)
+                        //    .SetFont(normalFont)
+                        //    .SetFontColor(ColorConstants.BLUE)
+                        //    .SetFontSize(12)
+                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
+                        //    .SetMarginBottom(10));
 
-                        document.Add(new Paragraph("\n"));
+                        //document.Add(new Paragraph("\n"));
 
                         // === Signature Table (Top) ===
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
@@ -603,6 +610,14 @@ namespace Agif_V2.Helpers
 
                             AddRecParagraph("5. I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.");
                             AddRecParagraph("     Application is recommended for sanction and accordingly I countersign the same.");
+
+                            string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                            document.Add(new Paragraph(domainInfo)
+                                .SetFont(normalFont)
+                                .SetFontColor(ColorConstants.BLUE)
+                                .SetFontSize(12)
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(10));
                         }
 
 
@@ -720,15 +735,15 @@ namespace Agif_V2.Helpers
                         string section30 = "32.  I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.";
                         document.Add(new Paragraph(section30).SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
 
-                        string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
-                        document.Add(new Paragraph(domainInfo)
-                            .SetFont(normalFont)
-                            .SetFontColor(ColorConstants.BLUE)
-                            .SetFontSize(12)
-                            .SetTextAlignment(TextAlignment.JUSTIFIED)
-                            .SetMarginBottom(10));
+                        //string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                        //document.Add(new Paragraph(domainInfo)
+                        //    .SetFont(normalFont)
+                        //    .SetFontColor(ColorConstants.BLUE)
+                        //    .SetFontSize(12)
+                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
+                        //    .SetMarginBottom(10));
 
-                        document.Add(new Paragraph("\n"));
+                        //document.Add(new Paragraph("\n"));
 
                         // === Signature Table (Top) ===
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
@@ -844,6 +859,14 @@ namespace Agif_V2.Helpers
                                 .SetTextAlignment(TextAlignment.JUSTIFIED)
                                 .SetMarginBottom(5);
                             document.Add(para6);
+
+                            string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
+                            document.Add(new Paragraph(domainInfo)
+                                .SetFont(normalFont)
+                                .SetFontColor(ColorConstants.BLUE)
+                                .SetFontSize(12)
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(10));
                         }
 
 
