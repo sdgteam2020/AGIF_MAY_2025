@@ -318,7 +318,7 @@ namespace DataAccessLayer.Repositories
             var carLoans = await (
                 from c in _context.trnCar
                 join t in _context.trnApplications on c.ApplicationId equals t.ApplicationId
-                where c.IsActive && c.UpdatedOn.Value.Year == year
+                where c.IsActive && c.UpdatedOn.Value.Year == year && !string.IsNullOrEmpty(c.DealerName)
                 group c by c.DealerName into g
                 select new DTOAnalyticsResponse
                 {
@@ -331,7 +331,7 @@ namespace DataAccessLayer.Repositories
             var pcaLoans = await (
                 from p in _context.trnPCA
                 join t in _context.trnApplications on p.ApplicationId equals t.ApplicationId
-                where p.IsActive && p.UpdatedOn.Value.Year == year
+                where p.IsActive && p.UpdatedOn.Value.Year == year && !string.IsNullOrEmpty(p.PCA_dealerName)
                 group p by p.PCA_dealerName into g
                 select new DTOAnalyticsResponse
                 {
@@ -344,7 +344,7 @@ namespace DataAccessLayer.Repositories
             var hbaLoans = await (
                 from h in _context.trnHBA
                 join t in _context.trnApplications on h.ApplicationId equals t.ApplicationId
-                where h.IsActive && h.UpdatedOn.Value.Year == year
+                where h.IsActive && h.UpdatedOn.Value.Year == year && !string.IsNullOrEmpty(h.PropertySeller)
                 group h by h.PropertySeller into g
                 select new DTOAnalyticsResponse
                 {
