@@ -211,13 +211,13 @@ function BindUsersData(status) {
             },
          
           
-            {
-                data: "regtName",
-                name: "RegtName",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
+            //{
+            //    data: "regtName",
+            //    name: "RegtName",
+            //    render: function (data, type, row) {
+            //        return data || 'N/A';
+            //    }
+            //},
             {
                 data: "isPrimary",
                 name: "IsPrimary",
