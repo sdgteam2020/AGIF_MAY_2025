@@ -25,7 +25,9 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#0">Home</a>
+@*                                     <a href="#0">Home</a>
+ *@                                    <a asp-controller="default" asp-action="Index">Home</a>
+
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
                                     Dashboard
@@ -102,7 +104,7 @@
             else
             {
                 <!-- End Col -->
-                <div class="col-xl-3 col-lg-4 col-sm-6">
+              @*   <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="icon-card mb-30">
                         <div class="icon orange">
                             <i class="lni lni-credit-cards"></i>
@@ -113,10 +115,29 @@
                         </div>
                     </div>
                     <!-- End Icon Cart -->
+
+                </div> *@
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="icon-card mb-30 position-relative">
+                          <div class="icon orange">
+                            <i class="lni lni-credit-cards"></i>
+                          </div>
+                          <div class="content">
+                            <h6 class="mb-10">Pending Appl</h6>
+                            <h3 class="text-bold mb-10">@metrics["PendingApplications"]</h3>
+                          </div>
+
+                          <!-- clickable overlay -->
+                          <a class="stretched-link"
+                             href="@Url.Action("UserApplicationList", "ApplicationRequest", new { status = 1 })"
+                             aria-label="Open Pending Applications">
+                          </a>
+                        </div>
                 </div>
+
                 <!-- End Col -->
                 <div class="col-xl-3 col-lg-4 col-sm-6">
-                    <div class="icon-card mb-30">
+                    <div class="icon-card mb-30 position-relative">
                         <div class="icon success">
                             <i class="lni lni-checkmark-circle"></i>
                         </div>
@@ -124,12 +145,15 @@
                             <h6 class="mb-10">Approved Appl</h6>
                             <h3 class="text-bold mb-10">@metrics["ApprovedApplications"]</h3>
                         </div>
+                          <a class="stretched-link" href="@Url.Action("UserApplicationList", "ApplicationRequest", new { status = 2 })"
+                            aria-label="Open Pending Applications">
+                        </a>
                     </div>
                     <!-- End Icon Cart -->
                 </div>
                 <!-- End Col -->
                 <div class="col-xl-3 col-lg-4 col-sm-6">
-                    <div class="icon-card mb-30">
+                    <div class="icon-card mb-30 position-relative">
                         <div class="icon red">
                             <i class="lni lni-close"></i>
                         </div>
@@ -137,6 +161,9 @@
                             <h6 class="mb-10">Rejected Appl</h6>
                             <h3 class="text-bold mb-10">@metrics["RejectedApplications"]</h3>
                         </div>
+                        <a class="stretched-link" href="@Url.Action("UserApplicationList", "ApplicationRequest", new { status = 3 })"
+                            aria-label="Open Pending Applications">
+                        </a>
                     </div>
                     <!-- End Icon Cart -->
                 </div>

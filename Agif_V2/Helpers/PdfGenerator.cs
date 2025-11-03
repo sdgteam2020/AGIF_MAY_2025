@@ -135,7 +135,7 @@ namespace Agif_V2.Helpers
                     AddRow("3.Old Army No", common.OldNumber, "4.Rank", common.DdlRank);
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
-                    AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email);
+                    AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email + "@" + common.EmailDomain);
                     AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.pcda_pao);
                     AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. Pan Card", common.PanCardNo);
                     AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);

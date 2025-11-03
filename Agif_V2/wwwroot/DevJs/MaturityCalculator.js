@@ -399,61 +399,24 @@ $('input[name="category"]').on('click', function () {
                     Swal.fire({
                         title: '', // Empty title as it's not needed
                         html: `
-             <div style="text-align: center; max-width: 600px; margin: 0 auto;">
-        <!-- Joining Date Section -->
-        <div style="border: 2px solid #28a745; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #f8fff9;">
-            <h4 style="color: #28a745; margin: 0; font-size: 1.2rem; font-weight: 600;">
-                📅 Your Month of Joining Indian Army is
-            </h4>
-            <div style="color: #2c3e50; font-size: 1.5rem; font-weight: bold; margin-top: 8px;">
-                ${joiningDate}
-            </div>
-        </div>
+             <div style="text-align: center;">
+            <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
+            Your month of Joining Indian Army is: <span style="color: #2c3e50;">${joiningDate}</span>
+        </h3>
 
-        <!-- Information Section 1 -->
-        <div style="border: 2px solid #007bff; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #f8f9ff;">
-            <p style="color: #007bff; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
-               💵 Contribution Made Presuming All Payments Deducted By CDA(O) And Paid to AGIF
-            </p>
-            <div style="font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin: 0;">
-                ₹${parseFloat(response.balCount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
+                    Assuming all your premiums have been received at AGIF, your approximate accumulation in maturity till previous month is
+                </h3>
+                 <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
+                    This is for serving Personnel only and E.I. amount is included in final maturity benefit.
+                </h3>
+                 <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
+                    For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
+                </h3>
+                <div style="font-size: 2.5rem; font-weight: bold; color: #2c3e50; margin: 20px 0;">
+                    ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </div>
             </div>
-        </div>
-
-        <!-- Information Section 2 -->
-        <div style="border: 2px solid #ffc107; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #fffef8;">
-            <p style="color: #856404; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
-                💵 Saving Element From Your Contributed Amount
-            </p>
-              <div style="font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin: 0;">
-                ₹${parseFloat(response.saveEL).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </div>
-        </div>
-
-
-        <!-- Amount Section -->
-        <div style="border: 3px solid #2c3e50; border-radius: 12px; padding: 25px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.1);margin-bottom: 10px;">
-            <div style="color: #6c757d; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
-               💰 Maturity Amount That Your Saving Element has Grown As on ${tilldate}
-            </div>
-            <div style="font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin: 0;">
-                ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </div>
-        </div>
-          <!-- Note Section -->
-        <div style="border: 2px solid #17a2b8; border-radius: 8px; padding: 15px; margin-bottom: 10px;  background-color: #f0f9ff; border-left: 5px solid #17a2b8;">
-            <p style="color: #0c5460; margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.4;">
-                📝 <strong>NOTE:</strong> Tax free return for FY 2025-2026 is 8.7%
-            </p>
-        </div>
-        
-        <!-- Information Section 3 -->
-        <div style="border: 2px solid #dc3545; border-radius: 8px; padding: 15px; margin-bottom: 10px; background-color: #fff8f8;">
-            <p style="color: #dc3545; margin: 0; font-size: 1.1rem; font-weight: 600; line-height: 1.4;">
-               📞 For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
-            </p>
-        </div>
-    </div>
         `,
                         icon: 'success',
                         confirmButtonText: 'OK',

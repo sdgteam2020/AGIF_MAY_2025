@@ -1244,7 +1244,7 @@ namespace Agif_V2.Controllers
 
             if (result.Item1) // Assuming result is a tuple (bool, string)
             {
-                return Json(new { success = true, message = "Bulk applications processed successfully." });
+                return Json(new { success = true, message = "Applications Status Uploaded Successfully." });
             }
             else
             {

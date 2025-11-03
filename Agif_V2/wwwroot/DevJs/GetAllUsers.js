@@ -161,22 +161,8 @@ function BindUsersData(status) {
                 }
             },
             {
-                data: "profileName",
-                name: "ProfileName",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "emailId",
-                name: "EmailId",
-                render: function (data, type, row) {
-                    return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
-                }
-            },
-            {
-                data: "mobileNo",
-                name: "MobileNo",
+                data: "domainId",
+                name: "domainId",
                 render: function (data, type, row) {
                     return data || 'N/A';
                 }
@@ -189,8 +175,8 @@ function BindUsersData(status) {
                 }
             },
             {
-                data: "unitName",
-                name: "UnitName",
+                data: "profileName",
+                name: "ProfileName",
                 render: function (data, type, row) {
                     return data || 'N/A';
                 }
@@ -202,6 +188,29 @@ function BindUsersData(status) {
                     return data || 'N/A';
                 }
             },
+            {
+                data: "unitName",
+                name: "UnitName",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "mobileNo",
+                name: "MobileNo",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
+                data: "emailId",
+                name: "EmailId",
+                render: function (data, type, row) {
+                    return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
+                }
+            },
+         
+          
             {
                 data: "regtName",
                 name: "RegtName",

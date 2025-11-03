@@ -87,8 +87,8 @@
             const rowHtml = `
                 <tr>
                 <td>${index+1}.</td>
-                    <td >${app.applicationType || 'N/A'}</td>
-                    <td>
+                    <td class="statusList">${app.applicationType || 'N/A'}</td>
+                    <td class="statusList">
                         <span class=" ${getStatusBadgeClass(app.statusId)} statusList">${app.status || 'Unknown'}</span>
                     </td>
                     <td class="d-flex align-items-center">

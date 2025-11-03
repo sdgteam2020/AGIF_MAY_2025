@@ -747,7 +747,7 @@ namespace DataAccessLayer.Repositories
             var query =
                 from appl in _db.trnClaim.AsNoTracking()
                 join prefixTable in _db.MArmyPrefixes.AsNoTracking() on appl.ArmyPrefix equals prefixTable.Id
-                join statusName in _db.StatusTable.AsNoTracking() on appl.StatusCode equals statusName.StatusCode
+                join statusName in _db.StatusTable.AsNoTracking() on appl.StatusCode equals statusName.ClaimStatusCode
                 join applType in _db.WithdrawalPurpose.AsNoTracking() on appl.WithdrawPurpose equals applType.Id
                 where prefixTable.Prefix == prefix
                      && appl.Number == number

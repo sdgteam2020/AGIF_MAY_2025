@@ -85,7 +85,7 @@
     });
     function updateButtonState() {
         const allChecked = $('input[name="instr"]').length === $('input[name="instr"]:checked').length;
-        $('#acceptButton, #RejectButton').prop('disabled', !allChecked);
+        $('#acceptButton').prop('disabled', !allChecked);
         if (allChecked) {
             $('#txtRemark').focus();
         }
@@ -303,56 +303,110 @@ function GetApplicationList(status, endpoint) {
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
     });
 }
-function OpenAction(applicationId, endpoint, category) {
-    //HBA_SL12345671Y_1007_Merged
-    $("#spnapplicationId").html(applicationId);
+//function OpenAction(applicationId, endpoint, category) {
+//    //HBA_SL12345671Y_1007_Merged
+//    $("#spnapplicationId").html(applicationId);
 
+//    const val = $("#UserType").val() || "Loan";
+
+//    $.ajax({
+//        type: "POST",
+//        url: endpoint,
+//        data: { applicationId: applicationId },
+//        dataType: 'json',
+//        success: function (response) {
+
+//            if (response != null) {
+//                $("#pdfContainer").empty();
+
+
+//                // Create a new object element dynamically
+//                const objectElement = document.createElement('object');
+//                objectElement.id = 'PdfViwerFOrDigital'; // Optional: Set ID for the object
+//                objectElement.type = 'application/pdf';
+//                objectElement.classList.add('w-100', 'h-100', 'border-0', 'rounded'); // Add your styling classes
+
+//                // Set the 'data' attribute to load the PDF
+//                const pdfUrl = response + '#toolbar=0&navpanes=0&scrollbar=0';
+
+//                //objectElement.setAttribute('data', response);
+//                objectElement.setAttribute('data', pdfUrl);
+
+//                // Append the object element to the container
+//                document.getElementById('pdfContainer').appendChild(objectElement);
+
+//                // Show the modal with the PDF viewer
+//                $("#ViewPdf").modal("show");
+
+
+//                if (val === "Loan")
+//                    fetchApplicationDetails(applicationId, "/OnlineApplication/GetApplicationDetails");
+//                else if (val === "Maturity")
+//                    fetchApplicationDetails(applicationId, "/Claim/GetApplicationDetails");
+
+//            } else {
+//                alert('Error retrieving PDF file path: ' + response.message);
+//                console.error('Error:', response.message);
+//            }
+//        },
+//    });
+
+
+//}
+function OpenAction(applicationId, endpoint, category) {
+    $("#spnapplicationId").html(applicationId);
     const val = $("#UserType").val() || "Loan";
 
-    $.ajax({
-        type: "POST",
-        url: endpoint,
-        data: { applicationId: applicationId },
-        dataType: 'json',
-        success: function (response) {
+    // Show loading overlay (optional)
+    $("#loadingOverlay").removeClass("d-none");
 
-            if (response != null) {
-                $("#pdfContainer").empty();
+    fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ applicationId })
+    })
+        .then(resp => resp.json())
+        .then(response => {
+            $("#loadingOverlay").addClass("d-none");
+            $("#pdfContainer").empty();
 
-
-                // Create a new object element dynamically
-                const objectElement = document.createElement('object');
-                objectElement.id = 'PdfViwerFOrDigital'; // Optional: Set ID for the object
-                objectElement.type = 'application/pdf';
-                objectElement.classList.add('w-100', 'h-100', 'border-0', 'rounded'); // Add your styling classes
-
-                // Set the 'data' attribute to load the PDF
-                const pdfUrl = response + '#toolbar=0&navpanes=0&scrollbar=0';
-
-                //objectElement.setAttribute('data', response);
-                objectElement.setAttribute('data', pdfUrl);
-
-                // Append the object element to the container
-                document.getElementById('pdfContainer').appendChild(objectElement);
-
-                // Show the modal with the PDF viewer
-                $("#ViewPdf").modal("show");
-
-
-                if (val === "Loan")
-                    fetchApplicationDetails(applicationId, "/OnlineApplication/GetApplicationDetails");
-                else if (val === "Maturity")
-                    fetchApplicationDetails(applicationId, "/Claim/GetApplicationDetails");
-
-            } else {
-                alert('Error retrieving PDF file path: ' + response.message);
-                console.error('Error:', response.message);
+            if (!response) {
+                alert("No PDF returned");
+                return;
             }
-        },
-    });
 
+            // Assume `response` is the full URL to your PDF
+            return fetch(response);
+        })
+        .then(r => {
+            if (!r || !r.ok) throw new Error("PDF not found");
+            return r.blob();
+        })
+        .then(blob => {
+            const pdfUrl = URL.createObjectURL(blob);
 
+            const embed = document.createElement("embed");
+            embed.src = pdfUrl + "#toolbar=0&navpanes=0&scrollbar=0";
+            embed.type = "application/pdf";
+            embed.classList.add("w-100", "h-100", "border-0", "rounded");
+
+            document.getElementById("pdfContainer").appendChild(embed);
+
+            $("#ViewPdf").modal("show");
+
+            const val = $("#UserType").val() || "Loan";
+            if (val === "Loan")
+                fetchApplicationDetails(applicationId, "/OnlineApplication/GetApplicationDetails");
+            else if (val === "Maturity")
+                fetchApplicationDetails(applicationId, "/Claim/GetApplicationDetails");
+        })
+        .catch(err => {
+            $("#loadingOverlay").addClass("d-none");
+            console.error(err);
+            alert("Error loading PDF: " + err.message);
+        });
 }
+
 function fetchApplicationDetails(applicationId, endpoint) {
     currentApplicationData = {};// Clear previous application data
     $.ajax({
@@ -467,7 +521,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
                 } else {
                     Swal.fire({
                         title: "Alert!",
-                        text: "Army No Not Matched Pl Insert Valid Token!",
+                        text: "Army No is Not Matching. Please Insert Valid Token!",
                         icon: "error"
                     });
 

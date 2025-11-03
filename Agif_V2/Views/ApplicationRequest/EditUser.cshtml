@@ -5,6 +5,14 @@
     var message = TempData["ProfileMessage"] ?? string.Empty;
 
 }
+<style>
+    /* CSS */
+.large-checkbox {
+  border: 2px solid #381c1c !important; /* light gray */
+  accent-color: #ccb; /* modern browsers - affects the tick color */
+}
+
+</style>
 
 <div class="container-fluid">
     <div class="row">
@@ -110,7 +118,7 @@
                             <div class="col-md-6  mt-4">
                                 <div class="form-group">
                                     <input type="checkbox" asp-for="DteFmn" id="DteFmn" class="form-check-input large-checkbox" disabled />
-                                    <label for="DteFmn" class="form-label">I am posted at Fmn HQ/Dte</label>
+                                    <label for="DteFmn" class="form-label">I am posted at Fmn HQ/Dte (Applicable for Col Rank & Above)</label>
                                      
                                 </div>
                             </div>
