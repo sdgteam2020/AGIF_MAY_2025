@@ -593,23 +593,52 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
         alert("Date of Commission cannot be earlier than Date of Birth.");
         return;
     }
-    const ageInMilliseconds = dateOfCommission - dateOfBirth;
-    const ageInYears = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)); // Account for leap years
-    if (ageInYears < 15) {
+    //const ageInMilliseconds = dateOfCommission - dateOfBirth;
+    //const ageInYears = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)); // Account for leap years
+    //if (ageInYears < 15) {
+    //    Swal.fire({
+    //        title: 'Warning!',
+    //        text: 'Atleast 15 years of age is required for commission. Please check the Date of Birth and Date of Commission.',
+    //        icon: 'warning',
+    //        confirmButtonText: 'OK'
+    //    }).then((result) => {
+    //        if (result.isConfirmed) {
+    //            $('#dateOfCommission').val("");
+    //            window.location.href = '/Claim/MaturityLoanType';
+    //        }
+    //    });
+    //}
+    const today = new Date(); // current date
+
+    const minCompletionDate = addYears(dateOfCommission, 15);
+
+    if (today < minCompletionDate) {
         Swal.fire({
             title: 'Warning!',
-            text: 'Atleast 15 years of age is required for commission. Please check the Date of Birth and Date of Commission.',
+            text: `Minimum 15 years of service required. Please check the Date of Birth and Date of Commission.`,
             icon: 'warning',
             confirmButtonText: 'OK'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $('#dateOfCommission').val("");
-                window.location.href = '/Claim/MaturityLoanType';
-            }
+        }).then(() => {
+            $('#dateOfRetirement').val("");
+            window.location.href = '/Claim/MaturityLoanType';
         });
+        return false;
     }
 
+    return true; // valid service length
 
+}
+
+function addYears(date, years) {
+    const d = new Date(date.getTime());
+    const m = d.getMonth();
+    d.setFullYear(d.getFullYear() + years);
+
+    // Adjust Feb 29 for non-leap years
+    if (m === 1 && date.getDate() === 29 && d.getMonth() !== 1) {
+        d.setMonth(1, 28);
+    }
+    return d;
 }
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();
@@ -979,6 +1008,24 @@ function SetRetDate() {
                             dob.setFullYear(dob.getFullYear() + data.retirementAge);
                             const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
 
+
+                            const retirementDate = new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate()); // local midnight
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0); // normalize to start of today
+
+                            if (retirementDate < today) {
+                                Swal.fire({
+                                    title: 'Invalid Date',
+                                    text: 'Date of retirement is not valid.',
+                                    icon: 'warning',
+                                    confirmButtonText: 'OK'
+                                });
+                                $('#dateOfRetirement').val('');
+                                $('#dateOfBirth').val('');
+                                $('#dateOfCommission').val('');
+                                return; // stop here
+                            }
+
                             // Format date as yyyy-mm-dd
                             const yyyy = lastDay.getFullYear();
                             const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
@@ -999,6 +1046,24 @@ function SetRetDate() {
                             const dob = new Date(year, month - 1, day);
                             dob.setFullYear(dob.getFullYear() + 10);
                             const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
+
+
+                            const retirementDate = new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate()); // local midnight
+                            const today = new Date();
+                            today.setHours(0, 0, 0, 0); // normalize to start of today
+
+                            if (retirementDate < today) {
+                                Swal.fire({
+                                    title: 'Invalid Date',
+                                    text: 'Date of retirement is not valid.',
+                                    icon: 'warning',
+                                    confirmButtonText: 'OK'
+                                });
+                                $('#dateOfRetirement').val('');
+                                $('#dateOfBirth').val('');
+                                $('#dateOfCommission').val('');
+                                return; // stop here
+                            }
 
                             // Format date as yyyy-mm-dd
                             const yyyy = lastDay.getFullYear();
@@ -1027,6 +1092,22 @@ function SetRetDate() {
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
                                 const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
 
+                                const retirementDate = new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate()); // local midnight
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0); // normalize to start of today
+
+                                if (retirementDate < today) {
+                                    Swal.fire({
+                                        title: 'Invalid Date',
+                                        text: 'Date of retirement is not valid.',
+                                        icon: 'warning',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    $('#dateOfRetirement').val('');
+                                    $('#dateOfBirth').val('');
+                                    $('#dateOfCommission').val('');
+                                    return; // stop here
+                                }
                                 // Format date as yyyy-mm-dd
                                 const yyyy = lastDay.getFullYear();
                                 const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
@@ -1049,6 +1130,22 @@ function SetRetDate() {
                                 dob.setFullYear(dob.getFullYear() + data.retirementAge);
                                 const lastDay = new Date(dob.getFullYear(), dob.getMonth() + 1, 0);
 
+                                const retirementDate = new Date(lastDay.getFullYear(), lastDay.getMonth(), lastDay.getDate()); // local midnight
+                                const today = new Date();
+                                today.setHours(0, 0, 0, 0); // normalize to start of today
+
+                                if (retirementDate < today) {
+                                    Swal.fire({
+                                        title: 'Invalid Date',
+                                        text: 'Date of retirement is not valid.',
+                                        icon: 'warning',
+                                        confirmButtonText: 'OK'
+                                    });
+                                    $('#dateOfRetirement').val('');
+                                    $('#dateOfBirth').val('');
+                                    $('#dateOfCommission').val('');
+                                    return; // stop here
+                                }
                                 // Format date as yyyy-mm-dd
                                 const yyyy = lastDay.getFullYear();
                                 const mm = String(lastDay.getMonth() + 1).padStart(2, '0');

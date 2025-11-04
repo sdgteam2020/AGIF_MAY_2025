@@ -210,14 +210,26 @@ namespace DataAccessLayer.Repositories
             if (applications == null || applications.Count == 0)
                 return false;
 
+            var statusCounters = new List<TrnStatusCounter>();
+
             foreach (var app in applications)
             {
                 app.DownloadCount += 1;
                 app.StatusCode = 4;
                 app.DownloadedOn = DateTime.Now;
+
+                // Add a new entry to TrnStatusCounter for each application
+                statusCounters.Add(new TrnStatusCounter
+                {
+                    StatusId = 4,
+                    ApplicationId = app.ApplicationId,
+                    ActionOn = DateTime.Now
+                });
             }
 
             _db.trnApplications.UpdateRange(applications);
+
+            await _db.TrnStatusCounter.AddRangeAsync(statusCounters);
 
             int result = await _db.SaveChangesAsync();
 
@@ -407,6 +419,8 @@ namespace DataAccessLayer.Repositories
                 .Where(a => dtoExport.Id.Contains(a.ApplicationId))
                 .ToList();
 
+            var statusCounters = new List<TrnClaimStatusCounter>();
+
             if (applications == null || applications.Count == 0)
                 return false;
 
@@ -415,13 +429,23 @@ namespace DataAccessLayer.Repositories
                 app.DownloadCount += 1;
                 app.StatusCode = 104;
                 app.DownloadedOn = DateTime.Now;
+
+                statusCounters.Add(new TrnClaimStatusCounter
+                {
+                    StatusId = 104,
+                    ApplicationId = app.ApplicationId,
+                    ActionOn = DateTime.Now
+                });
             }
 
             _db.trnClaim.UpdateRange(applications);
 
+            await _db.TrnClaimStatusCounter.AddRangeAsync(statusCounters);
+
             int result = await _db.SaveChangesAsync();
 
             return result > 0;
+
         }
 
         public async Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date)
