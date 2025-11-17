@@ -402,12 +402,12 @@
                     x: {
                         title: { display: true, text: 'Unit Name', font: { weight: 'bold', size: 14 } },
                         stacked: false,
-                        ticks: {
-                            maxRotation: 0,
-                            minRotation: 0,
-                            autoSkip: false,
-                            font: { size: 12 }
-                        }
+                        //ticks: {
+                        //    maxRotation: 0,
+                        //    minRotation: 0,
+                        //    autoSkip: false,
+                        //    font: { size: 12 }
+                        //}
                     }
                 },
                 animation: { duration: 2000, easing: 'easeInOutQuart' }
@@ -1169,7 +1169,7 @@
                 'rgba(108, 117, 125, 0.7)'   // 10
             ];
 
-            const UnitbackgroundColors = UnitrawData.map((_, index) => colors[index]);
+            const UnitbackgroundColors = UnitrawData.map((_, index) => Unitcolors[index]);
 
             // Update chart - Note: for horizontal bars, labels are Y-axis
             topUnitsChart.data.labels = UnitrawData.map(x => x.unitName);
@@ -1755,12 +1755,16 @@
             // Color gradient - Top performers get darker/bolder colors
             // Color palette - cycle through colors
             const colors = [
-                'rgba(0, 123, 255, 0.8)',    // #007bff
-                'rgba(40, 167, 69, 0.8)',    // #28a745
-                'rgba(255, 193, 7, 0.8)',    // #ffc107
-                'rgba(220, 53, 69, 0.8)',    // #dc3545
-                'rgba(23, 162, 184, 0.8)',   // #17a2b8
-                'rgba(108, 117, 125, 0.8)'   // #6c757d
+                'rgba(0, 123, 255, 0.9)',    // Top 1 - Bold Blue
+                'rgba(0, 123, 255, 0.85)',   // Top 2
+                'rgba(0, 123, 255, 0.8)',    // Top 3
+                'rgba(40, 167, 69, 0.8)',    // 4 - Green
+                'rgba(40, 167, 69, 0.75)',   // 5
+                'rgba(255, 193, 7, 0.8)',    // 6 - Yellow
+                'rgba(255, 193, 7, 0.75)',   // 7
+                'rgba(23, 162, 184, 0.8)',   // 8 - Cyan
+                'rgba(108, 117, 125, 0.8)',  // 9 - Gray
+                'rgba(108, 117, 125, 0.7)'   // #6c757d
             ];
 
             const UnitbackgroundColors = UnitrawData.map((_, index) => colors[index]);

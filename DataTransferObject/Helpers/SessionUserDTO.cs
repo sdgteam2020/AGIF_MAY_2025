@@ -36,5 +36,7 @@ namespace DataTransferObject.Helpers
         public int UnitId { get; set; }
 
         public string? name { get; set; } = string.Empty;
+        public string Nameid { get; set; }
+        public string AppName { get; set; }
     }
 }

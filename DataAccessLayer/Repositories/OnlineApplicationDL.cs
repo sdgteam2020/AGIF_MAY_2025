@@ -2,20 +2,9 @@
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
-using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.ObjectPool;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccessLayer.Repositories
 {
@@ -581,15 +570,15 @@ namespace DataAccessLayer.Repositories
         //    // Concatenate rankName and userName
         //    return $"{rankName} {userProfile.userName}".Trim();
         //}
-        public async Task<(string Name, string Mobile,string Armyno)> GetCODetails(int mappingId)
+        public async Task<(string Name, string Mobile,string Armyno)> GetCODetails(int ProfileId)
         {
             // Get the UserMapping by MappingId
-            var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
+            var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.ProfileId == ProfileId);
             if (userMapping == null)
                 return (string.Empty, string.Empty,string.Empty);
 
             // Get the UserProfile by ProfileId from UserMapping
-            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.ProfileId);
             if (userProfile == null)
                 return (string.Empty, string.Empty, string.Empty);
 

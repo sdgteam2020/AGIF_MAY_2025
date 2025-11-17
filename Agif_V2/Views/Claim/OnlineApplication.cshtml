@@ -1091,7 +1091,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
+                                                <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text file-upload" required data-text="Attach Part-II Order" accept=".pdf" />
                                                 <p class="file-error-message text-danger" ></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
                                             </div>
@@ -1143,7 +1143,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text" data-text="
+                                                <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text file-upload" data-text="
         Attach Bonafide cert/admission letter" required accept=".pdf" />
                                                 <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
@@ -1170,7 +1170,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
+                                                <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text file-upload" required data-text="Total expenditure (attach details)" accept=".pdf" />
                                                 <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>
@@ -1284,7 +1284,7 @@
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
-                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control" oninput="ValInDataNo(this)" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" autocomplete="off"/>
+                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"  required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" autocomplete="off"/>
                                                     <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
                                                 </div>
 
@@ -1299,7 +1299,7 @@
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
-                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control" oninput="ValInDataNo(this)" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" autocomplete="off"/>
+                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"  required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" autocomplete="off"/>
                                                     <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
                                                 </div>
 
@@ -1324,7 +1324,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text" required data-text="Attach Part-II Order" accept=".pdf" />
+                                                <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text file-upload" required data-text="Attach Part-II Order" accept=".pdf" />
                                                 <p class="file-error-message text-danger" ></p>
 
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
@@ -1364,7 +1364,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text" required data-text="Attach invitation card" accept=".pdf" />
+                                                <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text file-upload" required data-text="Attach invitation card" accept=".pdf" />
                                                 <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
                                             </div>
@@ -1445,7 +1445,7 @@
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
+                                                <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text file-upload" required data-text="Total expenditure (attach details)" accept=".pdf" />
                                                 <p class="file-error-message text-danger" ></p>
                                                 @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>

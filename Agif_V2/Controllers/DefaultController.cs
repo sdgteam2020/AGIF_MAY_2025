@@ -16,7 +16,7 @@ namespace Agif_V2.Controllers
         public IActionResult Index()
         {
             return View();
-        } 
+        }
         public IActionResult Index1()
         {
             return View();
@@ -113,13 +113,10 @@ namespace Agif_V2.Controllers
             var data = await _default.GetClaimTimeLine(ApplicationId);
             return Json(data);
         }
-
         public IActionResult Message()
         {
             ViewBag.Message = TempData["Message"];
-           return View();
+            return View();
         }
-
-
     }
 }

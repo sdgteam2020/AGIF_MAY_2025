@@ -29,7 +29,7 @@ namespace DataAccessLayer.Repositories
                           .Where(um => um.UnitId == unitId && um.IsActive == true)
                           .FirstOrDefaultAsync();
 
-            return userMapping ?? throw new InvalidOperationException("UserMapping not found.");
+            return userMapping;
         }
 
         public Task<List<UserMapping>> GetAllUser(bool status)

@@ -206,6 +206,163 @@ namespace DataAccessLayer.Repositories
             if (entity != null)
                 dbSet.Remove(entity);
         }
+        //public async Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId)
+        //{
+        //    ClaimCommonModel commonDataModel = new ClaimCommonModel();
+        //    MArmyPrefix mArmyPrefix = new MArmyPrefix();
+        //    string ArmyNo = string.Empty;
+
+        //    if (ApplicationId != 0)
+        //    {
+        //        commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId); ;
+        //        int id = commonDataModel.ArmyPrefix;
+        //        mArmyPrefix = await _IArmyPrefixes.Get(id);
+        //        ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
+        //        ArmyNo = ArmyNo.Trim();
+        //    }
+
+        //    var files = new List<IFormFile>();
+        //    if (model.EducationDetails != null)
+        //    {
+        //        if (model.EducationDetails.AttachBonafideLetter != null) files.Add(model.EducationDetails.AttachBonafideLetter);
+        //        if (model.EducationDetails.AttachPartIIOrder != null) files.Add(model.EducationDetails.AttachPartIIOrder);
+        //        if (model.EducationDetails.TotalExpenditureFile != null) files.Add(model.EducationDetails.TotalExpenditureFile);
+        //    }
+        //    else if (model.Marriageward != null)
+        //    {
+        //        if (model.Marriageward.AttachInvitationcard != null) files.Add(model.Marriageward.AttachInvitationcard);
+        //        if (model.Marriageward.AttachPartIIOrder != null) files.Add(model.Marriageward.AttachPartIIOrder);
+        //    }
+        //    else if (model.PropertyRenovation != null)
+        //    {
+        //        if (model.PropertyRenovation.TotalExpenditureFile != null) files.Add(model.PropertyRenovation.TotalExpenditureFile);
+        //    }
+        //    else if (model.SplWaiver != null)
+        //    {
+        //        if (model.SplWaiver.OtherReasonPdf != null) files.Add(model.SplWaiver.OtherReasonPdf);
+        //        if (model.SplWaiver.TotalExpenditureFile != null) files.Add(model.SplWaiver.TotalExpenditureFile);
+        //    }
+
+        //    string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
+        //    if (!Directory.Exists(tempFolder))
+        //    {
+        //        Directory.CreateDirectory(tempFolder);
+        //    }
+
+        //    string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
+        //    string folderPath = Path.Combine(tempFolder, folderName);
+        //    if (!Directory.Exists(folderPath))
+        //    {
+        //        Directory.CreateDirectory(folderPath);
+        //    }
+
+        //    foreach (var file in files)
+        //    {
+        //        string fileExtension = Path.GetExtension(file.FileName);
+        //        string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
+        //        string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
+        //        string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension}";
+        //        string outputFile = Path.Combine(folderPath, fileName);
+
+        //        using (var fileStream = new FileStream(outputFile, FileMode.Create))
+        //        {
+        //            await file.CopyToAsync(fileStream);
+        //        }
+
+        //        if (model.EducationDetails != null)
+        //        {
+        //            if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
+        //            {
+        //                model.EducationDetails.AttachBonafideLetterPdf = fileName;
+        //                model.EducationDetails.IsAttachBonafideLetterPdf = true;
+        //            }
+        //            else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
+        //            {
+        //                model.EducationDetails.AttachPartIIOrderPdf = fileName;
+        //                model.EducationDetails.IsAttachPartIIOrderPdf = true;
+        //            }
+        //            else if (file.Name.Equals(model.EducationDetails.TotalExpenditureFile.Name))
+        //            {
+        //                model.EducationDetails.TotalExpenditureFilePdf = fileName;
+        //                model.EducationDetails.IsTotalExpenditureFilePdf = true;
+        //            }
+        //        }
+
+        //        if (model.Marriageward != null)
+        //        {
+        //            if (file.Name.Equals(model.Marriageward.AttachInvitationcard.Name))
+        //            {
+        //                model.Marriageward.AttachInvitationcardPdf = fileName;
+        //                model.Marriageward.IsAttachInvitationcardPdf = true;
+        //            }
+        //            else if (file.Name.Equals(model.Marriageward.AttachPartIIOrder.Name))
+        //            {
+        //                model.Marriageward.AttachPartIIOrderPdf = fileName;
+        //                model.Marriageward.IsAttachPartIIOrderPdf = true;
+        //            }
+
+        //        }
+        //        if (model.PropertyRenovation != null)
+        //        {
+        //            if (file.Name.Equals(model.PropertyRenovation.TotalExpenditureFile.Name))
+        //            {
+        //                model.PropertyRenovation.TotalExpenditureFilePdf = fileName;
+        //                model.PropertyRenovation.IsTotalExpenditureFilePdf = true;
+        //            }
+        //        }
+
+        //        if (model.SplWaiver != null)
+        //        {
+        //            if (file.Name.Equals(model.SplWaiver.OtherReasonPdf.Name))
+        //            {
+        //                model.SplWaiver.OtherReasonsPdf = fileName;
+        //                model.SplWaiver.IsOtherReasonPdf = true;
+        //            }
+        //            else if (file.Name.Equals(model.SplWaiver.TotalExpenditureFile.Name))
+        //            {
+        //                model.SplWaiver.TotalExpenditureFilePdf = fileName;
+        //                model.SplWaiver.IsTotalExpenditureFilePdf = true;
+        //            }
+        //        }
+
+        //    }
+
+        //    if (model.EducationDetails != null)
+        //    {
+        //        EducationDetailsModel educationDetails = new EducationDetailsModel();
+        //        educationDetails = model.EducationDetails;
+        //        educationDetails.ApplicationId = commonDataModel.ApplicationId;
+        //        await _Education.Add(model.EducationDetails);
+        //    }
+        //    else if (model.Marriageward != null)
+        //    {
+        //        MarriagewardModel marriageward = new MarriagewardModel();
+        //        marriageward = model.Marriageward;
+        //        marriageward.ApplicationId = commonDataModel.ApplicationId;
+        //        await _Marraige.Add(model.Marriageward);
+        //    }
+        //    else if (model.PropertyRenovation != null)
+        //    {
+        //        PropertyRenovationModel propertyRenovation = new PropertyRenovationModel();
+        //        propertyRenovation = model.PropertyRenovation;
+        //        propertyRenovation.ApplicationId = commonDataModel.ApplicationId;
+        //        await _Property.Add(model.PropertyRenovation);
+        //    }
+
+        //    else if (model.SplWaiver != null)
+        //    {
+        //        SplWaiverModel splWaiver = new SplWaiverModel();
+        //        splWaiver = model.SplWaiver;
+        //        splWaiver.ApplicationId = commonDataModel.ApplicationId;
+        //        await _Special.Add(model.SplWaiver);
+        //    }
+
+
+
+
+        //    return true;
+        //}
+
         public async Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
@@ -261,7 +418,8 @@ namespace DataAccessLayer.Repositories
                 string fileExtension = Path.GetExtension(file.FileName);
                 string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
                 string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
-                string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension}";
+                //string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension
+                string fileName = $"{fileBaseName}{fileExtension}";
                 string outputFile = Path.Combine(folderPath, fileName);
 
                 using (var fileStream = new FileStream(outputFile, FileMode.Create))
@@ -273,17 +431,17 @@ namespace DataAccessLayer.Repositories
                 {
                     if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
                     {
-                        model.EducationDetails.AttachBonafideLetterPdf = fileName;
+                        model.EducationDetails.AttachBonafideLetterPdf = "AttachBonafideLetter";
                         model.EducationDetails.IsAttachBonafideLetterPdf = true;
                     }
                     else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
                     {
-                        model.EducationDetails.AttachPartIIOrderPdf = fileName;
+                        model.EducationDetails.AttachPartIIOrderPdf = "AttachPartIIOrder";
                         model.EducationDetails.IsAttachPartIIOrderPdf = true;
                     }
                     else if (file.Name.Equals(model.EducationDetails.TotalExpenditureFile.Name))
                     {
-                        model.EducationDetails.TotalExpenditureFilePdf = fileName;
+                        model.EducationDetails.TotalExpenditureFilePdf = "TotalExpenditureFile";
                         model.EducationDetails.IsTotalExpenditureFilePdf = true;
                     }
                 }
@@ -292,12 +450,12 @@ namespace DataAccessLayer.Repositories
                 {
                     if (file.Name.Equals(model.Marriageward.AttachInvitationcard.Name))
                     {
-                        model.Marriageward.AttachInvitationcardPdf = fileName;
+                        model.Marriageward.AttachInvitationcardPdf = "AttachInvitationcard";
                         model.Marriageward.IsAttachInvitationcardPdf = true;
                     }
                     else if (file.Name.Equals(model.Marriageward.AttachPartIIOrder.Name))
                     {
-                        model.Marriageward.AttachPartIIOrderPdf = fileName;
+                        model.Marriageward.AttachPartIIOrderPdf = "AttachPartIIOrder";
                         model.Marriageward.IsAttachPartIIOrderPdf = true;
                     }
 
@@ -306,7 +464,7 @@ namespace DataAccessLayer.Repositories
                 {
                     if (file.Name.Equals(model.PropertyRenovation.TotalExpenditureFile.Name))
                     {
-                        model.PropertyRenovation.TotalExpenditureFilePdf = fileName;
+                        model.PropertyRenovation.TotalExpenditureFilePdf = "TotalExpenditureFile";
                         model.PropertyRenovation.IsTotalExpenditureFilePdf = true;
                     }
                 }
@@ -315,12 +473,12 @@ namespace DataAccessLayer.Repositories
                 {
                     if (file.Name.Equals(model.SplWaiver.OtherReasonPdf.Name))
                     {
-                        model.SplWaiver.OtherReasonsPdf = fileName;
+                        model.SplWaiver.OtherReasonsPdf = "OtherReason";
                         model.SplWaiver.IsOtherReasonPdf = true;
                     }
                     else if (file.Name.Equals(model.SplWaiver.TotalExpenditureFile.Name))
                     {
-                        model.SplWaiver.TotalExpenditureFilePdf = fileName;
+                        model.SplWaiver.TotalExpenditureFilePdf = "TotalExpenditureFile";
                         model.SplWaiver.IsTotalExpenditureFilePdf = true;
                     }
                 }
@@ -431,6 +589,166 @@ namespace DataAccessLayer.Repositories
             return userMapping;
         }
 
+        //public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
+        //{
+        //    ClaimCommonModel commonDataModel = new ClaimCommonModel();
+        //    MArmyPrefix mArmyPrefix = new MArmyPrefix();
+        //    string ArmyNo = string.Empty;
+
+        //    if (ApplicationId != 0)
+        //    {
+        //        commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId);
+        //        int id = commonDataModel.ArmyPrefix;
+        //        mArmyPrefix = await _IArmyPrefixes.Get(id);
+        //        ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
+        //        ArmyNo = ArmyNo.Trim();
+        //    }
+
+        //    string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
+        //    string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
+        //    string folderPath = Path.Combine(tempFolder, folderName);
+
+        //    //  Check if the folder exists
+        //    if (!Directory.Exists(folderPath))
+        //    {
+        //        // Folder not found, return false or handle as needed
+        //        return false;
+        //    }
+
+        //    var fileUpload = new ClaimDocumentUpload();
+        //    fileUpload.ApplicationId = ApplicationId;
+        //    // Add PDFs to the folder
+        //    foreach (var file in files)
+        //    {
+        //        if (file != null)
+        //        {
+        //            // Generate a file name based on PurposeType, ArmyNo, ApplicationId, and the file name
+        //            string fileExtension = Path.GetExtension(file.FileName);
+        //            string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
+        //            string outputFile = Path.Combine(folderPath, fileName);
+
+        //            // Save the file to the folder
+        //            using (var fileStream = new FileStream(outputFile, FileMode.Create))
+        //            {
+        //                await file.CopyToAsync(fileStream);
+        //            }
+
+        //            if (file.Name.Contains("CancelledCheque"))
+        //            {
+        //                fileUpload.IsCancelledChequePdf = true;
+        //                fileUpload.CancelledCheque = fileName; // Update with the dynamic file name
+        //            }
+        //            else if (file.Name.Contains("PaySlip"))
+        //            {
+        //                fileUpload.IsPaySlipPdf = true;
+        //                fileUpload.PaySlipPdf = fileName; // Update with the dynamic file name
+        //            }
+        //            else if (file.Name.Contains("Spdocus"))
+        //            {
+        //                fileUpload.IsSplWaiverPdf = true;
+        //                fileUpload.SplWaiverPdf = fileName; // Update with the dynamic file name
+        //            }
+        //            else if (file.Name.Contains("SeviceExtn"))
+        //            {
+        //                fileUpload.IsSeviceExtnPdf = true;
+        //                fileUpload.SeviceExtnPdf = fileName; // Update with the dynamic file name
+        //            }
+        //        }
+        //    }
+
+        //    if (PurposeType == "ED")
+        //    {
+        //        var Eddetails = await _Education.GetByApplicationId(ApplicationId);
+        //        fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
+        //        fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
+        //        fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
+        //        fileUpload.IsAttachPartIIOrderPdf = Eddetails.IsAttachPartIIOrderPdf;
+        //        fileUpload.TotalExpenditureFile = Eddetails.TotalExpenditureFilePdf;
+        //        fileUpload.IsTotalExpenditureFilePdf = Eddetails.IsTotalExpenditureFilePdf;
+        //    }
+        //    else if (PurposeType == "MW")
+        //    {
+        //        var MWdetails = await _Marraige.GetByApplicationId(ApplicationId);
+        //        fileUpload.Attach_PartIIOrderPdf = MWdetails.AttachPartIIOrderPdf;
+        //        fileUpload.IsAttach_PartIIOrderPdf = MWdetails.IsAttachPartIIOrderPdf;
+        //        fileUpload.AttachInvitationcardPdf = MWdetails.AttachInvitationcardPdf;
+        //        fileUpload.IsAttachInvitationcardPdf = MWdetails.IsAttachInvitationcardPdf;
+        //    }
+        //    else if (PurposeType == "PR")
+        //    {
+        //        // Process Property Renovation Details
+        //        var PRdetails = await _Property.GetByApplicationId(ApplicationId);
+        //        fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
+        //        fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
+        //    }
+        //    else if (PurposeType == "SP")
+        //    {
+        //        // Process Special Waiver Details
+        //        var SPdetails = await _Special.GetByApplicationId(ApplicationId);
+        //        fileUpload.OtherReasonsPdf = SPdetails.OtherReasonsPdf;
+        //        fileUpload.IsOtherReasonPdf = SPdetails.IsOtherReasonPdf;
+        //        fileUpload.TotalExpenditureFile = SPdetails.TotalExpenditureFilePdf;
+        //        fileUpload.IsTotalExpenditureFilePdf = SPdetails.IsTotalExpenditureFilePdf;
+        //    }
+
+        //    await _DocumentUpload.Add(fileUpload);
+
+
+        //    await UpdateApplicationStatus(ApplicationId, 101);
+
+        //    TrnClaimStatusCounter trnStatusCounter = new TrnClaimStatusCounter
+        //    {
+        //        StatusId = 101,
+        //        ApplicationId = ApplicationId,
+        //        ActionOn = DateTime.Now,
+        //    };
+        //    await InsertStatusCounter(trnStatusCounter);
+
+        //    var IOArmyNo = await GetIOArmyNoAsync(ApplicationId);
+        //    if (IOArmyNo == null)
+        //    {
+        //        var CoDetails = await GetCoDetails(ApplicationId);
+        //        if (CoDetails != null)
+        //        {
+        //            TrnFwdCO trnFwdCO = new TrnFwdCO
+        //            {
+        //                ApplicationId = ApplicationId,
+        //                ArmyNo = ArmyNo,
+        //                COUserId = CoDetails.UserId,
+        //                ProfileId = CoDetails.ProfileId,
+        //                CreatedOn = DateTime.Now,
+        //                Status = 101
+        //            };
+        //            await AddFwdCO(trnFwdCO);
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        if (!string.IsNullOrEmpty(IOArmyNo))
+        //        {
+        //            var IoDetails = await GetUserDetails(IOArmyNo);
+        //            if (IoDetails != null)
+        //            {
+        //                TrnFwdCO trnFwdCO = new TrnFwdCO
+        //                {
+        //                    ApplicationId = ApplicationId,
+        //                    ArmyNo = ArmyNo,
+        //                    COUserId = IoDetails.UserId,
+        //                    ProfileId = IoDetails.ProfileId,
+        //                    CreatedOn = DateTime.Now,
+        //                    Status = 101
+        //                };
+        //                await AddFwdCO(trnFwdCO);
+        //            }
+
+        //        }
+        //    }
+
+        //    return true;
+        //}
+
+
         public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
@@ -466,7 +784,8 @@ namespace DataAccessLayer.Repositories
                 {
                     // Generate a file name based on PurposeType, ArmyNo, ApplicationId, and the file name
                     string fileExtension = Path.GetExtension(file.FileName);
-                    string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
+                    //string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
+                    string fileName = $"{file.Name}{fileExtension}";
                     string outputFile = Path.Combine(folderPath, fileName);
 
                     // Save the file to the folder
@@ -478,22 +797,22 @@ namespace DataAccessLayer.Repositories
                     if (file.Name.Contains("CancelledCheque"))
                     {
                         fileUpload.IsCancelledChequePdf = true;
-                        fileUpload.CancelledCheque = fileName; // Update with the dynamic file name
+                        fileUpload.CancelledCheque = "CancelledCheque"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("PaySlip"))
                     {
                         fileUpload.IsPaySlipPdf = true;
-                        fileUpload.PaySlipPdf = fileName; // Update with the dynamic file name
+                        fileUpload.PaySlipPdf = "PaySlipPdf"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("Spdocus"))
                     {
                         fileUpload.IsSplWaiverPdf = true;
-                        fileUpload.SplWaiverPdf = fileName; // Update with the dynamic file name
+                        fileUpload.SplWaiverPdf = "Spdocus"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("SeviceExtn"))
                     {
                         fileUpload.IsSeviceExtnPdf = true;
-                        fileUpload.SeviceExtnPdf = fileName; // Update with the dynamic file name
+                        fileUpload.SeviceExtnPdf = "SeviceExtn"; // Update with the dynamic file name
                     }
                 }
             }
@@ -589,7 +908,6 @@ namespace DataAccessLayer.Repositories
 
             return true;
         }
-
 
         public Task<DTOClaimCommonOnlineResponse> GetApplicationDetails(int applicationId)
         {
@@ -779,70 +1097,70 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsAttachBonafideLetterPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.AttachBonafideLetterPdf;
+                        dTODocumentFileView.FileName = DocumentModel.AttachBonafideLetterPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttachPartIIOrderPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.AttachPartIIOrderPdf;
+                        dTODocumentFileView.FileName = DocumentModel.AttachPartIIOrderPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttachInvitationcardPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.AttachInvitationcardPdf;
+                        dTODocumentFileView.FileName = DocumentModel.AttachInvitationcardPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttach_PartIIOrderPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.Attach_PartIIOrderPdf;
+                        dTODocumentFileView.FileName = DocumentModel.Attach_PartIIOrderPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsTotalExpenditureFilePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.TotalExpenditureFile;
+                        dTODocumentFileView.FileName = DocumentModel.TotalExpenditureFile + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsCancelledChequePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque;
+                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque + ".Pdf" ;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsPaySlipPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf;
+                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSplWaiverPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.SplWaiverPdf;
+                        dTODocumentFileView.FileName = DocumentModel.SplWaiverPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSeviceExtnPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf;
+                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf + ".Pdf" ;
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsOtherReasonPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.OtherReasonsPdf;
+                        dTODocumentFileView.FileName = DocumentModel.OtherReasonsPdf + ".Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }

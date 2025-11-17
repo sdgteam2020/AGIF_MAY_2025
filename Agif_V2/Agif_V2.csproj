@@ -1,259 +1,271 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
+		<MvcRazorCompileOnPublish>false</MvcRazorCompileOnPublish>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="wwwroot\images\cards\card-style-1\**" />
-    <Compile Remove="wwwroot\images\cards\card-style-2\**" />
-    <Compile Remove="wwwroot\images\cards\card-style-4\**" />
-    <Compile Remove="wwwroot\images\cards\card-style-5\**" />
-    <Compile Remove="wwwroot\images\cards\card-style-6\**" />
-    <Compile Remove="wwwroot\images\invoice\**" />
-    <Compile Remove="wwwroot\images\lead\**" />
-    <Compile Remove="wwwroot\images\modals\**" />
-    <Content Remove="wwwroot\images\cards\card-style-1\**" />
-    <Content Remove="wwwroot\images\cards\card-style-2\**" />
-    <Content Remove="wwwroot\images\cards\card-style-4\**" />
-    <Content Remove="wwwroot\images\cards\card-style-5\**" />
-    <Content Remove="wwwroot\images\cards\card-style-6\**" />
-    <Content Remove="wwwroot\images\invoice\**" />
-    <Content Remove="wwwroot\images\lead\**" />
-    <Content Remove="wwwroot\images\modals\**" />
-    <EmbeddedResource Remove="wwwroot\images\cards\card-style-1\**" />
-    <EmbeddedResource Remove="wwwroot\images\cards\card-style-2\**" />
-    <EmbeddedResource Remove="wwwroot\images\cards\card-style-4\**" />
-    <EmbeddedResource Remove="wwwroot\images\cards\card-style-5\**" />
-    <EmbeddedResource Remove="wwwroot\images\cards\card-style-6\**" />
-    <EmbeddedResource Remove="wwwroot\images\invoice\**" />
-    <EmbeddedResource Remove="wwwroot\images\lead\**" />
-    <EmbeddedResource Remove="wwwroot\images\modals\**" />
-    <None Remove="wwwroot\images\cards\card-style-1\**" />
-    <None Remove="wwwroot\images\cards\card-style-2\**" />
-    <None Remove="wwwroot\images\cards\card-style-4\**" />
-    <None Remove="wwwroot\images\cards\card-style-5\**" />
-    <None Remove="wwwroot\images\cards\card-style-6\**" />
-    <None Remove="wwwroot\images\invoice\**" />
-    <None Remove="wwwroot\images\lead\**" />
-    <None Remove="wwwroot\images\modals\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="wwwroot\images\cards\card-style-1\**" />
+		<Compile Remove="wwwroot\images\cards\card-style-2\**" />
+		<Compile Remove="wwwroot\images\cards\card-style-4\**" />
+		<Compile Remove="wwwroot\images\cards\card-style-5\**" />
+		<Compile Remove="wwwroot\images\cards\card-style-6\**" />
+		<Compile Remove="wwwroot\images\invoice\**" />
+		<Compile Remove="wwwroot\images\lead\**" />
+		<Compile Remove="wwwroot\images\modals\**" />
+		<Content Remove="wwwroot\images\cards\card-style-1\**" />
+		<Content Remove="wwwroot\images\cards\card-style-2\**" />
+		<Content Remove="wwwroot\images\cards\card-style-4\**" />
+		<Content Remove="wwwroot\images\cards\card-style-5\**" />
+		<Content Remove="wwwroot\images\cards\card-style-6\**" />
+		<Content Remove="wwwroot\images\invoice\**" />
+		<Content Remove="wwwroot\images\lead\**" />
+		<Content Remove="wwwroot\images\modals\**" />
+		<EmbeddedResource Remove="wwwroot\images\cards\card-style-1\**" />
+		<EmbeddedResource Remove="wwwroot\images\cards\card-style-2\**" />
+		<EmbeddedResource Remove="wwwroot\images\cards\card-style-4\**" />
+		<EmbeddedResource Remove="wwwroot\images\cards\card-style-5\**" />
+		<EmbeddedResource Remove="wwwroot\images\cards\card-style-6\**" />
+		<EmbeddedResource Remove="wwwroot\images\invoice\**" />
+		<EmbeddedResource Remove="wwwroot\images\lead\**" />
+		<EmbeddedResource Remove="wwwroot\images\modals\**" />
+		<None Remove="wwwroot\images\cards\card-style-1\**" />
+		<None Remove="wwwroot\images\cards\card-style-2\**" />
+		<None Remove="wwwroot\images\cards\card-style-4\**" />
+		<None Remove="wwwroot\images\cards\card-style-5\**" />
+		<None Remove="wwwroot\images\cards\card-style-6\**" />
+		<None Remove="wwwroot\images\invoice\**" />
+		<None Remove="wwwroot\images\lead\**" />
+		<None Remove="wwwroot\images\modals\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Views\Home\UserApprovalLists.cshtml" />
-    <Content Remove="wwwroot\DevJs\Login.js" />
-    <Content Remove="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="Views\Home\UserApprovalLists.cshtml" />
+		<Content Remove="wwwroot\DevJs\Login.js" />
+		<Content Remove="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC211312A_3003\ED_IC211312A_3003_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_IC211312A_3003\ED_IC211312A_3003_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_SpdocusPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED__0\ED__0_AttachBonafideletter.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\ED__0\ED__0_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_Attachinvitationcard.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_Attachinvitationcard.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_Attachinvitationcard.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_SpdocusPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_Attachinvitationcard.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_Attachinvitationcard.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_Attachinvitationcard.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_AttachPartIIOrder.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_SeviceExtnPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_SpdocusPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_Merged.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_OtherReasonPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_SpdocusPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_OtherReasonPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_SeviceExtnPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_SpdocusPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_OtherReasonPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_SeviceExtnPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_SpdocusPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_TotalExpenditureFile.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_Application.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_CancelledCheque.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_OtherReasonPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_PaySlipPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_SeviceExtnPdf.pdf" />
-    <None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_SpdocusPdf.pdf" />
-    <None Include="wwwroot\DevJs\Login.js" />
-    <None Include="wwwroot\images\auth\.DS_Store" />
-    <None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\AGIF Loan  Inward Payment Using NEFT.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\Benevolent Reserve Fund.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\FRAUD.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\PRE-EMI REVISION.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\Provisioning of IT Rebate Certificate .pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\Review of HBA.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\REVISED NOMINATION FORM.pdf" />
-    <None Include="wwwroot\ImportantPdfFiles\REVISION OF POLICY FOR GRANT OF HBA.pdf" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC121213W_1002\ED_IC121213W_1002_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC14661207K_4009\ED_IC14661207K_4009_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC211312A_3003\ED_IC211312A_3003_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_IC211312A_3003\ED_IC211312A_3003_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC12121331N_2003\ED_JC12121331N_2003_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC14661000K_6010\ED_JC14661000K_6010_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_JC779734M_4006\ED_JC779734M_4006_SpdocusPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_5009\ED_OR14661207K_5009_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14661207K_7009\ED_OR14661207K_7009_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_OR14851082N_5014\ED_OR14851082N_5014_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED_SL00596L_5017\ED_SL00596L_5017_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED__0\ED__0_AttachBonafideletter.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\ED__0\ED__0_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_Attachinvitationcard.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_IC121133Y_1003\MW_IC121133Y_1003_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_Attachinvitationcard.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC393175L_3004\MW_JC393175L_3004_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_Attachinvitationcard.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_4007\MW_JC779734M_4007_SpdocusPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_Attachinvitationcard.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_JC779734M_5010\MW_JC779734M_5010_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_Attachinvitationcard.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_OR18002525X_5015\MW_OR18002525X_5015_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_Attachinvitationcard.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_AttachPartIIOrder.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\MW_SS14661000K_8009\MW_SS14661000K_8009_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_SeviceExtnPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC14661000K_6009\PR_JC14661000K_6009_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_JC54545L_2002\PR_JC54545L_2002_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_SpdocusPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661207K_4008\PR_OR14661207K_4008_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR14661208M_5011\PR_OR14661208M_5011_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_Merged.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\PR_OR18002525X_5016\PR_OR18002525X_5016_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_OtherReasonPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_IC12345N_5013\SP_IC12345N_5013_SpdocusPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_OtherReasonPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_SeviceExtnPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7010\SP_OR14661207K_7010_SpdocusPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_OtherReasonPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_SeviceExtnPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_SpdocusPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR14661207K_7011\SP_OR14661207K_7011_TotalExpenditureFile.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_Application.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_CancelledCheque.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_OtherReasonPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_PaySlipPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_SeviceExtnPdf.pdf" />
+		<None Include="wwwroot\ClaimTempUploads\SP_OR54545L_4005\SP_OR54545L_4005_SpdocusPdf.pdf" />
+		<None Include="wwwroot\DevJs\Login.js" />
+		<None Include="wwwroot\images\auth\.DS_Store" />
+		<None Include="wwwroot\ImportantPdfFiles\AGI Journal.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\AGIF Loan  Inward Payment Using NEFT.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\Benevolent Reserve Fund.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\TempPdf.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\FRAUD.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\PRE-EMI REVISION.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\Provisioning of IT Rebate Certificate .pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\Review of HBA.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\REVISED NOMINATION FORM.pdf" />
+		<None Include="wwwroot\ImportantPdfFiles\REVISION OF POLICY FOR GRANT OF HBA.pdf" />
+		<None Include="wwwroot\TempUploads\PCAOR15712822H_1040\agif_PDF_File.pdf" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.105.0" />
-    <PackageReference Include="EPPlus" Version="8.0.6" />
-    <PackageReference Include="itext7" Version="8.0.5" />
-    <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
-    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.15" />
-    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
-    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.7" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.94.2" />
+		<PackageReference Include="EPPlus" Version="8.0.6" />
+		<PackageReference Include="itext7" Version="8.0.5" />
+		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
+		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.15" />
+		<PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.0" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.8" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\cards\" />
-    <Folder Include="wwwroot\images\clients\" />
-    <Folder Include="wwwroot\images\projects\" />
-    <Folder Include="wwwroot\MergePdf\" />
-    <Folder Include="wwwroot\PdfDownloaded\" />
-    <Folder Include="wwwroot\TempUploads\CA_IC45678833M_15214\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="wwwroot\images\cards\" />
+		<Folder Include="wwwroot\images\clients\" />
+		<Folder Include="wwwroot\images\projects\" />
+		<Folder Include="wwwroot\PdfDownloaded\" />
+		<Folder Include="wwwroot\TempUploads\CA_IC45678833M_15214\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-    <ProjectReference Include="..\DataTransferObject\DataTransferObject.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
+		<ProjectReference Include="..\DataTransferObject\DataTransferObject.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Account\GetAllUsers.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
-    <_ContentIncludedByDefault Remove="wwwroot\css\chatbot.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\css\home-index.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\DevJs\Login.js" />
-  </ItemGroup>
+	<ItemGroup>
+		<_ContentIncludedByDefault Remove="Views\Account\GetAllUsers.cshtml" />
+		<_ContentIncludedByDefault Remove="Views\Default\FinalWithdrawalfromMaturityBenefit.cshtml" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\chatbot.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\css\home-index.css" />
+		<_ContentIncludedByDefault Remove="wwwroot\DevJs\Login.js" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Account\GetAllUsers.cshtml" />
-  </ItemGroup>
+	<ItemGroup>
+		<UpToDateCheckInput Remove="Views\Account\GetAllUsers.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="SignatureVerification">
+			<HintPath>SignatureVerification.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+
+
 
 </Project>

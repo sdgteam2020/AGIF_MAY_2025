@@ -1,14 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Response;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ConstrainedExecution;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace DataAccessLayer.Repositories
 {
@@ -559,7 +551,7 @@ namespace DataAccessLayer.Repositories
                     PCACount = g.Sum(x => x.PCACount),
                     HBACount = g.Sum(x => x.HBACount)
                 })
-                .OrderBy(x => x.UnitName)
+                .OrderBy(x => x.UnitName).Take(20)
                 .ToList();
          
 
