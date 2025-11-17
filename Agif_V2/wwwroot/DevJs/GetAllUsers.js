@@ -219,6 +219,13 @@ function BindUsersData(status) {
             //    }
             //},
             {
+                data: "updatedOn",
+                name: "UpdatedOn",
+                render: function (data, type, row) {
+                    return data || 'N/A';
+                }
+            },
+            {
                 data: "isPrimary",
                 name: "IsPrimary",
                 orderable: false,

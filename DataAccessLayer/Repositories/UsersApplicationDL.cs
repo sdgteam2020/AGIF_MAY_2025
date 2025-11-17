@@ -464,6 +464,7 @@ namespace DataAccessLayer.Repositories
                 profile.Email = sessionUserDTO.EmailId ?? string.Empty;
                 profile.rank = sessionUserDTO.RankId;
                 profile.MobileNo = sessionUserDTO.MobileNo ?? string.Empty;
+                profile.UpdatedOn = DateTime.Now;
                 updated = true;
             }
 
@@ -488,6 +489,7 @@ namespace DataAccessLayer.Repositories
             {
                 user.Email = sessionUserDTO.EmailId;
                 user.PhoneNumber = sessionUserDTO.MobileNo;
+                user.UpdatedOn = DateTime.Now;
                 var result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {

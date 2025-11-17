@@ -95,7 +95,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(SessionUserDTO sessionUserDTO)
         {
-            if(!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
                 return BadRequest("Invalid request data.");
             }

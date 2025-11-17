@@ -67,7 +67,7 @@ namespace DataAccessLayer.Repositories
                         join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
                         join role in _context.UserRoles on user.Id equals role.UserId
                         where mapping.IsActive == status && role.RoleId == 2
-                        orderby user.UpdatedOn
+                        orderby user.UpdatedOn descending
                         select new DTOUserProfileResponse
                         {
                             DomainId = profile.userName,
@@ -82,6 +82,7 @@ namespace DataAccessLayer.Repositories
                             IsActive = status,
                             IsPrimary = mapping.IsPrimary,
                             IsFmn = mapping.IsFmn,
+                            UpdatedOn = user.UpdatedOn,
                         };
 
             return users;
