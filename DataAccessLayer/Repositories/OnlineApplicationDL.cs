@@ -761,11 +761,11 @@ namespace DataAccessLayer.Repositories
                                         Unit = presentUnit != null ? presentUnit.UnitId : 0,
                                        
                                         apfx = prefix.Prefix,
-                                        ano = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
+                                        ano = $"{common.Number ?? string.Empty}".Trim(),
                                         AadharNo = common.AadharCardNo ?? string.Empty,
                                         asfx = common.Suffix ?? string.Empty,
                                         opfx = prefix.Prefix,
-                                        ono = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+                                        ono = $"{common.OldNumber ?? string.Empty}".Trim(),
                                         osfx = common.OldSuffix ?? string.Empty,
                                         Rank = rank != null ? rank.RankName : string.Empty,
                                         Loanee_Name = common.ApplicantName ?? string.Empty,

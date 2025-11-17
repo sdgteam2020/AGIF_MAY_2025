@@ -80,7 +80,7 @@
                     </li>
                 }
 
-                else if(Model?.Role == "MaturityAdmin")
+                else if(Model?.Role == "ClaimAdmin")
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
@@ -107,7 +107,7 @@
 
                 }
 
-                else if (Model?.Role == "Admin")
+                else if (Model?.Role == "LoanAdmin" )
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
@@ -133,8 +133,31 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                           data-bs-toggle="collapse"
+                           data-bs-target="#ddmenu_2"
+                           aria-controls="ddmenu_2"
+                           aria-expanded="false"
+                           aria-label="Toggle navigation">
+                            <i class="bi bi-list-check"></i>
+                            <span class="text">User Approval List</span>
+                        </a>
+                        <ul id="ddmenu_2" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="true"><i class="bi bi-hourglass"></i>Active Users</a>
+
+                            </li>
+                            <li>
+
+                                <a href="#" class="submit-status active" data-controller="Account" data-method="GetAllUsers" data-status="false"><i class="bi bi-check-circle-fill"></i>Deactive Users</a>
+
+                            </li>
+                        </ul>
+                    </li>
+
                 }
-                else if (Model?.Role == "SuperAdmin")
+                else if (Model?.Role == "Admin")
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"

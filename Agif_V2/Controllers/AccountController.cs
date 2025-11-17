@@ -168,14 +168,16 @@ namespace Agif_V2.Controllers
 
             Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
 
-            if (roles.Contains("Admin") || roles.Contains("MaturityAdmin") || roles.Contains("SuperAdmin"))
+            if (roles.Contains("LoanAdmin") || roles.Contains("ClaimAdmin") || roles.Contains("Admin"))
             {
                 return RedirectToAction("Index", "Home");
             }
 
             if (profile == null)
             {
-                return Json(new { success = false, message = "User mapping not found." });
+                //return Json(new { success = false, message = "User mapping not found." });
+                TempData["Message"] = "User mapping not found. Please contact administrator.";
+                return RedirectToAction("Message", "Default");
             }
 
             bool isCOActive = profile.IsCOActive;
@@ -193,13 +195,14 @@ namespace Agif_V2.Controllers
             if (result.IsLockedOut)
             {
                 model = await PopulateLockoutInfo(model, user);
-                return View(model);
+                TempData["Message"] = "Your account has been locked due to multiple failed login attempts. Please try again later or contact the administrator.";
+                return RedirectToAction("Message", "Default");
             }
 
             if (result.IsNotAllowed)
             {
-                ModelState.AddModelError(string.Empty, "Your account is not allowed to sign in.");
-                return View(model);
+               TempData["Message"] = "Your account is not allowed to sign in. Please contact administrator.";
+                return RedirectToAction("Message", "Default");
             }
 
             var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
@@ -207,14 +210,14 @@ namespace Agif_V2.Controllers
 
             if (remainingAttempts > 0)
             {
-                ModelState.AddModelError(string.Empty, $"Invalid username or password. {remainingAttempts} attempt(s) remaining before account lockout.");
+                TempData["Message"] = $"Invalid username or password. {remainingAttempts} attempt(s) remaining before your account is locked.";
             }
             else
             {
-                model = await PopulateLockoutInfo(model, user);
+                TempData["Message"] = "Your account has been locked due to multiple failed login attempts. Please contact the administrator.";
             }
 
-            return View(model);
+            return RedirectToAction("Message", "Default");
         }
         public IActionResult Register()
         {
@@ -289,7 +292,7 @@ namespace Agif_V2.Controllers
 
         }
 
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin,LoanAdmin")]
         public IActionResult GetAllUsers(bool status)
         {
             if (!ModelState.IsValid)
@@ -366,6 +369,7 @@ namespace Agif_V2.Controllers
             // var ci = "SQL_Latin1_General_CP1_CI_AS";
 
             return query.Where(x =>
+            EF.Functions.Like(x.DomainId ?? "", pattern) ||
                 EF.Functions.Like(x.EmailId ?? "", pattern) ||
                 EF.Functions.Like(x.MobileNo ?? "", pattern) ||
                 EF.Functions.Like(x.ArmyNo ?? "", pattern) ||

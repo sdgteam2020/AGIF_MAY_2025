@@ -28,7 +28,7 @@ namespace Agif_V2.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            if(sessionUser.Role == "Admin")
+            if(sessionUser.Role == "LoanAdmin")
             {
                 var userCounts = await home.GetUserCount();
                 var metrics = new Dictionary<string, int>
@@ -40,7 +40,7 @@ namespace Agif_V2.Controllers
                 ViewBag.Metrics = metrics;
             }
 
-            else if (sessionUser.Role == "MaturityAdmin")
+            else if (sessionUser.Role == "ClaimAdmin")
             {
                 var userCounts = await home.GetUserCount();
                 var metrics = new Dictionary<string, int>
@@ -65,7 +65,7 @@ namespace Agif_V2.Controllers
             }
             return View(sessionUser);
         }
-        [Authorize(Roles = "SuperAdmin")]
+        [Authorize(Roles = "Admin")]
         public  IActionResult LogViewer()
         {
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");

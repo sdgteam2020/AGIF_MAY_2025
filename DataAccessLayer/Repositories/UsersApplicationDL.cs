@@ -37,7 +37,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date)
         {
             var result = await (from appl in _db.trnApplications
-                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && appl.StatusCode == 2
+                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && (appl.StatusCode == 2 || appl.StatusCode == 4)
                                 select new DTOGetApplResponse
                                 {
                                     ApplicationId = appl.ApplicationId,
@@ -451,7 +451,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date)
         {
             var result = await (from appl in _db.trnClaim
-                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && appl.StatusCode == 2
+                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && (appl.StatusCode == 102 || appl.StatusCode == 104)
                                 select new DTOGetApplResponse
                                 {
                                     ApplicationId = appl.ApplicationId,
@@ -576,7 +576,7 @@ namespace DataAccessLayer.Repositories
                 // Add table-valued parameter
                 var parameter = new SqlParameter("@ApplicationUpdates", applicationUpdates)
                 {
-                    SqlDbType = SqlDbType.Structured,
+                    //SqlDbType = SqlDbType.Structured,
                     TypeName = "dbo.BulkApplicationUpdateType"
                 };
                 command.Parameters.Add(parameter);
@@ -631,7 +631,7 @@ namespace DataAccessLayer.Repositories
                 // Add table-valued parameter
                 var parameter = new SqlParameter("@ApplicationUpdates", applicationUpdates)
                 {
-                    SqlDbType = SqlDbType.Structured,
+                    //SqlDbType = SqlDbType.Structured,
                     TypeName = "dbo.BulkApplicationUpdateType"
                 };
                 command.Parameters.Add(parameter);

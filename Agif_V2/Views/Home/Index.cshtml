@@ -43,7 +43,7 @@
         <!-- ========== title-wrapper end ========== -->
         <!-- ========== title-wrapper end ========== -->
         <div class="row">
-            @if(role == "Admin" || role == "MaturityAdmin")
+            @if(role == "LoanAdmin" || role == "ClaimAdmin")
             {
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="icon-card mb-30">
@@ -72,7 +72,7 @@
                 </div>
 
             }
-            else if (role == "SuperAdmin")
+            else if (role == "Admin")
             {
                 
                 <div class="col-xl-3 col-lg-4 col-sm-6">

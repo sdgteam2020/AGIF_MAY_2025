@@ -521,7 +521,7 @@ namespace Agif_V2.Controllers
 
             return Json(new { success = true, message = "Application rejected." });
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "LoanAdmin")]
         public IActionResult UsersApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
@@ -533,7 +533,7 @@ namespace Agif_V2.Controllers
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             return View(dTOTempSession);
         }
-        [Authorize(Roles = "MaturityAdmin")]
+        [Authorize(Roles = "ClaimAdmin")]
         public  IActionResult ClaimApplicationListAdmin(string status)
         {
             ViewBag.Status = status;
@@ -692,16 +692,31 @@ namespace Agif_V2.Controllers
             string newFolderPath = Path.Combine(basePath, newFolderName);
             Directory.CreateDirectory(newFolderPath);
 
+            string downloadFolderPath = Path.Combine(basePath, "Downloads");
             // Optional: keep the download/watermarked copy in a subfolder
-            string downloadFolder = Path.Combine(newFolderPath, "Downloads");
+            string downloadFolder = Path.Combine(downloadFolderPath, "Downloads");
             Directory.CreateDirectory(downloadFolder);
 
-            // Make a copy of the merged PDF in the export folder
-            string watermarkedCopyPath = Path.Combine(downloadFolder, fileName);
-            System.IO.File.Copy(mergedPdfPath, watermarkedCopyPath, overwrite: true);
 
-            // Watermark the copy (not the original)
-            _watermark.AddAnnotationAfterDigitalSign(ipAddress, watermarkedCopyPath);
+            // Make a copy of the merged PDF in the export folder
+            //string watermarkedCopyPath = Path.Combine(downloadFolder, fileName);
+            //System.IO.File.Copy(mergedPdfPath, watermarkedCopyPath, overwrite: true);
+
+            //// Watermark the copy (not the original)
+            //_watermark.AddAnnotationAfterDigitalSign(ipAddress, watermarkedCopyPath);
+            foreach (var data in ret.OnlineApplicationResponse)
+            {
+                var fileName1 = $"App{data.ApplicationId}{data.Number}.pdf";
+                var sourceMergedPdf = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MergePdf", fileName1);
+                var watermarkedCopyPath = Path.Combine(downloadFolder, fileName1);
+
+                if (System.IO.File.Exists(sourceMergedPdf))
+                {
+                    System.IO.File.Copy(sourceMergedPdf, watermarkedCopyPath, overwrite: true);
+                    _watermark.AddAnnotationAfterDigitalSign(ipAddress, watermarkedCopyPath);
+                }
+            }
+
 
 
             string hbaFolder = Path.Combine(newFolderPath, "HBA");
