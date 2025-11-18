@@ -28,7 +28,8 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOGetApplResponse>> GetApplicationByDate(DateTime date)
         {
             var result = await (from appl in _db.trnApplications
-                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && (appl.StatusCode == 2 || appl.StatusCode == 4)
+                                join DigitalSignRecords in _db.trnDigitalSignRecords on appl.ApplicationId equals DigitalSignRecords.ApplId
+                                where EF.Functions.DateDiffDay(DigitalSignRecords.SignOn, date) == 0 && (appl.StatusCode == 2 || appl.StatusCode == 4)
                                 select new DTOGetApplResponse
                                 {
                                     ApplicationId = appl.ApplicationId,
@@ -172,7 +173,8 @@ namespace DataAccessLayer.Repositories
                                                      join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
                                                      join statusName in _db.StatusTable on appl.StatusCode equals statusName.StatusCode
                                                      join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-                                                     orderby appl.UpdatedOn descending
+                                                     join digitalSign in _db.trnDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId
+                                                     orderby digitalSign.SignOn descending
                                                      select new DTOGetApplResponse
                                                      {
                                                          ApplicationId = appl.ApplicationId,
@@ -183,7 +185,7 @@ namespace DataAccessLayer.Repositories
                                                          RegtCorps = regt.RegtName,
                                                          PresentUnit = unit.UnitName,
                                                          PcdaPao = appl.pcda_pao ?? string.Empty,
-                                                         AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                                         AppliedDate = digitalSign.SignOn.HasValue ? digitalSign.SignOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                          ApplicationType = appl.ApplicationType.ToString(),
                                                          UpdatedOn = appl.UpdatedOn,
                                                          DownloadedOn = appl.DownloadedOn,
@@ -383,7 +385,8 @@ namespace DataAccessLayer.Repositories
                                                      join unit in _db.MUnits on appl.PresentUnit equals unit.UnitId
                                                      join statusName in _db.StatusTable on appl.StatusCode equals statusName.ClaimStatusCode
                                                      join applType in _db.WithdrawalPurpose on appl.WithdrawPurpose equals applType.Id
-                                                     orderby appl.UpdatedOn descending
+                                                     join digitalSign in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId
+                                                     orderby digitalSign.SignOn descending
                                                      select new DTOGetApplResponse
                                                      {
                                                          ApplicationId = appl.ApplicationId,
@@ -394,7 +397,7 @@ namespace DataAccessLayer.Repositories
                                                          RegtCorps = regt.RegtName,
                                                          PresentUnit = unit.UnitName,
                                                          PcdaPao = appl.pcda_pao ?? string.Empty,
-                                                         AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
+                                                         AppliedDate = digitalSign.SignOn.HasValue ? digitalSign.SignOn.Value.ToString("dd/MM/yyyy") : string.Empty,
                                                          ApplicationType = applType.Name ?? string.Empty,
                                                          UpdatedOn = appl.UpdatedOn,
                                                          DownloadedOn = appl.DownloadedOn,
@@ -442,7 +445,8 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOGetApplResponse>> GetClaimApplicationByDate(DateTime date)
         {
             var result = await (from appl in _db.trnClaim
-                                where EF.Functions.DateDiffDay(appl.UpdatedOn, date) == 0 && (appl.StatusCode == 102 || appl.StatusCode == 104)
+                                join DigitalSignRecords in _db.trnClaimDigitalSignRecords on appl.ApplicationId equals DigitalSignRecords.ApplId
+                                where EF.Functions.DateDiffDay(DigitalSignRecords.SignOn, date) == 0 && (appl.StatusCode == 102 || appl.StatusCode == 104)
                                 select new DTOGetApplResponse
                                 {
                                     ApplicationId = appl.ApplicationId,

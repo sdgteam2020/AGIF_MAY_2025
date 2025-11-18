@@ -499,8 +499,8 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify({
-            //"inputPersID": "9a4beb14b87de35d6bba98e2b16ad4eb341d52bda2bb3b7eadb064baf676cbd3" //Amit kumar jha
-            "inputPersID": IcNo//HRMS Token
+            "inputPersID": "9a4beb14b87de35d6bba98e2b16ad4eb341d52bda2bb3b7eadb064baf676cbd3" //Amit kumar jha
+            //"inputPersID": IcNo//HRMS Token
             //"inputPersID": "867a43f0ec5593ba28ebd8f8e765bb6f3886f45981193f3d2befdc72404e0484" //Comdt Token
         }),
 

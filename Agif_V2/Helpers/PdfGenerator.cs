@@ -8,6 +8,7 @@ using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Draw;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
@@ -100,6 +101,8 @@ namespace Agif_V2.Helpers
                         .SetTextAlignment(TextAlignment.CENTER)
                         .SetMarginBottom(20)
                         .SetUnderline());
+                    var line = new LineSeparator(new SolidLine());
+                    document.Add(line);
 
                     Table table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
                     // Helper method
@@ -179,10 +182,10 @@ namespace Agif_V2.Helpers
                         AddLoanRow("26. Estimated Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
 
 
-                        AddLoanRow("28. No of EMI (In Months)", hba.HBA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("28. No of EMI (In Months)", hba.HBA_EMI_Applied.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
 
 
-                        AddLoanRow("30. Bank IFSC Code", common.IfsCode, "", "");
+                        AddLoanRow("30. Bank IFS Code", common.IfsCode, "", "");
 
 
 
@@ -239,14 +242,6 @@ namespace Agif_V2.Helpers
                         document.Add(para30);
                         document.Add(new Paragraph("\n"));
 
-                        //string domainInfo = $"Verified by - {UserName}   IP Address – {IpAddress}   Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
-                        //document.Add(new Paragraph(domainInfo)
-                        //    .SetFont(normalFont)
-                        //    .SetFontColor(ColorConstants.BLUE)
-                        //    .SetFontSize(12)
-                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
-                        //    .SetMarginBottom(10));
-
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number))
                             .SetBorder(Border.NO_BORDER)
@@ -255,6 +250,12 @@ namespace Agif_V2.Helpers
                             .SetFontSize(10));
                         signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); // Empty left cell
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT)
+                            .SetFont(regularFont)
+                            .SetFontSize(10));
+                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); // Empty left cell
+                        signatureTable.AddCell(new Cell().Add(new Paragraph(common.UpdatedOn))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT)
                             .SetFont(regularFont)
@@ -300,7 +301,7 @@ namespace Agif_V2.Helpers
                             r1.Add(new Text(common.ApplicantName).SetFont(boldFont));
                             r1.Add(new Text(" of my Unit ").SetFont(regularFont));
                             r1.Add(new Text(common.PresentUnit).SetFont(boldFont));
-                            r1.Add(new Text(". I identify his signature documents as attested by him and certify them to be correct.")
+                            r1.Add(new Text(". I identify his signature on supporting documents as attested by him and certify them to be correct.")
                                 .SetFont(regularFont));
                             document.Add(r1);
 
@@ -309,10 +310,13 @@ namespace Agif_V2.Helpers
                             {
         $"2. It's certified that I am the CO/OC Tps of {common.Number} {common.DdlRank} {common.ApplicantName} and I am authorised to countersign financial documents of this individual.",
         "3. I have interviewed him and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.",
-        $"4. It is certified that Bank A/c No {common.SalaryAcctNo} of Bank ({common.NameOfBank}) with IFSC {common.IfsCode} as given in the application...",
+        $"4. It is certified that Bank A/c No {common.SalaryAcctNo} of Bank {common.NameOfBank} with IFSC {common.IfsCode} as given in the application and cancelled cheque is of Salary Account of {common.Number} {common.DdlRank} {common.ApplicantName}. ",
         "5. I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.",
         "     Application is recommended for sanction and accordingly I countersign the same."
     };
+
+
+
 
                             foreach (var point in paraTexts)
                             {
@@ -381,7 +385,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 470);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 440);
                             document.Add(icon);
                         }
                         if (isRejected)
@@ -395,7 +399,6 @@ namespace Agif_V2.Helpers
 
 
                     }
-
                     else if (data.CarApplicationResponse != null)
                     {
                         var car = data.CarApplicationResponse;
@@ -413,8 +416,8 @@ namespace Agif_V2.Helpers
 
                         AddLoanRow("22. Dealer Name", car.DealerName, "23. Model Name", car.ModelName);
                         AddLoanRow("24.Vehicle Cost", car.VehicleCost.ToString(), "25. Vehicle Type", car.Veh_Loan_Type.ToString());
-                        AddLoanRow("26. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString(), "27. Loan Frequency", car.CA_LoanFreq.ToString());
-                        AddLoanRow("28.Salary Acct No", common.SalaryAcctNo.ToString(), "29. Bank IFSC Code", common.IfsCode);
+                        AddLoanRow("26. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString(), "27. No of EMI (In Months)", car.CA_EMI_Applied.ToString());
+                        AddLoanRow("28.Salary Acct No", common.SalaryAcctNo.ToString(), "29. Bank IFS Code", common.IfsCode);
                         document.Add(cartable);
 
 
@@ -463,12 +466,12 @@ namespace Agif_V2.Helpers
 
                         var points30 = new List<string>
                             {
-                                "(a) If, at any time, it is found that I have obtained Car / Two Wheeler Loan from AGIF by misrepresentation, misstatement or fraud.",
-                                "(b) I will ensure that I will maintain adequate credit in my IRLA during the duration of repayment of complete loan instalments.",
-                                "(c) I will repay the loan amount with interest by monthly deductions from my salary.",
-                                "(d) In case the vehicle for which loan has been obtained meets with an accident.",
-                                "(e) In the event of my becoming non-effective / retirement / dismissal / premature retirement.",
-                                "(f) I will pay the sum of loan amount or the balance remaining unpaid."
+                                "(a) If, at any time, it is found that I have obtained Car / Two Wheeler Loan from AGIF by misrepresentation, misstatement or fraud or have committed a breach of the terms, conditions / instructions issued from time to time by AGIF, I shall without prejudice, be liable to legal, disciplinary or any other action and will become liable to repay in one lump-sum the entire amount of loan or balance of the outstanding loan together with interest for period of default of 2 % higher than the rate of interest at which the loan was sanctioned, to AGIF without any demur. ",
+                                "(b) I will ensure that I will maintain adequate credit in my IRLA during the duration of repayment of complete loan instalments. In case of any debit balance resulting in non-remittance of EMI (instalment) by the CDA (O) / PAO (OR) to AGIF, I undertake to pay it directly along with interest for period of default of two percent over and above the rate of interest at which the loan was sanctioned, as levied by the AGIF for the delayed period of instalments.",
+                                "(c) I will repay the loan amount with interest by monthly deductions from my salary and I hereby authorise the AGIF to make such deductions. I will repay the difference to the AGIF forthwith within one month from the date of sanction of loan, if the actual cost of vehicle is less than the loan paid for purchase of motor vehicle.",
+                                "(d) In case the vehicle for which loan has been obtained meets with an accident or gets damaged due to unforeseen event and is declared beyond economical repairs or is lost due to theft or fire, the amount claimed from Insurance company will be paid in full towards balance amount of loan to AGIF.",
+                                "(e) In the event of my becoming non-effective / retirement / dismissal / premature retirement and death preceding retirement, the AGIF shall be entitled to recover through the PAO (OR) / CDA(O) and / or receive the balance of the loan with interest remaining unpaid and any other dues from the whole or any specified part of the gratuity that may be sanctioned to me, Insurance / Disability / Maturity / survival benefit of AGIF, death benefits, DSOP Fund, DCRG, Commuted value of pension, leave encashment, Service pension, payable to the Applicant, without any demur from any quarter.",
+                                "(f) I will pay the sum of loan amount or the balance remaining unpaid at the date of retirement / dismissal / premature retirement from service by equal payments on the first day of every month and will pay interest on the sum remaining due as calculated according to the rules. I authorise the PAO (OR) / CDA (O) to deduct the amount as conveyed by AGIF from my salary. I hereby assign and transfer upto the AGIF the Motor Vehicle by way of security for the said loan and the interest thereon."
                             };
 
                         foreach (var point in points30)
@@ -490,16 +493,6 @@ namespace Agif_V2.Helpers
                         document.Add(titleParagraph31);
 
 
-                        //string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
-                        //document.Add(new Paragraph(domainInfo)
-                        //    .SetFont(normalFont)
-                        //    .SetFontColor(ColorConstants.BLUE)
-                        //    .SetFontSize(12)
-                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
-                        //    .SetMarginBottom(10));
-
-                        //document.Add(new Paragraph("\n"));
-
                         // === Signature Table (Top) ===
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
                         signatureTable.AddCell(new Cell()
@@ -516,6 +509,18 @@ namespace Agif_V2.Helpers
                                 .SetFont(normalFont).SetFontSize(10))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT));
+
+                        signatureTable.AddCell(new Cell()
+                            .Add(new Paragraph("").SetFont(normalFont).SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER));
+
+                        signatureTable.AddCell(new Cell()
+                            .Add(new Paragraph(common.UpdatedOn)
+                                .SetFont(normalFont).SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+
 
                         document.Add(signatureTable);
 
@@ -580,15 +585,15 @@ namespace Agif_V2.Helpers
 
                             document.Add(p2);
 
+                         
                             Paragraph p3 = new Paragraph()
-                                .Add(new Text("3. I have interviewed him on ").SetFont(normalFont).SetFontSize(10))
-                                .Add(new Text(interviewDate).SetFont(boldFont).SetFontSize(10))
-                                .Add(new Text(" and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.")
+                                .Add(new Text("3.     I have interviewed him ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text("and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.")
                                     .SetFont(normalFont).SetFontSize(10))
                                 .SetTextAlignment(TextAlignment.JUSTIFIED)
                                 .SetMarginBottom(5);
-
                             document.Add(p3);
+
 
                             string accountNo = common.ConfirmSalaryAcctNo ?? "";
                             string bankName = common.NameOfBank ?? "";
@@ -597,12 +602,12 @@ namespace Agif_V2.Helpers
                             Paragraph p4 = new Paragraph()
                                 .Add(new Text("4.     It is certified that Bank A/c No ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text(accountNo).SetFont(boldFont).SetFontSize(10))
-                                .Add(new Text(" of Bank (").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(" of Bank ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text(bankName).SetFont(boldFont).SetFontSize(10))
-                                .Add(new Text(") with IFSC ").SetFont(normalFont).SetFontSize(10))
-                                .Add(new Text(branchName).SetFont(boldFont).SetFontSize(10))
+                                .Add(new Text(" with IFSC ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(common.IfsCode).SetFont(boldFont).SetFontSize(10))
                                 .Add(new Text(" as given in the application and cancelled cheque is of Salary account of ").SetFont(normalFont).SetFontSize(10))
-                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName).SetFont(boldFont).SetFontSize(10))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName+".").SetFont(boldFont).SetFontSize(10))
                                 .SetTextAlignment(TextAlignment.JUSTIFIED)
                                 .SetMarginBottom(5);
 
@@ -610,6 +615,9 @@ namespace Agif_V2.Helpers
 
                             AddRecParagraph("5. I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.");
                             AddRecParagraph("     Application is recommended for sanction and accordingly I countersign the same.");
+
+
+                           
 
                             string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
                             document.Add(new Paragraph(domainInfo)
@@ -670,7 +678,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 270);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 290);
                             document.Add(icon);
                         }
 
@@ -700,8 +708,8 @@ namespace Agif_V2.Helpers
 
                         AddLoanRow("24. Dealer Name", pca.PCA_dealerName, "25. Model Name", pca.PCA_modelName);
                         AddLoanRow("26. Est Cost:", pca.computerCost.ToString(), "27. Loan Amt Reqd:", pca.PCA_Amount_Applied_For_Loan.ToString());
-                        AddLoanRow("28. Loan Frequency", pca.PCA_LoanFreq.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
-                        AddLoanRow("30. Bank IFSC Code", common.IfsCode, "", "");
+                        AddLoanRow("28. No of EMI (In Months)", pca.PCA_EMI_Applied.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("30. Bank IFS Code", common.IfsCode, "", "");
 
                         document.Add(pcatable);
 
@@ -735,15 +743,7 @@ namespace Agif_V2.Helpers
                         string section30 = "32.  I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.";
                         document.Add(new Paragraph(section30).SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
 
-                        //string domainInfo = $"Verified by - {UserName} IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
-                        //document.Add(new Paragraph(domainInfo)
-                        //    .SetFont(normalFont)
-                        //    .SetFontColor(ColorConstants.BLUE)
-                        //    .SetFontSize(12)
-                        //    .SetTextAlignment(TextAlignment.JUSTIFIED)
-                        //    .SetMarginBottom(10));
-
-                        //document.Add(new Paragraph("\n"));
+                       
 
                         // === Signature Table (Top) ===
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
@@ -763,6 +763,19 @@ namespace Agif_V2.Helpers
 
                         signatureTable.AddCell(new Cell()
                             .Add(new Paragraph(common.DdlRank + " " + common.ApplicantName)
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+                        
+                        signatureTable.AddCell(new Cell()
+                            .Add(new Paragraph("")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER));
+
+                        signatureTable.AddCell(new Cell()
+                            .Add(new Paragraph(common.UpdatedOn)
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER)
