@@ -167,7 +167,8 @@ namespace Agif_V2.Controllers
                 Role = role,
                 DomainId = user.DomainId,
                 RankName = profile.RankName ?? string.Empty,
-                ArmyNo = profile.ArmyNo ?? string.Empty
+                ArmyNo = profile.ArmyNo ?? string.Empty,
+                name = profile.ProfileName ?? string.Empty,
             };
 
             Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);

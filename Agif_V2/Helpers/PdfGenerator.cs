@@ -28,7 +28,7 @@ namespace Agif_V2.Helpers
         {
             _usersApplications = usersApplications;
         }
-        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name, string Mobile, string armyno)
+        public async Task<int> CreatePdfForOnlineApplication(int applicationId, string generatedPdfPath, bool isRejected, bool isApproved, string UserName, string IpAddress, string Name, string Mobile, string armyno,string unitName,string apptName)
         {
             var data = await _usersApplications.GetApplicationDetails(applicationId);
             var directory = Path.GetDirectoryName(generatedPdfPath);
@@ -139,7 +139,7 @@ namespace Agif_V2.Helpers
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
                     AddRow("7. DOE/DOC", common.DateOfCommission?.ToString("dd-MM-yyyy"), "8.Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
                     AddRow("9. Mobile No", common.MobileNo, "10. Email ID", common.Email + "@" + common.EmailDomain);
-                    AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.pcda_pao);
+                    AddRow("11. Regt/Corps", common.RegtCorps, "12. PCDA(O)/PAO(OR)", common.ApplicantType==1?"PCDA(O) Pune": common.pcda_pao);
                     AddRow("13.PCDA(O) Acct No", common.pcda_AcctNo, "14. PAN Card", common.PanCardNo);
                     AddRow("15. Aadhaar Card No", common.AadharCardNo, "16. Parent Unit", common.ParentUnit);
                     AddRow("17. Present Unit", common.PresentUnit, "18.Unit PIN", common.PresentUnitPin);
@@ -363,6 +363,16 @@ namespace Agif_V2.Helpers
                                     .SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(unitName)
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(apptName)
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + Mobile)
                                     .SetFont(regularFont)
@@ -537,6 +547,7 @@ namespace Agif_V2.Helpers
 
                             // Page Break (Optional)
                             // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                            document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                             document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
                                 .SetFont(boldFont)
@@ -655,6 +666,17 @@ namespace Agif_V2.Helpers
                                 .SetTextAlignment(TextAlignment.LEFT)
                                 .SetBorder(Border.NO_BORDER));
 
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(unitName).SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(apptName).SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
 
                             signatureTable2.AddCell(new Cell()
                                 .Add(new Paragraph("Mobile No: " + Mobile).SetFont(normalFont).SetFontSize(10))
@@ -678,7 +700,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 290);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 450);
                             document.Add(icon);
                         }
 
@@ -687,7 +709,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 557);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 315);
                             document.Add(icon);
                         }
 
@@ -919,6 +941,28 @@ namespace Agif_V2.Helpers
                                 .SetTextAlignment(TextAlignment.LEFT));
 
                             signatureTable2.AddCell(new Cell()
+                               .Add(new Paragraph("")
+                                   .SetFont(normalFont).SetFontSize(10))
+                               .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(unitName)
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+                            
+                            signatureTable2.AddCell(new Cell()
+                               .Add(new Paragraph("")
+                                   .SetFont(normalFont).SetFontSize(10))
+                               .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(apptName)
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell()
                                 .Add(new Paragraph("")
                                     .SetFont(normalFont).SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER));
@@ -946,12 +990,10 @@ namespace Agif_V2.Helpers
 
                         if (isApproved)
                         {
-
-
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(60f, 60f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 313);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 330);
                             document.Add(icon);
                         }
 
@@ -960,7 +1002,7 @@ namespace Agif_V2.Helpers
                             string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
                             ImageData imageData = ImageDataFactory.Create(imagePath);
                             Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 600);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 30, 640);
                             document.Add(icon);
                         }
 

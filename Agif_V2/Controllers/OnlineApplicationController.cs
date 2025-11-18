@@ -427,10 +427,10 @@ namespace Agif_V2.Controllers
                 var session = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
                 if (session == null) throw new Exception("Session expired or invalid user context.");
 
-                var (name, mobile, armyno) = await _IonlineApplication1.GetCODetails(session.ProfileId);
+                var (name, mobile, armyno,unitName,ApptName) = await _IonlineApplication1.GetCODetails(session.ProfileId);
                 string generatedPdfPath = Path.Combine(sourceFolderPath, folderPath + "_Application.pdf");
 
-                int result = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, session.UserName, ip, name, mobile, armyno);
+                int result = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, session.UserName, ip, name, mobile, armyno,unitName,ApptName);
 
                 if (result == 1)
                 {
