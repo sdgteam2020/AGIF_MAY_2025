@@ -288,6 +288,7 @@ namespace DataAccessLayer.Repositories
                               ConfirmSalaryAcctNo= AccountDetails.ConfirmSalaryAcctNo,
                               UpdatedOn = common.UpdatedOn.ToString(),
                               EmailDomain = common.EmailDomain ?? string.Empty,
+                              ApplicantType = common.ApplicantType,
                               
                               
                           }).FirstOrDefault();
@@ -298,7 +299,7 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "HBA";
                     var Hbamodel = (from hba in _context.trnHBA
-                                    join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.Id into loanTypeGroup
+                                    join loanType in _context.MLoanTypes on hba.PropertyType equals loanType.LoanTypeCode into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
                                     where hba.ApplicationId == applicationId
                                     select new DTOHbaApplicationresponse
@@ -323,7 +324,7 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "CAR";
                     var Carmodel = (from car in _context.trnCar
-                                    join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.Id into loanTypeGroup
+                                    join loanType in _context.MLoanTypes on car.Veh_Loan_Type equals loanType.LoanTypeCode into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
                                     where car.ApplicationId == applicationId
                                     select new DTOCarApplicationresponse
@@ -347,7 +348,7 @@ namespace DataAccessLayer.Repositories
                 {
                     formtype = "PCA";
                     var PcaModal = (from pca in _context.trnPCA
-                                    join loanType in _context.MLoanTypes on pca.computer_Loan_Type equals loanType.Id into loanTypeGroup
+                                    join loanType in _context.MLoanTypes on pca.computer_Loan_Type equals loanType.LoanTypeCode into loanTypeGroup
                                     from loanType in loanTypeGroup.DefaultIfEmpty()
                                     where pca.ApplicationId == applicationId
                                     select new DTOPCAApplicationresponse
@@ -570,21 +571,29 @@ namespace DataAccessLayer.Repositories
         //    // Concatenate rankName and userName
         //    return $"{rankName} {userProfile.userName}".Trim();
         //}
-        public async Task<(string Name, string Mobile,string Armyno)> GetCODetails(int ProfileId)
+        public async Task<(string Name, string Mobile,string Armyno,string unit,string appt)> GetCODetails(int ProfileId)
         {
             // Get the UserMapping by MappingId
             var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.ProfileId == ProfileId);
             if (userMapping == null)
-                return (string.Empty, string.Empty,string.Empty);
+                return (string.Empty, string.Empty,string.Empty, string.Empty, string.Empty);
 
             // Get the UserProfile by ProfileId from UserMapping
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.ProfileId);
             if (userProfile == null)
-                return (string.Empty, string.Empty, string.Empty);
+                return (string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
             // Get the RankName from MRanks using rank id from UserProfile
             var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
             string rankName = rank != null ? rank.RankName : string.Empty;
+
+            //Get present Unit from MUnits using UnitId from UserMapping
+            var unit = await _context.MUnits.FirstOrDefaultAsync(u => u.UnitId == userMapping.UnitId);
+            string unitName = unit != null ? unit.UnitName : string.Empty;
+
+            //get Appointment name from MAppointments using AppointmentId from UserMapping
+            var appointment = await _context.MAppointments.FirstOrDefaultAsync(a => a.ApptId == userProfile.ApptId);
+            string appointmentName = appointment != null ? appointment.AppointmentName : string.Empty;
 
          
 
@@ -594,7 +603,7 @@ namespace DataAccessLayer.Repositories
 
             var Armyno=userProfile.ArmyNo ?? string.Empty;
 
-            return (fullName, mobile,Armyno);
+            return (fullName, mobile,Armyno,unitName,appointmentName);
         }
 
         public async Task<bool> CheckExtensionofservice(int applicationid)

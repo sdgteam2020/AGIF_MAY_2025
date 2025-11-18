@@ -41,7 +41,7 @@ namespace DataAccessLayer.Interfaces
         Task<DTOCommonOnlineApplicationResponseList> GetApplicationDetailsForExport(DTOExportRequest dTOExport);
         Task<bool> CheckDocumentUploaded(int ApplicationID);
 
-        Task<(string Name, string Mobile, string Armyno)> GetCODetails(int mappingId);
+        Task<(string Name, string Mobile, string Armyno, string unit, string appt)> GetCODetails(int mappingId);
         Task<bool> CheckExtensionofservice(int applicationid);
 
         Task<DataTable> GetApplicationDetailsForExcel(DTOExportRequest dTOExport);
