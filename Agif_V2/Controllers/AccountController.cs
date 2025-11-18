@@ -583,6 +583,44 @@ namespace Agif_V2.Controllers
             return Json(new { success = true });
         }
 
+        [HttpPost]
+        public async Task<JsonResult> UpdateUserFormation(string domainId, bool isActive)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid request");
+            }
+            var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (string.IsNullOrEmpty(ip))
+            {
+                ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            }
+            if (string.IsNullOrWhiteSpace(domainId))
+            {
+                return Json(new { success = false, message = "Domain ID cannot be null or empty." });
+            }
+
+            var userProfile = await _userProfile.GetByUserName(domainId);
+            if (userProfile == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+
+            var userMapping = (await _userMapping.GetByProfileId(userProfile.ProfileId)).FirstOrDefault();
+            if (userMapping == null)
+            {
+                return Json(new { success = false, message = "User mapping not found." });
+            }
+
+
+            userMapping.IsFmn = isActive;
+            await _userMapping.Update(userMapping);
+
+            return Json(new { success = true });
+        }
+
         public async Task<IActionResult> CheckIsCoRegister(int unitId)
         {
             if (!ModelState.IsValid)

@@ -308,9 +308,9 @@ namespace Agif_V2.Helpers
                             // Paragraphs 2–5
                             string[] paraTexts =
                             {
-        $"2. It's certified that I am the CO/OC Tps of {common.Number} {common.DdlRank} {common.ApplicantName} and I am authorised to countersign financial documents of this individual.",
+        $"2. It's certified that I am the CO/OC Tps of {new Text (common.Number).SetFont(boldFont)} {new Text (common.DdlRank).SetFont(boldFont)} {new Text (common.ApplicantName).SetFont(boldFont) } and I am authorised to countersign financial documents of this individual.",
         "3. I have interviewed him and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.",
-        $"4. It is certified that Bank A/c No {common.SalaryAcctNo} of Bank {common.NameOfBank} with IFSC {common.IfsCode} as given in the application and cancelled cheque is of Salary Account of {common.Number} {common.DdlRank} {common.ApplicantName}. ",
+        $"4. It is certified that Bank A/c No {new Text(common.SalaryAcctNo).SetFont(boldFont)} of Bank ({new Text(common.NameOfBank).SetFont(boldFont)}) with IFSC {new Text(common.IfsCode).SetFont(boldFont)} as given in the application...",
         "5. I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.",
         "     Application is recommended for sanction and accordingly I countersign the same."
     };

@@ -1407,7 +1407,7 @@ namespace DataAccessLayer.Repositories
                              Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                              
                              ApplicationType = applicationType.Id,
-                             armyno = common.Number ?? string.Empty,
+                             armyno = prefix.Prefix + common.Number ?? string.Empty,
                              AadharNo = common.AadharCardNo ?? string.Empty,
                              Rank = rank != null ? rank.RankName : string.Empty,
                              MaturityHolder_Name = common.ApplicantName ?? string.Empty,
@@ -1431,7 +1431,7 @@ namespace DataAccessLayer.Repositories
                              Residual_Service = common.ResidualService ?? 0,
                              Suffix=common.Suffix ?? string.Empty,
                              opfx=common.OldArmyPrefix,
-                             ono=common.OldNumber,
+                             ono= oldPrefix.Prefix + common.OldNumber ?? string.Empty,
                              suffix_= common.OldSuffix ?? string.Empty,
                              Bank_Branch=AccountDetails.NameOfBankBranch ?? string.Empty,
                              ChldrenName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,

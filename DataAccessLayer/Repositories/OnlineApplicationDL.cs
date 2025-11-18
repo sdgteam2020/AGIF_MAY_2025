@@ -282,7 +282,7 @@ namespace DataAccessLayer.Repositories
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
                               NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
-                              pcda_pao = common.pcda_pao ?? string.Empty,
+                              pcda_pao = regCorps.PCDA_PAO ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
                               ConfirmSalaryAcctNo= AccountDetails.ConfirmSalaryAcctNo,

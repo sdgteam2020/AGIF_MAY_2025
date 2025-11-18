@@ -265,7 +265,28 @@ function BindUsersData(status) {
                         </div>
                     `;
                 }
-            }
+            },
+            {
+                data: "isFmn",
+                name: "isFmn",
+                orderable: false,
+                className: 'noExport',
+                render: function (data, type, row) {
+                    const isFmn = row.isFmn || false;
+                    const statusText = isFmn ? 'Fmn' : 'No Fmn';
+                    const statusClass = isFmn ? 'status-active' : 'status-inactive';
+
+                    return `
+                        <div class='action action-container'>
+                            <label class="toggle-switch">
+                                <input type="checkbox" class="cls-toggle-fmn" data-domain-id='${row.domainId || ''}' ${isFmn ? 'checked' : ''}>
+                                <span class="slider"></span>
+                            </label>
+                            <span class="status-text ${statusClass}">${statusText}</span>
+                        </div>
+                    `;
+                }
+            },
         ],
         language: {
             search: "",
@@ -352,6 +373,40 @@ function BindUsersData(status) {
                     }
                 });
             });
+
+            $('#tblData tbody').off('change', '.cls-toggle-fmn').on('change', '.cls-toggle-fmn', function () {
+                const $toggle = $(this);
+                const domainId = $toggle.data('domain-id');
+                const isActive = $toggle.is(':checked');
+                const statusText = $toggle.closest('.action-container').find('.status-text');
+
+                // Revert the toggle immediately; will be set again on confirm
+                $toggle.prop('checked', !isActive);
+
+                Swal.fire({
+                    title: `Are you sure?`,
+                    text: `Do you want to ${isActive ? 'activate' : 'deactivate'} formation of this user?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: 'No'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Set back the correct toggle value
+                        $toggle.prop('checked', isActive);
+
+                        // Update status text immediately for better UX
+                        if (isActive) {
+                            statusText.text('Active').removeClass('status-inactive').addClass('status-active');
+                        } else {
+                            statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+                        }
+
+                        // Call function to update user status
+                        updateUserFormation(domainId, isActive, $toggle);
+                    }
+                });
+            });
         }
 
     });
@@ -384,6 +439,31 @@ function updateUserStatus(domainId, isActive, toggleElement) {
     });
 }
 
+function updateUserFormation(domainId, isActive, toggleElement) {
+    $.ajax({
+        url: "/Account/UpdateUserFormation",
+        type: "POST",
+        data: {
+            domainId: domainId,
+            isActive: isActive
+        },
+        success: function (response) {
+            if (response.success) {
+                $('#tblData').DataTable().ajax.reload(null, false);
+                showSuccessMessage(`User Formation updated to: ${isActive ? 'Active' : 'Inactive'}`);
+            }
+            else {
+                revertToggle(toggleElement, !isActive);
+                console.error('Failed to update user Formation:', response.message);
+                showErrorMessage('Failed to update user Formation: ' + response.message);
+            }
+        },
+        error: function (xhr, status, error) {
+            revertToggle(toggleElement, !isActive);
+            console.error('Error updating user status:', error);
+        }
+    });
+}
 function updateUserPrimary(domainId, isPrimary, toggleElement) {
     $.ajax({
         url: "/Account/UpdateUserPrimary", // You'll need to create this endpoint
