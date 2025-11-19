@@ -59,8 +59,8 @@ function BindUsersData() {
             }
         },
         {
-            data: "coProfileId",
-            name: "CoProfileId",
+            data: "unitName",
+            name: "UnitName",
             render: function (data, type, row) {
                 return data || 'N/A';
             }

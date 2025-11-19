@@ -39,69 +39,6 @@ namespace DataAccessLayer.Repositories
         }
 
 
-        //public async Task<List<DTOGetApplResponse>> GetUsersApplication(int Mapping, int status)
-        //{
-        //    int actualStatus = (status == 2 || status > 3) ? 2 : status;
-
-        //    var UsersApplicationList = await (
-        //        from appl in _db.trnApplications
-        //        join user in _db.trnUserMappings on appl.PresentUnit equals user.UnitId
-        //        join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-        //        join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-        //        join digitalSign in _db.trnDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
-        //        from digitalSign in ds.DefaultIfEmpty()
-        //        where user.MappingId == Mapping
-        //              && (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
-        //              && user.IsPrimary == true
-        //        select new DTOGetApplResponse
-        //        {
-        //            ApplicationId = appl.ApplicationId,
-        //            ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-        //            Name = appl.ApplicantName,
-        //            ApplicationType = applType.ApplicationTypeName,
-        //            DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
-        //            AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-        //            IsMergePdf = appl.IsMergePdf,
-        //            UpdatedOn = appl.UpdatedOn,
-        //            DigitalSignDate = digitalSign != null && digitalSign.SignOn.HasValue ? digitalSign.SignOn.Value : (DateTime?)null
-        //        }).ToListAsync();
-
-        //    var COApplicationList = await (
-        //        from appl in _db.trnApplications
-        //        join profile in _db.UserProfiles on appl.IOArmyNo equals profile.ArmyNo
-        //        join prefix in _db.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
-        //        join applType in _db.MApplicationTypes on appl.ApplicationType equals applType.ApplicationTypeId
-        //        join digitalSign in _db.trnDigitalSignRecords on appl.ApplicationId equals digitalSign.ApplId into ds
-        //        from digitalSign in ds.DefaultIfEmpty()
-        //        where (appl.StatusCode == status || (status == 2 && appl.StatusCode > 3))
-        //        select new DTOGetApplResponse
-        //        {
-        //            ApplicationId = appl.ApplicationId,
-        //            ArmyNo = prefix.Prefix + appl.Number + appl.Suffix,
-        //            Name = appl.ApplicantName,
-        //            ApplicationType = applType.ApplicationTypeName,
-        //            DateOfBirth = appl.DateOfBirth.HasValue ? appl.DateOfBirth.Value.ToString("dd/MM/yyyy") : string.Empty,
-        //            AppliedDate = appl.UpdatedOn.HasValue ? appl.UpdatedOn.Value.ToString("dd/MM/yyyy") : string.Empty,
-        //            IsMergePdf = appl.IsMergePdf,
-        //            UpdatedOn = appl.UpdatedOn,
-        //            DigitalSignDate = digitalSign != null && digitalSign.SignOn.HasValue ? digitalSign.SignOn.Value : (DateTime?)null
-        //        }).ToListAsync();
-
-        //    // Merge
-        //    var applicationList = UsersApplicationList.Union(COApplicationList);
-
-        //    // Conditional order
-        //    if (status == 2)
-        //    {
-        //        applicationList = applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue);
-        //    }
-        //    else
-        //    {
-        //        applicationList = applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
-        //    }
-
-        //    return applicationList.ToList();
-        //}
         public async Task<List<DTOGetApplResponse>> GetUsersApplication(int Mapping, int status)
         {
             int actualStatus = (status == 2 || status > 3) ? 2 : status;

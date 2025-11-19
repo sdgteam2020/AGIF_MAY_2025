@@ -58,7 +58,7 @@ namespace DataAccessLayer.Repositories
                                 join prefix in _context.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                 join applicationType in _context.MApplicationTypes on appl.ApplicationType equals applicationType.ApplicationTypeId
                                 join status in _context.StatusTable on appl.StatusCode equals status.StatusCode
-                                where (prefix.Prefix + appl.Number + appl.Suffix) == armyNo
+                                where (appl.ArmyPrefix==14? ((appl.Number + appl.Suffix) == armyNo) : (prefix.Prefix + appl.Number + appl.Suffix) == armyNo)
                                 select new DTOApplicationStatusResponse
                                 { 
                                     ApplicationId = appl.ApplicationId,

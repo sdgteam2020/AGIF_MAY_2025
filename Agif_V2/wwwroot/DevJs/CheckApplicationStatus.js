@@ -75,34 +75,50 @@
 
             // Conditional extra button for statusId = 103
             let extraButtonHtml = '';
+            let downloadButtonHtml = '';
+            if (app.statusId !== 1) {
+                downloadButtonHtml = `
+                <button class="btn btn-danger ms-2 btn-icon downloadApplication"
+        type="button"
+        title="Download"
+        data-app-id="${safeAppId}">
+    <i class="bi bi-download"></i>
+</button>
+                `
+            }
             if (app.statusId === 1003 || app.statusId === 2003) {
                 extraButtonHtml = `
-                <button class="btn btn-warning ms-2 extra-btn btn-custom editapp" type="button"
-                        data-app-id="${safeAppId}">
-                    Edit Application
-                </button>
+               <button class="btn btn-warning ms-2 btn-icon editapp"
+        type="button"
+        title="Edit Application"
+        data-app-id="${safeAppId}">
+    <i class="bi bi-pencil-square"></i>
+</button>
             `;
             }
 
             const rowHtml = `
                 <tr>
-                <td>${index+1}.</td>
+                <td>${index + 1}.</td>
                     <td class="statusList">${app.applicationType || 'N/A'}</td>
                     <td class="statusList">
                         <span class=" ${getStatusBadgeClass(app.statusId)} statusList">${app.status || 'Unknown'}</span>
                     </td>
                     <td class="d-flex align-items-center">
-                        <button class="btn btn-custom timeline-btn " type="button"
+                        <button class="btn btn-primary timeline-btn " type="button"
                                 data-app-id="${safeAppId}" 
                                 data-bs-toggle="collapse" 
                                 data-bs-target="#timeline-${safeAppId}" 
                                 aria-expanded="false" 
-                                aria-controls="timeline-${safeAppId}">
-                            <i class="fas fa-calendar-check"></i> Application Timeline
+                                aria-controls="timeline-${safeAppId}"
+                                title="Application Timeline">
+                            <i class="bi bi-calendar-week"></i>
                         </button>
                          ${extraButtonHtml}
+                         ${downloadButtonHtml}
+                         
                     </td>
-                                        <td class="statusList">${app.remarks || 'N/A'}</td>
+                    <td class="statusList">${app.remarks || 'N/A'}</td>
 
                 </tr>
                 <tr class="collapse" id="timeline-${safeAppId}">
@@ -128,14 +144,32 @@
         const appId = $(this).data('app-id');  // Get application ID from button
         if (!appId) return;
 
-        if(type === 'Loan')
+        if (type === 'Loan')
             window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
         else if (type === 'Maturity')
             window.location.href = `/Claim/OnlineApplication/${appId}`;
 
 
         //window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
-      });
+    });
+
+    $(document).on('click', '.downloadApplication', function () {
+
+        const appId = $(this).data('app-id');
+        if (!appId) return;
+
+        downloadApplication(appId);
+    });
+
+    function downloadApplication(applicationId) {
+        if (!applicationId) {
+            alert('Application ID is required for download');
+            return;
+        }
+
+        // Direct file download — no AJAX needed
+        window.location.href = `/Default/DownloadApplication?id=${applicationId}`;
+    }
 
     $(document).on('click', '.timeline-btn', function () {
         const appId = $(this).data('app-id');
