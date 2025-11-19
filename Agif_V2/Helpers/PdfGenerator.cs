@@ -283,52 +283,74 @@ namespace Agif_V2.Helpers
                                 .SetMarginTop(10)
                                 .SetMarginBottom(5));
 
-                            // Paragraph 1
                             Paragraph r1 = new Paragraph()
-                                .SetTextAlignment(TextAlignment.JUSTIFIED)
-                                .SetMarginBottom(3)
-                                .SetMarginLeft(20)
-                                .SetFont(regularFont)
-                                .SetFontSize(10);
-
-                            r1.Add(new Text("1. I certify that above ").SetFont(regularFont));
-                            r1.Add(new Text(formType).SetFont(boldFont));
-                            r1.Add(new Text(" Application has been submitted by ").SetFont(regularFont));
-                            r1.Add(new Text(common.Number).SetFont(boldFont));
-                            r1.Add(new Text(" ").SetFont(regularFont));
-                            r1.Add(new Text(common.DdlRank).SetFont(boldFont));
-                            r1.Add(new Text(" ").SetFont(regularFont));
-                            r1.Add(new Text(common.ApplicantName).SetFont(boldFont));
-                            r1.Add(new Text(" of my Unit ").SetFont(regularFont));
-                            r1.Add(new Text(common.PresentUnit).SetFont(boldFont));
-                            r1.Add(new Text(". I identify his signature on supporting documents as attested by him and certify them to be correct.")
-                                .SetFont(regularFont));
+   .Add(new Text("1.     I certify that above ").SetFont(normalFont).SetFontSize(10))
+   .Add(new Text(formType).SetFont(boldFont).SetFontSize(10))
+   .Add(new Text(" Application has been submitted by ").SetFont(normalFont).SetFontSize(10))
+   .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName)
+       .SetFont(boldFont).SetFontSize(10))
+   .Add(new Text(" of my Unit ").SetFont(normalFont).SetFontSize(10))
+   .Add(new Text(common.PresentUnit).SetFont(boldFont).SetFontSize(10))
+   .Add(new Text(". I identify his signature on supporting documents as attested by him and certify them to be correct.")
+       .SetFont(normalFont).SetFontSize(10))
+   .SetTextAlignment(TextAlignment.JUSTIFIED)
+   .SetMarginBottom(5);
                             document.Add(r1);
+                            // Paragraph 2
+                            Paragraph r2 = new Paragraph()
+                                .Add(new Text("2.     It's certified that I am the CO/OC Tps of ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName)
+                                    .SetFont(boldFont).SetFontSize(10))
+                                .Add(new Text(" and I am authorised to countersign financial documents of this individual.")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(5);
+                            document.Add(r2);
 
-                            // Paragraphs 2–5
-                            string[] paraTexts =
-                            {
-        $"2. It's certified that I am the CO/OC Tps of {new Text (common.Number).SetFont(boldFont)} {new Text (common.DdlRank).SetFont(boldFont)} {new Text (common.ApplicantName).SetFont(boldFont) } and I am authorised to countersign financial documents of this individual.",
-        "3. I have interviewed him and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.",
-        $"4. It is certified that Bank A/c No {new Text(common.SalaryAcctNo).SetFont(boldFont)} of Bank ({new Text(common.NameOfBank).SetFont(boldFont)}) with IFSC {new Text(common.IfsCode).SetFont(boldFont)} as given in the application...",
-        "5. I have satisfied myself of the correctness of personal details given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest.",
-        "     Application is recommended for sanction and accordingly I countersign the same."
-    };
+                            // Paragraph 3
+                            Paragraph r3 = new Paragraph()
+                                .Add(new Text("3.     I have interviewed him ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text("and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(5);
+                            document.Add(r3);
 
+                            // Paragraph 4
+                            Paragraph r4 = new Paragraph()
+                                .Add(new Text("4.     It is certified that Bank A/c No ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(common.SalaryAcctNo).SetFont(boldFont).SetFontSize(10))
+                                .Add(new Text(" of Bank ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(common.NameOfBank).SetFont(boldFont).SetFontSize(10))
+                                .Add(new Text(" with IFSC ").SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(common.IfsCode).SetFont(boldFont).SetFontSize(10))
+                                .Add(new Text(" as given in the application and cancelled cheque is of Salary account of ")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName)
+                                    .SetFont(boldFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(5);
+                            document.Add(r4);
 
+                            // Paragraph 5
+                            Paragraph r5 = new Paragraph()
+                                .Add(new Text("5.     I have satisfied myself of the correctness of personal details given in application. ")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text("I have perused the supporting documents and checked their correctness. ")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .Add(new Text("Supporting documents uploaded are readable and latest.")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(10f);
+                            document.Add(r5);
 
-
-                            foreach (var point in paraTexts)
-                            {
-                                Paragraph p = new Paragraph(point)
-                                    .SetFont(regularFont)
-                                    .SetFontSize(10)
-                                    .SetTextAlignment(TextAlignment.JUSTIFIED)
-                                    .SetMarginBottom(3)
-                                    .SetMarginLeft(20);
-                                document.Add(p);
-                            }
-
+                            // Paragraph 6
+                            Paragraph r6 = new Paragraph("     Application is recommended for sanction and accordingly I countersign the same.")
+                                .SetFont(normalFont)
+                                .SetFontSize(10)
+                                .SetTextAlignment(TextAlignment.JUSTIFIED)
+                                .SetMarginBottom(5);
+                            document.Add(r6);
                             document.Add(new Paragraph("\n"));
                             string domainInfo = $"Verified by - {UserName}   IP Address – {IpAddress}   Date Time  – {DateTime.Now:dd-MM-yyyy hh:mm tt}";
                             document.Add(new Paragraph(domainInfo)
