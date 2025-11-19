@@ -6606,7 +6606,9 @@ tbody, td, tfoot, th, thead, tr {
    #ViewLog:hover{
        cursor:pointer;
    }
-
+#AnalyticsDashBoard:hover {
+    cursor: pointer;
+}
 /* Firefox-specific hiding */
 @-moz-document url-prefix() {
     #pdfContainer iframe {

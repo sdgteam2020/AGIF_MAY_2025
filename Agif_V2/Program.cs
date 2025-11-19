@@ -147,7 +147,7 @@ var app = builder.Build();
 app.UseRequestLocalization();
 app.UseSession();
 
-app.UseResponseCompression();
+//app.UseResponseCompression();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -162,22 +162,22 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-//app.Use(async (context, next) =>
-//{
-//    var referer = context.Request.Headers["Referer"].ToString();
-//    var path = context.Request.Path.Value;
+app.Use(async (context, next) =>
+{
+    var referer = context.Request.Headers["Referer"].ToString();
+    var path = context.Request.Path.Value;
 
-//    if (string.IsNullOrEmpty(referer) &&
-//        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
-//        !path.StartsWith("/css") &&
-//        !path.StartsWith("/js"))
-//    {
-//        context.Response.Redirect("/Default/Index");
-//        return;
-//    }
+    if (string.IsNullOrEmpty(referer) &&
+        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
+        !path.StartsWith("/css") &&
+        !path.StartsWith("/js"))
+    {
+        context.Response.Redirect("/Default/Index");
+        return;
+    }
 
-//    await next();
-//});
+    await next();
+});
 
 app.UseAuthorization();
 

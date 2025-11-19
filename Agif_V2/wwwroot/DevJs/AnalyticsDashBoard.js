@@ -6,11 +6,26 @@
     const $loanCanvas = $('#applicationByMonth');
     const $matCanvas = $('#maturityChartCanvas');
     const currentYear = new Date().getFullYear();
-
+    const chartvalue = $('#AdminTypeId').val();
     // ---- state ----
     let activeMode = 'loan';   // 'loan' | 'maturity'
     let loanChart = null;
     let maturityChart = null;
+
+    if (chartvalue == '1') {
+        activeMode = 'loan';
+        $('#btnMaturity').addClass('d-none');
+
+    }
+    else if (chartvalue == '2') {
+        activeMode = 'maturity';
+        $('#btnLoan').addClass('d-none');
+        $('.loan').addClass('d-none');
+    }
+    else {
+        $('#btnLoan').removeClass('d-none');
+        $('#btnMaturity').removeClass('d-none');
+    }
 
     // ---- utils ----
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -48,6 +63,8 @@
         });
 
         const topCtx = $('#topRanksChart')[0].getContext('2d');
+       // window.topRanksChart.destroy();
+
          topRanksChart = new Chart(topCtx, {
             type: 'bar',
             data: {
@@ -116,6 +133,7 @@
 
         // ---- Chart 3: Top Regt/Corps (Regt on X, Count on Y) ----
         const topregtCtx = $('#topRegtChart')[0].getContext('2d');
+       // window.topRegtChart.destroy();
          topRegtChart = new Chart(topregtCtx, {
             type: 'bar',
             data: {
@@ -1480,7 +1498,11 @@
         });
 
         const topCtx = $('#topRanksChart')[0].getContext('2d');
-        window.topRanksChart.destroy();
+        if (window.topRanksChart && typeof window.topRanksChart.destroy === 'function') {
+            window.topRanksChart.destroy();
+            window.topRanksChart = null; // optional: clear reference
+        }
+        //window.topRanksChart.destroy();
          topRanksChart = new Chart(topCtx, {
             type: 'bar',
             data: {
@@ -1549,7 +1571,11 @@
 
         // ---- Chart 3: Top Regt/Corps (Regt on X, Count on Y) ----
         const topregtCtx = $('#topRegtChart')[0].getContext('2d');
-        window.topRegtChart.destroy();
+        if (window.topRegtChart && typeof window.topRegtChart.destroy === 'function') {
+            window.topRegtChart.destroy();
+            window.topRegtChart = null; // optional: clear reference
+        }
+        //window.topRegtChart.destroy();
          topRegtChart = new Chart(topregtCtx, {
             type: 'bar',
             data: {
@@ -1605,7 +1631,11 @@
         const topUnitsCtx = $('#topUnitsChart')[0].getContext('2d');
 
         // ---- Chart: Top 10 Units (Horizontal Bar) ----
-        window.topUnitsChart.destroy();
+        if (window.topUnitsChart && typeof window.topUnitsChart.destroy === 'function') {
+            window.topUnitsChart.destroy();
+            window.topUnitsChart = null; // optional: clear reference
+        }
+       // window.topUnitsChart.destroy();
          topUnitsChart = new Chart(topUnitsCtx, {
             type: 'bar',
             data: {

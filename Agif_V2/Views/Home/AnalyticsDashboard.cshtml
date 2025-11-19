@@ -2,9 +2,15 @@
     ViewData["Title"] = "Analytics Dashboard";
     
 }
+@{
+    var adminTypeId = ViewBag.AdminTypeId as int? ?? 0;
+}
+
 <link href="~/css/analyticsdashboard.css" rel="stylesheet" />
 <script src="~/js/chart.min.js"></script>
 <script src="~/devjs/analyticsdashboard.js"></script>
+
+<input type="hidden" id="AdminTypeId" value="@ViewBag.AdminTypeId" />
 
 <div class="container-fluid">
     <div class="text-center my-4">
@@ -13,8 +19,8 @@
 
     <div class="d-flex justify-content-center my-3">
         <div class="btn-group gap-3" role="group" aria-label="Mode">
-                <button id="btnLoan" type="button" class="btn btn-primary active">Loan</button>
-                <button id="btnMaturity" type="button" class="btn btn-outline-primary">Maturity</button>
+                <button id="btnLoan" type="button" class="btn btn-primary active d-none">Loan</button>
+                <button id="btnMaturity" type="button" class="btn btn-outline-primary d-none">Maturity</button>
             </div>
     </div>
 

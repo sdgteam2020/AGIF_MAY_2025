@@ -137,7 +137,9 @@ namespace Agif_V2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult AnalyticsDashBoard()
+
+        [HttpPost]
+        public IActionResult AnalyticsDashBoard(int id)
         {
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
@@ -145,6 +147,7 @@ namespace Agif_V2.Controllers
                 return Unauthorized("Session expired or invalid user session.");
             }
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
+            ViewBag.AdminTypeId = id;
             return View(dTOTempSession);
         }
 

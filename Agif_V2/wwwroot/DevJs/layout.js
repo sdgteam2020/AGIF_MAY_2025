@@ -381,34 +381,35 @@ $("#ViewLog").on('click', function () {
     window.location.href = '/Home/LogViewer'
 })
 $("#AnalyticsDashBoard").on('click', function () {
-    window.location.href = '/Home/AnalyticsDashBoard'
+    //window.location.href = '/Home/AnalyticsDashBoard'
+    $("#analyticsForm").submit();
 })
 
-$(document).ready(function () {
+//$(document).ready(function () {
 
-    // 1️ APPLY SAVED ACTIVE MENU ON PAGE LOAD
-    const savedStatus = localStorage.getItem("activeMenuStatus");
+//    // 1️ APPLY SAVED ACTIVE MENU ON PAGE LOAD
+//    const savedStatus = localStorage.getItem("activeMenuStatus");
 
-    if (savedStatus) {
-        $(".submit-status").removeClass("active");
-        $(`.submit-status[data-status='${savedStatus}']`).addClass("active");
-    }
+//    if (savedStatus) {
+//        $(".submit-status").removeClass("active");
+//        $(`.submit-status[data-status='${savedStatus}']`).addClass("active");
+//    }
 
-    // 2️ SET ACTIVE MENU ON CLICK
-    $(document).on("click", ".submit-status", function (e) {
-        e.preventDefault();
+//    // 2️ SET ACTIVE MENU ON CLICK
+//    $(document).on("click", ".submit-status", function (e) {
+//        e.preventDefault();
 
-        // Remove active from all
-        $(".submit-status").removeClass("active");
+//        // Remove active from all
+//        $(".submit-status").removeClass("active");
 
-        // Add active to clicked one
-        $(this).addClass("active");
+//        // Add active to clicked one
+//        $(this).addClass("active");
 
-        // Save status in localStorage
-        const status = $(this).data("status");
-        localStorage.setItem("activeMenuStatus", status);
+//        // Save status in localStorage
+//        const status = $(this).data("status");
+//        localStorage.setItem("activeMenuStatus", status);
 
  
-    });
+//    });
 
-});
+//});
