@@ -222,7 +222,9 @@ function BindUsersData(status) {
                 data: "updatedOn",
                 name: "UpdatedOn",
                 render: function (data, type, row) {
-                    return data || 'N/A';
+                    if (!data) return "N/A";
+
+                    return new Intl.DateTimeFormat('en-GB').format(new Date(data));
                 }
             },
             {

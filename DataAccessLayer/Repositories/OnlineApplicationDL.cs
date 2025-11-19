@@ -550,27 +550,6 @@ namespace DataAccessLayer.Repositories
             return userMapping;
         }
 
-        //public async Task<string> GetCOName(int mappingId)
-        //{
-        //    // Get the UserMapping by MappingId
-        //    var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
-
-            
-        //    if (userMapping == null)
-        //        return string.Empty;
-
-        //    // Get the UserProfile by ProfileId from UserMapping
-        //    var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
-        //    if (userProfile == null)
-        //        return string.Empty;
-
-        //    // Get the RankName from MRanks using rank id from UserProfile
-        //    var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
-        //    string rankName = rank != null ? rank.RankName : string.Empty;
-
-        //    // Concatenate rankName and userName
-        //    return $"{rankName} {userProfile.userName}".Trim();
-        //}
         public async Task<(string Name, string Mobile,string Armyno,string unit,string appt)> GetCODetails(int ProfileId)
         {
             // Get the UserMapping by MappingId
@@ -757,12 +736,11 @@ namespace DataAccessLayer.Repositories
                                     select new DTOExcelResponse
                                     {
                                         Unit = presentUnit != null ? presentUnit.UnitId : 0,
-                                       
-                                        apfx = prefix.Prefix,
+                                        apfx = common.ArmyPrefix!=14? prefix.Prefix:"",
                                         ano = $"{common.Number ?? string.Empty}".Trim(),
                                         AadharNo = common.AadharCardNo ?? string.Empty,
                                         asfx = common.Suffix ?? string.Empty,
-                                        opfx = prefix.Prefix,
+                                        opfx = common.OldArmyPrefix != 14? oldPrefix.Prefix:"",
                                         ono = $"{common.OldNumber ?? string.Empty}".Trim(),
                                         osfx = common.OldSuffix ?? string.Empty,
                                         Rank = rank != null ? rank.RankName : string.Empty,

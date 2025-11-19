@@ -38,6 +38,8 @@ namespace DataAccessLayer.Repositories
         {
             var res = await (
                 from logs in _context.TrnApprovedLogs
+                join userMapping in _context.trnUserMappings on logs.coProfileId equals userMapping.ProfileId
+                join unit in _context.MUnits on userMapping.UnitId equals unit.UnitId
                 orderby logs.UpdatedOn descending
                 select new DTOApprovedLogs
                 {
@@ -46,6 +48,7 @@ namespace DataAccessLayer.Repositories
                     IpAddress = logs.IpAddress,
                     CoDomainId = logs.coDomainId,
                     CoProfileId = logs.coProfileId,
+                    UnitName = unit.UnitName,
                     IsApproved = logs.IsApproved,
                     UpdatedOn = logs.UpdatedOn
                 }).ToListAsync();
