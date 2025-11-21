@@ -182,7 +182,7 @@ namespace Agif_V2.Helpers
                         AddLoanRow("26. Estimated Cost", hba.PropertyCost.ToString(), "27. Loan Amt Reqd", hba.HBA_Amount_Applied_For_Loan.ToString());
 
 
-                        AddLoanRow("28. No of EMI (In Months)", hba.HBA_EMI_Applied.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("28. No of EMI (In Months)",Convert.ToInt32(hba.HBA_EMI_Applied).ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
 
 
                         AddLoanRow("30. Bank IFS Code", common.IfsCode, "", "");
@@ -385,16 +385,16 @@ namespace Agif_V2.Helpers
                                     .SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(unitName)
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph($"{apptName},{unitName}")
                                     .SetFont(regularFont)
                                     .SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));
-                            signatureTable2.AddCell(new Cell().Add(new Paragraph(apptName)
-                                    .SetFont(regularFont)
-                                    .SetFontSize(10))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.LEFT));
+                            //signatureTable2.AddCell(new Cell().Add(new Paragraph(apptName)
+                            //        .SetFont(regularFont)
+                            //        .SetFontSize(10))
+                            //    .SetBorder(Border.NO_BORDER)
+                            //    .SetTextAlignment(TextAlignment.LEFT));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + Mobile)
                                     .SetFont(regularFont)
@@ -448,7 +448,7 @@ namespace Agif_V2.Helpers
 
                         AddLoanRow("22. Dealer Name", car.DealerName, "23. Model Name", car.ModelName);
                         AddLoanRow("24.Vehicle Cost", car.VehicleCost.ToString(), "25. Vehicle Type", car.Veh_Loan_Type.ToString());
-                        AddLoanRow("26. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString(), "27. No of EMI (In Months)", car.CA_EMI_Applied.ToString());
+                        AddLoanRow("26. Loan Amt Reqd:", car.CA_Amount_Applied_For_Loan.ToString(), "27. No of EMI (In Months)",Convert.ToInt32(car.CA_EMI_Applied).ToString());
                         AddLoanRow("28.Salary Acct No", common.SalaryAcctNo.ToString(), "29. Bank IFS Code", common.IfsCode);
                         document.Add(cartable);
 
@@ -689,15 +689,15 @@ namespace Agif_V2.Helpers
                                 .SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell()
-                                .Add(new Paragraph(unitName).SetFont(normalFont).SetFontSize(10))
+                                .Add(new Paragraph($"{apptName},{unitName}").SetFont(normalFont).SetFontSize(10))
                                 .SetTextAlignment(TextAlignment.LEFT)
                                 .SetBorder(Border.NO_BORDER));
 
 
-                            signatureTable2.AddCell(new Cell()
-                                .Add(new Paragraph(apptName).SetFont(normalFont).SetFontSize(10))
-                                .SetTextAlignment(TextAlignment.LEFT)
-                                .SetBorder(Border.NO_BORDER));
+                            //signatureTable2.AddCell(new Cell()
+                            //    .Add(new Paragraph(apptName).SetFont(normalFont).SetFontSize(10))
+                            //    .SetTextAlignment(TextAlignment.LEFT)
+                            //    .SetBorder(Border.NO_BORDER));
 
 
                             signatureTable2.AddCell(new Cell()
@@ -752,7 +752,7 @@ namespace Agif_V2.Helpers
 
                         AddLoanRow("24. Dealer Name", pca.PCA_dealerName, "25. Model Name", pca.PCA_modelName);
                         AddLoanRow("26. Est Cost:", pca.computerCost.ToString(), "27. Loan Amt Reqd:", pca.PCA_Amount_Applied_For_Loan.ToString());
-                        AddLoanRow("28. No of EMI (In Months)", pca.PCA_EMI_Applied.ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
+                        AddLoanRow("28. No of EMI (In Months)",Convert.ToInt32(pca.PCA_EMI_Applied).ToString(), "29.Salary Acct No", common.SalaryAcctNo.ToString());
                         AddLoanRow("30. Bank IFS Code", common.IfsCode, "", "");
 
                         document.Add(pcatable);
@@ -968,21 +968,21 @@ namespace Agif_V2.Helpers
                                .SetBorder(Border.NO_BORDER));
 
                             signatureTable2.AddCell(new Cell()
-                                .Add(new Paragraph(unitName)
+                                .Add(new Paragraph($"{apptName},{unitName}")
                                     .SetFont(normalFont).SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));
                             
-                            signatureTable2.AddCell(new Cell()
-                               .Add(new Paragraph("")
-                                   .SetFont(normalFont).SetFontSize(10))
-                               .SetBorder(Border.NO_BORDER));
+                            //signatureTable2.AddCell(new Cell()
+                            //   .Add(new Paragraph("")
+                            //       .SetFont(normalFont).SetFontSize(10))
+                            //   .SetBorder(Border.NO_BORDER));
 
-                            signatureTable2.AddCell(new Cell()
-                                .Add(new Paragraph(apptName)
-                                    .SetFont(normalFont).SetFontSize(10))
-                                .SetBorder(Border.NO_BORDER)
-                                .SetTextAlignment(TextAlignment.LEFT));
+                            //signatureTable2.AddCell(new Cell()
+                            //    .Add(new Paragraph(apptName)
+                            //        .SetFont(normalFont).SetFontSize(10))
+                            //    .SetBorder(Border.NO_BORDER)
+                            //    .SetTextAlignment(TextAlignment.LEFT));
 
                             signatureTable2.AddCell(new Cell()
                                 .Add(new Paragraph("")

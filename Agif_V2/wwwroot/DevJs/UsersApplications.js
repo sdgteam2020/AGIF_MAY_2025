@@ -620,7 +620,7 @@ function sendPDFToServer(filepath, thumbprint, type) {
             Thumbprint: thumbprint,
             pdfpath: fullPath,
             XCoordinate: "450",
-            YCoordinate: "50",
+            YCoordinate: "20",
             Page: "1",
             CustomText: "Digital Signature"
         }]),

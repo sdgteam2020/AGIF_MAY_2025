@@ -771,13 +771,6 @@ namespace Agif_V2.Controllers
             string downloadFolder = Path.Combine(downloadFolderPath, "Downloads");
             Directory.CreateDirectory(downloadFolder);
 
-
-            // Make a copy of the merged PDF in the export folder
-            //string watermarkedCopyPath = Path.Combine(downloadFolder, fileName);
-            //System.IO.File.Copy(mergedPdfPath, watermarkedCopyPath, overwrite: true);
-
-            //// Watermark the copy (not the original)
-            //_watermark.AddAnnotationAfterDigitalSign(ipAddress, watermarkedCopyPath);
             foreach (var data in ret.OnlineApplicationResponse)
             {
                 var fileName1 = $"App{data.ApplicationId}{data.Number}.pdf";

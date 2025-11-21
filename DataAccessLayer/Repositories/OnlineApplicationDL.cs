@@ -764,7 +764,7 @@ namespace DataAccessLayer.Repositories
                                         Residual_Service = common.ResidualService,
                                         ApplicationType = common.ApplicationType == 1 ? hba.PropertyType : common.ApplicationType == 2 ? car.Veh_Loan_Type : pca.computer_Loan_Type,
                                         
-                                        Salary_Slip_Month_Year = common.MonthlyPaySlip.ToString(),
+                                        Salary_Slip_Month_Year = common.MonthlyPaySlip.HasValue?common.MonthlyPaySlip.Value.ToString("MM-yyyy"):string.Empty,
                                         Basic_Salary = common.BasicPay,
                                         Rank_Grade_Pay = common.rank_gradePay,
                                         MSP = common.Msp,
