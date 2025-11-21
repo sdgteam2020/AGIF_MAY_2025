@@ -76,7 +76,7 @@
             // Conditional extra button for statusId = 103
             let extraButtonHtml = '';
             let downloadButtonHtml = '';
-            if (app.statusId !== 1) {
+            if (app.statusId !== 1 && app.statusId !== 101) {
                 downloadButtonHtml = `
                 <button class="btn btn-danger ms-2 btn-icon downloadApplication"
         type="button"
@@ -86,7 +86,7 @@
 </button>
                 `
             }
-            if (app.statusId === 1003 || app.statusId === 2003) {
+            if (app.statusId === 41 || app.statusId === 161) {
                 extraButtonHtml = `
                <button class="btn btn-warning ms-2 btn-icon editapp"
         type="button"
@@ -156,19 +156,24 @@
     $(document).on('click', '.downloadApplication', function () {
 
         const appId = $(this).data('app-id');
+        const type = $('#typeSelect').val();
         if (!appId) return;
 
-        downloadApplication(appId);
+        downloadApplication(appId,type);
     });
 
-    function downloadApplication(applicationId) {
+    function downloadApplication(applicationId,type) {
         if (!applicationId) {
             alert('Application ID is required for download');
             return;
         }
 
+        if (type === 'Loan')
+            window.location.href = `/Default/DownloadApplication?id=${applicationId}`;
+        else if (type === 'Maturity')
+            window.location.href = `/Default/DownloadClaimApplication?id=${applicationId}`;
         // Direct file download — no AJAX needed
-        window.location.href = `/Default/DownloadApplication?id=${applicationId}`;
+        
     }
 
     $(document).on('click', '.timeline-btn', function () {

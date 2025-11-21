@@ -11,12 +11,14 @@ namespace Agif_V2.Controllers
     {
         private readonly IDefault _default;
         private readonly IOnlineApplication _onlineApplication;
+        private readonly IClaimOnlineApplication _IClaimonlineApplication;
         private readonly Watermark _watermark;
-        public DefaultController(IDefault _default, IOnlineApplication _onlineApplication, Watermark _watermark)
+        public DefaultController(IDefault _default, IOnlineApplication _onlineApplication, Watermark _watermark, IClaimOnlineApplication iClaimonlineApplication)
         {
             this._default = _default;
             this._onlineApplication = _onlineApplication;
             this._watermark = _watermark;
+            _IClaimonlineApplication = iClaimonlineApplication;
         }
 
         public IActionResult Index()
@@ -180,6 +182,60 @@ namespace Agif_V2.Controllers
             // STEP 6: Return PDF file for download
             return File(fileBytes, "application/pdf", originalFileName);
         }
-         
+        public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
+            }
+
+            string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "IpAddress";
+
+            DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
+            var ret = await _IClaimonlineApplication.GetApplicationDetailsForExport(dTOExport);
+
+            var firstRecord = ret.OnlineApplicationResponse.FirstOrDefault();
+            if (firstRecord == null)
+            {
+                return Json(new { success = false, message = "No record found." });
+            }
+
+            string armyNo = firstRecord.Number ?? "UnknownArmyNo";
+            int applicationId = firstRecord.ApplicationId;
+            string originalFileName = $"App{applicationId}{armyNo}.pdf";
+
+            string originalFilePath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "ClaimMergePdf",
+                originalFileName
+            );
+
+            if (!System.IO.File.Exists(originalFilePath))
+            {
+                return Json(new { success = false, message = "Merged PDF not found." });
+            }
+
+            // STEP 1: Create a temp folder inside /wwwroot/
+            string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempPdf");
+            Directory.CreateDirectory(tempFolder);
+
+            // STEP 2: Copy original to temp file
+            string tempFilePath = Path.Combine(tempFolder, originalFileName);
+            System.IO.File.Copy(originalFilePath, tempFilePath, overwrite: true);
+
+            // STEP 3: Apply watermark on temp file
+            // (This modifies ONLY the copied file, NOT the main one)
+            _watermark.AddAnnotationAfterDigitalSign(ipAddress, tempFilePath);
+
+            // STEP 4: Read the watermarked temp file for download
+            byte[] fileBytes = System.IO.File.ReadAllBytes(tempFilePath);
+
+            // STEP 5: Delete temp file after reading (optional but recommended)
+            System.IO.File.Delete(tempFilePath);
+
+            // STEP 6: Return PDF file for download
+            return File(fileBytes, "application/pdf", originalFileName);
+        }
     }
 }

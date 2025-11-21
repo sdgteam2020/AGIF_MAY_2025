@@ -1132,30 +1132,39 @@ function ExtensionOfServiceAccess() {
     }
 }
 function fetchPCDA_PAO() {
-    const regt = $('#regtCorps').val();
-    if (!regt) {
-        alert("Please select Regt/Corps.");
-        return;
+    const category = $('#applicantCategory').val();
+
+    if (category == 1) {
+        $('#pcda_pao').val("PCDA (O), Pune");
+        setOutlineActive("pcda_pao");
     }
-    fetch(`/OnlineApplication/GetPCDA_PAO?regt=${encodeURIComponent(regt)}`, {
-        method: 'GET'
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
+    else {
+        const regt = $('#regtCorps').val();
+        if (!regt) {
+            alert("Please select Regt/Corps.");
+            return;
+        }
+        fetch(`/OnlineApplication/GetPCDA_PAO?regt=${encodeURIComponent(regt)}`, {
+            method: 'GET'
         })
-        .then(data => {
-            if (data != null) {
-                $('#pcda_pao').val(data.pcdaPao);
-                setOutlineActive("pcda_pao");
-            }
-        })
-        .catch(error => {
-            alert("Data Not loaded!");
-            console.error('Fetch error:', error);
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data != null) {
+                    $('#pcda_pao').val(data.pcdaPao);
+                    setOutlineActive("pcda_pao");
+                }
+            })
+            .catch(error => {
+                alert("Data Not loaded!");
+                console.error('Fetch error:', error);
+            });
+    }
+    
 
 
 }

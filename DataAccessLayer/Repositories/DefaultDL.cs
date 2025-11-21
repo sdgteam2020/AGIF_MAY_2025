@@ -64,7 +64,7 @@ namespace DataAccessLayer.Repositories
                                     ApplicationId = appl.ApplicationId,
                                     ApplicationType = applicationType.ApplicationTypeName,
                                     Status = status.StatusName.ToString(),
-                                    StatusId = status.StatusId,
+                                    StatusId = status.StatusCode,
                                     Remarks= appl.AGIFRemarks ?? string.Empty
                                 }).ToListAsync();
 
@@ -76,14 +76,14 @@ namespace DataAccessLayer.Repositories
             var applications = await (from appl in _context.trnClaim
                                       join prefix in _context.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                      join applicationType in _context.WithdrawalPurpose on appl.WithdrawPurpose equals applicationType.Id
-                                      join status in _context.StatusTable on appl.StatusCode equals status.ClaimStatusCode
-                                      where (prefix.Prefix + appl.Number + appl.Suffix) == armyNo && status.ClaimStatusCode!=0
+                                      join status in _context.StatusTable on appl.StatusCode equals status.ClaimStatusCode 
+                                      where (appl.ArmyPrefix == 14 ? ((appl.Number + appl.Suffix) == armyNo) : (prefix.Prefix + appl.Number + appl.Suffix) == armyNo) && status.ClaimStatusCode != 0
                                       select new DTOApplicationStatusResponse
                                       {
                                           ApplicationId = appl.ApplicationId,
                                           ApplicationType = applicationType.Name,
                                           Status = status.StatusName.ToString(),
-                                          StatusId = status.StatusId,
+                                          StatusId = status.ClaimStatusCode,
                                           Remarks = appl.AGIFRemarks ?? string.Empty
                                       }).ToListAsync();
 
