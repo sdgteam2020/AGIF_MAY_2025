@@ -28,75 +28,7 @@
 }
 
 
-   
-
-
  <link href="~/css/onlineapplication.css" rel="stylesheet" />
-<style>
-    /* Form outline positioning */
-    .form-outline {
-        position: relative;
-    }
-
-    /* Gender dropdown styling */
-    .gender-dropdown {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: white;
-        border: 1px solid #ced4da;
-        border-radius: 0.25rem;
-        padding: 0.5rem;
-        z-index: 1000;
-        margin-top: 2px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    }
-
-        /* Show dropdown when active */
-        .gender-dropdown.show {
-            display: block;
-        }
-
-    /* Floating label */
-    .form-label.active {
-        transform: translateY(-1rem);
-        font-size: 0.875rem;
-    }
-
-    /* Male button - Blue theme */
-    .gender-male {
-        border-color: #007bff !important;
-        color: #007bff !important;
-    }
-
-        .gender-male:hover {
-            background-color: #e7f3ff !important;
-        }
-
-    .btn-check:checked + .gender-male {
-        background-color: #007bff !important;
-        color: white !important;
-        border-color: #007bff !important;
-    }
-
-    /* Female button - Pink theme */
-    .gender-female {
-        border-color: #ff69b4 !important;
-        color: #ff69b4 !important;
-    }
-
-        .gender-female:hover {
-            background-color: #ffe6f2 !important;
-        }
-
-    .btn-check:checked + .gender-female {
-        background-color: #ff69b4 !important;
-        color: white !important;
-        border-color: #ff69b4 !important;
-    }
-</style>
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -144,7 +76,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" required />
+                                                <input type="text" id="armyNumber" name="ClaimCommonData.Number" value="@Model.ClaimCommonData?.Number" class="form-control js-valindata js-setsuffix" maxlength="8" pattern="^\d{3,8}$" required />
                                                 <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
@@ -187,7 +119,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="oldArmyNo" name="ClaimCommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.ClaimCommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)" pattern="^\d{3,8}$" />
+                                                <input type="text" id="oldArmyNo" name="ClaimCommonData.OldNumber"  class="form-control js-valindata js-setsuffix" value="@Model.ClaimCommonData?.OldNumber" maxlength="8"  pattern="^\d{3,8}$" />
                                                 <label class="form-label" for="txtOldNumber">Old Army No.</label>
                                             </div>
                                         </div>
@@ -229,7 +161,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
+                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName" required maxlength="20"/>
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
                                         <div class="invalid-feedback">
                                             Please choose a username.
@@ -245,7 +177,7 @@
                                         <span class="input-group-text">💼</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.ClaimCommonData != null)
+                                        <select class="form-select select js-setregcorp" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps"  required data-regt-prefix="@if (Model.ClaimCommonData != null)
                                         {
                                             @Model.ClaimCommonData.RegtCorps
                                             ;
@@ -261,8 +193,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                               oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                                placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
@@ -273,8 +205,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission"
-                                               required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control DocPicker js-format-date js-doc-change" id="dateOfCommission" aria-label="Date of Commission" name="ClaimCommonData.DateOfCommission"
+                                               required value="@Model.ClaimCommonData?.DateOfCommission?.ToString("yyyy-MM-dd")" placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOC/DOE</label>
                                     </div>
                                 </div>
@@ -297,15 +229,11 @@
                                                  new
                                                  {
                                                      @class = "select form-select",
-                                                     id = "ExtnOfService",
-                                                     onchange = "extensionOfService()",
-                                                     onblur = "ExtensionOfServiceAccess()"
+                                                     id = "ExtnOfService"
+                                                   
                                                  })
                                         <label class="form-label select-label ">Extn of Service in Present Rank</label>
                                     </div>
-
-
-
                                 </div>
                             </div>
 
@@ -313,8 +241,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="ClaimCommonData.DateOfPromotion" value="@Model.ClaimCommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled
-                                               oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control DopPicker js-format-date" id="dateOfPromotion" aria-label="Date of Promotion" name="ClaimCommonData.DateOfPromotion" value="@Model.ClaimCommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled
+                                                 placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
@@ -334,7 +262,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="aadharCardNo" name="ClaimCommonData.AadharCardNo" class="form-control" oninput="formatAadhar(this)" value="@Model.ClaimCommonData?.AadharCardNo" onkeyup="ValInAadhar(this)" maxlength="14" required />
+                                        <input type="text" id="aadharCardNo" name="ClaimCommonData.AadharCardNo" class="form-control"  value="@Model.ClaimCommonData?.AadharCardNo"  maxlength="14" required />
                                         <label class="form-label select-label ">Aadhar Card No</label>
                                     </div>
                                 </div>
@@ -356,7 +284,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📱</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="mobileNo" name="ClaimCommonData.MobileNo" class="form-control" maxlength="10" onblur="verifyMobileNo(this)" oninput="ValInDataNo(this)" value="@Model.ClaimCommonData?.MobileNo" required />
+                                        <input type="text" id="mobileNo" name="ClaimCommonData.MobileNo" class="form-control" maxlength="10" value="@Model.ClaimCommonData?.MobileNo" required />
                                         <label class="form-label select-label ">Mobile No</label>
                                     </div>
                                 </div>
@@ -450,7 +378,7 @@
                                         <span class="input-group-text">🪖</span>
                                     </div>
                                     <div class="form-outline" data-mdb-input-init">
-                                        @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name" } })
+                                        @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @dirName = "ParentUnit's name" } })
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.ParentUnit, "", new { @class = "text-danger" })
                                         <span id="ParentUnitId" class="d-none">@Model.ClaimCommonData?.ParentUnit</span>
                                         <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..." />
@@ -466,7 +394,7 @@
                                         <span class="input-group-text">🪖</span>
                                     </div>
                                     <div class="form-outline" data-mdb-input-init>
-                                        @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
+                                        @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @dirName = "PresentUnit's name" } })
                                         @Html.ValidationMessageFor(model => model.ClaimCommonData.PresentUnit, "", new { @class = "text-danger" })
                                         <span id="PresentUnitId" class="d-none">@Model.ClaimCommonData?.PresentUnit</span>
                                         <input type="text" class="form-control" id="PresenttxtUnit" placeholder="Search Present Unit..." />
@@ -478,7 +406,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="presentUnitPin" name="ClaimCommonData.PresentUnitPin" class="form-control" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.ClaimCommonData?.PresentUnitPin" />
+                                        <input type="text" id="presentUnitPin" name="ClaimCommonData.PresentUnitPin" class="form-control js-unit-pin" required maxlength="6" value="@Model.ClaimCommonData?.PresentUnitPin" />
                                         <label class="form-label select-label ">Present Unit PIN</label>
                                     </div>
                                 </div>
@@ -542,49 +470,52 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Vill_Town" />
+                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15"  required value="@Model.AddressDetails?.Vill_Town" />
                                         <label class="form-label" for="Vill_Town">Village/Town</label>
                                     </div>
 
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AddressDetails.Vill_Town, "", new { @class = "text-danger" })
-
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="postOffice" name="AddressDetails.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.PostOffice" />
+                                        <input type="text" id="postOffice" name="AddressDetails.PostOffice" class="form-control form-control-Alphabets" maxlength="15" required value="@Model.AddressDetails?.PostOffice" />
                                         <label class="form-label" for="postOffice">Post Office</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AddressDetails.PostOffice, "", new { @class = "text-danger" })
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="distt" name="AddressDetails.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Distt" />
+                                        <input type="text" id="distt" name="AddressDetails.Distt" class="form-control form-control-Alphabets" maxlength="15"  required value="@Model.AddressDetails?.Distt" />
                                         <label class="form-label" for="distt">Enter Dist</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AddressDetails.Distt, "", new { @class = "text-danger" })
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="state" name="AddressDetails.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.State" />
+                                        <input type="text" id="state" name="AddressDetails.State" class="form-control form-control-Alphabets" maxlength="15"  required value="@Model.AddressDetails?.State" />
                                         <label class="form-label" for="state">Enter State</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AddressDetails.State, "", new { @class = "text-danger" })
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.AddressDetails?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt js-unit-pin"  required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
@@ -608,27 +539,29 @@
                 <div id="salaryAcctDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
                     <div class="accordion-body">
                         <div class="row g-3">
+                            
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onchange="validateAccountNo(this)" value="@Model.AccountDetails?.SalaryAcctNo" required />
+                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" maxlength="17" value="@Model.AccountDetails?.SalaryAcctNo" required />
                                         <label class="form-label select-label ">Applicant's Salary Acct No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.SalaryAcctNo, "", new { @class = "text-danger" })
-
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control" onchange="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
+                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control"  maxlength="17" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
                                         <label class="form-label select-label ">Re-Enter Salary Acct No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
@@ -639,26 +572,29 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.IfsCode, "", new { @class = "text-danger" })
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
+                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control form-control-Alphabets"  maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
                                         <label class="form-label select-label ">Name of Bank</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBank, "", new { @class = "text-danger" })
                             </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBankBranch, "", new { @class = "text-danger" })
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -686,7 +622,7 @@
 
                                 <div id="loanFormContainer" class="d-none">
                                     <div class="loan-entry">
-                                        <button type="button" class="btn btn-sm btn-outline-danger remove-btn" onclick="removeLoanForm()">
+                                        <button type="button" class="btn btn-sm btn-outline-danger remove-btn">
                                             <i class="fas fa-times"></i>Remove
                                         </button>
 
@@ -723,7 +659,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan" class="form-control isNumerictxt"  maxlength="8" />
                                                             <label class="form-label" for="hbaDuration">House Building Duration of Loan</label>
                                                         </div>
 
@@ -736,7 +672,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="hbaAmount" name="ClaimCommonData.House_Building_Amount_Taken" value="@Model.ClaimCommonData?.House_Building_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
+                                                            <input type="text" id="hbaAmount" name="ClaimCommonData.House_Building_Amount_Taken" value="@Model.ClaimCommonData?.House_Building_Amount_Taken" class="form-control isNumerictxt" maxlength="8" pattern="^\d{3,8}$" />
                                                             <label class="form-label" for="hbaAmount">House Building Amount Taken</label>
                                                         </div>
 
@@ -766,7 +702,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <input type="text" id="hraDuration" name="ClaimCommonData.House_Repair_Advance_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Duration_of_Loan" class="form-control isNumerictxt" maxlength="8" />
                                                             <label class="form-label" for="hraDuration">House Repair Duration of Loan</label>
                                                         </div>
 
@@ -779,7 +715,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <input type="text" id="hraAmount" name="ClaimCommonData.House_Repair_Advance_Amount_Taken" value="@Model.ClaimCommonData?.House_Repair_Advance_Amount_Taken" class="form-control isNumerictxt" maxlength="8" />
                                                             <label class="form-label" for="hraAmount">House Repair Amount Taken</label>
                                                         </div>
 
@@ -808,7 +744,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control isNumerictxt"  maxlength="8" />
                                                             <label class="form-label" for="caDuration">Conveyance Duration of Loan</label>
                                                         </div>
 
@@ -821,7 +757,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="caAmount" name="ClaimCommonData.Conveyance_Amount_Taken" value="@Model.ClaimCommonData?.Conveyance_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
+                                                            <input type="text" id="caAmount" name="ClaimCommonData.Conveyance_Amount_Taken" value="@Model.ClaimCommonData?.Conveyance_Amount_Taken" class="form-control isNumerictxt"  maxlength="8" pattern="^\d{3,8}$" />
                                                             <label class="form-label" for="caAmount">Conveyance Amount Taken</label>
                                                         </div>
 
@@ -850,7 +786,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control" oninput="ValInDataNo(this)" maxlength="8" />
+                                                            <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control isNumerictxt"  maxlength="8" />
                                                             <label class="form-label" for="pcaDuration">Computer Duration of Loan</label>
                                                         </div>
 
@@ -863,7 +799,7 @@
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="pcaAmount" name="ClaimCommonData.Computer_Amount_Taken" value="@Model.ClaimCommonData?.Computer_Amount_Taken" class="form-control" oninput="ValInDataNo(this)" maxlength="8" pattern="^\d{3,8}$" />
+                                                            <input type="text" id="pcaAmount" name="ClaimCommonData.Computer_Amount_Taken" value="@Model.ClaimCommonData?.Computer_Amount_Taken" class="form-control isNumerictxt"  maxlength="8" pattern="^\d{3,8}$" />
                                                             <label class="form-label" for="pcaAmount">Computer Amount Taken</label>
                                                         </div>
 
@@ -905,7 +841,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired" class="form-control" oninput="formatIndianNumber(this)" required maxlength="10" />
+                                                <input type="text" id="AmountOfWithdrawalRequired" name="ClaimCommonData.AmountOfWithdrawalRequired" value="@Model.ClaimCommonData?.AmountOfWithdrawalRequired" class="form-control" required maxlength="10" />
                                                 <label class="form-label" for="AmountOfWithdrawalRequired">Amount of withdrawal required (Withdrawal will be limited to actual expenditure or 90% of Maturity Benefit Whichever is less)</label>
                                             </div>
 
@@ -962,7 +898,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👶</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="txtChildName" name="EducationDetails.ChildName" class="form-control form-control-Alphabets" value="@Model.EducationDetails?.ChildName" required oninput="ValInDataLetter(this)" />
+                                                <input type="text" id="txtChildName" name="EducationDetails.ChildName" class="form-control form-control-Alphabets" value="@Model.EducationDetails?.ChildName" required  maxlength="20"/>
                                                 <label class="form-label" for="txtChildName">Name of Child</label>
                                                 <div class="invalid-feedback">
                                                     Please choose a username.
@@ -976,8 +912,8 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🎂</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" class="form-control monthPicker" id="EducationdateOfBirth" aria-label="Education date Of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required"
-                                                       oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="EducationdateOfBirth" aria-label="Education date Of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                                        placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">DOB</label>
                                             </div>
 
@@ -1024,7 +960,7 @@
 
                                        
 
-                                        <div id="genderRadioGroup" class="gender-dropdown" style="display:none;">
+                                        <div id="genderRadioGroup" class="gender-dropdown" >
                                             <div class="btn-group w-100">
                                                 <input type="radio" class="btn-check gender-radio" name="EducationDetails.Gender" id="EduGenderMale" value="Male" required>
                                                 <label class="btn btn-outline-primary  gender-male mb-0" for="EduGenderMale">Male</label>
@@ -1073,15 +1009,12 @@
                                     }
 
 
-
-
-
                                     <div class="col-md-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📅</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" class="form-control monthPicker" id="DOPartIIDate" aria-label="DO Part II Date" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
-                                                       oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="DOPartIIDate" aria-label="DO Part II Date" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
+                                                        placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label">DO Part-II Date</label>
                                             </div>
                                         </div>
@@ -1109,7 +1042,7 @@
                                                 
                                                 @Html.DropDownListFor(m => m.EducationDetails.CourseForWithdrawal,
                                                      new SelectList(new[] {
-                                        new { Value = " ", Text = "Select one" },
+                                        new { Value = "", Text = "Select one" },
                                         new { Value = "12th", Text = "12th" },
                                         new { Value = "UG", Text = "UG" },
                                         new { Value = "PG", Text = "PG" }
@@ -1117,7 +1050,8 @@
                                                      new
                                                      {
                                                          @class = "select form-select",
-                                                         id = "CourseForWithdrawal"
+                                                         id = "CourseForWithdrawal",
+                                                          required = "required"
                                                      })
                                                 <label class="form-label select-label ">Name of Course/Class for withdrawal required</label>
                                                  </div>
@@ -1129,7 +1063,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🎓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="NameOfcollege" name="EducationDetails.CollegeInstitution" value="@Model.EducationDetails?.CollegeInstitution" class="form-control form-control-Alphabets" oninput="ValInDataLetter(this)" required maxlength="30" />
+                                                <input type="text" id="NameOfcollege" name="EducationDetails.CollegeInstitution" value="@Model.EducationDetails?.CollegeInstitution" class="form-control form-control-Alphabets"  required maxlength="30" />
                                                 <label class="form-label" for="NameOfcollege">
                                                     Name of College/Institution where studying
                                                 </label>
@@ -1158,7 +1092,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💸</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control" oninput="formatIndianNumber(this)" required maxlength="10" />
+                                                <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"  required maxlength="10" />
                                                 <label class="form-label" for="TotalExpenditure">Total Expenditure</label>
                                             </div>
 
@@ -1201,7 +1135,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👶</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="txtNameOfChild" name="Marriageward.NameOfChild" class="form-control" value="@Model.Marriageward?.NameOfChild" required oninput="ValInDataLetter(this)" />
+                                                <input type="text" id="txtNameOfChild" name="Marriageward.NameOfChild" class="form-control form-control-Alphabets" value="@Model.Marriageward?.NameOfChild" required maxlength="20"/>
                                                 <label class="form-label" for="txtNameOfChild">Name of Child</label>
                                                 <div class="invalid-feedback">
                                                     Please choose a username.
@@ -1215,8 +1149,8 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🎂</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" class="form-control monthPicker" id="MarriagewarddateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                                       oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="MarriagewarddateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required
+                                                        placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">DOB</label>
                                             </div>
 
@@ -1265,7 +1199,7 @@
 
                                        
 
-                                        <div id="genderRadioGroup" class="gender-dropdown" style="display:none;">
+                                        <div id="genderRadioGroup" class="gender-dropdown" >
                                             <div class="btn-group w-100">
                                                 <input type="radio" class="btn-check gender-radio" name="Marriageward.Gender" id="EduGenderMale" value="Male" required>
                                                 <label class="btn btn-outline-primary  gender-male mb-0" for="EduGenderMale">Male</label>
@@ -1313,8 +1247,8 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📅</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" class="form-control DOPartIIPicker" id="MarriagewardDOPartIIDate" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
-                                                       oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="MarriagewardDOPartIIDate" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
+                                                        placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">DO Part-II Date</label>
                                             </div>
                                         </div>
@@ -1336,7 +1270,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="AgeOfWard" name="Marriageward.AgeOfWard" value="@Model.Marriageward?.AgeOfWard" class="form-control" oninput="ValInDataNo(this)" required maxlength="2" />
+                                                <input type="text" id="AgeOfWard" name="Marriageward.AgeOfWard" value="@Model.Marriageward?.AgeOfWard" class="form-control isNumerictxt" required maxlength="2" />
                                                 <label class="form-label" for="AgeOfWard">Age of Ward</label>
                                             </div>
 
@@ -1348,8 +1282,8 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📅</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" class="form-control DOPartIIPicker" id="DateOfMarriage" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required
-                                                       oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                                <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="DateOfMarriage" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required
+                                                        placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">Date of Marriage</label>
                                             </div>
                                         </div>
@@ -1414,7 +1348,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👤</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PropertyHolderName" name="PropertyRenovation.PropertyHolderName" class="form-control" value="@Model.PropertyRenovation?.PropertyHolderName" required oninput="ValInDataLetter(this)" maxlength="15" />
+                                                <input type="text" id="PropertyHolderName" name="PropertyRenovation.PropertyHolderName" class="form-control form-control-Alphabets" value="@Model.PropertyRenovation?.PropertyHolderName" required  maxlength="20" />
                                                 <label class="form-label" for="PropertyHolderName">Name of property holder(s)</label>
                                                 <div class="invalid-feedback">
                                                     Please choose a username.
@@ -1430,7 +1364,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💸</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="EstimatedCost" name="PropertyRenovation.EstimatedCost" value="@Model.PropertyRenovation?.EstimatedCost" class="form-control" required oninput="formatIndianNumber(this)" maxlength="10" />
+                                                <input type="text" id="EstimatedCost" name="PropertyRenovation.EstimatedCost" value="@Model.PropertyRenovation?.EstimatedCost" class="form-control" required maxlength="10" />
                                                 <label class="form-label" for="EstimatedCost">Estimated cost of expenditure</label>
                                             </div>
 
@@ -1474,7 +1408,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💬</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control" value="@Model.SplWaiver?.OtherReasons" required oninput="ValInDataLetter(this)" />
+                                                <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control form-control-Alphabets" value="@Model.SplWaiver?.OtherReasons" required  />
                                                 <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
                                                 <div class="invalid-feedback">
                                                     Please type other reason.

@@ -73,7 +73,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="armyNumber" name="CommonData.Number" value="@Model.CommonData?.Number" onchange="SetSuffixLetter(this)" class="form-control" oninput="ValInDataNo(this)" required maxlength="8" pattern="^\d{3,8}$" />
+                                                <input type="text" id="armyNumber" name="CommonData.Number" value="@Model.CommonData?.Number" class="form-control js-valindata js-setsuffix" required maxlength="8" pattern="^\d{3,8}$" />
                                                 <label class="form-label" for="armyNumber">Army No.</label>
                                             </div>
                                         </div>
@@ -114,7 +114,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="oldArmyNo" name="CommonData.OldNumber" onchange="SetSuffixLetter(this)" class="form-control" value="@Model.CommonData?.OldNumber" maxlength="8" oninput="ValInDataNo(this)" required pattern="^\d{3,8}$" />
+                                                <input type="text" id="oldArmyNo" name="CommonData.OldNumber" class="form-control js-valindata js-setsuffix" value="@Model.CommonData?.OldNumber" maxlength="8"  required pattern="^\d{3,8}$" />
                                                 <label class="form-label" for="txtOldNumber">Old Army No.</label>
                                             </div>
                                         </div>
@@ -156,7 +156,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required oninput="ValInDataLetter(this)" />
+                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required />
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
                                         
                                     </div>
@@ -169,7 +169,7 @@
                                         <span class="input-group-text">💼</span>
                                     </div>
                                     <div class="col-md-10">
-                                        <select class="form-select select" id="regtCorps" aria-label="Regt/Corps" data-mdb-filter="true" name="CommonData.RegtCorps" onchange="fetchPCDA_PAO()" required data-regt-prefix="@if (Model.CommonData != null)
+                                        <select class="form-select select js-setregcorp" id="regtCorps" aria-label="Regt/Corps" data-mdb-filter="true" name="CommonData.RegtCorps" required data-regt-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.RegtCorps
                                             ;
@@ -184,8 +184,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("dd-MM-yyyy")"
-                                               required oninput="formatDate(this)" onchange="validateDateFormat(this)" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="dateOfBirth" aria-label="Date of Birth" name="CommonData.DateOfBirth" value="@Model.CommonData?.DateOfBirth?.ToString("dd-MM-yyyy")"
+                                               required placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label " for="dateOfBirth">DOB</label>
                                     </div>
                                 </div>
@@ -196,8 +196,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control DocPicker" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"
-                                               required value="@Model.CommonData?.DateOfCommission?.ToString("dd-MM-yyyy")" oninput="formatDate(this)" onchange="validateDateFormat(this);calculateYearDifference();" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control DocPicker js-format-date js-doc-change" id="dateOfCommission" aria-label="Date of Commission" name="CommonData.DateOfCommission"
+                                               required value="@Model.CommonData?.DateOfCommission?.ToString("dd-MM-yyyy")"  placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label " for="dateOfCommission">DOC/DOE</label>
                                     </div>
                                 </div>
@@ -220,9 +220,7 @@
                                                  new
                                                  {
                                                      @class = "select form-select",
-                                                     id = "ExtnOfService",
-                                                     onchange = "extensionOfService()",
-                                                     onblur = "ExtensionOfServiceAccess()",
+                                                     id = "ExtnOfService",                 
                                                      disabled = true // this is the preferred way
                                                  })
 
@@ -235,8 +233,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control DopPicker" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled"
-                                               oninput="formatDate(this)" onchange="updateRetDateOnPromotionDateSelection()" placeholder="dd/mm/yyyy" autocomplete="off">
+                                        <input type="text" class="form-control DopPicker js-format-date" id="dateOfPromotion" aria-label="Date of Promotion" name="CommonData.DateOfPromotion" value="@Model.CommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled"
+                                              placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label " for="dateOfPromotion">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
@@ -256,7 +254,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="aadharCardNo" name="CommonData.AadharCardNo" class="form-control" oninput="formatAadhar(this)" value="@Model.CommonData?.AadharCardNo" onkeyup="ValInAadhar(this)" maxlength="14" required />
+                                        <input type="text" id="aadharCardNo" name="CommonData.AadharCardNo" class="form-control"  value="@Model.CommonData?.AadharCardNo"  maxlength="14" required />
                                         <label class="form-label select-label " for="aadharCardNo">Aadhar Card No</label>
                                     </div>
                                 </div>
@@ -278,7 +276,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📱</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="mobileNo" name="CommonData.MobileNo" class="form-control" maxlength="10" onblur="verifyMobileNo(this)" oninput="ValInDataNo(this)" value="@Model.CommonData?.MobileNo" required />
+                                        <input type="text" id="mobileNo" name="CommonData.MobileNo" class="form-control" maxlength="10" value="@Model.CommonData?.MobileNo" required />
                                         <label class="form-label select-label " for="mobileNo">Mobile No</label>
                                     </div>
                                 </div>
@@ -377,7 +375,7 @@
                                         <span class="input-group-text">🪖</span>
                                     </div>
                                     <div class="form-outline" data-mdb-input-init>
-                                        @Html.EditorFor(m => m.CommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "ParentUnit's name", @data_val = "true" } })
+                                        @Html.EditorFor(m => m.CommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required",  @dirName = "ParentUnit's name", @data_val = "true" } })
                                         @Html.ValidationMessageFor(m => m.CommonData.ParentUnit, "", new { @class = "text-danger" })
                                         <span id="ParentUnitId" class="d-none">@Model.CommonData?.ParentUnit</span>
                                         <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..." />
@@ -394,7 +392,7 @@
                                         <span class="input-group-text">🪖</span>
                                     </div>
                                     <div class="form-outline" data-mdb-input-init>
-                                        @Html.EditorFor(model => model.CommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @onkeyup = "ValInData(this)", @dirName = "PresentUnit's name" } })
+                                        @Html.EditorFor(model => model.CommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @dirName = "PresentUnit's name" } })
                                         @Html.ValidationMessageFor(model => model.CommonData.PresentUnit, "", new { @class = "text-danger" })
                                         <span id="PresentUnitId" class="d-none">@Model.CommonData?.PresentUnit</span>
                                         <input type="text" class="form-control" id="PresenttxtUnit" placeholder="Search Present Unit..." />
@@ -411,7 +409,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="presentUnitPin" name="CommonData.PresentUnitPin" class="form-control isNumerictxt" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.CommonData?.PresentUnitPin" />
+                                        <input type="text" id="presentUnitPin" name="CommonData.PresentUnitPin" class="form-control isNumerictxt js-unit-pin" required maxlength="6" value="@Model.CommonData?.PresentUnitPin" />
                                         <label class="form-label select-label ">Present Unit PIN</label>
                                     </div>
                                 </div>
@@ -474,7 +472,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Vill_Town" />
+                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" required value="@Model.AddressDetails?.Vill_Town" />
                                         <label class="form-label" for="Vill_Town">Village/Town</label>
                                     </div>
 
@@ -486,7 +484,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="postOffice" name="AddressDetails.PostOffice" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.PostOffice" />
+                                        <input type="text" id="postOffice" name="AddressDetails.PostOffice" class="form-control form-control-Alphabets" maxlength="15" required value="@Model.AddressDetails?.PostOffice" />
                                         <label class="form-label" for="postOffice">Post Office</label>
                                     </div>
                                 </div>
@@ -496,7 +494,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="distt" name="AddressDetails.Distt" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.Distt" />
+                                        <input type="text" id="distt" name="AddressDetails.Distt" class="form-control form-control-Alphabets" maxlength="15"  required value="@Model.AddressDetails?.Distt" />
                                         <label class="form-label" for="distt">Enter Dist</label>
                                     </div>
                                 </div>
@@ -506,7 +504,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗺️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="state" name="AddressDetails.State" class="form-control form-control-Alphabets" maxlength="15" onkeyup="ValInDataAddress(this)" onkeydown="ValInDataAddress(this)" required value="@Model.AddressDetails?.State" />
+                                        <input type="text" id="state" name="AddressDetails.State" class="form-control form-control-Alphabets" maxlength="15" required value="@Model.AddressDetails?.State" />
                                         <label class="form-label" for="state">Enter State</label>
                                     </div>
                                 </div>
@@ -516,7 +514,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt last-input" onchange="validateUnitPin(this)" onkeydown="ValInDataNo" onkeyup="ValInDataNo" required maxlength="6" value="@Model.AddressDetails?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt last-input js-unit-pin" required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
@@ -544,7 +542,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" minlength="10" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" onblur="validateAccountNo(this)" value="@Model.AccountDetails?.SalaryAcctNo" required />
+                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" minlength="10" maxlength="17" value="@Model.AccountDetails?.SalaryAcctNo" required />
                                         <label class="form-label select-label ">Applicant's Salary Acct No</label>
                                     </div>
                                 </div>
@@ -555,7 +553,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control" onblur="confirmAccountNo(this)" maxlength="17" onkeydown="ValInDataNo(this)" onkeyup="ValInDataNo(this)" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
+                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control"  maxlength="17"   value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
                                         <label class="form-label select-label ">Re-Enter Salary Acct No</label>
                                     </div>
                                 </div>
@@ -575,7 +573,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control form-control-Alphabets" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
+                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control form-control-Alphabets"  maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
                                         <label class="form-label select-label ">Name of Bank</label>
                                     </div>
                                 </div>
@@ -585,7 +583,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets last-input" onkeydown="ValInData(this)" onkeyup="ValInData(this)" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets last-input" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
@@ -611,7 +609,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗓️</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" class="form-control Payslippicker" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")" oninput="formatDate(this)" onchange="Validate_Salary_Slip_date(this)" placeholder="dd/mm/yyyy" autocomplete="off" required>
+                                        <input type="text" class="form-control Payslippicker js-format-date" id="monthlyPaySlip" aria-label="Monthly Pay Slip" name="CommonData.MonthlyPaySlip" value="@Model.CommonData?.MonthlyPaySlip?.ToString("yyyy-MM-dd")"  placeholder="dd/mm/yyyy" autocomplete="off" required>
                                         <label class="form-label select-label ">Monthly Pay Slip</label>
                                     </div>
                                 </div>
@@ -631,7 +629,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="basicPay" name="CommonData.BasicPay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.BasicPay" />
+                                        <input type="text" id="basicPay" name="CommonData.BasicPay" class="form-control js-inputtext js-textchange" maxlength="9" required value="@Model.CommonData?.BasicPay" />
                                         <label class="form-label select-label ">Basic Pay<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
@@ -641,7 +639,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="dsop_afpp" name="CommonData.dsop_afpp" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.dsop_afpp" />
+                                        <input type="text" id="dsop_afpp" name="CommonData.dsop_afpp" class="form-control js-inputtext js-textchange" maxlength="9" required value="@Model.CommonData?.dsop_afpp" />
                                         <label class="form-label select-label ">DSOP/AFPP Subs<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
@@ -653,7 +651,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="rank_gradePay" name="CommonData.rank_gradePay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.rank_gradePay" />
+                                        <input type="text" id="rank_gradePay" name="CommonData.rank_gradePay" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.rank_gradePay" />
                                         <label class="form-label select-label ">Rank/Grade Pay</label>
                                     </div>
                                 </div>
@@ -662,7 +660,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="agif_Subs" name="CommonData.agif_Subs" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.agif_Subs" />
+                                        <input type="text" id="agif_Subs" name="CommonData.agif_Subs" class="form-control js-inputtext js-textchange" maxlength="9" required value="@Model.CommonData?.agif_Subs" />
                                         <label class="form-label select-label ">AGIF Subs<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
@@ -674,7 +672,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="msp" name="CommonData.Msp" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.Msp" />
+                                        <input type="text" id="msp" name="CommonData.Msp" class="form-control js-inputtext js-textchange" maxlength="9" required value="@Model.CommonData?.Msp" />
                                         <label class="form-label select-label ">MSP<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
@@ -684,7 +682,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="incomeTaxMonthly" name="CommonData.IncomeTaxMonthly" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.IncomeTaxMonthly" />
+                                        <input type="text" id="incomeTaxMonthly" name="CommonData.IncomeTaxMonthly" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.IncomeTaxMonthly" />
                                         <label class="form-label select-label ">Income Tax Monthly</label>
                                     </div>
                                 </div>
@@ -695,7 +693,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="CI_Pay" name="CommonData.CI_Pay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.CI_Pay" />
+                                        <input type="text" id="CI_Pay" name="CommonData.CI_Pay" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.CI_Pay" />
                                         <label class="form-label select-label ">CI Pay</label>
                                     </div>
                                 </div>
@@ -704,7 +702,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="educationCess" name="CommonData.EducationCess" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.EducationCess" />
+                                        <input type="text" id="educationCess" name="CommonData.EducationCess" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.EducationCess" />
                                         <label class="form-label select-label ">Education Cess</label>
                                     </div>
                                 </div>
@@ -715,7 +713,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="npax_Pay" name="CommonData.npax_Pay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.npax_Pay" />
+                                        <input type="text" id="npax_Pay" name="CommonData.npax_Pay" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.npax_Pay" />
                                         <label class="form-label select-label ">NPA/X Gp Pay</label>
                                     </div>
                                 </div>
@@ -724,7 +722,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="pli" name="CommonData.Pli" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.Pli" />
+                                        <input type="text" id="pli" name="CommonData.Pli" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.Pli" />
                                         <label class="form-label select-label ">PLI</label>
                                     </div>
                                 </div>
@@ -735,7 +733,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="techPay" name="CommonData.TechPay" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.TechPay" />
+                                        <input type="text" id="techPay" name="CommonData.TechPay" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.TechPay" />
                                         <label class="form-label select-label ">Tech Pay</label>
                                     </div>
                                 </div>
@@ -744,7 +742,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="misc_Deduction" name="CommonData.misc_Deduction" class="form-control" maxlength="9" oninput="formatIndianNumber(this)" value="@Model.CommonData?.misc_Deduction" />
+                                        <input type="text" id="misc_Deduction" name="CommonData.misc_Deduction" class="form-control js-inputtext" maxlength="9"  value="@Model.CommonData?.misc_Deduction" />
                                         <label class="form-label select-label ">MISC Deduction(Regular Nature)</label>
                                     </div>
                                 </div>
@@ -755,7 +753,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="da" name="CommonData.Da" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" required value="@Model.CommonData?.Da" />
+                                        <input type="text" id="da" name="CommonData.Da" class="form-control js-inputtext js-textchange" maxlength="9"  required value="@Model.CommonData?.Da" />
                                         <label class="form-label select-label ">DA<span class="text-danger" >*</span></label>
                                     </div>
                                 </div>
@@ -765,7 +763,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="loanEMI_Outside" name="CommonData.loanEMI_Outside" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.loanEMI_Outside" />
+                                        <input type="text" id="loanEMI_Outside" name="CommonData.loanEMI_Outside" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.loanEMI_Outside" />
                                         <label class="form-label select-label ">Loan EMI(Outside AGIF)</label>
                                     </div>
                                 </div>
@@ -776,7 +774,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="pmha" name="CommonData.Pmha" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.Pmha" />
+                                        <input type="text" id="pmha" name="CommonData.Pmha" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.Pmha" />
                                         <label class="form-label select-label ">PMHA</label>
                                     </div>
                                 </div>
@@ -785,7 +783,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="loanEMI" name="CommonData.LoanEmi" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.LoanEmi" />
+                                        <input type="text" id="loanEMI" name="CommonData.LoanEmi" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.LoanEmi" />
                                         <label class="form-label select-label ">Loan EMI(AGIF)</label>
                                     </div>
                                 </div>
@@ -796,7 +794,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="lra" name="CommonData.Lra" class="form-control" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.Lra" />
+                                        <input type="text" id="lra" name="CommonData.Lra" class="form-control js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.Lra" />
                                         <label class="form-label select-label ">LRA</label>
                                     </div>
                                 </div>
@@ -807,7 +805,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="miscPay" name="CommonData.MiscPay" class="form-control last-input" maxlength="9" onchange="textChange()" oninput="formatIndianNumber(this)" value="@Model.CommonData?.MiscPay" />
+                                        <input type="text" id="miscPay" name="CommonData.MiscPay" class="form-control last-input js-inputtext js-textchange" maxlength="9" value="@Model.CommonData?.MiscPay" />
                                         <label class="form-label select-label ">MISC Pay(Regular Nature)</label>
                                     </div>
                                 </div>
@@ -917,7 +915,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💰</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.HBAApplication?.PropertyCost" />
+                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control js-inputtext" maxlength="12" required value="@Model.HBAApplication?.PropertyCost" />
                                                 <label class="form-label select-label " for="propertyCost">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
                                             </div>
                                         </div>
@@ -964,7 +962,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_Amount_Applied_For_Loan" name="HBAApplication.HBA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_HBA(this)" required value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
+                                                <input type="text" id="HBA_Amount_Applied_For_Loan" name="HBAApplication.HBA_Amount_Applied_For_Loan" class="form-control" required value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
                                                 <label class="form-label select-label " for="HBA_Amount_Applied_For_Loan">Amount Applied For Loan</label>
                                             </div>
                                         </div>
@@ -974,7 +972,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('HBA')" oninput="validateEMI_HBA(this);calculateEMI_HBA()" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
+                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control js-hba-emi" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
                                                 <label class="form-label select-label " for="HBA_EMI_Applied">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -1081,11 +1079,11 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_LoanFreq, "", new { @class = "text-danger" })
                                     </div>
 
-                              <div class="col-md-2">
+                                    <div class="col-md-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="vehicleCost" name="CarApplication.VehicleCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.CarApplication?.VehicleCost" />
+                                                <input type="text" id="vehicleCost" name="CarApplication.VehicleCost" class="form-control js-inputtext" maxlength="12" required value="@Model.CarApplication?.VehicleCost" />
                                                 <label class="form-label select-label ">Vehicle Ex-Showroom Price</label>
                                             </div>
                                         </div>
@@ -1122,26 +1120,29 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_repayingCapacity, "", new { @class = "text-danger" })
                                     </div>
+
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="CA_Amount_Applied_For_Loan" name="CarApplication.CA_Amount_Applied_For_Loan" class="form-control" oninput="formatIndianNumber(this);validateAmount_CA(this)" required value="@Model.CarApplication?.CA_Amount_Applied_For_Loan" />
+                                                <input type="text" id="CA_Amount_Applied_For_Loan" name="CarApplication.CA_Amount_Applied_For_Loan" class="form-control" required value="@Model.CarApplication?.CA_Amount_Applied_For_Loan" />
                                                 <label class="form-label select-label ">Amount Applied For Loan</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_Amount_Applied_For_Loan, "", new { @class = "text-danger" })
                                     </div>
+
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control"  onchange="validateEMIForRepayingCapacity('CA')" oninput="validateEMI_CA(this);calculateEMI_CA()" required value="@Model.CarApplication?.CA_EMI_Applied" />
+                                                <input type="text" id="CA_EMI_Applied" name="CarApplication.CA_EMI_Applied" class="form-control js-ca-emi" required value="@Model.CarApplication?.CA_EMI_Applied" />
                                                 <label class="form-label select-label " for="CA_EMI_Applied">No of EMI Applied</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_EMI_Applied, "", new { @class = "text-danger" })
                                     </div>
+
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
@@ -1152,6 +1153,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_approxEMIAmount, "", new { @class = "text-danger" })
                                     </div>
+
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🪪</span>
@@ -1166,7 +1168,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📆</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control LicencePicker" required value="@Model.CarApplication?.Validity_Date_DL" oninput="formatDate(this)" placeholder="dd/mm/yyyy" autocomplete="off" />
+                                                <input type="text" id="validity_Date_DL" name="CarApplication.Validity_Date_DL" class="form-control LicencePicker js-format-date" required value="@Model.CarApplication?.Validity_Date_DL" placeholder="dd/mm/yyyy" autocomplete="off" />
                                                 <label class="form-label select-label ">Validity Date of Driving License No</label>
                                             </div>
                                         </div>
@@ -1214,7 +1216,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏠</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_dealerName" name="PCAApplication.PCA_dealerName" class="form-control" required onkeyup="ValInData(this)" value="@Model.PCAApplication?.PCA_dealerName" />
+                                                <input type="text" id="PCA_dealerName" name="PCAApplication.PCA_dealerName" class="form-control" required value="@Model.PCAApplication?.PCA_dealerName" />
                                                 <label class="form-label select-label ">Dealers Name and Address</label>
                                             </div>
                                         </div>
@@ -1242,7 +1244,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_companyName" name="PCAApplication.PCA_companyName" class="form-control" onkeyup="ValInData(this)" required value="@Model.PCAApplication?.PCA_companyName" />
+                                                <input type="text" id="PCA_companyName" name="PCAApplication.PCA_companyName" class="form-control form-control-Alphabets" required value="@Model.PCAApplication?.PCA_companyName" />
                                                 <label class="form-label select-label ">Company Name</label>
                                             </div>
                                         </div>
@@ -1252,7 +1254,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_modelName" name="PCAApplication.PCA_modelName" class="form-control" onkeyup="ValInData(this)" required value="@Model.PCAApplication?.PCA_modelName" />
+                                                <input type="text" id="PCA_modelName" name="PCAApplication.PCA_modelName" class="form-control" required value="@Model.PCAApplication?.PCA_modelName" />
                                                 <label class="form-label select-label ">Model Name</label>
                                             </div>
                                         </div>
@@ -1281,7 +1283,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control" maxlength="12" oninput="formatIndianNumber(this)" required value="@Model.PCAApplication?.computerCost" />
+                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control js-inputtext" maxlength="12"  required value="@Model.PCAApplication?.computerCost" />
                                                 <label class="form-label select-label " for="computerCost">Total Price of Computer</label>
                                             </div>
                                         </div>
@@ -1322,7 +1324,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan"  class="form-control" oninput="formatIndianNumber(this);validateAmount_PCA(this)" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
+                                                <input type="text" id="PCA_Amount_Applied_For_Loan" name="PCAApplication.PCA_Amount_Applied_For_Loan"  class="form-control" required value="@Model.PCAApplication?.PCA_Amount_Applied_For_Loan" />
                                                 <label class="form-label select-label " for="PCA_Amount_Applied_For_Loan">Amount Applied For Loan</label>
                                             </div>
                                         </div>
@@ -1332,7 +1334,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control" onchange="validateEMIForRepayingCapacity('PCA')" oninput="validateEMI_PCA(this);calculateEMI_PCA()" required value="@Model.PCAApplication?.PCA_EMI_Applied" />
+                                                <input type="text" id="PCA_EMI_Applied" name="PCAApplication.PCA_EMI_Applied" class="form-control js-pca-emi" required value="@Model.PCAApplication?.PCA_EMI_Applied" />
                                                 <label class="form-label select-label ">No of EMI Applied</label>
                                             </div>
                                         </div>

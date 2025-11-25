@@ -13,46 +13,37 @@ using Microsoft.EntityFrameworkCore;
 using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
 
-// ============================
-// DATABASE
-// ============================
-builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-    options.UseSqlServer(configuration.GetConnectionString("AgifConnection")));
-
-// ============================
-// CULTURE
-// ============================
+var configration = builder.Configuration;
+builder.Services.AddDbContextPool<ApplicationDbContext>(options => options.UseSqlServer(configration.GetConnectionString("AgifConnection")));
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    options.SetDefaultCulture("en-GB")
-           .AddSupportedCultures("en-GB", "en-US")
-           .AddSupportedUICultures("en-GB", "en-US");
+    var supportedCultures = new[] { "en-GB", "en-US" };
+    options.SetDefaultCulture(supportedCultures[0])
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
 
-    options.RequestCultureProviders.Insert(0,
-        new CustomRequestCultureProvider(ctx =>
-            Task.FromResult(new ProviderCultureResult("en-GB"))));
+    // Force the request culture to always use "en-GB"
+    options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(context =>
+    {
+        return Task.FromResult(new ProviderCultureResult("en-GB"));
+    }));
 });
 
-// ============================
-// IDENTITY CONFIG
-// ============================
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {
     options.ValidationInterval = TimeSpan.Zero;
 });
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(option =>
 {
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 8;
-    options.Password.RequiredUniqueChars = 1;
-    options.User.RequireUniqueEmail = false;
-}).AddEntityFrameworkStores<ApplicationDbContext>()
-  .AddDefaultTokenProviders();
+    option.Password.RequireNonAlphanumeric = true;
+    option.Password.RequireUppercase = true;
+    option.Password.RequireDigit = true;
+    option.Password.RequiredLength = 8;
+    option.Password.RequiredUniqueChars = 1;
+    option.User.RequireUniqueEmail = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -61,19 +52,23 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.AllowedForNewUsers = true;
 });
 
-// ============================
-// RESPONSE COMPRESSION
-// ============================
 builder.Services.AddResponseCompression(options =>
 {
     options.EnableForHttps = true;
     options.Providers.Add<BrotliCompressionProvider>();
     options.Providers.Add<GzipCompressionProvider>();
 
+    // Add font MIME types
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
     {
-        "font/woff", "font/woff2", "application/font-woff", "application/font-woff2",
-        "application/vnd.ms-fontobject", "font/ttf", "font/otf", "application/font-sfnt"
+        "font/woff",
+        "font/woff2",
+        "application/font-woff",
+        "application/font-woff2",
+        "application/vnd.ms-fontobject",
+        "font/ttf",
+        "font/otf",
+        "application/font-sfnt"
     });
 });
 
@@ -87,9 +82,8 @@ builder.Services.Configure<GzipCompressionProviderOptions>(options =>
     options.Level = CompressionLevel.SmallestSize;
 });
 
-// ============================
-// DEPENDENCY INJECTION
-// ============================
+
+
 builder.Services.AddTransient<IOnlineApplication, OnlineApplicationDL>();
 builder.Services.AddScoped<IClaimOnlineApplication, ClaimOnlineApplicationDL>();
 builder.Services.AddTransient<IAppointment, AppointmentDL>();
@@ -126,82 +120,56 @@ builder.Services.AddTransient<IClaimApplication, ClaimDigitalDL>();
 builder.Services.AddTransient<Watermark>();
 builder.Services.AddTransient<IClaimCalculator, ClaimCalculatorDL>();
 
-// ============================
-// CORS
-// ============================
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy",builder =>
-        builder.WithOrigins("http://localhost", "*")
-               .AllowAnyMethod()
-               .AllowAnyHeader());
+    options.AddPolicy("CorsPolicy",
+        builder => builder.WithOrigins("http://localhost", "*")
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 });
 
-// ============================
-// MVC & SESSION
-// ============================
+// Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set session timeout
+    options.Cookie.HttpOnly = true; // Make the session cookie HTTP only
+    options.Cookie.IsEssential = true; // Make the session cookie essential
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SameSite = SameSiteMode.Strict;  // Strong CSRF protection
 });
 
 var app = builder.Build();
 
-// ============================
-// LOCALIZATION
-// ============================
 app.UseRequestLocalization();
-
-// ============================
-// SESSION
-// ============================
 app.UseSession();
 
-// ============================
-// ERROR HANDLING
-// ============================
+//app.UseResponseCompression();
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// ============================
-// SECURITY HEADERS — CSP
-// ============================
-// Restrict inline JS and CSS
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Content-Security-Policy"] =
-        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
+        "script-src 'self'; style-src 'self'; img-src 'self' data: blob; font-src 'self';";
 
     await next();
 });
 
-// ============================
-// STATIC FILES (AFTER CSP)
-// ============================
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-// ============================
-// ROUTING & CORS
-// ============================
 app.UseRouting();
+
 app.UseCors("CorsPolicy");
 
-// ============================
-// REFERER VALIDATION
-// ============================
 app.Use(async (context, next) =>
 {
     var referer = context.Request.Headers["Referer"].ToString();
@@ -219,16 +187,11 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// ============================
-// AUTH
-// ============================
 app.UseAuthorization();
 
-// ============================
-// ROUTES
-// ============================
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Default}/{action=Index}/{id?}");
+
 
 app.Run();

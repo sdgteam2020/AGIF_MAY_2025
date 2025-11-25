@@ -845,3 +845,74 @@ input[disabled] {
 .approval-item.documents .approval-text {
     color: #7b1fa2;
 }
+.form-outline {
+    position: relative;
+}
+
+/* Gender dropdown styling */
+.gender-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    z-index: 1000;
+    margin-top: 2px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+    /* Show dropdown when active */
+    .gender-dropdown.show {
+        display: block;
+    }
+
+/* Floating label */
+.form-label.active {
+    transform: translateY(-1rem);
+    font-size: 0.875rem;
+}
+
+/* Male button - Blue theme */
+.gender-male {
+    border-color: #007bff !important;
+    color: #007bff !important;
+}
+
+    .gender-male:hover {
+        background-color: #e7f3ff !important;
+    }
+
+.btn-check:checked + .gender-male {
+    background-color: #007bff !important;
+    color: white !important;
+    border-color: #007bff !important;
+}
+
+/* Female button - Pink theme */
+.gender-female {
+    border-color: #ff69b4 !important;
+    color: #ff69b4 !important;
+}
+
+    .gender-female:hover {
+        background-color: #ffe6f2 !important;
+    }
+
+.btn-check:checked + .gender-female {
+    background-color: #ff69b4 !important;
+    color: white !important;
+    border-color: #ff69b4 !important;
+}
+
+
+#validationerrormessage {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+}

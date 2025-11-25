@@ -28,7 +28,12 @@ $('#DteFmn').on('change', function () {
 
 $("#btnsignup").on("click", function (e) {
     e.preventDefault(); // Prevent form submission for now
-
+    // Validate Unit selection
+    if ($("#UnitId").val() == 0 || $("#txtUnit").val() == "") {
+        $("#UnitId").val(0);
+        $("#txtUnit").val("");
+        return false;
+    }
     // Show the confirmation SweetAlert
     Swal.fire({
         title: 'Do you really want to save?',
@@ -52,7 +57,7 @@ $("#txtUnit").autocomplete({
         //alert(1);
         $("input[name='UnitId']").val(0);
 
-        if (request.term.length > 2) {
+      if (request.term.length > 0) {
             const param = { "UnitName": request.term };
             $("#UnitId").val(0);
             $.ajax({

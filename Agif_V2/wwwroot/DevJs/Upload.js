@@ -47,8 +47,8 @@
                     // Create a link with the eye icon and the PDF file URL
                     const fileUrl = URL.createObjectURL(file); // Create a Blob URL for the file
                     preview.html(`
-                        <a href="${fileUrl}" target="_blank" style="font-size: 1.5rem; text-decoration: none;">
-                            <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                        <a href="${fileUrl}" target="_blank" id="upload">
+                            <i class="bi bi-eye uploadeye" ></i>
                         </a>
                     `);
                 };
@@ -167,7 +167,7 @@ function messageHandler() {
 
     if (message && message.trim() !== '') {
         Swal.fire({
-            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,
+            html: `<span id="message">${message}</span>`,
             icon: 'success',
             confirmButtonText: 'OK',
             customClass: {

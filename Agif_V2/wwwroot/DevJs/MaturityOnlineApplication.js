@@ -16,7 +16,110 @@ $(document).ready(function () {
     //MarrGenderDisplay();
     findDataWithArmyNumber();
     findDataWithApplicationId();
+    callingCommonFunctions();
 });
+
+function callingCommonFunctions() {
+    $(document).on("input", ".js-valindata", function () {
+        ValInDataNo(this);
+    });
+
+    // For all elements that need SetSuffixLetter on change
+    $(document).on("change", ".js-setsuffix", function () {
+        SetSuffixLetter(this);
+    });
+
+    $(document).on("change", ".js-setregcorp", function () {
+        fetchPCDA_PAO();
+    });
+
+
+    $(document).on("input", ".js-format-date", function () {
+        formatDate(this);
+    });
+
+
+    $(document).on("change", ".js-monthpicker-date", function () {
+        validateDateFormat(this);
+    });
+
+
+    $(document).on("change", "#dateOfPromotion", function () {
+        updateRetDateOnPromotionDateSelection();
+    });
+
+
+    $(document).on("change", ".js-doc-change", function () {
+        validateDateFormat(this);
+        calculateYearDifference();
+    });
+
+    $("#ExtnOfService").on("change blur", function () {
+        extensionOfService();
+        ExtensionOfServiceAccess();
+    });
+
+    $("#aadharCardNo").on("input", function () {
+        formatAadhar(this);
+    });
+
+    $("#txtApplicantName").on("input", function () {
+        ValInDataLetter(this);
+    });
+
+    $("#mobileNo").on("input", function () {
+        ValInDataNo(this);
+    });
+
+    $("#mobileNo").on("blur", function () {
+        verifyMobileNo(this);
+    });
+
+    $(".js-unit-pin").on("input change", function (e) {
+
+        // Always validate numeric typing
+        ValInDataNo(this);
+
+        // Only run format validation on change
+        if (e.type === "change") {
+            let isValid = validateUnitPin(this);
+
+            // If validateUnitPin returns false → clear value
+            if (isValid === false) {
+                $(this).val("");     // CLEAR VALUE
+            }
+        }
+    });
+
+    $("#salaryAcctNo").on("input change", function (e) {
+
+        // Numeric typing check
+        ValInDataNo(this);
+
+        // On change, validate account no
+        if (e.type === "change") {
+            let isValid = validateAccountNo(this);
+
+            if (isValid === false) {
+                $(this).val("");  // CLEAR if invalid
+            }
+        }
+    });
+
+    $("#confirmSalaryAcctNo").on("input", function (e) {
+        ValInDataNo(this);
+    });
+
+
+    $('.remove-btn').on('click', function () {
+        removeLoanForm();
+    });
+
+    $("#AmountOfWithdrawalRequired , #TotalExpenditure, #EstimatedCost").on("input", function (e) {
+        formatIndianNumber(this);
+    });
+
+}
 
 function resetCivilPostalAddress() {
     $('#armyPostOffice').on('change', function () {
@@ -418,18 +521,29 @@ function confirmAccountNo() {
         const accountNo = $('#salaryAcctNo').val();
         const reEnterAccountNo = $('#confirmSalaryAcctNo').val();
 
+        //if (accountNo !== reEnterAccountNo) {
+        //    $('#confirmSalaryAcctNo').val('').css('border', '2px solid red');
+
+        //    const $this = $(this); // store jQuery reference to use in arrow functions
+
+        //    setTimeout(() => {
+        //        $this.focus();
+        //    }, 10);
+
+        //    setTimeout(() => {
+        //        $this.css('border', '');
+        //    }, 2000);
+        //}
         if (accountNo !== reEnterAccountNo) {
-            $('#confirmSalaryAcctNo').val('').css('border', '2px solid red');
+            Swal.fire({
+                title: "Alert",
+                text: "You Salary Account No is mismatch",
+                icon: "warning"
+            }).then(() => {
 
-            const $this = $(this); // store jQuery reference to use in arrow functions
-
-            setTimeout(() => {
-                $this.focus();
-            }, 10);
-
-            setTimeout(() => {
-                $this.css('border', '');
-            }, 2000);
+                $('#confirmSalaryAcctNo').val("");
+                $('#confirmSalaryAcctNo').focus();
+            });
         }
     });
 }
@@ -2347,18 +2461,6 @@ function formatDateToDDMMYYYY(dateString) {
 
     return `${day}/${month}/${year}`;
 }
-$('.file-upload').on('change', function () {
-    const file = this.files[0];
-    const errorrMessage = $(this).next('.file-error-message'); // container for error
-
-    if (file && file.size > 150 * 1024) {
-        errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
-        this.value = ''; // Clear the input field
-    } else {
-        errorrMessage.text(''); // Clear the error message if file size is valid
-
-    }
-});
 
 document.addEventListener('DOMContentLoaded', function () {
     initGenderDropdown('EducationGenderDisplay', 'genderRadioGroup');

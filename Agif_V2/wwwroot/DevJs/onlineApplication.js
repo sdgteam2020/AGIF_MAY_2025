@@ -22,7 +22,161 @@ $(document).ready(function () {
     accordionAutoOpenClose();
     findDataWithArmyNumber();
     findDataWithApplicationId();
+    callingCommonFunctions();
+
 });
+
+function callingCommonFunctions() {
+    $(document).on("input", ".js-valindata", function () {
+        ValInDataNo(this);
+    });
+
+    // For all elements that need SetSuffixLetter on change
+    $(document).on("change", ".js-setsuffix", function () {
+        SetSuffixLetter(this);
+    });
+
+
+    $(document).on("change", ".js-setregcorp", function () {
+        fetchPCDA_PAO();
+    });
+
+
+    $(document).on("input", ".js-format-date", function () {
+        formatDate(this);
+    });
+
+
+    $(document).on("change", ".js-monthpicker-date", function () {
+        validateDateFormat(this);
+    });
+
+    $(document).on("change", "#dateOfPromotion", function () {
+        updateRetDateOnPromotionDateSelection();
+    });
+
+
+    $(document).on("change", ".js-doc-change", function () {
+        validateDateFormat(this);
+        calculateYearDifference();
+    });
+
+    $("#txtApplicantName").on("input", function () {
+        ValInDataLetter(this);
+    });
+
+    $("#ExtnOfService").on("change blur", function () {
+        extensionOfService();
+        ExtensionOfServiceAccess();
+    });
+
+    $("#aadharCardNo").on("input", function () {
+        formatAadhar(this);
+    });
+
+    $("#mobileNo").on("input", function () {
+        ValInDataNo(this);
+    });
+
+    $("#mobileNo").on("blur", function () {
+        verifyMobileNo(this);
+    });
+
+    $(".js-unit-pin").on("input change", function (e) {
+
+        // Always validate numeric typing
+        ValInDataNo(this);
+
+        // Only run format validation on change
+        if (e.type === "change") {
+            let isValid = validateUnitPin(this);
+
+            // If validateUnitPin returns false → clear value
+            if (isValid === false) {
+                $(this).val("");     // CLEAR VALUE
+            }
+        }
+    });
+
+
+    $("#salaryAcctNo").on("input change", function (e) {
+
+        // Numeric typing check
+        ValInDataNo(this);
+
+        // On change, validate account no
+        if (e.type === "change") {
+            let isValid = validateAccountNo(this);
+
+            if (isValid === false) {
+                $(this).val("");  // CLEAR if invalid
+            }
+        }
+    });
+
+    $("#confirmSalaryAcctNo").on("input", function (e) {
+        ValInDataNo(this);
+    });
+
+
+    $("#monthlyPaySlip").on("change", function (e) {
+        Validate_Salary_Slip_date(this)
+    });
+
+    $(document).on("input", ".js-inputtext", function () {
+        formatIndianNumber(this);
+    });
+
+    // For all elements that need SetSuffixLetter on change
+    $(document).on("change", ".js-textchange", function () {
+        textChange();
+    });
+
+    $("#HBA_Amount_Applied_For_Loan").on("input", function () {
+        formatIndianNumber(this);
+        validateAmount_HBA(this);
+    });
+
+    $(document).on("input", ".js-hba-emi", function () {
+        validateEMI_HBA(this);
+        calculateEMI_HBA();
+    });
+
+    $(document).on("change", ".js-hba-emi", function () {
+        validateEMIForRepayingCapacity("HBA");
+    });
+
+    $("#CA_Amount_Applied_For_Loan").on("input", function () {
+        formatIndianNumber(this);
+        validateAmount_CA(this);
+    });
+
+    $(document).on("input", ".js-ca-emi", function () {
+        validateEMI_CA(this);
+        calculateEMI_CA();
+    });
+
+    $(document).on("change", ".js-ca-emi", function () {
+        validateEMIForRepayingCapacity("CA");
+    });
+
+    $("#PCA_Amount_Applied_For_Loan").on("input", function () {
+        formatIndianNumber(this);
+        validateAmount_PCA(this);
+    });
+
+    $(document).on("input", ".js-pca-emi", function () {
+        validateEMI_PCA(this);
+        calculateEMI_PCA();
+    });
+
+
+    $(document).on("change", ".js-pca-emi", function () {
+        validateEMIForRepayingCapacity('PCA');
+    });
+
+
+}
 function accordionAutoOpenClose() {
     $('.accordion').on('keydown', '.last-input', function (e) {
         if (e.key === 'Tab' && !e.shiftKey) {
@@ -2180,19 +2334,16 @@ function findDataWithArmyNumber() {
 
         // Validate required fields
         if (!armyPrefix) {
-            alert('Please select an Army Prefix.');
             $('#armyPrefix').focus();
             return;
         }
 
         if (!armyNumber) {
-            alert('Army Number is required.');
             $('#armyNumber').focus();
             return;
         }
 
         if (!armySuffix) {
-            alert('Army Suffix is required.');
             $('#txtSuffix').focus();
             return;
         }

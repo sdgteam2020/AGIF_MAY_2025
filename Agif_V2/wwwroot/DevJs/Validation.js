@@ -47,7 +47,9 @@ function validateUnitPin(input) {
         }).then(() => {
             input.focus();
         })
+        return false;
     }
+    return true;
 }
 function validateAccountNo(input) {
 
@@ -60,8 +62,9 @@ function validateAccountNo(input) {
         }).then(() => {
             input.focus();
         })
-
+        return false;
     }
+    return true;
 }
 function validateDateFormat(input) {
     const value = input.value;
@@ -181,7 +184,7 @@ function isNumeric(key) {
 function showErrorMessage(message) {
     // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+        <div class="alert alert-danger alert-dismissible fade show" id="validationerrormessage" role="alert">
             <i class="lni lni-cross-circle"></i> ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -195,3 +198,18 @@ function showErrorMessage(message) {
         });
     }, 2000);
 }
+
+//function showErrorMessage(message) {
+//    const $alert = $('#globalErrorAlert');
+//    const $msg = $('#globalErrorMessage');
+
+//    $msg.text(message);
+
+//    // show alert
+//    $alert.removeClass('d-none').addClass('show');
+
+//    // auto hide after 2 seconds
+//    setTimeout(function () {
+//        $alert.removeClass('show').addClass('d-none');
+//    }, 2000);
+//}

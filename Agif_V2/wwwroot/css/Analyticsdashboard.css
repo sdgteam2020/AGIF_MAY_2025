@@ -41,3 +41,8 @@ canvas {
 .rounded {
     border-radius: 8px !important;
 }
+
+#yearSelect {
+    width: auto;
+    min-width: 120px;
+}
