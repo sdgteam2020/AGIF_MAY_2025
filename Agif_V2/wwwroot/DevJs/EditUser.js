@@ -29,9 +29,12 @@
         }
     }
 
-    $('#editButton').click(function () {
+    $('#editButton').on('click',function () {
         enableEditMode();
     });
+    $('#UnitId').on('onkeyup', function () {
+        ValInData(this);
+    })
 
      function enableEditMode() {                   
 
@@ -97,4 +100,15 @@
 
 $("input, textarea").on("paste", function (e) {
     e.preventDefault();
+});
+$(document).ready(function () {
+    var message = $('#profileMessage').val();
+
+    if (message) {
+        Swal.fire({
+            html: `<span class="msg-title">${message}</span>`,
+            icon: 'success',
+            confirmButtonText: 'OK'
+        });
+    }
 });

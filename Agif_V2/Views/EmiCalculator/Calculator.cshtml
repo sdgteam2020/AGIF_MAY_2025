@@ -22,7 +22,7 @@
                         <label class="form-label">Loan Amount</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-currency-rupee"></i></span>
-                            <input type="text" class="form-control with-icon" id="loanAmount" oninput="formatIndianNumber(this)" min="0" step="1000">
+                            <input type="text" class="form-control with-icon" id="loanAmount" min="0" step="1000">
                         </div>
                     </div>
 
@@ -39,7 +39,7 @@
                     </div>
 
 
-                    <button type="button" class="btn btn-calculate btn-primary w-100 d-none" onclick="calculateEMI()">
+                    <button type="button" class="btn btn-calculate btn-primary w-100 d-none" id="btnCalculate">
                         <i class="fas fa-calculator me-2"></i>Calculate EMI
                     </button>
 

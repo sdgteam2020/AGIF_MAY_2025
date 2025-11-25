@@ -30,13 +30,13 @@
             <h4 class="mb-0">Applications by Month</h4>
             <div class="d-flex align-items-center">
                 <label for="yearSelect" class="me-2 mb-0">Select Year:</label>
-                <select id="yearSelect" class="form-select" style="width: auto; min-width: 120px;">
+                <select id="yearSelect" class="form-select">
                     <!-- Years will be filled dynamically -->
                 </select>
             </div>
         </div>
         <!-- Chart Container -->
-        <div class="canvasDiv" style="position: relative; height: 400px;">
+        <div class="canvasDiv">
             <canvas id="applicationByMonth"></canvas>
             <canvas id="maturityChartCanvas" class="d-none"></canvas>
 
@@ -133,7 +133,7 @@
             <div class="bg-light p-4 rounded loan">
                 <h4 class="mb-3">Top 20 Approved Personnel by Total Loan Amount</h4>
                 <!-- Chart Container -->
-                <div class="canvasTopRanks" style="height: 700px;">
+                <div class="canvasTopRanks">
                     <canvas id="topPersonnelChart"></canvas>
                 </div>
             </div>
@@ -174,15 +174,6 @@
                 </div>
             </div>
         </div>
-       @*  <div class="col-md-6 col-lg-6">
-            <div class="bg-light p-4 rounded">
-                <h4 class="mb-3">Applications by Age Group</h4>
-                <!-- Chart Container -->
-                <div class="canvasTopRegtCorps canvasTopRanks">
-                    <canvas id="AgeGroupsChart"></canvas>
-                </div>
-            </div>
-        </div> *@
     </div>
 
     <br />

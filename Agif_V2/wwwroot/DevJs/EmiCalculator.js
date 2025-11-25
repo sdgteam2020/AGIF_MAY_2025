@@ -5,6 +5,12 @@
     });
     checkEMIMonths() 
 
+    $('#loanAmount').on('input', function () {
+        formatIndianNumber(this);
+    })
+    $('#btnCalculate').on('click', function () {
+        calculateEMI();
+    })
 
 });
 

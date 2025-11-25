@@ -179,13 +179,13 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 // SECURITY HEADERS — CSP
 // ============================
 // Restrict inline JS and CSS
-app.Use(async (context, next) =>
-{
-    context.Response.Headers["Content-Security-Policy"] =
-        "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
+//app.Use(async (context, next) =>
+//{
+//    context.Response.Headers["Content-Security-Policy"] =
+//        "script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
 
-    await next();
-});
+//    await next();
+//});
 
 // ============================
 // STATIC FILES (AFTER CSP)

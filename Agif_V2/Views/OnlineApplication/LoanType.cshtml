@@ -2,7 +2,8 @@
     ViewData["Title"] = "Loan type";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-<style>
+<link href="~/css/LoanType.css" rel="stylesheet" />
+@* <style>
     .loan-card {
         max-width: 500px;
         border: none;
@@ -142,7 +143,7 @@
     .min-vh-100 {
         min-height: 50vh !important;
     }
-</style>
+</style> *@
 @* <div class="container-fluid mt-2">
     <div class="d-flex justify-content-center align-items-center">
         <div class="card shadow p-4 w-25 mt-lg-5">
@@ -198,7 +199,7 @@
 <!--New With responsive-->
 <div class="container-fluid mt-2">
     <div class="d-flex justify-content-center align-items-center min-vh-100">
-        <div class="card loan-card shadow p-4 w-100 mt-lg-5" style="max-width: 500px;">
+        <div class="card loan-card shadow p-4 w-100 mt-lg-5">
             <div class="pagetitle">
                 <h1>Apply Loan</h1>
             </div>
@@ -206,7 +207,7 @@
             <form id="loanForm" action="/OnlineApplication/Redirection" method="post">
                 <div class="mb-3">
                     <div class="form-group">
-                        <label for="loanType">Loan Type :</label>
+                        <label for="loanType" class="text-nowrap">Loan Type :</label>
                         <select id="loanType" name="loanType" class="form-select" required>
                         </select>
                     </div>
@@ -215,7 +216,7 @@
 
                 <div class="mb-3">
                     <div class="form-group">
-                        <label for="applicantCategory">Applicant Category:</label>
+                        <label for="applicantCategory" class="text-nowrap">Applicant Category:</label>
                         <select id="applicantCategory" name="applicantCategory" class="form-select" required>
                         </select>
                     </div>

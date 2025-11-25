@@ -1,0 +1,618 @@
+﻿.select-arrow:before {
+    content: "\25BC"; /* Unicode escape for ▼             */
+}
+
+div:where(.swal2-container) div:where(.swal2-popup) {
+    width: 650px;
+}
+
+
+.ui-datepicker {
+    animation: clipIn 0.4s ease-out;
+    background: white;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 280px;
+    z-index: 9999;
+}
+
+.ui-datepicker-header {
+    background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.ui-datepicker-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ui-datepicker-prev {
+    display: none;
+}
+
+.ui-datepicker-next {
+    display: none;
+}
+
+    .ui-datepicker-prev:hover,
+    .ui-datepicker-next:hover {
+        background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+    }
+
+    .ui-datepicker-prev span,
+    .ui-datepicker-next span {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-indent: -9999px;
+        position: relative;
+    }
+
+        .ui-datepicker-prev span:before {
+            content: "❮";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-indent: 0;
+            color: white;
+            font-size: 12px;
+        }
+
+        .ui-datepicker-next span:before {
+            content: "❯";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-indent: 0;
+            color: white;
+            font-size: 12px;
+        }
+
+.ui-datepicker-calendar {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .ui-datepicker-calendar th {
+        padding: 10px 5px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .ui-datepicker-calendar td {
+        padding: 2px;
+        text-align: center;
+    }
+
+        .ui-datepicker-calendar td a {
+            display: block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            text-decoration: none;
+            color: #333;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+            .ui-datepicker-calendar td a:hover {
+                background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+                color: white;
+                transform: scale(1.1);
+            }
+
+    .ui-datepicker-calendar .ui-datepicker-today a {
+        background: #f8f9fa;
+        border: 2px solid #073c07;
+        font-weight: bold;
+    }
+
+    .ui-datepicker-calendar .ui-datepicker-current-day a,
+    .ui-datepicker-calendar .ui-state-active {
+        background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+        color: white;
+        font-weight: bold;
+    }
+
+    .ui-datepicker-calendar .ui-datepicker-other-month a {
+        color: #ccc;
+    }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@@keyframes backgroundMove {
+    0% {
+        transform: translateX(-30px) translateY(-15px);
+    }
+
+    100% {
+        transform: translateX(30px) translateY(15px);
+    }
+}
+
+.army-emblem {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.03;
+    font-size: 20rem;
+    color: #ff9900;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.calculator-container {
+    perspective: 1500px;
+    padding: 1rem;
+    position: relative;
+    z-index: 10;
+}
+
+.calculator-body {
+    background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0d0d0d 100%);
+    border-radius: 20px;
+    padding: 2.0rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 2px 0 rgba(255, 153, 0, 0.1), inset 0 -2px 0 rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 153, 0, 0.2);
+    transform-style: preserve-3d;
+    transform: rotateX(8deg) rotateY(-3deg);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    border: 3px solid rgba(255, 153, 0, 0.3);
+}
+
+.army-header {
+    background: linear-gradient(145deg, #1a3829, #0f2419);
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0d0d0d 100%);
+    border-radius: 15px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.8), inset 0 -2px 5px rgba(255, 153, 0, 0.1), 0 0 20px rgba(255, 153, 0, 0.2);
+    border: 2px solid rgba(255, 153, 0, 0.4);
+    position: relative;
+    text-align: center;
+}
+
+.input-section {
+    background: linear-gradient(145deg, #2a4a3a, #1e3d2e);
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #0d0d0d 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 128, 0, 0.3);
+    transform: translateZ(15px);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.form-control, .form-select {
+    background: linear-gradient(145deg, #1a3829, #0f2419);
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    border: 2px solid rgba(0, 128, 0, 0.4);
+    border-radius: 8px;
+    color: #ffffff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.calculator-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.1), transparent);
+    animation: militaryShine 4s infinite;
+}
+
+@@keyframes militaryShine {
+    0% {
+        left: -100%;
+    }
+
+    50% {
+        left: 100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.calculator-body:hover {
+    transform: rotateX(4deg) rotateY(-1deg) translateY(-15px);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 2px 0 rgba(255, 153, 0, 0.2), 0 0 0 3px rgba(255, 153, 0, 0.4);
+}
+
+
+
+@@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+.army-title {
+    /* color: #ff9900; */
+    color: rgb(255 0 0);
+    font-family: 'Orbitron', monospace;
+    font-size: 1.4rem;
+    font-weight: 1000;
+    /*  text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
+        animation: titleGlow 3s ease-in-out infinite alternate; */
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+}
+
+.army-subtitle {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+@@keyframes titleGlow {
+    from {
+        text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    to {
+        text-shadow: 0 0 15px #ff9900, 0 0 25px #ff9900, 0 0 35px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+}
+
+
+
+.input-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ff9900, transparent);
+    border-radius: 12px 12px 0 0;
+}
+
+.input-section:hover {
+    transform: translateZ(20px);
+    border-color: rgba(0, 128, 0, 0.5);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 20px rgba(0, 128, 0, 0.2);
+}
+
+.section-label {
+    /*         color: #ff9900; */
+    color: rgb(255 0 0);
+    font-size: 0.9rem;
+    font-weight: 1000;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 10px rgba(255, 153, 0, 0.5);
+    position: relative;
+}
+
+    .section-label::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 200px;
+        height: 2px;
+        background: linear-gradient(90deg, #ff9900, transparent);
+    }
+
+
+
+.form-control:focus, .form-select:focus {
+    /*          background: linear-gradient(145deg, #2a4a3a, #1a3829);
+            background: #310; */
+    border-color: #ff9900;
+    box-shadow: 0 0 0 0.2rem rgba(255, 153, 0, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 153, 0, 0.3);
+    color: #ffffff;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-select option {
+    background: #1a3829;
+    color: #ffffff;
+}
+
+/* Radio Button Styles */
+.rank-selection {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.rank-option {
+    flex: 1;
+    min-width: 200px;
+}
+
+.rank-radio {
+    display: none;
+}
+
+.rank-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*         padding: 1.5rem 1rem;
+ */
+    /* background: linear-gradient(145deg, #1a3829, #0f2419); */
+    border: 2px solid rgba(0, 128, 0, 0.4);
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    height: 130px;
+}
+
+    .rank-label::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 153, 0, 0.1), transparent);
+        transition: left 0.6s;
+    }
+
+    .rank-label:hover {
+        transform: translateY(-5px);
+        border-color: rgba(255, 153, 0, 0.6);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 153, 0, 0.2);
+    }
+
+        .rank-label:hover::before {
+            left: 100%;
+        }
+
+.rank-radio:checked + .rank-label {
+    /* background: linear-gradient(145deg, #ff9900, #e68a00); */
+    background: #310;
+    border-color: #ff9900;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(255, 153, 0, 0.4), 0 0 25px rgba(255, 153, 0, 0.3);
+}
+
+.rank-icon {
+    font-size: 2.0rem;
+    margin-bottom: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.rank-radio:checked + .rank-label .rank-icon {
+    transform: scale(1.1);
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+.rank-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    /*         margin-bottom: 0.3rem;
+ */ letter-spacing: 1px;
+}
+
+.rank-description {
+    font-size: 0.8rem;
+    opacity: 0.9;
+    line-height: 1.3;
+}
+
+.result-display {
+    background: linear-gradient(145deg, #1a3829, #0f2419);
+    border: 3px solid #00ff00;
+    border-radius: 15px;
+    padding: 2.5rem;
+    margin-top: 2rem;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(0, 255, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.1), inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+    transform: translateZ(20px);
+    position: relative;
+}
+
+    .result-display::before {
+        content: 'SERVICE PERIOD';
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1a3829;
+        color: #ff9900;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        border-radius: 15px;
+        border: 2px solid #00ff00;
+    }
+
+.result-value {
+    color: #00ff00;
+    font-family: 'Orbitron', monospace;
+    font-size: 2.8rem;
+    font-weight: 900;
+    text-shadow: 0 0 15px #00ff00, 0 0 25px #00ff00, 2px 2px 4px rgba(0, 0, 0, 0.8);
+    animation: resultPulse 2.5s infinite;
+    margin-bottom: 1rem;
+}
+
+@@keyframes resultPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 0.9;
+    }
+}
+
+.military-grid {
+    background-image: linear-gradient(rgba(255, 153, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 153, 0, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+@@media (max-width: 768px) {
+    .calculator-body {
+        padding: 1.5rem;
+        transform: none;
+        margin: 1rem;
+    }
+
+        .calculator-body:hover {
+            transform: translateY(-8px);
+        }
+
+    .army-title {
+        font-size: 1.1rem;
+    }
+
+    .result-value {
+        font-size: 2.2rem;
+    }
+
+    .rank-selection {
+        flex-direction: column;
+    }
+
+    .rank-option {
+        min-width: 100%;
+    }
+}
+
+.floating-particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 153, 0, 0.6);
+    border-radius: 50%;
+    animation: militaryFloat 8s infinite linear;
+}
+
+@@keyframes militaryFloat {
+    0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+.service-motto {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 153, 0, 0.6);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.swal-center-container {
+    text-align: center;
+}
+
+.swal-heading {
+    color: #310;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.swal-highlight {
+    color: #2c3e50;
+}
+
+.swal-amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 20px 0;
+}

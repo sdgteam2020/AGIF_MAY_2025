@@ -12,6 +12,10 @@ $(document).ready(function () {
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 102 : rawValue;
     BindUsersData(value);
+
+    $('#btnAllDownload').on('click', function () {
+        getAllApplicationByDateWise();
+    })
 });
 
 

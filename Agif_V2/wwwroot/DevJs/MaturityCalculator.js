@@ -1,17 +1,15 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    //const tillDateInput = document.getElementById('tillDate');
-    //const today = new Date();
-    //const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-
-    //// Format date as YYYY-MM-DD for input field
-    //const formattedDate = lastMonth.toISOString().split('T')[0];
-    //tillDateInput.value = formattedDate;
+﻿$(document).ready(function () {
     setTillDateToPreviousMonth();
-  
 
-    // Set focus to date of joining field
-    //    document.getElementById('dateOfBirth').focus();
+    $('#dateOfBirth').on('input', function () {
+        formatDate(this);
+    })
+
+    $('#dateOfBirth').on('change', function () {
+        validateDateFormat(this);
+    })
 });
+
 
 // Form validation
 document.getElementById('loanForm').addEventListener('submit', function (e) {
@@ -158,35 +156,6 @@ function my_date(date_string) {
     const year = date_components[2];
     return new Date(year, month - 1, day);
 }
-//function setTillDateToPreviousMonth() {
-//    const today = new Date();
-//    const previousMonth = new Date(today);
-
-//    // Go to previous month
-//    previousMonth.setMonth(today.getMonth() - 1);
-
-//    // If we're in January, setMonth(-1) will correctly go to December of previous year
-//    // Set to the 1st day of the previous month
-//    previousMonth.setDate(1);
-
-//    // Format as YYYY-MM-DD for date input
-//    const formattedTillDate = previousMonth.toISOString().split('T')[0];
-
-//    const tillDateInput = document.getElementById('tillDate');
-//    tillDateInput.value = formattedTillDate;
-//}
-//function setTillDateToPreviousMonth() {
-//    const today = new Date();
-
-//    // Create date for last day of previous month
-//    // new Date(year, month, 0) gives last day of the previous month
-//    const lastDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-
-//    // Format as YYYY-MM-DD for date input
-//    const formattedTillDate = lastDayOfPreviousMonth.toISOString().split('T')[0];
-//    const tillDateInput = document.getElementById('tillDate');
-//    tillDateInput.value = formattedTillDate;
-//}
 function setTillDateToPreviousMonth() {
     const today = new Date();
     const lastDayOfPreviousMonth = new Date(today.getFullYear(), today.getMonth(), 0);
@@ -200,124 +169,6 @@ function setTillDateToPreviousMonth() {
     const tillDateInput = document.getElementById('tillDate');
     tillDateInput.value = formattedTillDate;
 }
-//document.getElementById('calculateButton').addEventListener('click', function () {
-//    const dt = document.getElementById('dateOfBirth').value; // Get the date input value
-
-//    if (!dt) {
-//        showErrorMessage("Please select a valid Date Of Joining");
-//        return;
-//    }
-//    const categoryValue = $('#Category').val();
-//    // Extract month and year from the selected date
-//    const [day, month, year] = dt.split('/');
-//    console.log(month, year);
-//    // Make the AJAX request
-
-
-//    //// Show full-screen loader
-//    //$.LoadingOverlay("show", {
-//    //    image: "",
-
-//    //    fontawesome: "fa fa-spinner fa-spin", // Font Awesome spinner
-//    //    //text: "Calculating maturity... please wait",
-//    //    fontawesomeColor: "#28a745", // Green spinner
-
-//    //    textResizeFactor: 0.8,
-//    //    background: "rgba(0,0,0,0.4)"
-//    //});
-
-
-//    $.ajax({
-//        url: '/EmiCalculator/Calculate', // The URL to your controller method
-//        method: 'POST',
-//        data: { month: month, year: year, categoryValue: categoryValue }, // Send month and year
-//        success: function (response) {
-//            //if (response.success) {
-//            //    console.log("Maturity calculated:", response.value);
-//            //    // You can update the page with the result
-//            //    $('#result').html(`Maturity Value: ${response.value}`);
-//            //} else {
-//            //    console.log("Calculation failed:", response.message);
-//            //    // Optionally, you can display the error message
-//            //    $('#result').html("An error occurred while calculating the maturity.");
-//            //}
-//            //$.LoadingOverlay("hide");
-
-//            if (response.success) {
-//                console.log("Maturity calculated:", response.value);
-
-//                //        // Show result in SweetAlert
-//                //        Swal.fire({
-//                //            title: '',
-//                //            html: `
-//                //    <div style="text-align: justify;">
-//                //        <h3 style="color: #28a745; margin-bottom: 15px;">ASSUMING ALL YOUR PREMIUMS HAVE BEER RECEVIVED AT AGIF, YOUR APPROX ACCUMULATION IN MATURITY  TILL PREVIOUS MONTH IS</h3>
-//                //        <div style="font-size: 2rem; font-weight: bold; color: #2c3e50; margin: 20px 0;">
-//                //            ₹${parseFloat(response.value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-//                //        </div>
-
-//                //    </div>
-//                //`,
-//                //            icon: 'success',
-//                //            confirmButtonText: 'Great!',
-//                //            confirmButtonColor: '#28a745',
-//                //            showCloseButton: true,
-//                //            timer: 20000, // Auto close after 20 seconds
-//                //            timerProgressBar: true
-//                //        });
-//                Swal.fire({
-//                    title: '', // Empty title as it's not needed
-//                    html: `
-//        <div style="text-align: center;">
-//            <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-//                Assuming all your premiums have been received at AGIF, your approximate accumulation in maturity till previous month is
-//            </h3>
-//             <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-//                This is for serving Personals only and E.I. amount will be deducted from final maturity amount.
-//            </h3>
-//            <div style="font-size: 2.5rem; font-weight: bold; color: #2c3e50; margin: 20px 0;">
-//                ₹${parseFloat(response.value).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-//            </div>
-//        </div>
-//    `,
-//                    icon: 'success',
-//                    confirmButtonText: 'OK',
-//                    confirmButtonColor: '#28a745',
-//                    showCloseButton: true,
-//                    //timer: 20000, // Auto-close after 20 seconds
-//                    //timerProgressBar: true,
-//                    customClass: {
-//                        popup: 'swal-popup',
-//                        title: 'swal-title',
-//                        content: 'swal-content',
-//                        confirmButton: 'swal-confirm-btn',
-//                        closeButton: 'swal-close-btn'
-//                    }
-//                });
-//            } else {
-//                // Handle error case
-//                Swal.fire({
-//                    title: 'Calculation Failed',
-//                    text: 'Unable to calculate maturity amount. Please try again.',
-//                    icon: 'error',
-//                    confirmButtonColor: '#dc3545'
-//                });
-//            }
-//        },
-//        error: function (error) {
-//            //$.LoadingOverlay("hide");
-
-//            console.error("Error calculating maturity:", error);
-//            Swal.fire({
-//                title: 'Error',
-//                text: 'Something went wrong while calculating maturity.',
-//                icon: 'error',
-//                confirmButtonColor: '#dc3545'
-//            });
-//            //console.error("Error calculating maturity:", error);
-//        }
-//    });
-//});
 // Detect change in dropdown and show the button when a value is selected
 $('#Category').on('change', function () {
     const categoryValue = $(this).val(); // Get the selected value
@@ -344,117 +195,96 @@ function showErrorMessage(message) {
         });
     }, 2000);
 }
-//const radioButtons = document.querySelectorAll('input[name="category"]');
-//radioButtons.forEach(radio => {
-//    radio.addEventListener('change', function () {
-//        if (this.checked) {
-//            // Small delay to show the selection animation
-//            setTimeout(() => {
-//                calculateMaturity();
-//            }, 300);
-//        }
-//    });
-//});
 
 $('input[name="category"]').on('click', function () {
 
-        const dt = document.getElementById('dateOfBirth').value; // Get the date input value
+    const dt = document.getElementById('dateOfBirth').value; // Get the date input value
 
-        if (!dt) {
-            showErrorMessage("Please select a valid Date Of Joining");
-            return;
+    if (!dt) {
+        showErrorMessage("Please select a valid Date Of Joining");
+        return;
     }
 
     const categoryValue = $('input[name="category"]:checked').val();
-    console.log("Selected category value:", categoryValue);
-        const [day, month, year] = dt.split('/');
-        console.log(month, year);
-    //    // Make the AJAX request
+    const [day, month, year] = dt.split('/');
 
 
-    //    //// Show full-screen loader
-    //    //$.LoadingOverlay("show", {
-    //    //    image: "",
+    $.ajax({
+        url: '/EmiCalculator/Calculate', // The URL to your controller method
+        method: 'POST',
+        data: { month: month, year: year, categoryValue: categoryValue }, // Send month and year
+        success: function (response) {
 
-    //    //    fontawesome: "fa fa-spinner fa-spin", // Font Awesome spinner
-    //    //    //text: "Calculating maturity... please wait",
-    //    //    fontawesomeColor: "#28a745", // Green spinner
+            if (response.success) {
 
-    //    //    textResizeFactor: 0.8,
-    //    //    background: "rgba(0,0,0,0.4)"
-    //    //});
-
-
-        $.ajax({
-            url: '/EmiCalculator/Calculate', // The URL to your controller method
-            method: 'POST',
-            data: { month: month, year: year, categoryValue: categoryValue }, // Send month and year
-            success: function (response) {
-
-                if (response.success) {
-                    console.log("Maturity calculated:", response.value);
-
-                    let joiningDate = formatDateToReadable($('#dateOfBirth').val());
-                    let tilldate = formatDateToReadable($('#tillDate').val());
-                    Swal.fire({
-                        title: '', // Empty title as it's not needed
-                        html: `
-             <div style="text-align: center;">
-            <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-            Your month of Joining Indian Army is: <span style="color: #2c3e50;">${joiningDate}</span>
+                let joiningDate = formatDateToReadable($('#dateOfBirth').val());
+                let tilldate = formatDateToReadable($('#tillDate').val());
+                Swal.fire({
+                    title: '', // Empty title as it's not needed
+                    html: `
+             <div class="swal-center-container">
+        <h3 class="swal-heading">
+            Your month of Joining Indian Army is:
+            <span class="swal-highlight">${joiningDate}</span>
         </h3>
 
-                <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-                    Assuming all your premiums have been received at AGIF, your approximate accumulation in maturity till previous month is
-                </h3>
-                 <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-                    This is for serving Personnel only and E.I. amount is included in final maturity benefit.
-                </h3>
-                 <h3 style="color: #310; margin-bottom: 15px; font-size: 1.5rem; font-weight: bold;">
-                    For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
-                </h3>
-                <div style="font-size: 2.5rem; font-weight: bold; color: #2c3e50; margin: 20px 0;">
-                    ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </div>
-            </div>
-        `,
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#28a745',
-                        showCloseButton: true,
-                        //timer: 20000, // Auto-close after 20 seconds
-                        //timerProgressBar: true,
-                        customClass: {
-                            popup: 'swal-popup',
-                            title: 'swal-title',
-                            content: 'swal-content',
-                            confirmButton: 'swal-confirm-btn',
-                            closeButton: 'swal-close-btn'
-                        }
-                    });
-                } else {
-                    // Handle error case
-                    Swal.fire({
-                        title: 'Calculation Failed',
-                        text: 'Unable to calculate maturity amount. Please try again.',
-                        icon: 'error',
-                        confirmButtonColor: '#dc3545'
-                    });
-                }
-            },
-            error: function (error) {
-                //$.LoadingOverlay("hide");
+        <h3 class="swal-heading">
+            Assuming all your premiums have been received at AGIF, your approximate accumulation in maturity till previous month is
+        </h3>
 
-                console.error("Error calculating maturity:", error);
+        <h3 class="swal-heading">
+            This is for serving Personnel only and E.I. amount is included in final maturity benefit.
+        </h3>
+
+        <h3 class="swal-heading">
+            For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
+        </h3>
+
+        <div class="swal-amount">
+            ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+        </div>
+    </div>
+        `,
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#28a745',
+                    showCloseButton: true,
+                    //timer: 20000, // Auto-close after 20 seconds
+                    //timerProgressBar: true,
+                    customClass: {
+                        popup: 'swal-popup',
+                        title: 'swal-title',
+                        content: 'swal-content',
+                        confirmButton: 'swal-confirm-btn',
+                        closeButton: 'swal-close-btn'
+                    }
+                });
+            } else {
+                // Handle error case
                 Swal.fire({
-                    title: 'Error',
-                    text: 'Something went wrong while calculating maturity.',
+                    title: 'Calculation Failed',
+                    text: 'Unable to calculate maturity amount. Please try again.',
                     icon: 'error',
                     confirmButtonColor: '#dc3545'
                 });
-                //console.error("Error calculating maturity:", error);
             }
-        });
+        },
+        error: function (error) {
+            //$.LoadingOverlay("hide");
+
+            console.error("Error calculating maturity:", error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Something went wrong while calculating maturity.',
+                icon: 'error',
+                confirmButtonColor: '#dc3545'
+            });
+            //console.error("Error calculating maturity:", error);
+        }
+    });
 });
 
 function formatDateToReadable(dateString) {
