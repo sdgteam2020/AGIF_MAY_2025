@@ -120,4 +120,4 @@ $(document).ready(() => {
 });
 $("input, textarea").on("paste", function (e) {
     e.preventDefault();
-});
+});              

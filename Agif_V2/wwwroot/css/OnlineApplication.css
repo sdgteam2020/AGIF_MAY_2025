@@ -63,7 +63,7 @@ button {
     .form-group label {
         width: 200px; /* or min-width if needed */
         font-weight: 600;
-        font-size: 2rem;
+        font-size: 1rem;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 

@@ -11,7 +11,12 @@ $(document).ready(function () {
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
     BindUsersData(value);
+    $('#btnAllDownload').on('click', function () {
+        getAllApplicationByDateWise();
+    })
 });
+
+
 
 $('#btnCloseModal').on('click', function () {
     if ($.fn.DataTable.isDataTable('#tblOk')) {

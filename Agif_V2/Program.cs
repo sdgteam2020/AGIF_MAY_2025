@@ -156,13 +156,17 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.Use(async (context, next) =>
-{
-    context.Response.Headers["Content-Security-Policy"] =
-        "script-src 'self'; style-src 'self'; img-src 'self' data: blob; font-src 'self';";
+// ============================
+// SECURITY HEADERS — CSP
+// ============================
+// Restrict inline JS and CSS
+//app.Use(async (context, next) =>
+//{
+//    context.Response.Headers["Content-Security-Policy"] =
+//        "script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
 
-    await next();
-});
+//    await next();
+//});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

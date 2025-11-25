@@ -610,6 +610,8 @@ function sendPDFToServer(filepath, thumbprint, type) {
     const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
     let URL = '';
 
+    console.log("Full PDF Path:", fullPath)
+
     $.ajax({
         //url: 'http://localhost/Temporary_Listen_Addresses/ByteDigitalSignAsync',
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ByteDigitalSignAsync',

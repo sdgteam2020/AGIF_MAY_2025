@@ -86,7 +86,7 @@
 }
 
 /* Responsive design */
-@@media (max-width: 768px) {
+@media (max-width: 768px) {
     .timeline-vertical {
         flex-direction: column;
     }
@@ -162,7 +162,7 @@
 }
 
 /* Responsive improvements */
-@@media (max-width: 768px) {
+@media (max-width: 768px) {
     .timeline-content {
         min-width: 160px;
         padding: 10px 14px;
@@ -408,3 +408,11 @@
         background-color: rgba(51, 17, 0, 0.08) !important;
         transform: translateX(3px);
     }
+
+.card {
+    display: list-item;
+}
+
+.statusList {
+    text-align: justify;
+}
