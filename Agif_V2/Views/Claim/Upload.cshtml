@@ -13,6 +13,8 @@
 
 }
 
+<script src="~/devjs/pdf.min.js"></script>
+<link href="~/css/validation.css" rel="stylesheet" />
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
@@ -60,7 +62,7 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- Cancelled Cheque -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
                                         <div class="row">
                                             <div class="col-md-10">
                                                 <label for="CancelledCheque" class="form-label fw-bold">
@@ -74,7 +76,7 @@
                                             <div class="col-md-2">
                                                 <label class="form-label fw-bold"></label>
                                                 <div id="cancelledChequePreview" class="file-preview-container">
-                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                <i class="bi bi-eye icon-clickable"></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,7 +86,7 @@
 
                                 <div class="row">
                                     <!-- Pay Slip -->
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-8 mb-3">
 
 
                                         <div class="row">
@@ -100,7 +102,7 @@
                                             <div class="col-md-2">
                                                 <label class="form-label fw-bold"></label>
                                                 <div id="paySlipPreview" class="file-preview-container">
-                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                <i class="bi bi-eye icon-clickable"></i>
                                                 </div>
                                             </div>
                                         </div>
@@ -149,7 +151,7 @@
 
                             <div class="row">
                                 <!-- Service Extn -->
-                                <div class="col-md-6 mb-3">
+                                <div class="col-md-8 mb-3">
 
 
                                     <div class="row">
@@ -165,7 +167,7 @@
                                         <div class="col-md-2">
                                             <label class="form-label fw-bold"></label>
                                             <div id="SeviceExtnPre" class="file-preview-container">
-                                                <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+                                                <i class="bi bi-eye icon-clickable"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -189,51 +191,10 @@
     </div>
 
     <input type="hidden" id="isExtension" value="@IsExtension.ToString().ToLower()" />
+    <input type="hidden" id="messageHolder" value="@message" />
 
 </div>
 
-<style>
-    .file-preview-container {
-        margin-top: 6px;
-        overflow: hidden;
-    }
 
-        .file-preview-container embed {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .file-preview-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .file-preview-container p {
-            color: #888;
-            font-style: italic;
-        }
-</style>
 <script src="~/devjs/ClaimUpload.js"></script>
 
-<script>
-    $(document).ready(function () {
-        var message = '@message';
-
-        if (message !== '' && message !== null) {
-            // Display SweetAlert with custom styles
-            Swal.fire({
-                html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,  // Custom message with font size, color, and bold style
-                icon: 'success',
-                confirmButtonText: 'OK',  // Text on the confirm button
-                confirmButtonClass: 'btn btn-primary btn-lg',  // Custom class for larger button
-                customClass: {
-                    title: 'font-weight-bold',  // Optional: makes the title bold
-                    htmlContainer: 'text-dark'  // Optional: sets the message text color
-                },
-                padding: '25px'  // Adds padding to the alert for better spacing
-            });
-        }
-    });
-</script>

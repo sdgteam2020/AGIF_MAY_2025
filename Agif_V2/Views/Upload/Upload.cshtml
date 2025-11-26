@@ -9,7 +9,10 @@
     var message = TempData["Message"] ?? string.Empty;
     var IsExtension = TempData["IsextensionOfService"] ?? false;
 }
-<link href="~/css/validation.css" rel="stylesheet" />
+<!-- Add PDF.js CDN -->
+
+ <script src="~/devjs/pdf.min.js"></script>
+ <link href="~/css/validation.css" rel="stylesheet" />
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
@@ -424,7 +427,9 @@
                 </div>
             </div>
         </div>
+       
     </div>
+    
 
     <input type="hidden" id="isExtension" value="@IsExtension.ToString().ToLower()" />
     <input type="hidden" id="messageHolder" value="@message" />

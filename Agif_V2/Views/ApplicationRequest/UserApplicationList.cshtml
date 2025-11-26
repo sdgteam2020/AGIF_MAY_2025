@@ -27,7 +27,7 @@ else
     string armyno = ViewBag.ArmyNo as string;
 }
 
-
+<link href="~/css/validation.css" rel="stylesheet" />
 <div class="container">
     <div class="container-fluid">
         <!-- ========== title-wrapper start ========== -->
@@ -375,6 +375,13 @@ else
     </div>
     <input type="hidden" id="UserType" value="Loan" />
 </div>
+<div id="global-loader"
+     class="d-none">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Processing...</span>
+    </div>
+</div>
+
 
 <script src="~/devjs/usersapplications.js"></script>
 @section Scripts {

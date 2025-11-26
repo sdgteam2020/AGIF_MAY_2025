@@ -28,6 +28,7 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
+            //int applicationId = 40022;
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
@@ -52,7 +53,6 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> ApplicationDetails()
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
-
             TempData.Keep("applicationId");
 
             if (applicationId == 0)

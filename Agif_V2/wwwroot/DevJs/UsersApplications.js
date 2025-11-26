@@ -57,6 +57,7 @@
             }
         }).then((result) => {
             if (result.isConfirmed) {
+                showLoader();
                 GetTokenvalidatepersid2fa(icNo, applnId, type);
             }
         });
@@ -519,6 +520,8 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
                     DataSignDigitaly(applnId, URL, type);
 
                 } else {
+                    hideLoader();
+
                     Swal.fire({
                         title: "Alert!",
                         text: "Army No is Not Matching. Please Insert Valid Token!",
@@ -532,6 +535,13 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
             Swal.fire({
                 title: "Alert!",
                 text: "Please Ensure that DGIS App has been installed and running at the time of Digital Signature.",
+                icon: "error"
+            });
+            hideLoader();
+
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to communicate with signing service.",
                 icon: "error"
             });
         }
@@ -549,6 +559,7 @@ function DataSignDigitaly(applicationId, endpoint, userType) {
             }
         },
         error: function () {
+            hideLoader();
             Swal.fire({
                 title: "Alert!",
                 text: "Please ensure that DGIS App is installed and running during the digital signature process.",
@@ -579,6 +590,7 @@ function DigitalSignByAPI(applicationId, type) {
             console.error('No thumbprint received.');
         }
     }).catch(function (error) {
+        hideLoader();
         console.error('Failed to fetch thumbprint:', error);
     });
 }
@@ -599,6 +611,7 @@ function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
             }
         },
         error: function (xhr, status, error) {
+            hideLoader();
             console.error('Error fetching PDF file path:', error);
         }
     });
@@ -627,6 +640,7 @@ function sendPDFToServer(filepath, thumbprint, type) {
             CustomText: "Digital Signature"
         }]),
         success: function (response) {
+            hideLoader();
             if (response) {
                 Swal.fire({
                     title: "Application Approved",
@@ -657,6 +671,13 @@ function sendPDFToServer(filepath, thumbprint, type) {
         },
         error: function (error) {
             console.error('Error sending PDF:', error);
+            hideLoader();
+
+            Swal.fire({
+                title: "Error!",
+                text: "Failed to communicate with signing service.",
+                icon: "error"
+            });
         }
     });
 }
@@ -822,4 +843,12 @@ function populateHistoryTable(data) {
     });
 
     $('#totalRecords').text(data.length);
+}
+
+function showLoader() {
+    $("#global-loader").removeClass("d-none");
+}
+
+function hideLoader() {
+    $("#global-loader").addClass("d-none");
 }

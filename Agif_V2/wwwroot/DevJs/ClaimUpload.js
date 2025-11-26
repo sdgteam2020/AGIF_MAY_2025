@@ -38,45 +38,128 @@
 
 
     // Function to preview the file (PDF or Image)
+    //function previewFile(input, previewSelector) {
+    //    const file = input.files[0];
+    //    const preview = $(previewSelector);
+    //    const errorContainer = $(input).closest('.col-md-10').find('.file-error-message'); // Find the error container below the input
+    //    const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+    //    errorContainer.text('');
+
+    //    if (file) {
+    //        // Check if the file is a PDF
+    //        if (file.type !== 'application/pdf') {
+    //            errorContainer.text('Only PDF files are allowed').css('color', 'red');
+    //            input.value = ''; // Clear the input field
+    //            return;
+    //        }
+
+    //        // Check the file size (must not exceed 1MB)
+    //        if (file.size > maxFileSize) {
+    //            errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
+    //            input.value = ''; // Clear the input field
+    //        } else {
+    //            const reader = new FileReader();
+
+    //            reader.onload = function (e) {
+    //                // Create a link with the eye icon and the PDF file URL
+    //                const fileUrl = URL.createObjectURL(file); // Create a Blob URL for the file
+    //                preview.html(`
+    //                    <a href="${fileUrl}" target="_blank" style="font-size: 1.5rem; text-decoration: none;">
+    //                        <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
+    //                    </a>
+    //                `);
+    //            };
+
+    //            reader.readAsDataURL(file);
+    //        }
+    //    } else {
+    //        preview.html('<p>No file selected</p>');
+    //    }
+    //}
+
+
     function previewFile(input, previewSelector) {
         const file = input.files[0];
         const preview = $(previewSelector);
-        const errorContainer = $(input).closest('.col-md-10').find('.file-error-message'); // Find the error container below the input
-        const maxFileSize = 1 * 1024 * 1024; // 1MB in bytes
+        const errorContainer = $(input).closest('.col-md-10').find('.file-error-message');
+        const maxFileSize = 1 * 1024 * 1024;
+
         errorContainer.text('');
 
         if (file) {
-            // Check if the file is a PDF
             if (file.type !== 'application/pdf') {
                 errorContainer.text('Only PDF files are allowed').css('color', 'red');
-                input.value = ''; // Clear the input field
+                input.value = '';
                 return;
             }
 
-            // Check the file size (must not exceed 1MB)
             if (file.size > maxFileSize) {
                 errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
-                input.value = ''; // Clear the input field
+                input.value = '';
             } else {
                 const reader = new FileReader();
-
                 reader.onload = function (e) {
-                    // Create a link with the eye icon and the PDF file URL
-                    const fileUrl = URL.createObjectURL(file); // Create a Blob URL for the file
                     preview.html(`
-                        <a href="${fileUrl}" target="_blank" style="font-size: 1.5rem; text-decoration: none;">
-                            <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
-                        </a>
-                    `);
-                };
+                    <i class="bi bi-eye uploadeye"></i>
+                `);
 
+                    preview.find('.uploadeye').on('click', function () {
+                        showPdfModal(e.target.result);
+                    });
+                };
                 reader.readAsDataURL(file);
             }
-        } else {
-            preview.html('<p>No file selected</p>');
         }
     }
 
+    function showPdfModal(pdfData) {
+        const modal = $('<div class="modal fade" tabindex="-1">').html(`
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">PDF Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body pdf-scroll-body">
+                    <div id="pdfCanvasContainer"></div>
+                </div>
+            </div>
+        </div>
+    `);
+
+        $('body').append(modal);
+        modal.modal('show');
+
+        const loadingTask = pdfjsLib.getDocument(pdfData);
+        loadingTask.promise.then(function (pdf) {
+            const container = document.getElementById('pdfCanvasContainer');
+            const numPages = pdf.numPages;
+
+            // Render all pages
+            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                pdf.getPage(pageNum).then(function (page) {
+                    const canvas = document.createElement('canvas');
+                    canvas.className = 'pdf-page-canvas';
+                    const context = canvas.getContext('2d');
+                    const viewport = page.getViewport({ scale: 1.5 });
+
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    container.appendChild(canvas);
+
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    });
+                });
+            }
+        });
+
+        modal.on('hidden.bs.modal', function () {
+            modal.remove();
+        });
+    }
 
     $('#uploadBtn').on('click', function (e) {
         e.preventDefault();
@@ -190,12 +273,13 @@ function checkUploadFiles() {
 // Bind change event to all file inputs
 $('input[type="file"]').on('change', checkUploadFiles);
 
+
 function messageHandler() {
-    let message = $('#messageHolder').val();
+    const message = $('#messageHolder').val();
 
     if (message && message.trim() !== '') {
         Swal.fire({
-            html: `<span style="font-size: 25px; font-weight: bold; color: black;">${message}</span>`,
+            html: `<span id="message">${message}</span>`,
             icon: 'success',
             confirmButtonText: 'OK',
             customClass: {
