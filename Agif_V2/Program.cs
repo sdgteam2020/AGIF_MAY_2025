@@ -164,8 +164,8 @@ app.Use(async (context, next) =>
 
 
 
-//    await next();
-//});
+    await next();
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
