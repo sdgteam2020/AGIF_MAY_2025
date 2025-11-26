@@ -6,6 +6,7 @@ using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
+using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -159,11 +160,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.Use(async (context, next) =>
 {
     context.Response.Headers["Content-Security-Policy"] =
-  "script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
-    //"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'self' blob:; frame-src 'self' blob:;";
-
-
-
+ "default-src 'self' blob:; object-src 'self' blob:;script-src 'self';style-src 'self' 'unsafe-inline';img-src 'self' data:;connect-src 'self'; ";
     await next();
 });
 
