@@ -112,6 +112,24 @@
         fetchApplicantData(currentApplicationData.armyNo);
     })
 });
+
+$(document).on("click", ".btn-merge", function () {
+    const id = $(this).data("id");
+    const url = $(this).data("url");
+    const category = $(this).data("category");
+
+    mergePdf(id, 0, 0, url, category);
+});
+
+$(document).on("click", ".btn-view", function () {
+    const id = $(this).data("id");
+    const url = $(this).data("url");
+    const category = $(this).data("category");
+
+    OpenAction(id, url, category);
+});
+
+
 let currentApplicationData = {};
 function populateRecommendationModal(applicationData) {
     if (!applicationData || Object.keys(applicationData).length === 0) {
@@ -203,32 +221,77 @@ function GetApplicationList(status, endpoint) {
     }
 
     // Add the "Action" column dynamically
+    //dynamicColumns.push({
+    //    data: null,
+    //    orderable: false,
+    //    className: 'noExport',
+    //    render: function (data, type, row) {
+    //        const categorytype = $("#UserType").val() || "Loan";
+    //        console.log(categorytype);
+    //        if (row.isMergePdf == false) {
+    //            return `
+    //                <div class='action action-container d-flex'>
+    //                    <button class='btn btn-sm btn-outline-danger align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="Merge Pdf">
+    //                        <i class="bi bi-pencil-square"></i>
+    //                    </button>
+    //                </div>
+    //            `;
+    //        } else {
+    //            return `
+    //                <div class='action action-container'>
+    //                    <button class='btn btn-sm btn-outline-danger mx-2' onclick='OpenAction(${row.applicationId}, "${categorytype === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="View Pdf">
+    //                        <i class="bi bi-pencil-square"></i>
+    //                    </button>
+    //                </div>
+    //            `;
+    //        }
+    //    }
+    //});
+
     dynamicColumns.push({
         data: null,
         orderable: false,
         className: 'noExport',
         render: function (data, type, row) {
             const categorytype = $("#UserType").val() || "Loan";
-            console.log(categorytype);
-            if (row.isMergePdf == false) {
+            const mergeUrl = categorytype === "Loan"
+                ? "/OnlineApplication/MergePdf"
+                : "/Claim/MergePdf";
+
+            const viewUrl = categorytype === "Loan"
+                ? "/OnlineApplication/GetPdfFilePath"
+                : "/Claim/GetPdfFilePath";
+
+            if (!row.isMergePdf) {
                 return `
-                    <div class='action action-container d-flex'>
-                        <button class='btn btn-sm btn-outline-danger align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="Merge Pdf">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                    </div>
-                `;
+                <div class='action action-container d-flex'>
+                    <button class='btn-merge btn btn-sm btn-outline-danger align-items-center mx-2'
+                            data-id='${row.applicationId}'
+                            data-url='${mergeUrl}'
+                            data-category='${categorytype}'
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="Merge Pdf">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </div>`;
             } else {
                 return `
-                    <div class='action action-container'>
-                        <button class='btn btn-sm btn-outline-danger mx-2' onclick='OpenAction(${row.applicationId}, "${categorytype === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="View Pdf">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-                    </div>
-                `;
+                <div class='action action-container d-flex'>
+                    <button class='btn-view btn btn-sm btn-outline-danger mx-2'
+                            data-id='${row.applicationId}'
+                            data-url='${viewUrl}'
+                            data-category='${categorytype}'
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="top"
+                            title="View Pdf">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                </div>`;
             }
         }
     });
+
 
     // Set the correct sorting order
     let tableOrder;

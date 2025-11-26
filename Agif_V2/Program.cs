@@ -163,7 +163,7 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 //app.Use(async (context, next) =>
 //{
 //    context.Response.Headers["Content-Security-Policy"] =
-//        "script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
+//        "default-src 'self';script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self';";
 
 //    await next();
 //});

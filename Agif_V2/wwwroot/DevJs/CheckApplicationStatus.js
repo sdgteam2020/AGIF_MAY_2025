@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     $('#typeSelect').on('change', function () {
         let selectedType = $(this).val();
-        console.log('Dropdown changed to:', selectedType);
         clearAllData();
     });
 
@@ -15,8 +14,7 @@
 
         // Clear the input field (optional)
         $('#armyNoInput').val('');
-
-        console.log('All data cleared');
+        
     }
 
 
@@ -47,7 +45,6 @@
                 }
             },
             error: function (xhr, status, error) {
-                console.error('Error fetching data:', error);
                 alert('Error searching applications. Please try again.');
             }
         });
@@ -123,10 +120,10 @@
                 </tr>
                 <tr class="collapse" id="timeline-${safeAppId}">
                     <td colspan="3">
-                        <div class="timeline-loading" id="loading-${safeAppId}" style="text-align: center; padding: 20px;">
+                        <div class="timeline-loading" id="loading-${safeAppId}">
                             <i class="fas fa-spinner fa-spin"></i> Loading timeline...
                         </div>
-                        <div class="timeline-container" id="timeline-content-${safeAppId}" style="display: none;">
+                        <div class="timeline-container" id="timeline-content-${safeAppId}">
                             <!-- Timeline will be populated here -->
                         </div>
                     </td>
@@ -187,8 +184,7 @@
         if (timelineContent.children().length > 0) {
             return; // Timeline already loaded, just toggle
         }
-
-        //console.log("Timeline button clicked for App ID:", appId, "Type:", selectedType);
+        
 
         // Show loading
         loadingDiv.show();
@@ -245,7 +241,7 @@
             }
             timelineHtml += `
                 <div class="${stepClass}">
-                    <div class="timeline-dot ${getStatusBadgeClass(step.statusId)}" style="box-shadow: 0 0 0 2px ${shadow};"></div>
+                    <div class="timeline-dot ${getStatusBadgeClass(step.statusId)}"></div>
                     ${!isLast ? '<div class="timeline-line"></div>' : ''}
                     <div class="timeline-content ${getStatusBadgeClass(step.statusId)}">
                         <div class="timeline-title text-white">${step.status || step.title || 'Status Update'}</div>
