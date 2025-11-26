@@ -616,3 +616,10 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     color: #2c3e50;
     margin: 20px 0;
 }
+.global-alert-box {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+}
