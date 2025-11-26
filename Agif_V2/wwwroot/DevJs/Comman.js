@@ -1,7 +1,7 @@
 ﻿function showSuccessMessage(message) {
     // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `
-        <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" id="validationerrormessage">
             <i class="lni lni-checkmark-circle"></i> ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -18,7 +18,7 @@
 function showErrorMessage(message) {
     // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px;">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="validationerrormessage">
             <i class="lni lni-cross-circle"></i> ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

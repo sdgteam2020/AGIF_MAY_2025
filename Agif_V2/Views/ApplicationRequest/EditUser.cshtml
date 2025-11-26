@@ -5,6 +5,7 @@
     var message = TempData["ProfileMessage"] ?? string.Empty;
 
 }
+<link href="~/css/validation.css" rel="stylesheet" />
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 mt-4">
@@ -49,11 +50,14 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.EmailId, "Email Address", htmlAttributes: new { @class = "control-label" })
-                                    @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { @class = "form-control", @type = "email", @placeholder = "Enter Email Address", @disabled = "disabled",maxlength="50", @required = "required" } })
+                                    @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { @class = "form-control form-email", @type = "email", @placeholder = "Enter Email Address", @disabled = "disabled",maxlength="50", @required = "required" } })
                                     @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+
                                 </div>
+                             </div>
+
                             </div>
-                        </div>
+                       
 
                         <div class="row">
                             <div class="col-md-6">
@@ -76,7 +80,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                 <label asp-for="RegtId">Regt/Corps:</label>
-                                    <select class="form-select select" asp-for="RegtId" id="regtCorps" name="regtCorps" required disabled data-regtcorps-prefix="@if (Model != null) {
+                                    <select class="form-select select" asp-for="RegtId" id="regtCorps" name="RegtId" required disabled data-regtcorps-prefix="@if (Model != null) {
                                                 @Model.RegtId;}"></select>
                                     @Html.ValidationMessageFor(m => m.RegtId, "", new { @class = "text-danger" })
                                 </div>
@@ -153,7 +157,6 @@
 </div>
 <input id="profileMessage" type="hidden" value="@message" />
 <script src="~/devjs/mtable.js"></script>
-<script src="~/devjs/Validation.js"></script>
 <script src="~/devjs/EditUser.js"></script>
 @* <script>
     $(document).ready(function () {

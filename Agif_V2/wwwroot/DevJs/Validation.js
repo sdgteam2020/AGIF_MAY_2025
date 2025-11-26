@@ -137,7 +137,6 @@ $('.form-email').on("keypress", function (e) {
         return false; // Block the keypress
     }
 });
-
 $('.form-control-domainId').on("keypress", function (e) {
     // Get the key code of the pressed key
     const keyCode = e.which;

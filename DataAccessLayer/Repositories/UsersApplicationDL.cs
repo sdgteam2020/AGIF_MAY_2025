@@ -405,6 +405,7 @@ namespace DataAccessLayer.Repositories
                 profile.Email = sessionUserDTO.EmailId ?? string.Empty;
                 profile.rank = sessionUserDTO.RankId;
                 profile.MobileNo = sessionUserDTO.MobileNo ?? string.Empty;
+                profile.regtCorps=sessionUserDTO.RegtId;
                 profile.UpdatedOn = DateTime.Now;
                 updated = true;
             }

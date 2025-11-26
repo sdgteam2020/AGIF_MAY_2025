@@ -45,6 +45,7 @@
          $('#ApptId').prop('disabled', false);   
          $('#rank').prop('disabled', false);       
          $('#DteFmn').prop('disabled', false);       
+         $('#regtCorps').prop('disabled', false);       
 
             // Update page title
             $('#page-title').html('Edit User Profile');
@@ -95,6 +96,57 @@
     $("#btnTokenDetails").on('click', function () {
 
         GetTokenDetails("ArmyNo", "name", "errormsg", "btnsignup")
+    });
+
+    $('.form-control-Alphabets').on("keypress", function (e) {
+
+        // Get the key code of the pressed key
+        const keyCode = e.which;
+
+        // Allow only alphabets (A-Z, a-z) and numbers (0-9)
+        if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode == 32)) {
+            return true; // Allow the keypress
+        } else {
+            showErrorMessage('Only Alphabets allowed');
+            return false; // Block the keypress
+        }
+    });
+
+    $('.isNumerictxt').on("keypress", function (e) {
+
+        if (isNumeric(e.key)) {
+
+            return true;
+
+        }
+        else {
+            $(this).val($(this).val().replace(e.key, ""));
+            showErrorMessage('Only Numbers allowed');
+            return false;
+
+        }
+    });
+
+    function isNumeric(key) {
+        // Allow only digits 0–9
+        return /^[0-9]$/.test(key);
+    }
+
+    $('.form-email').on("keypress", function (e) {
+        const keyCode = e.which;
+
+        // Allow only alphabets (A-Z, a-z) and numbers (0-9)
+        if ((keyCode >= 65 && keyCode <= 90) ||  // A-Z
+            (keyCode >= 97 && keyCode <= 122) ||  // a-z
+            (keyCode >= 48 && keyCode <= 57) ||   // 0-9
+            (keyCode == 64) ||                    // '@' symbol (keyCode 64)
+            (keyCode == 46) ||                    // '.' symbol (keyCode 46)
+            (keyCode == 95)) {                   // '_' symbol (keyCode 95)
+            return true;
+        } else {
+            showErrorMessage('Only Alphabets, Numbers, @, . and _ are allowed');
+            return false; // Block the keypress
+        }
     });
 });
 
