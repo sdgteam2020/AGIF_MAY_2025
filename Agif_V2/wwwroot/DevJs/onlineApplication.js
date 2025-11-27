@@ -2441,6 +2441,7 @@ function findDataWithArmyNumber() {
                     }
                     else {
                         console.log("Data not found for the provided Army Number.");
+                       
                     }
 
                 },

@@ -11,9 +11,10 @@
 }
 <!-- Add PDF.js CDN -->
 
- <script src="~/devjs/pdf.min.js"></script>
- <link href="~/css/validation.css" rel="stylesheet" />
-<div class="container mt-5">
+@*  <script src="~/devjs/pdf.min.js"></script>
+ *@<link href="~/css/validation.css" rel="stylesheet" />
+@* <link href="~/css/main.css" rel="stylesheet" />
+ *@<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
             <div class="card shadow">
@@ -427,7 +428,63 @@
                 </div>
             </div>
         </div>
-       
+        <div class="modal fade" id="ViewPdf" tabindex="-1" aria-labelledby="ViewPdfLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content ">
+                    <!-- Modal Header -->
+                    <div class="modal-header  text-white border-0 py-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-file-earmark-pdf fs-4 me-3"></i>
+                            <div>
+                                <h5 class="modal-title text-white fw-bold mb-0" id="ViewPdfLabel">PDF Preview</h5>
+                                <span class="opacity-75 d-none" id="spnapplicationId"></span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body p-0 bg-secondary bg-opacity-10">
+                        <!-- PDF Toolbar -->
+                      
+
+                        <!-- PDF Container -->
+                        <div class="d-flex justify-content-center align-items-center full-height-minus-200">
+                            <div class="bg-white shadow-lg rounded w-95 h-95">
+                                <div id="pdfContainer" class="w-100 h-100 d-flex justify-content-center align-items-center position-relative">
+                                    <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center d-none bg-white-90">
+                                        <div class="text-center">
+                                            <div class="spinner-border text-primary mb-3" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p class="text-muted">Loading PDF...</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <div class="modal-footer bg-light border-top">
+                        <div class="d-flex justify-content-between w-100 align-items-center">
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success me-2">
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Ready for Review
+                                </span>
+                                <small class="text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Review the PDF before processing
+                                </small>
+                            </div>
+                            <div class="d-flex gap-2" id="DigitalSignatureforaction">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
 

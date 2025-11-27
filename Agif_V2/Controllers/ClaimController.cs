@@ -87,7 +87,7 @@ namespace Agif_V2.Controllers
         {
             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
 
-            //int applicationId = 14;
+           // int applicationId = 14;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
@@ -139,9 +139,14 @@ namespace Agif_V2.Controllers
             var WithdrwalPurpose = TempData["WithdrwalPurpose"] as string;
 
 
-            TempData["CategoryNew"] = EncryptDecrypt.DecryptionData(Category?? string.Empty);
+            //TempData["CategoryNew"] = EncryptDecrypt.DecryptionData(Category?? string.Empty);
 
-            TempData["WithdrwalPurposeNew"] = EncryptDecrypt.DecryptionData(WithdrwalPurpose?? string.Empty);
+            //TempData["WithdrwalPurposeNew"] = EncryptDecrypt.DecryptionData(WithdrwalPurpose?? string.Empty);
+
+
+            TempData["CategoryNew"] = Category ?? string.Empty;
+
+            TempData["WithdrwalPurposeNew"] = WithdrwalPurpose ?? string.Empty;
 
             TempData["ClaimapplicationId"] = id;
 
@@ -169,11 +174,11 @@ namespace Agif_V2.Controllers
 
         public IActionResult Redirection(string Category, string PurposeOfWithdrwal)
         {
-            string AppCategory = EncryptDecrypt.EncryptionData(Category);
-            string WithdrwalPurpose = EncryptDecrypt.EncryptionData(PurposeOfWithdrwal);
+            //string AppCategory = EncryptDecrypt.EncryptionData(Category);
+            //string WithdrwalPurpose = EncryptDecrypt.EncryptionData(PurposeOfWithdrwal);
 
-            TempData["Category"] = AppCategory;
-            TempData["WithdrwalPurpose"] = WithdrwalPurpose;
+            TempData["Category"] = Category;
+            TempData["WithdrwalPurpose"] = PurposeOfWithdrwal;
             return RedirectToAction("OnlineApplication");
         }
 

@@ -78,86 +78,151 @@
     //}
 
 
+    //function previewFile(input, previewSelector) {
+    //    const file = input.files[0];
+    //    const preview = $(previewSelector);
+    //    const errorContainer = $(input).closest('.col-md-10').find('.file-error-message');
+    //    const maxFileSize = 1 * 1024 * 1024;
+
+    //    errorContainer.text('');
+
+    //    if (file) {
+    //        if (file.type !== 'application/pdf') {
+    //            errorContainer.text('Only PDF files are allowed').css('color', 'red');
+    //            input.value = '';
+    //            return;
+    //        }
+
+    //        if (file.size > maxFileSize) {
+    //            errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
+    //            input.value = '';
+    //        } else {
+    //            const reader = new FileReader();
+    //            reader.onload = function (e) {
+    //                preview.html(`
+    //                <i class="bi bi-eye uploadeye"></i>
+    //            `);
+
+    //                preview.find('.uploadeye').on('click', function () {
+    //                    showPdfModal(e.target.result);
+    //                });
+    //            };
+    //            reader.readAsDataURL(file);
+    //        }
+    //    }
+    //}
+
+    //function showPdfModal(pdfData) {
+    //    const modal = $('<div class="modal fade" tabindex="-1">').html(`
+    //    <div class="modal-dialog modal-lg">
+    //        <div class="modal-content">
+    //            <div class="modal-header">
+    //                <h5 class="modal-title">PDF Preview</h5>
+    //                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    //            </div>
+    //            <div class="modal-body pdf-scroll-body">
+    //                <div id="pdfCanvasContainer"></div>
+    //            </div>
+    //        </div>
+    //    </div>
+    //`);
+
+    //    $('body').append(modal);
+    //    modal.modal('show');
+
+    //    const loadingTask = pdfjsLib.getDocument(pdfData);
+    //    loadingTask.promise.then(function (pdf) {
+    //        const container = document.getElementById('pdfCanvasContainer');
+    //        const numPages = pdf.numPages;
+
+    //        // Render all pages
+    //        for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+    //            pdf.getPage(pageNum).then(function (page) {
+    //                const canvas = document.createElement('canvas');
+    //                canvas.className = 'pdf-page-canvas';
+    //                const context = canvas.getContext('2d');
+    //                const viewport = page.getViewport({ scale: 1.5 });
+
+    //                canvas.height = viewport.height;
+    //                canvas.width = viewport.width;
+
+    //                container.appendChild(canvas);
+
+    //                page.render({
+    //                    canvasContext: context,
+    //                    viewport: viewport
+    //                });
+    //            });
+    //        }
+    //    });
+
+    //    modal.on('hidden.bs.modal', function () {
+    //        modal.remove();
+    //    });
+    //}
+
     function previewFile(input, previewSelector) {
         const file = input.files[0];
         const preview = $(previewSelector);
         const errorContainer = $(input).closest('.col-md-10').find('.file-error-message');
-        const maxFileSize = 1 * 1024 * 1024;
+        const maxFileSize = 1 * 1024 * 1024; // 1MB
 
         errorContainer.text('');
 
         if (file) {
+            // Check if the file is a PDF
             if (file.type !== 'application/pdf') {
                 errorContainer.text('Only PDF files are allowed').css('color', 'red');
                 input.value = '';
                 return;
             }
 
+            // Check the file size
             if (file.size > maxFileSize) {
                 errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
                 input.value = '';
             } else {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    preview.html(`
-                    <i class="bi bi-eye uploadeye"></i>
-                `);
+                // Show eye icon for preview
+                preview.html(`
+                <i class="bi bi-eye uploadeye"></i>
+            `);
 
-                    preview.find('.uploadeye').on('click', function () {
-                        showPdfModal(e.target.result);
-                    });
-                };
-                reader.readAsDataURL(file);
+                // Click event to show PDF in modal
+                preview.find('.uploadeye').on('click', function () {
+                    showPdfInModal(file);
+                });
             }
+        } else {
+            preview.html('<p>No file selected</p>');
         }
     }
 
-    function showPdfModal(pdfData) {
-        const modal = $('<div class="modal fade" tabindex="-1">').html(`
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">PDF Preview</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body pdf-scroll-body">
-                    <div id="pdfCanvasContainer"></div>
-                </div>
-            </div>
-        </div>
-    `);
+    // Function to show PDF in modal using createObjectURL
+    function showPdfInModal(file) {
+        // Clear previous PDF if any
+        const pdfContainer = document.getElementById("pdfContainer");
+        pdfContainer.innerHTML = '';
 
-        $('body').append(modal);
-        modal.modal('show');
+        // Create blob URL
+        const blob = new Blob([file], { type: 'application/pdf' });
+        const pdfUrl = URL.createObjectURL(blob);
 
-        const loadingTask = pdfjsLib.getDocument(pdfData);
-        loadingTask.promise.then(function (pdf) {
-            const container = document.getElementById('pdfCanvasContainer');
-            const numPages = pdf.numPages;
+        // Create embed element
+        const embed = document.createElement("embed");
+        embed.src = pdfUrl + "#toolbar=0&navpanes=0&scrollbar=0";
+        embed.type = "application/pdf";
+        embed.classList.add("w-100", "h-100", "border-0", "rounded");
 
-            // Render all pages
-            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-                pdf.getPage(pageNum).then(function (page) {
-                    const canvas = document.createElement('canvas');
-                    canvas.className = 'pdf-page-canvas';
-                    const context = canvas.getContext('2d');
-                    const viewport = page.getViewport({ scale: 1.5 });
+        // Append to container
+        pdfContainer.appendChild(embed);
 
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+        // Show modal
+        $("#ViewPdf").modal("show");
 
-                    container.appendChild(canvas);
-
-                    page.render({
-                        canvasContext: context,
-                        viewport: viewport
-                    });
-                });
-            }
-        });
-
-        modal.on('hidden.bs.modal', function () {
-            modal.remove();
+        // Clean up blob URL when modal is closed
+        $('#ViewPdf').on('hidden.bs.modal', function () {
+            URL.revokeObjectURL(pdfUrl);
+            pdfContainer.innerHTML = '';
         });
     }
 

@@ -55,8 +55,11 @@ namespace Agif_V2.Controllers
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
-            TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType ?? string.Empty);
-            TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory ?? string.Empty);
+            //TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType ?? string.Empty);
+            //TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory ?? string.Empty);
+
+            TempData["loantypeNew"] = loanType ?? string.Empty;
+            TempData["applicantcategoryNew"] = applicantCategory ?? string.Empty;
             TempData["applicationId"] = id;
 
             var response= new DTOCommonOnlineApplicationResponse();
@@ -192,11 +195,11 @@ namespace Agif_V2.Controllers
 
         public IActionResult Redirection(string loanType, string applicantCategory)
         {
-            string Loan = EncryptDecrypt.EncryptionData(loanType);
-            string Category = EncryptDecrypt.EncryptionData(applicantCategory);
+            //string Loan = EncryptDecrypt.EncryptionData(loanType);
+            //string Category = EncryptDecrypt.EncryptionData(applicantCategory);
 
-            TempData["LoanType"] = Loan;
-            TempData["ApplicantCategory"] = Category;
+            TempData["LoanType"] = loanType;
+            TempData["ApplicantCategory"] = applicantCategory;
             return RedirectToAction("OnlineApplication");
         }
 
