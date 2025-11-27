@@ -11,7 +11,6 @@
 function loadDropdown() {
 
     const Rank = $('#rank').data('rank-prefix');
-  //  var UnitId = $('#UnitId').val();
     const regtCorps = $('#regtCorps').data('regtcorps-prefix');
     const ApptId = $('#ApptId').data('apptid-prefix');
 
@@ -59,7 +58,6 @@ $("#btnsignup").on("click", function (e) {
 
 $("#txtUnit").autocomplete({
     source: function (request, response) {
-        //alert(1);
         $("input[name='UnitId']").val(0);
 
       if (request.term.length > 0) {

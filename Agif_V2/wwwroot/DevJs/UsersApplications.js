@@ -221,34 +221,6 @@ function GetApplicationList(status, endpoint) {
         });
     }
 
-    // Add the "Action" column dynamically
-    //dynamicColumns.push({
-    //    data: null,
-    //    orderable: false,
-    //    className: 'noExport',
-    //    render: function (data, type, row) {
-    //        const categorytype = $("#UserType").val() || "Loan";
-    //        console.log(categorytype);
-    //        if (row.isMergePdf == false) {
-    //            return `
-    //                <div class='action action-container d-flex'>
-    //                    <button class='btn btn-sm btn-outline-danger align-items-center mx-2' onclick='mergePdf(${row.applicationId}, 0, 0, "${categorytype === "Loan" ? "/OnlineApplication/MergePdf" : "/Claim/MergePdf"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="Merge Pdf">
-    //                        <i class="bi bi-pencil-square"></i>
-    //                    </button>
-    //                </div>
-    //            `;
-    //        } else {
-    //            return `
-    //                <div class='action action-container'>
-    //                    <button class='btn btn-sm btn-outline-danger mx-2' onclick='OpenAction(${row.applicationId}, "${categorytype === "Loan" ? "/OnlineApplication/GetPdfFilePath" : "/Claim/GetPdfFilePath"}",${categorytype})' data-bs-toggle="tooltip" data-bs-placement="top" title="View Pdf">
-    //                        <i class="bi bi-pencil-square"></i>
-    //                    </button>
-    //                </div>
-    //            `;
-    //        }
-    //    }
-    //});
-
     dynamicColumns.push({
         data: null,
         orderable: false,
@@ -367,56 +339,6 @@ function GetApplicationList(status, endpoint) {
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
     });
 }
-//function OpenAction(applicationId, endpoint, category) {
-//    //HBA_SL12345671Y_1007_Merged
-//    $("#spnapplicationId").html(applicationId);
-
-//    const val = $("#UserType").val() || "Loan";
-
-//    $.ajax({
-//        type: "POST",
-//        url: endpoint,
-//        data: { applicationId: applicationId },
-//        dataType: 'json',
-//        success: function (response) {
-
-//            if (response != null) {
-//                $("#pdfContainer").empty();
-
-
-//                // Create a new object element dynamically
-//                const objectElement = document.createElement('object');
-//                objectElement.id = 'PdfViwerFOrDigital'; // Optional: Set ID for the object
-//                objectElement.type = 'application/pdf';
-//                objectElement.classList.add('w-100', 'h-100', 'border-0', 'rounded'); // Add your styling classes
-
-//                // Set the 'data' attribute to load the PDF
-//                const pdfUrl = response + '#toolbar=0&navpanes=0&scrollbar=0';
-
-//                //objectElement.setAttribute('data', response);
-//                objectElement.setAttribute('data', pdfUrl);
-
-//                // Append the object element to the container
-//                document.getElementById('pdfContainer').appendChild(objectElement);
-
-//                // Show the modal with the PDF viewer
-//                $("#ViewPdf").modal("show");
-
-
-//                if (val === "Loan")
-//                    fetchApplicationDetails(applicationId, "/OnlineApplication/GetApplicationDetails");
-//                else if (val === "Maturity")
-//                    fetchApplicationDetails(applicationId, "/Claim/GetApplicationDetails");
-
-//            } else {
-//                alert('Error retrieving PDF file path: ' + response.message);
-//                console.error('Error:', response.message);
-//            }
-//        },
-//    });
-
-
-//}
 function OpenAction(applicationId, endpoint, category) {
     $("#spnapplicationId").html(applicationId);
     const val = $("#UserType").val() || "Loan";
@@ -563,9 +485,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify({
-            "inputPersID": "9a4beb14b87de35d6bba98e2b16ad4eb341d52bda2bb3b7eadb064baf676cbd3" //Amit kumar jha
-            //"inputPersID": IcNo//HRMS Token
-            //"inputPersID": "867a43f0ec5593ba28ebd8f8e765bb6f3886f45981193f3d2befdc72404e0484" //Comdt Token
+            "inputPersID": IcNo//HRMS Token
         }),
 
         success: function (response) {
@@ -689,7 +609,6 @@ function sendPDFToServer(filepath, thumbprint, type) {
     console.log("Full PDF Path:", fullPath)
 
     $.ajax({
-        //url: 'http://localhost/Temporary_Listen_Addresses/ByteDigitalSignAsync',
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ByteDigitalSignAsync',
         type: 'POST',
         contentType: 'application/json',
@@ -746,7 +665,6 @@ function sendPDFToServer(filepath, thumbprint, type) {
 }
 function GetThumbprint() {
     return $.ajax({
-        //url: 'http://localhost/Temporary_Listen_Addresses/FetchUniqueTokenDetails',
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/FetchUniqueTokenDetails',
         type: 'GET'
     }).then(function (response) {
@@ -866,7 +784,6 @@ function fetchApplicantData(armyNo) {
                 $('#applicantName').text(applicantData.name || 'N/A');
                 $('#applicantArmyNo').text(applicantData.armyNo || 'N/A');
                 populateHistoryTable(response.data);
-                //$('#ApplicantHistoryModal').modal('show');
                
             } else {
                 console.error('Failed to fetch applicant history:', response.message);

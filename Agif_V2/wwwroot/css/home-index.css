@@ -35,14 +35,11 @@
 
 .link-container a {
     color: #1b46d1;
-    /* blue color */
     text-decoration: none;
-    /* Removes underline */
 }
 
     .link-container a:hover {
         text-decoration: underline;
-        /* Adds underline on hover */
     }
 
 .chat-toggle-btn {

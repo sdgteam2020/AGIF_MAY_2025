@@ -252,8 +252,6 @@ $('input[name="category"]').on('click', function () {
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#28a745',
                     showCloseButton: true,
-                    //timer: 20000, // Auto-close after 20 seconds
-                    //timerProgressBar: true,
                     customClass: {
                         popup: 'swal-popup',
                         title: 'swal-title',
@@ -273,7 +271,6 @@ $('input[name="category"]').on('click', function () {
             }
         },
         error: function (error) {
-            //$.LoadingOverlay("hide");
 
             console.error("Error calculating maturity:", error);
             Swal.fire({
@@ -282,7 +279,6 @@ $('input[name="category"]').on('click', function () {
                 icon: 'error',
                 confirmButtonColor: '#dc3545'
             });
-            //console.error("Error calculating maturity:", error);
         }
     });
 });

@@ -345,7 +345,6 @@ body {
 
     .panel-default > .panel-heading {
         color: #333;
-        /*background-color: rgb(66,57,51);*/
         background-color: #310;
         border-color: #ddd
     }

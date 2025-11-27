@@ -198,17 +198,3 @@ function showErrorMessage(message) {
     }, 2000);
 }
 
-//function showErrorMessage(message) {
-//    const $alert = $('#globalErrorAlert');
-//    const $msg = $('#globalErrorMessage');
-
-//    $msg.text(message);
-
-//    // show alert
-//    $alert.removeClass('d-none').addClass('show');
-
-//    // auto hide after 2 seconds
-//    setTimeout(function () {
-//        $alert.removeClass('show').addClass('d-none');
-//    }, 2000);
-//}

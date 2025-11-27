@@ -12,8 +12,6 @@ $(document).ready(function () {
     ExtensionOfServiceAccess();
     resetCivilPostalAddress();
     resetFieldsOnRankRegtChange();
-    //EduGenderDisplay();
-    //MarrGenderDisplay();
     findDataWithArmyNumber();
     findDataWithApplicationId();
     callingCommonFunctions();
@@ -142,14 +140,8 @@ $('#loanType').change(function () {
 $('#loanFormContainer').on('input change', 'input, select', function () {
     checkFieldsForLoan();
 });
-//function showLoanForm() {
-//    $('#addLoanSection').hide();
-//    $('#loanFormContainer').show();
-//    resetLoanForm();
-//}
 $('#showLoanFormButton').on('click', function () {
     $('#addLoanSection').hide();         // Hide the loan section
-    //$('#loanFormContainer').show();      // Show the loan form container
     $('#loanFormContainer').removeClass('d-none');
     resetLoanForm();                     // Call function to reset the loan form
 });
@@ -199,18 +191,15 @@ function showLoanTypeFields(loanType) {
             alert(`${loanTypeNames[loanType]} has already been added. Only one entry per loan type is allowed.`);
             $('#loanType').val(''); // Reset selection
             $('#addLoanButton').hide();
-            //$('#addLoanButton').addClass('d-none');
 
             return;
         }
 
         $('#' + loanType + 'Fields').show();
         $('#addLoanButton').show();
-        //$('#addLoanButton').removeClass('d-none');
         checkFieldsForLoan();
     } else {
         $('#addLoanButton').hide();
-        //$('#addLoanButton').addClass('d-none');
 
     }
 }
@@ -242,7 +231,6 @@ function removeLoanRow(button) {
     $(button).closest('tr').remove();
 
     if ($('#loanGrid tbody tr').length === 0) {
-        // $('#loanGridContainer').hide();
         $('#loanGridContainer').addClass('d-none');
     }
 
@@ -298,43 +286,16 @@ function addLoanToGrid() {
     `;
 
         $('#loanGrid tbody').append(newRow);
-        //$('#loanGridContainer, #loanGrid').show();
         $('#loanGridContainer').removeClass('d-none');
         $('#loanGrid').removeClass('d-none');
 
         // Update dropdown to disable the added loan type
         updateLoanTypeDropdown();
 
-        // Reset form
         resetLoanForm();
     
 }
 
-//function validateLoanData(loanType, date, duration, amount) {
-//    //const datePattern = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\d{4})$/; // Matches dd-mm-yyyy format
-
-//    //if (!datePattern.test(date)) {
-//    //    showErrorMessage('Invalid date format. Please use dd-mm-yyyy.');
-//    //    return false;
-//    //}
-//    // Date validation
-//    const loanDate = new Date(date);
-//    const currentDate = new Date();
-//    const minDate = new Date('1990-01-01');
-
-//    if (loanDate > currentDate) {
-//        showErrorMessage('Loan date cannot be in the future.');
-//        return false;
-//    }
-//    // Amount validation
-//    const amountNum = parseFloat(amount);
-//    if (isNaN(amountNum) || amountNum <= 0 || amountNum > 10000000) {
-//        showErrorMessage('Please enter a valid amount (₹1 - ₹1,00,00,000).');
-//        return false;
-//    }
-
-//    return true;
-//}
 function validateLoanData(loanType, date, duration, amount) {
     // Date validation (yyyy-dd-mm format)
     const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/; // Matches yyyy-dd-mm format
@@ -434,7 +395,6 @@ function updateLoanTypeDropdown() {
 
 function expandAccordions() {
 
-    //$('#dateOfRetirement').val("2044-10-12");
     let $toggleButton = $('#toggleAll');
 
     $toggleButton.on('click', function () {
@@ -494,17 +454,14 @@ function loadDropdown() {
 
     if (loanType == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
-        //mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 9, 0);
         mMsater(Rank, "ddlrank", 3, 0);
     }
     else if (loanType == 2) {
         mMsater(armyPrefixValue, "armyPrefix", 10, 0);
-        //mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 10, 0);
         mMsater(Rank, "ddlrank", 4, 0);
     }
     else if (loanType == 3) {
         mMsater(armyPrefixValue, "armyPrefix", 11, 0);
-      // mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 11, 0);
         mMsater(Rank, "ddlrank", 13, 0);
     }
     
@@ -521,19 +478,6 @@ function confirmAccountNo() {
         const accountNo = $('#salaryAcctNo').val();
         const reEnterAccountNo = $('#confirmSalaryAcctNo').val();
 
-        //if (accountNo !== reEnterAccountNo) {
-        //    $('#confirmSalaryAcctNo').val('').css('border', '2px solid red');
-
-        //    const $this = $(this); // store jQuery reference to use in arrow functions
-
-        //    setTimeout(() => {
-        //        $this.focus();
-        //    }, 10);
-
-        //    setTimeout(() => {
-        //        $this.css('border', '');
-        //    }, 2000);
-        //}
         if (accountNo !== reEnterAccountNo) {
             Swal.fire({
                 title: "Alert",
@@ -707,21 +651,6 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
         alert("Date of Commission cannot be earlier than Date of Birth.");
         return;
     }
-    //const ageInMilliseconds = dateOfCommission - dateOfBirth;
-    //const ageInYears = Math.floor(ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)); // Account for leap years
-    //if (ageInYears < 15) {
-    //    Swal.fire({
-    //        title: 'Warning!',
-    //        text: 'Atleast 15 years of age is required for commission. Please check the Date of Birth and Date of Commission.',
-    //        icon: 'warning',
-    //        confirmButtonText: 'OK'
-    //    }).then((result) => {
-    //        if (result.isConfirmed) {
-    //            $('#dateOfCommission').val("");
-    //            window.location.href = '/Claim/MaturityLoanType';
-    //        }
-    //    });
-    //}
     const today = new Date(); // current date
 
     const minCompletionDate = addYears(dateOfCommission, 15);
@@ -931,49 +860,6 @@ function formatDateToString(date) {
     const year = date.getFullYear();
     return day + "/" + month + "/" + year;
 }
-
-//function validateDateFormat(input) {
-//    const value = input.value;
-//    const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
-
-//    // Check if the value matches the date format
-//    if (value && !datePattern.test(value)) {
-//        Swal.fire({
-//            icon: "error",
-//            title: "Invalid date",
-//            text: "Invalid date format. Please select a valid date.",
-//        });
-//        input.focus();
-//        input.value = ""; // Clear the invalid input
-//        return;
-//    }
-
-//    // Additional validation to check date validity and reasonable year range
-//    if (value && datePattern.test(value)) {
-//        const parts = value.split('/');
-//        const day = parseInt(parts[0], 10);
-//        const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
-//        const year = parseInt(parts[2], 10);
-
-//        // Check for reasonable year range (e.g., 1900 to current year)
-//        const currentYear = new Date().getFullYear();
-//        if (year < 1900 || year > currentYear) {
-//            Swal.fire({
-//                icon: "error",
-//                title: "Invalid year",
-//                text: `Please enter a year between 1900 and ${currentYear}.`,
-//            });
-//            input.focus();
-//            input.value = ""; // Clear the invalid input
-//            return;
-//        }
-
-//        // Check if it's a valid date
-
-//    }
-
-//    SetRetDate();
-//}
 
 
 function validateDateFormat(input) {
@@ -1333,7 +1219,6 @@ function calculateResidualService() {
                 confirmButtonText: 'OK'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect to claim/online application page
                     window.location.href = '/Claim/MaturityLoanType';  // Adjust URL if necessary
                 }
             });
@@ -1510,7 +1395,6 @@ function filterAmountText(loanType) {
         const VehicleCost = $('#vehicleCost');
         const cleanedValue = VehicleCost.val().replace(/,/g, '');
         VehicleCost.val(cleanedValue);
-        //alert(cleanedValue);
     }
 }
 
@@ -1522,7 +1406,6 @@ function handleSubmitClick() {
         // Clear previous error messages
         form.querySelectorAll(".error").forEach(span => span.textContent = "");
 
-        // let errorlist = "";
         let errorlist = []; // Use an array to store individual error messages
         let hasError = false;
 
@@ -1555,7 +1438,6 @@ function handleSubmitClick() {
                 if (errorSpan) {
                     errorSpan.textContent = input.validationMessage;
                 }
-                // errorlist += input.name + ", ";
                 let errorText = input.name;
                 const prefixes = ["ClaimCommonData.", "Marriageward.", "EducationDetails.", "PropertyRenovation.", "SplWaiver.", "AddressDetails.", "AccountDetails."];
                 prefixes.forEach(prefix => {
@@ -1581,7 +1463,6 @@ function handleSubmitClick() {
             return false;
         }
         else {
-            //form.submit();
             $("#msgerror").html(''); // Clear error message
             if (formSubmitting) return; // Allow submission after confirmation
             if (formCancelled) {
@@ -1610,7 +1491,6 @@ function checkCORegistration() {
 
     const ArmyNo = `${armyNumber}${prefix}${suffix}`.toUpperCase();
 
-    //const $unitValidation = $("span[data-valmsg-for='Unit']");
 
     if (prefix === "0" || armyNumber === "" || suffix === "") {
         // Warn if Army No is incomplete
@@ -1625,7 +1505,6 @@ function checkCORegistration() {
             data: { ArmyNo: ArmyNo },
             success: function (result) {
                 if (result === true) {
-                    //$('#unitSearchDialog').show();
                     $('#unitSearchDialog').removeClass('d-none'); // Show the dialog if CO is registered
                 } else if (result === false) {
                     // If not registered, set unit input back to required
@@ -1824,7 +1703,6 @@ $("#ParenttxtUnit").autocomplete({
 
 $("#PresenttxtUnit").autocomplete({
     source: function (request, response) {
-        //alert(1);
         $("input[name='PresentUnit']").val(0);
 
         if (request.term.length > 2) {
@@ -2095,30 +1973,6 @@ $("input, textarea").on("paste", function (e) {
     e.preventDefault();
 });
 
-//function EduGenderDisplay() {
-//    // Show gender options on input click
-//    $('#EducationGenderDisplay').on('focus', function () {
-//        $('#genderRadioGroup').addClass('show');
-//        $(this).closest('.form-outline').find('.form-label').addClass('active');
-//    });
-
-//    // Handle radio button selection
-//    $('.gender-radio').on('change', function () {
-//        var selectedGender = $(this).val();
-//        $('#EducationGenderDisplay').val(selectedGender);
-//        $('#genderRadioGroup').removeClass('show');
-//    });
-
-//    // Optional: Close dropdown when clicking outside
-//    $(document).on('click', function (e) {
-//        if (!$(e.target).closest('.form-outline').length) {
-//            $('#genderRadioGroup').removeClass('show');
-//        }
-//    });
-//}
-
-
-
 function MarrGenderDisplay() {
     // Show gender options on input click
     $('#MarriageGenderDisplay').on('focus', function () {
@@ -2196,19 +2050,16 @@ function findDataWithArmyNumber() {
 
         // Validate required fields
         if (!armyPrefix) {
-            //alert('Please select an Army Prefix.');
             $('#armyPrefix').focus();
             return;
         }
 
         if (!armyNumber) {
-           // alert('Army Number is required.');
             $('#armyNumber').focus();
             return;
         }
 
         if (!armySuffix) {
-           // alert('Army Suffix is required.');
             $('#txtSuffix').focus();
             return;
         }

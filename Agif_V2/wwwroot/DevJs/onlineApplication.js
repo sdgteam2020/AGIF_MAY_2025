@@ -2394,27 +2394,7 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
                         //salary details
-                        //setInputValueWithFloatingLabel('basicPay', data.basicPay);
-                        //setInputValueWithFloatingLabel('rank_gradePay', data.rank_gradePay);
-                        //setInputValueWithFloatingLabel('msp', data.msp);
-                        //setInputValueWithFloatingLabel('npax_Pay', data.npax_Pay);
-                        //setInputValueWithFloatingLabel('da', data.da);
-                        //setInputValueWithFloatingLabel('miscPay', data.miscPay);
-                        //setInputValueWithFloatingLabel('pli', data.pli);
-                        //setInputValueWithFloatingLabel('agif_Subs', data.agif_Subs);
-                        //setInputValueWithFloatingLabel('incomeTaxMonthly', data.incomeTaxMonthly);
-                        //setInputValueWithFloatingLabel('educationCess', data.educationCess);
-                        //setInputValueWithFloatingLabel('loanEmi', data.loanEmi);
-                        //setInputValueWithFloatingLabel('loanEMI_Outside', data.loanEMI_Outside);
-                        //setInputValueWithFloatingLabel('misc_Deduction', data.misc_Deduction);
-                        //setInputValueWithFloatingLabel('totalCredit', data.totalCredit);
-                        //setInputValueWithFloatingLabel('salary_After_Deductions', data.salary_After_Deductions);
-                        //setInputValueWithFloatingLabel('cI_Pay', data.cI_Pay);
-                        //setInputValueWithFloatingLabel('techPay', data.techPay);
-                        //setInputValueWithFloatingLabel('pmha', data.pmha);
-                        //setInputValueWithFloatingLabel('lra', data.lra);
-                        //setInputValueWithFloatingLabel('dsop_afpp', data.dsop_afpp);
-                        //setInputValueWithFloatingLabel('totalDeductions', data.totalDeductions);
+                        
 
 
 
@@ -2423,19 +2403,7 @@ function findDataWithArmyNumber() {
                         $('#regtCorps').val(data.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.emailDomain).trigger('change');
-                        //const formattedDOB = formatDateToDDMMYYYY(data.dateOfBirth);
-                        //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
-                        ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
-                        ////$('#dateOfCommission').val(formatDateToDDMMYYYY(data.dateOfCommission));
-                        //const formattedDOC = formatDateToDDMMYYYY(data.dateOfCommission);
-                        //setInputValueWithFloatingLabel('dateOfCommission', formattedDOC);
-                        ////$('#dateOfPromotion').val(formatDateToDDMMYYYY(data.dateOfPromotion));
-                        //const formattedDOP = formatDateToDDMMYYYY(data.dateOfPromotion);
-                        //setInputValueWithFloatingLabel('dateOfPromotion', formattedDOP);
-                        ////$('#dateOfRetirement').val(formatDateToDDMMYYYY(data.dateOfRetirement));
-                        //const dateOfRetirement = formatDateToDDMMYYYY(data.dateOfRetirement);
-                        //console.log(dateOfRetirement);
-                        //setInputValueWithFloatingLabel('dateOfRetirement', dateOfRetirement);
+                        
 
                         console.log(data);
                     }
@@ -2503,50 +2471,14 @@ function findDataWithApplicationId() {
                         setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
                         setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
-                        //salary details
-                        //setInputValueWithFloatingLabel('basicPay', data.basicPay);
-                        //setInputValueWithFloatingLabel('rank_gradePay', data.rank_gradePay);
-                        //setInputValueWithFloatingLabel('msp', data.msp);
-                        //setInputValueWithFloatingLabel('npax_Pay', data.npax_Pay);
-                        //setInputValueWithFloatingLabel('da', data.da);
-                        //setInputValueWithFloatingLabel('miscPay', data.miscPay);
-                        //setInputValueWithFloatingLabel('pli', data.pli);
-                        //setInputValueWithFloatingLabel('agif_Subs', data.agif_Subs);
-                        //setInputValueWithFloatingLabel('incomeTaxMonthly', data.incomeTaxMonthly);
-                        //setInputValueWithFloatingLabel('educationCess', data.educationCess);
-                        //setInputValueWithFloatingLabel('loanEmi', data.loanEmi);
-                        //setInputValueWithFloatingLabel('loanEMI_Outside', data.loanEMI_Outside);
-                        //setInputValueWithFloatingLabel('misc_Deduction', data.misc_Deduction);
-                        //setInputValueWithFloatingLabel('totalCredit', data.totalCredit);
-                        //setInputValueWithFloatingLabel('salary_After_Deductions', data.salary_After_Deductions);
-                        //setInputValueWithFloatingLabel('cI_Pay', data.cI_Pay);
-                        //setInputValueWithFloatingLabel('techPay', data.techPay);
-                        //setInputValueWithFloatingLabel('pmha', data.pmha);
-                        //setInputValueWithFloatingLabel('lra', data.lra);
-                        //setInputValueWithFloatingLabel('dsop_afpp', data.dsop_afpp);
-                        //setInputValueWithFloatingLabel('totalDeductions', data.totalDeductions);
-
-                       // alert(typeof (data.onlineApplicationResponse.armyPrefix));
+                       
                         $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
                         $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).trigger('change');
                         $('#ddlrank').val(data.onlineApplicationResponse.rankId).trigger('change');
                         $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
-                        //const formattedDOB = formatDateToDDMMYYYY(data.onlineApplicationResponse.dateOfBirth);
-                        //setInputValueWithFloatingLabel('dateOfBirth', formattedDOB);
-                        ////$('#dateOfBirth').val(formatDateToDDMMYYYY(data.dateOfBirth));
-                        ////$('#dateOfCommission').val(formatDateToDDMMYYYY(data.dateOfCommission));
-                        //const formattedDOC = formatDateToDDMMYYYY(data.dateOfCommission);
-                        //setInputValueWithFloatingLabel('dateOfCommission', formattedDOC);
-                        ////$('#dateOfPromotion').val(formatDateToDDMMYYYY(data.dateOfPromotion));
-                        //const formattedDOP = formatDateToDDMMYYYY(data.dateOfPromotion);
-                        //setInputValueWithFloatingLabel('dateOfPromotion', formattedDOP);
-                        ////$('#dateOfRetirement').val(formatDateToDDMMYYYY(data.dateOfRetirement));
-                        //const dateOfRetirement = formatDateToDDMMYYYY(data.dateOfRetirement);
-                        //console.log(dateOfRetirement);
-                        //setInputValueWithFloatingLabel('dateOfRetirement', dateOfRetirement);
-                        if (data.carApplicationResponse != null) {
+                         if (data.carApplicationResponse != null) {
                             $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');
                             $('#VehTypeId').val(data.carApplicationResponse.vehical_Type).trigger('change');
                             $('#CA_LoanFreq').val(data.carApplicationResponse.cA_LoanFreq).trigger('change');

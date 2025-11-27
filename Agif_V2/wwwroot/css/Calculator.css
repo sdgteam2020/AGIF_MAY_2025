@@ -152,7 +152,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     box-sizing: border-box;
 }
 
-@@keyframes backgroundMove {
+@keyframes backgroundMove {
     0% {
         transform: translateX(-30px) translateY(-15px);
     }
@@ -248,7 +248,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     animation: militaryShine 4s infinite;
 }
 
-@@keyframes militaryShine {
+@keyframes militaryShine {
     0% {
         left: -100%;
     }
@@ -269,7 +269,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 
 
 
-@@keyframes twinkle {
+@keyframes twinkle {
     0%, 100% {
         opacity: 0.5;
         transform: scale(1);
@@ -282,13 +282,10 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 }
 
 .army-title {
-    /* color: #ff9900; */
     color: rgb(255 0 0);
     font-family: 'Orbitron', monospace;
     font-size: 1.4rem;
     font-weight: 1000;
-    /*  text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
-        animation: titleGlow 3s ease-in-out infinite alternate; */
     letter-spacing: 2px;
     margin-bottom: 0.5rem;
 }
@@ -301,7 +298,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     opacity: 0.9;
 }
 
-@@keyframes titleGlow {
+@keyframes titleGlow {
     from {
         text-shadow: 0 0 10px #ff9900, 0 0 20px #ff9900, 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
@@ -331,7 +328,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 }
 
 .section-label {
-    /*         color: #ff9900; */
     color: rgb(255 0 0);
     font-size: 0.9rem;
     font-weight: 1000;
@@ -355,8 +351,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 
 
 .form-control:focus, .form-select:focus {
-    /*          background: linear-gradient(145deg, #2a4a3a, #1a3829);
-            background: #310; */
     border-color: #ff9900;
     box-shadow: 0 0 0 0.2rem rgba(255, 153, 0, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 153, 0, 0.3);
     color: #ffffff;
@@ -392,9 +386,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*         padding: 1.5rem 1rem;
- */
-    /* background: linear-gradient(145deg, #1a3829, #0f2419); */
     border: 2px solid rgba(0, 128, 0, 0.4);
     border-radius: 15px;
     cursor: pointer;
@@ -428,7 +419,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
         }
 
 .rank-radio:checked + .rank-label {
-    /* background: linear-gradient(145deg, #ff9900, #e68a00); */
     background: #310;
     border-color: #ff9900;
     color: white;
@@ -451,8 +441,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     font-family: 'Orbitron', monospace;
     font-size: 1.1rem;
     font-weight: 700;
-    /*         margin-bottom: 0.3rem;
- */ letter-spacing: 1px;
+    letter-spacing: 1px;
 }
 
 .rank-description {
@@ -499,7 +488,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     margin-bottom: 1rem;
 }
 
-@@keyframes resultPulse {
+@keyframes resultPulse {
     0%, 100% {
         transform: scale(1);
         opacity: 1;
@@ -516,7 +505,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     background-size: 20px 20px;
 }
 
-@@media (max-width: 768px) {
+@media (max-width: 768px) {
     .calculator-body {
         padding: 1.5rem;
         transform: none;
@@ -563,7 +552,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     animation: militaryFloat 8s infinite linear;
 }
 
-@@keyframes militaryFloat {
+@keyframes militaryFloat {
     0% {
         transform: translateY(100vh) rotate(0deg);
         opacity: 0;

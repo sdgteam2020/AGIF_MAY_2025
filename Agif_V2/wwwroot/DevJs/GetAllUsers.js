@@ -1,78 +1,8 @@
 ﻿$(document).ready(function () {
     let rawValue = $("#Status").val();
-    let value = rawValue !== "false"; // true if "true" or blank; false only when "false"
+    let value = rawValue !== "false"; 
 
-    // Add CSS for toggle slider
-    //$('<style>')
-    //    .prop('type', 'text/css')
-    //    .html(`
-    //        .toggle-switch {
-    //            position: relative;
-    //            display: inline-block;
-    //            width: 60px;
-    //            height: 28px;
-    //        }
-
-    //        .toggle-switch input {
-    //            opacity: 0;
-    //            width: 0;
-    //            height: 0;
-    //        }
-
-    //        .slider {
-    //            position: absolute;
-    //            cursor: pointer;
-    //            top: 0;
-    //            left: 0;
-    //            right: 0;
-    //            bottom: 0;
-    //            background-color: #dc3545;
-    //            transition: .4s;
-    //            border-radius: 28px;
-    //        }
-
-    //        .slider:before {
-    //            position: absolute;
-    //            content: "";
-    //            height: 20px;
-    //            width: 20px;
-    //            left: 4px;
-    //            bottom: 4px;
-    //            background-color: white;
-    //            transition: .4s;
-    //            border-radius: 50%;
-    //        }
-
-    //        input:checked + .slider {
-    //            background-color: #198754;
-    //        }
-
-    //        input:checked + .slider:before {
-    //            transform: translateX(32px);
-    //        }
-
-    //        .status-text {
-    //            font-size: 0.8rem;
-    //            margin-left: 10px;
-    //            font-weight: 500;
-    //        }
-
-    //        .status-active {
-    //            color: #198754;
-    //        }
-
-    //        .status-inactive {
-    //            color: #dc3545;
-    //        }
-
-    //        .action-container {
-    //            display: flex;
-    //            align-items: center;
-    //            gap: 10px;
-    //        }
-    //    `)
-    //    .appendTo('head');
-
+    
     BindUsersData(value);
 });
 
@@ -210,14 +140,6 @@ function BindUsersData(status) {
                 }
             },
          
-          
-            //{
-            //    data: "regtName",
-            //    name: "RegtName",
-            //    render: function (data, type, row) {
-            //        return data || 'N/A';
-            //    }
-            //},
             {
                 data: "updatedOn",
                 name: "UpdatedOn",
