@@ -30,7 +30,6 @@ namespace Agif_V2.Controllers
             }   
 
             var result = await _claimCalculator.CalculateTotalInvestment(month, year,categoryValue);
-            // return Json(new { success = true, message = "Calculation completed successfully.", value = Investmentvalue });
             return Json(new{success = true,CurrentBalance = result.currentBalance,BalCount = result.balCount,SaveEL = result.saveEL});
         }
 

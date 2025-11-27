@@ -55,8 +55,6 @@ namespace Agif_V2.Controllers
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
-            //TempData["loantypeNew"] = EncryptDecrypt.DecryptionData(loanType ?? string.Empty);
-            //TempData["applicantcategoryNew"] = EncryptDecrypt.DecryptionData(applicantCategory ?? string.Empty);
 
             TempData["loantypeNew"] = loanType ?? string.Empty;
             TempData["applicantcategoryNew"] = applicantCategory ?? string.Empty;
@@ -100,7 +98,6 @@ namespace Agif_V2.Controllers
             // Map of (Prefix, RankId) to RetirementAge
             var prefixRankRetirementMap = new Dictionary<(int prefix, int rank), int>
             {
-                // NTR prefix = 11
                 { (11, 21), 57 },
                 { (11, 22), 57 },
                 { (11, 23), 57 },
@@ -110,7 +107,6 @@ namespace Agif_V2.Controllers
                 { (11, 27), 60 },
                 { (11, 28), 61 },
 
-                // SC prefix = 3
                 { (3, 21), 57 },
                 { (3, 22), 57 },
                 { (3, 23), 57 },
@@ -195,8 +191,6 @@ namespace Agif_V2.Controllers
 
         public IActionResult Redirection(string loanType, string applicantCategory)
         {
-            //string Loan = EncryptDecrypt.EncryptionData(loanType);
-            //string Category = EncryptDecrypt.EncryptionData(applicantCategory);
 
             TempData["LoanType"] = loanType;
             TempData["ApplicantCategory"] = applicantCategory;
@@ -380,8 +374,6 @@ namespace Agif_V2.Controllers
 
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
-                //PdfReader pdfReader = new PdfReader(mergedPdfPath, new ReaderProperties());
-                //_watermark.AddAnnotationAfterDigitalSign(ip, mergedPdfPath);
 
 
                 if (!mergeResult) return JsonError("Failed to merge PDF files.");
@@ -517,7 +509,6 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Application ID is not specified." });
             }
-            //string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
             string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
             string mergepdfName = "App" + applicationIdStr + armyNo;
             string pdfFilePath = $"/MergePdf/{mergepdfName}.pdf";

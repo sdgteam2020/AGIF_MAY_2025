@@ -138,12 +138,6 @@ namespace Agif_V2.Controllers
             var Category = TempData["Category"] as string;
             var WithdrwalPurpose = TempData["WithdrwalPurpose"] as string;
 
-
-            //TempData["CategoryNew"] = EncryptDecrypt.DecryptionData(Category?? string.Empty);
-
-            //TempData["WithdrwalPurposeNew"] = EncryptDecrypt.DecryptionData(WithdrwalPurpose?? string.Empty);
-
-
             TempData["CategoryNew"] = Category ?? string.Empty;
 
             TempData["WithdrwalPurposeNew"] = WithdrwalPurpose ?? string.Empty;
@@ -174,9 +168,6 @@ namespace Agif_V2.Controllers
 
         public IActionResult Redirection(string Category, string PurposeOfWithdrwal)
         {
-            //string AppCategory = EncryptDecrypt.EncryptionData(Category);
-            //string WithdrwalPurpose = EncryptDecrypt.EncryptionData(PurposeOfWithdrwal);
-
             TempData["Category"] = Category;
             TempData["WithdrwalPurpose"] = PurposeOfWithdrwal;
             return RedirectToAction("OnlineApplication");
@@ -186,8 +177,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> OnlineApplication(DTOClaimApplication model)
         {
-            //if (!await ValidateModelAsync(model))
-            //    return View("OnlineApplication", model);
+          
 
             // Perform custom validation (adds errors to ModelState)
             await ValidateModelAsync(model);
@@ -456,144 +446,6 @@ namespace Agif_V2.Controllers
 
 
         [HttpPost]
-        //public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
-        //{
-
-
-        //    try
-        //    {
-        //        string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-        //        if (string.IsNullOrEmpty(ip))
-        //        {
-        //            ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-        //        }
-        //        var userData = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
-        //        if (userData == null)
-        //        {
-        //            return Json(new { success = false, message = "Application not found." });
-        //        }
-
-        //        string applicationType = userData.OnlineApplicationResponse.ApplicationType.ToString();
-        //        string applicationTypeName = "";
-        //        if (string.IsNullOrEmpty(applicationType))
-        //        {
-        //            return Json(new { success = false, message = "Application type is not specified." });
-        //        }
-        //        else
-        //        {
-        //            if (applicationType == "1")
-        //            {
-        //                applicationTypeName = "ED";
-        //            }
-        //            else if (applicationType == "2")
-        //            {
-        //                applicationTypeName = "MW";
-        //            }
-        //            else if (applicationType == "3")
-        //            {
-        //                applicationTypeName = "PR";
-        //            }
-        //            else if(applicationType == "4")
-        //                applicationTypeName = "SP";
-        //        }
-
-        //        string armyNo = userData.OnlineApplicationResponse.Number;
-        //        if (string.IsNullOrEmpty(armyNo))
-        //        {
-        //            return Json(new { success = false, message = "Army number is not specified." });
-        //        }
-
-        //        string applicationIdStr = applicationId.ToString();
-        //        string folderPath = applicationTypeName + "_" + armyNo + "_" + applicationIdStr;
-        //        string sourceFolderPath = Path.Combine(_env.WebRootPath, "ClaimTempUploads", folderPath);
-
-
-        //        // Check if source folder exists
-        //        if (!Directory.Exists(sourceFolderPath))
-        //        {
-        //            return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
-        //        }
-
-        //        // Get all PDF files from the source folder
-        //        string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
-
-        //        if (pdfFiles.Length == 0)
-        //        {
-        //            return Json(new { success = false, message = "No PDF files found in the specified folder." });
-        //        }
-
-        //        // Generate the new PDF first (if needed)
-        //        string pdfName = folderPath + "_Application";
-        //        var generatedPdfPath = Path.Combine(sourceFolderPath, pdfName + ".pdf");
-
-        //        try
-        //        {
-        //            SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-
-        //            if (dTOTempSession == null)
-        //            {
-        //                return Json(new { success = false, message = "Session expired or invalid user context." });
-        //            }
-
-        //            var (name, mobile, armyno) = await _IClaimonlineApplication1.GetCODetails(dTOTempSession.ProfileId);
-
-        //            var data = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, dTOTempSession.UserName, ip, name, mobile, armyno);
-
-
-        //            if (data == 1)
-        //            {
-        //                pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
-        //                         .ToArray(); ;
-        //            }
-        //        }
-        //        catch (Exception pdfGenEx)
-        //        {
-        //            Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
-        //            // Continue with existing PDFs if generation fails
-        //        }
-
-        //        // Create merged PDF path in TempUploads root
-        //        string tempUploadsPath = Path.Combine(_env.WebRootPath, "ClaimMergePdf");
-        //        if (!Directory.Exists(tempUploadsPath))
-        //        {
-        //            Directory.CreateDirectory(tempUploadsPath);
-        //        }
-
-        //        string MergePdfName = "App" + applicationIdStr + armyNo;
-        //        string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
-        //        ViewBag.MergedPdfPath = mergedPdfPath;
-        //        // Merge all PDFs using iText7
-        //        bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
-
-        //        ReaderProperties readerProperties = new ReaderProperties();
-        //        PdfReader pdfReader = new PdfReader(mergedPdfPath, readerProperties);
-        //        _watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
-
-        //        if (mergeResult)
-        //        {
-        //            // Get relative path for client
-        //            string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
-
-        //            await _IClaimonlineApplication1.UpdateMergePdfStatus(applicationId, true);
-        //            return Json(new
-        //            {
-        //                success = true,
-        //                message = "PDFs merged successfully.",
-        //                mergedFilePath = relativePath,
-        //                fullPath = mergedPdfPath,
-        //                totalFiles = pdfFiles.Length
-        //            });
-        //        }
-        //        else
-        //        {
-        //            return Json(new { success = false, message = "Failed to merge PDF files." });
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
-        //    }
-        //}
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
         {
 
@@ -679,8 +531,7 @@ namespace Agif_V2.Controllers
 
                     if (data == 1)
                     {
-                        //pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf").OrderBy(file => Path.GetFileName(file))
-                        //         .ToArray();
+                    
 
                         pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf")
                            .OrderBy(file =>
@@ -713,9 +564,6 @@ namespace Agif_V2.Controllers
                 // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
-                // ReaderProperties readerProperties = new ReaderProperties();
-                //PdfReader pdfReader = new PdfReader(mergedPdfPath, readerProperties);
-                //_watermark.OpenPdf(pdfReader, ip, mergedPdfPath);
 
                 if (mergeResult)
                 {

@@ -390,12 +390,7 @@ namespace Agif_V2.Helpers
                                     .SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));
-                            //signatureTable2.AddCell(new Cell().Add(new Paragraph(apptName)
-                            //        .SetFont(regularFont)
-                            //        .SetFontSize(10))
-                            //    .SetBorder(Border.NO_BORDER)
-                            //    .SetTextAlignment(TextAlignment.LEFT));
-
+              
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + Mobile)
                                     .SetFont(regularFont)
                                     .SetFontSize(10))
@@ -568,7 +563,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5));
 
                             // Page Break (Optional)
-                            // document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                             document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                             document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
@@ -692,12 +686,6 @@ namespace Agif_V2.Helpers
                                 .Add(new Paragraph($"{apptName},{unitName}").SetFont(normalFont).SetFontSize(10))
                                 .SetTextAlignment(TextAlignment.LEFT)
                                 .SetBorder(Border.NO_BORDER));
-
-
-                            //signatureTable2.AddCell(new Cell()
-                            //    .Add(new Paragraph(apptName).SetFont(normalFont).SetFontSize(10))
-                            //    .SetTextAlignment(TextAlignment.LEFT)
-                            //    .SetBorder(Border.NO_BORDER));
 
 
                             signatureTable2.AddCell(new Cell()
@@ -972,17 +960,6 @@ namespace Agif_V2.Helpers
                                     .SetFont(normalFont).SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));
-                            
-                            //signatureTable2.AddCell(new Cell()
-                            //   .Add(new Paragraph("")
-                            //       .SetFont(normalFont).SetFontSize(10))
-                            //   .SetBorder(Border.NO_BORDER));
-
-                            //signatureTable2.AddCell(new Cell()
-                            //    .Add(new Paragraph(apptName)
-                            //        .SetFont(normalFont).SetFontSize(10))
-                            //    .SetBorder(Border.NO_BORDER)
-                            //    .SetTextAlignment(TextAlignment.LEFT));
 
                             signatureTable2.AddCell(new Cell()
                                 .Add(new Paragraph("")

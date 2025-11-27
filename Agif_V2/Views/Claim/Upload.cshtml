@@ -13,8 +13,7 @@
 
 }
 
-@* <script src="~/devjs/pdf.min.js"></script>
- *@<link href="~/css/validation.css" rel="stylesheet" />
+ <link href="~/css/validation.css" rel="stylesheet" />
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-9">
@@ -39,9 +38,6 @@
                                 <ul class="mt-2 mb-2">
                                     <li>Page 1 - Cancelled cheque or first page of passbook duly authenticated by bank.</li>
                                     <li>Page 2 - Latest pay slip.</li>
-                                   @*  <li>
-                                        Page 3 - Personal application & sp docus (for seeking of spl waiver).
-                                    </li> *@
                                 <li>Page 3 - Service Extn Pt II order/ Pay Slip in which Pt II order adjusted (if applicable).</li>
 
                                 </ul>
@@ -117,36 +113,6 @@
                                 </div>
 
 
-
-                             
-
-
-                               @*  <div class="row">
-                                    <!-- Service Extn -->
-                                    <div class="col-md-6 mb-3">
-
-
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                            <label for="SpdocusPdf" class="form-label fw-bold">
-                                                3. sp docus (for seeking of spl waiver)
-                                                </label>
-                                            <input class="form-control file-upload-limited" type="file" id="SpdocusPdf" name="SpdocusPdf" data-preview="#SpdocusPre" accept=".pdf" disabled required>
-                                            <p class="file-error-message text-danger" ></p> <!-- Error message container -->
-                                                @Html.ValidationMessageFor(m => m.SpdocusPdf, "", new { @class = "text-danger" })
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <label class="form-label fw-bold"></label>
-                                            <div id="SpdocusPre" class="file-preview-container">
-                                                    <i class="bi bi-eye" style="font-size: 1.5rem; cursor: pointer;"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div> *@
 
 
                             <div class="row">

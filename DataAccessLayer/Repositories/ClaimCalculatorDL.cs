@@ -39,9 +39,6 @@ namespace DataAccessLayer.Repositories
             var today = DateTime.Today;
             var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            //var today = new DateTime(1991, 4, 01); // Set the date manually to 01/04/1993
-            //var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1); // Adjust the tillDate accordingly
-
             // Validate joining date
             if (joiningDate > tillDate)
             {
@@ -80,11 +77,6 @@ namespace DataAccessLayer.Repositories
                     previousBalance = currentBalance;
                     currentBalance += applicableRate.InvestmentAmount;
 
-                    //Balcount = Balcount + Balamount;
-
-                    //newbalance = Balcount - Balamount;
-
-
                     Balcount = Balcount + applicableRate.PrAmount;
 
                     newbalance = Balcount - applicableRate.PrAmount;
@@ -94,18 +86,8 @@ namespace DataAccessLayer.Repositories
 
                     newcurrentbalance= currentBalance * monthlyFactor;
 
-                    //var balance = await GetBonusAmount(previousBalance, currentDate, currentBalance, monthlyFactor, categoryValue, newbalance);
                     var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, categoryValue, newbalance);
 
-                    // Apply monthly compounding
-                    //if (balance == 0)
-                    //{
-                    //    currentBalance *= monthlyFactor;
-                    //}
-                    //else
-                    //{
-                    //    currentBalance = balance * monthlyFactor;
-                    //}
                     if (balance != 0)
                     {
                         currentBalance = balance;
@@ -134,18 +116,7 @@ namespace DataAccessLayer.Repositories
 
                     newcurrentbalance = currentBalance * monthlyFactor;
 
-                    // var balance = await GetBonusAmount(previousBalance, currentDate, currentBalance, monthlyFactor, categoryValue, newbalance);
                      var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, categoryValue, newbalance);
-
-                    // Apply monthly compounding
-                    //if (balance == 0)
-                    //{
-                    //    currentBalance *= monthlyFactor;
-                    //}
-                    //else
-                    //{
-                    //    currentBalance = balance * monthlyFactor;
-                    //}
 
                     if (balance != 0)
                     {
@@ -163,7 +134,6 @@ namespace DataAccessLayer.Repositories
                 currentDate = currentDate.AddMonths(1);
             }
 
-            //return Math.Round(currentBalance, 2);
             return (
                     currentBalance: Math.Round(currentBalance, 2),
                     balCount: Math.Round(Balcount, 2),
@@ -231,7 +201,6 @@ namespace DataAccessLayer.Repositories
 
             if (categoryValue==1 && bonusRecordOfficers != null)
             {
-              //  BonusAmount = (PreviousBalance * bonusRecordOfficers.AnnualBonus) / 100;
                 if (Currentdate > cutoff)
                 {
                     BonusAmount = (newbalance * bonusRecordOfficers.AnnualBonus) / 100;

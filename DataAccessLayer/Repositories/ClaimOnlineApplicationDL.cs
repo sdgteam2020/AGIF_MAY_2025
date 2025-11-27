@@ -106,70 +106,6 @@ namespace DataAccessLayer.Repositories
             return existingUser;
         }
 
-        //public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
-        //{
-        //    var existingUser = await GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
-
-        //    if (existingUser != null)
-        //    {
-        //        var ED = await _context.trnEducationDetails
-        //            .FirstOrDefaultAsync(c => c.ApplicationId == existingUser.ApplicationId);
-
-        //        var MW = await _context.trnMarriageward
-        //            .FirstOrDefaultAsync(h => h.ApplicationId == existingUser.ApplicationId);
-
-        //        var PC = await _context.trnPropertyRenovation
-        //            .FirstOrDefaultAsync(p => p.ApplicationId == existingUser.ApplicationId);
-
-        //        var Sp = await _context.trnSplWaiver
-        //            .FirstOrDefaultAsync(s => s.ApplicationId == existingUser.ApplicationId);
-
-        //        var documents = await _context.trnClaimDocumentUpload
-        //            .Where(d => d.ApplicationId == existingUser.ApplicationId)
-        //            .ToListAsync();
-
-        //        var AccountDetails = await _context.trnClaimAccountDetails
-        //            .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
-
-        //        var AddressDetails = await _context.trnClaimAddressDetails
-        //            .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
-
-
-        //        if (ED != null)
-        //            _context.trnEducationDetails.Remove(ED);
-
-        //        if (MW != null)
-        //            _context.trnMarriageward.Remove(MW);
-
-        //        if (PC != null)
-        //            _context.trnPropertyRenovation.Remove(PC);
-
-        //        if (Sp != null)
-        //            _context.trnSplWaiver.Remove(Sp);
-
-        //        if (documents.Any())
-        //            _context.trnClaimDocumentUpload.RemoveRange(documents);
-
-        //        if (AccountDetails != null)
-        //            _context.trnClaimAccountDetails.Remove(AccountDetails);
-
-        //        if (AddressDetails != null)
-        //            _context.trnClaimAddressDetails.Remove(AddressDetails);
-
-        //        var applicationEntity = await _context.trnClaim
-        //            .FirstOrDefaultAsync(a => a.ApplicationId == existingUser.ApplicationId);
-
-        //        if (applicationEntity != null)
-        //            _context.trnClaim.Remove(applicationEntity);
-
-        //        await _context.SaveChangesAsync();
-        //        return true;
-
-        //    }
-
-        //    return false;
-        //}
-
         public async Task<bool> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
         {
             var existingUser = await GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
@@ -206,162 +142,6 @@ namespace DataAccessLayer.Repositories
             if (entity != null)
                 dbSet.Remove(entity);
         }
-        //public async Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId)
-        //{
-        //    ClaimCommonModel commonDataModel = new ClaimCommonModel();
-        //    MArmyPrefix mArmyPrefix = new MArmyPrefix();
-        //    string ArmyNo = string.Empty;
-
-        //    if (ApplicationId != 0)
-        //    {
-        //        commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId); ;
-        //        int id = commonDataModel.ArmyPrefix;
-        //        mArmyPrefix = await _IArmyPrefixes.Get(id);
-        //        ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
-        //        ArmyNo = ArmyNo.Trim();
-        //    }
-
-        //    var files = new List<IFormFile>();
-        //    if (model.EducationDetails != null)
-        //    {
-        //        if (model.EducationDetails.AttachBonafideLetter != null) files.Add(model.EducationDetails.AttachBonafideLetter);
-        //        if (model.EducationDetails.AttachPartIIOrder != null) files.Add(model.EducationDetails.AttachPartIIOrder);
-        //        if (model.EducationDetails.TotalExpenditureFile != null) files.Add(model.EducationDetails.TotalExpenditureFile);
-        //    }
-        //    else if (model.Marriageward != null)
-        //    {
-        //        if (model.Marriageward.AttachInvitationcard != null) files.Add(model.Marriageward.AttachInvitationcard);
-        //        if (model.Marriageward.AttachPartIIOrder != null) files.Add(model.Marriageward.AttachPartIIOrder);
-        //    }
-        //    else if (model.PropertyRenovation != null)
-        //    {
-        //        if (model.PropertyRenovation.TotalExpenditureFile != null) files.Add(model.PropertyRenovation.TotalExpenditureFile);
-        //    }
-        //    else if (model.SplWaiver != null)
-        //    {
-        //        if (model.SplWaiver.OtherReasonPdf != null) files.Add(model.SplWaiver.OtherReasonPdf);
-        //        if (model.SplWaiver.TotalExpenditureFile != null) files.Add(model.SplWaiver.TotalExpenditureFile);
-        //    }
-
-        //    string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
-        //    if (!Directory.Exists(tempFolder))
-        //    {
-        //        Directory.CreateDirectory(tempFolder);
-        //    }
-
-        //    string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
-        //    string folderPath = Path.Combine(tempFolder, folderName);
-        //    if (!Directory.Exists(folderPath))
-        //    {
-        //        Directory.CreateDirectory(folderPath);
-        //    }
-
-        //    foreach (var file in files)
-        //    {
-        //        string fileExtension = Path.GetExtension(file.FileName);
-        //        string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
-        //        string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
-        //        string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension}";
-        //        string outputFile = Path.Combine(folderPath, fileName);
-
-        //        using (var fileStream = new FileStream(outputFile, FileMode.Create))
-        //        {
-        //            await file.CopyToAsync(fileStream);
-        //        }
-
-        //        if (model.EducationDetails != null)
-        //        {
-        //            if (file.Name.Equals(model.EducationDetails.AttachBonafideLetter.Name))
-        //            {
-        //                model.EducationDetails.AttachBonafideLetterPdf = fileName;
-        //                model.EducationDetails.IsAttachBonafideLetterPdf = true;
-        //            }
-        //            else if (file.Name.Equals(model.EducationDetails.AttachPartIIOrder.Name))
-        //            {
-        //                model.EducationDetails.AttachPartIIOrderPdf = fileName;
-        //                model.EducationDetails.IsAttachPartIIOrderPdf = true;
-        //            }
-        //            else if (file.Name.Equals(model.EducationDetails.TotalExpenditureFile.Name))
-        //            {
-        //                model.EducationDetails.TotalExpenditureFilePdf = fileName;
-        //                model.EducationDetails.IsTotalExpenditureFilePdf = true;
-        //            }
-        //        }
-
-        //        if (model.Marriageward != null)
-        //        {
-        //            if (file.Name.Equals(model.Marriageward.AttachInvitationcard.Name))
-        //            {
-        //                model.Marriageward.AttachInvitationcardPdf = fileName;
-        //                model.Marriageward.IsAttachInvitationcardPdf = true;
-        //            }
-        //            else if (file.Name.Equals(model.Marriageward.AttachPartIIOrder.Name))
-        //            {
-        //                model.Marriageward.AttachPartIIOrderPdf = fileName;
-        //                model.Marriageward.IsAttachPartIIOrderPdf = true;
-        //            }
-
-        //        }
-        //        if (model.PropertyRenovation != null)
-        //        {
-        //            if (file.Name.Equals(model.PropertyRenovation.TotalExpenditureFile.Name))
-        //            {
-        //                model.PropertyRenovation.TotalExpenditureFilePdf = fileName;
-        //                model.PropertyRenovation.IsTotalExpenditureFilePdf = true;
-        //            }
-        //        }
-
-        //        if (model.SplWaiver != null)
-        //        {
-        //            if (file.Name.Equals(model.SplWaiver.OtherReasonPdf.Name))
-        //            {
-        //                model.SplWaiver.OtherReasonsPdf = fileName;
-        //                model.SplWaiver.IsOtherReasonPdf = true;
-        //            }
-        //            else if (file.Name.Equals(model.SplWaiver.TotalExpenditureFile.Name))
-        //            {
-        //                model.SplWaiver.TotalExpenditureFilePdf = fileName;
-        //                model.SplWaiver.IsTotalExpenditureFilePdf = true;
-        //            }
-        //        }
-
-        //    }
-
-        //    if (model.EducationDetails != null)
-        //    {
-        //        EducationDetailsModel educationDetails = new EducationDetailsModel();
-        //        educationDetails = model.EducationDetails;
-        //        educationDetails.ApplicationId = commonDataModel.ApplicationId;
-        //        await _Education.Add(model.EducationDetails);
-        //    }
-        //    else if (model.Marriageward != null)
-        //    {
-        //        MarriagewardModel marriageward = new MarriagewardModel();
-        //        marriageward = model.Marriageward;
-        //        marriageward.ApplicationId = commonDataModel.ApplicationId;
-        //        await _Marraige.Add(model.Marriageward);
-        //    }
-        //    else if (model.PropertyRenovation != null)
-        //    {
-        //        PropertyRenovationModel propertyRenovation = new PropertyRenovationModel();
-        //        propertyRenovation = model.PropertyRenovation;
-        //        propertyRenovation.ApplicationId = commonDataModel.ApplicationId;
-        //        await _Property.Add(model.PropertyRenovation);
-        //    }
-
-        //    else if (model.SplWaiver != null)
-        //    {
-        //        SplWaiverModel splWaiver = new SplWaiverModel();
-        //        splWaiver = model.SplWaiver;
-        //        splWaiver.ApplicationId = commonDataModel.ApplicationId;
-        //        await _Special.Add(model.SplWaiver);
-        //    }
-
-
-
-
-        //    return true;
-        //}
 
         public async Task<bool> submitApplication(DTOClaimApplication model, string PurposeType, int ApplicationId)
         {
@@ -418,7 +198,6 @@ namespace DataAccessLayer.Repositories
                 string fileExtension = Path.GetExtension(file.FileName);
                 string originalFileName = file.Name;  // e.g., "EducationDetails.AttachBonafideletter"
                 string fileBaseName = originalFileName.Substring(originalFileName.IndexOf('.') + 1);
-                //string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{fileBaseName}{fileExtension
                 string fileName = $"{fileBaseName}{fileExtension}";
                 string outputFile = Path.Combine(folderPath, fileName);
 
@@ -589,166 +368,7 @@ namespace DataAccessLayer.Repositories
             return userMapping;
         }
 
-        //public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
-        //{
-        //    ClaimCommonModel commonDataModel = new ClaimCommonModel();
-        //    MArmyPrefix mArmyPrefix = new MArmyPrefix();
-        //    string ArmyNo = string.Empty;
-
-        //    if (ApplicationId != 0)
-        //    {
-        //        commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId);
-        //        int id = commonDataModel.ArmyPrefix;
-        //        mArmyPrefix = await _IArmyPrefixes.Get(id);
-        //        ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
-        //        ArmyNo = ArmyNo.Trim();
-        //    }
-
-        //    string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
-        //    string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
-        //    string folderPath = Path.Combine(tempFolder, folderName);
-
-        //    //  Check if the folder exists
-        //    if (!Directory.Exists(folderPath))
-        //    {
-        //        // Folder not found, return false or handle as needed
-        //        return false;
-        //    }
-
-        //    var fileUpload = new ClaimDocumentUpload();
-        //    fileUpload.ApplicationId = ApplicationId;
-        //    // Add PDFs to the folder
-        //    foreach (var file in files)
-        //    {
-        //        if (file != null)
-        //        {
-        //            // Generate a file name based on PurposeType, ArmyNo, ApplicationId, and the file name
-        //            string fileExtension = Path.GetExtension(file.FileName);
-        //            string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
-        //            string outputFile = Path.Combine(folderPath, fileName);
-
-        //            // Save the file to the folder
-        //            using (var fileStream = new FileStream(outputFile, FileMode.Create))
-        //            {
-        //                await file.CopyToAsync(fileStream);
-        //            }
-
-        //            if (file.Name.Contains("CancelledCheque"))
-        //            {
-        //                fileUpload.IsCancelledChequePdf = true;
-        //                fileUpload.CancelledCheque = fileName; // Update with the dynamic file name
-        //            }
-        //            else if (file.Name.Contains("PaySlip"))
-        //            {
-        //                fileUpload.IsPaySlipPdf = true;
-        //                fileUpload.PaySlipPdf = fileName; // Update with the dynamic file name
-        //            }
-        //            else if (file.Name.Contains("Spdocus"))
-        //            {
-        //                fileUpload.IsSplWaiverPdf = true;
-        //                fileUpload.SplWaiverPdf = fileName; // Update with the dynamic file name
-        //            }
-        //            else if (file.Name.Contains("SeviceExtn"))
-        //            {
-        //                fileUpload.IsSeviceExtnPdf = true;
-        //                fileUpload.SeviceExtnPdf = fileName; // Update with the dynamic file name
-        //            }
-        //        }
-        //    }
-
-        //    if (PurposeType == "ED")
-        //    {
-        //        var Eddetails = await _Education.GetByApplicationId(ApplicationId);
-        //        fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
-        //        fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
-        //        fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
-        //        fileUpload.IsAttachPartIIOrderPdf = Eddetails.IsAttachPartIIOrderPdf;
-        //        fileUpload.TotalExpenditureFile = Eddetails.TotalExpenditureFilePdf;
-        //        fileUpload.IsTotalExpenditureFilePdf = Eddetails.IsTotalExpenditureFilePdf;
-        //    }
-        //    else if (PurposeType == "MW")
-        //    {
-        //        var MWdetails = await _Marraige.GetByApplicationId(ApplicationId);
-        //        fileUpload.Attach_PartIIOrderPdf = MWdetails.AttachPartIIOrderPdf;
-        //        fileUpload.IsAttach_PartIIOrderPdf = MWdetails.IsAttachPartIIOrderPdf;
-        //        fileUpload.AttachInvitationcardPdf = MWdetails.AttachInvitationcardPdf;
-        //        fileUpload.IsAttachInvitationcardPdf = MWdetails.IsAttachInvitationcardPdf;
-        //    }
-        //    else if (PurposeType == "PR")
-        //    {
-        //        // Process Property Renovation Details
-        //        var PRdetails = await _Property.GetByApplicationId(ApplicationId);
-        //        fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
-        //        fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
-        //    }
-        //    else if (PurposeType == "SP")
-        //    {
-        //        // Process Special Waiver Details
-        //        var SPdetails = await _Special.GetByApplicationId(ApplicationId);
-        //        fileUpload.OtherReasonsPdf = SPdetails.OtherReasonsPdf;
-        //        fileUpload.IsOtherReasonPdf = SPdetails.IsOtherReasonPdf;
-        //        fileUpload.TotalExpenditureFile = SPdetails.TotalExpenditureFilePdf;
-        //        fileUpload.IsTotalExpenditureFilePdf = SPdetails.IsTotalExpenditureFilePdf;
-        //    }
-
-        //    await _DocumentUpload.Add(fileUpload);
-
-
-        //    await UpdateApplicationStatus(ApplicationId, 101);
-
-        //    TrnClaimStatusCounter trnStatusCounter = new TrnClaimStatusCounter
-        //    {
-        //        StatusId = 101,
-        //        ApplicationId = ApplicationId,
-        //        ActionOn = DateTime.Now,
-        //    };
-        //    await InsertStatusCounter(trnStatusCounter);
-
-        //    var IOArmyNo = await GetIOArmyNoAsync(ApplicationId);
-        //    if (IOArmyNo == null)
-        //    {
-        //        var CoDetails = await GetCoDetails(ApplicationId);
-        //        if (CoDetails != null)
-        //        {
-        //            TrnFwdCO trnFwdCO = new TrnFwdCO
-        //            {
-        //                ApplicationId = ApplicationId,
-        //                ArmyNo = ArmyNo,
-        //                COUserId = CoDetails.UserId,
-        //                ProfileId = CoDetails.ProfileId,
-        //                CreatedOn = DateTime.Now,
-        //                Status = 101
-        //            };
-        //            await AddFwdCO(trnFwdCO);
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        if (!string.IsNullOrEmpty(IOArmyNo))
-        //        {
-        //            var IoDetails = await GetUserDetails(IOArmyNo);
-        //            if (IoDetails != null)
-        //            {
-        //                TrnFwdCO trnFwdCO = new TrnFwdCO
-        //                {
-        //                    ApplicationId = ApplicationId,
-        //                    ArmyNo = ArmyNo,
-        //                    COUserId = IoDetails.UserId,
-        //                    ProfileId = IoDetails.ProfileId,
-        //                    CreatedOn = DateTime.Now,
-        //                    Status = 101
-        //                };
-        //                await AddFwdCO(trnFwdCO);
-        //            }
-
-        //        }
-        //    }
-
-        //    return true;
-        //}
-
-
+        
         public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
@@ -784,7 +404,6 @@ namespace DataAccessLayer.Repositories
                 {
                     // Generate a file name based on PurposeType, ArmyNo, ApplicationId, and the file name
                     string fileExtension = Path.GetExtension(file.FileName);
-                    //string fileName = $"{PurposeType}_{ArmyNo}_{ApplicationId}_{file.Name}{fileExtension}";
                     string fileName = $"{file.Name}{fileExtension}";
                     string outputFile = Path.Combine(folderPath, fileName);
 
@@ -1179,28 +798,6 @@ namespace DataAccessLayer.Repositories
             return Task.FromResult(data);
         }
 
-        //public async Task<string> GetCOName(int mappingId)
-        //{
-        //    // Get the UserMapping by MappingId
-        //    var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
-
-
-        //    if (userMapping == null)
-        //        return string.Empty;
-
-        //    // Get the UserProfile by ProfileId from UserMapping
-        //    var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
-        //    if (userProfile == null)
-        //        return string.Empty;
-
-        //    // Get the RankName from MRanks using rank id from UserProfile
-        //    var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
-        //    string rankName = rank != null ? rank.RankName : string.Empty;
-
-        //    // Concatenate rankName and userName
-        //    return $"{rankName} {userProfile.userName}".Trim();
-        //}
-
         public async Task<(string Name, string Mobile, string Armyno)> GetCODetails(int mappingId)
         {
             // Get the UserMapping by MappingId
@@ -1294,7 +891,6 @@ namespace DataAccessLayer.Repositories
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new ClaimCommonDataOnlineResponse
                           {
-                              //ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
                               PresentUnit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                               ApplicationId = common.ApplicationId,
                               ApplicationType = common.WithdrawPurpose,
@@ -1407,7 +1003,6 @@ namespace DataAccessLayer.Repositories
                              Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
                              
                              ApplicationType = applicationType.Id,
-                             //armyno = prefix.Prefix + common.Number ?? string.Empty,
                              armyno = common.ArmyPrefix != 14 ? prefix.Prefix + common.Number : common.Number,
                              AadharNo = common.AadharCardNo ?? string.Empty,
                              Rank = rank != null ? rank.RankName : string.Empty,
@@ -1431,9 +1026,7 @@ namespace DataAccessLayer.Repositories
                              Year_Of_Service = common.TotalService ?? 0,
                              Residual_Service = common.ResidualService ?? 0,
                              Suffix=common.Suffix ?? string.Empty,
-                            // opfx=common.OldArmyPrefix,
                              opfx = null,
-                             // ono= oldPrefix.Prefix + common.OldNumber ?? string.Empty,
                              ono = common.OldArmyPrefix != 14 ? oldPrefix.Prefix + common.OldNumber : common.OldNumber,
                              suffix_ = common.OldSuffix ?? string.Empty,
                              Bank_Branch=AccountDetails.NameOfBankBranch ?? string.Empty,
@@ -1460,76 +1053,7 @@ namespace DataAccessLayer.Repositories
 
                              EmailDomain=common.EmailDomain?? string.Empty,
                              dateandtimeofdocuuploadfrosanctioningauth = DigitalSignRecords.SignOn ?? null,
-                             IPaddress=common.IPAddress ?? string.Empty
-                             //NextFmnHQ = common.NextFmnHQ ?? string.Empty,
-                             //ArmyPostOffice = armyPostOffice != null ? armyPostOffice.ArmyPostOffice : string.Empty,
-                             //OldArmyNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
-                             //ApplicationId = common.ApplicationId,
-                             //ApplicationType = common.WithdrawPurpose,
-                             //PresentUnitPin = common.PresentUnitPin ?? string.Empty,
-                             //DateOfPromotion = common.DateOfPromotion,
-                             //ParentUnit = parentUnit != null ? parentUnit.UnitName : string.Empty,
-                             //NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
-                             //NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
-                             //CDA_Account_No = common.pcda_AcctNo ?? string.Empty,
-                             //Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
-                             //Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
-                             //Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
-                             //Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
-                             // Pin_Code = AddressDetails.Code ?? string.Empty,
-                             //DOPartIINo = common.WithdrawPurpose == 1 ? ED.DOPartIINo : common.ApplicantType == 2 ? MW.DOPartIINo : null,
-                             //DoPartIIDate = common.WithdrawPurpose == 1 ? ED.DoPartIIDate : common.ApplicantType == 2 ? MW.DoPartIIDate : null,
-
-                             //StatusCode = common.StatusCode,
-
-                             //ExtnOfService = common.ExtnOfService ?? string.Empty,
-
-                             //House_Building_Advance_Loan = common.House_Building_Advance_Loan ?? false,
-
-                             //House_Repair_Advance_Loan = common.House_Repair_Advance_Loan ?? false,
-
-                             //Conveyance_Advance_Loan = common.Conveyance_Advance_Loan ?? false,
-
-                             //Computer_Advance_Loan = common.Computer_Advance_Loan ?? false,
-
-                             //House_Building_Date_of_Loan_taken = common.House_Building_Date_of_Loan_taken,
-                             //House_Building_Amount_Taken = common.House_Building_Amount_Taken ?? 0,
-                             //House_Building_Duration_of_Loan = common.House_Building_Duration_of_Loan ?? 0,
-
-                             //Conveyance_Amount_Taken = common.Conveyance_Amount_Taken ?? 0,
-                             //Conveyance_Date_of_Loan_taken = common.Conveyance_Date_of_Loan_taken,
-                             //Conveyance_Duration_of_Loan = common.Conveyance_Duration_of_Loan ?? 0,
-
-                             //House_Repair_Advance_Amount_Taken = common.House_Repair_Advance_Amount_Taken ?? 0,
-                             //House_Repair_Advance_Date_of_Loan_taken = common.House_Repair_Advance_Date_of_Loan_taken,
-                             //House_Repair_Advance_Duration_of_Loan = common.House_Repair_Advance_Duration_of_Loan ?? 0,
-
-                             //Computer_Amount_Taken = common.Computer_Amount_Taken ?? 0,
-                             //Computer_Date_of_Loan_taken = common.Computer_Date_of_Loan_taken,
-                             //Computer_Duration_of_Loan = common.Computer_Duration_of_Loan ?? 0,
-                             // Corrected logic for AnyloantakenformAGIF assignment
-                             //AnyloantakenformAGIF = common.House_Building_Advance_Loan == true ? "House Building Advance Loan" :
-                             //                       common.House_Repair_Advance_Loan == true ? "House Repair Advance Loan" :
-                             //                       common.Conveyance_Advance_Loan == true ? "Conveyance Advance Loan" :
-                             //                       common.Computer_Advance_Loan == true ? "Computer Advance Loan" : string.Empty,
-
-                             //Dtofloantaken = common.House_Building_Advance_Loan == true ? common.House_Building_Date_of_Loan_taken :
-                             //               common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Date_of_Loan_taken :
-                             //               common.Conveyance_Advance_Loan == true ? common.Conveyance_Date_of_Loan_taken :
-                             //               common.Computer_Advance_Loan == true ? common.Computer_Date_of_Loan_taken :
-                             //               (DateTime?)null,
-
-                             //DurationMonths = common.House_Building_Advance_Loan == true ? common.House_Building_Duration_of_Loan :
-                             //    common.House_Repair_Advance_Loan == true ? common.House_Repair_Advance_Duration_of_Loan :
-                             //    common.Conveyance_Advance_Loan == true ? common.Conveyance_Duration_of_Loan :
-                             //    common.Computer_Advance_Loan == true ? common.Computer_Duration_of_Loan :
-                             //    0,
-
-                             //AmountTaken = common.House_Building_Advance_Loan == true ? (common.House_Building_Amount_Taken ?? 0) :
-                             //    common.House_Repair_Advance_Loan == true ? (common.House_Repair_Advance_Amount_Taken ?? 0) :
-                             //    common.Conveyance_Advance_Loan == true ? (common.Conveyance_Amount_Taken ?? 0) :
-                             //    common.Computer_Advance_Loan == true ? (common.Computer_Amount_Taken ?? 0) :
-                             //    0,
+                             IPaddress=common.IPAddress ?? string.Empty                           
                          }).ToList();
 
             foreach (var item in query)

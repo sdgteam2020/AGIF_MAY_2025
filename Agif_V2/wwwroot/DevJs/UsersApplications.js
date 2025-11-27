@@ -674,6 +674,7 @@ function GetThumbprint() {
             throw new Error('Thumbprint not found in response');
         }
     }).catch(function (error) {
+        hideLoader();
         console.error('Error fetching thumbprint:', error);
         return null;
     });
@@ -715,6 +716,7 @@ function SignXmlSendTOdatabase(xmlString, endpoint, userType) {
             mergePdf(applnId, false, true, url, userType);
         },
         error: function () {
+            hideLoader();
             alert("Data Not Saved!");
         }
     });
