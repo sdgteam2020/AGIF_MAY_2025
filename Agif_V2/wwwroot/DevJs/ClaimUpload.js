@@ -3,22 +3,6 @@
     checkUploadFiles();
 
 
-    //$('#CancelledCheque').change(function () {
-    //    previewFile(this, '#cancelledChequePreview');
-    //});
-
-    //$('#PaySlipPdf').change(function () {
-    //    previewFile(this, '#paySlipPreview');
-    //});
-
-
-    //$('#SpdocusPdf').change(function () {
-    //    previewFile(this, '#SpdocusPre');
-    //});
-
-    //$('#SeviceExtnPdf').change(function () {
-    //    previewFile(this, '#SeviceExtnPre');
-    //});
 
     $('.file-upload-limited').on('change', function () {
         const file = this.files[0];
