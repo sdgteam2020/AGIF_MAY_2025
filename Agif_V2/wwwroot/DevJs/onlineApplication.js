@@ -951,7 +951,7 @@ function SetRetDate() {
     if (!regtCorps) {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Regt/Corps value is empty.Please enter a valid regiment.</p>',
+            html: '<p class="f-18px">Regt/Corps value is empty.Please enter a valid regiment.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
@@ -961,7 +961,7 @@ function SetRetDate() {
     if (!rankId) {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Rank value is empty.Please enter a valid rank.</p>',
+            html: '<p class="f-18px">Rank value is empty.Please enter a valid rank.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
@@ -971,7 +971,7 @@ function SetRetDate() {
     if (Prefix === "0" || Prefix === "") {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Please select Prefix.</p>',
+            html: '<p class="f-18px">Please select Prefix.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
@@ -1190,7 +1190,7 @@ function extensionOfService() {
     if (!prefix) {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Please select Prefix.</p>',
+            html: '<p class="f-18px">Please select Prefix.</p>',
             icon: 'warning',
         });
         return;
@@ -1203,7 +1203,7 @@ function extensionOfService() {
                 if (!currentRetDate) {
                     Swal.fire({
                         title: 'Error!',
-                        html: '<p style="font-size: 18px;">Current retirement date is required for extension calculation.</p>',
+                        html: '<p class="f-18px">Current retirement date is required for extension calculation.</p>',
                         icon: 'error',
                     });
                     return;
@@ -1232,7 +1232,7 @@ function extensionOfService() {
 
                     Swal.fire({
                         title: 'Error!',
-                        html: '<p style="font-size: 18px;">Invalid retirement date format.</p>',
+                        html: '<p class="f-18px">Invalid retirement date format.</p>',
                         icon: 'error',
                     });
                 }
@@ -1670,8 +1670,8 @@ function checkUnitSameOrNot(ArmyNo) {
                         formSubmitting = false;
                         Swal.fire({
                             icon: 'info',
-                            title: '<span style="font-size: 20px;">Registration Pending/Not Activated</span>',
-                            html: '<span style="font-size: 18px;">Please approach your IO/Superior countersigning auth for Regn or contact AGIF.</span>',
+                            title: '<span class="f-20px">Registration Pending/Not Activated</span>',
+                            html: '<span class="f-18px">Please approach your IO/Superior countersigning auth for Regn or contact AGIF.</span>',
                             confirmButtonText: 'OK',
                             cancelButtonText: 'Cancel',
                             showCancelButton: true,

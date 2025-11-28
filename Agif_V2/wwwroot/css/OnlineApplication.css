@@ -916,3 +916,9 @@ input[disabled] {
     z-index: 9999;
     min-width: 300px;
 }
+.f-18px{
+    font-size:18px;
+}
+.f-20px{
+    font-size:20px;
+}

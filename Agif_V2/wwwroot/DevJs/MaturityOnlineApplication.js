@@ -957,7 +957,7 @@ function SetRetDate() {
     if (!regtCorps) {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Regt/Corps value is empty.Please enter a valid regiment.</p>',
+            html: '<p class="f-18px">Regt/Corps value is empty.Please enter a valid regiment.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
@@ -967,7 +967,7 @@ function SetRetDate() {
     if (!rankId) {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Rank value is empty.Please enter a valid rank.</p>',
+            html: '<p class="f-18px">Rank value is empty.Please enter a valid rank.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
@@ -977,7 +977,7 @@ function SetRetDate() {
     if (Prefix == "0" || Prefix == "") {
         Swal.fire({
             title: 'Warning!',
-            html: '<p style="font-size: 18px;">Please select Prefix.</p>',
+            html: '<p class="f-18px">Please select Prefix.</p>',
             confirmButtonText: 'OK',
             width: '500px'
         });
@@ -1601,8 +1601,8 @@ function checkUnitSameOrNot(ArmyNo) {
 
                         Swal.fire({
                             icon: 'info',
-                            title: '<span style="font-size: 20px;">Registration Pending/Not Activated</span>',
-                            html: '<span style="font-size: 18px;">Please approach your Unit IO to register/contact to AGIF.</span>',
+                            title: '<span class="f-20px">Registration Pending/Not Activated</span>',
+                            html: '<span class="f-18px">Please approach your Unit IO to register/contact to AGIF.</span>',
                             confirmButtonText: 'OK',
                             cancelButtonText: 'Cancel',
                             showCancelButton: true,
