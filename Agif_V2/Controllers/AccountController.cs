@@ -41,7 +41,6 @@ namespace Agif_V2.Controllers
 
         public IActionResult Login()
         {
-            //Response.Redirect("https://iam2.army.mil/IAM/User", true);
             return View();
         }
 
@@ -299,7 +298,6 @@ namespace Agif_V2.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // If the model state is not valid, return an error message or handle accordingly
                 return BadRequest("Invalid request.");
             }
 
@@ -318,7 +316,6 @@ namespace Agif_V2.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    // If the request is invalid, return an empty response or a proper error message
                     var invalidResponse = CreateResponse(0, 0, 0, new List<DTOUserProfileResponse>());
                     return Json(invalidResponse);
                 }
@@ -367,8 +364,6 @@ namespace Agif_V2.Controllers
             var s = EscapeLike(searchValue.Trim()); 
             var pattern = $"%{s}%";
 
-            // If your DB/columns are case-sensitive, force CI collation per field:
-            // var ci = "SQL_Latin1_General_CP1_CI_AS";
 
             return query.Where(x =>
             EF.Functions.Like(x.DomainId ?? "", pattern) ||
@@ -427,10 +422,8 @@ namespace Agif_V2.Controllers
                     userStatus = status.Equals("true", StringComparison.CurrentCultureIgnoreCase);
                 }
 
-                // Get all users data
                 var queryableData = _userProfile.GetAllUser(userStatus);
                 var userList =  await queryableData.ToListAsync();
-                //var userList = queryableData.ToList();
 
                 using (var workbook = new XLWorkbook())
                 {

@@ -19,7 +19,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="userName">Username:</label>
-                                    <input asp-for="userName" class="form-control" value="@Username" id="username" name="userName" readonly/>
+                                    <input asp-for="userName" class="form-control" value="@Html.Encode(Username)" id="username" name="userName" readonly />
 
                                 </div>
                             </div>

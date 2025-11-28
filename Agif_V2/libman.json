@@ -89,6 +89,22 @@
         "js/dataTables.buttons.min.js",
         "js/buttons.print.min.js"
       ]
+    },
+    {
+      "library": "bootstrap@5.3.2",
+      "destination": "wwwroot/js/",
+      "files": [
+        "js/bootstrap.min.js",
+        "js/bootstrap.bundle.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap@5.3.2",
+      "destination": "wwwroot/js/",
+      "files": [
+        "dist/js/bootstrap.bundle.min.js"
+      ]
     }
   ]
 }

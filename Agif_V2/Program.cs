@@ -148,7 +148,6 @@ var app = builder.Build();
 app.UseRequestLocalization();
 app.UseSession();
 
-//app.UseResponseCompression();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -157,12 +156,6 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-//app.Use(async (context, next) =>
-//{
-//    context.Response.Headers["Content-Security-Policy"] =
-// "default-src 'self' blob:; object-src 'self' blob:;script-src 'self';style-src 'self' 'unsafe-inline';img-src 'self' data:;connect-src 'self'; ";
-//    await next();
-//});
 app.Use(async (ctx, next) =>
 {
     // 1) Content Security Policy
