@@ -6,19 +6,17 @@ using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography;
-
-
-using System.Text;
 using OneLogin.Saml;
-using System.Web;
 using Org.BouncyCastle.Ocsp;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Web;
 
 namespace Agif_V2.Controllers
 {
@@ -533,8 +531,30 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> FinalLogout()
         {
+            //await _signInManager.SignOutAsync();
+            //HttpContext.Session.Clear();
+            //return View();
+            // Remove the session token to clear user-specific session data
+            HttpContext.Session.Remove("User");
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user != null)
+            {
+                await _userManager.UpdateSecurityStampAsync(user); // invalidate all cookies
+            }
+
+            // Sign out the user from ASP.NET Identity authentication
             await _signInManager.SignOutAsync();
+
+            //Clear server-side session state
             HttpContext.Session.Clear();
+
+            // Delete session + auth cookies explicitly (good for audits)
+            Response.Cookies.Delete(".AspNetCore.Identity.Application");
+            Response.Cookies.Delete(".AspNetCore.Session");
+
+            // Return the logout confirmation view to the user
             return View();
         }
         [HttpPost]

@@ -434,15 +434,12 @@ function formatAadhar(input) {
     input.value = formattedValue;
 }
 function loadDropdown() {
-    const params = new URLSearchParams(window.location.search);
 
-    const loanTypeFromUrl = params.get("Category");
     const loanTypeFromInput = document.getElementById('Category')?.value || null;
-    const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+    const loanType = loanTypeFromInput;
 
-    const applicantCategoryFromUrl = params.get("PurposeOfWithdrwal");
     const applicantCategoryFromInput = document.getElementById('Purpose')?.value || null;
-    const applicantCategory = applicantCategoryFromUrl ? applicantCategoryFromUrl : applicantCategoryFromInput;
+    const applicantCategory = applicantCategoryFromInput;
 
     const armyPrefixValue = $('#armyPrefix').data('army-prefix');
     const OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');
@@ -484,7 +481,6 @@ function confirmAccountNo() {
                 text: "You Salary Account No is mismatch",
                 icon: "warning"
             }).then(() => {
-
                 $('#confirmSalaryAcctNo').val("");
                 $('#confirmSalaryAcctNo').focus();
             });

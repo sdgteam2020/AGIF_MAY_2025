@@ -157,10 +157,45 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-app.Use(async (context, next) =>
+//app.Use(async (context, next) =>
+//{
+//    context.Response.Headers["Content-Security-Policy"] =
+// "default-src 'self' blob:; object-src 'self' blob:;script-src 'self';style-src 'self' 'unsafe-inline';img-src 'self' data:;connect-src 'self'; ";
+//    await next();
+//});
+app.Use(async (ctx, next) =>
 {
-    context.Response.Headers["Content-Security-Policy"] =
- "default-src 'self' blob:; object-src 'self' blob:;script-src 'self';style-src 'self' 'unsafe-inline';img-src 'self' data:;connect-src 'self'; ";
+    // 1) Content Security Policy
+    ctx.Response.Headers["Content-Security-Policy"] =
+        "default-src 'self' blob:; " +
+        "script-src 'self'; " +
+        "style-src 'self'; " + 
+        "img-src 'self' data:; " +
+        "font-src 'self' data:; " +
+        "connect-src 'self'; " +
+        "frame-ancestors 'none'; " +
+        "base-uri 'self'; " +
+        "object-src 'self' blob:; " +
+        "form-action 'self';";
+
+    // 2) X-Frame-Options (align with frame-ancestors)
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";
+
+    // 3) Referrer-Policy
+    ctx.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+
+    // Extra good headers
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+
+    // Use HSTS only on HTTPS + production
+    ctx.Response.Headers["Strict-Transport-Security"] =
+        "max-age=31536000; includeSubDomains; preload";
+
+    // Hide tech details where possible
+    ctx.Response.Headers.Remove("X-Powered-By");
+    ctx.Response.Headers.Remove("x-aspnet-version");
+
     await next();
 });
 
