@@ -87,7 +87,6 @@ namespace Agif_V2.Controllers
         {
             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
 
-           // int applicationId = 14;
             bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);

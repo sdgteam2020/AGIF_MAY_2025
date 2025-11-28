@@ -1,0 +1,15 @@
+﻿.stretched-link-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.stretched-link-form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;

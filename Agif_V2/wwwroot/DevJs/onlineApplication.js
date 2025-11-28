@@ -394,20 +394,15 @@ function formatAadhar(input) {
     input.value = formattedValue;
 }
 function loadDropdown() {
-    const params = new URLSearchParams(window.location.search);
-
-    const loanTypeFromUrl = params.get("loanType");
+  
 
     const loanTypeFromInput = document.getElementById('loanType')?.value || null;
 
-    const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
-
-
-    const applicantCategoryFromUrl = params.get("applicantCategory");
+    const loanType = loanTypeFromInput;
 
     const applicantCategoryFromInput = document.getElementById('applicantCategory')?.value || null;
 
-    const applicantCategory = applicantCategoryFromUrl ? applicantCategoryFromUrl : applicantCategoryFromInput;
+    const applicantCategory = applicantCategoryFromInput;
 
     const armyPrefixValue = $('#armyPrefix').data('army-prefix');
     const OldArmyPrefixvalue = $('#oldArmyPrefix').data('oldarmy-prefix');

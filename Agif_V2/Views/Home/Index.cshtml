@@ -18,6 +18,7 @@
         adminId = 2;
     }
 }
+<link href="~/css/index.css" rel="stylesheet" />
 <div class="container">
     <div class="container-fluid">
         <!-- ========== title-wrapper start ========== -->
@@ -137,11 +138,10 @@
                             <h3 class="text-bold mb-10">@metrics["PendingApplications"]</h3>
                           </div>
 
-                          <!-- clickable overlay -->
-                          <a class="stretched-link"
-                             href="@Url.Action("UserApplicationList", "ApplicationRequest", new { status = 1 })"
-                             aria-label="Open Pending Applications">
-                          </a>
+                             <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+            <input type="hidden" name="status" value="1" />
+            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+        </form>
                         </div>
                 </div>
 
@@ -155,9 +155,11 @@
                             <h6 class="mb-10">Approved Appl</h6>
                             <h3 class="text-bold mb-10">@metrics["ApprovedApplications"]</h3>
                         </div>
-                          <a class="stretched-link" href="@Url.Action("UserApplicationList", "ApplicationRequest", new { status = 2 })"
-                            aria-label="Open Pending Applications">
-                        </a>
+                         
+                                 <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+            <input type="hidden" name="status" value="2" />
+            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+        </form>
                     </div>
                     <!-- End Icon Cart -->
                 </div>
@@ -171,9 +173,11 @@
                             <h6 class="mb-10">Rejected Appl</h6>
                             <h3 class="text-bold mb-10">@metrics["RejectedApplications"]</h3>
                         </div>
-                        <a class="stretched-link" href="@Url.Action("UserApplicationList", "ApplicationRequest", new { status = 3 })"
-                            aria-label="Open Pending Applications">
-                        </a>
+                     
+                        <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+            <input type="hidden" name="status" value="3" />
+            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+        </form>
                     </div>
                     <!-- End Icon Cart -->
                 </div>

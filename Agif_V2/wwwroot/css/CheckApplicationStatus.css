@@ -411,6 +411,7 @@
 
 .card {
     display: list-item;
+    width: 100%;
 }
 
 .statusList {
