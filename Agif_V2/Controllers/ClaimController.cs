@@ -390,6 +390,7 @@ namespace Agif_V2.Controllers
 
             if (!ModelState.IsValid)
             {
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("Upload", model);
             }
 

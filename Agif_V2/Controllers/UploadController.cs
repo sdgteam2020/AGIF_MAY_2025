@@ -18,12 +18,14 @@ namespace Agif_V2.Controllers
         private readonly IArmyPrefixes _IArmyPrefixes;
        private readonly IDoucmentupload _IDocumentUpload;
         private readonly PdfUpload _pdfUpload;
-        public UploadController(IOnlineApplication OnlineApplication, IArmyPrefixes _IArmyPrefixes, IDoucmentupload _IDocumentUpload,PdfUpload _pdfUpload)
+        private readonly IModelStateLogger _modelStateLogger;
+        public UploadController(IOnlineApplication OnlineApplication, IArmyPrefixes _IArmyPrefixes, IDoucmentupload _IDocumentUpload,PdfUpload _pdfUpload, IModelStateLogger modelStateLogger)
         {
             _IonlineApplication1 = OnlineApplication;
             this._IArmyPrefixes = _IArmyPrefixes;
             this._IDocumentUpload = _IDocumentUpload;
             this._pdfUpload = _pdfUpload;
+            _modelStateLogger = modelStateLogger;
         }
         public async Task<IActionResult> Upload()
         {
@@ -76,6 +78,7 @@ namespace Agif_V2.Controllers
         {
             if(ModelState.IsValid==false)
             {
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("Upload", model);
             }
             TempData.Keep("applicationId");
