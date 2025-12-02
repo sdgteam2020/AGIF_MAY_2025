@@ -318,6 +318,7 @@ namespace DataAccessLayer.Repositories
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (profile != null)
             {
+                profile.ArmyNo = sessionUserDTO.ArmyNo ?? string.Empty;
                 profile.Name = sessionUserDTO.name ?? string.Empty;
                 profile.Email = sessionUserDTO.EmailId ?? string.Empty;
                 profile.rank = sessionUserDTO.RankId;

@@ -32,9 +32,9 @@ namespace Agif_V2.Controllers
         private readonly IAddress _address;
         private readonly IAccount _account;
         private readonly Watermark _watermark;
+        private readonly IModelStateLogger _modelStateLogger;
 
-         
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, Watermark watermark)
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -48,6 +48,7 @@ namespace Agif_V2.Controllers
             _address = address;
             _account = account;
             _watermark = watermark;
+            _modelStateLogger = modelStateLogger;
         }
         [HttpGet]
         public IActionResult OnlineApplication(int id)
@@ -247,6 +248,7 @@ namespace Agif_V2.Controllers
 
             if (!ModelState.IsValid)
             {
+                await _modelStateLogger.LogModelStateError(ModelState,HttpContext);
                 return View("OnlineApplication", model);
             }
 

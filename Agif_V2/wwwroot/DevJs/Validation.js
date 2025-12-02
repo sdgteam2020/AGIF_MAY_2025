@@ -107,7 +107,7 @@ $('.form-control-Alphabets').on("keypress", function (e) {
         return false; // Block the keypress
     }
 });
-$('.form-control').on("keypress", function (e) {
+$('.form-control:not(.form-email-domain)').on("keypress", function (e) {
 
     // Get the key code of the pressed key
     const keyCode = e.which;
@@ -198,3 +198,18 @@ function showErrorMessage(message) {
     }, 2000);
 }
 
+$('.form-email-domain').on("keypress", function (e) {
+    const key = e.key;
+
+    if (key === "@") {
+        showErrorMessage("Email not allowed. Enter username only.");
+        return false;
+    }
+
+    const allowed = /^[A-Za-z0-9._\- ]$/;
+
+    if (!allowed.test(key)) {
+        showErrorMessage("Only A-Z, a-z, 0-9, ., _, -, space allowed.");
+        return false;
+    }
+});

@@ -25,10 +25,12 @@ namespace Agif_V2.Controllers
         private readonly IClaimAccount _ClaimAccount;
         private readonly FileUtility _fileUtility;
         private readonly Watermark _watermark;
+        private readonly IModelStateLogger _modelStateLogger;
 
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger)
         {
+
             _IClaimonlineApplication1 = OnlineApplication;      
             _pdfGenerator = pdfGenerator;
             _env = env;
@@ -39,6 +41,7 @@ namespace Agif_V2.Controllers
             _ClaimAccount = claimAccount;
             _fileUtility = fileUtility;
             _watermark = watermark;
+            _modelStateLogger = modelStateLogger;
         }
 
         public IActionResult MaturityLoanType()
@@ -183,7 +186,11 @@ namespace Agif_V2.Controllers
 
             // Check ModelState.IsValid
             if (!ModelState.IsValid)
+            {
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("OnlineApplication", model);
+            }
+                
 
             // Save common data
             var claimCommonModel = await SaveClaimCommonDataAsync(model);
