@@ -4,7 +4,7 @@
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
 
     if (value == 2) {
-        $('#tblApplications thead tr th').eq(6).before('<th>Digital Sign On</th>');
+        $('#tblApplications thead tr th ').eq(6).before('<th class="bg-danger text-white">Digital Sign On</th>');
     }
 
     GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
