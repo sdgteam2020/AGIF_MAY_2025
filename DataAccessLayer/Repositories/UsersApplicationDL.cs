@@ -324,6 +324,7 @@ namespace DataAccessLayer.Repositories
                 profile.rank = sessionUserDTO.RankId;
                 profile.MobileNo = sessionUserDTO.MobileNo ?? string.Empty;
                 profile.regtCorps=sessionUserDTO.RegtId;
+                profile.ApptId = sessionUserDTO.ApptId;
                 profile.UpdatedOn = DateTime.Now;
                 updated = true;
             }

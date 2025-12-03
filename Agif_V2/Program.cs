@@ -163,7 +163,7 @@ app.Use(async (ctx, next) =>
     ctx.Response.Headers["Content-Security-Policy"] =
         "default-src 'self' blob:; " +
         "script-src 'self'; " +
-        "style-src 'self'; " + 
+        "style-src 'self' 'unsafe-inline'; " + 
         "img-src 'self' data:; " +
         "font-src 'self' data:; " +
         "connect-src 'self'; " +
