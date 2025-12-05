@@ -749,6 +749,10 @@ namespace Agif_V2.Controllers
         }
         public async Task<JsonResult> GetDataByApplicationId(int applicationId)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid Request." });
+            }
             DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
             return Json(data);
         }

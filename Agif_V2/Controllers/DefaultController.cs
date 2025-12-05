@@ -123,7 +123,8 @@ namespace Agif_V2.Controllers
             return View();
         }
 
-        public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
+        [HttpPost]
+        public async Task<IActionResult> DownloadApplication(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -132,7 +133,7 @@ namespace Agif_V2.Controllers
 
             string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "IpAddress";
 
-            DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
+            DTOExportRequest dTOExport = new DTOExportRequest { Id = new List<int> { id } };
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
 
             var firstRecord = ret.OnlineApplicationResponse.FirstOrDefault();
@@ -177,8 +178,11 @@ namespace Agif_V2.Controllers
 
             // STEP 6: Return PDF file for download
             return File(fileBytes, "application/pdf", originalFileName);
+            
         }
-        public async Task<IActionResult> DownloadClaimApplication([FromQuery] List<int> id)
+
+        [HttpPost]
+        public async Task<IActionResult> DownloadClaimApplication(int id)
         {
             if (!ModelState.IsValid)
             {
@@ -187,7 +191,7 @@ namespace Agif_V2.Controllers
 
             string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "IpAddress";
 
-            DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
+            DTOExportRequest dTOExport = new DTOExportRequest { Id = new List<int> { id } };
             var ret = await _IClaimonlineApplication.GetApplicationDetailsForExport(dTOExport);
 
             var firstRecord = ret.OnlineApplicationResponse.FirstOrDefault();

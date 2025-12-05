@@ -559,6 +559,41 @@ function SetSuffixLetter(obj) {
 
 
 
+//function getApplicantDetalis() {
+
+//    const armyNumber = $("#armyPrefix").val();
+//    const Prefix = $("#armyNumber").val();
+//    const Suffix = $("#txtSuffix").val();
+//    const appType = parseInt($("#loanType").val(), 10);
+
+//    $.ajax({
+//        type: "get",
+//        url: "/OnlineApplication/CheckExistUser",
+//        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+//        success: function (data) {
+//            if (data.exists) {
+//                Swal.fire({
+//                    title: "You Have Already applied for Loan.",
+//                    text: "Would you like to apply for a new Loan !",
+//                    icon: "warning",
+//                    showCancelButton: true,
+//                    confirmButtonColor: "#3085d6",
+//                    cancelButtonColor: "#d33",
+//                    confirmButtonText: "Yes"
+//                }).then((result) => {
+//                    if (result.isConfirmed) {
+//                        DeleteConfirmation();
+//                    }
+//                });
+//            }
+
+//        },
+//        error: function () {
+//            alert("Data Not loaded!")
+//        }
+//    });
+//}
+
 function getApplicantDetalis() {
 
     const armyNumber = $("#armyPrefix").val();
@@ -567,9 +602,10 @@ function getApplicantDetalis() {
     const appType = parseInt($("#loanType").val(), 10);
 
     $.ajax({
-        type: "get",
+        type: "POST",
         url: "/OnlineApplication/CheckExistUser",
-        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+        data: JSON.stringify({ armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType }),
+        contentType: 'application/json', 
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
@@ -610,15 +646,42 @@ function DeleteConfirmation() {
     });
 }
 
+//function DeleteExistingLoan() {
+//    const armyNumber = $("#armyPrefix").val();
+//    const Prefix = $("#armyNumber").val();
+//    const Suffix = $("#txtSuffix").val();
+//    const appType = parseInt($("#loanType").val(), 10);
+//    $.ajax({
+//        type: "get",
+//        url: "/OnlineApplication/DeleteExistingLoan",
+//        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+//        success: function (data) {
+//            if (data.exists) {
+//                Swal.fire({
+//                    position: "top-end",
+//                    icon: "success",
+//                    title: "Deleted! Please Apply Again!",
+//                    showConfirmButton: false,
+//                    timer: 3000
+//                });
+//            }
+//        },
+//        error: function () {
+//            alert("Data Not loaded!")
+//        }
+//    });
+//}
+
 function DeleteExistingLoan() {
     const armyNumber = $("#armyPrefix").val();
     const Prefix = $("#armyNumber").val();
     const Suffix = $("#txtSuffix").val();
     const appType = parseInt($("#loanType").val(), 10);
     $.ajax({
-        type: "get",
+        type: "POST",
         url: "/OnlineApplication/DeleteExistingLoan",
-        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+        data: JSON.stringify({ armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType }),
+        contentType: 'application/json', 
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
@@ -981,14 +1044,18 @@ function SetRetDate() {
 
     const dateOfBirthString = $('#dateOfBirth').val();
     const dateParts = dateOfBirthString.split('/');
+
+    const param = { "rankId": rankId, "Prefix": Prefix, "regtId": regtId };
+
     if (dateParts.length === 3) {
         if (EnrollDate === "" || EnrollDate === undefined || dateOfBirthString === "" || dateOfBirthString === undefined) {
             console.log('EnrollDate or dateOfBirthString is empty or undefined.');
         } else {
             $.ajax({
-                type: "get",
+                type: "POST",
                 url: "/OnlineApplication/GetRetirementDate",
-                data: { rankId: rankId, Prefix: Prefix, regtId: regtId },
+                contentType: 'application/x-www-form-urlencoded',
+                data: param,
                 success: function (data) {
                     if (data.userTypeId == 1) {
                         // userTypeId == 1 => Officers
@@ -1293,25 +1360,42 @@ function fetchPCDA_PAO() {
             alert("Please select Regt/Corps.");
             return;
         }
-        fetch(`/OnlineApplication/GetPCDA_PAO?regt=${encodeURIComponent(regt)}`, {
-            method: 'GET'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
+        const param = { "regt": regt }; 
+        //fetch(`/OnlineApplication/GetPCDA_PAO?regt=${encodeURIComponent(regt)}`, {
+        //    method: 'POST'
+        //})
+        //    .then(response => {
+        //        if (!response.ok) {
+        //            throw new Error('Network response was not ok');
+        //        }
+        //        return response.json();
+        //    })
+        //    .then(data => {
+        //        if (data != null) {
+        //            $('#pcda_pao').val(data.pcdaPao);
+        //            setOutlineActive("pcda_pao");
+        //        }
+        //    })
+        //    .catch(error => {
+        //        alert("Data Not loaded!");
+        //        console.error('Fetch error:', error);
+        //    });
+        $.ajax({
+            url: '/OnlineApplication/GetPCDA_PAO',  // Your endpoint URL
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded',  // Specify content type for URL-encoded data
+            data: param,  // Pass the data parameter
+            success: function (data) {
                 if (data != null) {
-                    $('#pcda_pao').val(data.pcdaPao);
-                    setOutlineActive("pcda_pao");
+                    $('#pcda_pao').val(data.pcdaPao);  // Set the result into the input
+                    setOutlineActive("pcda_pao");  // Call the function to activate the outline
                 }
-            })
-            .catch(error => {
-                alert("Data Not loaded!");
-                console.error('Fetch error:', error);
-            });
+            },
+            error: function (xhr, status, error) {
+                alert("Data Not loaded!");  // Alert the user in case of error
+                console.error('AJAX error:', error);  // Log the error for debugging
+            }
+        });
     }
     
 
@@ -2344,11 +2428,20 @@ function findDataWithArmyNumber() {
         }
 
         const fullArmyNumber = `${armyPrefix}-${armyNumber}-${armySuffix}`.toUpperCase();
+        //if (fullArmyNumber) {
+        //    $.ajax({
+        //        url: '/OnlineApplication/GetDataByArmyNumber',
+        //        type: 'GET',
+        //        data: { ArmyNo: fullArmyNumber },
+        //        success: function (data) {
+        //            if (data) {
+
         if (fullArmyNumber) {
             $.ajax({
-                url: '/OnlineApplication/GetDataByArmyNumber',
-                type: 'GET',
-                data: { ArmyNo: fullArmyNumber },
+                url: '/OnlineApplication/GetDataByArmyNumber',  // Keep the same URL
+                type: 'POST',
+                data: JSON.stringify({ ArmyNo: fullArmyNumber }),  // Send ArmyNo in the body
+                contentType: 'application/json',  // Specify content type
                 success: function (data) {
                     if (data) {
 
@@ -2425,7 +2518,7 @@ function findDataWithApplicationId() {
     if (applicationid!= 0) {
             $.ajax({
                 url: '/OnlineApplication/GetDataByApplicationId',
-                type: 'GET',
+                type: 'POST',
                 data: { applicationid: applicationid },
                 success: function (data) {
                     if (data) {

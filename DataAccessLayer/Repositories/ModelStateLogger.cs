@@ -21,7 +21,7 @@ namespace DataAccessLayer.Repositories
         }
         public async Task LogModelStateError(ModelStateDictionary modelState, HttpContext httpContext)
         {
-            if(modelState== null || modelState.IsValid)
+            if (modelState == null || modelState.IsValid)
             {
                 return;
             }
@@ -30,6 +30,18 @@ namespace DataAccessLayer.Repositories
                 .Where(ms => ms.Value.Errors.Count > 0)
                 .Select(ms => $"{ms.Key} : {string.Join(", ", ms.Value.Errors.Select(e => e.ErrorMessage))}")
                 .ToList();
+
+            // Check if "ArmyNo" is present in ModelState and add it to the message
+            if (modelState.ContainsKey("CommonData.Number"))
+            {
+                var armyNoErrors = string.Join(", ", modelState["CommonData.Number"].Errors.Select(e => e.ErrorMessage));
+                allErrors.Add($"ArmyNo :{modelState["CommonData.ArmyPrefix"].AttemptedValue}-{modelState["CommonData.Number"].AttemptedValue}{modelState["CommonData.Suffix"].AttemptedValue} - {armyNoErrors}");
+            }
+            else if (modelState.ContainsKey("ClaimCommonData.Number"))
+            {
+                var armyNoErrors = string.Join(", ", modelState["ClaimCommonData.Number"].Errors.Select(e => e.ErrorMessage));
+                allErrors.Add($"ArmyNo :{modelState["ClaimCommonData.ArmyPrefix"].AttemptedValue}-{modelState["ClaimCommonData.Number"].AttemptedValue}{modelState["ClaimCommonData.Suffix"].AttemptedValue} - {armyNoErrors}");
+            }
 
             // Combine message
             string message = string.Join(" | ", allErrors);

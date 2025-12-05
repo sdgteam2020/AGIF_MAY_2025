@@ -20,7 +20,7 @@ namespace DataTransferObject.Model
 
         [Required(ErrorMessage = "Dealer Name is required.")]
         [StringLength(100, ErrorMessage = "Dealer Name can't be longer than 100 characters.")]
-        [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Dealer Name must only contain alphabets and spaces.")]
+        [RegularExpression(@"^[A-Za-z0-9\s]+$", ErrorMessage = "Dealer Name must only contain alphabets, numbers, and spaces.")]
         public string? PCA_dealerName { get; set; }
 
         [Required(ErrorMessage = "Loan Type is required.")]

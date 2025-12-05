@@ -139,11 +139,17 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public IActionResult AnalyticsDashBoard(int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid data provided.");
+            }
+
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
             {
                 return Unauthorized("Session expired or invalid user session.");
             }
+
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             ViewBag.AdminTypeId = id;
             return View(dTOTempSession);

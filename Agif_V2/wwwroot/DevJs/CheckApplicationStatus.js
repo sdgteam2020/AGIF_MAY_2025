@@ -34,7 +34,7 @@
 
         $.ajax({
             url: searchEndpoint,
-            type: 'GET',
+            type: 'POST',
             data: { armyNo: armyNo },
             success: function (data) {
                 if (data && data.length > 0) {
@@ -159,19 +159,65 @@
         downloadApplication(appId,type);
     });
 
-    function downloadApplication(applicationId,type) {
+    //function downloadApplication(applicationId,type) {
+    //    if (!applicationId) {
+    //        alert('Application ID is required for download');
+    //        return;
+    //    }
+
+    //    if (type === 'Loan')
+    //        window.location.href = `/Default/DownloadApplication?id=${applicationId}`;
+    //    else if (type === 'Maturity')
+    //        window.location.href = `/Default/DownloadClaimApplication?id=${applicationId}`;
+    //    // Direct file download — no AJAX needed
+
+    //}
+    function downloadApplication(applicationId, type) {
         if (!applicationId) {
             alert('Application ID is required for download');
             return;
         }
 
-        if (type === 'Loan')
-            window.location.href = `/Default/DownloadApplication?id=${applicationId}`;
-        else if (type === 'Maturity')
-            window.location.href = `/Default/DownloadClaimApplication?id=${applicationId}`;
-        // Direct file download — no AJAX needed
+        // Determine the action URL
+        let actionUrl = '';
+        if (type === 'Loan') {
+            actionUrl = '/Default/DownloadApplication';
+        } else if (type === 'Maturity') {
+            actionUrl = '/Default/DownloadClaimApplication';
+        } else {
+            alert('Invalid download type');
+            return;
+        }
+
+        // Create a hidden form
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = actionUrl;
+        form.style.display = 'none';
+
+        // Add CSRF token (get from your page)
+        //const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+      
+        //    const tokenInput = document.createElement('input');
+        //    tokenInput.type = 'hidden';
+        //    tokenInput.name = '__RequestVerificationToken';
+        //    tokenInput.value = csrfToken;
+        //    form.appendChild(tokenInput);
         
+
+        // Add application ID (encrypted on server side)
+        const idInput = document.createElement('input');
+        idInput.type = 'hidden';
+        idInput.name = 'id';
+        idInput.value = applicationId;
+        form.appendChild(idInput);
+
+        // Add form to body, submit, then remove
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
     }
+
 
     $(document).on('click', '.timeline-btn', function () {
         const appId = $(this).data('app-id');
@@ -198,7 +244,7 @@
         // Get the appropriate timeline endpoint
         $.ajax({
             url: endpoint,
-            type: 'GET',
+            type: 'POST',
             data: { applicationId: appId },
             success: function (response) {
                 // Hide loading

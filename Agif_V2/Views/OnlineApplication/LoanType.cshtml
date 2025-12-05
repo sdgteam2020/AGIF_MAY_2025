@@ -13,6 +13,7 @@
             </div>
 
             <form id="loanForm" action="/OnlineApplication/Redirection" method="post">
+                @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="loanType" class="text-nowrap">Loan Type :</label>

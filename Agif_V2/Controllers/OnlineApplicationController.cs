@@ -89,7 +89,8 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
-       
+
+        [HttpPost]
         public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix, int regtId)
         {
             if(!ModelState.IsValid)
@@ -151,14 +152,33 @@ namespace Agif_V2.Controllers
             }
         }
 
-        public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
+        //public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Json("Invalid Request.");
+        //    }
+
+        //    var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+
+        //    if (existingUser != null) // Check if the user exists
+        //    {
+        //        return Json(new { exists = true }); // User exists
+        //    }
+        //    else
+        //    {
+        //        return Json(new { exists = false }); // User does not exist
+        //    }
+        //}
+        [HttpPost]
+        public async Task<JsonResult> CheckExistUser([FromBody] CommonParameters model)
         {
             if (!ModelState.IsValid)
             {
                 return Json("Invalid Request.");
             }
 
-            var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
+            var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(model.armyNumber, model.Prefix, model.Suffix, model.appType);
 
             if (existingUser != null) // Check if the user exists
             {
@@ -169,16 +189,34 @@ namespace Agif_V2.Controllers
                 return Json(new { exists = false }); // User does not exist
             }
         }
+        //public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        //{
 
-        public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Json("Invalid Request.");
+        //    }
+
+        //    bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
+
+        //    if (result == true)
+        //    {
+        //        return Json(new { exists = true });
+        //    }
+        //    else
+        //    {
+        //        return Json(new { exists = false });
+        //    }
+        //}
+        [HttpPost]
+        public async Task<JsonResult> DeleteExistingLoan([FromBody] CommonParameters model)
         {
-
             if (!ModelState.IsValid)
             {
                 return Json("Invalid Request.");
             }
 
-            bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
+            bool result = await _IonlineApplication1.DeleteExistingLoan(model.armyNumber, model.Prefix, model.Suffix, model.appType);
 
             if (result == true)
             {
@@ -190,14 +228,29 @@ namespace Agif_V2.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Redirection(string loanType, string applicantCategory)
         {
 
             TempData["LoanType"] = loanType;
             TempData["ApplicantCategory"] = applicantCategory;
+
             return RedirectToAction("OnlineApplication");
         }
 
+        //public IActionResult Redirection()
+        //{
+
+        //    string LoanType = Request.Form["loanType"];
+        //    string ApplicantCategory = Request.Form["applicantCategory"];
+
+        //    //TempData["LoanType"] = loanType;
+        //    //TempData["ApplicantCategory"] = applicantCategory;
+        //    TempData["LoanType"] = LoanType;
+        //    TempData["ApplicantCategory"] = ApplicantCategory;
+        //    return RedirectToAction("OnlineApplication");
+        //}
 
         public async Task<JsonResult> CheckForCoRegister(string ArmyNo)
         {
@@ -616,9 +669,21 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
             }
         }
-        public async Task<JsonResult> GetDataByArmyNumber(string ArmyNo)
+        //public async Task<JsonResult> GetDataByArmyNumber(string ArmyNo)
+        //{
+        //    var applicationId = await _IonlineApplication1.GetLatestApplicationIdByArmyNo(ArmyNo);
+        //    if (applicationId == null)
+        //    {
+        //        return Json(new { success = false, message = "Application ID not found." });
+        //    }
+
+        //    DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
+        //    return Json(data.OnlineApplicationResponse);
+        //}
+        [HttpPost]
+        public async Task<IActionResult> GetDataByArmyNumber([FromBody] SessionUserDTO sessionUserDTO)
         {
-            var applicationId = await _IonlineApplication1.GetLatestApplicationIdByArmyNo(ArmyNo);
+            var applicationId = await _IonlineApplication1.GetLatestApplicationIdByArmyNo(sessionUserDTO.ArmyNo);
             if (applicationId == null)
             {
                 return Json(new { success = false, message = "Application ID not found." });
@@ -630,9 +695,13 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> GetDataByApplicationId(int applicationId)
         {
-           DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid Request." });
+            }
+            DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
             return Json(data);
         }
-    }
+    }   
 
 }
