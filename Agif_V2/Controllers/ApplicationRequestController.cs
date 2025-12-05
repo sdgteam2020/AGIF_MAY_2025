@@ -99,6 +99,15 @@ namespace Agif_V2.Controllers
             {
                 return BadRequest("Invalid request data.");
             }
+            var trustedSessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+            if (trustedSessionUser == null)
+            {
+                return RedirectToAction("Login", "Account"); // Session expired
+            }
+
+            sessionUserDTO.ProfileId = trustedSessionUser.ProfileId;
+            sessionUserDTO.MappingId = trustedSessionUser.MappingId;
             var result = await _userApplication.UpdateUserDetails(sessionUserDTO);
             if (result)
             {

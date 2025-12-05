@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     loadDropdown();
-    var unitInput = $("input[name='UnitId']");
+    const unitInput = $("input[name='UnitId']");
 
     unitInput.on("keyup", function () {
         ValInData(this);

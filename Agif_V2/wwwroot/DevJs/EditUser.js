@@ -154,7 +154,7 @@ $("input, textarea").on("paste", function (e) {
     e.preventDefault();
 });
 $(document).ready(function () {
-    var message = $('#profileMessage').val();
+    const message = $('#profileMessage').val();
 
     if (message) {
         Swal.fire({

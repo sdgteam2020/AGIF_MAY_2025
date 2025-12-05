@@ -1,4 +1,18 @@
 ﻿$(function () {
+    //Declaring charts
+    let topRanksChart = null;
+    let topRegtChart = null;
+    let topUnitsChart = null;
+    let loanStatisticsChart = null;
+    let topUnitsLoanChart = null;
+    let topDealersChart = null;
+    let topLoanDealersChart = null;
+    let topPersonnelChart = null;
+    let applicationStatusChart = null;
+    let ageGroupsChart = null;
+    let topApplicantsChart = null;
+    let comparisonChart = null;
+
     // ---- DOM ----
     const $yearSelect = $('#yearSelect');
     const $btnLoan = $('#btnLoan');
