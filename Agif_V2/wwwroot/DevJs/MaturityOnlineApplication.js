@@ -1978,7 +1978,7 @@ function MarrGenderDisplay() {
 
     // Handle radio button selection
     $('.gender-radio').on('change', function () {
-        var selectedGender = $(this).val();
+        const selectedGender = $(this).val();
         $('#MarriageGenderDisplay').val(selectedGender);
         $('#genderRadioGroup').removeClass('show');
     });

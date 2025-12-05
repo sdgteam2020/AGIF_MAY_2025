@@ -31,10 +31,9 @@ namespace Agif_V2.Controllers
         private readonly FileUtility _fileUtility;
         private readonly IAddress _address;
         private readonly IAccount _account;
-        private readonly Watermark _watermark;
         private readonly IModelStateLogger _modelStateLogger;
 
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger)
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -47,7 +46,6 @@ namespace Agif_V2.Controllers
             _fileUtility = fileUtility;
             _address = address;
             _account = account;
-            _watermark = watermark;
             _modelStateLogger = modelStateLogger;
         }
         [HttpGet]

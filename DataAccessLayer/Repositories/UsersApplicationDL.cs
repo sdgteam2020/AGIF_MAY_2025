@@ -4,6 +4,7 @@ using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -313,6 +314,9 @@ namespace DataAccessLayer.Repositories
         public async Task<bool> UpdateUserDetails(SessionUserDTO sessionUserDTO)
         {
             bool updated = false;
+            //SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+
+            //SessionUserDTO? dTOTempSession = DataTransferObject.Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
             // Update UserProfile
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);

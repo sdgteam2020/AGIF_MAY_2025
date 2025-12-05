@@ -485,12 +485,14 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify({
-            "inputPersID": IcNo//HRMS Token
+            //"inputPersID": IcNo//HRMS Token
+            "inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"//HRMS Token
+
         }),
 
         success: function (response) {
             if (response) {
-               
+                console.log("GetTokenvalidatepersid2fa ::" + response);
                 const validationResult = response.ValidatePersID2FAResult;
 
                 if (validationResult === true) {
