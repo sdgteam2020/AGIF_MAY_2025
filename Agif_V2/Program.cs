@@ -133,6 +133,18 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOptions>(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
+
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
+
 builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
@@ -163,7 +175,7 @@ app.Use(async (ctx, next) =>
     ctx.Response.Headers["Content-Security-Policy"] =
         "default-src 'self' blob:; " +
         "script-src 'self'; " +
-        "style-src 'self' 'unsafe-inline'; " +
+        "style-src 'self';" +
         "img-src 'self' data:; " +
         "font-src 'self' data:; " +
         "frame-ancestors 'none'; " +
@@ -181,9 +193,7 @@ app.Use(async (ctx, next) =>
     ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
     ctx.Response.Headers["X-XSS-Protection"] = "1; mode=block";
 
-    // Use HSTS only on HTTPS + production
-    ctx.Response.Headers["Strict-Transport-Security"] =
-        "max-age=31536000; includeSubDomains; preload";
+
 
     // Hide tech details where possible
     ctx.Response.Headers.Remove("X-Powered-By");

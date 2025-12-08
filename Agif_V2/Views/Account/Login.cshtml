@@ -57,13 +57,6 @@
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <div class="checkbox-container">
-                        <input type="checkbox" asp-for="RememberMe" disabled="@(Model?.IsLockedOut == true)" />
-                        <label asp-for="RememberMe">Remember Me</label>
-                    </div>
-                </div>
-
                 @* Attempt Counter *@
                 @if (Model?.FailedAttempts > 0 && Model?.IsLockedOut != true)
                 {
