@@ -37,6 +37,7 @@
             }
 
             <form asp-action="Login" method="post" id="loginForm">
+                @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <div class="form-group">
                         <label asp-for="UserName">Username:</label>

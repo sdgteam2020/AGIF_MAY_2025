@@ -136,13 +136,32 @@ namespace Agif_V2.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult AnalyticsDashBoard(int id)
+        //[HttpPost]
+        //public IActionResult AnalyticsDashBoard(int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest("Invalid data provided.");
+        //    }
+
+        //    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+        //    if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
+        //    {
+        //        return Unauthorized("Session expired or invalid user session.");
+        //    }
+
+        //    ViewBag.ArmyNo = dTOTempSession.ArmyNo;
+        //    ViewBag.AdminTypeId = id;
+        //    return View(dTOTempSession);
+        //}
+
+        public IActionResult AnalyticsDashBoard()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid data provided.");
             }
+            int id = 0;
 
             SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
             if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
@@ -150,12 +169,22 @@ namespace Agif_V2.Controllers
                 return Unauthorized("Session expired or invalid user session.");
             }
 
+            if (dTOTempSession.Role == "LoanAdmin")
+            {
+                id = 1;
+            }
+            else if (dTOTempSession.Role == "ClaimAdmin")
+            {
+                id = 2;
+            }
+
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             ViewBag.AdminTypeId = id;
             return View(dTOTempSession);
         }
 
-        [HttpGet]
+
+        [HttpPost]
         public async Task<IActionResult> GetApplicationAnalytics(int year)
         {
             try
@@ -169,7 +198,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
             }
         }
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetClaimApplicationAnalytics(int year)
         {
             try

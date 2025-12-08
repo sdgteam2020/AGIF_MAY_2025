@@ -99,6 +99,5 @@ $("#ViewLog").on('click', function () {
     window.location.href = '/Home/LogViewer'
 })
 $("#AnalyticsDashBoard").on('click', function () {
-    //window.location.href = '/Home/AnalyticsDashBoard'
-    $("#analyticsForm").submit();
+    window.location.href = '/Home/AnalyticsDashBoard'
 })
