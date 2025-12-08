@@ -11,6 +11,7 @@ namespace DataTransferObject.Model
     {
         [Required]
         [Display(Name = "UserName")]
+        [RegularExpression(@"^[a-zA-Z0-9@._-]+$", ErrorMessage = "Invalid characters in Username")]
         public string UserName { get; set; }
 
         [Required]
