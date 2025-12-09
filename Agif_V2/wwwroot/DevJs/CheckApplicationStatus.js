@@ -18,42 +18,124 @@
     }
 
 
-    $('#searchByArmyNo').on('submit', function (e) {
+    //$('#searchByArmyNo').on('submit', function (e) {
+    //    e.preventDefault();
+    //    const armyNo = $('#armyNoInput').val().trim();
+    //    if (armyNo === '') return;
+    //    const token = $('input[name="__RequestVerificationToken"]').val();
+
+    //    // Clear previous results
+    //    $('#noResultsMessage').addClass('d-none');
+    //    $('#resultsTable').addClass('d-none');
+
+    //    let selectedType = $('#typeSelect').val();
+
+    //    // Determine the endpoint based on selected type
+    //    const searchEndpoint = getSearchEndpoint(selectedType);
+
+    //    $.ajax({
+    //        url: searchEndpoint,
+    //        type: 'POST',
+    //        data: {
+    //            armyNo: armyNo,
+                
+    //        }, headers: {
+    //            'RequestVerificationToken': token   // must match options.HeaderName
+    //        },
+    //        success: function (data) {
+    //            if (data && data.length > 0) {
+    //                populateTable(data);
+    //                $('#resultsTable').removeClass('d-none');
+    //            } else {
+    //                $('#noResultsMessage').removeClass('d-none');
+    //            }
+    //        },
+    //        error: function (xhr, status, error) {
+    //            alert('Error searching applications. Please try again.');
+    //        }
+    //    });
+    //});
+
+
+    $('#searchByArmyNo').on('submit', async function (e) {
         e.preventDefault();
+
         const armyNo = $('#armyNoInput').val().trim();
-        if (armyNo === '') return;
-        const token = $('input[name="__RequestVerificationToken"]').val();
+        if (armyNo === '') {
+            alert('Please enter an Army Number');
+            return;
+        }
+
+        const selectedType = $('#typeSelect').val();
+        const searchEndpoint = getSearchEndpoint(selectedType);
 
         // Clear previous results
         $('#noResultsMessage').addClass('d-none');
         $('#resultsTable').addClass('d-none');
 
-        let selectedType = $('#typeSelect').val();
+        try {
+            // Get CSRF token from page
+            const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
 
-        // Determine the endpoint based on selected type
-        const searchEndpoint = getSearchEndpoint(selectedType);
-
-        $.ajax({
-            url: searchEndpoint,
-            type: 'POST',
-            data: {
-                armyNo: armyNo,
-                
-            }, headers: {
-                'RequestVerificationToken': token   // must match options.HeaderName
-            },
-            success: function (data) {
-                if (data && data.length > 0) {
-                    populateTable(data);
-                    $('#resultsTable').removeClass('d-none');
-                } else {
-                    $('#noResultsMessage').removeClass('d-none');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert('Error searching applications. Please try again.');
+            if (!token) {
+                console.error('CSRF token not found on page');
+                alert('Security token missing. Please refresh the page.');
+                return;
             }
-        });
+
+            console.log('Token found:', token.substring(0, 20) + '...'); // Debug log
+
+            // Create FormData and add both armyNo AND token
+            const formData = new FormData();
+            formData.append('armyNo', armyNo);
+            formData.append('__RequestVerificationToken', token); // ← CRITICAL!
+
+            console.log('Sending request to:', searchEndpoint); // Debug log
+
+            // Disable submit button to prevent double submission
+            const submitButton = $(this).find('button[type="submit"]');
+            const originalText = submitButton.text();
+            submitButton.prop('disabled', true).text('Searching...');
+
+            const response = await fetch(searchEndpoint, {
+                method: 'POST',
+                body: formData, // Don't set Content-Type header, let browser handle it
+                credentials: 'same-origin',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' // Optional but good practice
+                }
+            });
+
+            console.log('Response status:', response.status); // Debug log
+
+            if (!response.ok) {
+                if (response.status === 400) {
+                    console.error('CSRF validation failed');
+                    alert('Security validation failed. Please refresh the page.');
+                    return;
+                }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Result:', data); // Debug log
+
+            // Handle response
+            if (data && data.length > 0) {
+                populateTable(data);
+                $('#resultsTable').removeClass('d-none');
+            } else {
+                $('#noResultsMessage').removeClass('d-none');
+            }
+
+        } catch (error) {
+            console.error('Search error:', error);
+            alert('Search failed. Please try again.');
+        } finally {
+            // Re-enable submit button
+            const submitButton = $(this).find('button[type="submit"]');
+            submitButton.prop('disabled', false).text('Search');
+        }
     });
 
     // Function to determine the search endpoint based on selected type
@@ -140,21 +222,54 @@
     }
 
 
-    $(document).on('click', '.editapp', function () {
-        // Adjust the URL according to your routing
-        const type = $('#typeSelect').val();
+    //$(document).on('click', '.editapp', function () {
+    //    // Adjust the URL according to your routing
+    //    const type = $('#typeSelect').val();
 
+    //    const appId = $(this).data('app-id');  // Get application ID from button
+    //    if (!appId) return;
+
+    //    if (type === 'Loan')
+    //        window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
+    //    else if (type === 'Maturity')
+    //        window.location.href = `/Claim/OnlineApplication/${appId}`;
+
+
+    //    //window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
+    //});
+    $(document).on('click', '.editapp', function () {
+        // Get the loan type and application ID
+        const type = $('#typeSelect').val();
         const appId = $(this).data('app-id');  // Get application ID from button
+
         if (!appId) return;
 
-        if (type === 'Loan')
-            window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
-        else if (type === 'Maturity')
-            window.location.href = `/Claim/OnlineApplication/${appId}`;
+        // Prepare the data to send to the server
+        const requestData = {
+            appId: appId,
+            type: type
+        };
 
-
-        //window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
+        // Send AJAX request to the server to process the data
+        $.ajax({
+            url: '/OnlineApplication/HandleApplicationRedirect', // Your controller and action to handle the logic
+            type: 'POST',
+            data: requestData,
+            success: function (response) {
+                if (response.success) {
+                    // If the server returns a URL to redirect to, perform the redirect
+                    window.location.href = response.redirectUrl; // Redirect based on server response
+                } else {
+                    // Handle any errors if necessary
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function () {
+                alert('An error occurred while processing the request');
+            }
+        });
     });
+
 
     $(document).on('click', '.downloadApplication', function () {
 

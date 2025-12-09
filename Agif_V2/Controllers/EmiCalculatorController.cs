@@ -22,17 +22,40 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> Calculate(int month, int year, int categoryValue)
+        //public async Task<JsonResult> Calculate(int month, int year, int categoryValue)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return Json("Invalid request");
+        //    }   
+
+        //    var result = await _claimCalculator.CalculateTotalInvestment(month, year,categoryValue);
+        //    return Json(new{success = true,CurrentBalance = result.currentBalance,BalCount = result.balCount,SaveEL = result.saveEL});
+        //}
+        [HttpPost]
+        public async Task<IActionResult> Calculate(int month, int year, int categoryValue, int? commissionMonth, int? commissionYear)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return Json("Invalid request");
-            }   
+                var result = await _claimCalculator.CalculateTotalInvestment(month, year, categoryValue, commissionMonth, commissionYear);
 
-            var result = await _claimCalculator.CalculateTotalInvestment(month, year,categoryValue);
-            return Json(new{success = true,CurrentBalance = result.currentBalance,BalCount = result.balCount,SaveEL = result.saveEL});
+                return Json(new
+                {
+                    success = true,
+                    currentBalance = result.currentBalance,
+                    balCount = result.balCount,
+                    saveEL = result.saveEL
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
         }
-
 
     }
 }

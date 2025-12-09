@@ -612,3 +612,165 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     z-index: 9999;
     min-width: 300px;
 }
+/* Calculate Button Styles */
+.calculate-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(145deg, #ff9900, #cc7a00);
+    border: 2px solid rgba(255, 153, 0, 0.6);
+    border-radius: 12px;
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
+    text-transform: uppercase;
+}
+
+    .calculate-btn:hover {
+        background: linear-gradient(145deg, #cc7a00, #ff9900);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(255, 153, 0, 0.6);
+    }
+
+    .calculate-btn:active {
+        transform: translateY(-1px);
+        box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
+    }
+
+/* Smooth fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#dateFieldsContainer {
+    animation: fadeIn 0.5s ease-out;
+}
+/* Smooth transitions for section movements */
+.input-section {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fade in animation */
+@keyframes smoothFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Fade out animation */
+@keyframes smoothFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+}
+
+/* Slide down animation */
+@keyframes smoothSlideDown {
+    0% {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        max-height: 500px;
+        transform: translateY(0);
+    }
+}
+
+/* Class for smooth appearance */
+.smooth-appear {
+    animation: smoothFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.smooth-disappear {
+    animation: smoothFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Calculate Button Enhanced Styles */
+.calculate-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(145deg, #ff9900, #cc7a00);
+    border: 2px solid rgba(255, 153, 0, 0.6);
+    border-radius: 12px;
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+}
+
+    .calculate-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .calculate-btn:hover::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .calculate-btn:hover {
+        background: linear-gradient(145deg, #cc7a00, #ff9900);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(255, 153, 0, 0.6);
+    }
+
+    .calculate-btn:active {
+        transform: translateY(-1px) scale(0.98);
+        box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
+    }
+
+/* Rank label enhanced hover */
+.rank-label {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+    .rank-label:hover {
+        transform: translateY(-8px) scale(1.02);
+    }
+
+/* Form control focus animation */
+.form-control:focus, .form-select:focus {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

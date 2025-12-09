@@ -77,9 +77,9 @@
         });
 
         const topCtx = $('#topRanksChart')[0].getContext('2d');
-       // window.topRanksChart.destroy();
+        // window.topRanksChart.destroy();
 
-         topRanksChart = new Chart(topCtx, {
+        topRanksChart = new Chart(topCtx, {
             type: 'bar',
             data: {
                 labels: [],
@@ -147,8 +147,8 @@
 
         // ---- Chart 3: Top Regt/Corps (Regt on X, Count on Y) ----
         const topregtCtx = $('#topRegtChart')[0].getContext('2d');
-       // window.topRegtChart.destroy();
-         topRegtChart = new Chart(topregtCtx, {
+        // window.topRegtChart.destroy();
+        topRegtChart = new Chart(topregtCtx, {
             type: 'bar',
             data: {
                 labels: [],
@@ -202,7 +202,7 @@
         // ---- Chart 4: Loan Statistics by Application Type & Vehicle Loan Type ----
         const loanCtx = $('#loanStatisticsChart')[0].getContext('2d');
 
-         loanStatisticsChart = new Chart(loanCtx, {
+        loanStatisticsChart = new Chart(loanCtx, {
             type: 'bar',
             data: {
                 labels: [],
@@ -290,7 +290,7 @@
         const topUnitsCtx = $('#topUnitsChart')[0].getContext('2d');
 
         // ---- Chart: Top 10 Units (Horizontal Bar) ----
-         topUnitsChart = new Chart(topUnitsCtx, {
+        topUnitsChart = new Chart(topUnitsCtx, {
             type: 'bar',
             data: {
                 labels: [],
@@ -376,7 +376,7 @@
         //chart 6
         const toploanUnitsCtx = $('#topUnitsLoanChart')[0].getContext('2d');
 
-         topUnitsLoanChart = new Chart(toploanUnitsCtx, {
+        topUnitsLoanChart = new Chart(toploanUnitsCtx, {
             type: 'bar',
             data: {
                 labels: [],   // Unit names
@@ -485,8 +485,8 @@
 
         //chart 7 Top 10 Dealers
         const topDealersCtx = $('#topDealersChart')[0].getContext('2d');
-        
-         topDealersChart = new Chart(topDealersCtx, {
+
+        topDealersChart = new Chart(topDealersCtx, {
             type: 'doughnut',
             data: {
                 labels: [], // Dealer names
@@ -616,8 +616,8 @@
 
         const topLoanDealers = $('#topLoanDealersChart')[0].getContext('2d');
 
-   
-         topLoanDealersChart = new Chart(topLoanDealers, {
+
+        topLoanDealersChart = new Chart(topLoanDealers, {
             type: 'pie',
             data: {
                 labels: [],
@@ -753,7 +753,7 @@
 
         const topPersonnelCtx = $('#topPersonnelChart')[0].getContext('2d');
 
-         topPersonnelChart = new Chart(topPersonnelCtx, {
+        topPersonnelChart = new Chart(topPersonnelCtx, {
             type: 'bar',
             data: {
                 labels: [], // Rank + ApplicantName
@@ -842,8 +842,8 @@
 
         //chart 10
         const statusChartCtx = $('#applicationStatusChart')[0].getContext('2d');
-    
-         applicationStatusChart = new Chart(statusChartCtx, {
+
+        applicationStatusChart = new Chart(statusChartCtx, {
             type: 'polarArea',  // Polar area chart
             data: {
                 labels: ['Pending', 'Approved', 'Rejected'],
@@ -881,7 +881,7 @@
         //chart 11
         const ageGroupsCtx = $('#AgeGroupsChart')[0].getContext('2d');
 
-         ageGroupsChart = new Chart(ageGroupsCtx, {
+        ageGroupsChart = new Chart(ageGroupsCtx, {
             type: 'bar',  // Histogram-style
             data: {
                 labels: [],            // Will be updated dynamically
@@ -949,7 +949,7 @@
         //chart 12
         const MultipleLoansChartCtx = $('#TopApplicantsMultipleLoansChart')[0].getContext('2d');
 
-         topApplicantsChart = new Chart(MultipleLoansChartCtx, {
+        topApplicantsChart = new Chart(MultipleLoansChartCtx, {
             type: 'line',
             data: { datasets: [] },
             options: {
@@ -1012,7 +1012,7 @@
         //chart 13
         const comparisonChartCtx = $('#LoancomparisonChart')[0].getContext('2d');
 
-         comparisonChart = new Chart(comparisonChartCtx, {
+        comparisonChart = new Chart(comparisonChartCtx, {
             type: 'bar',
             data: { datasets: [] },
             options: {
@@ -1908,12 +1908,12 @@
         });
 
         const topCtx = $('#topRanksChart')[0].getContext('2d');
-        if (window.topRanksChart && typeof window.topRanksChart.destroy === 'function') {
-            window.topRanksChart.destroy();
-            window.topRanksChart = null; // optional: clear reference
+        if (topRanksChart ) {
+            topRanksChart.destroy();
+            topRanksChart = null; // optional: clear reference
         }
         //window.topRanksChart.destroy();
-         topRanksChart = new Chart(topCtx, {
+        topRanksChart = new Chart(topCtx, {
             type: 'bar',
             data: {
                 labels: [],
@@ -1976,17 +1976,17 @@
                     });
                 }
             }]
-         });
+        });
 
 
         // ---- Chart 3: Top Regt/Corps (Regt on X, Count on Y) ----
         const topregtCtx = $('#topRegtChart')[0].getContext('2d');
-        if (window.topRegtChart && typeof window.topRegtChart.destroy === 'function') {
-            window.topRegtChart.destroy();
-            window.topRegtChart = null; // optional: clear reference
+        if (topRegtChart) {
+           topRegtChart.destroy();
+            topRegtChart = null; // optional: clear reference
         }
         //window.topRegtChart.destroy();
-         topRegtChart = new Chart(topregtCtx, {
+        topRegtChart = new Chart(topregtCtx, {
             type: 'bar',
             data: {
                 labels: [],
@@ -2041,12 +2041,12 @@
         const topUnitsCtx = $('#topUnitsChart')[0].getContext('2d');
 
         // ---- Chart: Top 10 Units (Horizontal Bar) ----
-        if (window.topUnitsChart && typeof window.topUnitsChart.destroy === 'function') {
-            window.topUnitsChart.destroy();
-            window.topUnitsChart = null; // optional: clear reference
+        if (topUnitsChart ) {
+            topUnitsChart.destroy();
+            topUnitsChart = null; // optional: clear reference
         }
-       // window.topUnitsChart.destroy();
-         topUnitsChart = new Chart(topUnitsCtx, {
+        // window.topUnitsChart.destroy();
+        topUnitsChart = new Chart(topUnitsCtx, {
             type: 'bar',
             data: {
                 labels: [],

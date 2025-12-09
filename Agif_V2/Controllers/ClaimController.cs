@@ -135,16 +135,18 @@ namespace Agif_V2.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> OnlineApplication(int id)
+        public async Task<IActionResult> OnlineApplication()
         {
             var Category = TempData["Category"] as string;
             var WithdrwalPurpose = TempData["WithdrwalPurpose"] as string;
+
+            int id = TempData["ClaimapplicationId"] is int applicationId ? applicationId : 0;
 
             TempData["CategoryNew"] = Category ?? string.Empty;
 
             TempData["WithdrwalPurposeNew"] = WithdrwalPurpose ?? string.Empty;
 
-            TempData["ClaimapplicationId"] = id;
+            //TempData["ClaimapplicationId"] = id;
 
             var response = new DTOClaimCommonOnlineResponse();
             response = null;

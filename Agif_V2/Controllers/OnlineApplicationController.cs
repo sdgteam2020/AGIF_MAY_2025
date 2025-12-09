@@ -49,15 +49,15 @@ namespace Agif_V2.Controllers
             _modelStateLogger = modelStateLogger;
         }
         [HttpGet]
-        public IActionResult OnlineApplication(int id)
+        public IActionResult OnlineApplication()
         {
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
-
+            int id = TempData["applicationId"] is int applicationId ? applicationId : 0 ;
             TempData["loantypeNew"] = loanType ?? string.Empty;
             TempData["applicantcategoryNew"] = applicantCategory ?? string.Empty;
-            TempData["applicationId"] = id;
+            //TempData["applicationId"] = id;
 
             var response= new DTOCommonOnlineApplicationResponse();
             response = null;
@@ -700,6 +700,30 @@ namespace Agif_V2.Controllers
             DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
             return Json(data);
         }
-    }   
+
+        [HttpPost]
+        public IActionResult HandleApplicationRedirect(int appId, string type)
+        {
+            // Here, you can perform any necessary processing based on the appId and type
+
+            // Depending on the type, determine the URL to redirect to
+            string redirectUrl = string.Empty;
+
+            if (type == "Loan")
+            {
+                redirectUrl = Url.Action("OnlineApplication", "OnlineApplication");
+                TempData["applicationId"] = appId;
+            }
+            else if (type == "Maturity")
+            {
+                redirectUrl = Url.Action("OnlineApplication", "Claim");
+                TempData["ClaimapplicationId"] = appId;
+            }
+
+            // Return the redirect URL to the client-side
+            return Json(new { success = true, redirectUrl = redirectUrl });
+        }
+
+    }
 
 }

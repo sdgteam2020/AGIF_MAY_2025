@@ -3,7 +3,6 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 <link href="~/css/calculator.css" rel="stylesheet" />
-<!-- jQuery Toast Plugin -->
 
 <div class="military-grid">
     <div class="army-emblem">🏛️</div>
@@ -18,24 +17,40 @@
                     </div>
 
                     <div id="loanForm">
-                        <!-- Date Of Joining -->
-                        <div class="input-section">
-                            <div class="section-label">📅 Enrolment/Start Date of AGIF subscription</div>
-                            <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" required placeholder="DD/MM/YYYY" autocomplete="off">
+                        <!-- Date fields container (initially hidden, will show on top after selection) -->
+                        <div id="dateFieldsContainer" style="display: none;">
+                            <!-- Date Of Joining/Enrolment -->
+                            <div class="input-section">
+                                <div class="section-label">📅 Enrolment/Start Date of AGIF subscription</div>
+                                <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" required placeholder="DD/MM/YYYY" autocomplete="off">
+                            </div>
+
+                            <!-- Date of Commission (Only for Officers) -->
+                            <div class="input-section" id="commissionDateSection" style="display: none;">
+                                <div class="section-label">🎖️ Date of Commission (If Applicable)</div>
+                                <input type="text" class="form-control monthPicker" id="commissionDate" aria-label="Commission Date" placeholder="DD/MM/YYYY (Leave blank if not applicable)" autocomplete="off">
+                            </div>
+
+                            <!-- Till Date -->
+                            <div class="input-section">
+                                <div class="section-label">📊 Calculate Till Date</div>
+                                <input type="date"
+                                       id="tillDate"
+                                       name="tillDate"
+                                       class="form-control"
+                                       disabled />
+                            </div>
+
+                            <!-- Calculate Button -->
+                            <div class="input-section">
+                                <button type="button" id="calculateButton" class="calculate-btn">
+                                    Calculate Maturity
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Till Date -->
-                        <div class="input-section">
-                            <div class="section-label">📊 Calculate Till Date</div>
-                            <input type="date"
-                                   id="tillDate"
-                                   name="tillDate"
-                                   class="form-control"
-                                   disabled />
-                        </div>
-
-                        <!-- Rank Group Radio Buttons -->
-                        <div class="input-section">
+                        <!-- Rank Group Radio Buttons (initially shown, will move to bottom after selection) -->
+                        <div class="input-section" id="rankGroupSection">
                             <div class="section-label">🎖️ Rank Group</div>
                             <div class="rank-selection">
                                 <div class="rank-option">
@@ -56,6 +71,8 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Breakdown Table -->
                         <div class="input-section">
                             <div class="section-label">Breakdown of Current Monthly Subscription</div>
                             <div class="card-body">
@@ -63,24 +80,24 @@
                                     <table class="table table-bordered align-middle mb-0 text-center text-white">
                                         <thead>
                                             <tr class="text-white">
-                                                <th>Category</th>
-                                                <th>Risk Element</th>
-                                                <th>Saving Element</th>
-                                                <th>Total</th>
+                                                <th class="text-white">Category</th>
+                                                <th class="text-white">Risk Element</th>
+                                                <th class="text-white">Saving Element</th>
+                                                <th class="text-white">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>Offrs</td>
-                                                <td>1500</td>
-                                                <td>11000</td>
-                                                <td>12500</td>
+                                                <td class="text-white">Offrs</td>
+                                                <td class="text-white">1500</td>
+                                                <td class="text-white">11000</td>
+                                                <td class="text-white">12500</td>
                                             </tr>
                                             <tr>
-                                                <td>JCOs/OR</td>
-                                                <td>800</td>
-                                                <td>6700</td>
-                                                <td>7500</td>
+                                                <td class="text-white">JCOs/OR</td>
+                                                <td class="text-white">800</td>
+                                                <td class="text-white">6700</td>
+                                                <td class="text-white">7500</td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -12,41 +12,171 @@ namespace DataAccessLayer.Repositories
         {
             _context = context;
         }
-        public async Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(int month, int year,int categoryValue)
+        //public async Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(int month, int year,int categoryValue)
+        //{
+        //    var investmentRates = new List<InvestmentChange_JCO_OR>();
+        //    var officersInvestmentRates = new List<InvestmentChange_Officers>();
+
+        //    var applicableRate = new InvestmentChange_JCO_OR();
+        //    var applicableRateOfficers = new InvestmentChange_Officers();
+
+        //    applicableRate = null;
+        //    applicableRateOfficers = null;
+
+        //    if (categoryValue==1)
+        //    {
+        //         officersInvestmentRates = await GetOfficersInvestmentRatesAsync();
+        //    }
+        //    else  
+        //    {
+        //         investmentRates = await GetInvestmentRatesAsync();
+        //    }
+
+        //    // Create joining date from month and year (1st day of the month)
+        //    var joiningDate = new DateTime(year, month, 1);
+
+        //    //Calculate till date(last day of previous month from current date)
+        //    var today = DateTime.Today;
+        //    var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
+
+        //    // Validate joining date
+        //    if (joiningDate > tillDate)
+        //    {
+        //        throw new ArgumentException("Joining date cannot be after current month");
+        //    }
+
+        //    decimal currentBalance = 0;
+        //    decimal previousBalance = 0;   
+        //    decimal Balcount = 0;
+        //    decimal newbalance = 0;
+        //    decimal newcurrentbalance = 0;
+        //    decimal SaveEL = 0;
+        //    var currentDate = joiningDate;
+
+        //    // Calculate month by month until till date
+        //    while (currentDate <= tillDate)
+        //    {
+
+        //        // Find applicable investment rate for this month
+
+        //        if (categoryValue == 1)
+        //        {
+        //            applicableRateOfficers = GetApplicableRateOfficers(officersInvestmentRates, currentDate);
+        //        }
+
+        //        else
+        //        {
+        //            applicableRate = GetApplicableRate(investmentRates, currentDate);
+
+        //        }
+
+        //        if (applicableRate != null)
+        //        {
+        //            SaveEL = applicableRate.InvestmentAmount + SaveEL;
+        //            // Add monthly investment amount
+        //            previousBalance = currentBalance;
+        //            currentBalance += applicableRate.InvestmentAmount;
+
+        //            Balcount = Balcount + applicableRate.PrAmount;
+
+        //            newbalance = Balcount - applicableRate.PrAmount;
+
+        //            // Calculate monthly interest factor: (1 + annual_rate/100)^(1/12)
+        //            var monthlyFactor = (decimal)Math.Pow((double)(1 + applicableRate.InterestRate / 100), 1.0 / 12.0);
+
+        //            newcurrentbalance= currentBalance * monthlyFactor;
+
+        //            var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, categoryValue, newbalance);
+
+        //            if (balance != 0)
+        //            {
+        //                currentBalance = balance;
+        //            }
+        //            else
+        //            {
+        //                currentBalance = newcurrentbalance;
+        //            }
+
+        //        }
+        //        else if (applicableRateOfficers != null)
+        //        {
+        //            // Add monthly investment amount
+        //            SaveEL = applicableRateOfficers.InvestmentAmount + SaveEL;
+
+        //            previousBalance = currentBalance;
+        //            currentBalance += applicableRateOfficers.InvestmentAmount;
+
+
+        //            Balcount = Balcount + applicableRateOfficers.PrAmount;
+
+        //            newbalance = Balcount - applicableRateOfficers.PrAmount;
+
+        //            // Calculate monthly interest factor: (1 + annual_rate/100)^(1/12)
+        //            var monthlyFactor = (decimal)Math.Pow((double)(1 + applicableRateOfficers.InterestRate / 100), 1.0 / 12.0);
+
+        //            newcurrentbalance = currentBalance * monthlyFactor;
+
+        //             var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, categoryValue, newbalance);
+
+        //            if (balance != 0)
+        //            {
+        //                currentBalance = balance;
+        //            }
+        //            else
+        //            {
+        //                currentBalance = newcurrentbalance;
+        //            }
+
+        //        }
+
+
+        //        // Move to next month
+        //        currentDate = currentDate.AddMonths(1);
+        //    }
+
+        //    return (
+        //            currentBalance: Math.Round(currentBalance, 2),
+        //            balCount: Math.Round(Balcount, 2),
+        //            saveEL: Math.Round(SaveEL, 2)
+        //            );
+        //}
+
+        public async Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(int month, int year, int categoryValue, int? commissionMonth, int? commissionYear)
         {
             var investmentRates = new List<InvestmentChange_JCO_OR>();
             var officersInvestmentRates = new List<InvestmentChange_Officers>();
 
-            var applicableRate = new InvestmentChange_JCO_OR();
-            var applicableRateOfficers = new InvestmentChange_Officers();
-
-            applicableRate = null;
-            applicableRateOfficers = null;
-
-            if (categoryValue==1)
-            {
-                 officersInvestmentRates = await GetOfficersInvestmentRatesAsync();
-            }
-            else  
-            {
-                 investmentRates = await GetInvestmentRatesAsync();
-            }
+            // Load both rate tables
+            investmentRates = await GetInvestmentRatesAsync();
+            officersInvestmentRates = await GetOfficersInvestmentRatesAsync();
 
             // Create joining date from month and year (1st day of the month)
             var joiningDate = new DateTime(year, month, 1);
 
-            //Calculate till date(last day of previous month from current date)
+            // Commission date (if applicable)
+            DateTime? commissionDate = null;
+            if (commissionMonth.HasValue && commissionYear.HasValue)
+            {
+                commissionDate = new DateTime(commissionYear.Value, commissionMonth.Value, 1);
+            }
+
+            // Calculate till date (last day of previous month from current date)
             var today = DateTime.Today;
             var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
 
-            // Validate joining date
+            // Validate dates
             if (joiningDate > tillDate)
             {
                 throw new ArgumentException("Joining date cannot be after current month");
             }
 
+            if (commissionDate.HasValue && commissionDate.Value <= joiningDate)
+            {
+                throw new ArgumentException("Commission date must be after joining date");
+            }
+
             decimal currentBalance = 0;
-            decimal previousBalance = 0;   
+            decimal previousBalance = 0;
             decimal Balcount = 0;
             decimal newbalance = 0;
             decimal newcurrentbalance = 0;
@@ -56,37 +186,51 @@ namespace DataAccessLayer.Repositories
             // Calculate month by month until till date
             while (currentDate <= tillDate)
             {
-              
-                // Find applicable investment rate for this month
+                InvestmentChange_JCO_OR applicableRate = null;
+                InvestmentChange_Officers applicableRateOfficers = null;
+                int effectiveCategoryValue = categoryValue;
 
-                if (categoryValue == 1)
+                // Determine which rate to use based on commission date
+                if (categoryValue == 1 && commissionDate.HasValue)
                 {
+                    // Officer with commission date - check if we're before or after commission
+                    if (currentDate < commissionDate.Value)
+                    {
+                        // Before commission - use JCO/OR rates
+                        effectiveCategoryValue = 2;
+                        applicableRate = GetApplicableRate(investmentRates, currentDate);
+                    }
+                    else
+                    {
+                        // After commission - use Officer rates
+                        applicableRateOfficers = GetApplicableRateOfficers(officersInvestmentRates, currentDate);
+                    }
+                }
+                else if (categoryValue == 1)
+                {
+                    // Officer without commission date - always use Officer rates
                     applicableRateOfficers = GetApplicableRateOfficers(officersInvestmentRates, currentDate);
                 }
-
                 else
                 {
+                    // JCO/OR - always use JCO/OR rates
                     applicableRate = GetApplicableRate(investmentRates, currentDate);
-                   
                 }
 
+                // Process JCO/OR rates
                 if (applicableRate != null)
                 {
                     SaveEL = applicableRate.InvestmentAmount + SaveEL;
-                    // Add monthly investment amount
                     previousBalance = currentBalance;
                     currentBalance += applicableRate.InvestmentAmount;
 
                     Balcount = Balcount + applicableRate.PrAmount;
-
                     newbalance = Balcount - applicableRate.PrAmount;
 
-                    // Calculate monthly interest factor: (1 + annual_rate/100)^(1/12)
                     var monthlyFactor = (decimal)Math.Pow((double)(1 + applicableRate.InterestRate / 100), 1.0 / 12.0);
+                    newcurrentbalance = currentBalance * monthlyFactor;
 
-                    newcurrentbalance= currentBalance * monthlyFactor;
-
-                    var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, categoryValue, newbalance);
+                    var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, 2, newbalance);
 
                     if (balance != 0)
                     {
@@ -96,27 +240,21 @@ namespace DataAccessLayer.Repositories
                     {
                         currentBalance = newcurrentbalance;
                     }
-
                 }
+                // Process Officer rates
                 else if (applicableRateOfficers != null)
                 {
-                    // Add monthly investment amount
                     SaveEL = applicableRateOfficers.InvestmentAmount + SaveEL;
-
                     previousBalance = currentBalance;
                     currentBalance += applicableRateOfficers.InvestmentAmount;
 
-
                     Balcount = Balcount + applicableRateOfficers.PrAmount;
-
                     newbalance = Balcount - applicableRateOfficers.PrAmount;
 
-                    // Calculate monthly interest factor: (1 + annual_rate/100)^(1/12)
                     var monthlyFactor = (decimal)Math.Pow((double)(1 + applicableRateOfficers.InterestRate / 100), 1.0 / 12.0);
-
                     newcurrentbalance = currentBalance * monthlyFactor;
 
-                     var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, categoryValue, newbalance);
+                    var balance = await GetBonusAmount(previousBalance, currentDate, newcurrentbalance, monthlyFactor, 1, newbalance);
 
                     if (balance != 0)
                     {
@@ -126,21 +264,18 @@ namespace DataAccessLayer.Repositories
                     {
                         currentBalance = newcurrentbalance;
                     }
-
                 }
-               
 
                 // Move to next month
                 currentDate = currentDate.AddMonths(1);
             }
 
             return (
-                    currentBalance: Math.Round(currentBalance, 2),
-                    balCount: Math.Round(Balcount, 2),
-                    saveEL: Math.Round(SaveEL, 2)
-                    );
+                currentBalance: Math.Round(currentBalance, 2),
+                balCount: Math.Round(Balcount, 2),
+                saveEL: Math.Round(SaveEL, 2)
+            );
         }
-
         private InvestmentChange_JCO_OR? GetApplicableRate(List<InvestmentChange_JCO_OR> rates, DateTime forDate)
         {
             // Find the most recent rate that's effective for the given date
