@@ -22,6 +22,7 @@
         e.preventDefault();
         const armyNo = $('#armyNoInput').val().trim();
         if (armyNo === '') return;
+        const token = $('input[name="__RequestVerificationToken"]').val();
 
         // Clear previous results
         $('#noResultsMessage').addClass('d-none');
@@ -35,7 +36,12 @@
         $.ajax({
             url: searchEndpoint,
             type: 'POST',
-            data: { armyNo: armyNo },
+            data: {
+                armyNo: armyNo,
+                
+            }, headers: {
+                'RequestVerificationToken': token   // must match options.HeaderName
+            },
             success: function (data) {
                 if (data && data.length > 0) {
                     populateTable(data);

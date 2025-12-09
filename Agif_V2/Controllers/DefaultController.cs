@@ -4,6 +4,7 @@ using DataTransferObject.Request;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.PortableExecutable;
+using System.Text.RegularExpressions;
 
 namespace Agif_V2.Controllers
 {
@@ -83,15 +84,38 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SearchByArmyNo(string armyNo)
         {
+            if (string.IsNullOrWhiteSpace(armyNo))
+            {
+                return Json(new { success = false, message = "Army number is required" });
+            }
+
+            // Format validation
+            if (!Regex.IsMatch(armyNo, @"^[a-zA-Z0-9]{1,20}$"))
+            {
+                return Json(new { success = false, message = "Invalid army number format" });
+            }
             var data = await _default.GetUserApplicationStatusByArmyNo(armyNo);
             return Json(data);
         }
 
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClaimSearchByArmyNo(string armyNo)
         {
+            if (string.IsNullOrWhiteSpace(armyNo))
+            {
+                return Json(new { success = false, message = "Army number is required" });
+            }
+
+            // Format validation
+            if (!Regex.IsMatch(armyNo, @"^[a-zA-Z0-9]{1,20}$"))
+            {
+                return Json(new { success = false, message = "Invalid army number format" });
+            }
             var data = await _default.GetClaimUserApplicationStatusByArmyNo(armyNo);
             return Json(data);
         }
