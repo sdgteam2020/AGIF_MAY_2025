@@ -79,7 +79,7 @@ namespace Agif_V2.Controllers
                 dTOTempSession.MobileNo = dTOUserProfileResponse.MobileNo ?? string.Empty;
                 dTOTempSession.ProfileName = dTOUserProfileResponse.ProfileName ?? string.Empty;
                 dTOTempSession.UserName = dTOUserProfileResponse.DomainId ?? string.Empty;
-                dTOTempSession.EmailId = dTOUserProfileResponse.EmailId ?? string.Empty;
+                //dTOTempSession.EmailId = dTOUserProfileResponse.EmailId ?? string.Empty;
                 dTOTempSession.RankId = dTOUserProfileResponse.RankId;
                 dTOTempSession.RegtId = dTOUserProfileResponse.RegtId;
                 dTOTempSession.ApptId = dTOUserProfileResponse.ApptId;
