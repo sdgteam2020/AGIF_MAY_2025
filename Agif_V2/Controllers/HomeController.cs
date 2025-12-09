@@ -185,6 +185,7 @@ namespace Agif_V2.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetApplicationAnalytics(int year)
         {
             try
@@ -199,6 +200,7 @@ namespace Agif_V2.Controllers
             }
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetClaimApplicationAnalytics(int year)
         {
             try
