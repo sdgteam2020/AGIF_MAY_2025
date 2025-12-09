@@ -295,6 +295,7 @@ namespace Agif_V2.Controllers
         }
 
         [Authorize(Roles = "Admin,LoanAdmin")]
+   
         public IActionResult GetAllUsers(bool status)
         {
             if (!ModelState.IsValid)
@@ -310,7 +311,8 @@ namespace Agif_V2.Controllers
             }
             return View(dTOTempSession);
         }
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetAllUsersListPaginated(DTODataTableRequest request, string status = "")
         {
             try

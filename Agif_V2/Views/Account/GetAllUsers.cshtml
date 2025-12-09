@@ -18,79 +18,81 @@ else
    
 }
 <link href="~/css/GetAllUsers.css" rel="stylesheet" />
-<div class="container">
-    <div class="container-fluid">
-    <div class="title-wrapper pt-30">
-        <div class="row align-items-center">
-            <div class="col-md-8">
-                <div class="title">
-                    <h2>
-                        @Page
-                    </h2>
-                </div>
-            </div>
-            <!-- end col -->
-            <div class="col-md-4">
-                <div class="breadcrumb-wrapper">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="#0">Applications</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">
+<form>
+
+    <div class="container">
+        <div class="container-fluid">
+            <div class="title-wrapper pt-30">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="title">
+                            <h2>
                                 @Page
-                            </li>
-                        </ol>
-                    </nav>
+                            </h2>
+                        </div>
+                    </div>
+                    <!-- end col -->
+                    <div class="col-md-4">
+                        <div class="breadcrumb-wrapper">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="#0">Applications</a>
+                                    </li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        @Page
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <!-- end col -->
                 </div>
+                <!-- end row -->
             </div>
-            <!-- end col -->
-        </div>
-        <!-- end row -->
-    </div>
 
-        <input type="hidden" id="Status" value="@ViewBag.UserStatus.ToString().ToLower()" />
+            <input type="hidden" id="Status" value="@ViewBag.UserStatus.ToString().ToLower()" />
+            @Html.AntiForgeryToken()
+            <div class="card mt-2">
 
-    <div class="card mt-2">
-       
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-12">
-                    <div class="table-wrapper">
-                            <div class="text-end mb-2">
-                                <button type="button" id="btnDownloadExcel" class="btn btn-info btn-sm">
-                                    <i class="bi bi-file-earmark-excel me-1"></i> Download All Users
-                                </button>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-12">
+                            <div class="table-wrapper">
+                                <div class="text-end mb-2">
+                                    <button type="button" id="btnDownloadExcel" class="btn btn-info btn-sm">
+                                        <i class="bi bi-file-earmark-excel me-1"></i> Download All Users
+                                    </button>
+                                </div>
+
+                                <table class="table table-striped border border-purple table-hover" id="tblData">
+                                    <thead>
+                                        <tr>
+                                            <th class="bg-danger text-white">Ser No</th>
+                                            <th class="bg-danger text-white">User Id</th>
+                                            <th class="bg-danger text-white">Army No</th>
+                                            <th class="bg-danger text-white">Unit Cdr Name</th>
+                                            <th class="bg-danger text-white">Appt</th>
+                                            <th class="bg-danger text-white">Unit Name</th>
+                                            <th class="bg-danger text-white">Mobile No</th>
+                                            <th class="bg-danger text-white">Email Id</th>
+                                            <th class="bg-danger text-white">Registration Date</th>
+                                            <th class="bg-danger text-white">User Type</th>
+                                            <th class="noExport bg-danger text-white">Status</th>
+                                            <th class="bg-danger text-white">Fmn Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
-
-                        <table class="table table-striped border border-purple table-hover" id="tblData">
-                            <thead>
-                                <tr>
-                                    <th class="bg-danger text-white">Ser No</th>
-                                    <th class="bg-danger text-white">User Id</th>
-                                    <th class="bg-danger text-white">Army No</th>
-                                    <th class="bg-danger text-white">Unit Cdr Name</th>
-                                    <th class="bg-danger text-white">Appt</th>
-                                    <th class="bg-danger text-white">Unit Name</th>
-                                    <th class="bg-danger text-white">Mobile No</th>
-                                    <th class="bg-danger text-white">Email Id</th>
-                                    @* <th>Regt</th> *@
-                                    <th class="bg-danger text-white">Registration Date</th>
-                                    <th class="bg-danger text-white">User Type</th>
-                                        <th class="noExport bg-danger text-white">Status</th>
-                                    <th class="bg-danger text-white">Fmn Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
+</form>
 
 @section Scripts {
     <!-- CSS: Bootstrap 5 and DataTables -->

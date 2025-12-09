@@ -61,6 +61,9 @@ function BindUsersData(status) {
             url: "/Account/GetAllUsersListPaginated",
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             data: function (data) {
                 // Set default values for sortColumn and sortDirection if no sorting is applied
                 const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName'; // Default column if none selected
@@ -136,7 +139,13 @@ function BindUsersData(status) {
                 data: "emailId",
                 name: "EmailId",
                 render: function (data, type, row) {
-                    return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
+                    if (!data) return 'N/A';
+
+                    // 1. Encode the email string using JavaScript character codes
+                    const encodedEmail = Array.from(data)
+                        .map(c => `&#${c.charCodeAt(0)};`)
+                        .join('');
+                    return encodedEmail;
                 }
             },
          
@@ -335,6 +344,14 @@ function BindUsersData(status) {
 
     });
 }
+
+// Add this to your $(document).ready() or drawCallback function
+$('#tblData tbody').on('click', '.contact-user-link', function () {
+    const email = $(this).data('email');
+    if (email) {
+        window.location.href = `mailto:${email}`;
+    }
+});
 
 // Function to handle user status update
 function updateUserStatus(domainId, isActive, toggleElement) {
