@@ -606,6 +606,8 @@ function sendPDFToServer(filepath, thumbprint, type) {
 
     const baseUrl = window.location.origin;
     const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
+    console.log(fullPath);
+    alert(fullPath);
     let URL = '';
 
     console.log("Full PDF Path:", fullPath)

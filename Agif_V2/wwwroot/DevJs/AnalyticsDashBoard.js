@@ -2141,6 +2141,9 @@
             contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: 'json',
             data: { year: year }, // goes in POST body, not query string
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (resp) {
                 if (!resp || !resp.success) {
                     alert(resp?.message || "Failed to load Maturity data");

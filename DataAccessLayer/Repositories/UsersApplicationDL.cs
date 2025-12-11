@@ -314,9 +314,6 @@ namespace DataAccessLayer.Repositories
         public async Task<bool> UpdateUserDetails(SessionUserDTO sessionUserDTO)
         {
             bool updated = false;
-            //SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-
-            //SessionUserDTO? dTOTempSession = DataTransferObject.Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
             // Update UserProfile
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
@@ -349,7 +346,7 @@ namespace DataAccessLayer.Repositories
             }
 
             // Update Identity User
-            var user = await _userManager.FindByIdAsync(sessionUserDTO.MappingId.ToString());
+            var user = await _userManager.FindByIdAsync(sessionUserDTO.UserId.ToString());
             if (user != null)
             {
                 user.Email = sessionUserDTO.EmailId;

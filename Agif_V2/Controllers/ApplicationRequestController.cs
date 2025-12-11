@@ -108,6 +108,7 @@ namespace Agif_V2.Controllers
 
             sessionUserDTO.ProfileId = trustedSessionUser.ProfileId;
             sessionUserDTO.MappingId = trustedSessionUser.MappingId;
+            sessionUserDTO.UserId = trustedSessionUser.UserId;
             var result = await _userApplication.UpdateUserDetails(sessionUserDTO);
             if (result)
             {

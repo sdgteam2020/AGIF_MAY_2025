@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 <link href="~/css/login.css" rel="stylesheet" />
-
+<script src="~/js/cryptography.js"></script>
 <div class="container-fluid mt-2">
     <div class="d-flex justify-content-center align-items-center  min-vh-50">
         <div class="card login-card shadow">
@@ -123,6 +123,7 @@
     <div id="loginConfig"
          data-is-locked-out="@isLockedOut.ToString().ToLower()"
          data-lockout-end="@lockoutEndStr"
-         data-auto-refresh-timeout="@autoRefreshTimeoutStr">
+         data-auto-refresh-timeout="@autoRefreshTimeoutStr"
+        data-public-key="@ViewBag.PublicKey">
     </div>
 }

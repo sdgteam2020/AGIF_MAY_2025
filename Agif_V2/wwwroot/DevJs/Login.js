@@ -86,15 +86,78 @@ class LoginManager {
         this.isLockedOut = false;
     }
 
+    //setupFormSubmission() {
+    //    $('#loginForm').submit((e) => {
+    //        const btn = $('#loginBtn');
+    //        if (!btn.prop('disabled')) {
+    //            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Signing in...');
+    //        }
+    //    });
+    //}
     setupFormSubmission() {
         $('#loginForm').submit((e) => {
+            e.preventDefault();
+
             const btn = $('#loginBtn');
+            const userNameInput = $("#UserName");
+            const passwordInput = $("#Password");
+            const configEl = document.getElementById("loginConfig");
+            const publicKey = configEl ? configEl.dataset.publicKey : null;
+
+            // Validate public key exists and is in PEM format
+            if (!publicKey || !publicKey.includes('-----BEGIN PUBLIC KEY-----')) {
+                console.error("Invalid or missing encryption key");
+                alert("Security configuration error. Please refresh the page.");
+                return;
+            }
+
             if (!btn.prop('disabled')) {
                 btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Signing in...');
+
+                try {
+                    // Initialize JSEncrypt
+                    const encrypt = new JSEncrypt();
+                    encrypt.setPublicKey(publicKey);
+
+                    // Get plain text values
+                    const username = userNameInput.val();
+                    const password = passwordInput.val();
+
+                    console.log('Attempting to encrypt credentials...');
+
+                    // Encrypt values
+                    const encryptedUser = encrypt.encrypt(username);
+                    const encryptedPass = encrypt.encrypt(password);
+
+                    console.log('Encryption result:', {
+                        userEncrypted: !!encryptedUser,
+                        passEncrypted: !!encryptedPass
+                    });
+
+                    // Verify encryption succeeded
+                    if (encryptedUser && encryptedPass) {
+                        // Update form fields with encrypted values
+                        userNameInput.val(encryptedUser);
+                        passwordInput.val(encryptedPass);
+
+                        console.log('Submitting encrypted form...');
+
+                        // Submit the form
+                        e.currentTarget.submit();
+                    } else {
+                        // Encryption failed
+                        console.error('Encryption failed');
+                        btn.prop('disabled', false).html('<i class="fas fa-sign-in-alt me-2"></i>Login');
+                        alert("Encryption failed. Please try again or refresh the page.");
+                    }
+                } catch (err) {
+                    console.error("Login encryption error:", err);
+                    btn.prop('disabled', false).html('<i class="fas fa-sign-in-alt me-2"></i>Login');
+                    alert("An error occurred. Please refresh the page and try again.");
+                }
             }
         });
     }
-
     setupAutoRefresh() {
         if (this.autoRefreshTimeout) {
             setTimeout(() => {

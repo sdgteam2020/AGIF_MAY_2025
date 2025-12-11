@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿using Agif_V2.Helpers;
+using ClosedXML.Excel;
 using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OneLogin.Saml;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Ocsp;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
@@ -28,8 +30,9 @@ namespace Agif_V2.Controllers
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMasterOnlyTable _masterOnlyTable;
+        private readonly AsymmetricEncryption _rsa;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping, IMasterOnlyTable _masterOnlyTable)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping, IMasterOnlyTable _masterOnlyTable,AsymmetricEncryption rsa)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -37,10 +40,55 @@ namespace Agif_V2.Controllers
             _userMapping = userMapping;
             _db = db;
             this._masterOnlyTable = _masterOnlyTable;
+            _rsa = rsa;
         }
+
+        //public IActionResult Login()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Login(LoginViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+
+        //    var user = await GetUserAsync(model.UserName);
+        //    if (user == null)
+        //    {
+        //        return HandleInvalidUserName(model);
+        //    }
+
+        //    if (await _userManager.IsLockedOutAsync(user))
+        //    {
+        //        return await HandleLockedOutUser(model, user);
+        //    }
+
+        //    var result = await SignInUserAsync(model, user);
+
+        //    if (result.Succeeded)
+        //    {
+        //        return await HandleSuccessfulLogin(user, model);
+        //    }
+
+        //    return await HandleFailedLogin(result, model, user);
+        //}
 
         public IActionResult Login()
         {
+            // Generate RSA key pair with PEM formatted public key
+            var (publicKeyPem, privateKeyXml) = _rsa.GenerateKeyPair();
+
+            // Store private key in session
+            HttpContext.Session.SetString("LoginPrivateKey", privateKeyXml);
+
+            // Pass PEM formatted public key to view (compatible with JSEncrypt)
+            ViewBag.PublicKey = publicKeyPem;
+
             return View();
         }
 
@@ -48,6 +96,38 @@ namespace Agif_V2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            // Retrieve private key from session
+            var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
+
+            if (string.IsNullOrEmpty(privateKey))
+            {
+                ModelState.AddModelError("", "Session expired. Please refresh the page.");
+                return View(model);
+            }
+
+            // Decrypt username and password
+            if (!string.IsNullOrEmpty(model.UserName) && !string.IsNullOrEmpty(model.Password))
+            {
+                var decryptedUser = _rsa.DecryptString(model.UserName, privateKey);
+                var decryptedPass = _rsa.DecryptString(model.Password, privateKey);
+
+                if (decryptedUser == null || decryptedPass == null)
+                {
+                    ModelState.AddModelError("", "Security validation failed. Please refresh the page.");
+                    // Clear the session key
+                    HttpContext.Session.Remove("LoginPrivateKey");
+                    return View(model);
+                }
+
+                // Replace encrypted values with decrypted ones
+                model.UserName = decryptedUser;
+                model.Password = decryptedPass;
+
+                // Revalidate model with decrypted data
+                ModelState.Clear();
+                TryValidateModel(model);
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -65,16 +145,15 @@ namespace Agif_V2.Controllers
             }
 
             var result = await SignInUserAsync(model, user);
-
             if (result.Succeeded)
             {
+                // Clear session key after successful login
+                HttpContext.Session.Remove("LoginPrivateKey");
                 return await HandleSuccessfulLogin(user, model);
             }
 
             return await HandleFailedLogin(result, model, user);
         }
-
-
         // Helper method to populate lockout information
         private async Task<LoginViewModel> PopulateLockoutInfo(LoginViewModel model, ApplicationUser user)
         {
