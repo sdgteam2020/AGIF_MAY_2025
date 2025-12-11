@@ -140,11 +140,11 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOption
     options.Cookie.HttpOnly = true;
 });
 
-//builder.Services.AddAntiforgery(options =>
-//{
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//    options.Cookie.HttpOnly = true;
-//});
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+});
 
 builder.Services.AddDistributedMemoryCache();
 
