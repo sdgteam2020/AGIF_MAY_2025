@@ -61,15 +61,16 @@ function BindUsersData(status) {
             url: "/Account/GetAllUsersListPaginated",
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
-            headers: {
-                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-            },
+            //headers: {
+            //    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            //},
             data: function (data) {
                 // Set default values for sortColumn and sortDirection if no sorting is applied
                 const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName'; // Default column if none selected
                 const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc'; // Default direction if none selected
 
                 return {
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
                     draw: data.draw,
                     start: data.start,
                     length: data.length,
