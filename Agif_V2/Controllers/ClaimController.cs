@@ -49,6 +49,7 @@ namespace Agif_V2.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
         {
             if (!ModelState.IsValid)
@@ -738,6 +739,7 @@ namespace Agif_V2.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<JsonResult> GetDataByArmyNumber(string ArmyNo)
         {
             var applicationId = await _IClaimonlineApplication1.GetLatestApplicationIdByArmyNo(ArmyNo);

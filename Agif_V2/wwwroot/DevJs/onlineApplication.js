@@ -1361,25 +1361,7 @@ function fetchPCDA_PAO() {
             return;
         }
         const param = { "regt": regt }; 
-        //fetch(`/OnlineApplication/GetPCDA_PAO?regt=${encodeURIComponent(regt)}`, {
-        //    method: 'POST'
-        //})
-        //    .then(response => {
-        //        if (!response.ok) {
-        //            throw new Error('Network response was not ok');
-        //        }
-        //        return response.json();
-        //    })
-        //    .then(data => {
-        //        if (data != null) {
-        //            $('#pcda_pao').val(data.pcdaPao);
-        //            setOutlineActive("pcda_pao");
-        //        }
-        //    })
-        //    .catch(error => {
-        //        alert("Data Not loaded!");
-        //        console.error('Fetch error:', error);
-        //    });
+
         $.ajax({
             url: '/OnlineApplication/GetPCDA_PAO',  // Your endpoint URL
             type: 'POST',

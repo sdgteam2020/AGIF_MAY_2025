@@ -140,11 +140,11 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOption
     options.Cookie.HttpOnly = true;
 });
 
-builder.Services.AddAntiforgery(options =>
-{
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.HttpOnly = true;
-});
+//builder.Services.AddAntiforgery(options =>
+//{
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    options.Cookie.HttpOnly = true;
+//});
 
 builder.Services.AddDistributedMemoryCache();
 
@@ -209,22 +209,22 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-//app.Use(async (context, next) =>
-//{
-//    var referer = context.Request.Headers["Referer"].ToString();
-//    var path = context.Request.Path.Value;
+app.Use(async (context, next) =>
+{
+    var referer = context.Request.Headers["Referer"].ToString();
+    var path = context.Request.Path.Value;
 
-//    if (string.IsNullOrEmpty(referer) &&
-//        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
-//        !path.StartsWith("/css") &&
-//        !path.StartsWith("/js"))
-//    {
-//        context.Response.Redirect("/Default/Index");
-//        return;
-//    }
+    if (string.IsNullOrEmpty(referer) &&
+        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
+        !path.StartsWith("/css") &&
+        !path.StartsWith("/js"))
+    {
+        context.Response.Redirect("/Default/Index");
+        return;
+    }
 
-//    await next();
-//});
+    await next();
+});
 
 app.UseAuthorization();
 

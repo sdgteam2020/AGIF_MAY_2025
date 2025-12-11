@@ -566,7 +566,7 @@ function getApplicantDetalis() {
     const appType = parseInt($("#Purpose").val(), 10);
 
     $.ajax({
-        type: "get",
+        type: "Post",
         url: "/Claim/CheckExistUser",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
         success: function (data) {
@@ -615,7 +615,7 @@ function DeleteExistingLoan() {
     const Suffix = $("#txtSuffix").val();
     const appType = parseInt($("#Purpose").val(), 10);
     $.ajax({
-        type: "get",
+        type: "POST",
         url: "/Claim/DeleteExistingLoan",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
         success: function (data) {
@@ -992,7 +992,7 @@ function SetRetDate() {
             console.log('EnrollDate or dateOfBirthString is empty or undefined.')
         } else {
             $.ajax({
-                type: "get",
+                type: "POST",
                 url: "/OnlineApplication/GetRetirementDate",
                 data: { rankId: rankId, Prefix: Prefix, regtId: regtId },
                 success: function (data) {
@@ -1327,26 +1327,24 @@ function fetchPCDA_PAO() {
         alert("Please select Regt/Corps.");
         return;
     }
-    fetch(`/OnlineApplication/GetPCDA_PAO?regt=${encodeURIComponent(regt)}`, {
-        method: 'GET'
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // assuming the server returns JSON
-        })
-        .then(data => {
-            if (data != null) {
-                $('#pcda_pao').val(data.pcdaPao);
-                setOutlineActive("pcda_pao");
-            }
-        })
-        .catch(error => {
-            alert("Data Not loaded!");
-            console.error('Fetch error:', error);
-        });
+    const param = { "regt": regt };
 
+    $.ajax({
+        url: '/OnlineApplication/GetPCDA_PAO',  // Your endpoint URL
+        type: 'POST',
+        contentType: 'application/x-www-form-urlencoded',  // Specify content type for URL-encoded data
+        data: param,  // Pass the data parameter
+        success: function (data) {
+            if (data != null) {
+                $('#pcda_pao').val(data.pcdaPao);  // Set the result into the input
+                setOutlineActive("pcda_pao");  // Call the function to activate the outline
+            }
+        },
+        error: function (xhr, status, error) {
+            alert("Data Not loaded!");  // Alert the user in case of error
+            console.error('AJAX error:', error);  // Log the error for debugging
+        }
+    });
 
 }
 function setOutlineActive(id) {
@@ -2064,7 +2062,7 @@ function findDataWithArmyNumber() {
         if (fullArmyNumber) {
             $.ajax({
                 url: '/Claim/GetDataByArmyNumber',
-                type: 'GET',
+                type: 'POST',
                 data: { ArmyNo: fullArmyNumber },
                 success: function (data) {
                     if (data) {
@@ -2138,7 +2136,7 @@ function findDataWithApplicationId() {
     if (applicationid != 0) {
         $.ajax({
             url: '/Claim/GetDataByApplicationId',
-            type: 'GET',
+            type: 'POST',
             data: { applicationid: applicationid },
             success: function (data) {
                 if (data) {
@@ -2327,3 +2325,25 @@ $('.file-upload').on('change', function () {
     }
 });
 
+$('#oldArmyNo').on('blur', function () {
+    const prefixVal = $('#oldArmyPrefix').val();
+
+    // Only apply rule when oldArmyPrefix == 13
+    if (prefixVal === "13") {
+        const armyNumber = $('#armyNumber').val().trim();
+        const oldArmyNo = $('#oldArmyNo').val().trim();
+
+        // If both numbers exist and are NOT same → show alert
+        if (armyNumber !== "" && oldArmyNo !== "" && armyNumber !== oldArmyNo) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Number mismatch',
+                text: 'Old Army No And Army No should be same.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // optional: clear old number and focus it
+                $('#oldArmyNo').val('');
+            });
+        }
+    }
+});
