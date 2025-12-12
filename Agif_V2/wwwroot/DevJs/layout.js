@@ -101,3 +101,6 @@ $("#ViewLog").on('click', function () {
 $("#AnalyticsDashBoard").on('click', function () {
     window.location.href = '/Home/AnalyticsDashBoard'
 })
+function getCsrfToken() {
+    return $('input[name="__RequestVerificationToken"]').val();
+}

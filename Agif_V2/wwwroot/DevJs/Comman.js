@@ -41,13 +41,14 @@ $(document).ready(function () {
         const controller = $(this).data('controller');
         const method = $(this).data('method');
         const status = $(this).data('status');
+        var token = $('input[name="__RequestVerificationToken"]').val();
 
         // Call the submitStatus function with the extracted data
-        submitStatus(controller, method, status);
+        submitStatus(controller, method, status, token);
     });
 });
 
-function submitStatus(controller, method, status) {
+function submitStatus(controller, method, status, token) {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = `/${controller}/${method}`;
@@ -58,6 +59,13 @@ function submitStatus(controller, method, status) {
     input.value = status;
 
     form.appendChild(input);
+    if (token) {
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '__RequestVerificationToken'; // Must match this name exactly
+        tokenInput.value = token;
+        form.appendChild(tokenInput);
+    }
     document.body.appendChild(form);
     form.submit();
 }

@@ -21,6 +21,7 @@ namespace Agif_V2.Controllers
         }
         #region Master Table 
         [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> GetAllMMaster(DTOMasterRequest data)
         {
             if (ModelState.IsValid)

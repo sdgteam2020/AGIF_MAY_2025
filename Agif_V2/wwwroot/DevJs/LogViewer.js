@@ -88,7 +88,7 @@ function BindUsersData() {
             }
         }
     ];
-
+    var token = $('input[name="__RequestVerificationToken"]').val();
     // Initialize DataTable with server-side processing
     $('#tblApprovedLog').DataTable({
         processing: true,
@@ -100,6 +100,9 @@ function BindUsersData() {
             url: "/Home/GetApprovedLogs",
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
+            "headers": {
+                "RequestVerificationToken": token
+            },
             data: function (data) {
                 return {
                     'request.Draw': data.draw,

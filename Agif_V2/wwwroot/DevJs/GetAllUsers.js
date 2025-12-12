@@ -1,8 +1,11 @@
 ﻿$(document).ready(function () {
     let rawValue = $("#Status").val();
-    let value = rawValue !== "false"; 
+    let value = rawValue !== "false";
 
-    
+    // Get token and store globally
+    window.token = $('input[name="__RequestVerificationToken"]').val();
+    console.log("Token found on load:", window.token);
+
     BindUsersData(value);
 });
 
@@ -17,23 +20,27 @@ $('#btnDownloadExcel').on('click', function () {
             Swal.showLoading();
         }
     });
-    
+
     $.ajax({
-        url: '/Account/ExportAllUsersToExcel', 
+        url: '/Account/ExportAllUsersToExcel',
         type: 'POST',
+        headers: {
+            "RequestVerificationToken": window.token || $('input[name="__RequestVerificationToken"]').val()
+        },
         xhrFields: {
-            responseType: 'blob'  
+            responseType: 'blob'
         },
         success: function (response) {
             Swal.close();
-            
+
             const link = document.createElement('a');
             link.href = URL.createObjectURL(response);
             link.download = "UsersList.xlsx";
             link.click();
         },
-        error: function () {
+        error: function (xhr, status, error) {
             Swal.close();
+            console.error('Export error:', error);
             Swal.fire({
                 title: 'Error',
                 text: 'An error occurred while exporting the data.',
@@ -43,46 +50,57 @@ $('#btnDownloadExcel').on('click', function () {
     });
 });
 
-
-
 function BindUsersData(status) {
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblData')) {
         $('#tblData').DataTable().destroy();
     }
 
+    // Get the token
+    const requestToken = window.token || $('input[name="__RequestVerificationToken"]').val();
+
+    console.log("Initializing DataTable with status:", status);
+    console.log("Using token:", requestToken);
+
     // Initialize DataTable with server-side processing
     let table = $('#tblData').DataTable({
         processing: true,
         serverSide: true,
         filter: true,
-        order: [[0, 'desc']], // Default sorting on the first column
+        order: [[0, 'desc']],
         ajax: {
             url: "/Account/GetAllUsersListPaginated",
             type: "POST",
-            contentType: "application/x-www-form-urlencoded",
-            //headers: {
-            //    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-            //},
+            headers: {
+                "RequestVerificationToken": requestToken
+            },
             data: function (data) {
-                // Set default values for sortColumn and sortDirection if no sorting is applied
-                const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName'; // Default column if none selected
-                const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc'; // Default direction if none selected
+                const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName';
+                const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc';
 
-                return {
-                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val(),
+                const payload = {
                     draw: data.draw,
                     start: data.start,
                     length: data.length,
                     searchValue: data.search.value,
-                    sortColumn: sortColumn, // Ensure it has a default
-                    sortDirection: sortDirection, // Ensure it has a default
-                    status: status // Pass the status parameter
+                    sortColumn: sortColumn,
+                    sortDirection: sortDirection,
+                    status: status.toString() // Send as string
                 };
+
+                console.log("Sending payload:", payload);
+                return payload;
             },
             error: function (xhr, error, code) {
                 console.error('Error loading data:', error);
-                alert('Error loading data. Please try again.');
+                console.error('XHR Status:', xhr.status);
+                console.error('Response:', xhr.responseText);
+
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error loading data. Please refresh the page and try again.',
+                    icon: 'error'
+                });
             }
         },
         columns: [
@@ -142,20 +160,17 @@ function BindUsersData(status) {
                 render: function (data, type, row) {
                     if (!data) return 'N/A';
 
-                    // 1. Encode the email string using JavaScript character codes
                     const encodedEmail = Array.from(data)
                         .map(c => `&#${c.charCodeAt(0)};`)
                         .join('');
                     return encodedEmail;
                 }
             },
-         
             {
                 data: "updatedOn",
                 name: "UpdatedOn",
                 render: function (data, type, row) {
                     if (!data) return "N/A";
-
                     return new Intl.DateTimeFormat('en-GB').format(new Date(data));
                 }
             },
@@ -185,7 +200,7 @@ function BindUsersData(status) {
                 orderable: false,
                 className: 'noExport',
                 render: function (data, type, row) {
-                    const isActive = row.isActive || false; // Assuming your data has isActive field
+                    const isActive = row.isActive || false;
                     const statusText = isActive ? 'Active' : 'Inactive';
                     const statusClass = isActive ? 'status-active' : 'status-inactive';
 
@@ -247,7 +262,6 @@ function BindUsersData(status) {
                 const isActive = $toggle.is(':checked');
                 const statusText = $toggle.closest('.action-container').find('.status-text');
 
-                // Revert the toggle immediately; will be set again on confirm
                 $toggle.prop('checked', !isActive);
 
                 Swal.fire({
@@ -259,28 +273,25 @@ function BindUsersData(status) {
                     cancelButtonText: 'No'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Set back the correct toggle value
                         $toggle.prop('checked', isActive);
 
-                        // Update status text immediately for better UX
                         if (isActive) {
                             statusText.text('Active').removeClass('status-inactive').addClass('status-active');
                         } else {
                             statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
                         }
 
-                        // Call function to update user status
                         updateUserStatus(domainId, isActive, $toggle);
                     }
                 });
             });
+
             $('#tblData tbody').off('change', '.cls-toggle-primary').on('change', '.cls-toggle-primary', function () {
                 const $toggle = $(this);
                 const domainId = $toggle.data('domain-id');
                 const isPrimary = $toggle.is(':checked');
                 const statusText = $toggle.closest('.action-container').find('.status-text');
 
-                // Revert the toggle immediately; will be set again on confirm
                 $toggle.prop('checked', !isPrimary);
 
                 Swal.fire({
@@ -292,17 +303,14 @@ function BindUsersData(status) {
                     cancelButtonText: 'No'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Set back the correct toggle value
                         $toggle.prop('checked', isPrimary);
 
-                        // Update status text immediately for better UX
                         if (isPrimary) {
                             statusText.text('Primary').removeClass('status-inactive').addClass('status-active');
                         } else {
                             statusText.text('Secondary').removeClass('status-active').addClass('status-inactive');
                         }
 
-                        // Call function to update user primary status
                         updateUserPrimary(domainId, isPrimary, $toggle);
                     }
                 });
@@ -314,7 +322,6 @@ function BindUsersData(status) {
                 const isActive = $toggle.is(':checked');
                 const statusText = $toggle.closest('.action-container').find('.status-text');
 
-                // Revert the toggle immediately; will be set again on confirm
                 $toggle.prop('checked', !isActive);
 
                 Swal.fire({
@@ -326,39 +333,30 @@ function BindUsersData(status) {
                     cancelButtonText: 'No'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Set back the correct toggle value
                         $toggle.prop('checked', isActive);
 
-                        // Update status text immediately for better UX
                         if (isActive) {
                             statusText.text('Active').removeClass('status-inactive').addClass('status-active');
                         } else {
                             statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
                         }
 
-                        // Call function to update user status
                         updateUserFormation(domainId, isActive, $toggle);
                     }
                 });
             });
         }
-
     });
 }
-
-// Add this to your $(document).ready() or drawCallback function
-$('#tblData tbody').on('click', '.contact-user-link', function () {
-    const email = $(this).data('email');
-    if (email) {
-        window.location.href = `mailto:${email}`;
-    }
-});
 
 // Function to handle user status update
 function updateUserStatus(domainId, isActive, toggleElement) {
     $.ajax({
-        url: "/Account/UpdateUserStatus", 
+        url: "/Account/UpdateUserStatus",
         type: "POST",
+        headers: {
+            "RequestVerificationToken": window.token || $('input[name="__RequestVerificationToken"]').val()
+        },
         data: {
             domainId: domainId,
             isActive: isActive
@@ -369,14 +367,15 @@ function updateUserStatus(domainId, isActive, toggleElement) {
                 showSuccessMessage(`User status updated to: ${isActive ? 'Active' : 'Inactive'}`);
             }
             else {
-                revertToggle(toggleElement, !isActive);
+                revertToggle(toggleElement, !isActive, 'status');
                 console.error('Failed to update user status:', response.message);
                 showErrorMessage('Failed to update user status: ' + response.message);
             }
         },
         error: function (xhr, status, error) {
-            revertToggle(toggleElement, !isActive);
+            revertToggle(toggleElement, !isActive, 'status');
             console.error('Error updating user status:', error);
+            showErrorMessage('Error updating user status. Please try again.');
         }
     });
 }
@@ -385,6 +384,9 @@ function updateUserFormation(domainId, isActive, toggleElement) {
     $.ajax({
         url: "/Account/UpdateUserFormation",
         type: "POST",
+        headers: {
+            "RequestVerificationToken": window.token || $('input[name="__RequestVerificationToken"]').val()
+        },
         data: {
             domainId: domainId,
             isActive: isActive
@@ -395,21 +397,26 @@ function updateUserFormation(domainId, isActive, toggleElement) {
                 showSuccessMessage(`User Formation updated to: ${isActive ? 'Active' : 'Inactive'}`);
             }
             else {
-                revertToggle(toggleElement, !isActive);
+                revertToggle(toggleElement, !isActive, 'status');
                 console.error('Failed to update user Formation:', response.message);
                 showErrorMessage('Failed to update user Formation: ' + response.message);
             }
         },
         error: function (xhr, status, error) {
-            revertToggle(toggleElement, !isActive);
+            revertToggle(toggleElement, !isActive, 'status');
             console.error('Error updating user status:', error);
+            showErrorMessage('Error updating user formation. Please try again.');
         }
     });
 }
+
 function updateUserPrimary(domainId, isPrimary, toggleElement) {
     $.ajax({
-        url: "/Account/UpdateUserPrimary", // You'll need to create this endpoint
+        url: "/Account/UpdateUserPrimary",
         type: "POST",
+        headers: {
+            "RequestVerificationToken": window.token || $('input[name="__RequestVerificationToken"]').val()
+        },
         data: {
             domainId: domainId,
             isPrimary: isPrimary
@@ -417,7 +424,7 @@ function updateUserPrimary(domainId, isPrimary, toggleElement) {
         success: function (response) {
             if (response.success && isPrimary) {
                 $('#tblData').DataTable().ajax.reload(null, false);
-                showSuccessMessage(`User role updated to: Primary'}`);
+                showSuccessMessage(`User role updated to: Primary`);
             } else if (response.success && !isPrimary) {
                 $('#tblData').DataTable().ajax.reload(null, false);
                 showErrorMessage(`You cannot change primary to secondary`);
@@ -455,3 +462,20 @@ function revertToggle(toggleElement, originalState, toggleType) {
     }
 }
 
+function showSuccessMessage(message) {
+    Swal.fire({
+        title: 'Success',
+        text: message,
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+    });
+}
+
+function showErrorMessage(message) {
+    Swal.fire({
+        title: 'Error',
+        text: message,
+        icon: 'error'
+    });
+}

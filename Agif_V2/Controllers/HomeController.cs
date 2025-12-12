@@ -75,7 +75,7 @@ namespace Agif_V2.Controllers
             ViewBag.ArmyNo = dTOTempSession.ArmyNo;
             return View(dTOTempSession);
         }
-
+        [HttpPost]
         public async Task<IActionResult> GetApprovedLogs(DTODataTableRequest request)
         {
             if (!ModelState.IsValid)
