@@ -28,3 +28,6 @@ function handleNavbarClick() {
         $(this).addClass("active fw-bold");
     });
 }
+function getCsrfToken() {
+    return $('input[name="__RequestVerificationToken"]').val();
+}

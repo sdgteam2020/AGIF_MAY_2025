@@ -374,7 +374,7 @@ namespace Agif_V2.Controllers
         }
 
         [Authorize(Roles = "Admin,LoanAdmin")]
-   
+        //[IgnoreAntiforgeryToken]
         public IActionResult GetAllUsers(bool status)
         {
             if (!ModelState.IsValid)
@@ -414,6 +414,11 @@ namespace Agif_V2.Controllers
 
                 var paginatedData = await query.Skip(request.Start).Take(request.Length).ToListAsync();
 
+                foreach (var userProfile in paginatedData)
+                {
+                    userProfile.EmailId = MaskEmailAddress(userProfile.EmailId);
+                }
+
                 var responseData = CreateResponse(request.Draw, totalRecords, filteredRecords, paginatedData);
 
                 return Json(responseData);
@@ -425,6 +430,29 @@ namespace Agif_V2.Controllers
             }
 
         }
+        private string MaskEmailAddress(string email)
+        {
+            if (string.IsNullOrEmpty(email) || !email.Contains("@"))
+            {
+                return email;
+            }
+
+            var parts = email.Split('@');
+            var localPart = parts[0];
+            var domain = parts[1];
+
+            var visibleLength = 1;
+
+            if (localPart.Length <= visibleLength)
+            {
+                return $"{localPart}@{domain}";
+            }
+
+            var visiblePart = localPart.Substring(0, visibleLength);
+            var maskedPart = new string('*', localPart.Length - visibleLength);
+
+            return $"{visiblePart}{maskedPart}@{domain}";
+        }
 
         private bool GetUserStatus(string status)
         {
@@ -434,7 +462,6 @@ namespace Agif_V2.Controllers
 
         private static string EscapeLike(string input)
         {
-            // Escape %, _ and [ which have special meaning in SQL LIKE
             return input.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
         }
 

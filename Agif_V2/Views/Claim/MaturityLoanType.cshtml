@@ -14,6 +14,7 @@
             </div>
 
             <form id="loanForm" action="/Claim/Redirection" method="post">
+                @Html.AntiForgeryToken()
                 <div class="mb-3">
                     <div class="form-group">
                         <label for="Category">Applicant Category:</label>

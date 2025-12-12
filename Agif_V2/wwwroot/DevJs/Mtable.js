@@ -5,12 +5,15 @@ function mMsater(sectid, ddl, TableId, ParentId) {
         id: TableId,
         ParentId: ParentId
     };
-
+    var token = $('input[name="__RequestVerificationToken"]').val();
     $.ajax({
         url: '/Master/GetAllMMaster',
         contentType: 'application/x-www-form-urlencoded',
         data: userdata,
         type: 'POST',
+        "headers": {
+            "RequestVerificationToken": token
+        },
         success: function (response) {
             if (response !== "null" && response != null) {
                 if (response === 0 || response === -1) {

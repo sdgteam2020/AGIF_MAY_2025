@@ -130,9 +130,17 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod()
         .AllowAnyHeader());
 });
-
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+    options.HeaderName = "RequestVerificationToken";
+});
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
+}).AddRazorRuntimeCompilation();
 
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOptions>(options =>
 {
@@ -140,11 +148,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.CookieTempDataProviderOption
     options.Cookie.HttpOnly = true;
 });
 
-builder.Services.AddAntiforgery(options =>
-{
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.HttpOnly = true;
-});
+
 
 builder.Services.AddDistributedMemoryCache();
 
