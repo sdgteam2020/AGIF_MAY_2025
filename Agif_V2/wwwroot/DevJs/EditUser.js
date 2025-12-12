@@ -16,6 +16,9 @@
                 url: '/Account/GetUnitById',
                 type: 'POST',
                 data: { UnitId: UnitId },
+                "headers": {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data) {
                         $('#txtUnit').val(data);

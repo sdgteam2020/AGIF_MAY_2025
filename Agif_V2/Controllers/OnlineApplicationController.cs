@@ -512,7 +512,7 @@ namespace Agif_V2.Controllers
         private JsonResult JsonError(string message) => Json(new { success = false, message });
         #endregion
 
-
+        [HttpPost]
         public async Task<JsonResult> GetPdfFilePath(int applicationId)
         {
             if (!ModelState.IsValid)

@@ -122,7 +122,7 @@ namespace Agif_V2.Controllers
             return View();
         }
 
-        
+        [HttpPost]
         public async Task<IActionResult> GetUsersApplicationList(DTODataTableRequest request, int status)
         {
             if(!ModelState.IsValid)
@@ -556,7 +556,7 @@ namespace Agif_V2.Controllers
             return View(dTOTempSession);
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> GetUsersApplicationListToAdmin(DTODataTableRequest request, int status)
         {
             if (!ModelState.IsValid)
@@ -635,7 +635,7 @@ namespace Agif_V2.Controllers
             }
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> GetClaimUsersApplicationListToAdmin(DTODataTableRequest request, int status)
         {
             if(!ModelState.IsValid)

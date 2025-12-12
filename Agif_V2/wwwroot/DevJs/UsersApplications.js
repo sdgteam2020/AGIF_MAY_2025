@@ -301,6 +301,9 @@ function GetApplicationList(status, endpoint) {
             url: endpoint,
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
+            "headers": {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             data: function (data) {
                 return {
                     draw: data.draw,
@@ -348,7 +351,10 @@ function OpenAction(applicationId, endpoint, category) {
 
     fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         body: new URLSearchParams({ applicationId })
     })
         .then(resp => resp.json())
@@ -400,6 +406,9 @@ function fetchApplicationDetails(applicationId, endpoint) {
         type: 'POST',
         data: { applicationId: applicationId },
         dataType: 'json',
+        headers: {
+            "RequestVerificationToken":  $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             if (response.success) {
                 currentApplicationData = response.data;
@@ -425,6 +434,9 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
         url: endpoint,
         data: { applicationId: applicationId, isRejected: isRejected, isApproved: isApproved },
         dataType: 'json',
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             if (isApproved) {
                 DigitalSignByAPI(applicationId, val);
@@ -538,6 +550,9 @@ function DataSignDigitaly(applicationId, endpoint, userType) {
         url: endpoint,
         type: "POST",
         data: { applicationId },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (data) { 
                 GetTokenSignXml(data, userType, applicationId);
@@ -588,6 +603,9 @@ function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
         type: 'POST',
         data: { applicationId: applicationId },
         dataType: 'json',
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             if (response) {
                 sendPDFToServer(response, thumbprint, type);
@@ -692,6 +710,9 @@ function SaveSignedPdf(base64String, fn, endpoint) {
             base64String: base64String, 
             fileName: `${fn}`
         },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             window.location.href = "/ApplicationRequest/UserApplicationList";
         },
@@ -710,6 +731,9 @@ function SignXmlSendTOdatabase(xmlString, endpoint, userType) {
         url: endpoint,
         type: 'POST',
         data: { applId: applnId, xmlResString: xmlString, remarks: remarks },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function () {
             if (userType === 'Loan') {
                 url = "/OnlineApplication/MergePdf";
@@ -739,6 +763,9 @@ function rejectedApplication(applicationId, type) {
         url: URL,
         data: { applId: applicationId, rem: remarks },
         type: 'POST',
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
 
             if (type === 'Loan')
@@ -783,6 +810,9 @@ function fetchApplicantData(armyNo) {
         type: 'POST',
         data: { armyNo: armyNo, usertype: usertype },
         dataType: 'json',
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             if (response.success) {
                 console.log(response.data);

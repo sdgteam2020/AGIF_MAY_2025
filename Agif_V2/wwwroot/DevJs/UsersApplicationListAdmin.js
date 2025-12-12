@@ -48,6 +48,9 @@ $('#btnExportOk').on('click', function () {
         contentType: 'application/json',
         data: JSON.stringify(validatedRecords),
         xhrFields: { responseType: 'blob' },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (blob) {
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
@@ -69,6 +72,9 @@ $('#btnExportNotOk').on('click', function () {
         contentType: 'application/json',
         data: JSON.stringify(rejectedRecords),
         xhrFields: { responseType: 'blob' },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (blob) {
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
@@ -101,6 +107,9 @@ $('#btnBulkUpload').on('click', function () {
         data: formData,
         contentType: false,
         processData: false,
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             
             if (response.success) {
@@ -262,6 +271,9 @@ $('#UploadExcel1').on('click', function () {
                 data: formData,
                 contentType: false,
                 processData: false,
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (response) {
                     if (response.success) {
                         Swal.fire({
@@ -388,7 +400,6 @@ function BindUsersData(status) {
             </button>`;
         }
     });
-
     // Initialize DataTable with server-side processing
     const table = $('#tblReceivedApplications').DataTable({
         processing: true,
@@ -399,6 +410,9 @@ function BindUsersData(status) {
             url: "/ApplicationRequest/GetUsersApplicationListToAdmin",
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
+            "headers": {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             data: function (data) {
                 return {
                     'request.Draw': data.draw,
