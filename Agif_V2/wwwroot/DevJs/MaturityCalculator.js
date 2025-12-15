@@ -286,6 +286,9 @@ $('#calculateButton').on('click', function () {
             commissionMonth: commissionMonth,
             commissionYear: commissionYear
         },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (response) {
             if (response.success) {
                 let joiningDate = formatDateToReadable($('#dateOfBirth').val());
