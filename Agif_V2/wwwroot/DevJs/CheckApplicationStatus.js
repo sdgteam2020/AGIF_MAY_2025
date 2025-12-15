@@ -255,6 +255,9 @@
             url: '/OnlineApplication/HandleApplicationRedirect', // Your controller and action to handle the logic
             type: 'POST',
             data: requestData,
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (response) {
                 if (response.success) {
                     // If the server returns a URL to redirect to, perform the redirect
@@ -317,13 +320,13 @@
         form.style.display = 'none';
 
         // Add CSRF token (get from your page)
-        //const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
       
-        //    const tokenInput = document.createElement('input');
-        //    tokenInput.type = 'hidden';
-        //    tokenInput.name = '__RequestVerificationToken';
-        //    tokenInput.value = csrfToken;
-        //    form.appendChild(tokenInput);
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '__RequestVerificationToken';
+            tokenInput.value = csrfToken;
+            form.appendChild(tokenInput);
         
 
         // Add application ID (encrypted on server side)
@@ -367,6 +370,9 @@
             url: endpoint,
             type: 'POST',
             data: { applicationId: appId },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (response) {
                 // Hide loading
                 loadingDiv.hide();

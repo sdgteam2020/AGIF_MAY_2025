@@ -1,4 +1,4 @@
-﻿// Login page functionality
+﻿//// Login page functionality
 class LoginManager {
     constructor(options = {}) {
         this.isLockedOut = options.isLockedOut || false;
@@ -176,7 +176,7 @@ $(document).ready(() => {
             autoRefreshTimeout: configEl.dataset.autoRefreshTimeout !== "null" ? parseInt(configEl.dataset.autoRefreshTimeout) : null
         };
 
-        new LoginManager(loginConfig);
+        //new LoginManager(loginConfig);
     } else {
         console.warn("loginConfig element not found.");
     }

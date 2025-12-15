@@ -96,7 +96,7 @@ namespace Agif_V2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            // Retrieve private key from session
+            //    // Retrieve private key from session
             var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
 
             if (string.IsNullOrEmpty(privateKey))

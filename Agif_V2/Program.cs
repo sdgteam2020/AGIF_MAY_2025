@@ -130,6 +130,7 @@ builder.Services.AddCors(options =>
         .AllowAnyMethod()
         .AllowAnyHeader());
 });
+
 builder.Services.AddAntiforgery(options =>
 {
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -174,38 +175,38 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-//app.Use(async (ctx, next) =>
-//{
-//    // 1) Content Security Policy
-//    ctx.Response.Headers["Content-Security-Policy"] =
-//        "default-src 'self' blob:; " +
-//        "script-src 'self'; " +
-//        "style-src 'self';" +
-//        "img-src 'self' data:; " +
-//        "font-src 'self' data:; " +
-//        "frame-ancestors 'none'; " +
-//        "base-uri 'self'; " +
-//        "object-src 'self' blob:; " +
-//        "form-action 'self';";
+app.Use(async (ctx, next) =>
+{
+    // 1) Content Security Policy
+    ctx.Response.Headers["Content-Security-Policy"] =
+        "default-src 'self' blob:; " +
+        "script-src 'self'; " +
+        "style-src 'self';" +
+        "img-src 'self' data:; " +
+        "font-src 'self' data:; " +
+        "frame-ancestors 'none'; " +
+        "base-uri 'self'; " +
+        "object-src 'self' blob:; " +
+        "form-action 'self';";
 
-//    // 2) X-Frame-Options (align with frame-ancestors)
-//    ctx.Response.Headers["X-Frame-Options"] = "DENY";
+    // 2) X-Frame-Options (align with frame-ancestors)
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";
 
-//    // 3) Referrer-Policy
-//    ctx.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    // 3) Referrer-Policy
+    ctx.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
 
-//    // Extra good headers
-//    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
-//    ctx.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+    // Extra good headers
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["X-XSS-Protection"] = "1; mode=block";
 
 
 
-//    // Hide tech details where possible
-//    ctx.Response.Headers.Remove("X-Powered-By");
-//    ctx.Response.Headers.Remove("x-aspnet-version");
+    // Hide tech details where possible
+    ctx.Response.Headers.Remove("X-Powered-By");
+    ctx.Response.Headers.Remove("x-aspnet-version");
 
-//    await next();
-//});
+    await next();
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

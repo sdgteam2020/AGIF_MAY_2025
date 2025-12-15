@@ -716,7 +716,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 .calculate-btn {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(145deg, #ff9900, #cc7a00);
     border: 2px solid rgba(255, 153, 0, 0.6);
     border-radius: 12px;
     color: white;
@@ -730,6 +729,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     text-transform: uppercase;
     position: relative;
     overflow: hidden;
+    background: #310;
 }
 
     .calculate-btn::before {
@@ -751,7 +751,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     }
 
     .calculate-btn:hover {
-        background: linear-gradient(145deg, #cc7a00, #ff9900);
+        background: #310;
         transform: translateY(-3px) scale(1.02);
         box-shadow: 0 10px 25px rgba(255, 153, 0, 0.6);
     }

@@ -101,6 +101,9 @@
             url: "/Claim/InfoBeforeUpload",
             type: 'POST',
             data: { applicationId: applicationId },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (response) {
                 if (response.success) {
                     Swal.fire({

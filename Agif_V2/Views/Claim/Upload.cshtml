@@ -51,6 +51,7 @@
                     </div>
                     <form id="uploadForm" action="@Url.Action("Upload", "Claim")" method="post" enctype="multipart/form-data">
                         <!-- Hidden field to pass form type to controller -->
+                        @Html.AntiForgeryToken()
                         <input type="hidden" id="hiddenFormType" name="formType" value="@formType" />
                         <input type="hidden" id="hiddenApplicationId" name="applicationId" value="@applicationId" />
                         

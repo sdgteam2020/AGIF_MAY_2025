@@ -569,6 +569,9 @@ function getApplicantDetalis() {
         type: "Post",
         url: "/Claim/CheckExistUser",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
@@ -618,6 +621,9 @@ function DeleteExistingLoan() {
         type: "POST",
         url: "/Claim/DeleteExistingLoan",
         data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
@@ -995,6 +1001,9 @@ function SetRetDate() {
                 type: "POST",
                 url: "/OnlineApplication/GetRetirementDate",
                 data: { rankId: rankId, Prefix: Prefix, regtId: regtId },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data.userTypeId == 1) {
                         const dateParts = $('#dateOfBirth').val().split('/');
@@ -1334,6 +1343,9 @@ function fetchPCDA_PAO() {
         type: 'POST',
         contentType: 'application/x-www-form-urlencoded',  // Specify content type for URL-encoded data
         data: param,  // Pass the data parameter
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (data != null) {
                 $('#pcda_pao').val(data.pcdaPao);  // Set the result into the input
@@ -1497,6 +1509,9 @@ function checkCORegistration() {
             url: '/OnlineApplication/CheckForCoRegister',
             type: 'POST',
             data: { ArmyNo: ArmyNo },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (result) {
                 if (result === true) {
                     $('#unitSearchDialog').removeClass('d-none'); // Show the dialog if CO is registered
@@ -1587,6 +1602,9 @@ function checkUnitSameOrNot(ArmyNo) {
                 url: '/OnlineApplication/CheckForCoRegister',
                 type: 'POST',
                 data: { ArmyNo: ArmyNo },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (result) {
                     if (result === true) {
                         $('#COArmyNo').val(ArmyNo);
@@ -1664,6 +1682,9 @@ $("#ParenttxtUnit").autocomplete({
                 contentType: 'application/x-www-form-urlencoded',
                 data: param,
                 type: 'POST',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (Array.isArray(data) && data.length !== 0) {
                         response($.map(data, function (item) {
@@ -1707,6 +1728,9 @@ $("#PresenttxtUnit").autocomplete({
                 contentType: 'application/x-www-form-urlencoded',
                 data: param,
                 type: 'POST',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data.length != 0) {
                         response($.map(data, function (item) {
@@ -1751,6 +1775,9 @@ function CheckIsCoRegister(UnitId, UnitName) {
         contentType: 'application/x-www-form-urlencoded',
         data: param,
         type: 'POST',
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (Number(data) === 1) {
                 $("#PresenttxtUnit").val(UnitName);
@@ -2064,6 +2091,9 @@ function findDataWithArmyNumber() {
                 url: '/Claim/GetDataByArmyNumber',
                 type: 'POST',
                 data: { ArmyNo: fullArmyNumber },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data) {
 
@@ -2138,6 +2168,9 @@ function findDataWithApplicationId() {
             url: '/Claim/GetDataByApplicationId',
             type: 'POST',
             data: { applicationid: applicationid },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (data) {
                 if (data) {
 
@@ -2326,24 +2359,28 @@ $('.file-upload').on('change', function () {
 });
 
 $('#oldArmyNo').on('blur', function () {
-    const prefixVal = $('#oldArmyPrefix').val();
+    const oldprefixVal = $('#oldArmyPrefix').val();
+    const prefixVal = $('#armyPrefix').val();
 
     // Only apply rule when oldArmyPrefix == 13
     if (prefixVal === "13") {
-        const armyNumber = $('#armyNumber').val().trim();
-        const oldArmyNo = $('#oldArmyNo').val().trim();
+        if (oldprefixVal === "13") {
+            const armyNumber = $('#armyNumber').val().trim();
+            const oldArmyNo = $('#oldArmyNo').val().trim();
 
-        // If both numbers exist and are NOT same → show alert
-        if (armyNumber !== "" && oldArmyNo !== "" && armyNumber !== oldArmyNo) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Number mismatch',
-                text: 'Old Army No And Army No should be same.',
-                confirmButtonText: 'OK'
-            }).then(() => {
-                // optional: clear old number and focus it
-                $('#oldArmyNo').val('');
-            });
+            // If both numbers exist and are NOT same → show alert
+            if (armyNumber !== "" && oldArmyNo !== "" && armyNumber !== oldArmyNo) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Number mismatch',
+                    text: 'Old Army No And Army No should be same.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    // optional: clear old number and focus it
+                    $('#oldArmyNo').val('');
+                });
+            }
         }
     }
+    
 });
