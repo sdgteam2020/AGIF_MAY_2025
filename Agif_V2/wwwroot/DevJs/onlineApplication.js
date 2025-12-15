@@ -606,6 +606,9 @@ function getApplicantDetalis() {
         url: "/OnlineApplication/CheckExistUser",
         data: JSON.stringify({ armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType }),
         contentType: 'application/json', 
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
@@ -682,6 +685,9 @@ function DeleteExistingLoan() {
         url: "/OnlineApplication/DeleteExistingLoan",
         data: JSON.stringify({ armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType }),
         contentType: 'application/json', 
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
             if (data.exists) {
                 Swal.fire({
@@ -1056,6 +1062,9 @@ function SetRetDate() {
                 url: "/OnlineApplication/GetRetirementDate",
                 contentType: 'application/x-www-form-urlencoded',
                 data: param,
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data.userTypeId == 1) {
                         // userTypeId == 1 => Officers
@@ -1367,6 +1376,9 @@ function fetchPCDA_PAO() {
             type: 'POST',
             contentType: 'application/x-www-form-urlencoded',  // Specify content type for URL-encoded data
             data: param,  // Pass the data parameter
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (data) {
                 if (data != null) {
                     $('#pcda_pao').val(data.pcdaPao);  // Set the result into the input
@@ -1642,6 +1654,9 @@ function checkCORegistration() {
             url: '/OnlineApplication/CheckForCoRegister',
             type: 'POST',
             data: { ArmyNo: ArmyNo },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
             success: function (result) {
                 if (result === true) {
                     $('#unitSearchDialog').removeClass('d-none');
@@ -1726,6 +1741,9 @@ function checkUnitSameOrNot(ArmyNo) {
                 url: '/OnlineApplication/CheckForCoRegister',
                 type: 'POST',
                 data: { ArmyNo: ArmyNo },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (result) {
                     if (result === true) {
                         $('#COArmyNo').val(ArmyNo);
@@ -2189,6 +2207,9 @@ $("#ParenttxtUnit").autocomplete({
                 contentType: 'application/x-www-form-urlencoded',
                 data: param,
                 type: 'POST',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data.length != 0) {
                         response($.map(data, function (item) {
@@ -2241,6 +2262,9 @@ $("#PresenttxtUnit").autocomplete({
                 contentType: 'application/x-www-form-urlencoded',
                 data: param,
                 type: 'POST',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data.length != 0) {
                         response($.map(data, function (item) {
@@ -2290,6 +2314,9 @@ function CheckIsCoRegister(UnitId, UnitName) {
         contentType: 'application/x-www-form-urlencoded',
         data: param,
         type: 'POST',
+        headers: {
+            "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+        },
         success: function (data) {
 
             if (data == 1) {
@@ -2424,6 +2451,9 @@ function findDataWithArmyNumber() {
                 type: 'POST',
                 data: JSON.stringify({ ArmyNo: fullArmyNumber }),  // Send ArmyNo in the body
                 contentType: 'application/json',  // Specify content type
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data) {
 
@@ -2502,6 +2532,9 @@ function findDataWithApplicationId() {
                 url: '/OnlineApplication/GetDataByApplicationId',
                 type: 'POST',
                 data: { applicationid: applicationid },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data) {
                         
