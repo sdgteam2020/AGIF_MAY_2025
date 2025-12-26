@@ -141,7 +141,7 @@ namespace Agif_V2.Controllers
             var Category = TempData["Category"] as string;
             var WithdrwalPurpose = TempData["WithdrwalPurpose"] as string;
 
-            int id = TempData["ClaimapplicationId"] is int applicationId ? applicationId : 0;
+            int id = TempData["RedirectClaimapplicationId"] is int applicationId ? applicationId : 0;
 
             TempData["CategoryNew"] = Category ?? string.Empty;
 
@@ -229,7 +229,7 @@ namespace Agif_V2.Controllers
             {
                 {"AttachPartIIOrder", "AttachPartIIOrder"},
                 {"AttachBonafideLetter", "AttachBonafideLetter"},
-                {"TotalExpenditureFile", "AttachPartIIOrder"}
+                {"TotalExpenditureFile", "TotalExpenditureFile"}
             });
                 else if (model.Marriageward != null)
                     isValid &= await ValidateFormFilesAsync(model.Marriageward, "Marriageward", new Dictionary<string, string>

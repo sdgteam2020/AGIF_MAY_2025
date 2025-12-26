@@ -9,7 +9,7 @@
     string loanType = Model?.loantype ?? TempData["loantypeNew"] as string ?? "CA";
     string applicantCategory = Model?.applicantCategory ?? TempData["applicantcategoryNew"] as string ?? "Officer";
     string loanTypeText = "";
-    int applicationid = TempData["applicationid"] != null ? (int)TempData["applicationid"] : 0;
+    int applicationid = TempData["RedirectapplicationId"] != null ? (int)TempData["RedirectapplicationId"] : 0;
     if(loanType == "1")
     {
         loanTypeText = "House Loan (HBA)";

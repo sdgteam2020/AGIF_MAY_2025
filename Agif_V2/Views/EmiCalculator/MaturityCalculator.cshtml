@@ -19,16 +19,16 @@
                     <div id="loanForm">
                         <!-- Date fields container (initially hidden, will show on top after selection) -->
                         <div id="dateFieldsContainer" class="hidden">
-                            <!-- Date Of Joining/Enrolment -->
-                            <div class="input-section">
+                            <!-- Date Of Joining/Enrolment (Hidden for Direct Officers) -->
+                            <div class="input-section" id="enrolmentDateSection">
                                 <div class="section-label">📅 Enrolment/Start Date of AGIF subscription</div>
                                 <input type="text" class="form-control monthPicker" id="dateOfBirth" aria-label="Date of Birth" required placeholder="DD/MM/YYYY" autocomplete="off">
                             </div>
 
                             <!-- Date of Commission (Only for Officers) -->
                             <div class="input-section hidden" id="commissionDateSection">
-                                <div class="section-label">🎖️ Date of Commission (If Applicable)</div>
-                                <input type="text" class="form-control monthPicker" id="commissionDate" aria-label="Commission Date" placeholder="DD/MM/YYYY (Leave blank if not applicable)" autocomplete="off">
+                                <div class="section-label">🎖️ Date of Commission</div>
+                                <input type="text" class="form-control monthPicker" id="commissionDate" aria-label="Commission Date" placeholder="DD/MM/YYYY" autocomplete="off">
                             </div>
 
                             <!-- Till Date -->
@@ -53,20 +53,42 @@
                         <div class="input-section" id="rankGroupSection">
                             <div class="section-label">🎖️ Rank Group</div>
                             <div class="rank-selection">
-                                <div class="rank-option">
-                                    <input type="radio" id="officers" name="category" value="1" class="rank-radio">
-                                    <label for="officers" class="rank-label officers">
+                               
+
+                                <!-- Officers Option (Initial) -->
+                                <div class="rank-option" id="officersInitialOption">
+                                    <input type="radio" id="officers_initial" name="category" value="1" class="rank-radio">
+                                    <label for="officers_initial" class="rank-label officers">
                                         <div class="rank-icon">👨‍✈️</div>
                                         <div class="rank-title">OFFICERS</div>
                                         <div class="rank-description">Commissioned Officers</div>
                                     </label>
                                 </div>
-                                <div class="rank-option">
+                                <!-- JCO/OR Option -->
+                                <div class="rank-option" id="jcoOption">
                                     <input type="radio" id="jco_or" name="category" value="2" class="rank-radio">
                                     <label for="jco_or" class="rank-label">
                                         <div class="rank-icon">🪖</div>
                                         <div class="rank-title">JCO/OR</div>
                                         <div class="rank-description">Junior Commissioned Officers<br>& Other Ranks</div>
+                                    </label>
+                                </div>
+                                <!-- Sub-options for Officers (Hidden initially) -->
+                                <div class="rank-option hidden" id="directOfficerOption">
+                                    <input type="radio" id="direct_officer" name="category" value="3" class="rank-radio">
+                                    <label for="direct_officer" class="rank-label officers">
+                                        <div class="rank-icon">⭐</div>
+                                        <div class="rank-title">OFFICER</div>
+                                        <div class="rank-description">(Direct Commission)</div>
+                                    </label>
+                                </div>
+
+                                <div class="rank-option hidden" id="promotedOfficerOption">
+                                    <input type="radio" id="promoted_officer" name="category" value="4" class="rank-radio">
+                                    <label for="promoted_officer" class="rank-label officers">
+                                        <div class="rank-icon">🎖️</div>
+                                        <div class="rank-title">Officer With Pre Commission Service</div>
+                                        <div class="rank-description">(Example ACC, SCO etc)</div>
                                     </label>
                                 </div>
                             </div>

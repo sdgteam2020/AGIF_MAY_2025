@@ -466,8 +466,7 @@ namespace DataAccessLayer.Repositories
         //        saveEL: Math.Round(SaveEL, 2)
         //    );
         //}
-        public async Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(
-    int month, int year, int categoryValue, int? commissionMonth, int? commissionYear)
+        public async Task<(decimal currentBalance, decimal balCount, decimal saveEL)> CalculateTotalInvestment(int month, int year, int categoryValue, int? commissionMonth, int? commissionYear)
         {
             var investmentRates = new List<InvestmentChange_JCO_OR>();
             var officersInvestmentRates = new List<InvestmentChange_Officers>();
@@ -488,19 +487,23 @@ namespace DataAccessLayer.Repositories
 
             // Calculate till date (last day of previous month from current date)
             var today = DateTime.Today;
-            //var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
-            var tillDate = new DateTime(2025, 9, 30);
+          var tillDate = new DateTime(today.Year, today.Month, 1).AddDays(-1);
+           //var tillDate = new DateTime(2029, 12, 01);
 
             // Validate dates
-            if (joiningDate > tillDate)
+            if (joiningDate > tillDate || commissionDate > tillDate)
             {
                 throw new ArgumentException("Joining date cannot be after current month");
             }
 
-            if (commissionDate.HasValue && commissionDate.Value <= joiningDate)
+            if(commissionDate!=joiningDate)
             {
-                throw new ArgumentException("Commission date must be after joining date");
+                if (commissionDate.HasValue && commissionDate.Value <= joiningDate)
+                {
+                    throw new ArgumentException("Commission date must be after joining date");
+                }
             }
+           
 
             decimal currentBalance = 0;
             decimal previousBalance = 0;
@@ -525,9 +528,9 @@ namespace DataAccessLayer.Repositories
                     if (currentDate.Year == commissionDate.Value.Year &&
                         currentDate.Month == commissionDate.Value.Month)
                     {
-                        // COMMISSION MONTH - Use BOTH JCO/OR and Officer rates
+                        // COMMISSION MONTH - Use rates
                         isCommissionMonth = true;
-                        applicableRate = GetApplicableRate(investmentRates, currentDate);
+                        //applicableRate = GetApplicableRate(investmentRates, currentDate);
                         applicableRateOfficers = GetApplicableRateOfficers(officersInvestmentRates, currentDate);
                     }
                     else if (currentDate < commissionDate.Value)
@@ -670,6 +673,22 @@ namespace DataAccessLayer.Repositories
                 .Where(r => r.ChangeDate <= forDate)
                 .OrderByDescending(r => r.ChangeDate)
                 .FirstOrDefault();
+            //if (rates == null || rates.Count == 0)
+            //    return null;
+
+            //// latest rate where ChangeDate <= forDate
+            //var applicable = rates
+            //    .Where(r => r.ChangeDate <= forDate)
+            //    .OrderByDescending(r => r.ChangeDate)
+            //    .FirstOrDefault();
+
+            //if (applicable != null)
+            //    return applicable;
+
+            //// if forDate is earlier than the first ChangeDate → return earliest row (Id=1 in your data)
+            //return rates
+            //    .OrderBy(r => r.ChangeDate)
+            //    .First();
         }
 
 

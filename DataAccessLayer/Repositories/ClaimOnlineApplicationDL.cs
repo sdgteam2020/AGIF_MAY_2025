@@ -431,7 +431,7 @@ namespace DataAccessLayer.Repositories
                     else if (file.Name.Contains("SeviceExtn"))
                     {
                         fileUpload.IsSeviceExtnPdf = true;
-                        fileUpload.SeviceExtnPdf = "SeviceExtn"; // Update with the dynamic file name
+                        fileUpload.SeviceExtnPdf = "SeviceExtnPdf"; // Update with the dynamic file name
                     }
                 }
             }

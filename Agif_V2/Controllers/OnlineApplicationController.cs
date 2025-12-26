@@ -54,7 +54,7 @@ namespace Agif_V2.Controllers
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
-            int id = TempData["applicationId"] is int applicationId ? applicationId : 0 ;
+            int id = TempData["RedirectapplicationId"] is int applicationId ? applicationId : 0 ;
             TempData["loantypeNew"] = loanType ?? string.Empty;
             TempData["applicantcategoryNew"] = applicantCategory ?? string.Empty;
             //TempData["applicationId"] = id;
@@ -712,12 +712,12 @@ namespace Agif_V2.Controllers
             if (type == "Loan")
             {
                 redirectUrl = Url.Action("OnlineApplication", "OnlineApplication");
-                TempData["applicationId"] = appId;
+                TempData["RedirectapplicationId"] = appId;
             }
             else if (type == "Maturity")
             {
                 redirectUrl = Url.Action("OnlineApplication", "Claim");
-                TempData["ClaimapplicationId"] = appId;
+                TempData["RedirectClaimapplicationId"] = appId;
             }
 
             // Return the redirect URL to the client-side

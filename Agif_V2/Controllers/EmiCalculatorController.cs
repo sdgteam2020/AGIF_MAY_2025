@@ -21,7 +21,7 @@ namespace Agif_V2.Controllers
             return View();
         }
 
-        [HttpPost]
+        
         //public async Task<JsonResult> Calculate(int month, int year, int categoryValue)
         //{
         //    if (!ModelState.IsValid)

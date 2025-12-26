@@ -221,59 +221,88 @@ function showErrorMessage(message) {
     }, 2000);
 }
 
-// Handle rank group selection - SWAP POSITIONS
-$('input[name="category"]').on('change', function () {
-    const categoryValue = $(this).val();
-    const dateFieldsContainer = $('#dateFieldsContainer');
-    const commissionDateSection = $('#commissionDateSection');
-    const rankGroupSection = $('#rankGroupSection');
-    const loanForm = $('#loanForm');
+// Handle initial Officers button click - Show sub-options
+$('#officers_initial').on('change', function () {
+    if ($(this).is(':checked')) {
+        // Hide JCO/OR option
+        $('#jcoOption').fadeOut(200);
 
-    // Move date fields to top and rank group to bottom
-    dateFieldsContainer.detach().prependTo(loanForm);
-    rankGroupSection.detach().insertBefore(loanForm.find('.input-section').last());
+        // Show officer sub-options
+        $('#directOfficerOption').removeClass('hidden').hide().fadeIn(300);
+        $('#promotedOfficerOption').removeClass('hidden').hide().fadeIn(300);
 
-    // Show date fields with animation
-    dateFieldsContainer.slideDown(400);
-    dateFieldsContainer.removeClass('hidden');
-    // Reinitialize datepickers
-    initializeDatepickers();
-
-    // Show/hide commission date based on selection
-    if (categoryValue === '1') { // Officers
-        commissionDateSection.slideDown(300);
-    } else { // JCO/OR
-        commissionDateSection.slideUp(300);
-        $('#commissionDate').val('');
+        // Uncheck the initial officers option
+        $(this).prop('checked', false);
     }
 });
 
+
+
 // Handle calculation when button is clicked
 $('#calculateButton').on('click', function () {
-    const dt = document.getElementById('dateOfBirth').value;
-
-    if (!dt) {
-        showErrorMessage("Please select a valid Enrolment/Start Date");
-        return;
-    }
+    // Add button loading effect
+    const btn = $(this);
+    const originalText = btn.text();
+    btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-2"></span>Calculating...');
 
     const categoryValue = $('input[name="category"]:checked').val();
 
-    if (!categoryValue) {
+    if (!categoryValue || categoryValue === '1') {
         showErrorMessage("Please select a Rank Group");
+        btn.prop('disabled', false).text(originalText);
         return;
     }
 
-    const [day, month, year] = dt.split('/');
+    let month = null, year = null;
+    let commissionMonth = null, commissionYear = null;
 
-    const commissionDateValue = $('#commissionDate').val();
-    let commissionMonth = null;
-    let commissionYear = null;
+    // Validate based on category
+    if (categoryValue === '2') {
+        // JCO/OR - Need enrolment date
+        const dt = document.getElementById('dateOfBirth').value;
+        if (!dt) {
+            showErrorMessage("Please select Enrolment/Start Date");
+            btn.prop('disabled', false).text(originalText);
+            return;
+        }
+        const [day, mon, yr] = dt.split('/');
+        month = mon;
+        year = yr;
+    } else if (categoryValue === '3') {
+        // Direct Officer - Need commission date only
+        const commDt = document.getElementById('commissionDate').value;
+        if (!commDt) {
+            showErrorMessage("Please select  Joining Date");
+            btn.prop('disabled', false).text(originalText);
+            return;
+        }
+        const [day, mon, yr] = commDt.split('/');
+        month = mon;
+        year = yr;
+        commissionMonth = mon;
+        commissionYear = yr;
+    } else if (categoryValue === '4') {
+        // Promoted Officer - Need both dates
+        const dt = document.getElementById('dateOfBirth').value;
+        const commDt = document.getElementById('commissionDate').value;
 
-    if (commissionDateValue) {
-        const [commDay, commMonth, commYear] = commissionDateValue.split('/');
-        commissionMonth = commMonth;
-        commissionYear = commYear;
+        if (!dt) {
+            showErrorMessage("Please select Enrolment/Start Date");
+            btn.prop('disabled', false).text(originalText);
+            return;
+        }
+        if (!commDt) {
+            showErrorMessage("Please select Date of Commission");
+            btn.prop('disabled', false).text(originalText);
+            return;
+        }
+
+        const [day, mon, yr] = dt.split('/');
+        const [commDay, commMon, commYr] = commDt.split('/');
+        month = mon;
+        year = yr;
+        commissionMonth = commMon;
+        commissionYear = commYr;
     }
 
     $.ajax({
@@ -282,20 +311,27 @@ $('#calculateButton').on('click', function () {
         data: {
             month: month,
             year: year,
-            categoryValue: categoryValue,
+            categoryValue: categoryValue === '2' ? 2 : 1, // Send 1 for officers, 2 for JCO/OR
             commissionMonth: commissionMonth,
             commissionYear: commissionYear
-        },
-        headers: {
+        }, headers: {
             "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
         },
         success: function (response) {
+            btn.prop('disabled', false).text(originalText);
+
             if (response.success) {
-                let joiningDate = formatDateToReadable($('#dateOfBirth').val());
+                let joiningDate = '';
                 let tilldate = formatDateToReadable($('#tillDate').val());
 
+                if (categoryValue === '3') {
+                    joiningDate = formatDateToReadable($('#commissionDate').val());
+                } else {
+                    joiningDate = formatDateToReadable($('#dateOfBirth').val());
+                }
+
                 Swal.fire({
-                    title: '', // Empty title as it's not needed
+                    title: '',
                     html: `
              <div class="swal-center-container">
         <h3 class="swal-heading">
@@ -306,6 +342,12 @@ $('#calculateButton').on('click', function () {
         <h3 class="swal-heading">
             Assuming all your premiums have been received at AGIF, your approximate accumulation in maturity till previous month is
         </h3>
+          <div class="swal-amount">
+            ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}
+        </div>
 
         <h3 class="swal-heading">
             This is for serving Personnel only and E.I. amount is included in final maturity benefit.
@@ -315,12 +357,7 @@ $('#calculateButton').on('click', function () {
             For officers with service in ranks, Please contact AGIF Helpline No. 01126148055 for maturity details
         </h3>
 
-        <div class="swal-amount">
-            ₹${parseFloat(response.currentBalance).toLocaleString('en-IN', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    })}
-        </div>
+      
     </div>
         `,
                     icon: 'success',
@@ -328,6 +365,12 @@ $('#calculateButton').on('click', function () {
                     confirmButtonColor: '#28a745',
                     showCloseButton: true,
                     width: '700px',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown animate__faster'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp animate__faster'
+                    },
                     customClass: {
                         popup: 'swal-popup',
                         title: 'swal-title',
@@ -346,6 +389,7 @@ $('#calculateButton').on('click', function () {
             }
         },
         error: function (error) {
+            btn.prop('disabled', false).text(originalText);
             console.error("Error calculating maturity:", error);
             Swal.fire({
                 title: 'Error',
@@ -382,3 +426,61 @@ function formatDateToReadable(dateString) {
 
     return dateString;
 }
+// Handle rank group selection - OPTIMIZED SMOOTH SWAP
+$('input[name="category"]').on('change', function () {
+    const categoryValue = $(this).val();
+
+    // Skip if it's the initial officers button (value="1")
+    if (categoryValue === '1') {
+        $('#officersInitialOption').addClass('hidden');
+        return;
+    }
+
+    const dateFieldsContainer = $('#dateFieldsContainer');
+    const enrolmentDateSection = $('#enrolmentDateSection');
+    const commissionDateSection = $('#commissionDateSection');
+    const rankGroupSection = $('#rankGroupSection');
+    const loanForm = $('#loanForm');
+
+    // Faster animation - rank group section moving down
+    rankGroupSection.fadeOut(200, function () {
+        // Move date fields to top and rank group to bottom
+        dateFieldsContainer.detach().prependTo(loanForm);
+        rankGroupSection.detach().insertBefore(loanForm.find('.input-section').last());
+
+        // Show rank group section again quickly
+        rankGroupSection.fadeIn(250);
+
+        // Clear all date fields
+        $('#dateOfBirth').val('');
+        $('#commissionDate').val('');
+
+        // Prepare date fields based on selection BEFORE showing
+        if (categoryValue === '2') {
+            // JCO/OR - Only show enrolment date
+            $('#enrolmentDateSection .section-label').html('📅 Enrolment/Start Date of AGIF subscription');
+            enrolmentDateSection.removeClass('hidden');
+            commissionDateSection.addClass('hidden');
+        } else if (categoryValue === '3') {
+            // Direct Officer - Only show commission date (change label to "Joining Date")
+            $('#commissionDateSection .section-label').html('📅 Joining Date');
+            enrolmentDateSection.addClass('hidden');
+            commissionDateSection.removeClass('hidden');
+        } else if (categoryValue === '4') {
+            // Promoted Officer - Show both dates (keep original labels)
+            $('#enrolmentDateSection .section-label').html('📅 Enrolment/Start Date of AGIF subscription');
+            $('#commissionDateSection .section-label').html('🎖️ Date of Commission');
+            enrolmentDateSection.removeClass('hidden');
+            commissionDateSection.removeClass('hidden');
+        }
+
+        // Show date fields container with faster animation
+        dateFieldsContainer.removeClass('hidden').css('opacity', '0').show();
+        dateFieldsContainer.animate({ opacity: 1 }, 350);
+
+        // Reinitialize datepickers
+        setTimeout(function () {
+            initializeDatepickers();
+        }, 50);
+    });
+});

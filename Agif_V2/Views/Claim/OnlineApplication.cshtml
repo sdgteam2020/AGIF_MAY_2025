@@ -8,7 +8,7 @@
     string Category = Model?.Category ?? TempData["CategoryNew"] as string ?? "1";
     string Purpose = Model?.Purpose ?? TempData["WithdrwalPurposeNew"] as string ?? "1";
     string PurposeTypeText = "";
-    int applicationid = TempData["ClaimapplicationId"] != null ? (int)TempData["ClaimapplicationId"] : 0;
+    int applicationid = TempData["RedirectClaimapplicationId"] != null ? (int)TempData["RedirectClaimapplicationId"] : 0;
 
     if (Purpose == "1")
     {

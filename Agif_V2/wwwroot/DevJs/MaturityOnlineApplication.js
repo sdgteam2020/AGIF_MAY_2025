@@ -1139,18 +1139,6 @@ function SetRetDate() {
                                 const today = new Date();
                                 today.setHours(0, 0, 0, 0); // normalize to start of today
 
-                                if (retirementDate < today) {
-                                    Swal.fire({
-                                        title: 'Invalid Date',
-                                        text: 'Date of retirement is not valid.',
-                                        icon: 'warning',
-                                        confirmButtonText: 'OK'
-                                    });
-                                    $('#dateOfRetirement').val('');
-                                    $('#dateOfBirth').val('');
-                                    $('#dateOfCommission').val('');
-                                    return; // stop here
-                                }
                                 // Format date as yyyy-mm-dd
                                 const yyyy = lastDay.getFullYear();
                                 const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
@@ -1161,6 +1149,8 @@ function SetRetDate() {
                                 globleRetirementDate.value = formattedDate;
                                 calculateResidualService();
                                 ExtensionOfServiceAccess();
+
+                               
                             } else {
                                 $('#dateOfRetirement').val('');
                                 console.warn("Invalid retirement age or date of birth.");
@@ -1215,8 +1205,9 @@ function calculateResidualService() {
     $('#totalResidualMonth').val(totalmonths);
     $('#residualService').val(years);
 
+
     if (purposetype === "3") {
-        if (years > 2) {
+        if (totalmonths > 24) {
             Swal.fire({
                 title: 'Residual Service Calculated',
                 text: 'Your residual service is not valid',
@@ -1319,11 +1310,51 @@ function extensionOfService() {
 }
 
 function ExtensionOfServiceAccess() {
+    const retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
+
+
+    const retirementDate = new Date(retirementDateStr);
+    const currentDate = new Date();
+
+    // Normalize both dates to remove time differences
+    retirementDate.setHours(0, 0, 0, 0);
+    currentDate.setHours(0, 0, 0, 0);
+
+    let years = retirementDate.getFullYear() - currentDate.getFullYear();
+    let months = retirementDate.getMonth() - currentDate.getMonth();
+    let days = retirementDate.getDate() - currentDate.getDate();
+
+    if (days < 0) {
+        months -= 1;
+        const prevMonth = new Date(retirementDate.getFullYear(), retirementDate.getMonth(), 0);
+        days += prevMonth.getDate(); // Add days of the previous month
+    }
+
+    if (months < 0) {
+        years -= 1;
+        months += 12;
+    }
+
+    if (years <= -2) {
+        Swal.fire({
+            title: 'Invalid Date',
+            text: 'Date of retirement is not valid.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+    }
+    else {
+
+        $('#residualService').val(years);
+
+        setOutlineActive("residualService");
+    }
+
     const prefix = $('#armyPrefix').val();
     const yearOfService = parseFloat($('#residualService').val());
     const extensionDropdown = $('#ExtnOfService');
     // Enable only if Year of Service < 2 and Prefix is JC or OR
-    if ((prefix == 13 || prefix == 14) && yearOfService < 2 && yearOfService >= 0) {
+    if ((prefix == 13 || prefix == 14) && yearOfService < 2 && yearOfService >= -2) {
         extensionDropdown.prop('disabled', false);
     } else {
         extensionDropdown.prop('disabled', true);

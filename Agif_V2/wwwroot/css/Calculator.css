@@ -394,7 +394,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     text-align: center;
     position: relative;
     overflow: hidden;
-    height: 130px;
+    height: 150px;
 }
 
     .rank-label::before {
