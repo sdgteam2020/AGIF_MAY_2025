@@ -2172,8 +2172,6 @@ function findDataWithArmyNumber() {
                         $('#emailDomain').val(data.emailDomain).trigger('change');
 
 
-                        console.log(data);
-
                     }
                     else {
                         console.log("Data not found for the provided Army Number.");
@@ -2331,7 +2329,6 @@ function findDataWithApplicationId() {
                         updateLoanTypeDropdown();
                     }
                    
-                    console.log(data);
                     
                 }
                 else {

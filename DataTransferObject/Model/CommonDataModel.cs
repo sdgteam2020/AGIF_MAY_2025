@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class CommonDataModel:Common
+    public class CommonDataModel:Common, IValidatableObject
     {
         [Key]
         public int ApplicationId { get; set; }
@@ -97,6 +97,7 @@ namespace DataTransferObject.Model
         [StringLength(200, ErrorMessage = "PCDA PAO can't be longer than 200 characters.")]
         public string? pcda_pao { get; set; }
 
+        [Required]
         [StringLength(20, ErrorMessage = "PCDA Account No can't be longer than 20 characters.")]
         public string? pcda_AcctNo { get; set; }
 
@@ -218,5 +219,16 @@ namespace DataTransferObject.Model
         public int  DownloadCount { get; set; }
 
         public string? AGIFRemarks { get; set; }= string.Empty;
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (ApplicantType == 1 && string.IsNullOrWhiteSpace(pcda_AcctNo))
+            {
+                yield return new ValidationResult(
+                    "PCDA Account No is required when Applicant Type is 1.",
+                    new[] { nameof(pcda_AcctNo) }
+                );
+            }
+        }
     }
 }

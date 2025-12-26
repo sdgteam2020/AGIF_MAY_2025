@@ -472,8 +472,6 @@ function downloadApplication(applicationId, armyNo, applicationType) {
                 window.location.href = '/ClaimPdfDownloaded/' + response + ".zip";
 
             }
-            // Handle success
-            console.log('Download initiated successfully');
         },
         error: function (xhr, status, error) {
             console.error('Download failed:', error);
@@ -506,7 +504,6 @@ function getAllApplicationByDateWise() {
                 applicationIds.push(item.applicationId);
             });
             downloadApplications(applicationIds);
-            console.log('Applications retrieved:', applicationIds);
         },
         error: function (xhr, status, error) {
             console.error('Request failed:', error);

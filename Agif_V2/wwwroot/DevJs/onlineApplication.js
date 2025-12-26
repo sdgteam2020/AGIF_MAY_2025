@@ -1312,8 +1312,6 @@ function extensionOfService() {
                         icon: 'error',
                     });
                 }
-            } else {
-                console.log('DoP is set:', dop);
             }
         } else if (!dop || dop.trim() === "") {
             if (globleRetirementDate?.value) {
@@ -1322,12 +1320,8 @@ function extensionOfService() {
             } else {
                 console.error('Global retirement date not available');
             }
-        } else {
-            console.log('DoP is set:', dop);
         }
 
-    } else {
-        console.log('Prefix does not qualify for extension (not 13 or 14)');
     }
 }
 
@@ -1461,8 +1455,6 @@ function Validate_Salary_Slip_date(inputElement) {
             inputElement.value = "";
             inputElement.focus();
         });
-    } else {
-        console.log("Valid date:", normalizedSelectedDate);
     }
 }
 function textChange() {
@@ -2504,14 +2496,8 @@ function findDataWithArmyNumber() {
                         $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.emailDomain).trigger('change');
                         
-
-                        console.log(data);
                     }
-                    else {
-                        console.log("Data not found for the provided Army Number.");
-                       
-                    }
-
+                    
                 },
                 error: function (xhr, status, error) {
                     console.error("Error fetching data:", error);
@@ -2636,11 +2622,8 @@ function findDataWithApplicationId() {
 
                         }
 
-                        console.log(data);
                     }
-                    else {
-                        console.log("Data not found for the provided Army Number.");
-                    }
+                    
                 },
                 error: function (xhr, status, error) {
                     console.error("Error fetching data:", error);

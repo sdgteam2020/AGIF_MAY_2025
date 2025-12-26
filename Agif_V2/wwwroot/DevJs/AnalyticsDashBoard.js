@@ -1119,9 +1119,6 @@
                     return;
                 }
 
-                console.log(resp);
-                // your existing chart logic here...
-                // Expected: data.monthlyApplications[]: { month, caCount, pcaCount, hbaCount, totalApplications }
                 const rows = (resp.data?.monthlyApplications || [])
                     .map(m => ({
                         month: Number(m.month),
@@ -1152,7 +1149,6 @@
 
                 // Chart 3: top Regt/Corps
                 const regtRaw = resp.data.topRegiments || [];
-                console.log(regtRaw);
                 const regtSorted = regtRaw
                     .map(r => ({ regt: r.regt ?? 'N/A', count: Number(r.regtCount || 0) }))
                     .sort((a, b) => b.count - a.count)
@@ -1381,8 +1377,6 @@
                 //chart 12
                 const multipleLoans = resp.data.multipleLoans;
                 const datasets = multipleLoans.map((app, idx) => {
-                    console.log(`Processing applicant ${idx}:`, app);
-                    console.log('Loan Dates:', app.loanDates);
 
                     // Filter and parse valid dates only
                     const points = (app.loanDates || [])
@@ -1416,7 +1410,6 @@
                                 year: 'numeric'
                             });
 
-                            console.log(`Date ${i}: ${dateStr} -> ${dateString} (year: ${year.toFixed(2)})`);
 
                             return {
                                 x: year,
@@ -1426,7 +1419,6 @@
                         })
                         .filter(point => point !== null);  // Remove invalid dates
 
-                    console.log(`Valid points for ${app.applicantName}:`, points);
 
                     if (points.length === 0) {
                         console.warn(`No valid dates for applicant: ${app.applicantName}`);
@@ -1445,7 +1437,6 @@
                     };
                 }).filter(dataset => dataset.data.length > 0);  // Only include datasets with data
 
-                console.log('Final Datasets:', datasets);
 
 
                 topApplicantsChart.data.datasets = datasets;
@@ -1502,387 +1493,6 @@
             }
         });
     }
-
-    //function loadLoanData(year) {
-    //    $.getJSON(`/Home/GetApplicationAnalytics?year=${year}`, function (resp) {
-    //        if (!resp || resp.success === false) return alert(resp?.message || 'Failed to load loan data');
-
-    //        // Expected: data.monthlyApplications[]: { month, caCount, pcaCount, hbaCount, totalApplications }
-    //        const rows = (resp.data?.monthlyApplications || [])
-    //            .map(m => ({
-    //                month: Number(m.month),
-    //                ca: Number(m.caCount || 0),
-    //                pca: Number(m.pcaCount || 0),
-    //                hba: Number(m.hbaCount || 0),
-    //                total: Number(m.totalApplications || 0)
-    //            }))
-    //            .sort((a, b) => a.month - b.month);
-
-    //        loanChart.data.labels = rows.map(r => monthNames[(r.month || 1) - 1] || '');
-    //        loanChart.data.datasets[0].data = rows.map(r => r.ca);
-    //        loanChart.data.datasets[1].data = rows.map(r => r.pca);
-    //        loanChart.data.datasets[2].data = rows.map(r => r.hba);
-    //        loanChart.data.datasets[3].data = rows.map(r => r.total || (r.ca + r.pca + r.hba));
-    //        loanChart.update();
-
-    //        // Chart 2: top ranks
-    //        const ranksRaw = resp.data.topRanks || [];
-    //        const ranksSorted = ranksRaw
-    //            .map(r => ({ rank: r.rank ?? 'N/A', count: Number(r.rankCount || 0) }))
-    //            .sort((a, b) => b.count - a.count)
-    //            .slice(0, 10);
-
-    //        topRanksChart.data.labels = ranksSorted.map(x => x.rank);
-    //        topRanksChart.data.datasets[0].data = ranksSorted.map(x => x.count);
-    //        topRanksChart.update();
-
-    //        // Chart 3: top Regt/Corps
-    //        const regtRaw = resp.data.topRegiments || [];
-    //        console.log(regtRaw);
-    //        const regtSorted = regtRaw
-    //            .map(r => ({ regt: r.regt ?? 'N/A', count: Number(r.regtCount || 0) }))
-    //            .sort((a, b) => b.count - a.count)
-    //            .slice(0, 10);
-
-    //        topRegtChart.data.labels = regtSorted.map(x => x.regt);
-    //        topRegtChart.data.datasets[0].data = regtSorted.map(x => x.count);
-    //        topRegtChart.update();
-
-    //        //chart 4
-    //        const rawData = (resp.data.loanStats || [])
-    //            .map(item => ({
-    //                vehLoanType: item.vehLoanType || 'N/A',
-    //                loanType: item.loanType || 'N/A',
-    //                loanCount: Number(item.loanCount || 0)
-    //            }))
-    //            .sort((a, b) => b.loanCount - a.loanCount);
-
-    //        // Color palette - cycle through colors
-    //        const colors = [
-    //            'rgba(0, 123, 255, 0.8)',    // #007bff
-    //            'rgba(40, 167, 69, 0.8)',    // #28a745
-    //            'rgba(255, 193, 7, 0.8)',    // #ffc107
-    //            'rgba(220, 53, 69, 0.8)',    // #dc3545
-    //            'rgba(23, 162, 184, 0.8)',   // #17a2b8
-    //            'rgba(108, 117, 125, 0.8)'   // #6c757d
-    //        ];
-
-    //        const backgroundColors = rawData.map((_, index) => colors[index % colors.length]);
-
-    //        // Update chart
-    //        loanStatisticsChart.data.labels = rawData.map(x => x.loanType);
-    //        loanStatisticsChart.data.datasets[0].data = rawData.map(x => x.loanCount);
-    //        loanStatisticsChart.data.datasets[0].backgroundColor = backgroundColors;
-    //        loanStatisticsChart.data.datasets[0].rawData = rawData; // Store for tooltip
-    //        loanStatisticsChart.update();
-
-
-    //        //chart 5
-    //        const UnitrawData = (resp.data.topUnits || [])
-    //            .map(item => ({
-    //                unitName: item.unitName || 'N/A',
-    //                totalApplications: Number(item.totalApplications || 0)
-    //            }))
-    //            .sort((a, b) => b.totalApplications - a.totalApplications)
-    //            .slice(0, 10);
-
-    //        // Color gradient - Top performers get darker/bolder colors
-    //        const Unitcolors = [
-    //            'rgba(0, 123, 255, 0.9)',    // Top 1 - Bold Blue
-    //            'rgba(0, 123, 255, 0.85)',   // Top 2
-    //            'rgba(0, 123, 255, 0.8)',    // Top 3
-    //            'rgba(40, 167, 69, 0.8)',    // 4 - Green
-    //            'rgba(40, 167, 69, 0.75)',   // 5
-    //            'rgba(255, 193, 7, 0.8)',    // 6 - Yellow
-    //            'rgba(255, 193, 7, 0.75)',   // 7
-    //            'rgba(23, 162, 184, 0.8)',   // 8 - Cyan
-    //            'rgba(108, 117, 125, 0.8)',  // 9 - Gray
-    //            'rgba(108, 117, 125, 0.7)'   // 10
-    //        ];
-
-    //        const UnitbackgroundColors = UnitrawData.map((_, index) => Unitcolors[index]);
-
-    //        // Update chart - Note: for horizontal bars, labels are Y-axis
-    //        topUnitsChart.data.labels = UnitrawData.map(x => x.unitName);
-    //        topUnitsChart.data.datasets[0].data = UnitrawData.map(x => x.totalApplications);
-    //        topUnitsChart.data.datasets[0].backgroundColor = UnitbackgroundColors;
-    //        topUnitsChart.update();
-
-
-    //        //chart 6
-
-    //        const rawLoanAmountData = (resp.data.topUnitsByLoanAmount || [])
-    //            .map(item => ({
-    //                unitName: item.unitName || 'N/A',
-    //                totalLoanAmount: Number(item.totalLoanAmount || 0),
-    //                totalHbaLoan: Number(item.totalHbaLoan || 0),
-    //                totalCarLoan: Number(item.totalCarLoan || 0),
-    //                totalPcaLoan: Number(item.totalPcaLoan || 0),
-    //                totalApplications: Number(item.totalApplications || 0)
-    //            }))
-    //            .sort((a, b) => b.totalLoanAmount - a.totalLoanAmount)
-    //            .slice(0, 10);
-
-    //        const unitLabelsLoan = rawLoanAmountData.map(x => x.unitName);
-    //        const carLoanData = rawLoanAmountData.map(x => x.totalCarLoan);
-    //        const pcaLoanData = rawLoanAmountData.map(x => x.totalPcaLoan);
-    //        const hbaLoanData = rawLoanAmountData.map(x => x.totalHbaLoan);
-    //        const totalLoanData = rawLoanAmountData.map(x => x.totalLoanAmount);
-
-    //        // Attach raw data to chart instance for tooltip usage
-    //        topUnitsLoanChart.rawLoanData = rawLoanAmountData;
-
-    //        // Update chart datasets (grouped)
-    //        topUnitsLoanChart.data.labels = unitLabelsLoan;
-    //        topUnitsLoanChart.data.datasets = [
-    //            { label: 'Car Loan', data: carLoanData, backgroundColor: 'rgba(0,123,255,0.85)' },
-    //            { label: 'PCA/Computer Loan', data: pcaLoanData, backgroundColor: 'rgba(40,167,69,0.85)' },
-    //            { label: 'HBA Loan', data: hbaLoanData, backgroundColor: 'rgba(255,193,7,0.85)' },
-    //            { label: 'Total Loan', data: totalLoanData, backgroundColor: 'rgba(220,53,69,0.85)' }
-    //        ];
-
-    //        // ensure axis labels and stacked flags retain defaults (grouped)
-    //        topUnitsLoanChart.options.scales.x.title = { display: true, text: 'Unit Name', font: { weight: 'bold', size: 14 } };
-    //        topUnitsLoanChart.options.scales.y.title = { display: true, text: 'Loan Amount (₹)', font: { weight: 'bold', size: 14 } };
-    //        topUnitsLoanChart.options.scales.x.stacked = false;
-    //        topUnitsLoanChart.options.scales.y.stacked = false;
-
-    //        topUnitsLoanChart.update();
-
-
-    //        //chart 7
-    //        const dealers = (resp.data.topDealers || [])
-    //            .map(d => ({ name: d.dealerName || 'N/A', count: Number(d.totalApplications || 0) }))
-    //            .sort((a, b) => b.count - a.count)
-    //            .slice(0, 10);
-
-    //        topDealersChart.data.labels = dealers.map(d => d.name);
-    //        topDealersChart.data.datasets[0].data = dealers.map(d => d.count);
-    //        topDealersChart.update();
-
-    //        //chart 8
-    //        const Loandealers = (resp.data.topLoanDealers || [])
-    //            .map(d => ({
-    //                name: d.dealerName || 'N/A',
-    //                loanAmount: Number(d.totalLoanAmount || 0)
-    //            }))
-    //            .sort((a, b) => b.loanAmount - a.loanAmount)
-    //            .slice(0, 10);
-
-    //        const dealerColors = [
-    //            'rgba(255, 99, 132, 0.8)',   // Top 1 - Light Red
-    //            'rgba(54, 162, 235, 0.8)',   // Top 2 - Blue
-    //            'rgba(255, 159, 64, 0.8)',   // Top 3 - Orange
-    //            'rgba(75, 192, 192, 0.8)',   // Top 4 - Teal
-    //            'rgba(153, 102, 255, 0.8)',  // Top 5 - Purple
-    //            'rgba(255, 205, 86, 0.8)',   // Top 6 - Light Yellow
-    //            'rgba(255, 99, 132, 0.6)',   // Top 7 - Soft Red
-    //            'rgba(255, 159, 64, 0.6)',   // Top 8 - Soft Orange
-    //            'rgba(75, 192, 192, 0.6)',   // Top 9 - Soft Teal
-    //            'rgba(153, 102, 255, 0.6)'   // Top 10 - Soft Purple
-    //        ];
-
-    //        topLoanDealersChart.data.labels = Loandealers.map(d => d.name);
-    //        topLoanDealersChart.data.datasets[0].data = Loandealers.map(d => d.loanAmount);
-    //        topLoanDealersChart.data.datasets[0].backgroundColor = Loandealers.map((_, index) => dealerColors[index]);;
-
-    //        topLoanDealersChart.update();
-
-    //        //chart 9
-    //        const topPersonnel = (resp.data.topPersonnel || [])
-    //            .map(item => ({
-    //                displayName: item.rank + ' ' + item.applicantName,
-    //                applicantName: item.applicantName,
-    //                rankName: item.rankName,
-    //                totalLoanAmount: Number(item.totalLoanAmount || 0),
-    //                totalCarLoan: Number(item.totalCarLoan || 0),
-    //                totalHbaLoan: Number(item.totalHbaLoan || 0),
-    //                totalPcaLoan: Number(item.totalPcaLoan || 0),
-    //                totalLoans: Number(item.totalLoans || 0),
-    //                carLoans: Number(item.carLoans || 0),
-    //                hbaLoans: Number(item.hbaLoans || 0),
-    //                pcaLoans: Number(item.pcaLoans || 0)
-    //            }))
-    //            .sort((a, b) => b.totalLoanAmount - a.totalLoanAmount)
-    //            .slice(0, 20);
-
-    //        const topPersonnelcolors = topPersonnel.map((_, index) => {
-    //            if (index < 3) return 'rgba(220, 53, 69, 0.9)';   // Top 3 - Red
-    //            if (index < 7) return 'rgba(255, 193, 7, 0.8)';   // Next 4 - Yellow
-    //            if (index < 15) return 'rgba(0, 123, 255, 0.8)';  // Next 8 - Blue
-    //            return 'rgba(108, 117, 125, 0.7)';               // Remaining - Gray
-    //        });
-
-    //        topPersonnelChart.data.labels = topPersonnel.map(x => x.displayName);
-    //        topPersonnelChart.data.datasets[0].data = topPersonnel.map(x => x.totalLoanAmount);
-    //        topPersonnelChart.data.datasets[0].backgroundColor = topPersonnelcolors;
-    //        topPersonnelChart.data.datasets[0].rawData = topPersonnel;
-    //        topPersonnelChart.update();
-
-
-    //        //chart 10
-    //        // --- Doughnut Chart: Applications by Status ---
-
-    //        if (resp.data.statusCounts != 0) {
-    //            const statusData = [
-    //                resp.data.statusCounts[0].pendingCount,
-    //                resp.data.statusCounts[0].approvedCount,
-    //                resp.data.statusCounts[0].rejectedCount
-    //            ];
-
-    //            // Update dataset dynamically
-    //            applicationStatusChart.data.datasets[0].data = statusData;
-    //        }
-    //        else {
-    //            applicationStatusChart.data.datasets[0].data = 0;
-    //        }
-    //        applicationStatusChart.update();
-
-
-    //        //chart 11
-    //        const ageGroupsData = resp.data.ageGroups;
-
-    //        // Extract labels and counts dynamically
-    //        const ageGroupsLabels = ageGroupsData.map(x => x.ageGroup);
-    //        const ageGroupsCounts = ageGroupsData.map(x => x.totalApplications);
-
-    //        // Optional: assign colors dynamically
-    //        const ageGroupsColors = [
-    //            'rgba(75,192,192,0.8)',
-    //            'rgba(54,162,235,0.8)',
-    //            'rgba(255,206,86,0.8)',
-    //            'rgba(255,99,132,0.8)',
-    //            'rgba(153,102,255,0.8)'
-    //        ];
-    //        const agecolors = ageGroupsLabels.map((_, i) => ageGroupsColors[i % ageGroupsColors.length]);
-
-    //        ageGroupsChart.data.labels = ageGroupsData.map(x => x.ageGroup);
-    //        ageGroupsChart.data.datasets[0].data = ageGroupsCounts;
-    //        ageGroupsChart.data.labels = ageGroupsLabels;
-    //        ageGroupsChart.data.datasets[0].backgroundColor = agecolors;
-
-    //        ageGroupsChart.update();
-
-
-    //        //chart 12
-    //        const multipleLoans = resp.data.multipleLoans;
-    //        const datasets = multipleLoans.map((app, idx) => {
-    //            console.log(`Processing applicant ${idx}:`, app);
-    //            console.log('Loan Dates:', app.loanDates);
-
-    //            // Filter and parse valid dates only
-    //            const points = (app.loanDates || [])
-    //                .filter(dateStr => dateStr != null && dateStr !== '')  // Remove null/empty
-    //                .map((dateStr, i) => {
-    //                    // Try to parse the date
-    //                    let date;
-
-    //                    // Handle different date formats
-    //                    if (typeof dateStr === 'string') {
-    //                        // ISO format: "2023-05-15T10:30:00"
-    //                        date = new Date(dateStr);
-    //                    } else if (typeof dateStr === 'object' && dateStr !== null) {
-    //                        // Already a date object
-    //                        date = dateStr;
-    //                    } else {
-    //                        console.warn('Invalid date format:', dateStr);
-    //                        return null;
-    //                    }
-
-    //                    // Validate the date
-    //                    if (isNaN(date.getTime())) {
-    //                        console.warn('Invalid date:', dateStr);
-    //                        return null;
-    //                    }
-
-    //                    const year = date.getFullYear() + (date.getMonth() / 12);
-    //                    const dateString = date.toLocaleDateString('en-IN', {
-    //                        day: '2-digit',
-    //                        month: 'short',
-    //                        year: 'numeric'
-    //                    });
-
-    //                    console.log(`Date ${i}: ${dateStr} -> ${dateString} (year: ${year.toFixed(2)})`);
-
-    //                    return {
-    //                        x: year,
-    //                        y: i + 1,
-    //                        dateString: dateString
-    //                    };
-    //                })
-    //                .filter(point => point !== null);  // Remove invalid dates
-
-    //            console.log(`Valid points for ${app.applicantName}:`, points);
-
-    //            if (points.length === 0) {
-    //                console.warn(`No valid dates for applicant: ${app.applicantName}`);
-    //            }
-
-    //            return {
-    //                label: `${app.rank || ''} ${app.applicantName}`,
-    //                data: points,
-    //                fill: false,
-    //                borderColor: `hsl(${idx * 18}, 70%, 50%)`,
-    //                backgroundColor: `hsl(${idx * 18}, 70%, 50%)`,
-    //                borderWidth: 2,
-    //                tension: 0.3,
-    //                pointRadius: 4,
-    //                pointHoverRadius: 6
-    //            };
-    //        }).filter(dataset => dataset.data.length > 0);  // Only include datasets with data
-
-    //        console.log('Final Datasets:', datasets);
-
-
-    //        topApplicantsChart.data.datasets = datasets;
-    //        topApplicantsChart.update();
-
-
-    //        //chart 13
-    //        const loanDataByUnit = resp.data.loanTypes;  // Assuming `resp.data` contains the loan data
-
-    //        // Prepare the datasets
-    //        const Compdatasets = [
-    //            {
-    //                label: 'Car Loans',
-    //                data: loanDataByUnit.map(unit => unit.caCount),
-    //                backgroundColor: 'rgba(0, 123, 255, 0.8)',
-    //                borderColor: '#ffffff',
-    //                borderWidth: 2,
-    //                stack: 'LoanTypes'
-    //            },
-    //            {
-    //                label: 'PCA Loans',
-    //                data: loanDataByUnit.map(unit => unit.pcaCount),
-    //                backgroundColor: 'rgba(40, 167, 69, 0.8)',
-    //                borderColor: '#ffffff',
-    //                borderWidth: 2,
-    //                stack: 'LoanTypes'
-    //            },
-    //            {
-    //                label: 'HBA Loans',
-    //                data: loanDataByUnit.map(unit => unit.hbaCount),
-    //                backgroundColor: 'rgba(255, 193, 7, 0.8)',
-    //                borderColor: '#ffffff',
-    //                borderWidth: 2,
-    //                stack: 'LoanTypes'
-    //            }
-    //        ];
-
-    //        // Prepare labels (unit names)
-    //        const labels = loanDataByUnit.map(unit => unit.unitName);
-
-    //        // Update chart data
-    //        comparisonChart.data.labels = labels;
-
-
-    //        comparisonChart.data.datasets = Compdatasets;
-
-    //        // Update the chart
-    //        comparisonChart.update();
-
-    //    }).fail(() => alert('Failed to load loan data'));
-    //}
 
     // ===================== MATURITY CHART =====================
     function initMaturityChart() {
@@ -2188,7 +1798,6 @@
 
                 // Chart 3: top Regt/Corps
                 const regtRaw = resp.data.topRegiments || [];
-                console.log(regtRaw);
                 const regtSorted = regtRaw
                     .map(r => ({ regt: r.regt ?? 'N/A', count: Number(r.regtCount || 0) }))
                     .sort((a, b) => b.count - a.count)
@@ -2238,94 +1847,7 @@
             }
         });
     }
-    //function loadMaturityData(year) {
-    //    $.getJSON(`/Home/GetClaimApplicationAnalytics?year=${year}`, function (resp) {
-    //        if (!resp || resp.success === false) return alert(resp?.message || 'Failed to load maturity data');
-
-    //        // Flexible mapping: accept several possible field names
-    //        // Prefer: monthlyMaturity[] but fallback to monthlyApplications[] if that’s your shape
-    //        const raw = resp.data?.monthlyMaturity || resp.data?.monthlyApplications || [];
-    //        const rows = raw
-    //            .map(m => ({
-    //                month: Number(m.month),
-    //                car: Number(m.carMaturity ?? m.caMaturity ?? m.caCount ?? 0),
-    //                pc: Number(m.pcMaturity ?? m.pcaMaturity ?? m.pcaCount ?? 0),
-    //                hba: Number(m.hbaMaturity ?? m.hbaCount ?? 0),
-    //                total: Number(m.totalMaturity ?? m.totalApplications ?? 0)
-    //            }))
-    //            .sort((a, b) => a.month - b.month);
-
-    //        maturityChart.data.labels = rows.map(r => monthNames[(r.month || 1) - 1] || '');
-    //        maturityChart.data.datasets[0].data = rows.map(r => r.car);
-    //        maturityChart.data.datasets[1].data = rows.map(r => r.pc);
-    //        maturityChart.data.datasets[2].data = rows.map(r => r.hba);
-    //        maturityChart.data.datasets[3].data = rows.map(r => r.total || (r.car + r.pc + r.hba));
-
-    //        // Auto-hide empty series for maturity if endpoint doesn’t provide per-scheme
-    //        maturityChart.getDatasetMeta(0).hidden = maturityChart.data.datasets[0].data.every(v => !v);
-    //        maturityChart.getDatasetMeta(1).hidden = maturityChart.data.datasets[1].data.every(v => !v);
-    //        maturityChart.getDatasetMeta(2).hidden = maturityChart.data.datasets[2].data.every(v => !v);
-
-    //        maturityChart.update();
-
-    //        // Chart 2: top ranks
-    //        const ranksRaw = resp.data.topRanks || [];
-    //        const ranksSorted = ranksRaw
-    //            .map(r => ({ rank: r.rank ?? 'N/A', count: Number(r.rankCount || 0) }))
-    //            .sort((a, b) => b.count - a.count)
-    //            .slice(0, 10);
-
-    //        topRanksChart.data.labels = ranksSorted.map(x => x.rank);
-    //        topRanksChart.data.datasets[0].data = ranksSorted.map(x => x.count);
-    //        topRanksChart.update();
-
-    //        // Chart 3: top Regt/Corps
-    //        const regtRaw = resp.data.topRegiments || [];
-    //        console.log(regtRaw);
-    //        const regtSorted = regtRaw
-    //            .map(r => ({ regt: r.regt ?? 'N/A', count: Number(r.regtCount || 0) }))
-    //            .sort((a, b) => b.count - a.count)
-    //            .slice(0, 10);
-
-    //        topRegtChart.data.labels = regtSorted.map(x => x.regt);
-    //        topRegtChart.data.datasets[0].data = regtSorted.map(x => x.count);
-    //        topRegtChart.update();
-
-    //        //chart 5
-    //        const UnitrawData = (resp.data.topUnits || [])
-    //            .map(item => ({
-    //                unitName: item.unitName || 'N/A',
-    //                totalApplications: Number(item.totalApplications || 0)
-    //            }))
-    //            .sort((a, b) => b.totalApplications - a.totalApplications)
-    //            .slice(0, 10);
-
-    //        // Color gradient - Top performers get darker/bolder colors
-    //        // Color palette - cycle through colors
-    //        const colors = [
-    //            'rgba(0, 123, 255, 0.9)',    // Top 1 - Bold Blue
-    //            'rgba(0, 123, 255, 0.85)',   // Top 2
-    //            'rgba(0, 123, 255, 0.8)',    // Top 3
-    //            'rgba(40, 167, 69, 0.8)',    // 4 - Green
-    //            'rgba(40, 167, 69, 0.75)',   // 5
-    //            'rgba(255, 193, 7, 0.8)',    // 6 - Yellow
-    //            'rgba(255, 193, 7, 0.75)',   // 7
-    //            'rgba(23, 162, 184, 0.8)',   // 8 - Cyan
-    //            'rgba(108, 117, 125, 0.8)',  // 9 - Gray
-    //            'rgba(108, 117, 125, 0.7)'   // #6c757d
-    //        ];
-
-    //        const UnitbackgroundColors = UnitrawData.map((_, index) => colors[index]);
-
-    //        // Update chart - Note: for horizontal bars, labels are Y-axis
-    //        topUnitsChart.data.labels = UnitrawData.map(x => x.unitName);
-    //        topUnitsChart.data.datasets[0].data = UnitrawData.map(x => x.totalApplications);
-    //        topUnitsChart.data.datasets[0].backgroundColor = UnitbackgroundColors;
-    //        topUnitsChart.update();
-
-    //    }).fail(() => alert('Failed to load maturity data'));
-    //}
-
+    
     // ===================== COMMON: value labels plugin =====================
     function valueLabelsPlugin() {
         return {

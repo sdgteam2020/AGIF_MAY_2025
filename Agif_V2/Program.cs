@@ -162,6 +162,13 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Strict;  // Strong CSRF protection
 });
 
+builder.Services.AddHsts(options =>
+{
+    options.Preload = true;
+    options.IncludeSubDomains = true;
+    options.MaxAge = TimeSpan.FromDays(365); // 1 year = 31536000 seconds
+});
+
 var app = builder.Build();
 
 app.UseRequestLocalization();
@@ -181,13 +188,14 @@ app.Use(async (ctx, next) =>
     ctx.Response.Headers["Content-Security-Policy"] =
         "default-src 'self' blob:; " +
         "script-src 'self'; " +
-        "style-src 'self';" +
+        "style-src 'self' 'unsafe-inline';" +
         "img-src 'self' data:; " +
         "font-src 'self' data:; " +
         "frame-ancestors 'none'; " +
         "base-uri 'self'; " +
         "object-src 'self' blob:; " +
-        "form-action 'self';";
+        "form-action 'self';"+
+        "connect-src 'self' wss:";
 
     // 2) X-Frame-Options (align with frame-ancestors)
     ctx.Response.Headers["X-Frame-Options"] = "DENY";
@@ -214,22 +222,22 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-app.Use(async (context, next) =>
-{
-    var referer = context.Request.Headers["Referer"].ToString();
-    var path = context.Request.Path.Value;
+//app.Use(async (context, next) =>
+//{
+//    var referer = context.Request.Headers["Referer"].ToString();
+//    var path = context.Request.Path.Value;
 
-    if (string.IsNullOrEmpty(referer) &&
-        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
-        !path.StartsWith("/css") &&
-        !path.StartsWith("/js"))
-    {
-        context.Response.Redirect("/Default/Index");
-        return;
-    }
+//    if (string.IsNullOrEmpty(referer) &&
+//        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
+//        !path.StartsWith("/css") &&
+//        !path.StartsWith("/js"))
+//    {
+//        context.Response.Redirect("/Default/Index");
+//        return;
+//    }
 
-    await next();
-});
+//    await next();
+//});
 
 app.UseAuthorization();
 

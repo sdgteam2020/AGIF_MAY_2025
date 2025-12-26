@@ -29,21 +29,13 @@ class LoginManager {
     setupCountdownTimer() {
         // FIXED: Added validation and debug logging
         if (this.isLockedOut && this.lockoutEnd && !isNaN(this.lockoutEnd.getTime())) {
-            console.log('Setting up countdown timer for:', this.lockoutEnd);
             this.updateCountdown();
             this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
-        } else {
-            console.log('Countdown not initialized:', {
-                isLockedOut: this.isLockedOut,
-                lockoutEnd: this.lockoutEnd,
-                isValidDate: this.lockoutEnd ? !isNaN(this.lockoutEnd.getTime()) : false
-            });
         }
     }
 
     updateCountdown() {
         if (!this.lockoutEnd || isNaN(this.lockoutEnd.getTime())) {
-            console.log('Invalid lockout end date');
             return;
         }
 
@@ -123,16 +115,12 @@ class LoginManager {
                     const username = userNameInput.val();
                     const password = passwordInput.val();
 
-                    console.log('Attempting to encrypt credentials...');
 
                     // Encrypt values
                     const encryptedUser = encrypt.encrypt(username);
                     const encryptedPass = encrypt.encrypt(password);
 
-                    console.log('Encryption result:', {
-                        userEncrypted: !!encryptedUser,
-                        passEncrypted: !!encryptedPass
-                    });
+                    
 
                     // Verify encryption succeeded
                     if (encryptedUser && encryptedPass) {
@@ -140,7 +128,6 @@ class LoginManager {
                         userNameInput.val(encryptedUser);
                         passwordInput.val(encryptedPass);
 
-                        console.log('Submitting encrypted form...');
 
                         // Submit the form
                         e.currentTarget.submit();
@@ -176,7 +163,7 @@ $(document).ready(() => {
             autoRefreshTimeout: configEl.dataset.autoRefreshTimeout !== "null" ? parseInt(configEl.dataset.autoRefreshTimeout) : null
         };
 
-        //new LoginManager(loginConfig);
+        new LoginManager(loginConfig);
     } else {
         console.warn("loginConfig element not found.");
     }

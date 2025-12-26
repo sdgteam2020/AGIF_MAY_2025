@@ -18,44 +18,6 @@
     }
 
 
-    //$('#searchByArmyNo').on('submit', function (e) {
-    //    e.preventDefault();
-    //    const armyNo = $('#armyNoInput').val().trim();
-    //    if (armyNo === '') return;
-    //    const token = $('input[name="__RequestVerificationToken"]').val();
-
-    //    // Clear previous results
-    //    $('#noResultsMessage').addClass('d-none');
-    //    $('#resultsTable').addClass('d-none');
-
-    //    let selectedType = $('#typeSelect').val();
-
-    //    // Determine the endpoint based on selected type
-    //    const searchEndpoint = getSearchEndpoint(selectedType);
-
-    //    $.ajax({
-    //        url: searchEndpoint,
-    //        type: 'POST',
-    //        data: {
-    //            armyNo: armyNo,
-                
-    //        }, headers: {
-    //            'RequestVerificationToken': token   // must match options.HeaderName
-    //        },
-    //        success: function (data) {
-    //            if (data && data.length > 0) {
-    //                populateTable(data);
-    //                $('#resultsTable').removeClass('d-none');
-    //            } else {
-    //                $('#noResultsMessage').removeClass('d-none');
-    //            }
-    //        },
-    //        error: function (xhr, status, error) {
-    //            alert('Error searching applications. Please try again.');
-    //        }
-    //    });
-    //});
-
 
     $('#searchByArmyNo').on('submit', async function (e) {
         e.preventDefault();
@@ -83,14 +45,11 @@
                 return;
             }
 
-            console.log('Token found:', token.substring(0, 20) + '...'); // Debug log
 
             // Create FormData and add both armyNo AND token
-            const formData = new FormData();
-            formData.append('armyNo', armyNo);
-            formData.append('__RequestVerificationToken', token); // ← CRITICAL!
+            const params = new URLSearchParams();
+            params.append('armyNo', armyNo);
 
-            console.log('Sending request to:', searchEndpoint); // Debug log
 
             // Disable submit button to prevent double submission
             const submitButton = $(this).find('button[type="submit"]');
@@ -99,14 +58,14 @@
 
             const response = await fetch(searchEndpoint, {
                 method: 'POST',
-                body: formData, // Don't set Content-Type header, let browser handle it
+                body: params,
                 credentials: 'same-origin',
                 headers: {
+                    'RequestVerificationToken': token,
                     'X-Requested-With': 'XMLHttpRequest' // Optional but good practice
                 }
             });
 
-            console.log('Response status:', response.status); // Debug log
 
             if (!response.ok) {
                 if (response.status === 400) {
@@ -118,7 +77,6 @@
             }
 
             const data = await response.json();
-            console.log('Result:', data); // Debug log
 
             // Handle response
             if (data && data.length > 0) {
@@ -283,19 +241,6 @@
         downloadApplication(appId,type);
     });
 
-    //function downloadApplication(applicationId,type) {
-    //    if (!applicationId) {
-    //        alert('Application ID is required for download');
-    //        return;
-    //    }
-
-    //    if (type === 'Loan')
-    //        window.location.href = `/Default/DownloadApplication?id=${applicationId}`;
-    //    else if (type === 'Maturity')
-    //        window.location.href = `/Default/DownloadClaimApplication?id=${applicationId}`;
-    //    // Direct file download — no AJAX needed
-
-    //}
     function downloadApplication(applicationId, type) {
         if (!applicationId) {
             alert('Application ID is required for download');

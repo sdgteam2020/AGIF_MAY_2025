@@ -85,7 +85,6 @@ namespace Agif_V2.Controllers
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SearchByArmyNo([FromForm] string armyNo)
         {
             if (string.IsNullOrWhiteSpace(armyNo))
@@ -103,7 +102,6 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ClaimSearchByArmyNo([FromForm] string armyNo)
         {
             if (string.IsNullOrWhiteSpace(armyNo))

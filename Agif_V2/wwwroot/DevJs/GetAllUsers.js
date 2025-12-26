@@ -4,7 +4,6 @@
 
     // Get token and store globally
     window.token = $('input[name="__RequestVerificationToken"]').val();
-    console.log("Token found on load:", window.token);
 
     BindUsersData(value);
 });
@@ -59,8 +58,6 @@ function BindUsersData(status) {
     // Get the token
     const requestToken = window.token || $('input[name="__RequestVerificationToken"]').val();
 
-    console.log("Initializing DataTable with status:", status);
-    console.log("Using token:", requestToken);
 
     // Initialize DataTable with server-side processing
     let table = $('#tblData').DataTable({
@@ -88,7 +85,6 @@ function BindUsersData(status) {
                     status: status.toString() // Send as string
                 };
 
-                console.log("Sending payload:", payload);
                 return payload;
             },
             error: function (xhr, error, code) {

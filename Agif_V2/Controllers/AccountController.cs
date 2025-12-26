@@ -93,7 +93,6 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             //    // Retrieve private key from session
