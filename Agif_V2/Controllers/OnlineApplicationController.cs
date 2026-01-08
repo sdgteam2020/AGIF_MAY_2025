@@ -312,6 +312,14 @@ namespace Agif_V2.Controllers
                     model.CommonData.ApplicationType = int.Parse(model.loantype);
                     model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
                     model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
+                    if(string.IsNullOrEmpty(model.CommonData.pcda_AcctNo))
+                    {
+                        model.CommonData.pcda_AcctNo = string.Empty;
+                    }
+                    if(string.IsNullOrEmpty(model.CommonData.pcda_pao))
+                    {
+                        model.CommonData.pcda_pao = string.Empty;
+                    }
                     common = await _IonlineApplication1.AddWithReturn(model.CommonData);
                 }
 

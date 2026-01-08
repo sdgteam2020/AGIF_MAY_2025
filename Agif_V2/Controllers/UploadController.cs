@@ -30,6 +30,7 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
+
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
@@ -45,6 +46,8 @@ namespace Agif_V2.Controllers
             bool IsextensionOfService = await _IonlineApplication1.CheckExtensionofservice(applicationId);
 
             TempData["IsextensionOfService"] = IsextensionOfService;
+
+            TempData.Keep("IsextensionOfService");
 
             FileUploadViewModel fileUploadViewModel = new FileUploadViewModel();
             fileUploadViewModel.FormType= FormType;
@@ -74,7 +77,7 @@ namespace Agif_V2.Controllers
 
         // Update ProcessUpload to redirect to ApplicationDetails after upload
         [HttpPost]
-        public async Task<IActionResult> Upload(FileUploadViewModel model, string formType, int applicationId)
+        public async Task<IActionResult> Upload(FileUploadViewModel model, string formType, int applicationId, bool isExtension = false)
         {
             if(ModelState.IsValid==false)
             {
@@ -83,10 +86,19 @@ namespace Agif_V2.Controllers
             }
             TempData.Keep("applicationId");
 
+            TempData.Keep("IsextensionOfService");
+
             var ArmyNo = await GetArmyNumber(applicationId);
             if (string.IsNullOrEmpty(ArmyNo)) ArmyNo = string.Empty;
 
             formType = await GetFormType(formType, applicationId);
+
+            // Validate required files based on form type
+            if (!ValidateRequiredFilesByFormType(model, formType, isExtension))
+            {
+                return View("Upload", model);
+            }
+
 
             var files = GetUploadedFiles(model);
             if (!files.Any())
@@ -124,7 +136,75 @@ namespace Agif_V2.Controllers
         }
 
         // ------------------- Helpers -------------------
+        private bool ValidateRequiredFilesByFormType(FileUploadViewModel model, string formType, bool isExtension)
+        {
+            bool isValid = true;
 
+            // Common required files for all form types
+            if (model.CancelledCheque == null)
+            {
+                ModelState.AddModelError(nameof(model.CancelledCheque), "Cancelled Cheque is required.");
+                isValid = false;
+            }
+
+            if (model.PaySlipPdf == null)
+            {
+                ModelState.AddModelError(nameof(model.PaySlipPdf), "Pay Slip is required.");
+                isValid = false;
+            }
+
+            // Form type specific validations
+            switch (formType.ToUpper())
+            {
+                case "CA":
+                case "CAR":
+                case "TW":
+                    if (model.QuotationPdf == null)
+                    {
+                        ModelState.AddModelError(nameof(model.QuotationPdf), "Quotation is required for Car/Two Wheeler Loan.");
+                        isValid = false;
+                    }
+                    if (model.DrivingLicensePdf == null)
+                    {
+                        ModelState.AddModelError(nameof(model.DrivingLicensePdf), "Driving License is required for Car/Two Wheeler Loan.");
+                        isValid = false;
+                    }
+                    // Service Extension is optional (if applicable)
+                    // Service Extension validation based on isExtension flag
+                    if (isExtension && model.SeviceExtnPdf == null)
+                    {
+                        ModelState.AddModelError(nameof(model.SeviceExtnPdf), "Service Extension Pt II order is required.");
+                        isValid = false;
+                    }
+                    break;
+
+                case "PCA":
+                    if (model.QuotationPdf == null)
+                    {
+                        ModelState.AddModelError(nameof(model.QuotationPdf), "Quotation is required for Computer Loan.");
+                        isValid = false;
+                    }
+                    // Service Extension is optional (if applicable)
+                    // Service Extension validation based on isExtension flag
+                    if (isExtension && model.SeviceExtnPdf == null)
+                    {
+                        ModelState.AddModelError(nameof(model.SeviceExtnPdf), "Service Extension Pt II order is required.");
+                        isValid = false;
+                    }
+                    break;
+
+                case "HBA":
+                    // Only Cancelled Cheque and Pay Slip are required (already validated above)
+                    break;
+
+                default:
+                    ModelState.AddModelError("", "Invalid form type.");
+                    isValid = false;
+                    break;
+            }
+
+            return isValid;
+        }
         private async Task<string> GetArmyNumber(int applicationId)
         {
             if (applicationId == 0) return string.Empty;

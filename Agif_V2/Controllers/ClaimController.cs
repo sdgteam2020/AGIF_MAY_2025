@@ -327,6 +327,15 @@ namespace Agif_V2.Controllers
             model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
             model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
             model.ClaimCommonData.IPAddress = ip;
+
+            if (string.IsNullOrEmpty(model.ClaimCommonData.pcda_AcctNo))
+            {
+                model.ClaimCommonData.pcda_AcctNo = string.Empty;
+            }
+            if (string.IsNullOrEmpty(model.ClaimCommonData.pcda_pao))
+            {
+                model.ClaimCommonData.pcda_pao = string.Empty;
+            }
             return await _IClaimonlineApplication1.AddWithReturn(model.ClaimCommonData);
         }
 

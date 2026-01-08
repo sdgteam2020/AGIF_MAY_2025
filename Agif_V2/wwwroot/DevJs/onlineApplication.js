@@ -1350,6 +1350,62 @@ function ExtensionOfServiceAccess() {
         extensionDropdown.val('');
     }
 }
+
+
+//function ExtensionOfServiceAccess() {
+//    const retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
+
+
+//    const retirementDate = new Date(retirementDateStr);
+//    const currentDate = new Date();
+
+//    // Normalize both dates to remove time differences
+//    retirementDate.setHours(0, 0, 0, 0);
+//    currentDate.setHours(0, 0, 0, 0);
+
+//    let years = retirementDate.getFullYear() - currentDate.getFullYear();
+//    let months = retirementDate.getMonth() - currentDate.getMonth();
+//    let days = retirementDate.getDate() - currentDate.getDate();
+
+//    if (days < 0) {
+//        months -= 1;
+//        const prevMonth = new Date(retirementDate.getFullYear(), retirementDate.getMonth(), 0);
+//        days += prevMonth.getDate(); // Add days of the previous month
+//    }
+
+//    if (months < 0) {
+//        years -= 1;
+//        months += 12;
+//    }
+
+//    if (years <= -2) {
+//        Swal.fire({
+//            title: 'Invalid Date',
+//            text: 'Date of retirement is not valid.',
+//            icon: 'warning',
+//            confirmButtonText: 'OK'
+//        });
+//    }
+//    else {
+
+//        $('#residualService').val(years);
+
+//        setOutlineActive("residualService");
+//    }
+
+//    const prefix = $('#armyPrefix').val();
+//    const yearOfService = parseFloat($('#residualService').val());
+//    const extensionDropdown = $('#ExtnOfService');
+//    // Enable only if Year of Service < 2 and Prefix is JC or OR
+//    if ((prefix == 13 || prefix == 14) && yearOfService <=2 && yearOfService >= -2) {
+//        extensionDropdown.prop('disabled', false);
+//    } else {
+//        extensionDropdown.prop('disabled', true);
+//        extensionDropdown.val('');
+//    }
+//}
+
+
 function fetchPCDA_PAO() {
     const category = $('#applicantCategory').val();
 
