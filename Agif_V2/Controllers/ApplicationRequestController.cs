@@ -312,9 +312,6 @@ namespace Agif_V2.Controllers
             return null;
         }
 
-
-
-
         public async Task<DTODigitalSignDataResponse?> SignDocument(int applicationId)
         {
             if (!ModelState.IsValid)
@@ -338,7 +335,7 @@ namespace Agif_V2.Controllers
                 digitalSignDTO.Mobile_No = onlineResponse.MobileNo ?? string.Empty;
                 digitalSignDTO.ApplType = onlineResponse.ApplicationType;
                 digitalSignDTO.DateOfCommision = onlineResponse.DateOfCommission?.ToString() ?? string.Empty;
-                digitalSignDTO.AccountNo = onlineResponse.SalaryAcctNo ?? string.Empty;
+                digitalSignDTO.AccountNo = onlineResponse.SalaryAcctNo ?? string.Empty; 
                 digitalSignDTO.RankName = onlineResponse.DdlRank ?? string.Empty;
                 digitalSignDTO.UnitName = onlineResponse.PresentUnit ?? string.Empty;
                 digitalSignDTO.PAN_No = onlineResponse.PanCardNo ?? string.Empty;

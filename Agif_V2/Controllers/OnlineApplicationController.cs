@@ -187,25 +187,6 @@ namespace Agif_V2.Controllers
                 return Json(new { exists = false }); // User does not exist
             }
         }
-        //public async Task<JsonResult> DeleteExistingLoan(string armyNumber, string Prefix, string Suffix, int appType)
-        //{
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Json("Invalid Request.");
-        //    }
-
-        //    bool result = await _IonlineApplication1.DeleteExistingLoan(armyNumber, Prefix, Suffix, appType);
-
-        //    if (result == true)
-        //    {
-        //        return Json(new { exists = true });
-        //    }
-        //    else
-        //    {
-        //        return Json(new { exists = false });
-        //    }
-        //}
         [HttpPost]
         public async Task<JsonResult> DeleteExistingLoan([FromBody] CommonParameters model)
         {
