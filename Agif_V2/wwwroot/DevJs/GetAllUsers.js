@@ -19,10 +19,11 @@ $('#btnDownloadExcel').on('click', function () {
             Swal.showLoading();
         }
     });
-
+    const status = $('#Status').val();
     $.ajax({
         url: '/Account/ExportAllUsersToExcel',
         type: 'POST',
+        data: { status: status },
         headers: {
             "RequestVerificationToken": window.token || $('input[name="__RequestVerificationToken"]').val()
         },

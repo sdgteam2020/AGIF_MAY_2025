@@ -520,11 +520,11 @@ namespace Agif_V2.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ExportAllUsersToExcel(string status = "")
+        public async Task<IActionResult> ExportAllUsersToExcel(string status)
         {
             try
             {
-                bool userStatus = true;
+                bool userStatus = (status.ToLower() == "true")?true:false;
                 if (!string.IsNullOrEmpty(status))
                 {
                     userStatus = status.Equals("true", StringComparison.CurrentCultureIgnoreCase);

@@ -31,6 +31,7 @@ namespace Agif_V2.Controllers
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
 
+
             bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
@@ -107,7 +108,7 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
-            if (!await ValidateFiles(files))
+            if (!ValidateFiles(files))
             {
                 return View("Upload", model);
             }
@@ -235,7 +236,7 @@ namespace Agif_V2.Controllers
             return files;
         }
 
-        private async Task<bool> ValidateFiles(List<IFormFile> files)
+        private bool ValidateFiles(List<IFormFile> files)
         {
             foreach (var file in files)
             {
@@ -248,14 +249,14 @@ namespace Agif_V2.Controllers
                 if (file.Length > 1 * 1024 * 1024)
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
 
-                if (!await _pdfUpload.IsValidPdfFile(file))
-                    ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
+                //if (!await _pdfUpload.IsValidPdfFile(file))
+                //    ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
 
-                if (await _pdfUpload.IsPdfPasswordProtected(file))
-                    ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
+                //if (await _pdfUpload.IsPdfPasswordProtected(file))
+                //    ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
 
-                if (await _pdfUpload.ContainsMaliciousPdfContent(file))
-                    ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
+                //if (await _pdfUpload.ContainsMaliciousPdfContent(file))
+                //    ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
             }
 
             return ModelState.IsValid;
