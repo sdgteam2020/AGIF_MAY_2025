@@ -2,6 +2,11 @@
     let rawValue = $("#Status").val();
     let value = rawValue !== "false";
 
+    $(".submit-status").removeClass("active-page-highlight");
+
+    // Find the link in the sidebar that has the matching data-status and add the class
+    $(`.submit-status[data-status='${value}']`).addClass("active-page-highlight");
+
     // Get token and store globally
     window.token = $('input[name="__RequestVerificationToken"]').val();
 

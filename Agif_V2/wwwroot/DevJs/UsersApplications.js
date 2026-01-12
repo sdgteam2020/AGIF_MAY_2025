@@ -2,7 +2,12 @@
     addBlurEffect();
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
+    // 2. Highlight the Sidebar Link
+    // First, remove the active class from all links to be safe
+    $(".submit-status").removeClass("active-page-highlight");
 
+    // Find the link in the sidebar that has the matching data-status and add the class
+    $(`.submit-status[data-status='${value}']`).addClass("active-page-highlight");
     if (value == 2) {
         $('#tblApplications thead tr th ').eq(6).before('<th class="bg-danger text-white">Digital Sign On</th>');
     }

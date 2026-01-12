@@ -6675,3 +6675,22 @@ tbody, td, tfoot, th, thead, tr {
 .w-22 {
     width: 22%;
 }
+
+/* 1. Main Link Style */
+.sidebar-nav-wrapper .sidebar-nav ul li a.active-page-highlight {
+    background: #ffffff !important; /* White Background */
+    color: #d50100 !important; /* The AGIF Red Color */
+    font-weight: 700 !important; /* Bold */
+    border-radius: 4px 0px 0px 4px; /* Specific corner curve */
+    padding: 6px !important; /* Spacing */
+    display: flex; /* Keeps icon and text aligned */
+    align-items: center;
+}
+
+    /* 2. Icon Style inside the active link */
+    /* I changed this from Black to Red to match the text, or use #365CF5 for Blue */
+    .sidebar-nav-wrapper .sidebar-nav ul li a.active-page-highlight i,
+    .sidebar-nav-wrapper .sidebar-nav ul li a.active-page-highlight .icon {
+        color: #d50100 !important; /* Red Icon */
+        margin-right: 15px; /* Ensure spacing matches your existing CSS */
+    }

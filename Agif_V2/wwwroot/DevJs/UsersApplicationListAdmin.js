@@ -10,6 +10,10 @@ $(document).ready(function () {
 
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 2 : rawValue;
+    $(".submit-status").removeClass("active-page-highlight");
+
+    // Find the link in the sidebar that has the matching data-status and add the class
+    $(`.submit-status[data-status='${value}']`).addClass("active-page-highlight");
     BindUsersData(value);
     $('#btnAllDownload').on('click', function () {
         getAllApplicationByDateWise();

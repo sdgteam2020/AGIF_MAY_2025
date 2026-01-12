@@ -6762,3 +6762,7 @@ tbody, td, tfoot, th, thead, tr {
 .w-22 {
     width: 22%;
 }
+
+.form-checkbox{
+    border:3px solid #000;
+}
