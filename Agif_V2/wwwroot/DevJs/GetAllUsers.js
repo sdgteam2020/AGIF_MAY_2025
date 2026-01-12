@@ -67,6 +67,7 @@ function BindUsersData(status) {
 
     // Initialize DataTable with server-side processing
     let table = $('#tblData').DataTable({
+        width:"100%",
         processing: true,
         serverSide: true,
         filter: true,

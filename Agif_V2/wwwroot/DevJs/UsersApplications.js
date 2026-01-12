@@ -298,6 +298,7 @@ function GetApplicationList(status, endpoint) {
 
     // Initialize DataTable with server-side processing
     $('#tblApplications').DataTable({
+        width:"100%",
         processing: true,
         serverSide: true,
         filter: true,

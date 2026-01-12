@@ -406,6 +406,7 @@ function BindUsersData(status) {
     });
     // Initialize DataTable with server-side processing
     const table = $('#tblReceivedApplications').DataTable({
+        width:"100%",
         processing: true,
         serverSide: true,
         filter: true,
