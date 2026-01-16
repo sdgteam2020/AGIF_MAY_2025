@@ -131,12 +131,12 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader());
 });
 
-builder.Services.AddAntiforgery(options =>
-{
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.HttpOnly = true;
-    options.HeaderName = "RequestVerificationToken";
-});
+//builder.Services.AddAntiforgery(options =>
+//{
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    options.Cookie.HttpOnly = true;
+//    options.HeaderName = "RequestVerificationToken";
+//});
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {

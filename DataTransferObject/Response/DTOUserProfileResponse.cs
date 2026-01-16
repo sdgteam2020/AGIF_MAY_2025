@@ -30,8 +30,10 @@ namespace DataTransferObject.Response
         public int ApptId { get; set; }
 
         public int UnitId { get; set; }
-        public DateTime? UpdatedOn{ get; set; }
+        public DateTime? UpdatedOn { get; set; }
         public string? username { get; set; }
+
+        public bool status  {get; set;}
 
     }
 }

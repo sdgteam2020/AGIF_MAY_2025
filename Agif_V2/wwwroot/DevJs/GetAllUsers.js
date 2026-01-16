@@ -55,15 +55,543 @@ $('#btnDownloadExcel').on('click', function () {
     });
 });
 
+//function BindUsersData(status) {
+//    // Destroy existing DataTable if it exists
+//    if ($.fn.DataTable.isDataTable('#tblData')) {
+//        $('#tblData').DataTable().destroy();
+//    }
+//    // Dynamically add/remove Action column header
+//    const actionColumnHeader = $('#tblData thead tr th:last-child');
+
+//    if (status === false) {
+//        // Check if Action column already exists
+//        if (actionColumnHeader.text().trim() !== 'Action') {
+//            $('#tblData thead tr').append('<th class="noExport bg-danger text-white">Action</th>');
+//        }
+//    } else {
+//        // Remove Action column if it exists
+//        if (actionColumnHeader.text().trim() === 'Action') {
+//            actionColumnHeader.remove();
+//        }
+//    }
+
+//    // Get the token
+//    const requestToken = window.token || $('input[name="__RequestVerificationToken"]').val();
+
+
+//    // Initialize DataTable with server-side processing
+//    let table = $('#tblData').DataTable({
+//        processing: true,
+//        serverSide: true,
+//        filter: true,
+//        order: [[0, 'desc']],
+//        ajax: {
+//            url: "/Account/GetAllUsersListPaginated",
+//            type: "POST",
+//            headers: {
+//                "RequestVerificationToken": requestToken
+//            },
+//            data: function (data) {
+//                console.log(data)
+//                const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName';
+//                const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc';
+
+//                const payload = {
+//                    draw: data.draw,
+//                    start: data.start,
+//                    length: data.length,
+//                    searchValue: data.search.value,
+//                    sortColumn: sortColumn,
+//                    sortDirection: sortDirection,
+//                    status: status.toString() // Send as string
+//                };
+
+//                return payload;
+//            },
+//            error: function (xhr, error, code) {
+//                console.error('Error loading data:', error);
+//                console.error('XHR Status:', xhr.status);
+//                console.error('Response:', xhr.responseText);
+
+//                Swal.fire({
+//                    title: 'Error',
+//                    text: 'Error loading data. Please refresh the page and try again.',
+//                    icon: 'error'
+//                });
+//            }
+//        },
+//        columns: [
+//            {
+//                data: null,
+//                name: "SerialNumber",
+//                orderable: false,
+//                render: function (data, type, row, meta) {
+//                    return meta.row + meta.settings._iDisplayStart + 1;
+//                }
+//            },
+//            {
+//                data: "domainId",
+//                name: "domainId",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "armyNo",
+//                name: "ArmyNo",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "profileName",
+//                name: "ProfileName",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "appointmentName",
+//                name: "AppointmentName",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "unitName",
+//                name: "UnitName",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "mobileNo",
+//                name: "MobileNo",
+//                render: function (data, type, row) {
+//                    return data || 'N/A';
+//                }
+//            },
+//            {
+//                data: "emailId",
+//                name: "EmailId",
+//                render: function (data, type, row) {
+//                    if (!data) return 'N/A';
+
+//                    const encodedEmail = Array.from(data)
+//                        .map(c => `&#${c.charCodeAt(0)};`)
+//                        .join('');
+//                    return encodedEmail;
+//                }
+//            },
+//            {
+//                data: "updatedOn",
+//                name: "UpdatedOn",
+//                render: function (data, type, row) {
+//                    if (!data) return "N/A";
+//                    return new Intl.DateTimeFormat('en-GB').format(new Date(data));
+//                }
+//            },
+//            {
+//                data: "isPrimary",
+//                name: "IsPrimary",
+//                orderable: false,
+//                className: 'noExport',
+//                render: function (data, type, row) {
+//                    const isPrimary = row.isPrimary || false;
+//                    const statusText = isPrimary ? 'Primary' : 'Secondary';
+//                    const statusClass = isPrimary ? 'status-active' : 'status-inactive';
+
+//                    return `
+//                        <div class='action action-container'>
+//                            <label class="toggle-switch">
+//                                <input type="checkbox" class="cls-toggle-primary" data-domain-id='${row.domainId || ''}' ${isPrimary ? 'checked' : ''}>
+//                                <span class="slider"></span>
+//                            </label>
+//                            <span class="status-text ${statusClass}">${statusText}</span>
+//                        </div>
+//                    `;
+//                }
+//            },
+//            {
+//                data: null,
+//                orderable: false,
+//                className: 'noExport',
+//                render: function (data, type, row) {
+//                    const isActive = row.isActive || false;
+//                    const statusText = isActive ? 'Active' : 'Inactive';
+//                    const statusClass = isActive ? 'status-active' : 'status-inactive';
+
+//                    return `
+//                        <div class='action action-container'>
+//                            <label class="toggle-switch">
+//                                <input type="checkbox" class="cls-toggle-status" data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
+//                                <span class="slider"></span>
+//                            </label>
+//                            <span class="status-text ${statusClass}">${statusText}</span>
+//                        </div>
+//                    `;
+//                }
+//            },
+//            {
+//                data: "isFmn",
+//                name: "isFmn",
+//                orderable: false,
+//                className: 'noExport',
+//                render: function (data, type, row) {
+//                    const isFmn = row.isFmn || false;
+//                    const statusText = isFmn ? 'Fmn' : 'No Fmn';
+//                    const statusClass = isFmn ? 'status-active' : 'status-inactive';
+
+//                    return `
+//                        <div class='action action-container'>
+//                            <label class="toggle-switch">
+//                                <input type="checkbox" class="cls-toggle-fmn" data-domain-id='${row.domainId || ''}' ${isFmn ? 'checked' : ''}>
+//                                <span class="slider"></span>
+//                            </label>
+//                            <span class="status-text ${statusClass}">${statusText}</span>
+//                        </div>
+//                    `;
+//                }
+//            },
+//            {
+//                data: "status",
+//                name: "Status",
+//                orderable: false,
+//                className: 'noExport',
+//                render: function (data, type, row) {
+//                    // Show delete button only when status is false
+//                    if (row.status === false) {
+//                        return `
+//                            <div class='action text-center'>
+//                                <button type="button" class="btn btn-danger btn-sm cls-delete-user" data-domain-id='${row.domainId || ''}' data-profile-id='${row.profileId || ''}'>
+//                                    <i class="bi bi-trash"></i> Delete
+//                                </button>
+//                            </div>
+//                        `;
+//                    } else {
+//                        return '<span class="text-muted"></span>';
+//                    }
+//                }
+//            },
+
+//        ],
+//        language: {
+//            search: "",
+//            searchPlaceholder: "Search applications...",
+//            processing: "Loading applications...",
+//            emptyTable: "No applications found",
+//            info: "Showing _START_ to _END_ of _TOTAL_ applications",
+//            infoEmpty: "Showing 0 to 0 of 0 applications",
+//            infoFiltered: "(filtered from _MAX_ total applications)",
+//            lengthMenu: "Show _MENU_ applications per page",
+//            paginate: {
+//                first: "First",
+//                last: "Last",
+//                next: "Next",
+//                previous: "Previous"
+//            }
+//        },
+//        dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+//        drawCallback: function (settings) {
+//            // Re-bind toggle switch events after each draw
+//            $('#tblData tbody').off('change', '.cls-toggle-status').on('change', '.cls-toggle-status', function () {
+//                const $toggle = $(this);
+//                const domainId = $toggle.data('domain-id');
+//                const isActive = $toggle.is(':checked');
+//                const statusText = $toggle.closest('.action-container').find('.status-text');
+
+//                $toggle.prop('checked', !isActive);
+
+//                Swal.fire({
+//                    title: `Are you sure?`,
+//                    text: `Do you want to ${isActive ? 'activate' : 'deactivate'} this user?`,
+//                    icon: 'warning',
+//                    showCancelButton: true,
+//                    confirmButtonText: 'Yes',
+//                    cancelButtonText: 'No'
+//                }).then((result) => {
+//                    if (result.isConfirmed) {
+//                        $toggle.prop('checked', isActive);
+
+//                        if (isActive) {
+//                            statusText.text('Active').removeClass('status-inactive').addClass('status-active');
+//                        } else {
+//                            statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+//                        }
+
+//                        updateUserStatus(domainId, isActive, $toggle);
+//                    }
+//                });
+//            });
+
+//            $('#tblData tbody').off('change', '.cls-toggle-primary').on('change', '.cls-toggle-primary', function () {
+//                const $toggle = $(this);
+//                const domainId = $toggle.data('domain-id');
+//                const isPrimary = $toggle.is(':checked');
+//                const statusText = $toggle.closest('.action-container').find('.status-text');
+
+//                $toggle.prop('checked', !isPrimary);
+
+//                Swal.fire({
+//                    title: `Are you sure?`,
+//                    text: `Do you want to set this user as ${isPrimary ? 'Primary' : 'Secondary'}?`,
+//                    icon: 'warning',
+//                    showCancelButton: true,
+//                    confirmButtonText: 'Yes',
+//                    cancelButtonText: 'No'
+//                }).then((result) => {
+//                    if (result.isConfirmed) {
+//                        $toggle.prop('checked', isPrimary);
+
+//                        if (isPrimary) {
+//                            statusText.text('Primary').removeClass('status-inactive').addClass('status-active');
+//                        } else {
+//                            statusText.text('Secondary').removeClass('status-active').addClass('status-inactive');
+//                        }
+
+//                        updateUserPrimary(domainId, isPrimary, $toggle);
+//                    }
+//                });
+//            });
+
+//            $('#tblData tbody').off('change', '.cls-toggle-fmn').on('change', '.cls-toggle-fmn', function () {
+//                const $toggle = $(this);
+//                const domainId = $toggle.data('domain-id');
+//                const isActive = $toggle.is(':checked');
+//                const statusText = $toggle.closest('.action-container').find('.status-text');
+
+//                $toggle.prop('checked', !isActive);
+
+//                Swal.fire({
+//                    title: `Are you sure?`,
+//                    text: `Do you want to ${isActive ? 'activate' : 'deactivate'} formation of this user?`,
+//                    icon: 'warning',
+//                    showCancelButton: true,
+//                    confirmButtonText: 'Yes',
+//                    cancelButtonText: 'No'
+//                }).then((result) => {
+//                    if (result.isConfirmed) {
+//                        $toggle.prop('checked', isActive);
+
+//                        if (isActive) {
+//                            statusText.text('Active').removeClass('status-inactive').addClass('status-active');
+//                        } else {
+//                            statusText.text('Inactive').removeClass('status-active').addClass('status-inactive');
+//                        }
+
+//                        updateUserFormation(domainId, isActive, $toggle);
+//                    }
+//                });
+//            });
+
+//            // Handle delete button click
+//            $('#tblData tbody').off('click', '.cls-delete-user').on('click', '.cls-delete-user', function () {
+//                const $button = $(this);
+//                const domainId = $button.data('domain-id');
+//                const profileId = $button.data('profile-id');
+
+//                Swal.fire({
+//                    title: 'Are you sure?',
+//                    text: 'Do you want to delete this user?',
+//                    icon: 'warning',
+//                    showCancelButton: true,
+//                    confirmButtonText: 'Yes, Delete',
+//                    cancelButtonText: 'Cancel',
+//                    confirmButtonColor: '#d33',
+//                    cancelButtonColor: '#3085d6'
+//                }).then((result) => {
+//                    if (result.isConfirmed) {
+//                        deleteUser(domainId, profileId);
+//                    }
+//                });
+//            });
+//        }
+//    });
+//}
+
 function BindUsersData(status) {
     // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblData')) {
         $('#tblData').DataTable().destroy();
     }
 
+    // Dynamically add/remove Action column header
+    const actionColumnHeader = $('#tblData thead tr th:last-child');
+
+    if (status === false) {
+        // Check if Action column already exists
+        if (actionColumnHeader.text().trim() !== 'Action') {
+            $('#tblData thead tr').append('<th class="noExport bg-danger text-white">Action</th>');
+        }
+    } else {
+        // Remove Action column if it exists
+        if (actionColumnHeader.text().trim() === 'Action') {
+            actionColumnHeader.remove();
+        }
+    }
+
     // Get the token
     const requestToken = window.token || $('input[name="__RequestVerificationToken"]').val();
 
+    // Define columns based on status
+    const baseColumns = [
+        {
+            data: null,
+            name: "SerialNumber",
+            orderable: false,
+            render: function (data, type, row, meta) {
+                return meta.row + meta.settings._iDisplayStart + 1;
+            }
+        },
+        {
+            data: "domainId",
+            name: "domainId",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "armyNo",
+            name: "ArmyNo",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "profileName",
+            name: "ProfileName",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "appointmentName",
+            name: "AppointmentName",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "unitName",
+            name: "UnitName",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "mobileNo",
+            name: "MobileNo",
+            render: function (data, type, row) {
+                return data || 'N/A';
+            }
+        },
+        {
+            data: "emailId",
+            name: "EmailId",
+            render: function (data, type, row) {
+                if (!data) return 'N/A';
+
+                const encodedEmail = Array.from(data)
+                    .map(c => `&#${c.charCodeAt(0)};`)
+                    .join('');
+                return encodedEmail;
+            }
+        },
+        {
+            data: "updatedOn",
+            name: "UpdatedOn",
+            render: function (data, type, row) {
+                if (!data) return "N/A";
+                return new Intl.DateTimeFormat('en-GB').format(new Date(data));
+            }
+        },
+        {
+            data: "isPrimary",
+            name: "IsPrimary",
+            orderable: false,
+            className: 'noExport',
+            render: function (data, type, row) {
+                const isPrimary = row.isPrimary || false;
+                const statusText = isPrimary ? 'Primary' : 'Secondary';
+                const statusClass = isPrimary ? 'status-active' : 'status-inactive';
+
+                return `
+                    <div class='action action-container'>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="cls-toggle-primary" data-domain-id='${row.domainId || ''}' ${isPrimary ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="status-text ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            }
+        },
+        {
+            data: null,
+            orderable: false,
+            className: 'noExport',
+            render: function (data, type, row) {
+                const isActive = row.isActive || false;
+                const statusText = isActive ? 'Active' : 'Inactive';
+                const statusClass = isActive ? 'status-active' : 'status-inactive';
+
+                return `
+                    <div class='action action-container'>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="cls-toggle-status" data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="status-text ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            }
+        },
+        {
+            data: "isFmn",
+            name: "isFmn",
+            orderable: false,
+            className: 'noExport',
+            render: function (data, type, row) {
+                const isFmn = row.isFmn || false;
+                const statusText = isFmn ? 'Fmn' : 'No Fmn';
+                const statusClass = isFmn ? 'status-active' : 'status-inactive';
+
+                return `
+                    <div class='action action-container'>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="cls-toggle-fmn" data-domain-id='${row.domainId || ''}' ${isFmn ? 'checked' : ''}>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="status-text ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+            }
+        }
+    ];
+
+    // Add Action column only if status is false
+    if (status === false) {
+        baseColumns.push({
+            data: "status",
+            name: "Status",
+            orderable: false,
+            className: 'noExport',
+            render: function (data, type, row) {
+                // Show delete button only when status is false
+                if (row.status === false) {
+                    return `
+                        <div class='action text-center'>
+                            <button type="button" class="btn btn-danger btn-sm cls-delete-user" data-domain-id='${row.domainId || ''}' data-profile-id='${row.profileId || ''}'>
+                                <i class="bi bi-trash"></i> Delete
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    return '<span class="text-muted"></span>';
+                }
+            }
+        });
+    }
 
     // Initialize DataTable with server-side processing
     let table = $('#tblData').DataTable({
@@ -79,6 +607,7 @@ function BindUsersData(status) {
                 "RequestVerificationToken": requestToken
             },
             data: function (data) {
+                console.log(data)
                 const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName';
                 const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc';
 
@@ -106,140 +635,7 @@ function BindUsersData(status) {
                 });
             }
         },
-        columns: [
-            {
-                data: null,
-                name: "SerialNumber",
-                orderable: false,
-                render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }
-            },
-            {
-                data: "domainId",
-                name: "domainId",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "armyNo",
-                name: "ArmyNo",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "profileName",
-                name: "ProfileName",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "appointmentName",
-                name: "AppointmentName",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "unitName",
-                name: "UnitName",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "mobileNo",
-                name: "MobileNo",
-                render: function (data, type, row) {
-                    return data || 'N/A';
-                }
-            },
-            {
-                data: "emailId",
-                name: "EmailId",
-                render: function (data, type, row) {
-                    if (!data) return 'N/A';
-
-                    const encodedEmail = Array.from(data)
-                        .map(c => `&#${c.charCodeAt(0)};`)
-                        .join('');
-                    return encodedEmail;
-                }
-            },
-            {
-                data: "updatedOn",
-                name: "UpdatedOn",
-                render: function (data, type, row) {
-                    if (!data) return "N/A";
-                    return new Intl.DateTimeFormat('en-GB').format(new Date(data));
-                }
-            },
-            {
-                data: "isPrimary",
-                name: "IsPrimary",
-                orderable: false,
-                className: 'noExport',
-                render: function (data, type, row) {
-                    const isPrimary = row.isPrimary || false;
-                    const statusText = isPrimary ? 'Primary' : 'Secondary';
-                    const statusClass = isPrimary ? 'status-active' : 'status-inactive';
-
-                    return `
-                        <div class='action action-container'>
-                            <label class="toggle-switch">
-                                <input type="checkbox" class="cls-toggle-primary" data-domain-id='${row.domainId || ''}' ${isPrimary ? 'checked' : ''}>
-                                <span class="slider"></span>
-                            </label>
-                            <span class="status-text ${statusClass}">${statusText}</span>
-                        </div>
-                    `;
-                }
-            },
-            {
-                data: null,
-                orderable: false,
-                className: 'noExport',
-                render: function (data, type, row) {
-                    const isActive = row.isActive || false;
-                    const statusText = isActive ? 'Active' : 'Inactive';
-                    const statusClass = isActive ? 'status-active' : 'status-inactive';
-
-                    return `
-                        <div class='action action-container'>
-                            <label class="toggle-switch">
-                                <input type="checkbox" class="cls-toggle-status" data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
-                                <span class="slider"></span>
-                            </label>
-                            <span class="status-text ${statusClass}">${statusText}</span>
-                        </div>
-                    `;
-                }
-            },
-            {
-                data: "isFmn",
-                name: "isFmn",
-                orderable: false,
-                className: 'noExport',
-                render: function (data, type, row) {
-                    const isFmn = row.isFmn || false;
-                    const statusText = isFmn ? 'Fmn' : 'No Fmn';
-                    const statusClass = isFmn ? 'status-active' : 'status-inactive';
-
-                    return `
-                        <div class='action action-container'>
-                            <label class="toggle-switch">
-                                <input type="checkbox" class="cls-toggle-fmn" data-domain-id='${row.domainId || ''}' ${isFmn ? 'checked' : ''}>
-                                <span class="slider"></span>
-                            </label>
-                            <span class="status-text ${statusClass}">${statusText}</span>
-                        </div>
-                    `;
-                }
-            },
-        ],
+        columns: baseColumns,
         language: {
             search: "",
             searchPlaceholder: "Search applications...",
@@ -348,6 +744,28 @@ function BindUsersData(status) {
                     }
                 });
             });
+
+            // Handle delete button click
+            $('#tblData tbody').off('click', '.cls-delete-user').on('click', '.cls-delete-user', function () {
+                const $button = $(this);
+                const domainId = $button.data('domain-id');
+                const profileId = $button.data('profile-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you want to permanently delete this user?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Delete',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteUser(domainId, profileId);
+                    }
+                });
+            });
         }
     });
 }
@@ -442,6 +860,48 @@ function updateUserPrimary(domainId, isPrimary, toggleElement) {
             revertToggle(toggleElement, !isPrimary, 'primary');
             console.error('Error updating user primary status:', error);
             showErrorMessage('Error updating user role. Please try again.');
+        }
+    });
+}
+
+function deleteUser(domainId, profileId) {
+    const requestToken = window.token || $('input[name="__RequestVerificationToken"]').val();
+
+    $.ajax({
+        url: '/Account/DeleteUser', // Update with your actual endpoint
+        type: 'POST',
+        headers: {
+            "RequestVerificationToken": requestToken
+        },
+        data: {
+            domainId: domainId,
+            profileId: profileId
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    title: 'Deleted!',
+                    text: 'User has been deleted successfully.',
+                    icon: 'success'
+                }).then(() => {
+                    // Reload the DataTable
+                    $('#tblData').DataTable().ajax.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: response.message || 'Failed to delete user.',
+                    icon: 'error'
+                });
+            }
+        },
+        error: function (xhr, error, code) {
+            console.error('Error deleting user:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while deleting the user.',
+                icon: 'error'
+            });
         }
     });
 }

@@ -518,6 +518,42 @@ namespace Agif_V2.Controllers
                 data = data
             };
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string domainId, int profileId)
+        {
+            try
+            {
+                // Perform deletion
+                var result = await _userProfile.DeleteUserAsync(domainId, profileId);
+
+                if (result)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        message = "User deleted successfully"
+                    });
+                }
+                else
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "User not found or could not be deleted"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception here
+                return Json(new
+                {
+                    success = false,
+                    message = "An error occurred while deleting the user"
+                });
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> ExportAllUsersToExcel(string status)

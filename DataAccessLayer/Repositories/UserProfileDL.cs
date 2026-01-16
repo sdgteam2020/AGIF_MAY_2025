@@ -27,7 +27,7 @@ namespace DataAccessLayer.Repositories
 
     
 
-        public IQueryable<DTOUserProfileResponse> GetAllUser(bool status)
+       public IQueryable<DTOUserProfileResponse> GetAllUser(bool status)
         {
             var users = from user in _context.Users
                         join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
@@ -54,6 +54,8 @@ namespace DataAccessLayer.Repositories
                             IsPrimary = mapping.IsPrimary,
                             IsFmn = mapping.IsFmn,
                             UpdatedOn = user.UpdatedOn,
+                            ProfileId = profile.ProfileId,
+                            status = _context.TrnFwdCO.Any(fwd => fwd.ProfileId == profile.ProfileId)
                         };
 
             return users;
@@ -99,6 +101,8 @@ namespace DataAccessLayer.Repositories
                     username = profile.Name
                 }
             ).FirstOrDefaultAsync();
+
+            
 
             return userDetails;
         }
@@ -161,6 +165,78 @@ namespace DataAccessLayer.Repositories
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+
+        public async Task<bool> DeleteUserAsync(string domainId, int profileId)
+        {
+            try
+            {
+                // Find the user profile
+                var userProfile = await _context.UserProfiles
+                    .FirstOrDefaultAsync(p => p.ProfileId == profileId && p.userName == domainId);
+
+                if (userProfile == null)
+                {
+                    return false;
+                }
+
+                // Find the user mapping
+                var userMapping = await _context.trnUserMappings
+                    .FirstOrDefaultAsync(m => m.ProfileId == profileId);
+
+                if (userMapping == null)
+                {
+                    return false;
+                }
+
+                var userId = userMapping.UserId;
+
+                // Find the Identity user
+                var identityUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (identityUser == null)
+                {
+                    return false;
+                }
+
+                using (var transaction = await _context.Database.BeginTransactionAsync())
+                {
+                    try
+                    {
+                        // 1. Delete from AspNetUserRoles
+                        var userRoles = _context.UserRoles.Where(ur => ur.UserId == userId);
+                        _context.UserRoles.RemoveRange(userRoles);
+
+                        // 2. Delete from trnUserMappings
+                        _context.trnUserMappings.Remove(userMapping);
+
+                        // 3. Delete from UserProfiles
+                        _context.UserProfiles.Remove(userProfile);
+
+                        // 4. Delete from AspNetUsers (Identity)
+                        _context.Users.Remove(identityUser);
+
+                        // Save all changes
+                        await _context.SaveChangesAsync();
+
+                        // Commit transaction
+                        await transaction.CommitAsync();
+
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
     }
