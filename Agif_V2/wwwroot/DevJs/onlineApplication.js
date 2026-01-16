@@ -1227,12 +1227,16 @@ function enableDisablePromotionDate() {
 }
 
 function togglePromotionDate(rankValue) {
-    if (rankValue === '31' || rankValue === '1') {
-        $('#dateOfPromotion').prop('disabled', false).addClass('bg-white text-dark');
-    } else {
-        $('#dateOfPromotion').prop('disabled', true).removeClass('bg-white text-dark');
-    }
+    const eligibleRanks = ['1', '31'];
+    const $promotionDate = $('#dateOfPromotion');
+    const isEligible = eligibleRanks.includes(rankValue);
+
+    $promotionDate
+        .prop('disabled', !isEligible)
+        .prop('required', isEligible)
+        .toggleClass('bg-white text-dark', isEligible);
 }
+
 
 function updateRetDateOnPromotionDateSelection() {
     const promotionDate = $('#dateOfPromotion').val();
