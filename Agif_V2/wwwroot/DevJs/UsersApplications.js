@@ -626,15 +626,9 @@ function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
     });
 }
 function sendPDFToServer(filepath, thumbprint, type) {
-    console.log("Thumbprint used:", thumbprint);
-
     const baseUrl = window.location.origin;
     const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
-    console.log(fullPath);
-    alert(fullPath);
     let URL = '';
-
-    console.log("Full PDF Path:", fullPath)
 
     $.ajax({
         url: 'https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/ByteDigitalSignAsync',

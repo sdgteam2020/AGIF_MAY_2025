@@ -131,12 +131,12 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader());
 });
 
-//builder.Services.AddAntiforgery(options =>
-//{
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//    options.Cookie.HttpOnly = true;
-//    options.HeaderName = "RequestVerificationToken";
-//});
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+    options.HeaderName = "RequestVerificationToken";
+});
 // Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {
@@ -182,39 +182,50 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-//app.Use(async (ctx, next) =>
-//{
-//    // 1) Content Security Policy
-//    ctx.Response.Headers["Content-Security-Policy"] =
-//        "default-src 'self' blob:; " +
-//        "script-src 'self'; " +
-//        "style-src 'self' 'unsafe-inline';" +
-//        "img-src 'self' data:; " +
-//        "font-src 'self' data:; " +
-//        "frame-ancestors 'none'; " +
-//        "base-uri 'self'; " +
-//        "object-src 'self' blob:; " +
-//        "form-action 'self';"+
-//        "connect-src 'self' wss:";
+app.Use(async (ctx, next) =>
+{
+    var blockedMethods = new[] { "OPTIONS", "TRACE", "TRACK", "CONNECT" };
 
-//    // 2) X-Frame-Options (align with frame-ancestors)
-//    ctx.Response.Headers["X-Frame-Options"] = "DENY";
+    if (blockedMethods.Contains(ctx.Request.Method, StringComparer.OrdinalIgnoreCase))
+    {
+        ctx.Response.StatusCode = StatusCodes.Status405MethodNotAllowed;
+        ctx.Response.Headers["Allow"] = "GET, HEAD, POST";
+        await ctx.Response.WriteAsync("Method Not Allowed");
+        return;
+    }
 
-//    // 3) Referrer-Policy
-//    ctx.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    ctx.Response.OnStarting(() =>
+    {
+        ctx.Response.Headers.Remove("Server");
+        ctx.Response.Headers.Remove("X-Powered-By");
+        ctx.Response.Headers.Remove("x-aspnet-version");
+        return Task.CompletedTask;
+    });
 
-//    // Extra good headers
-//    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
-//    ctx.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+    var isDev = app.Environment.IsDevelopment();
 
+    // Base CSP strings
+    string defaultSrc = "default-src 'self' blob:; ";
+    string scriptSrc =  "script-src 'self'; ";
+    string styleSrc = "style-src 'self' 'unsafe-inline'; "; // Bootstrap/JQuery often need unsafe-inline
+    string imgSrc = "img-src 'self' data: blob:; "; // Added 'data:' and 'blob:' explicitly
+    string fontSrc = "font-src 'self' data:; ";
+    string connectSrc = isDev
+        ? "connect-src 'self' https://dgisapp.army.mil:55102 ws://localhost:* wss://localhost:*; "
+        : "connect-src 'self' https://dgisapp.army.mil:55102; ";
+    string other = "frame-ancestors 'none'; base-uri 'self'; object-src 'self' blob:; form-action 'self';";
 
+    ctx.Response.Headers["Content-Security-Policy"] = $"{defaultSrc}{scriptSrc}{styleSrc}{imgSrc}{fontSrc}{connectSrc}{other}";
 
-//    // Hide tech details where possible
-//    ctx.Response.Headers.Remove("X-Powered-By");
-//    ctx.Response.Headers.Remove("x-aspnet-version");
+    ctx.Response.Headers["X-Frame-Options"] = "DENY";
+    ctx.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    ctx.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+    ctx.Response.Headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload";
 
-//    await next();
-//});
+    await next();
+});
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
