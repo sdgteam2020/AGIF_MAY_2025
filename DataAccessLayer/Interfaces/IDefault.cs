@@ -9,9 +9,9 @@ namespace DataAccessLayer.Interfaces
 {
     public interface IDefault
     {
-        Task<List<DTOApplicationStatusResponse>> GetUserApplicationStatusByArmyNo(string armyNo);
+        Task<List<DTOApplicationStatusResponse>> GetUserApplicationStatusByArmyNo(string armyNo,string aadharNo);
         Task<List<DTOApplicationStatusResponse>> GetTimeLine(int applicationId);
         Task<List<DTOApplicationStatusResponse>> GetClaimTimeLine(int applicationId);
-        Task<List<DTOApplicationStatusResponse>> GetClaimUserApplicationStatusByArmyNo(string armyNo);
+        Task<List<DTOApplicationStatusResponse>> GetClaimUserApplicationStatusByArmyNo(string armyNo, string aadharNo);
     }
 }

@@ -52,13 +52,13 @@ namespace DataAccessLayer.Repositories
             return timeLine;
         }
 
-        public async Task<List<DTOApplicationStatusResponse>> GetUserApplicationStatusByArmyNo(string armyNo)
+        public async Task<List<DTOApplicationStatusResponse>> GetUserApplicationStatusByArmyNo(string armyNo,string aadharNo)
         {
             var applications = await (from appl in _context.trnApplications
                                 join prefix in _context.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                 join applicationType in _context.MApplicationTypes on appl.ApplicationType equals applicationType.ApplicationTypeId
                                 join status in _context.StatusTable on appl.StatusCode equals status.StatusCode
-                                where (appl.ArmyPrefix==14? ((appl.Number + appl.Suffix) == armyNo) : (prefix.Prefix + appl.Number + appl.Suffix) == armyNo) && status.StatusCode != 0
+                                where (appl.ArmyPrefix==14? ((appl.Number + appl.Suffix) == armyNo && appl.AadharCardNo == aadharNo) : (prefix.Prefix + appl.Number + appl.Suffix) == armyNo) && appl.AadharCardNo == aadharNo && status.StatusCode != 0
                                       select new DTOApplicationStatusResponse
                                 { 
                                     ApplicationId = appl.ApplicationId,
@@ -71,13 +71,13 @@ namespace DataAccessLayer.Repositories
             return await Task.FromResult(applications);
         }
 
-        public async Task<List<DTOApplicationStatusResponse>> GetClaimUserApplicationStatusByArmyNo(string armyNo)
+        public async Task<List<DTOApplicationStatusResponse>> GetClaimUserApplicationStatusByArmyNo(string armyNo, string aadharNo)
         {
             var applications = await (from appl in _context.trnClaim
                                       join prefix in _context.MArmyPrefixes on appl.ArmyPrefix equals prefix.Id
                                      join applicationType in _context.WithdrawalPurpose on appl.WithdrawPurpose equals applicationType.Id
                                       join status in _context.StatusTable on appl.StatusCode equals status.ClaimStatusCode 
-                                      where (appl.ArmyPrefix == 14 ? ((appl.Number + appl.Suffix) == armyNo) : (prefix.Prefix + appl.Number + appl.Suffix) == armyNo) && status.ClaimStatusCode != 0
+                                      where (appl.ArmyPrefix == 14 ? ((appl.Number + appl.Suffix) == armyNo && appl.AadharCardNo == aadharNo) : (prefix.Prefix + appl.Number + appl.Suffix) == armyNo) && appl.AadharCardNo == aadharNo && status.ClaimStatusCode != 0
                                       select new DTOApplicationStatusResponse
                                       {
                                           ApplicationId = appl.ApplicationId,

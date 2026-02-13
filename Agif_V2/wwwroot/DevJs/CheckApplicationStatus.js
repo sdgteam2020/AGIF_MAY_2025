@@ -14,17 +14,37 @@
 
         // Clear the input field (optional)
         $('#armyNoInput').val('');
+        $('#aadharNoInput').val('');
         
     }
-
-
+    $('#aadharNoInput').on('input', function () {
+        formatAadhar(this);
+    })
+    function formatAadhar(input) {
+        let value = input.value.replace(/\D/g, '');
+        value = value.substring(0, 12);
+        let formattedValue = '';
+        for (let i = 0; i < value.length; i++) {
+            if (i > 0 && i % 4 === 0) {
+                formattedValue += '-';
+            }
+            formattedValue += value[i];
+        }
+        input.value = formattedValue;
+    }
 
     $('#searchByArmyNo').on('submit', async function (e) {
         e.preventDefault();
 
         const armyNo = $('#armyNoInput').val().trim();
+        
+        const aadharNo = $('#aadharNoInput').val().trim();
         if (armyNo === '') {
             alert('Please enter an Army Number');
+            return;
+        }
+        if (aadharNo === '') {
+            alert('Please enter an Aadhar Number');
             return;
         }
 
@@ -49,6 +69,7 @@
             // Create FormData and add both armyNo AND token
             const params = new URLSearchParams();
             params.append('armyNo', armyNo);
+            params.append('aadharNo', aadharNo);
 
 
             // Disable submit button to prevent double submission

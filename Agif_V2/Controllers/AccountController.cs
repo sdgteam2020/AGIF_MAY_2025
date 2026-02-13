@@ -43,41 +43,6 @@ namespace Agif_V2.Controllers
             _rsa = rsa;
         }
 
-        //public IActionResult Login()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Login(LoginViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
-
-        //    var user = await GetUserAsync(model.UserName);
-        //    if (user == null)
-        //    {
-        //        return HandleInvalidUserName(model);
-        //    }
-
-        //    if (await _userManager.IsLockedOutAsync(user))
-        //    {
-        //        return await HandleLockedOutUser(model, user);
-        //    }
-
-        //    var result = await SignInUserAsync(model, user);
-
-        //    if (result.Succeeded)
-        //    {
-        //        return await HandleSuccessfulLogin(user, model);
-        //    }
-
-        //    return await HandleFailedLogin(result, model, user);
-        //}
-
         public IActionResult Login()
         {
             // Generate RSA key pair with PEM formatted public key
@@ -668,10 +633,7 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> FinalLogout()
         {
-            //await _signInManager.SignOutAsync();
-            //HttpContext.Session.Clear();
-            //return View();
-            // Remove the session token to clear user-specific session data
+            
             HttpContext.Session.Remove("User");
 
             var user = await _userManager.GetUserAsync(User);

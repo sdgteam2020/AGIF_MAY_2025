@@ -85,11 +85,15 @@ namespace Agif_V2.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> SearchByArmyNo([FromForm] string armyNo)
+        public async Task<IActionResult> SearchByArmyNo([FromForm] string armyNo,string aadharNo)
         {
             if (string.IsNullOrWhiteSpace(armyNo))
             {
                 return Json(new { success = false, message = "Army number is required" });
+            }
+            if (string.IsNullOrWhiteSpace(aadharNo))
+            {
+                return Json(new { success = false, message = "Aadhar number is required" });
             }
 
             // Format validation
@@ -97,24 +101,28 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Invalid army number format" });
             }
-            var data = await _default.GetUserApplicationStatusByArmyNo(armyNo);
+            var data = await _default.GetUserApplicationStatusByArmyNo(armyNo,aadharNo);
             return Json(data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ClaimSearchByArmyNo([FromForm] string armyNo)
+        public async Task<IActionResult> ClaimSearchByArmyNo([FromForm] string armyNo, string aadharNo)
         {
             if (string.IsNullOrWhiteSpace(armyNo))
             {
                 return Json(new { success = false, message = "Army number is required" });
             }
+            if (string.IsNullOrWhiteSpace(aadharNo))
+            {
+                return Json(new { success = false, message = "Aadhar number is required" });
+            }
 
             // Format validation
             if (!Regex.IsMatch(armyNo, @"^[a-zA-Z0-9]{1,20}$"))
             {
-                return Json(new { success = false, message = "Invalid army number format" });
+                return Json(new { success = false, message = "Invalid Aadhar number format" });
             }
-            var data = await _default.GetClaimUserApplicationStatusByArmyNo(armyNo);
+            var data = await _default.GetClaimUserApplicationStatusByArmyNo(armyNo,aadharNo);
             return Json(data);
         }
 

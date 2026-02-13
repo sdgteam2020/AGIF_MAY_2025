@@ -18,7 +18,7 @@ namespace DataAccessLayer.Repositories
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> _userManager;
         private static readonly Regex ArmyNoRegex =
         new(@"^(?<prefix>[A-Za-z]{1,3})(?<number>\d{3,8})(?<suffix>[A-Za-z]?)$",
-            RegexOptions.Compiled | RegexOptions.CultureInvariant);
+            RegexOptions.Compiled | RegexOptions.CultureInvariant,TimeSpan.FromMilliseconds(500));
 
         public UsersApplicationDL(ApplicationDbContext db, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
