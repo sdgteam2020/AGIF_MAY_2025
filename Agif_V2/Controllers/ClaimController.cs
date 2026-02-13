@@ -138,6 +138,10 @@ namespace Agif_V2.Controllers
         [HttpGet]
         public async Task<IActionResult> OnlineApplication()
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
             var Category = TempData["Category"] as string;
             var WithdrwalPurpose = TempData["WithdrwalPurpose"] as string;
 

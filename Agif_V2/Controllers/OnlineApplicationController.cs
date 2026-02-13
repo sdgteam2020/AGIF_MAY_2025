@@ -51,6 +51,11 @@ namespace Agif_V2.Controllers
         [HttpGet]
         public IActionResult OnlineApplication()
         {
+            if (!ModelState.IsValid)
+            {
+                return Json("Invalid Request.");
+            }
+
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 

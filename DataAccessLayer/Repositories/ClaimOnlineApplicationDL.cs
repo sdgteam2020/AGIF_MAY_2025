@@ -624,6 +624,7 @@ namespace DataAccessLayer.Repositories
                               Distt = AddressDetails.Distt ?? string.Empty,
                               State = AddressDetails.State ?? string.Empty,
                               Code = AddressDetails.Code ?? string.Empty,
+                              ExtnOfService= string.IsNullOrEmpty(common.ExtnOfService) ? "No" : common.ExtnOfService,
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)

@@ -154,6 +154,22 @@ namespace Agif_V2.Helpers
 
 
 
+                    //AddRow("1. Army No", common.Number, "2. Old Army No", common.OldNumber);
+                    //AddRow("3. Rank", common.DdlRank, "4. Name", common.ApplicantName);
+                    //AddRow("5. Regt/Corps", common.RegtCorps, "6. Present Unit", common.PresentUnit);
+                    //AddRow("7. Unit Pin Code", common.PresentUnitPin, "8. Unit Address", common.ArmyPostOffice);
+                    //AddRow("9. Fmn HQ", common.NextFmnHQ, "10. Permanent Home Address", (common.Vill_Town ?? "") + ", " + (common.PostOffice ?? "") + ", " +
+                    //    (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""));
+                    //AddRow("11. Civil Postal Address", common.CivilPostalAddress, "12. Date of Enrollment", common.DateOfCommission?.ToString("dd-MM-yyyy"));
+                    //AddRow("13. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"), "14. Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
+                    //AddRow("15. Total Service (In Years)", common.TotalService.ToString(), "16. E-Mail", common.Email + "@" + common.EmailDomain);
+                    //AddRow("17. Aadhaar No", common.AadharCardNo, "18. Pan No", common.PanCardNo);
+                    //AddRow("19. Mob No", common.MobileNo, "20. Salary Account No", common.SalaryAcctNo);
+                    //AddRow("21. IFSC Code", common.IfsCode, "22. Bank Branch", common.NameOfBankBranch);
+                    //AddRow("23. Purpose of Withdrawal", formType, "24. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString());
+                    //AddRow("25. No of Withdrawals", common.NoOfwithdrwal, "", "");
+
+
                     AddRow("1. Army No", common.Number, "2. Old Army No", common.OldNumber);
                     AddRow("3. Rank", common.DdlRank, "4. Name", common.ApplicantName);
                     AddRow("5. Regt/Corps", common.RegtCorps, "6. Present Unit", common.PresentUnit);
@@ -162,12 +178,12 @@ namespace Agif_V2.Helpers
                         (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""));
                     AddRow("11. Civil Postal Address", common.CivilPostalAddress, "12. Date of Enrollment", common.DateOfCommission?.ToString("dd-MM-yyyy"));
                     AddRow("13. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"), "14. Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
-                    AddRow("15. Total Service (In Years)", common.TotalService.ToString(), "16. E-Mail", common.Email + "@" + common.EmailDomain);
-                    AddRow("17. Aadhaar No", common.AadharCardNo, "18. Pan No", common.PanCardNo);
-                    AddRow("19. Mob No", common.MobileNo, "20. Salary Account No", common.SalaryAcctNo);
-                    AddRow("21. IFSC Code", common.IfsCode, "22. Bank Branch", common.NameOfBankBranch);
-                    AddRow("23. Purpose of Withdrawal", formType, "24. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString());
-                    AddRow("25. No of Withdrawals", common.NoOfwithdrwal, "", "");
+                    AddRow("15. Total Service (In Years)", common.TotalService.ToString(), "16. Service Extn(Y/N)", common.ExtnOfService);
+                    AddRow("17. E-Mail", common.Email + "@" + common.EmailDomain, "18. Aadhaar No", common.AadharCardNo);
+                    AddRow("19. Pan No", common.PanCardNo, "20. Mob No", common.MobileNo);
+                    AddRow("21. Salary Account No", common.SalaryAcctNo, "22. IFSC Code", common.IfsCode);
+                    AddRow("23. Bank Branch", common.NameOfBankBranch, "24. Purpose of Withdrawal", formType);
+                    AddRow("25. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString(), "26. No of Withdrawals", common.NoOfwithdrwal);
 
                     document.Add(table);
 

@@ -1456,6 +1456,18 @@ function handleSubmitClick() {
         filterAmountText(loanType);
 
 
+        const residualServiceInput = $("#residualService");
+        if (residualServiceInput.length) {
+            const residualServiceValue = residualServiceInput.val();
+            if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 0) {
+                const errorSpan = residualServiceInput.parent().find(".error");
+                if (errorSpan.length) {
+                    errorSpan.text("Invalid residual service.");
+                }
+                errorlist.push("Residual Service");
+                hasError = true;
+            }
+        }
 
 
         inputs.forEach(input => {

@@ -188,6 +188,10 @@ namespace Agif_V2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetApplicationAnalytics(int year)
         {
+            if(!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid Request." });
+            }
             try
             {
                 var analyticsData = await home.GetTotalMonthlyApplications(year);
@@ -203,6 +207,10 @@ namespace Agif_V2.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetClaimApplicationAnalytics(int year)
         {
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid Request." });
+            }
             try
             {
                 var analyticsData = await home.GetTotalClaimMonthlyApplications(year);
