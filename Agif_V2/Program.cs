@@ -207,7 +207,7 @@ app.Use(async (ctx, next) =>
     // Base CSP strings
     string defaultSrc = "default-src 'self' blob:; ";
     string scriptSrc =  "script-src 'self'; ";
-    string styleSrc = "style-src 'self' 'unsafe-inline'; "; // Bootstrap/JQuery often need unsafe-inline
+    string styleSrc = "style-src 'self'; "; // Bootstrap/JQuery often need unsafe-inline
     string imgSrc = "img-src 'self' data: blob:; "; // Added 'data:' and 'blob:' explicitly
     string fontSrc = "font-src 'self' data:; ";
     string connectSrc = isDev

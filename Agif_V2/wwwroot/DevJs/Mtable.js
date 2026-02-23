@@ -5,7 +5,21 @@ function mMsater(sectid, ddl, TableId, ParentId) {
         id: TableId,
         ParentId: ParentId
     };
+
     var token = $('input[name="__RequestVerificationToken"]').val();
+
+    // --- SECURITY PATCH ---
+    // Validate the token format strictly to prevent DOM-based header manipulation
+    // ASP.NET Core tokens are Base64Url encoded (alphanumeric, dashes, underscores)
+    var tokenRegex = /^[a-zA-Z0-9_\-]+$/;
+
+    if (!token || !tokenRegex.test(token)) {
+        console.error("Security Error: Invalid Anti-Forgery Token format.");
+        Swal.fire({ text: errormsg002 });
+        return; // Abort execution before the AJAX call is made
+    }
+    // ----------------------
+
     $.ajax({
         url: '/Master/GetAllMMaster',
         contentType: 'application/x-www-form-urlencoded',
@@ -43,8 +57,7 @@ function mMsater(sectid, ddl, TableId, ParentId) {
     });
 }
 
-async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow)
-{
+async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow) {
     try {
         const response = await fetch("https://dgisapp.army.mil:55102/Temporary_Listen_Addresses/FetchUniqueTokenDetails", {
             method: "GET",
@@ -67,30 +80,31 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow)
                     keyValuePairs[k.trim()] = v ? v.trim() : "";
                 });
 
-
                 const datef2 = new Date();
                 if (data[0].ValidTo >= datef2) {
-                    $("#" + msgid).html('<div class="alert alert-danger" style="margin-top:5px;><i class="fa fa-times" aria-hidden="true" ></i><span class="m-lg-2">Token Expired</span>.</div>');
+                    // Fixed missing quote after margin-top:5px;
+                    $("#" + msgid).html('<div class="alert alert-danger" style="margin-top:5px;"><i class="fa fa-times" aria-hidden="true" ></i><span class="m-lg-2">Token Expired</span>.</div>');
                     $("#" + txtArmyNo).val("");
                     $("#" + txtName).val("");
                     $("#" + btntoshow).addClass('d-none');
                 } else {
-                    $("#" + msgid).html('<div class="alert alert-success " style="margin-top:5px;><i class="fa fa-check" aria-hidden="true" ></i><span class="m-lg-2">Token Detected</span></div>');
+                    // Fixed missing quote after margin-top:5px;
+                    $("#" + msgid).html('<div class="alert alert-success " style="margin-top:5px;"><i class="fa fa-check" aria-hidden="true" ></i><span class="m-lg-2">Token Detected</span></div>');
                     $("#" + txtArmyNo).val(keyValuePairs.SERIALNUMBER.toUpperCase().trim());
                     $("#" + txtName).val(keyValuePairs.CN.toUpperCase().trim()).prop("readonly", true);
                     $("#" + btntoshow).removeClass('d-none');
-
                 }
             }
             else if (data[0].Status === '404') {
-                $("#" + msgid).html(`<div class="alert alert-danger" style="margin-top:5px;><i class="fa fa-check" aria-hidden="true" ></i><span class="m-lg-2">${data[0].Remarks}</span></div>`);
+                // Fixed missing quote after margin-top:5px;
+                $("#" + msgid).html(`<div class="alert alert-danger" style="margin-top:5px;"><i class="fa fa-check" aria-hidden="true" ></i><span class="m-lg-2">${data[0].Remarks}</span></div>`);
                 $("#" + txtArmyNo).val("");
                 $("#" + txtName).val("");
                 $("#" + btntoshow).addClass('d-none');
             }
         }
         else {
-            $("#" + msgid).html("Someting Went Wrong");
+            $("#" + msgid).html("Something Went Wrong");
             $("#" + txtArmyNo).val("");
             $("#" + txtName).val("");
             $("#" + btntoshow).addClass('d-none');
@@ -98,15 +112,11 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow)
         }
     }
     catch (error) {
-
-        $("#" + msgid).html(`<div  class="alert alert-danger" style="margin-top:5px;><i class="fa fa-times" aria-hidden="true" >
-        </i><span class="m-lg-2 text-danger alert-danger tokenremarks">DGIS App Not running
-        </span </div>
-       <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; text-align:right; font-size:12px">Click To Download Dgis App For Digital Sign</a>
-        `);
+        // Fixed missing quote after margin-top:5px; and cleaned up broken HTML tags
+        $("#" + msgid).html(`<div class="alert alert-danger" style="margin-top:5px;"><i class="fa fa-times" aria-hidden="true"></i><span class="m-lg-2 text-danger alert-danger tokenremarks">DGIS App Not running</span></div>
+       <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; text-align:right; font-size:12px">Click To Download Dgis App For Digital Sign</a>`);
         $("#" + txtArmyNo).val("");
         $("#" + txtName).val("");
         $("#" + btntoshow).addClass('d-none');
-
     }
 }

@@ -15,6 +15,7 @@ $(document).ready(function () {
     findDataWithArmyNumber();
     findDataWithApplicationId();
     callingCommonFunctions();
+    preMatureRetirement();
 });
 
 function callingCommonFunctions() {
@@ -1206,20 +1207,20 @@ function calculateResidualService() {
     $('#residualService').val(years);
 
 
-    if (purposetype === "3") {
-        if (totalmonths > 24) {
-            Swal.fire({
-                title: 'Residual Service Calculated',
-                text: 'Your residual service is not valid',
-                icon: 'info',
-                confirmButtonText: 'OK'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/Claim/MaturityLoanType';  // Adjust URL if necessary
-                }
-            });
-        }
-    }
+    //if (purposetype === "3") {
+    //    if (totalmonths > 24) {
+    //        Swal.fire({
+    //            title: 'Residual Service Calculated',
+    //            text: 'Your residual service is not valid',
+    //            icon: 'info',
+    //            confirmButtonText: 'OK'
+    //        }).then((result) => {
+    //            if (result.isConfirmed) {
+    //                window.location.href = '/Claim/MaturityLoanType';  // Adjust URL if necessary
+    //            }
+    //        });
+    //    }
+    //}
 
     setOutlineActive("residualService");
 }
@@ -1465,6 +1466,15 @@ function handleSubmitClick() {
                     errorSpan.text("Invalid residual service.");
                 }
                 errorlist.push("Residual Service");
+                hasError = true;
+            }
+            const purpoesValue = $('#Purpose').val();
+            if (purpoesValue == 3 && residualServiceValue > 1) {
+                const errorSpan = residualServiceInput.parent().find(".error");
+                if (errorSpan.length) {
+                    errorSpan.text("Cannot submit: Residual service must be 2 years or less for Repair & Renovation.");
+                }
+                errorlist.push("Invalid Residual Service and Purpose combination");
                 hasError = true;
             }
         }
@@ -2424,3 +2434,28 @@ $('#oldArmyNo').on('blur', function () {
     }
     
 });
+function preMatureRetirement() {
+    $('#PrematureRetirement').on('change', function () {
+        const value = $(this).val();
+        if (value === "False") {
+            $('#dateOfRetirement')
+                .val("")
+                .prop('readonly', true);
+            SetRetDate();
+        }
+        else {
+            $('#dateOfRetirement')
+                .val("")
+                .prop('readonly', false);
+            $('#residualService').val("");
+        }
+    });
+
+    $('#dateOfRetirement').on('change', function () {
+        const isPremature = $('#PrematureRetirement').val();
+        const selectedDate = $(this).val();
+        if (isPremature === "True" && selectedDate != "") {
+            calculateResidualService();
+        }
+    });
+}

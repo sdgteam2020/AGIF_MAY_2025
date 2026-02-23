@@ -64,7 +64,7 @@ namespace DataTransferObject.Model
         public string? ExtnOfService { get; set; }
 
         public DateTime? DateOfPromotion { get; set; }
-
+        [Required(ErrorMessage ="Date of Retirement is required")]
         public DateTime? DateOfRetirement { get; set; }
 
         [Required(ErrorMessage = "Aadhar Card No is required.")]
@@ -181,6 +181,7 @@ namespace DataTransferObject.Model
         public string? AGIFRemarks { get; set; } = string.Empty;
 
         public string? IPAddress { get; set; } = string.Empty;
+        public bool PrematureRetirement { get; set; }
 
     }
 }

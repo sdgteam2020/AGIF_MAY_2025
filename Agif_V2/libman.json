@@ -105,6 +105,26 @@
       "files": [
         "dist/js/bootstrap.bundle.min.js"
       ]
+    },
+    {
+      "library": "crypto-js@4.2.0",
+      "destination": "wwwroot/js/crypto-js/",
+      "files": [
+        "crypto-js.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "crypto-js@4.2.0",
+      "destination": "wwwroot/lib/crypto-js/",
+      "files": [
+        "crypto-js.js"
+      ]
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@gosats/crypto-js@4.3.4",
+      "destination": "wwwroot/js/gosats/crypto-js/"
     }
   ]
 }

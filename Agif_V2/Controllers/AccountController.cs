@@ -23,7 +23,7 @@ using System.Web;
 namespace Agif_V2.Controllers
 {
     public class AccountController : Controller
-    {
+    {   public const string SessionKeySalt = "_Salt";
         private readonly ApplicationDbContext _db;
         private readonly IUserProfile _userProfile;
         private readonly IUserMapping _userMapping;
@@ -43,17 +43,87 @@ namespace Agif_V2.Controllers
             _rsa = rsa;
         }
 
+        //public IActionResult Login()
+        //{
+        //    // Generate RSA key pair with PEM formatted public key
+        //    var (publicKeyPem, privateKeyXml) = _rsa.GenerateKeyPair();
+
+        //    // Store private key in session
+        //    HttpContext.Session.SetString("LoginPrivateKey", privateKeyXml);
+
+        //    // Pass PEM formatted public key to view (compatible with JSEncrypt)
+        //    ViewBag.PublicKey = publicKeyPem;
+
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> Login(LoginViewModel model)
+        //{
+        //    //    // Retrieve private key from session
+        //    var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
+
+        //    if (string.IsNullOrEmpty(privateKey))
+        //    {
+        //        ModelState.AddModelError("", "Session expired. Please refresh the page.");
+        //        return View(model);
+        //    }
+
+        //    // Decrypt username and password
+        //    if (!string.IsNullOrEmpty(model.UserName) && !string.IsNullOrEmpty(model.Password))
+        //    {
+        //        var decryptedUser = _rsa.DecryptString(model.UserName, privateKey);
+        //        var decryptedPass = _rsa.DecryptString(model.Password, privateKey);
+
+        //        if (decryptedUser == null || decryptedPass == null)
+        //        {
+        //            ModelState.AddModelError("", "Security validation failed. Please refresh the page.");
+        //            // Clear the session key
+        //            HttpContext.Session.Remove("LoginPrivateKey");
+        //            return View(model);
+        //        }
+
+        //        // Replace encrypted values with decrypted ones
+        //        model.UserName = decryptedUser;
+        //        model.Password = decryptedPass;
+
+        //        // Revalidate model with decrypted data
+        //        ModelState.Clear();
+        //        TryValidateModel(model);
+        //    }
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+
+        //    var user = await GetUserAsync(model.UserName);
+        //    if (user == null)
+        //    {
+        //        return HandleInvalidUserName(model);
+        //    }
+
+        //    if (await _userManager.IsLockedOutAsync(user))
+        //    {
+        //        return await HandleLockedOutUser(model, user);
+        //    }
+
+        //    var result = await SignInUserAsync(model, user);
+        //    if (result.Succeeded)
+        //    {
+        //        // Clear session key after successful login
+        //        HttpContext.Session.Remove("LoginPrivateKey");
+        //        return await HandleSuccessfulLogin(user, model);
+        //    }
+
+        //    return await HandleFailedLogin(result, model, user);
+        //}
+
         public IActionResult Login()
         {
-            // Generate RSA key pair with PEM formatted public key
-            var (publicKeyPem, privateKeyXml) = _rsa.GenerateKeyPair();
-
-            // Store private key in session
-            HttpContext.Session.SetString("LoginPrivateKey", privateKeyXml);
-
-            // Pass PEM formatted public key to view (compatible with JSEncrypt)
-            ViewBag.PublicKey = publicKeyPem;
-
+            string dd = AESEncrytDecry.GetSalt();
+            HttpContext.Session.SetString(SessionKeySalt, dd);
+            ViewBag.hdns = dd;
             return View();
         }
 
@@ -61,19 +131,27 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             //    // Retrieve private key from session
-            var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
+            //var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
 
-            if (string.IsNullOrEmpty(privateKey))
-            {
-                ModelState.AddModelError("", "Session expired. Please refresh the page.");
-                return View(model);
-            }
+            //if (string.IsNullOrEmpty(privateKey))
+            //{
+            //    ModelState.AddModelError("", "Session expired. Please refresh the page.");
+            //    return View(model);
+            //}
 
             // Decrypt username and password
             if (!string.IsNullOrEmpty(model.UserName) && !string.IsNullOrEmpty(model.Password))
             {
-                var decryptedUser = _rsa.DecryptString(model.UserName, privateKey);
-                var decryptedPass = _rsa.DecryptString(model.Password, privateKey);
+                var salt = HttpContext.Session.GetString(SessionKeySalt);
+                if(string.IsNullOrEmpty(salt))
+                {
+                    ModelState.AddModelError("", "Session expired. Please refresh the page.");
+                    return View(model);
+                }
+                var decryptedUser = AESEncrytDecry.DecryptAES(model.UserName.Trim(), salt);
+                var decryptedPass = AESEncrytDecry.DecryptAES(model.Password.Trim(), salt);
+                //var decryptedUser = _rsa.DecryptString(model.UserName, privateKey);
+                //var decryptedPass = _rsa.DecryptString(model.Password, privateKey);
 
                 if (decryptedUser == null || decryptedPass == null)
                 {

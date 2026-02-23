@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Agif_V2.Helpers
 {
-    public class AsymmetricEncryption : Controller
+    public class AsymmetricEncryption
     {
         // Generate RSA key pair and return PEM formatted public key
         public (string publicKeyPem, string privateKeyXml) GenerateKeyPair()
@@ -139,6 +139,12 @@ namespace Agif_V2.Helpers
                 Console.WriteLine($"Decryption failed: {ex.Message}");
                 return null;
             }
+        }
+
+        public string GetSalt(int sizeInBytes = 16)
+        {
+            byte[] saltBytes = RandomNumberGenerator.GetBytes(sizeInBytes);
+            return Convert.ToBase64String(saltBytes);
         }
     }
 }

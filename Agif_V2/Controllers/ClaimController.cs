@@ -1,5 +1,4 @@
-﻿
-using Agif_V2.Helpers;
+﻿using Agif_V2.Helpers;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
@@ -186,6 +185,11 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> OnlineApplication(DTOClaimApplication model)
         {
+            if (model.ClaimCommonData != null && model.ClaimCommonData.ResidualService > 1 && model.PropertyRenovation != null)
+            {
+                ModelState.AddModelError("ClaimCommonData.ResidualService", "Residual Service cannot exceed 2 years for Repair & Renovation.");
+                return View(model);
+            }
           
 
             // Perform custom validation (adds errors to ModelState)

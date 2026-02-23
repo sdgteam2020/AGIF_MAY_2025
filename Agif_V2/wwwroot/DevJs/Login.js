@@ -1,25 +1,26 @@
-﻿//// Login page functionality
+﻿// 1. FIXED: Added parentheses to actually get the value
+// Also added a fallback to an empty string to prevent CryptoJS crashes
+const getSecretKey = () => $('#spnhdns').text().trim() || "";
+
 class LoginManager {
     constructor(options = {}) {
         this.isLockedOut = options.isLockedOut || false;
-        // FIXED: Better date parsing and validation
         this.lockoutEnd = options.lockoutEnd && options.lockoutEnd !== 'null' ?
             new Date(options.lockoutEnd) : null;
         this.autoRefreshTimeout = options.autoRefreshTimeout || null;
+        this.countdownInterval = null;
         this.init();
     }
 
     init() {
-        $(document).ready(() => {
-            this.setupAutoFill();
-            this.setupCountdownTimer();
-            this.setupFormSubmission();
-            this.setupAutoRefresh();
-        });
+        // Removed nested $(document).ready for better reliability
+        this.setupAutoFill();
+        this.setupCountdownTimer();
+        this.setupFormSubmission();
+        this.setupAutoRefresh();
     }
 
     setupAutoFill() {
-        // Auto-fill for development (remove in production)
         if (!this.isLockedOut) {
             $("#UserName").val("admin");
             $("#Password").val("Admin123!");
@@ -27,7 +28,6 @@ class LoginManager {
     }
 
     setupCountdownTimer() {
-        // FIXED: Added validation and debug logging
         if (this.isLockedOut && this.lockoutEnd && !isNaN(this.lockoutEnd.getTime())) {
             this.updateCountdown();
             this.countdownInterval = setInterval(() => this.updateCountdown(), 1000);
@@ -35,139 +35,105 @@ class LoginManager {
     }
 
     updateCountdown() {
-        if (!this.lockoutEnd || isNaN(this.lockoutEnd.getTime())) {
-            return;
-        }
-
         const now = new Date();
         const timeLeft = this.lockoutEnd - now;
-        
 
         if (timeLeft > 0) {
             const hours = Math.floor(timeLeft / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-            let display = '';
-            if (hours > 0) display += hours + 'h ';
-            if (minutes > 0) display += minutes + 'm ';
-            display += seconds + 's';
-
-            // FIXED: Added check if countdown element exists
-            const countdownElement = $('#countdown');
-            if (countdownElement.length > 0) {
-                countdownElement.text(display);
-            }
+            let display = `${hours > 0 ? hours + 'h ' : ''}${minutes > 0 ? minutes + 'm ' : ''}${seconds}s`;
+            $('#countdown').text(display);
         } else {
             this.handleLockoutExpired();
         }
     }
 
     handleLockoutExpired() {
-        
-        if (this.countdownInterval) {
-            clearInterval(this.countdownInterval);
-        }
-
-        $('#countdown').text('Expired - Please refresh page');
+        if (this.countdownInterval) clearInterval(this.countdownInterval);
+        $('#countdown').text('Expired - Please refresh');
         $('#loginBtn').prop('disabled', false).html('<i class="fas fa-sign-in-alt me-2"></i>Login');
         $('.alert-danger').hide();
         $('input').prop('disabled', false);
-
-        // Update lockout state
         this.isLockedOut = false;
     }
 
-    //setupFormSubmission() {
-    //    $('#loginForm').submit((e) => {
-    //        const btn = $('#loginBtn');
-    //        if (!btn.prop('disabled')) {
-    //            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Signing in...');
-    //        }
-    //    });
-    //}
     setupFormSubmission() {
-        $('#loginForm').submit((e) => {
+        $('#loginForm').on('submit', (e) => {
+            // Prevent default to handle encryption first
             e.preventDefault();
 
             const btn = $('#loginBtn');
             const userNameInput = $("#UserName");
             const passwordInput = $("#Password");
-            const configEl = document.getElementById("loginConfig");
-            const publicKey = configEl ? configEl.dataset.publicKey : null;
 
-            // Validate public key exists and is in PEM format
-            if (!publicKey || !publicKey.includes('-----BEGIN PUBLIC KEY-----')) {
-                console.error("Invalid or missing encryption key");
-                alert("Security configuration error. Please refresh the page.");
-                return;
-            }
+            if (btn.prop('disabled')) return;
 
-            if (!btn.prop('disabled')) {
-                btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Signing in...');
+            btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Signing in...');
 
-                try {
-                    // Initialize JSEncrypt
-                    const encrypt = new JSEncrypt();
-                    encrypt.setPublicKey(publicKey);
+            try {
+                const username = userNameInput.val();
+                const password = passwordInput.val();
 
-                    // Get plain text values
-                    const username = userNameInput.val();
-                    const password = passwordInput.val();
+                const encryptedUsername = encryptData(username);
+                const encryptedPassword = encryptData(password);
 
+                if (encryptedUsername && encryptedPassword) {
+                    userNameInput.val(encryptedUsername);
+                    passwordInput.val(encryptedPassword);
 
-                    // Encrypt values
-                    const encryptedUser = encrypt.encrypt(username);
-                    const encryptedPass = encrypt.encrypt(password);
-
-                    
-
-                    // Verify encryption succeeded
-                    if (encryptedUser && encryptedPass) {
-                        // Update form fields with encrypted values
-                        userNameInput.val(encryptedUser);
-                        passwordInput.val(encryptedPass);
-
-
-                        // Submit the form
-                        e.currentTarget.submit();
-                    } else {
-                        // Encryption failed
-                        console.error('Encryption failed');
-                        btn.prop('disabled', false).html('<i class="fas fa-sign-in-alt me-2"></i>Login');
-                        alert("Encryption failed. Please try again or refresh the page.");
-                    }
-                } catch (err) {
-                    console.error("Login encryption error:", err);
-                    btn.prop('disabled', false).html('<i class="fas fa-sign-in-alt me-2"></i>Login');
-                    alert("An error occurred. Please refresh the page and try again.");
+                    // Use native submit to bypass the jQuery interceptor
+                    e.target.submit();
+                } else {
+                    throw new Error("Encryption returned empty result");
                 }
+            } catch (err) {
+                console.error("Login encryption error:", err);
+                btn.prop('disabled', false).html('<i class="fas fa-sign-in-alt me-2"></i>Login');
+                alert("Security error. Please refresh and try again.");
             }
         });
     }
+
     setupAutoRefresh() {
         if (this.autoRefreshTimeout) {
-            setTimeout(() => {
-                location.reload();
-            }, this.autoRefreshTimeout);
+            setTimeout(() => location.reload(), this.autoRefreshTimeout);
         }
     }
 }
 
+// Encryption Functions
+function encryptData(plainText) {
+    const secretKey = getSecretKey(); // Call the helper
+    if (!secretKey) {
+        console.error("Encryption Key Missing");
+        return "";
+    }
+
+    const key = CryptoJS.enc.Utf8.parse(secretKey);
+    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+
+    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    return encrypted.toString();
+}
+
+// Global Initialization
 $(document).ready(() => {
     const configEl = document.getElementById("loginConfig");
     if (configEl) {
         const loginConfig = {
             isLockedOut: configEl.dataset.isLockedOut === "true",
-            lockoutEnd: configEl.dataset.lockoutEnd !== "null" ? new Date(configEl.dataset.lockoutEnd) : null,
+            lockoutEnd: configEl.dataset.lockoutEnd !== "null" ? configEl.dataset.lockoutEnd : null,
             autoRefreshTimeout: configEl.dataset.autoRefreshTimeout !== "null" ? parseInt(configEl.dataset.autoRefreshTimeout) : null
         };
-
         new LoginManager(loginConfig);
-    } else {
-        console.warn("loginConfig element not found.");
     }
+
+    $("input, textarea").on("paste", (e) => e.preventDefault());
 });
-$("input, textarea").on("paste", function (e) {
-    e.preventDefault();
-});              
