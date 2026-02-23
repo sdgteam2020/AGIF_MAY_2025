@@ -18,15 +18,12 @@ export const renderImage = (instance, params) => {
 
   dom.show(image, '')
 
-  // Src, alt
   image.setAttribute('src', params.imageUrl)
   image.setAttribute('alt', params.imageAlt || '')
 
-  // Width, height
   dom.applyNumericalStyle(image, 'width', params.imageWidth)
   dom.applyNumericalStyle(image, 'height', params.imageHeight)
 
-  // Class
   image.className = swalClasses.image
   dom.applyCustomClass(image, params, 'image')
 }

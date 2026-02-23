@@ -8,9 +8,6 @@ function mMsater(sectid, ddl, TableId, ParentId) {
 
     var token = $('input[name="__RequestVerificationToken"]').val();
 
-    // --- SECURITY PATCH ---
-    // Validate the token format strictly to prevent DOM-based header manipulation
-    // ASP.NET Core tokens are Base64Url encoded (alphanumeric, dashes, underscores)
     var tokenRegex = /^[a-zA-Z0-9_\-]+$/;
 
     if (!token || !tokenRegex.test(token)) {
@@ -18,7 +15,6 @@ function mMsater(sectid, ddl, TableId, ParentId) {
         Swal.fire({ text: errormsg002 });
         return; // Abort execution before the AJAX call is made
     }
-    // ----------------------
 
     $.ajax({
         url: '/Master/GetAllMMaster',
@@ -35,7 +31,6 @@ function mMsater(sectid, ddl, TableId, ParentId) {
                 } else {
                     let listItemddl = '<option value="">Please Select</option>';
 
-                    // Guard if response isn't iterable
                     if (Array.isArray(response)) {
                         response.forEach(item => {
                             listItemddl += `<option value="${item.id}">${item.name}</option>`;
@@ -49,7 +44,6 @@ function mMsater(sectid, ddl, TableId, ParentId) {
                     }
                 }
             }
-            // else: silently ignore null-like response (could add logging if needed)
         },
         error: function () {
             Swal.fire({ text: errormsg002 });
@@ -82,13 +76,11 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow) {
 
                 const datef2 = new Date();
                 if (data[0].ValidTo >= datef2) {
-                    // Fixed missing quote after margin-top:5px;
                     $("#" + msgid).html('<div class="alert alert-danger" style="margin-top:5px;"><i class="fa fa-times" aria-hidden="true" ></i><span class="m-lg-2">Token Expired</span>.</div>');
                     $("#" + txtArmyNo).val("");
                     $("#" + txtName).val("");
                     $("#" + btntoshow).addClass('d-none');
                 } else {
-                    // Fixed missing quote after margin-top:5px;
                     $("#" + msgid).html('<div class="alert alert-success " style="margin-top:5px;"><i class="fa fa-check" aria-hidden="true" ></i><span class="m-lg-2">Token Detected</span></div>');
                     $("#" + txtArmyNo).val(keyValuePairs.SERIALNUMBER.toUpperCase().trim());
                     $("#" + txtName).val(keyValuePairs.CN.toUpperCase().trim()).prop("readonly", true);
@@ -96,7 +88,6 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow) {
                 }
             }
             else if (data[0].Status === '404') {
-                // Fixed missing quote after margin-top:5px;
                 $("#" + msgid).html(`<div class="alert alert-danger" style="margin-top:5px;"><i class="fa fa-check" aria-hidden="true" ></i><span class="m-lg-2">${data[0].Remarks}</span></div>`);
                 $("#" + txtArmyNo).val("");
                 $("#" + txtName).val("");
@@ -112,7 +103,6 @@ async function GetTokenDetails(txtArmyNo, txtName, msgid, btntoshow) {
         }
     }
     catch (error) {
-        // Fixed missing quote after margin-top:5px; and cleaned up broken HTML tags
         $("#" + msgid).html(`<div class="alert alert-danger" style="margin-top:5px;"><i class="fa fa-times" aria-hidden="true"></i><span class="m-lg-2 text-danger alert-danger tokenremarks">DGIS App Not running</span></div>
        <a class="alert-info" href="https://dgis.army.mil" style="padding:5px; text-align:right; font-size:12px">Click To Download Dgis App For Digital Sign</a>`);
         $("#" + txtArmyNo).val("");

@@ -31,14 +31,12 @@ export class SweetAlert {
    * @this {SweetAlert}
    */
   constructor(...args) {
-    // Prevent run in Node env
     if (typeof window === 'undefined') {
       return
     }
 
     currentInstance = this
 
-    // @ts-ignore
     const outerParams = Object.freeze(this.constructor.argsToParams(args))
 
     /** @type {Readonly<SweetAlertOptions>} */
@@ -71,13 +69,11 @@ export class SweetAlert {
     setParameters(innerParams)
     Object.freeze(innerParams)
 
-    // clear the previous timer
     if (globalState.timeout) {
       globalState.timeout.stop()
       delete globalState.timeout
     }
 
-    // clear the restore focus timeout
     clearTimeout(globalState.restoreFocusTimeout)
 
     const domCache = populateDomCache(currentInstance)
@@ -89,7 +85,6 @@ export class SweetAlert {
     return swalPromise(currentInstance, domCache, innerParams)
   }
 
-  // `catch` cannot be the name of a module export, so we define our thenable methods here instead
   then(onFulfilled) {
     return this.#promise.then(onFulfilled)
   }
@@ -107,7 +102,6 @@ export class SweetAlert {
  */
 const swalPromise = (instance, domCache, innerParams) => {
   return new Promise((resolve, reject) => {
-    // functions to handle all closings/dismissals
     /**
      * @param {DismissReason} dismiss
      */
@@ -146,7 +140,6 @@ const swalPromise = (instance, domCache, innerParams) => {
 
     initFocus(domCache, innerParams)
 
-    // Scroll container to top on open (#1247, #1946)
     setTimeout(() => {
       domCache.container.scrollTop = 0
     })
@@ -212,7 +205,6 @@ const setupTimer = (globalState, innerParams, dismissWith) => {
       dom.applyCustomClass(timerProgressBar, innerParams, 'timerProgressBar')
       setTimeout(() => {
         if (globalState.timeout && globalState.timeout.running) {
-          // timer can be already stopped or unset at this point
           dom.animateTimerProgressBar(innerParams.timer)
         }
       })
@@ -237,7 +229,6 @@ const initFocus = (domCache, innerParams) => {
   if (innerParams.toast) {
     return
   }
-  // TODO: this is dumb, remove `allowEnterKey` param in the next major version
   if (!callIfFunction(innerParams.allowEnterKey)) {
     warnAboutDeprecation('allowEnterKey')
     blurActiveElement()
@@ -300,7 +291,6 @@ const blurActiveElement = () => {
   }
 }
 
-// Dear russian users visiting russian sites. Let's have fun.
 if (
   typeof window !== 'undefined' &&
   /^ru\b/.test(navigator.language) &&
@@ -319,14 +309,12 @@ if (
       document.body.appendChild(ukrainianAnthem)
       setTimeout(() => {
         ukrainianAnthem.play().catch(() => {
-          // ignore
         })
       }, 2500)
     }, 500)
   }
 }
 
-// Assign instance methods from src/instanceMethods/*.js to prototype
 SweetAlert.prototype.disableButtons = instanceMethods.disableButtons
 SweetAlert.prototype.enableButtons = instanceMethods.enableButtons
 SweetAlert.prototype.getInput = instanceMethods.getInput
@@ -344,10 +332,8 @@ SweetAlert.prototype.rejectPromise = instanceMethods.rejectPromise
 SweetAlert.prototype.update = instanceMethods.update
 SweetAlert.prototype._destroy = instanceMethods._destroy
 
-// Assign static methods from src/staticMethods/*.js to constructor
 Object.assign(SweetAlert, staticMethods)
 
-// Proxy to instance methods to constructor, for now, for backwards compatibility
 Object.keys(instanceMethods).forEach((key) => {
   /**
    * @param {...any} args

@@ -38,7 +38,6 @@ namespace Agif_V2.Helpers
             string formTypeName = string.Empty;
 
 
-            // First, determine the form type
             if (data.CarApplicationResponse != null)
             {
                 formType = "CAR / TWO WHEELER ADVANCE";
@@ -75,7 +74,6 @@ namespace Agif_V2.Helpers
                     var document = new Document(pdf, pageSize); // Use PageSize instead of Rectangle
                     document.SetMargins(30f, 25f, 40f, 25f);
 
-                    //Define Fonts
                     PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
                     PdfFont normalFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                     float smallFontSize = 9f;
@@ -87,7 +85,6 @@ namespace Agif_V2.Helpers
                                                  .SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
                     document.Add(headerTable);
 
-                    // Add a title
                     document.Add(new Paragraph("ARMY GROUP INSURANCE FUND")
                         .SetFont(boldFont)
                         .SetFontSize(12)
@@ -105,7 +102,6 @@ namespace Agif_V2.Helpers
                     document.Add(line);
 
                     Table table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                    // Helper method
                     void AddRow(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                     {
                         Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -133,7 +129,6 @@ namespace Agif_V2.Helpers
 
                     var common = data.OnlineApplicationResponse;
 
-                    // Populate rows
                     AddRow("1. Type of Loan", formTypeName, "2. Army Number", common.Number);
                     AddRow("3.Old Army No", common.OldNumber, "4.Rank", common.DdlRank);
                     AddRow("5. Name", common.ApplicantName, "6. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"));
@@ -152,7 +147,6 @@ namespace Agif_V2.Helpers
                          .SetBorderLeft(Border.NO_BORDER)
                          .SetBorderRight(Border.NO_BORDER)); // This is the heading cell
 
-                    // The address will span 3 columns
                     table.AddCell(new Cell(1, 3).Add(new Paragraph((common.Vill_Town ?? "") + ", " + (common.PostOffice ?? "") + ", " +
                         (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""))
                         .SetFont(normalFont)
@@ -197,9 +191,7 @@ namespace Agif_V2.Helpers
                         .SetMarginTop(10).SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetMarginBottom(5);
                         document.Add(para28);
-                        //document.Add(new Paragraph("\n"));
 
-                        // Section 29
                         Paragraph para29 = new Paragraph("32. I state and certify that:-")
                             .SetFont(regularFont)
                             .SetFontSize(10)
@@ -233,7 +225,6 @@ namespace Agif_V2.Helpers
                             document.Add(p);
                         }
 
-                        // Section 30
                         Paragraph para30 = new Paragraph("33.I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information. ")
                             .SetFont(regularFont)
                             .SetFontSize(10)
@@ -296,7 +287,6 @@ namespace Agif_V2.Helpers
    .SetTextAlignment(TextAlignment.JUSTIFIED)
    .SetMarginBottom(5);
                             document.Add(r1);
-                            // Paragraph 2
                             Paragraph r2 = new Paragraph()
                                 .Add(new Text("2.     It's certified that I am the CO/OC Tps of ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName)
@@ -307,7 +297,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(r2);
 
-                            // Paragraph 3
                             Paragraph r3 = new Paragraph()
                                 .Add(new Text("3.     I have interviewed him ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text("and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.")
@@ -316,7 +305,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(r3);
 
-                            // Paragraph 4
                             Paragraph r4 = new Paragraph()
                                 .Add(new Text("4.     It is certified that Bank A/c No ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text(common.SalaryAcctNo).SetFont(boldFont).SetFontSize(10))
@@ -332,7 +320,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(r4);
 
-                            // Paragraph 5
                             Paragraph r5 = new Paragraph()
                                 .Add(new Text("5.     I have satisfied myself of the correctness of personal details given in application. ")
                                     .SetFont(normalFont).SetFontSize(10))
@@ -344,7 +331,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(10f);
                             document.Add(r5);
 
-                            // Paragraph 6
                             Paragraph r6 = new Paragraph("     Application is recommended for sanction and accordingly I countersign the same.")
                                 .SetFont(normalFont)
                                 .SetFontSize(10)
@@ -451,7 +437,6 @@ namespace Agif_V2.Helpers
                         var normalFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                         var boldFontforpara29 = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
 
-                        // Section 29 title
                         var titleParagraph = new Paragraph("30. I state and certify that:")
                             .SetFont(normalFontforpara29)
                             .SetFontSize(10)
@@ -459,7 +444,6 @@ namespace Agif_V2.Helpers
                             .SetMarginBottom(5);
                         document.Add(titleParagraph);
 
-                        // List of bullet points
                         var points = new List<string>
                         {
                             "(a) I have read the instr / rules regulating the grant of loan to AGIF members for purchase of four / two wheeler and agree to abide by the terms and conditions stipulated therein from time to time. I agree to pay the one-time non-refundable insurance premium and abide by its terms and conditions.",
@@ -483,7 +467,6 @@ namespace Agif_V2.Helpers
                         }
 
 
-                        // Section 30 title
                         var titleParagraph30 = new Paragraph("31. I further agree that:")
                             .SetFont(normalFontforpara29)
                             .SetFontSize(10)
@@ -520,7 +503,6 @@ namespace Agif_V2.Helpers
                         document.Add(titleParagraph31);
 
 
-                        // === Signature Table (Top) ===
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
                         signatureTable.AddCell(new Cell()
                             .Add(new Paragraph(common.Number).SetFont(normalFont).SetFontSize(10))
@@ -552,7 +534,6 @@ namespace Agif_V2.Helpers
                         document.Add(signatureTable);
 
 
-                        // === Main Section ===
                         if (isApproved)
                         {
                             document.Add(new Paragraph("This is an electronically generated PDF")
@@ -562,7 +543,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginTop(10)
                                 .SetMarginBottom(5));
 
-                            // Page Break (Optional)
                             document.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
                             document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
@@ -576,7 +556,6 @@ namespace Agif_V2.Helpers
                             string strAppType = "Loan"; // Example dynamic value
                             string interviewDate = DateTime.Now.ToString("dd-MM-yyyy");
 
-                            // Helper for consistent paragraphs
                             void AddRecParagraph(string text)
                             {
                                 document.Add(new Paragraph(text)
@@ -656,7 +635,6 @@ namespace Agif_V2.Helpers
                         }
 
 
-                        // === Signature Section (Bottom) ===
                         if (isApproved || isRejected)
                         {
                             document.Add(new Paragraph("\n\n\n"));
@@ -747,13 +725,11 @@ namespace Agif_V2.Helpers
 
 
 
-                        // Section 29 Title
                         document.Add(new Paragraph("31. I state and certify that:")
                             .SetFont(normalFont)
                             .SetFontSize(10)
                             .SetMarginTop(10).SetMarginBottom(5));
 
-                        // Section 29 Bullet Points
                         string[] points = new string[]
                         {
                       "(a) I have read the rules regulating the grant of loan to AGIF members for purchase of personal computer and agree to abide by the terms and conditions stipulated therein from time to time. ",
@@ -767,17 +743,14 @@ namespace Agif_V2.Helpers
                             document.Add(new Paragraph(pt).SetFont(normalFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(3).SetMarginLeft(20));
                         }
 
-                        // (e) Clause
                         string ePoint = "I will pay the sum of loan amount or the balance remaining unpaid at the date of retirement / dismissal / premature retirement from service by equal payments on the first day of every month and will pay interest on the sum remaining due as calculated according to the rules.  I authorise the PAO (OR) / CDA (O) to deduct the amount as conveyed by AGIF from my salary. ";
                         document.Add(new Paragraph(ePoint).SetFont(normalFont).SetFontSize(10).SetTextAlignment(TextAlignment.JUSTIFIED).SetMarginBottom(3).SetMarginLeft(20));
 
-                        // Section 30
                         string section30 = "32.  I, solemnly declare that the details/information furnished by me and averments/certifications made herein are true to the best of my knowledge and belief and have not willfully suppressed any material information.";
                         document.Add(new Paragraph(section30).SetFont(normalFont).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
 
                        
 
-                        // === Signature Table (Top) ===
                         Table signatureTable = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
 
                         signatureTable.AddCell(new Cell()
@@ -816,7 +789,6 @@ namespace Agif_V2.Helpers
                         document.Add(signatureTable);
 
 
-                        // === Approval Section ===
                         if (isApproved)
                         {
                             document.Add(new Paragraph("This is an electronically generated PDF")
@@ -834,7 +806,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginTop(10)
                                 .SetMarginBottom(5));
 
-                            // Paragraph 1
                             Paragraph para1 = new Paragraph()
                                 .Add(new Text("1.     I certify that above ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text("PCA").SetFont(boldFont).SetFontSize(10))
@@ -849,7 +820,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(para1);
 
-                            // Paragraph 2
                             Paragraph para2 = new Paragraph()
                                 .Add(new Text("2.     It's certified that I am the CO/OC Tps of ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text(common.Number + " " + common.DdlRank + " " + common.ApplicantName)
@@ -860,7 +830,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(para2);
 
-                            // Paragraph 3
                             Paragraph para3 = new Paragraph()
                                 .Add(new Text("3.     I have interviewed him ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text("and verified his financial condition and established need for taking this loan. Applicant will be using loan amount for intended purpose only.")
@@ -869,7 +838,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(para3);
 
-                            // Paragraph 4
                             Paragraph para4 = new Paragraph()
                                 .Add(new Text("4.     It is certified that Bank A/c No ").SetFont(normalFont).SetFontSize(10))
                                 .Add(new Text(common.SalaryAcctNo).SetFont(boldFont).SetFontSize(10))
@@ -885,7 +853,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(5);
                             document.Add(para4);
 
-                            // Paragraph 5
                             Paragraph para5 = new Paragraph()
                                 .Add(new Text("5.     I have satisfied myself of the correctness of personal details given in application. ")
                                     .SetFont(normalFont).SetFontSize(10))
@@ -897,7 +864,6 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(10f);
                             document.Add(para5);
 
-                            // Paragraph 6
                             Paragraph para6 = new Paragraph("     Application is recommended for sanction and accordingly I countersign the same.")
                                 .SetFont(normalFont)
                                 .SetFontSize(10)
@@ -915,7 +881,6 @@ namespace Agif_V2.Helpers
                         }
 
 
-                        // === Signature Section (Bottom) ===
                         if (isApproved || isRejected)
                         {
                             document.Add(new Paragraph("\n\n\n"));

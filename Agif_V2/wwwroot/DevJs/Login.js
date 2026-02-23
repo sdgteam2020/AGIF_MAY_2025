@@ -1,6 +1,4 @@
-﻿// 1. FIXED: Added parentheses to actually get the value
-// Also added a fallback to an empty string to prevent CryptoJS crashes
-const getSecretKey = () => $('#spnhdns').text().trim() || "";
+﻿const getSecretKey = () => $('#spnhdns').text().trim() || "";
 
 class LoginManager {
     constructor(options = {}) {
@@ -13,7 +11,6 @@ class LoginManager {
     }
 
     init() {
-        // Removed nested $(document).ready for better reliability
         this.setupAutoFill();
         this.setupCountdownTimer();
         this.setupFormSubmission();
@@ -61,7 +58,6 @@ class LoginManager {
 
     setupFormSubmission() {
         $('#loginForm').on('submit', (e) => {
-            // Prevent default to handle encryption first
             e.preventDefault();
 
             const btn = $('#loginBtn');
@@ -83,7 +79,6 @@ class LoginManager {
                     userNameInput.val(encryptedUsername);
                     passwordInput.val(encryptedPassword);
 
-                    // Use native submit to bypass the jQuery interceptor
                     e.target.submit();
                 } else {
                     throw new Error("Encryption returned empty result");
@@ -103,7 +98,6 @@ class LoginManager {
     }
 }
 
-// Encryption Functions
 function encryptData(plainText) {
     const secretKey = getSecretKey(); // Call the helper
     if (!secretKey) {
@@ -123,7 +117,6 @@ function encryptData(plainText) {
     return encrypted.toString();
 }
 
-// Global Initialization
 $(document).ready(() => {
     const configEl = document.getElementById("loginConfig");
     if (configEl) {

@@ -5,9 +5,6 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
-/// <summary>
-/// Summary description for saml
-/// </summary>
 
 namespace OneLogin
 {
@@ -20,7 +17,6 @@ namespace OneLogin
             public void LoadCertificate(string certificate)
             {
                 cert = new X509Certificate2(StringToByteArray(certificate));
-                // cert.Import(StringToByteArray(certificate));
             }
 
             public void LoadCertificate(byte[] certificate)
@@ -261,30 +257,9 @@ namespace OneLogin
             {
                 return true;
 
-                //bool rslt = false;
 
-                //XmlNamespaceManager manager = new XmlNamespaceManager(xmlDoc.NameTable);
-                //manager.AddNamespace("ds", SignedXml.XmlDsigNamespaceUrl);
-                //manager.AddNamespace("saml", "urn:oasis:names:tc:SAML:2.0:assertion");
-                //manager.AddNamespace("samlp", "urn:oasis:names:tc:SAML:2.0:protocol");
 
-                //var nodes = xmlDoc.SelectNodes("/samlp:Response/saml:Assertion/saml:Subject/saml:SubjectConfirmation", manager);
-                //string value = null;
-                //if (nodes != null)
-                //{
-                //    value = nodes[0].ChildNodes[0].Attributes[0].Value;
-                //}
-                //AccountSettings accountSettings=new AccountSettings();
-                //if (accountSettings.entityId.ToUpper() == value.ToUpper())
-                //{
-                //    rslt = true;
-                //}
-                //else
-                //{
-                //    rslt = false;
-                //}
 
-                //return rslt;
             }
 
             public bool validateSAML1()
@@ -414,8 +389,6 @@ namespace OneLogin
                         xw.WriteAttributeString("IssueInstant", issue_instant);
                         xw.WriteAttributeString("Destination", issuer);
                         xw.WriteAttributeString("InResponseTo", logouturl);
-                        //xw.WriteAttributeString("ProtocolBinding", "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
-                        //xw.WriteAttributeString("assertionConsumerService", appSettings.assertionConsumerServiceUrl);
 
                         xw.WriteStartElement("saml2", "Issuer", "urn:oasis:names:tc:SAML:2.0:assertion");
                         xw.WriteString(appSettings.issuer);
@@ -427,16 +400,10 @@ namespace OneLogin
                         xw.WriteEndElement();
                         xw.WriteEndElement();
 
-                        //xw.WriteStartElement("samlp", "RequestedAuthnContext", "urn:oasis:names:tc:SAML:2.0:protocol");
-                        //xw.WriteAttributeString("Comparison", "exact");
 
-                        //xw.WriteStartElement("saml", "AuthnContextClassRef", "urn:oasis:names:tc:SAML:2.0:assertion");
-                        //xw.WriteString("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
-                        //xw.WriteEndElement();
 
                         xw.WriteEndElement(); // RequestedAuthnContext
 
-                        // xw.WriteEndElement();
                     }
 
                     if (format == AuthRequestFormat.Base64)
@@ -463,10 +430,6 @@ namespace OneLogin
 
                         xw.WriteAttributeString("Version", "2.0");
                         xw.WriteAttributeString("NameID", username);
-                        //  xw.WriteAttributeString("Issuer", issuer);
-                        // xw.WriteAttributeString("AppRole", logouturl);
-                        //xw.WriteAttributeString("ProtocolBinding", "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
-                        //xw.WriteAttributeString("assertionConsumerService", appSettings.assertionConsumerServiceUrl);
 
                         xw.WriteStartElement("saml2", "Issuer", "urn:oasis:names:tc:SAML:2.0:assertion");
                         xw.WriteString(appSettings.issuer);
@@ -475,22 +438,11 @@ namespace OneLogin
                         xw.WriteString(AppRole);
                         xw.WriteEndElement();
 
-                        //xw.WriteStartElement("saml2p", "Status", "urn:oasis:names:tc:SAML:2.0:protocol");
-                        //xw.WriteStartElement("saml2p", "StatusCode", "urn:oasis:names:tc:SAML:2.0:status:Success");
-                        //xw.WriteAttributeString("Value", "Success");
-                        //xw.WriteEndElement();
-                        //xw.WriteEndElement();
 
-                        //xw.WriteStartElement("samlp", "RequestedAuthnContext", "urn:oasis:names:tc:SAML:2.0:protocol");
-                        //xw.WriteAttributeString("Comparison", "exact");
 
-                        //xw.WriteStartElement("saml", "AuthnContextClassRef", "urn:oasis:names:tc:SAML:2.0:assertion");
-                        //xw.WriteString("urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport");
-                        //xw.WriteEndElement();
 
                         xw.WriteEndElement(); // RequestedAuthnContext
 
-                        // xw.WriteEndElement();
                     }
 
                     if (format == AuthRequestFormat.Base64)
@@ -515,8 +467,6 @@ namespace OneLogin
                         xw.WriteStartElement("saml2p", "LogoutRequest", "urn:oasis:names:tc:SAML:2.0:protocol");
                         xw.WriteAttributeString("ID", id);
 
-                        // xw.WriteAttributeString("Version", "2.0");
-                        // xw.WriteAttributeString("IssueInstant", issue_instant);
                         xw.WriteStartElement("saml2", "AppRole", "urn:oasis:names:tc:SAML:2.0:assertion");
                         xw.WriteString(AppRole);
                         xw.WriteEndElement();

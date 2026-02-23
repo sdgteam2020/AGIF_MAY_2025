@@ -15,7 +15,6 @@ var _self =
  */
 
 var Prism = (function () {
-  // Private helper vars
   var lang = /\blang(?:uage)?-([\w-]+)\b/i;
   var uniqueId = 0;
 
@@ -47,7 +46,6 @@ var Prism = (function () {
         return obj['__id'];
       },
 
-      // Deep clone a language definition (e.g. to extend it)
       clone: function (o, visited) {
         var type = _.util.type(o);
         visited = visited || {};
@@ -138,7 +136,6 @@ var Prism = (function () {
           }
         }
 
-        // Update references in other language definitions
         _.languages.DFS(_.languages, function (key, value) {
           if (value === root[inside] && key != inside) {
             this[key] = ret;
@@ -148,7 +145,6 @@ var Prism = (function () {
         return (root[inside] = ret);
       },
 
-      // Traverse a language definition with Depth First Search
       DFS: function (o, callback, type, visited) {
         visited = visited || {};
         for (var i in o) {
@@ -189,7 +185,6 @@ var Prism = (function () {
     },
 
     highlightElement: function (element, async, callback) {
-      // Find language
       var language,
         grammar,
         parent = element;
@@ -203,12 +198,10 @@ var Prism = (function () {
         grammar = _.languages[language];
       }
 
-      // Set language on the element, if not present
       element.className =
         element.className.replace(lang, '').replace(/\s+/g, ' ') + ' language-' + language;
 
       if (element.parentNode) {
-        // Set language on the parent, for styling
         parent = element.parentNode;
 
         if (/pre/i.test(parent.nodeName)) {
@@ -312,19 +305,16 @@ var Prism = (function () {
             alias = pattern.alias;
 
           if (greedy && !pattern.pattern.global) {
-            // Without the global flag, lastIndex won't work
             var flags = pattern.pattern.toString().match(/[imuy]*$/)[0];
             pattern.pattern = RegExp(pattern.pattern.source, flags + 'g');
           }
 
           pattern = pattern.pattern || pattern;
 
-          // Donâ€™t cache length as it changes during the loop
           for (var i = index, pos = startPos; i < strarr.length; pos += strarr[i].length, ++i) {
             var str = strarr[i];
 
             if (strarr.length > text.length) {
-              // Something went terribly wrong, ABORT, ABORT!
               return;
             }
 
@@ -350,19 +340,16 @@ var Prism = (function () {
                 ++k
               ) {
                 p += strarr[k].length;
-                // Move the index i to the element in strarr that is closest to from
                 if (from >= p) {
                   ++i;
                   pos = p;
                 }
               }
 
-              // If strarr[i] is a Token, then the match starts inside another Token, which is invalid
               if (strarr[i] instanceof Token) {
                 continue;
               }
 
-              // Number of tokens to delete and replace with the new match
               delNum = k - i;
               str = text.slice(pos, p);
               match.index -= pos;
@@ -470,7 +457,6 @@ var Prism = (function () {
     this.type = type;
     this.content = content;
     this.alias = alias;
-    // Copy of the full string this token was created from
     this.length = (matchedStr || '').length | 0;
     this.greedy = !!greedy;
   });
@@ -528,12 +514,10 @@ var Prism = (function () {
 
   if (!_self.document) {
     if (!_self.addEventListener) {
-      // in Node.js
       return _self.Prism;
     }
 
     if (!_.disableWorkerMessageHandler) {
-      // In worker
       _self.addEventListener(
         'message',
         function (evt) {
@@ -554,7 +538,6 @@ var Prism = (function () {
     return _self.Prism;
   }
 
-  //Get current script and highlight
   var script =
     document.currentScript || [].slice.call(document.getElementsByTagName('script')).pop();
 
@@ -581,7 +564,6 @@ if (typeof module !== 'undefined' && module.exports) {
   module.exports = Prism;
 }
 
-// hack for components to work correctly in node.js
 if (typeof global !== 'undefined') {
   global.Prism = Prism;
 }
@@ -629,7 +611,6 @@ Prism.languages.markup = {
 Prism.languages.markup['tag'].inside['attr-value'].inside['entity'] =
   Prism.languages.markup['entity'];
 
-// Plugin to make entity title show the real entity, idea by Roman Komarov
 Prism.hooks.add('wrap', function (env) {
   if (env.type === 'entity') {
     env.attributes['title'] = env.content.replace(/&amp;/, '&');
@@ -647,7 +628,6 @@ Prism.languages.css = {
     pattern: /@[\w-]+?.*?(?:;|(?=\s*\{))/i,
     inside: {
       rule: /@[\w-]+/,
-      // See rest below
     },
   },
   url: /url\((?:(["'])(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1|.*?)\)/i,
@@ -736,7 +716,6 @@ Prism.languages.javascript = Prism.languages.extend('clike', {
     /\b(?:as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|var|void|while|with|yield)\b/,
   number:
     /\b(?:0[xX][\dA-Fa-f]+|0[bB][01]+|0[oO][0-7]+|NaN|Infinity)\b|(?:\b\d+\.?\d*|\B\.\d+)(?:[Ee][+-]?\d+)?/,
-  // Allow for all non-ASCII characters (See http://stackoverflow.com/a/2008444)
   function: /[_$a-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*\()/i,
   operator:
     /-[-=]?|\+[+=]?|!=?=?|<<?=?|>>?>?=?|=(?:==?|>)?|&[&=]?|\|[|=]?|\*\*?=?|\/=?|~|\^=?|%=?|\?|\.{3}/,
@@ -749,7 +728,6 @@ Prism.languages.insertBefore('javascript', 'keyword', {
     lookbehind: true,
     greedy: true,
   },
-  // This must be declared before keyword because we use "function" inside the look-forward
   'function-variable': {
     pattern:
       /[_$a-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*=\s*(?:function\b|(?:\([^()]*\)|[_$a-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*=>))/i,
@@ -798,9 +776,6 @@ Prism.languages['markup-templating'] = {};
 
 Object.defineProperties(Prism.languages['markup-templating'], {
   buildPlaceholders: {
-    // Tokenize all inline templating expressions matching placeholderPattern
-    // If the replaceFilter function is provided, it will be called with every match.
-    // If it returns false, the match will not be replaced.
     value: function (env, language, placeholderPattern, replaceFilter) {
       if (env.language !== language) {
         return;
@@ -813,27 +788,22 @@ Object.defineProperties(Prism.languages['markup-templating'], {
           return match;
         }
         var i = env.tokenStack.length;
-        // Check for existing strings
         while (env.code.indexOf('___' + language.toUpperCase() + i + '___') !== -1) ++i;
 
-        // Create a sparse array
         env.tokenStack[i] = match;
 
         return '___' + language.toUpperCase() + i + '___';
       });
 
-      // Switch the grammar to markup
       env.grammar = Prism.languages.markup;
     },
   },
   tokenizePlaceholders: {
-    // Replace placeholders with proper tokens after tokenizing
     value: function (env, language) {
       if (env.language !== language || !env.tokenStack) {
         return;
       }
 
-      // Switch the grammar back
       env.grammar = Prism.languages[language];
 
       var j = 0;
@@ -950,7 +920,6 @@ Prism.languages.jsonp = Prism.languages.json;
     },
   });
 
-  // Must be defined after the function pattern
   Prism.languages.insertBefore('php', 'operator', {
     property: {
       pattern: /(->)[\w]+/,
@@ -1003,7 +972,6 @@ Prism.languages.jsonp = Prism.languages.json;
       },
     },
   });
-  // The different types of PHP strings "replace" the C-like standard string
   delete Prism.languages.php['string'];
 
   var string_interpolation = {
@@ -1030,7 +998,6 @@ Prism.languages.jsonp = Prism.languages.json;
   });
 })(Prism);
 Prism.languages.typescript = Prism.languages.extend('javascript', {
-  // From JavaScript Prism keyword list and TypeScript language spec: https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#221-reserved-words
   keyword:
     /\b(?:as|async|await|break|case|catch|class|const|continue|debugger|default|delete|do|else|enum|export|extends|finally|for|from|function|get|if|implements|import|in|instanceof|interface|let|new|null|of|package|private|protected|public|return|set|static|super|switch|this|throw|try|typeof|var|void|while|with|yield|module|declare|constructor|namespace|abstract|require|type)\b/,
   builtin: /\b(?:string|Function|any|number|boolean|Array|symbol|console)\b/,
@@ -1046,20 +1013,10 @@ Prism.languages.scss = Prism.languages.extend('css', {
     pattern: /@[\w-]+(?:\([^()]+\)|[^(])*?(?=\s+[{;])/,
     inside: {
       rule: /@[\w-]+/,
-      // See rest below
     },
   },
-  // url, compassified
   url: /(?:[-a-z]+-)*url(?=\()/i,
-  // CSS selector regex is not appropriate for Sass
-  // since there can be lot more things (var, @ directive, nesting..)
-  // a selector must start at the end of a property or after a brace (end of other rules or nesting)
-  // it can contain some characters that aren't used for defining rules or end of selector, & (parent selector), or interpolated variable
-  // the end of a selector is found when there is no rules in it ( {} or {\s}) or if there is a property (because an interpolated var
-  // can "pass" as a selector- e.g: proper#{$erty})
-  // this one was hard to do, so please be careful if you edit this one :)
   selector: {
-    // Initial look-ahead is used to prevent matching of blank selectors
     pattern: /(?=\S)[^@;{}()]?(?:[^@;{}()]|&|#\{\$[-\w]+\})+(?=\s*\{(?:\}|\s|[^}]+[:{][^}]+))/m,
     inside: {
       parent: {
@@ -1090,7 +1047,6 @@ Prism.languages.scss.property = {
 };
 
 Prism.languages.insertBefore('scss', 'important', {
-  // var and interpolated vars
   variable: /\$[-\w]+|#\{\$[-\w]+\}/,
 });
 
@@ -1184,29 +1140,24 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
       return;
     }
 
-    // works only for <code> wrapped inside <pre> (not inline)
     var pre = env.element.parentNode;
     var clsReg = /\s*\bline-numbers\b\s*/;
     if (
       !pre ||
       !/pre/i.test(pre.nodeName) ||
-      // Abort only if nor the <pre> nor the <code> have the class
       (!clsReg.test(pre.className) && !clsReg.test(env.element.className))
     ) {
       return;
     }
 
     if (env.element.querySelector('.line-numbers-rows')) {
-      // Abort if line numbers already exists
       return;
     }
 
     if (clsReg.test(env.element.className)) {
-      // Remove the class 'line-numbers' from the <code>
       env.element.className = env.element.className.replace(clsReg, ' ');
     }
     if (!clsReg.test(pre.className)) {
-      // Add the class 'line-numbers' to the <pre>
       pre.className += ' line-numbers';
     }
 
@@ -1324,24 +1275,20 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
    * @param env
    */
   var hook = (Prism.plugins.toolbar.hook = function (env) {
-    // Check if inline or actual code block (credit to line-numbers plugin)
     var pre = env.element.parentNode;
     if (!pre || !/pre/i.test(pre.nodeName)) {
       return;
     }
 
-    // Autoloader rehighlights, so only do this once.
     if (pre.parentNode.classList.contains('code-toolbar')) {
       return;
     }
 
-    // Create wrapper for <pre> to prevent scrolling toolbar with content
     var wrapper = document.createElement('div');
     wrapper.classList.add('code-toolbar');
     pre.parentNode.insertBefore(wrapper, pre);
     wrapper.appendChild(pre);
 
-    // Setup the toolbar
     var toolbar = document.createElement('div');
     toolbar.classList.add('toolbar');
 
@@ -1368,7 +1315,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
       toolbar.appendChild(item);
     });
 
-    // Add our toolbar to the currently created wrapper of <pre> tag
     wrapper.appendChild(toolbar);
   });
 
@@ -1385,7 +1331,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
     var element, template;
     var text = pre.getAttribute('data-label');
     try {
-      // Any normal text will blow up this selector.
       template = document.querySelector('template#' + text);
     } catch (e) {}
 
@@ -1417,11 +1362,8 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
   }
 
   var previewers = {
-    // gradient must be defined before color and angle
     gradient: {
       create: (function () {
-        // Stores already processed gradients so that we don't
-        // make the conversion every time the previewer is shown
         var cache = {};
 
         /**
@@ -1431,14 +1373,11 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
          * @param {string[]} values Array of the gradient function parameters (["0deg", "red 0%", "blue 100%"])
          */
         var convertToW3CLinearGradient = function (prefix, func, values) {
-          // Default value for angle
           var angle = '180deg';
 
           if (/^(?:-?\d*\.?\d+(?:deg|rad)|to\b|top|right|bottom|left)/.test(values[0])) {
             angle = values.shift();
             if (angle.indexOf('to ') < 0) {
-              // Angle uses old keywords
-              // W3C syntax uses "to" + opposite keywords
               if (angle.indexOf('top') >= 0) {
                 if (angle.indexOf('left') >= 0) {
                   angle = 'to bottom right';
@@ -1460,7 +1399,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
               } else if (angle.indexOf('right') >= 0) {
                 angle = 'to left';
               } else if (prefix) {
-                // Angle is shifted by 90deg in prefixed gradients
                 if (angle.indexOf('deg') >= 0) {
                   angle = 90 - parseFloat(angle) + 'deg';
                 } else if (angle.indexOf('rad') >= 0) {
@@ -1481,20 +1419,15 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
          */
         var convertToW3CRadialGradient = function (prefix, func, values) {
           if (values[0].indexOf('at') < 0) {
-            // Looks like old syntax
 
-            // Default values
             var position = 'center';
             var shape = 'ellipse';
             var size = 'farthest-corner';
 
             if (/\bcenter|top|right|bottom|left\b|^\d+/.test(values[0])) {
-              // Found a position
-              // Remove angle value, if any
               position = values.shift().replace(/\s*-?\d+(?:rad|deg)\s*/, '');
             }
             if (/\bcircle|ellipse|closest|farthest|contain|cover\b/.test(values[0])) {
-              // Found a shape and/or size
               var shapeSizeParts = values.shift().split(/\s+/);
               if (
                 shapeSizeParts[0] &&
@@ -1506,7 +1439,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
                 size = shapeSizeParts.shift();
               }
 
-              // Old keywords are converted to their synonyms
               if (size === 'cover') {
                 size = 'farthest-corner';
               } else if (size === 'contain') {
@@ -1533,9 +1465,7 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
           var parts = gradient.match(
             /^(\b|\B-[a-z]{1,10}-)((?:repeating-)?(?:linear|radial)-gradient)/
           );
-          // "", "-moz-", etc.
           var prefix = parts && parts[1];
-          // "linear-gradient", "radial-gradient", etc.
           var func = parts && parts[2];
 
           var values = gradient
@@ -2159,7 +2089,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
     }
   });
 
-  // Initialize the previewers only when needed
   Prism.hooks.add('after-highlight', function (env) {
     if (Previewer.byLanguages['*'] || Previewer.byLanguages[env.language]) {
       Previewer.initEvents(env.element, env.language);
@@ -2240,7 +2169,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
     removeTrailing: function (input) {
       return input.replace(/\s*?$/gm, '');
     },
-    // Support for deprecated plugin remove-initial-line-feed
     removeInitialLineFeed: function (input) {
       return input.replace(/^(?:\r?\n|\r)/, '');
     },
@@ -2284,12 +2212,10 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
     },
   };
 
-  // Support node modules
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = NormalizeWhitespace;
   }
 
-  // Exit if prism is not loaded
   if (typeof Prism === 'undefined') {
     return;
   }
@@ -2309,18 +2235,15 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
   Prism.hooks.add('before-sanity-check', function (env) {
     var Normalizer = Prism.plugins.NormalizeWhitespace;
 
-    // Check settings
     if (env.settings && env.settings['whitespace-normalization'] === false) {
       return;
     }
 
-    // Simple mode if there is no env.element
     if ((!env.element || !env.element.parentNode) && env.code) {
       env.code = Normalizer.normalize(env.code, env.settings);
       return;
     }
 
-    // Normal mode
     var pre = env.element.parentNode;
     var clsReg = /\bno-whitespace-normalization\b/;
     if (
@@ -2337,7 +2260,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
       after = '',
       codeFound = false;
 
-    // Move surrounding whitespace from the <pre> tag into the <code> tag
     for (var i = 0; i < children.length; ++i) {
       var node = children[i];
 
@@ -2359,7 +2281,6 @@ Prism.languages.scss['atrule'].inside.rest = Prism.languages.scss;
       env.code = before + env.code + after;
       env.code = Normalizer.normalize(env.code, env.settings);
     } else {
-      // Preserve markup for keep-markup plugin
       var html = before + env.element.innerHTML + after;
       env.element.innerHTML = Normalizer.normalize(html, env.settings);
       env.code = env.element.textContent;

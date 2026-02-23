@@ -4,10 +4,8 @@
 
 namespace DataAccessLayer.Migrations
 {
-    /// <inheritdoc />
     public partial class AddingForeignKeyRelation : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
@@ -120,7 +118,6 @@ namespace DataAccessLayer.Migrations
                 onDelete: ReferentialAction.Cascade);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

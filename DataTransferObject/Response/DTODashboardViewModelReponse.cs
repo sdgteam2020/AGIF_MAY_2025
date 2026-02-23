@@ -11,11 +11,9 @@ namespace DataTransferObject.Response
     {
         public SessionUserDTO SessionUser { get; set; }
 
-        // Admin metrics
         public int ActiveUsers { get; set; }
         public int InactiveUsers { get; set; }
 
-        // Non-admin metrics
         public int PendingApplications { get; set; }
         public int ApprovedApplications { get; set; }
         public int RejectedApplications { get; set; }

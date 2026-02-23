@@ -73,7 +73,6 @@ namespace DataAccessLayer.Repositories
 
         public async Task<DTOAnalyticsResult> GetTotalMonthlyApplications(int year)
         {
-            //chart 1
             var carCounts = await (
                 from car in _context.trnCar
                 where car.UpdatedOn.HasValue && car.UpdatedOn.Value.Year == year
@@ -116,7 +115,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Merge the data
             var combined = carCounts
                 .Union(pcCounts)
                 .Union(hbaCounts)
@@ -132,7 +130,6 @@ namespace DataAccessLayer.Repositories
             .OrderBy(m => int.Parse(m.Month))
             .ToList();
 
-            //chart 2
             var topRanks = await (
                 from app in _context.trnApplications
                 join rank in _context.MRanks on app.DdlRank equals rank.RankId
@@ -148,7 +145,6 @@ namespace DataAccessLayer.Repositories
             .Take(10)
             .ToListAsync();
 
-            //chart 3
             var topRegt = await (
                 from app in _context.trnApplications
                 join regt in _context.MRegtCorps on app.RegtCorps equals regt.Id
@@ -164,7 +160,6 @@ namespace DataAccessLayer.Repositories
             .Take(10)
             .ToListAsync();
 
-            //chart 4
             var loanStats = await (from app in _context.trnApplications
                              join car in _context.trnCar
                              on app.ApplicationId equals car.ApplicationId
@@ -180,7 +175,6 @@ namespace DataAccessLayer.Repositories
                                  LoanCount = g.Count()
                              }).ToListAsync();
 
-            //chart 5
                 var topUnits = await (from app in _context.trnApplications
                             join u in _context.MUnits
                             on app.PresentUnit equals u.UnitId
@@ -197,8 +191,6 @@ namespace DataAccessLayer.Repositories
       
 
 
-            //chart 6
-            // Step 1: Get all loan data in one query
             var loanData = await (
                 from a in _context.trnApplications.AsNoTracking()
                 where a.IsActive
@@ -218,7 +210,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync(); // Execute query here
 
-            // Step 2: Group in memory
             var aggregatedData = loanData
                 .GroupBy(x => x.PresentUnit)
                 .Select(g => new
@@ -234,14 +225,12 @@ namespace DataAccessLayer.Repositories
                 .Take(10)
                 .ToList();
 
-            // Step 3: Get unit names
             var unitIds = aggregatedData.Select(x => x.PresentUnit).ToList();
             var units = await _context.MUnits
                 .AsNoTracking()
                 .Where(u => unitIds.Contains(u.UnitId))
                 .ToDictionaryAsync(u => u.UnitId, u => u.UnitName);
 
-            // Step 4: Map to final result
             var result = aggregatedData
                 .Select(r => new DTOAnalyticsResponse
                 {
@@ -254,8 +243,6 @@ namespace DataAccessLayer.Repositories
                 })
                 .ToList();
 
-            //chart 7
-            // Step 1: Get top HBA dealers
             var hbaDealers = await (
                 from h in _context.trnHBA
                 join t in _context.trnApplications on h.ApplicationId equals t.ApplicationId
@@ -268,7 +255,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Step 2: Get top Car dealers
             var carDealers = await (
                 from c in _context.trnCar
                 join t in _context.trnApplications on c.ApplicationId equals t.ApplicationId
@@ -281,7 +267,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Step 3: Get top PCA dealers
             var pcaDealers = await (
                 from p in _context.trnPCA
                 join t in _context.trnApplications on p.ApplicationId equals t.ApplicationId
@@ -294,7 +279,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Step 4: Merge and group by DealerName, then take top 10
             var dealers = hbaDealers
                 .Concat(carDealers)
                 .Concat(pcaDealers)
@@ -308,8 +292,6 @@ namespace DataAccessLayer.Repositories
                 .Take(10)
                 .ToList();
 
-            //chart 8
-            // Step 1: Car Loans
             var carLoans = await (
                 from c in _context.trnCar
                 join t in _context.trnApplications on c.ApplicationId equals t.ApplicationId
@@ -322,7 +304,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Step 2: PCA Loans
             var pcaLoans = await (
                 from p in _context.trnPCA
                 join t in _context.trnApplications on p.ApplicationId equals t.ApplicationId
@@ -335,7 +316,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Step 3: HBA Loans
             var hbaLoans = await (
                 from h in _context.trnHBA
                 join t in _context.trnApplications on h.ApplicationId equals t.ApplicationId
@@ -348,7 +328,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Step 4: Merge and group by DealerName, then take top 10
             var combinedLoans = hbaLoans
                 .Concat(carLoans)
                 .Concat(pcaLoans)
@@ -362,7 +341,6 @@ namespace DataAccessLayer.Repositories
                 .Take(10)
                 .ToList();
 
-            //chart 9
            var topApplicantsByRank = await (
                                              from app in _context.trnApplications
                                              join rank in _context.MRanks
@@ -372,12 +350,10 @@ namespace DataAccessLayer.Repositories
                                              {
                                                  ApplicantRank = rank.RankName,
                                                  ApplicantName= app.ApplicantName,
-                                                 // Loan counts
                                                  CarLoanCount = _context.trnCar.Count(c => c.ApplicationId == app.ApplicationId && c.IsActive && c.IsActive && c.UpdatedOn.Value.Year == year),
                                                  PcaLoanCount = _context.trnPCA.Count(p => p.ApplicationId == app.ApplicationId && p.IsActive && p.IsActive && p.UpdatedOn.Value.Year == year),
                                                  HbaLoanCount = _context.trnHBA.Count(h => h.ApplicationId == app.ApplicationId && h.IsActive && h.IsActive && h.UpdatedOn.Value.Year == year),
 
-                                                 // Loan amounts applied
                                                  TotalCarLoanAmount = _context.trnCar
                                                                          .Where(c => c.ApplicationId == app.ApplicationId && c.IsActive && c.UpdatedOn.Value.Year == year)
                                                                          .Sum(c => (decimal?)c.CA_Amount_Applied_For_Loan) ?? 0m,
@@ -408,7 +384,6 @@ namespace DataAccessLayer.Repositories
                                              .Take(20)
                                              .ToListAsync();
 
-            //chart 10
             var statuslist = await _context.trnApplications
                               .Where(a => a.IsActive && a.UpdatedOn.Value.Year==year)
                               .GroupBy(a => 1) // Single group to aggregate all rows
@@ -439,7 +414,6 @@ namespace DataAccessLayer.Repositories
                                  .ToListAsync();
 
 
-            // Get top 20 applicants by number of loans
             var carApplicantLoans = await (
                                   from app in _context.trnApplications
                                   join car in _context.trnCar on app.ApplicationId equals car.ApplicationId
@@ -453,7 +427,6 @@ namespace DataAccessLayer.Repositories
                                   }
                                  ).ToListAsync();
 
-            // 2️⃣ Get PCA loans per applicant
             var pcaApplicantLoans = await (
                 from app in _context.trnApplications
                 join pca in _context.trnPCA on app.ApplicationId equals pca.ApplicationId
@@ -467,7 +440,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // 3️⃣ Get HBA loans per applicant
             var hbaApplicantLoans = await (
                 from app in _context.trnApplications
                 join hba in _context.trnHBA on app.ApplicationId equals hba.ApplicationId
@@ -481,7 +453,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // 4️⃣ Combine all loan types
             var combinedApplicantLoans = carApplicantLoans
                 .Concat(pcaApplicantLoans)
                 .Concat(hbaApplicantLoans)
@@ -542,7 +513,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Combine: Merge the results by UnitName
             var combinedLoanCountsByUnit = carLoanCountsByUnit
                 .Concat(pcaLoanCountsByUnit)
                 .Concat(hbaLoanCountsByUnit)
@@ -578,7 +548,6 @@ namespace DataAccessLayer.Repositories
 
         public async Task<DTOAnalyticsResult> GetTotalClaimMonthlyApplications(int year)
         {
-            //chart 1
             var carCounts = await (
                 from car in _context.trnEducationDetails
                 where car.UpdatedOn.HasValue && car.UpdatedOn.Value.Year == year
@@ -621,7 +590,6 @@ namespace DataAccessLayer.Repositories
                 }
             ).ToListAsync();
 
-            // Merge the data
             var combined = carCounts
                 .Union(pcCounts)
                 .Union(hbaCounts)
@@ -638,7 +606,6 @@ namespace DataAccessLayer.Repositories
             .ToList();
 
 
-            //chart 2
             var topRanks = await (
                 from app in _context.trnClaim
                 join rank in _context.MRanks on app.DdlRank equals rank.RankId
@@ -654,7 +621,6 @@ namespace DataAccessLayer.Repositories
             .Take(10)
             .ToListAsync();
 
-            //chart 3
             var topRegt = await (
                 from app in _context.trnClaim
                 join regt in _context.MRegtCorps on app.RegtCorps equals regt.Id
@@ -671,7 +637,6 @@ namespace DataAccessLayer.Repositories
             .ToListAsync();
 
 
-            //chart 5
             var topUnits = await (from app in _context.trnClaim
                                   join u in _context.MUnits
                                   on app.PresentUnit equals u.UnitId

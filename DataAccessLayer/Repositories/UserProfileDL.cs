@@ -75,7 +75,6 @@ namespace DataAccessLayer.Repositories
                 join regt in _context.MRegtCorps on profile.regtCorps equals regt.Id
                 join role in _context.UserRoles on user.Id equals role.UserId
 
-                // Consider using distinct or selecting only the most recent if needed
                 orderby user.UpdatedOn descending
 
                 select new DTOUserProfileResponse
@@ -172,7 +171,6 @@ namespace DataAccessLayer.Repositories
         {
             try
             {
-                // Find the user profile
                 var userProfile = await _context.UserProfiles
                     .FirstOrDefaultAsync(p => p.ProfileId == profileId && p.userName == domainId);
 
@@ -181,7 +179,6 @@ namespace DataAccessLayer.Repositories
                     return false;
                 }
 
-                // Find the user mapping
                 var userMapping = await _context.trnUserMappings
                     .FirstOrDefaultAsync(m => m.ProfileId == profileId);
 
@@ -192,7 +189,6 @@ namespace DataAccessLayer.Repositories
 
                 var userId = userMapping.UserId;
 
-                // Find the Identity user
                 var identityUser = await _context.Users
                     .FirstOrDefaultAsync(u => u.Id == userId);
 
@@ -205,23 +201,17 @@ namespace DataAccessLayer.Repositories
                 {
                     try
                     {
-                        // 1. Delete from AspNetUserRoles
                         var userRoles = _context.UserRoles.Where(ur => ur.UserId == userId);
                         _context.UserRoles.RemoveRange(userRoles);
 
-                        // 2. Delete from trnUserMappings
                         _context.trnUserMappings.Remove(userMapping);
 
-                        // 3. Delete from UserProfiles
                         _context.UserProfiles.Remove(userProfile);
 
-                        // 4. Delete from AspNetUsers (Identity)
                         _context.Users.Remove(identityUser);
 
-                        // Save all changes
                         await _context.SaveChangesAsync();
 
-                        // Commit transaction
                         await transaction.CommitAsync();
 
                         return true;

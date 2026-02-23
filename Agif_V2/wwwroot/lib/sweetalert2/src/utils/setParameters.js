@@ -6,7 +6,6 @@ import { warn } from './utils.js'
  * @param {SweetAlertOptions} params
  */
 function setDefaultInputValidators(params) {
-  // Use default `inputValidator` for supported input types if not provided
   if (params.inputValidator) {
     return
   }
@@ -22,7 +21,6 @@ function setDefaultInputValidators(params) {
  * @param {SweetAlertOptions} params
  */
 function validateCustomTargetElement(params) {
-  // Determine if the custom target element is valid
   if (
     !params.target ||
     (typeof params.target === 'string' && !document.querySelector(params.target)) ||
@@ -41,7 +39,6 @@ function validateCustomTargetElement(params) {
 export default function setParameters(params) {
   setDefaultInputValidators(params)
 
-  // showLoaderOnConfirm && preConfirm
   if (params.showLoaderOnConfirm && !params.preConfirm) {
     warn(
       'showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' +
@@ -52,7 +49,6 @@ export default function setParameters(params) {
 
   validateCustomTargetElement(params)
 
-  // Replace newlines with <br> in title
   if (typeof params.title === 'string') {
     params.title = params.title.split('\n').join('<br />')
   }

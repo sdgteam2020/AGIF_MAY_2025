@@ -316,7 +316,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.HbaApplicationResponse = Hbamodel;
                 }
 
@@ -366,7 +365,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.PcaApplicationResponse = PcaModal;
                 }
 
@@ -422,7 +420,6 @@ namespace DataAccessLayer.Repositories
                     }
 
                     data.Documents = lstdoc; // Assign the list of documents to the response object
-                    // Get all files in the directory
 
                 }
 
@@ -466,18 +463,15 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> CheckForCoRegister(string ArmyNo)
         {
-            // Step 1: Get UserProfile by ArmyNo
             var userProfile = await _context.UserProfiles
                 .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
 
             if (userProfile == null)
                 return false;
 
-            // Step 2: Get UserMapping by ProfileId
             var userMapping = await _context.trnUserMappings
                 .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
 
-            // Step 3: Return true if mapping exists, else false
             return userMapping != null;
         }
 
@@ -536,14 +530,12 @@ namespace DataAccessLayer.Repositories
 
         public async Task<UserMapping?> GetCoDetails(int applicationId)
         {
-            // Step 1: Get the application by applicationId
             var application = await _context.trnApplications
                 .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);
 
             if (application == null)
                 return null;
 
-            // Step 3: Get the UserMapping for the PresentUnit where IsPrimary and IsActive are true
             var userMapping = await _context.trnUserMappings
                 .FirstOrDefaultAsync(m => m.UnitId == application.PresentUnit && m.IsPrimary);
 
@@ -552,31 +544,25 @@ namespace DataAccessLayer.Repositories
 
         public async Task<(string Name, string Mobile,string Armyno,string unit,string appt)> GetCODetails(int ProfileId)
         {
-            // Get the UserMapping by MappingId
             var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.ProfileId == ProfileId);
             if (userMapping == null)
                 return (string.Empty, string.Empty,string.Empty, string.Empty, string.Empty);
 
-            // Get the UserProfile by ProfileId from UserMapping
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.ProfileId);
             if (userProfile == null)
                 return (string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
-            // Get the RankName from MRanks using rank id from UserProfile
             var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
             string rankName = rank != null ? rank.RankName : string.Empty;
 
-            //Get present Unit from MUnits using UnitId from UserMapping
             var unit = await _context.MUnits.FirstOrDefaultAsync(u => u.UnitId == userMapping.UnitId);
             string unitName = unit != null ? unit.UnitName : string.Empty;
 
-            //get Appointment name from MAppointments using AppointmentId from UserMapping
             var appointment = await _context.MAppointments.FirstOrDefaultAsync(a => a.ApptId == userProfile.ApptId);
             string appointmentName = appointment != null ? appointment.AppointmentName : string.Empty;
 
          
 
-            // Concatenate rankName and userName
             string fullName = $"{rankName} {userProfile.Name}".Trim();
             string mobile = userProfile.MobileNo ?? string.Empty; // Assuming MobileNo is the field name
 
@@ -587,7 +573,6 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> CheckExtensionofservice(int applicationid)
         {
-            // Fetch the application record by applicationid
             var application = await _context.trnApplications
                 .Where(a => a.ApplicationId == applicationid).FirstOrDefaultAsync();
 
@@ -967,7 +952,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.HbaApplicationResponse = Hbamodel;
                 }
 
@@ -1029,7 +1013,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.PcaApplicationResponse = PcaModal;
                 }
                 data.OnlineApplicationResponse = result;

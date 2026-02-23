@@ -113,10 +113,8 @@
 
         if (isLockedOut && Model?.LockoutEnd.HasValue == true)
         {
-            // ISO 8601 format for JS Date parsing
             lockoutEndStr = Model.LockoutEnd.Value.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 
-            // Calculate auto refresh timeout in milliseconds
             var timeoutMs = Math.Max(1000, (Model.LockoutEnd.Value - DateTime.UtcNow).TotalMilliseconds + 1000);
             autoRefreshTimeoutStr = timeoutMs.ToString("F0"); // no decimal
         }

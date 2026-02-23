@@ -4,10 +4,8 @@
 
 namespace DataAccessLayer.Migrations
 {
-    /// <inheritdoc />
     public partial class CreatetableMAgeMapping : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -48,7 +46,6 @@ namespace DataAccessLayer.Migrations
                 column: "RegtId");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

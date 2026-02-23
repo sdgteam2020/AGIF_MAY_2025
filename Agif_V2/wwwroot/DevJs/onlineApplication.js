@@ -31,7 +31,6 @@ function callingCommonFunctions() {
         ValInDataNo(this);
     });
 
-    // For all elements that need SetSuffixLetter on change
     $(document).on("change", ".js-setsuffix", function () {
         SetSuffixLetter(this);
     });
@@ -84,14 +83,11 @@ function callingCommonFunctions() {
 
     $(".js-unit-pin").on("input change", function (e) {
 
-        // Always validate numeric typing
         ValInDataNo(this);
 
-        // Only run format validation on change
         if (e.type === "change") {
             let isValid = validateUnitPin(this);
 
-            // If validateUnitPin returns false → clear value
             if (isValid === false) {
                 $(this).val("");     // CLEAR VALUE
             }
@@ -101,10 +97,8 @@ function callingCommonFunctions() {
 
     $("#salaryAcctNo").on("input change", function (e) {
 
-        // Numeric typing check
         ValInDataNo(this);
 
-        // On change, validate account no
         if (e.type === "change") {
             let isValid = validateAccountNo(this);
 
@@ -127,7 +121,6 @@ function callingCommonFunctions() {
         formatIndianNumber(this);
     });
 
-    // For all elements that need SetSuffixLetter on change
     $(document).on("change", ".js-textchange", function () {
         textChange();
     });
@@ -274,7 +267,6 @@ resetFieldsOnChange('#HBA_LoanFreq,#PCA_LoanFreq,#CA_LoanFreq', [
     '#HBA_EMI_Eligible', '#CA_EMI_Eligible', '#PCA_EMI_Eligible', '#vehicleCost', '#propertyCost', '#computerCost'
 ]);
 
-// Usage
 resetFieldsOnChange('#veh_Loan_Type,#VehTypeId', [
     '#CA_LoanFreq', '#vehicleCost', '#CA_Amt_Eligible_for_loan',
     '#CA_EMI_Eligible', '#CA_repayingCapacity', '#CA_Amount_Applied_For_Loan',
@@ -559,40 +551,9 @@ function SetSuffixLetter(obj) {
 
 
 
-//function getApplicantDetalis() {
 
-//    const armyNumber = $("#armyPrefix").val();
-//    const Prefix = $("#armyNumber").val();
-//    const Suffix = $("#txtSuffix").val();
-//    const appType = parseInt($("#loanType").val(), 10);
 
-//    $.ajax({
-//        type: "get",
-//        url: "/OnlineApplication/CheckExistUser",
-//        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
-//        success: function (data) {
-//            if (data.exists) {
-//                Swal.fire({
-//                    title: "You Have Already applied for Loan.",
-//                    text: "Would you like to apply for a new Loan !",
-//                    icon: "warning",
-//                    showCancelButton: true,
-//                    confirmButtonColor: "#3085d6",
-//                    cancelButtonColor: "#d33",
-//                    confirmButtonText: "Yes"
-//                }).then((result) => {
-//                    if (result.isConfirmed) {
-//                        DeleteConfirmation();
-//                    }
-//                });
-//            }
 
-//        },
-//        error: function () {
-//            alert("Data Not loaded!")
-//        }
-//    });
-//}
 
 function getApplicantDetalis() {
 
@@ -649,31 +610,6 @@ function DeleteConfirmation() {
     });
 }
 
-//function DeleteExistingLoan() {
-//    const armyNumber = $("#armyPrefix").val();
-//    const Prefix = $("#armyNumber").val();
-//    const Suffix = $("#txtSuffix").val();
-//    const appType = parseInt($("#loanType").val(), 10);
-//    $.ajax({
-//        type: "get",
-//        url: "/OnlineApplication/DeleteExistingLoan",
-//        data: { armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType },
-//        success: function (data) {
-//            if (data.exists) {
-//                Swal.fire({
-//                    position: "top-end",
-//                    icon: "success",
-//                    title: "Deleted! Please Apply Again!",
-//                    showConfirmButton: false,
-//                    timer: 3000
-//                });
-//            }
-//        },
-//        error: function () {
-//            alert("Data Not loaded!")
-//        }
-//    });
-//}
 
 function DeleteExistingLoan() {
     const armyNumber = $("#armyPrefix").val();
@@ -1067,7 +1003,6 @@ function SetRetDate() {
                 },
                 success: function (data) {
                     if (data.userTypeId == 1) {
-                        // userTypeId == 1 => Officers
                         const dateOfBirth = $('#dateOfBirth').val();
                         const dateParts = dateOfBirth.split('/');
                         if (data != 0 && dateParts.length == 3) {
@@ -1090,7 +1025,6 @@ function SetRetDate() {
                             console.warn("Invalid retirement age or date of birth.");
                         }
                     } else if (data.userTypeId == 2) {
-                        // userTypeId == 2 => Short Service Officers
                         const dateOfCommission = $('#dateOfCommission').val();
                         const dateParts = dateOfCommission.split('/');
                         if (data != 0 && dateParts.length == 3) {
@@ -1113,7 +1047,6 @@ function SetRetDate() {
                             console.warn("Invalid retirement age or date of birth.");
                         }
                     } else if (data.userTypeId == 3 || data.userTypeId == 4) {
-                        // userTypeId == 3 => JCOs     userTypeId == 4 => ORs
                         const rankType = $('#ddlrank').val();
                         if (rankType == 0) {
                             alert("Please select Rank Type.");
@@ -1356,58 +1289,16 @@ function ExtensionOfServiceAccess() {
 }
 
 
-//function ExtensionOfServiceAccess() {
-//    const retirementDateStr = $('#dateOfRetirement').val(); // Expected format: 'YYYY-MM-DD'
 
 
-//    const retirementDate = new Date(retirementDateStr);
-//    const currentDate = new Date();
 
-//    // Normalize both dates to remove time differences
-//    retirementDate.setHours(0, 0, 0, 0);
-//    currentDate.setHours(0, 0, 0, 0);
 
-//    let years = retirementDate.getFullYear() - currentDate.getFullYear();
-//    let months = retirementDate.getMonth() - currentDate.getMonth();
-//    let days = retirementDate.getDate() - currentDate.getDate();
 
-//    if (days < 0) {
-//        months -= 1;
-//        const prevMonth = new Date(retirementDate.getFullYear(), retirementDate.getMonth(), 0);
-//        days += prevMonth.getDate(); // Add days of the previous month
-//    }
 
-//    if (months < 0) {
-//        years -= 1;
-//        months += 12;
-//    }
 
-//    if (years <= -2) {
-//        Swal.fire({
-//            title: 'Invalid Date',
-//            text: 'Date of retirement is not valid.',
-//            icon: 'warning',
-//            confirmButtonText: 'OK'
-//        });
-//    }
-//    else {
 
-//        $('#residualService').val(years);
 
-//        setOutlineActive("residualService");
-//    }
 
-//    const prefix = $('#armyPrefix').val();
-//    const yearOfService = parseFloat($('#residualService').val());
-//    const extensionDropdown = $('#ExtnOfService');
-//    // Enable only if Year of Service < 2 and Prefix is JC or OR
-//    if ((prefix == 13 || prefix == 14) && yearOfService <=2 && yearOfService >= -2) {
-//        extensionDropdown.prop('disabled', false);
-//    } else {
-//        extensionDropdown.prop('disabled', true);
-//        extensionDropdown.val('');
-//    }
-//}
 
 
 function fetchPCDA_PAO() {
@@ -2135,7 +2026,6 @@ function RefreshMaxAmt_HBA() {
             }
         }
 
-        // ✅ use Amount in one place
         if (Amount > propertyCost) {
             $('#HBA_Amt_Eligible_for_loan').val(propertyCost.toLocaleString('en-IN'));
         } else {
@@ -2461,7 +2351,6 @@ function setInputValueWithFloatingLabel(inputId, value) {
 
     if (!$input.length) return; // Exit if element not found
 
-    // Set the value
     $input.val(value);
 
     $input.addClass('active');
@@ -2472,7 +2361,6 @@ function findDataWithArmyNumber() {
         const armyPrefix = $('#armyPrefix').val().trim();
         const armySuffix = $('#txtSuffix').val().trim();
 
-        // Validate required fields
         if (!armyPrefix) {
             $('#armyPrefix').focus();
             return;
@@ -2489,13 +2377,6 @@ function findDataWithArmyNumber() {
         }
 
         const fullArmyNumber = `${armyPrefix}-${armyNumber}-${armySuffix}`.toUpperCase();
-        //if (fullArmyNumber) {
-        //    $.ajax({
-        //        url: '/OnlineApplication/GetDataByArmyNumber',
-        //        type: 'GET',
-        //        data: { ArmyNo: fullArmyNumber },
-        //        success: function (data) {
-        //            if (data) {
 
         if (fullArmyNumber) {
             $.ajax({
@@ -2521,7 +2402,6 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('emailId', data.email);
                         setInputValueWithFloatingLabel('totalService', data.totalService);
                         setInputValueWithFloatingLabel('residualService', data.residualService);
-                        //Unit Details
 
                         setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
                         setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
@@ -2533,19 +2413,16 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
                         setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
 
-                        //Permanent Address Details
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
                         setInputValueWithFloatingLabel('distt', data.distt);
                         setInputValueWithFloatingLabel('state', data.state);
                         setInputValueWithFloatingLabel('Code', data.code);
-                        //Salary Account Details
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
                         setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
-                        //salary details
                         
 
 
@@ -2596,7 +2473,6 @@ function findDataWithApplicationId() {
                         setInputValueWithFloatingLabel('emailId', data.onlineApplicationResponse.email);
                         setInputValueWithFloatingLabel('totalService', data.onlineApplicationResponse.totalService);
                         setInputValueWithFloatingLabel('residualService', data.onlineApplicationResponse.residualService);
-                        //Unit Details
 
                         setInputValueWithFloatingLabel('pcda_pao', data.onlineApplicationResponse.pcda_pao);
                         setInputValueWithFloatingLabel('pcda_AcctNo', data.onlineApplicationResponse.pcda_AcctNo);
@@ -2608,13 +2484,11 @@ function findDataWithApplicationId() {
                         setInputValueWithFloatingLabel('civilPostalAddress', data.onlineApplicationResponse.civilPostalAddress);
                         setInputValueWithFloatingLabel('nextFmnHQ', data.onlineApplicationResponse.nextFmnHQ);
 
-                        //Permanent Address Details
                         setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
                         setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
                         setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
                         setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
-                        //Salary Account Details
                         setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);

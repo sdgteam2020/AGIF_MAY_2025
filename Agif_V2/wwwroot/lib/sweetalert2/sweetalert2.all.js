@@ -280,7 +280,6 @@
    */
   const getCloseButton = () => elementByClass(swalClasses.close);
 
-  // https://github.com/jkup/focusable/blob/master/index.js
   const focusable = `
   a[href],
   area[href],
@@ -308,7 +307,6 @@
     /** @type {NodeListOf<HTMLElement>} */
     const focusableElementsWithTabindex = popup.querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])');
     const focusableElementsWithTabindexSorted = Array.from(focusableElementsWithTabindex)
-    // sort according to tabindex
     .sort((a, b) => {
       const tabindexA = parseInt(a.getAttribute('tabindex') || '0');
       const tabindexB = parseInt(b.getAttribute('tabindex') || '0');
@@ -468,9 +466,7 @@
   const focusInput = input => {
     input.focus();
 
-    // place cursor at end of text in text input
     if (input.type !== 'file') {
-      // http://stackoverflow.com/a/2345915
       const val = input.value;
       input.value = '';
       input.value = val;
@@ -807,7 +803,6 @@
    * @param {SweetAlertOptions} params
    */
   const init = params => {
-    // Clean up the old popup container if it exists
     const oldContainerExisted = resetOldContainer();
     if (isNodeEnv()) {
       error('SweetAlert2 requires document to initialize');
@@ -832,17 +827,14 @@
    * @param {HTMLElement} target
    */
   const parseHtmlToContainer = (param, target) => {
-    // DOM element
     if (param instanceof HTMLElement) {
       target.appendChild(param);
     }
 
-    // Object
     else if (typeof param === 'object') {
       handleObject(param, target);
     }
 
-    // Plain string
     else if (param) {
       setInnerHtml(target, param);
     }
@@ -853,12 +845,10 @@
    * @param {HTMLElement} target
    */
   const handleObject = (param, target) => {
-    // JQuery element(s)
     if (param.jquery) {
       handleJqueryElem(target, param);
     }
 
-    // For other objects use their string representation
     else {
       setInnerHtml(target, param.toString());
     }
@@ -890,20 +880,16 @@
       return;
     }
 
-    // Actions (buttons) wrapper
     if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
       hide(actions);
     } else {
       show(actions);
     }
 
-    // Custom class
     applyCustomClass(actions, params, 'actions');
 
-    // Render all the buttons
     renderButtons(actions, loader, params);
 
-    // Loader
     setInnerHtml(loader, params.loaderHtml || '');
     applyCustomClass(loader, params, 'loader');
   };
@@ -921,7 +907,6 @@
       return;
     }
 
-    // Render buttons
     renderButton(confirmButton, 'confirm', params);
     renderButton(denyButton, 'deny', params);
     renderButton(cancelButton, 'cancel', params);
@@ -951,7 +936,6 @@
     }
     addClass([confirmButton, denyButton, cancelButton], swalClasses.styled);
 
-    // Buttons background colors
     if (params.confirmButtonColor) {
       confirmButton.style.backgroundColor = params.confirmButtonColor;
       addClass(confirmButton, swalClasses['default-outline']);
@@ -977,7 +961,6 @@
     setInnerHtml(button, params[`${buttonType}ButtonText`] || ''); // Set caption text
     button.setAttribute('aria-label', params[`${buttonType}ButtonAriaLabel`] || ''); // ARIA label
 
-    // Add buttons custom classes
     button.className = swalClasses[buttonType];
     applyCustomClass(button, params, `${buttonType}Button`);
   }
@@ -993,7 +976,6 @@
     }
     setInnerHtml(closeButton, params.closeButtonHtml || '');
 
-    // Custom class
     applyCustomClass(closeButton, params, 'closeButton');
     toggle(closeButton, params.showCloseButton);
     closeButton.setAttribute('aria-label', params.closeButtonAriaLabel || '');
@@ -1012,7 +994,6 @@
     handlePositionParam(container, params.position);
     handleGrowParam(container, params.grow);
 
-    // Custom class
     applyCustomClass(container, params, 'container');
   };
 
@@ -1070,7 +1051,6 @@
     domCache: new WeakMap()
   };
 
-  /// <reference path="../../../../sweetalert2.d.ts"/>
 
 
   /** @type {InputClass[]} */
@@ -1093,10 +1073,8 @@
         return;
       }
 
-      // set attributes
       setAttributes(inputClass, params.inputAttributes);
 
-      // set class
       inputContainer.className = swalClasses[inputClass];
       if (rerender) {
         hide(inputContainer);
@@ -1106,7 +1084,6 @@
       if (rerender) {
         showInput(params);
       }
-      // set custom class
       setCustomClass(params);
     }
   };
@@ -1129,7 +1106,6 @@
     const input = renderInputType[params.input](inputContainer, params);
     show(inputContainer);
 
-    // input autofocus
     if (params.inputAutoFocus) {
       setTimeout(() => {
         focusInput(input);
@@ -1335,13 +1311,10 @@
      */
     const getMargin = el => parseInt(window.getComputedStyle(el).marginLeft) + parseInt(window.getComputedStyle(el).marginRight);
 
-    // https://github.com/sweetalert2/sweetalert2/issues/2291
     setTimeout(() => {
-      // https://github.com/sweetalert2/sweetalert2/issues/1699
       if ('MutationObserver' in window) {
         const initialPopupWidth = parseInt(window.getComputedStyle(getPopup()).width);
         const textareaResizeHandler = () => {
-          // check if texarea is still in document (i.e. popup wasn't closed in the meantime)
           if (!document.body.contains(textarea)) {
             return;
           }
@@ -1373,19 +1346,16 @@
     showWhenInnerHtmlPresent(htmlContainer);
     applyCustomClass(htmlContainer, params, 'htmlContainer');
 
-    // Content as HTML
     if (params.html) {
       parseHtmlToContainer(params.html, htmlContainer);
       show(htmlContainer, 'block');
     }
 
-    // Content as plain text
     else if (params.text) {
       htmlContainer.textContent = params.text;
       show(htmlContainer, 'block');
     }
 
-    // No content
     else {
       hide(htmlContainer);
     }
@@ -1407,7 +1377,6 @@
       parseHtmlToContainer(params.footer, footer);
     }
 
-    // Custom class
     applyCustomClass(footer, params, 'footer');
   };
 
@@ -1422,9 +1391,7 @@
       return;
     }
 
-    // if the given icon already rendered, apply the styling without re-rendering the icon
     if (innerParams && params.icon === innerParams.icon) {
-      // Custom or default content
       setContent(icon, params);
       applyStyles(icon, params);
       return;
@@ -1440,14 +1407,11 @@
     }
     show(icon);
 
-    // Custom or default content
     setContent(icon, params);
     applyStyles(icon, params);
 
-    // Animate icon
     addClass(icon, params.showClass && params.showClass.icon);
 
-    // Re-adjust the success icon on system theme change
     const colorSchemeQueryList = window.matchMedia('(prefers-color-scheme: dark)');
     colorSchemeQueryList.addEventListener('change', adjustSuccessIconBackgroundColor);
   };
@@ -1464,17 +1428,13 @@
     }
     addClass(icon, params.icon && iconTypes[params.icon]);
 
-    // Icon color
     setColor(icon, params);
 
-    // Success icon background color
     adjustSuccessIconBackgroundColor();
 
-    // Custom class
     applyCustomClass(icon, params, 'icon');
   };
 
-  // Adjust success icon background color to match the popup background color
   const adjustSuccessIconBackgroundColor = () => {
     const popup = getPopup();
     if (!popup) {
@@ -1567,15 +1527,12 @@
     }
     show(image, '');
 
-    // Src, alt
     image.setAttribute('src', params.imageUrl);
     image.setAttribute('alt', params.imageAlt || '');
 
-    // Width, height
     applyNumericalStyle(image, 'width', params.imageWidth);
     applyNumericalStyle(image, 'height', params.imageHeight);
 
-    // Class
     image.className = swalClasses.image;
     applyCustomClass(image, params, 'image');
   };
@@ -1677,8 +1634,6 @@
       return;
     }
 
-    // Width
-    // https://github.com/sweetalert2/sweetalert2/issues/2170
     if (params.toast) {
       applyNumericalStyle(container, 'width', params.width);
       popup.style.width = '100%';
@@ -1690,21 +1645,17 @@
       applyNumericalStyle(popup, 'width', params.width);
     }
 
-    // Padding
     applyNumericalStyle(popup, 'padding', params.padding);
 
-    // Color
     if (params.color) {
       popup.style.color = params.color;
     }
 
-    // Background
     if (params.background) {
       popup.style.background = params.background;
     }
     hide(getValidationMessage());
 
-    // Classes
     addClasses$1(popup, params);
     if (params.draggable && !params.toast) {
       addClass(popup, swalClasses.draggable);
@@ -1721,7 +1672,6 @@
    */
   const addClasses$1 = (popup, params) => {
     const showClass = params.showClass || {};
-    // Default Class + showClass when updating Swal.update({})
     popup.className = `${swalClasses.popup} ${isVisible$1(popup) ? showClass.popup : ''}`;
     if (params.toast) {
       addClass([document.documentElement, document.body], swalClasses['toast-shown']);
@@ -1730,14 +1680,11 @@
       addClass(popup, swalClasses.modal);
     }
 
-    // Custom class
     applyCustomClass(popup, params, 'popup');
-    // TODO: remove in the next major
     if (typeof params.customClass === 'string') {
       addClass(popup, params.customClass);
     }
 
-    // Icon class (#1842)
     if (params.icon) {
       addClass(popup, swalClasses[`icon-${params.icon}`]);
     }
@@ -1820,7 +1767,6 @@
       title.innerText = params.titleText;
     }
 
-    // Custom class
     applyCustomClass(title, params, 'title');
   };
 
@@ -1925,22 +1871,18 @@
   const setFocus = (index, increment) => {
     var _dom$getPopup;
     const focusableElements = getFocusableElements();
-    // search for visible elements and select the next possible match
     if (focusableElements.length) {
       index = index + increment;
 
-      // rollover to first item
       if (index === focusableElements.length) {
         index = 0;
 
-        // go to last item
       } else if (index === -1) {
         index = focusableElements.length - 1;
       }
       focusableElements[index].focus();
       return;
     }
-    // no visible focusable elements, focus the popup
     (_dom$getPopup = getPopup()) === null || _dom$getPopup === undefined || _dom$getPopup.focus();
   };
   const arrowKeysNextButton = ['ArrowRight', 'ArrowDown'];
@@ -1956,10 +1898,6 @@
       return; // This instance has already been destroyed
     }
 
-    // Ignore keydown during IME composition
-    // https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event#ignoring_keydown_during_ime_composition
-    // https://github.com/sweetalert2/sweetalert2/issues/720
-    // https://github.com/sweetalert2/sweetalert2/issues/2406
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
@@ -1967,22 +1905,18 @@
       event.stopPropagation();
     }
 
-    // ENTER
     if (event.key === 'Enter') {
       handleEnter(event, innerParams);
     }
 
-    // TAB
     else if (event.key === 'Tab') {
       handleTab(event);
     }
 
-    // ARROWS - switch focus between buttons
     else if ([...arrowKeysNextButton, ...arrowKeysPreviousButton].includes(event.key)) {
       handleArrows(event.key);
     }
 
-    // ESC
     else if (event.key === 'Escape') {
       handleEsc(event, innerParams, dismissWith);
     }
@@ -1993,7 +1927,6 @@
    * @param {SweetAlertOptions} innerParams
    */
   const handleEnter = (event, innerParams) => {
-    // https://github.com/sweetalert2/sweetalert2/issues/2386
     if (!callIfFunction(innerParams.allowEnterKey)) {
       return;
     }
@@ -2021,12 +1954,10 @@
       }
     }
 
-    // Cycle to the next button
     if (!event.shiftKey) {
       setFocus(btnIndex, 1);
     }
 
-    // Cycle to the prev button
     else {
       setFocus(btnIndex, -1);
     }
@@ -2096,10 +2027,6 @@
     swalPromiseReject: new WeakMap()
   };
 
-  // From https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
-  // Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
-  // elements not within the active modal dialog will not be surfaced if a user opens a screen
-  // reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
 
   const setAriaHidden = () => {
     const container = getContainer();
@@ -2126,7 +2053,6 @@
     });
   };
 
-  // @ts-ignore
   const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent; // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
 
   /**
@@ -2187,11 +2113,8 @@
       return true;
     }
     if (!isScrollable(container) && target instanceof HTMLElement && target.tagName !== 'INPUT' &&
-    // #1603
     target.tagName !== 'TEXTAREA' &&
-    // #2266
     !(isScrollable(htmlContainer) &&
-    // #1944
     htmlContainer.contains(target))) {
       return true;
     }
@@ -2251,14 +2174,11 @@
    * @param {string} initialBodyOverflow
    */
   const replaceScrollbarWithPadding = initialBodyOverflow => {
-    // for queues, do not do this more than once
     if (previousBodyPadding !== null) {
       return;
     }
-    // if the body has overflow
     if (document.body.scrollHeight > window.innerHeight || initialBodyOverflow === 'scroll' // https://github.com/sweetalert2/sweetalert2/issues/2663
     ) {
-      // add padding so the content doesn't shift after removal of scrollbar
       previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
       document.body.style.paddingRight = `${previousBodyPadding + measureScrollbar()}px`;
     }
@@ -2284,8 +2204,6 @@
       removeKeydownHandler(globalState);
     }
 
-    // workaround for https://github.com/sweetalert2/sweetalert2/issues/2088
-    // for some reason removing the container in Safari will scroll the document to bottom
     if (isSafariOrIOS) {
       container.setAttribute('style', 'display:none !important');
       container.removeAttribute('class');
@@ -2318,13 +2236,11 @@
     const swalPromiseResolve = privateMethods.swalPromiseResolve.get(this);
     const didClose = triggerClosePopup(this);
     if (this.isAwaitingPromise) {
-      // A swal awaiting for a promise (after a click on Confirm or Deny) cannot be dismissed anymore #2335
       if (!resolveValue.isDismissed) {
         handleAwaitingPromise(this);
         swalPromiseResolve(resolveValue);
       }
     } else if (didClose) {
-      // Resolve Swal promise
       swalPromiseResolve(resolveValue);
     }
   }
@@ -2353,7 +2269,6 @@
     const rejectPromise = privateMethods.swalPromiseReject.get(this);
     handleAwaitingPromise(this);
     if (rejectPromise) {
-      // Reject Swal promise
       rejectPromise(error);
     }
   }
@@ -2364,7 +2279,6 @@
   const handleAwaitingPromise = instance => {
     if (instance.isAwaitingPromise) {
       delete instance.isAwaitingPromise;
-      // The instance might have been previously partly destroyed, we must resume the destroy process in this case #2335
       if (!privateProps.innerParams.get(instance)) {
         instance._destroy();
       }
@@ -2376,7 +2290,6 @@
    * @returns {SweetAlertResult}
    */
   const prepareResolveValue = resolveValue => {
-    // When user calls Swal.close()
     if (typeof resolveValue === 'undefined') {
       return {
         isConfirmed: false,
@@ -2399,7 +2312,6 @@
   const handlePopupAnimation = (instance, popup, innerParams) => {
     var _globalState$eventEmi;
     const container = getContainer();
-    // If animation is supported, animate
     const animationIsSupported = hasCssAnimation(popup);
     if (typeof innerParams.willClose === 'function') {
       innerParams.willClose(popup);
@@ -2408,7 +2320,6 @@
     if (animationIsSupported) {
       animatePopup(instance, popup, container, innerParams.returnFocus, innerParams.didClose);
     } else {
-      // Otherwise, remove immediately
       removePopupAndResetState(instance, container, innerParams.returnFocus, innerParams.didClose);
     }
   };
@@ -2449,7 +2360,6 @@
         didClose.bind(instance.params)();
       }
       (_globalState$eventEmi2 = globalState.eventEmitter) === null || _globalState$eventEmi2 === undefined || _globalState$eventEmi2.emit('didClose');
-      // instance might have been destroyed already
       if (instance._destroy) {
         instance._destroy();
       }
@@ -2639,19 +2549,13 @@
     inputOptions.forEach(inputOption => {
       const optionValue = inputOption[0];
       const optionLabel = inputOption[1];
-      // <optgroup> spec:
-      // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
-      // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
-      // check whether this is a <optgroup>
       if (Array.isArray(optionLabel)) {
-        // if it is an array, then it is an <optgroup>
         const optgroup = document.createElement('optgroup');
         optgroup.label = optionValue;
         optgroup.disabled = false; // not configurable for now
         select.appendChild(optgroup);
         optionLabel.forEach(o => renderOption(optgroup, o[1], o[0]));
       } else {
-        // case of <option>
         renderOption(select, optionLabel, optionValue);
       }
     });
@@ -2706,7 +2610,6 @@
       inputOptions.forEach((value, key) => {
         let valueFormatted = value;
         if (typeof valueFormatted === 'object') {
-          // case of <optgroup>
           valueFormatted = formatInputOptions(valueFormatted);
         }
         result.push([key, valueFormatted]);
@@ -2715,7 +2618,6 @@
       Object.keys(inputOptions).forEach(key => {
         let valueFormatted = inputOptions[key];
         if (typeof valueFormatted === 'object') {
-          // case of <optgroup>
           valueFormatted = formatInputOptions(valueFormatted);
         }
         result.push([key, valueFormatted]);
@@ -2896,7 +2798,6 @@
    * Hides loader and shows back the button which was hidden by .showLoading()
    */
   function hideLoading() {
-    // do nothing if popup is closed
     const innerParams = privateProps.innerParams.get(this);
     if (!innerParams) {
       return;
@@ -3281,7 +3182,6 @@
       return; // This instance has already been destroyed
     }
 
-    // Check if there is another Swal closing
     if (domCache.popup && globalState.swalCloseEventFinishedCallback) {
       globalState.swalCloseEventFinishedCallback();
       delete globalState.swalCloseEventFinishedCallback;
@@ -3298,12 +3198,9 @@
    */
   const disposeSwal = instance => {
     disposeWeakMaps(instance);
-    // Unset this.params so GC will dispose it (#1569)
     delete instance.params;
-    // Unset globalState props so GC will dispose globalState (#1569)
     delete globalState.keydownHandler;
     delete globalState.keydownTarget;
-    // Unset currentInstance
     delete globalState.currentInstance;
   };
 
@@ -3311,7 +3208,6 @@
    * @param {SweetAlert} instance
    */
   const disposeWeakMaps = instance => {
-    // If the current instance is awaiting a promise result, we keep the privateMethods to call them once the promise result is retrieved #2335
     if (instance.isAwaitingPromise) {
       unsetWeakMaps(privateProps, instance);
       instance.isAwaitingPromise = true;
@@ -3319,7 +3215,6 @@
       unsetWeakMaps(privateMethods, instance);
       unsetWeakMaps(privateProps, instance);
       delete instance.isAwaitingPromise;
-      // Unset instance methods
       delete instance.disableButtons;
       delete instance.enableButtons;
       delete instance.getInput;
@@ -3379,11 +3274,8 @@
     if (innerParams.toast) {
       handleToastClick(innerParams, domCache, dismissWith);
     } else {
-      // Ignore click events that had mousedown on the popup but mouseup on the container
-      // This can happen when the user drags a slider
       handleModalMousedown(domCache);
 
-      // Ignore click events that had mousedown on the container but mouseup on the popup
       handleContainerMousedown(domCache);
       handleModalClick(innerParams, domCache, dismissWith);
     }
@@ -3395,7 +3287,6 @@
    * @param {Function} dismissWith
    */
   const handleToastClick = (innerParams, domCache, dismissWith) => {
-    // Closing toast by internal click
     domCache.popup.onclick = () => {
       if (innerParams && (isAnyButtonShown(innerParams) || innerParams.timer || innerParams.input)) {
         return;
@@ -3420,8 +3311,6 @@
     domCache.popup.onmousedown = () => {
       domCache.container.onmouseup = function (e) {
         domCache.container.onmouseup = () => {};
-        // We only check if the mouseup target is the container because usually it doesn't
-        // have any other direct children aside of the popup
         if (e.target === domCache.container) {
           ignoreOutsideClick = true;
         }
@@ -3434,13 +3323,11 @@
    */
   const handleContainerMousedown = domCache => {
     domCache.container.onmousedown = e => {
-      // prevent the modal text from being selected on double click on the container (allowOutsideClick: false)
       if (e.target === domCache.container) {
         e.preventDefault();
       }
       domCache.popup.onmouseup = function (e) {
         domCache.popup.onmouseup = () => {};
-        // We also need to check if the mouseup target is a child of the popup
         if (e.target === domCache.popup || e.target instanceof HTMLElement && domCache.popup.contains(e.target)) {
           ignoreOutsideClick = true;
         }
@@ -3522,7 +3409,6 @@
         return super._main(params, Object.assign({}, mixinParams, priorityMixinParams));
       }
     }
-    // @ts-ignore
     return MixinSwal;
   }
 
@@ -3628,7 +3514,6 @@
     }
   };
 
-  // Source: https://gist.github.com/mudge/5830382?permalink_comment_id=2691957#gistcomment-2691957
 
   class EventEmitter {
     constructor() {
@@ -3642,8 +3527,6 @@
      */
     _getHandlersByEventName(eventName) {
       if (typeof this.events[eventName] === 'undefined') {
-        // not Set because we need to keep the FIFO order
-        // https://github.com/sweetalert2/sweetalert2/pull/2763#discussion_r1748990334
         this.events[eventName] = [];
       }
       return this.events[eventName];
@@ -3717,7 +3600,6 @@
      */
     removeAllListeners(eventName) {
       if (this.events[eventName] !== undefined) {
-        // https://github.com/sweetalert2/sweetalert2/pull/2763#discussion_r1749239222
         this.events[eventName].length = 0;
       }
     }
@@ -3749,16 +3631,13 @@
    * @param {EventHandler} [eventHandler]
    */
   const off = (eventName, eventHandler) => {
-    // Remove all handlers for all events
     if (!eventName) {
       globalState.eventEmitter.reset();
       return;
     }
     if (eventHandler) {
-      // Remove a specific handler
       globalState.eventEmitter.removeListener(eventName, eventHandler);
     } else {
-      // Remove all handlers for a specific event
       globalState.eventEmitter.removeAllListeners(eventName);
     }
   };
@@ -4121,7 +4000,6 @@
     const initialBodyOverflow = bodyStyles.overflowY;
     addClasses(container, popup, params);
 
-    // scrolling is 'hidden' until animation is done, after that 'auto'
     setTimeout(() => {
       setScrollingVisibility(container, popup);
     }, SHOW_CLASS_TIMEOUT);
@@ -4178,7 +4056,6 @@
       replaceScrollbarWithPadding(initialBodyOverflow);
     }
 
-    // sweetalert2/issues/1247
     setTimeout(() => {
       container.scrollTop = 0;
     });
@@ -4192,13 +4069,10 @@
   const addClasses = (container, popup, params) => {
     addClass(container, params.showClass.backdrop);
     if (params.animation) {
-      // this workaround with opacity is needed for https://github.com/sweetalert2/sweetalert2/issues/2059
       popup.style.setProperty('opacity', '0', 'important');
       show(popup, 'grid');
       setTimeout(() => {
-        // Animate popup right after showing it
         addClass(popup, params.showClass.popup);
-        // and remove the opacity workaround
         popup.style.removeProperty('opacity');
       }, SHOW_CLASS_TIMEOUT); // 10ms in order to fix #2062
     } else {
@@ -4225,7 +4099,6 @@
      * @returns {Promise<string | void>}
      */
     url: (string, validationMessage) => {
-      // taken from https://stackoverflow.com/a/3809435 with a small change from #1306 and #2013
       return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)$/.test(string) ? Promise.resolve() : Promise.resolve(validationMessage || 'Invalid URL');
     }
   };
@@ -4234,7 +4107,6 @@
    * @param {SweetAlertOptions} params
    */
   function setDefaultInputValidators(params) {
-    // Use default `inputValidator` for supported input types if not provided
     if (params.inputValidator) {
       return;
     }
@@ -4250,7 +4122,6 @@
    * @param {SweetAlertOptions} params
    */
   function validateCustomTargetElement(params) {
-    // Determine if the custom target element is valid
     if (!params.target || typeof params.target === 'string' && !document.querySelector(params.target) || typeof params.target !== 'string' && !params.target.appendChild) {
       warn('Target parameter is not valid, defaulting to "body"');
       params.target = 'body';
@@ -4265,13 +4136,11 @@
   function setParameters(params) {
     setDefaultInputValidators(params);
 
-    // showLoaderOnConfirm && preConfirm
     if (params.showLoaderOnConfirm && !params.preConfirm) {
       warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://sweetalert2.github.io/#ajax-request');
     }
     validateCustomTargetElement(params);
 
-    // Replace newlines with <br> in title
     if (typeof params.title === 'string') {
       params.title = params.title.split('\n').join('<br />');
     }
@@ -4291,13 +4160,11 @@
        * @type {Promise<SweetAlertResult>}
        */
       _classPrivateFieldInitSpec(this, _promise, undefined);
-      // Prevent run in Node env
       if (typeof window === 'undefined') {
         return;
       }
       currentInstance = this;
 
-      // @ts-ignore
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
@@ -4333,13 +4200,11 @@
       setParameters(innerParams);
       Object.freeze(innerParams);
 
-      // clear the previous timer
       if (globalState.timeout) {
         globalState.timeout.stop();
         delete globalState.timeout;
       }
 
-      // clear the restore focus timeout
       clearTimeout(globalState.restoreFocusTimeout);
       const domCache = populateDomCache(currentInstance);
       render(currentInstance, innerParams);
@@ -4347,7 +4212,6 @@
       return swalPromise(currentInstance, domCache, innerParams);
     }
 
-    // `catch` cannot be the name of a module export, so we define our thenable methods here instead
     then(onFulfilled) {
       return _classPrivateFieldGet2(_promise, this).then(onFulfilled);
     }
@@ -4364,7 +4228,6 @@
    */
   const swalPromise = (instance, domCache, innerParams) => {
     return new Promise((resolve, reject) => {
-      // functions to handle all closings/dismissals
       /**
        * @param {DismissReason} dismiss
        */
@@ -4395,7 +4258,6 @@
       setupTimer(globalState, innerParams, dismissWith);
       initFocus(domCache, innerParams);
 
-      // Scroll container to top on open (#1247, #1946)
       setTimeout(() => {
         domCache.container.scrollTop = 0;
       });
@@ -4460,7 +4322,6 @@
         applyCustomClass(timerProgressBar, innerParams, 'timerProgressBar');
         setTimeout(() => {
           if (globalState.timeout && globalState.timeout.running) {
-            // timer can be already stopped or unset at this point
             animateTimerProgressBar(innerParams.timer);
           }
         });
@@ -4485,7 +4346,6 @@
     if (innerParams.toast) {
       return;
     }
-    // TODO: this is dumb, remove `allowEnterKey` param in the next major version
     if (!callIfFunction(innerParams.allowEnterKey)) {
       warnAboutDeprecation('allowEnterKey');
       blurActiveElement();
@@ -4541,7 +4401,6 @@
     }
   };
 
-  // Dear russian users visiting russian sites. Let's have fun.
   if (typeof window !== 'undefined' && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|by|xn--p1ai)$/)) {
     const now = new Date();
     const initiationDate = localStorage.getItem('swal-initiation');
@@ -4556,14 +4415,12 @@
         document.body.appendChild(ukrainianAnthem);
         setTimeout(() => {
           ukrainianAnthem.play().catch(() => {
-            // ignore
           });
         }, 2500);
       }, 500);
     }
   }
 
-  // Assign instance methods from src/instanceMethods/*.js to prototype
   SweetAlert.prototype.disableButtons = disableButtons;
   SweetAlert.prototype.enableButtons = enableButtons;
   SweetAlert.prototype.getInput = getInput;
@@ -4581,10 +4438,8 @@
   SweetAlert.prototype.update = update;
   SweetAlert.prototype._destroy = _destroy;
 
-  // Assign static methods from src/staticMethods/*.js to constructor
   Object.assign(SweetAlert, staticMethods);
 
-  // Proxy to instance methods to constructor, for now, for backwards compatibility
   Object.keys(instanceMethods).forEach(key => {
     /**
      * @param {...any} args
@@ -4601,7 +4456,6 @@
   SweetAlert.version = '11.16.1';
 
   const Swal = SweetAlert;
-  // @ts-ignore
   Swal.default = Swal;
 
   return Swal;

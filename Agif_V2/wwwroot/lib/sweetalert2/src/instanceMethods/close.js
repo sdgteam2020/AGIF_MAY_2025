@@ -23,8 +23,6 @@ function removePopupAndResetState(instance, container, returnFocus, didClose) {
     removeKeydownHandler(globalState)
   }
 
-  // workaround for https://github.com/sweetalert2/sweetalert2/issues/2088
-  // for some reason removing the container in Safari will scroll the document to bottom
   if (isSafariOrIOS) {
     container.setAttribute('style', 'display:none !important')
     container.removeAttribute('class')
@@ -65,13 +63,11 @@ export function close(resolveValue) {
   const didClose = triggerClosePopup(this)
 
   if (this.isAwaitingPromise) {
-    // A swal awaiting for a promise (after a click on Confirm or Deny) cannot be dismissed anymore #2335
     if (!resolveValue.isDismissed) {
       handleAwaitingPromise(this)
       swalPromiseResolve(resolveValue)
     }
   } else if (didClose) {
-    // Resolve Swal promise
     swalPromiseResolve(resolveValue)
   }
 }
@@ -107,7 +103,6 @@ export function rejectPromise(error) {
   const rejectPromise = privateMethods.swalPromiseReject.get(this)
   handleAwaitingPromise(this)
   if (rejectPromise) {
-    // Reject Swal promise
     rejectPromise(error)
   }
 }
@@ -118,7 +113,6 @@ export function rejectPromise(error) {
 export const handleAwaitingPromise = (instance) => {
   if (instance.isAwaitingPromise) {
     delete instance.isAwaitingPromise
-    // The instance might have been previously partly destroyed, we must resume the destroy process in this case #2335
     if (!privateProps.innerParams.get(instance)) {
       instance._destroy()
     }
@@ -130,7 +124,6 @@ export const handleAwaitingPromise = (instance) => {
  * @returns {SweetAlertResult}
  */
 const prepareResolveValue = (resolveValue) => {
-  // When user calls Swal.close()
   if (typeof resolveValue === 'undefined') {
     return {
       isConfirmed: false,
@@ -156,7 +149,6 @@ const prepareResolveValue = (resolveValue) => {
  */
 const handlePopupAnimation = (instance, popup, innerParams) => {
   const container = dom.getContainer()
-  // If animation is supported, animate
   const animationIsSupported = dom.hasCssAnimation(popup)
 
   if (typeof innerParams.willClose === 'function') {
@@ -167,7 +159,6 @@ const handlePopupAnimation = (instance, popup, innerParams) => {
   if (animationIsSupported) {
     animatePopup(instance, popup, container, innerParams.returnFocus, innerParams.didClose)
   } else {
-    // Otherwise, remove immediately
     removePopupAndResetState(instance, container, innerParams.returnFocus, innerParams.didClose)
   }
 }
@@ -212,7 +203,6 @@ const triggerDidCloseAndDispose = (instance, didClose) => {
       didClose.bind(instance.params)()
     }
     globalState.eventEmitter?.emit('didClose')
-    // instance might have been destroyed already
     if (instance._destroy) {
       instance._destroy()
     }

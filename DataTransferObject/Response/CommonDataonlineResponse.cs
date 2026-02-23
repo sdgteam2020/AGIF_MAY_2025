@@ -130,7 +130,6 @@ namespace DataTransferObject.Response
 
         public string? NameOfBankBranch { get; set; }
 
-        // Financial information
 
 
 

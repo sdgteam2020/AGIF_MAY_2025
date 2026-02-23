@@ -25,13 +25,11 @@ namespace DataAccessLayer.Repositories
             {
                 return;
             }
-            // Extract all ModelState errors
             var allErrors = modelState
                 .Where(ms => ms.Value.Errors.Count > 0)
                 .Select(ms => $"{ms.Key} : {string.Join(", ", ms.Value.Errors.Select(e => e.ErrorMessage))}")
                 .ToList();
 
-            // Check if "ArmyNo" is present in ModelState and add it to the message
             if (modelState.ContainsKey("CommonData.Number"))
             {
                 var armyNoErrors = string.Join(", ", modelState["CommonData.Number"].Errors.Select(e => e.ErrorMessage));
@@ -43,10 +41,8 @@ namespace DataAccessLayer.Repositories
                 allErrors.Add($"ArmyNo :{modelState["ClaimCommonData.ArmyPrefix"].AttemptedValue}-{modelState["ClaimCommonData.Number"].AttemptedValue}{modelState["ClaimCommonData.Suffix"].AttemptedValue} - {armyNoErrors}");
             }
 
-            // Combine message
             string message = string.Join(" | ", allErrors);
 
-            // Log the error to the database
             ErrorLog errorLog = new ErrorLog
             {
                 StatusCode = 400, // Bad Request

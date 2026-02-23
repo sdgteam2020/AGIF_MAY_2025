@@ -106,7 +106,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
         }
@@ -136,24 +135,8 @@ namespace Agif_V2.Controllers
         }
 
 
-        //[HttpPost]
-        //public IActionResult AnalyticsDashBoard(int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest("Invalid data provided.");
-        //    }
 
-        //    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-        //    if (dTOTempSession == null || dTOTempSession.ProfileId <= 0)
-        //    {
-        //        return Unauthorized("Session expired or invalid user session.");
-        //    }
 
-        //    ViewBag.ArmyNo = dTOTempSession.ArmyNo;
-        //    ViewBag.AdminTypeId = id;
-        //    return View(dTOTempSession);
-        //}
 
         public IActionResult AnalyticsDashBoard()
         {
@@ -199,7 +182,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
             }
         }
@@ -218,7 +200,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
             }
         }

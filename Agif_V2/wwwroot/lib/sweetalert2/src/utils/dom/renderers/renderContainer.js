@@ -18,7 +18,6 @@ export const renderContainer = (instance, params) => {
   handlePositionParam(container, params.position)
   handleGrowParam(container, params.grow)
 
-  // Custom class
   dom.applyCustomClass(container, params, 'container')
 }
 

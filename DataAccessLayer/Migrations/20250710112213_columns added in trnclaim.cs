@@ -4,10 +4,8 @@
 
 namespace DataAccessLayer.Migrations
 {
-    /// <inheritdoc />
     public partial class columnsaddedintrnclaim : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
@@ -51,7 +49,6 @@ namespace DataAccessLayer.Migrations
                 defaultValue: "");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(

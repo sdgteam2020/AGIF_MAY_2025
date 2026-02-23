@@ -55,7 +55,6 @@ namespace DataTransferObject.Model
         [Required]
         public IFormFile TotalExpenditureFile { get; set; }
 
-        // Total Expenditure
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Total Expenditure should be a positive number")]
         public double TotalExpenditure { get; set; }

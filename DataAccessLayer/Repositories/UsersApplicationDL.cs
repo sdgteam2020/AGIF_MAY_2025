@@ -44,7 +44,6 @@ namespace DataAccessLayer.Repositories
         {
             int actualStatus = (status == 2 || status > 3) ? 2 : status;
 
-            // Local function to get queryable
             IQueryable<DTOGetApplResponse> GetApplications(bool isUserMapped)
             {
                 var query = from appl in _db.trnApplications
@@ -84,14 +83,11 @@ namespace DataAccessLayer.Repositories
                 });
             }
 
-            // Execute queries
             var usersApplicationList = await GetApplications(true).ToListAsync();
             var coApplicationList = await GetApplications(false).ToListAsync();
 
-            // Merge
             var applicationList = usersApplicationList.Union(coApplicationList);
 
-            // Conditional order
             applicationList = (status == 2)
                 ? applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue)
                 : applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
@@ -149,7 +145,6 @@ namespace DataAccessLayer.Repositories
                 app.StatusCode = 4;
                 app.DownloadedOn = DateTime.Now;
 
-                // Add a new entry to TrnStatusCounter for each application
                 statusCounters.Add(new TrnStatusCounter
                 {
                     StatusId = 4,
@@ -172,7 +167,6 @@ namespace DataAccessLayer.Repositories
         {
             int actualStatus = (status == 102 || status > 103) ? 102 : status;
 
-            // Local function to get queryable
             IQueryable<DTOGetApplResponse> GetApplications(bool isUserMapped)
             {
                 var query = from appl in _db.trnClaim
@@ -214,14 +208,11 @@ namespace DataAccessLayer.Repositories
                 });
             }
 
-            // Execute queries
             var usersApplicationList = await GetApplications(true).ToListAsync();
             var coApplicationList = await GetApplications(false).ToListAsync();
 
-            // Merge
             var applicationList = usersApplicationList.Union(coApplicationList);
 
-            // Conditional order
             applicationList = (status == 102)
                 ? applicationList.OrderByDescending(a => a.DigitalSignDate ?? DateTime.MinValue)
                 : applicationList.OrderByDescending(a => a.UpdatedOn ?? DateTime.MinValue);
@@ -315,7 +306,6 @@ namespace DataAccessLayer.Repositories
         {
             bool updated = false;
 
-            // Update UserProfile
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (profile != null)
             {
@@ -330,7 +320,6 @@ namespace DataAccessLayer.Repositories
                 updated = true;
             }
 
-            // Update UserMapping
             var mapping = await _db.trnUserMappings.FirstOrDefaultAsync(x => x.ProfileId == sessionUserDTO.ProfileId);
             if (mapping != null)
             {
@@ -345,7 +334,6 @@ namespace DataAccessLayer.Repositories
                 await _db.SaveChangesAsync();
             }
 
-            // Update Identity User
             var user = await _userManager.FindByIdAsync(sessionUserDTO.UserId.ToString());
             if (user != null)
             {
@@ -428,14 +416,12 @@ namespace DataAccessLayer.Repositories
                 command.CommandText = "dbo.ProcessBulkApplicationUpdates";
                 command.CommandType = CommandType.StoredProcedure;
 
-                // Add table-valued parameter
                 var parameter = new SqlParameter("@ApplicationUpdates", applicationUpdates)
                 {
                     TypeName = "dbo.BulkApplicationUpdateType"
                 };
                 command.Parameters.Add(parameter);
 
-                // Ensure connection is open
                 if (connection.State != ConnectionState.Open)
                     await connection.OpenAsync();
 
@@ -482,14 +468,12 @@ namespace DataAccessLayer.Repositories
                 command.CommandText = "dbo.ClaimProcessBulkApplicationUpdates";
                 command.CommandType = CommandType.StoredProcedure;
 
-                // Add table-valued parameter
                 var parameter = new SqlParameter("@ApplicationUpdates", applicationUpdates)
                 {
                     TypeName = "dbo.BulkApplicationUpdateType"
                 };
                 command.Parameters.Add(parameter);
 
-                // Ensure connection is open
                 if (connection.State != ConnectionState.Open)
                     await connection.OpenAsync();
 

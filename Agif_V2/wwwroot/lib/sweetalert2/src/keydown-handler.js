@@ -39,15 +39,12 @@ export const addKeydownHandler = (globalState, innerParams, dismissWith) => {
  */
 export const setFocus = (index, increment) => {
   const focusableElements = dom.getFocusableElements()
-  // search for visible elements and select the next possible match
   if (focusableElements.length) {
     index = index + increment
 
-    // rollover to first item
     if (index === focusableElements.length) {
       index = 0
 
-      // go to last item
     } else if (index === -1) {
       index = focusableElements.length - 1
     }
@@ -55,7 +52,6 @@ export const setFocus = (index, increment) => {
     focusableElements[index].focus()
     return
   }
-  // no visible focusable elements, focus the popup
   dom.getPopup()?.focus()
 }
 
@@ -73,10 +69,6 @@ const keydownHandler = (innerParams, event, dismissWith) => {
     return // This instance has already been destroyed
   }
 
-  // Ignore keydown during IME composition
-  // https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event#ignoring_keydown_during_ime_composition
-  // https://github.com/sweetalert2/sweetalert2/issues/720
-  // https://github.com/sweetalert2/sweetalert2/issues/2406
   if (event.isComposing || event.keyCode === 229) {
     return
   }
@@ -85,22 +77,18 @@ const keydownHandler = (innerParams, event, dismissWith) => {
     event.stopPropagation()
   }
 
-  // ENTER
   if (event.key === 'Enter') {
     handleEnter(event, innerParams)
   }
 
-  // TAB
   else if (event.key === 'Tab') {
     handleTab(event)
   }
 
-  // ARROWS - switch focus between buttons
   else if ([...arrowKeysNextButton, ...arrowKeysPreviousButton].includes(event.key)) {
     handleArrows(event.key)
   }
 
-  // ESC
   else if (event.key === 'Escape') {
     handleEsc(event, innerParams, dismissWith)
   }
@@ -111,7 +99,6 @@ const keydownHandler = (innerParams, event, dismissWith) => {
  * @param {SweetAlertOptions} innerParams
  */
 const handleEnter = (event, innerParams) => {
-  // https://github.com/sweetalert2/sweetalert2/issues/2386
   if (!callIfFunction(innerParams.allowEnterKey)) {
     return
   }
@@ -143,12 +130,10 @@ const handleTab = (event) => {
     }
   }
 
-  // Cycle to the next button
   if (!event.shiftKey) {
     setFocus(btnIndex, 1)
   }
 
-  // Cycle to the prev button
   else {
     setFocus(btnIndex, -1)
   }

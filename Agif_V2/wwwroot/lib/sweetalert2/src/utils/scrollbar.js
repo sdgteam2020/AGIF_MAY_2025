@@ -25,16 +25,13 @@ let previousBodyPadding = null
  * @param {string} initialBodyOverflow
  */
 export const replaceScrollbarWithPadding = (initialBodyOverflow) => {
-  // for queues, do not do this more than once
   if (previousBodyPadding !== null) {
     return
   }
-  // if the body has overflow
   if (
     document.body.scrollHeight > window.innerHeight ||
     initialBodyOverflow === 'scroll' // https://github.com/sweetalert2/sweetalert2/issues/2663
   ) {
-    // add padding so the content doesn't shift after removal of scrollbar
     previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'))
     document.body.style.paddingRight = `${previousBodyPadding + measureScrollbar()}px`
   }

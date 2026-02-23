@@ -1,4 +1,3 @@
-// Source: https://gist.github.com/mudge/5830382?permalink_comment_id=2691957#gistcomment-2691957
 
 export default class EventEmitter {
   constructor() {
@@ -12,8 +11,6 @@ export default class EventEmitter {
    */
   _getHandlersByEventName(eventName) {
     if (typeof this.events[eventName] === 'undefined') {
-      // not Set because we need to keep the FIFO order
-      // https://github.com/sweetalert2/sweetalert2/pull/2763#discussion_r1748990334
       this.events[eventName] = []
     }
     return this.events[eventName]
@@ -81,7 +78,6 @@ export default class EventEmitter {
    */
   removeAllListeners(eventName) {
     if (this.events[eventName] !== undefined) {
-      // https://github.com/sweetalert2/sweetalert2/pull/2763#discussion_r1749239222
       this.events[eventName].length = 0
     }
   }

@@ -43,81 +43,20 @@ namespace Agif_V2.Controllers
             _rsa = rsa;
         }
 
-        //public IActionResult Login()
-        //{
-        //    // Generate RSA key pair with PEM formatted public key
-        //    var (publicKeyPem, privateKeyXml) = _rsa.GenerateKeyPair();
 
-        //    // Store private key in session
-        //    HttpContext.Session.SetString("LoginPrivateKey", privateKeyXml);
 
-        //    // Pass PEM formatted public key to view (compatible with JSEncrypt)
-        //    ViewBag.PublicKey = publicKeyPem;
 
-        //    return View();
-        //}
 
-        //[HttpPost]
-        //public async Task<IActionResult> Login(LoginViewModel model)
-        //{
-        //    //    // Retrieve private key from session
-        //    var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
 
-        //    if (string.IsNullOrEmpty(privateKey))
-        //    {
-        //        ModelState.AddModelError("", "Session expired. Please refresh the page.");
-        //        return View(model);
-        //    }
 
-        //    // Decrypt username and password
-        //    if (!string.IsNullOrEmpty(model.UserName) && !string.IsNullOrEmpty(model.Password))
-        //    {
-        //        var decryptedUser = _rsa.DecryptString(model.UserName, privateKey);
-        //        var decryptedPass = _rsa.DecryptString(model.Password, privateKey);
 
-        //        if (decryptedUser == null || decryptedPass == null)
-        //        {
-        //            ModelState.AddModelError("", "Security validation failed. Please refresh the page.");
-        //            // Clear the session key
-        //            HttpContext.Session.Remove("LoginPrivateKey");
-        //            return View(model);
-        //        }
 
-        //        // Replace encrypted values with decrypted ones
-        //        model.UserName = decryptedUser;
-        //        model.Password = decryptedPass;
 
-        //        // Revalidate model with decrypted data
-        //        ModelState.Clear();
-        //        TryValidateModel(model);
-        //    }
 
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return View(model);
-        //    }
 
-        //    var user = await GetUserAsync(model.UserName);
-        //    if (user == null)
-        //    {
-        //        return HandleInvalidUserName(model);
-        //    }
 
-        //    if (await _userManager.IsLockedOutAsync(user))
-        //    {
-        //        return await HandleLockedOutUser(model, user);
-        //    }
 
-        //    var result = await SignInUserAsync(model, user);
-        //    if (result.Succeeded)
-        //    {
-        //        // Clear session key after successful login
-        //        HttpContext.Session.Remove("LoginPrivateKey");
-        //        return await HandleSuccessfulLogin(user, model);
-        //    }
 
-        //    return await HandleFailedLogin(result, model, user);
-        //}
 
         public IActionResult Login()
         {
@@ -130,16 +69,8 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            //    // Retrieve private key from session
-            //var privateKey = HttpContext.Session.GetString("LoginPrivateKey");
 
-            //if (string.IsNullOrEmpty(privateKey))
-            //{
-            //    ModelState.AddModelError("", "Session expired. Please refresh the page.");
-            //    return View(model);
-            //}
 
-            // Decrypt username and password
             if (!string.IsNullOrEmpty(model.UserName) && !string.IsNullOrEmpty(model.Password))
             {
                 var salt = HttpContext.Session.GetString(SessionKeySalt);
@@ -150,22 +81,17 @@ namespace Agif_V2.Controllers
                 }
                 var decryptedUser = AESEncrytDecry.DecryptAES(model.UserName.Trim(), salt);
                 var decryptedPass = AESEncrytDecry.DecryptAES(model.Password.Trim(), salt);
-                //var decryptedUser = _rsa.DecryptString(model.UserName, privateKey);
-                //var decryptedPass = _rsa.DecryptString(model.Password, privateKey);
 
                 if (decryptedUser == null || decryptedPass == null)
                 {
                     ModelState.AddModelError("", "Security validation failed. Please refresh the page.");
-                    // Clear the session key
                     HttpContext.Session.Remove("LoginPrivateKey");
                     return View(model);
                 }
 
-                // Replace encrypted values with decrypted ones
                 model.UserName = decryptedUser;
                 model.Password = decryptedPass;
 
-                // Revalidate model with decrypted data
                 ModelState.Clear();
                 TryValidateModel(model);
             }
@@ -189,14 +115,12 @@ namespace Agif_V2.Controllers
             var result = await SignInUserAsync(model, user);
             if (result.Succeeded)
             {
-                // Clear session key after successful login
                 HttpContext.Session.Remove("LoginPrivateKey");
                 return await HandleSuccessfulLogin(user, model);
             }
 
             return await HandleFailedLogin(result, model, user);
         }
-        // Helper method to populate lockout information
         private async Task<LoginViewModel> PopulateLockoutInfo(LoginViewModel model, ApplicationUser user)
         {
             if (user != null)
@@ -416,7 +340,6 @@ namespace Agif_V2.Controllers
         }
 
         [Authorize(Roles = "Admin,LoanAdmin")]
-        //[IgnoreAntiforgeryToken]
         public IActionResult GetAllUsers(bool status)
         {
             if (!ModelState.IsValid)
@@ -532,7 +455,6 @@ namespace Agif_V2.Controllers
 
             bool ascending = sortDirection.ToLower() == "asc";
 
-            // Define sorting logic in a dictionary
             var sortMap = new Dictionary<string, Func<IQueryable<DTOUserProfileResponse>, IOrderedQueryable<DTOUserProfileResponse>>>
           {
            { "profilename", q => ascending ? q.OrderBy(x => x.ProfileName) : q.OrderByDescending(x => x.ProfileName) },
@@ -547,7 +469,6 @@ namespace Agif_V2.Controllers
            { "isfmn", q => ascending ? q.OrderBy(x => x.IsFmn) : q.OrderByDescending(x => x.IsFmn) }
          };
 
-            // Use the dictionary to apply the sorting
             return sortMap.ContainsKey(sortColumn.ToLower()) ? sortMap[sortColumn.ToLower()](query) : query;
         }
 
@@ -567,7 +488,6 @@ namespace Agif_V2.Controllers
         {
             try
             {
-                // Perform deletion
                 var result = await _userProfile.DeleteUserAsync(domainId, profileId);
 
                 if (result)
@@ -589,7 +509,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception here
                 return Json(new
                 {
                     success = false,
@@ -616,7 +535,6 @@ namespace Agif_V2.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("Users");
 
-                    // Add headers and data to worksheet
                     worksheet.Cell(1, 1).Value = "S.No.";
                     worksheet.Cell(1, 2).Value = "User Name";
                     worksheet.Cell(1, 3).Value = "Army No";
@@ -646,7 +564,6 @@ namespace Agif_V2.Controllers
                         row++;
                     }
 
-                    // Save the file to memory stream
                     using (var stream = new MemoryStream())
                     {
                         workbook.SaveAs(stream);
@@ -721,17 +638,13 @@ namespace Agif_V2.Controllers
                 await _userManager.UpdateSecurityStampAsync(user); // invalidate all cookies
             }
 
-            // Sign out the user from ASP.NET Identity authentication
             await _signInManager.SignOutAsync();
 
-            //Clear server-side session state
             HttpContext.Session.Clear();
 
-            // Delete session + auth cookies explicitly (good for audits)
             Response.Cookies.Delete(".AspNetCore.Identity.Application");
             Response.Cookies.Delete(".AspNetCore.Session");
 
-            // Return the logout confirmation view to the user
             return View();
         }
         [HttpPost]
@@ -873,8 +786,6 @@ namespace Agif_V2.Controllers
             }
         }
 
-        //IAM Code begins
-        //Login with Iam
         [AllowAnonymous]
         public async Task<IActionResult> UserLogin()
         {
@@ -971,7 +882,6 @@ namespace Agif_V2.Controllers
 
                 System.String[] spearator = { Convert.ToBase64String(plainTextBytes) };
 
-                // using the method
                 System.String[] newstring = Encryptedtext.Split(spearator, StringSplitOptions.RemoveEmptyEntries);
                 string key = newstring[1].ToString();
                 string plain = newstring[0].ToString();
@@ -979,7 +889,6 @@ namespace Agif_V2.Controllers
                 try
                 {
                     byte[] byteData = Convert.FromBase64String(key);
-                    //   byte[] decryptedkey = new byte[16];
                     byte[] decryptedkey = new byte[32];
                     X509Certificate2 myCert2 = null;
                     RSACryptoServiceProvider rsa = null;
@@ -987,11 +896,9 @@ namespace Agif_V2.Controllers
                     try
                     {
                         myCert2 = new X509Certificate2(@"C:\\Cert\\App Certificate\\agif.army.mil.pfx", "Abc@2022");
-                        // rsa = (RSACryptoServiceProvider)myCert2.PrivateKey;
                         #region test
                         using (RSA rs = myCert2.GetRSAPrivateKey())
                         {
-                            // rs.KeySize = 16;
                             decryptedkey = rs.Decrypt(byteData, RSAEncryptionPadding.Pkcs1);
 
                         }
@@ -1001,14 +908,12 @@ namespace Agif_V2.Controllers
                     {
 
                     }
-                    // byte[] iv = new byte[16];
                     byte[] iv = new byte[32];
 
 
                     byte[] iv1 = new byte[16] { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 
-                    // result = DecryptString0705222_Final(plain, rsa.Decrypt(byteData, RSAEncryptionPadding.Pkcs1), iv1);
                     result = DecryptString0705222_Final(plain, decryptedkey, iv1);
                 }
                 catch (Exception exxx)
@@ -1028,46 +933,34 @@ namespace Agif_V2.Controllers
         [AllowAnonymous]
         private string DecryptString0705222_Final(string cipherText, byte[] key, byte[] iv)
         {
-            // Instantiate a new Aes object to perform string symmetric encryption
             Aes encryptor = Aes.Create();
 
             encryptor.Mode = CipherMode.ECB;
 
-            // Set key and IV
             byte[] aesKey = new byte[32];
             Array.Copy(key, 0, aesKey, 0, 32);
             encryptor.Key = aesKey;
             encryptor.IV = iv;
             encryptor.Padding = PaddingMode.PKCS7;
 
-            // Instantiate a new MemoryStream object to contain the encrypted bytes
             MemoryStream memoryStream = new MemoryStream();
 
-            // Instantiate a new encryptor from our Aes object
             ICryptoTransform aesDecryptor = encryptor.CreateDecryptor();
 
-            // Instantiate a new CryptoStream object to process the data and write it to the 
-            // memory stream
             CryptoStream cryptoStream = new CryptoStream(memoryStream, aesDecryptor, CryptoStreamMode.Write);
 
-            // Will contain decrypted plaintext
             string plainText = System.String.Empty;
 
             try
             {
-                // Convert the ciphertext string into a byte array
                 byte[] cipherBytes = Convert.FromBase64String(cipherText);
 
-                // Decrypt the input ciphertext string
                 cryptoStream.Write(cipherBytes, 0, cipherBytes.Length);
 
-                // Complete the decryption process
                 cryptoStream.FlushFinalBlock();
 
-                // Convert the decrypted data from a MemoryStream to a byte array
                 byte[] plainBytes = memoryStream.ToArray();
 
-                // Convert the decrypted byte array to string
                 plainText = Encoding.ASCII.GetString(plainBytes, 0, plainBytes.Length);
             }
             catch (Exception exx)
@@ -1076,12 +969,10 @@ namespace Agif_V2.Controllers
             }
             finally
             {
-                // Close both the MemoryStream and the CryptoStream
                 memoryStream.Close();
                 cryptoStream.Close();
             }
 
-            // Return the decrypted data as a string
             return plainText;
 
         }
@@ -1109,7 +1000,6 @@ namespace Agif_V2.Controllers
                         HttpContext.Session.Clear();
                         try
                         {
-                            // SendResponseToIAM("http://localhost:59474/Account/Logout", accountSettings.entityId, nameid);
                             SendResponseToIAM("https://agif.army.mil/Account/Logout", accountSettings.entityId, nameid);
                         }
                         catch (Exception exx)
@@ -1122,7 +1012,6 @@ namespace Agif_V2.Controllers
                 {
                     HttpContext.Session.Clear();
 
-                    //Response.Redirect("http://localhost:59474/Account/FinalLogout");
                     Response.Redirect("https://agif.army.mil/Account/FinalLogout");
                 }
                 else

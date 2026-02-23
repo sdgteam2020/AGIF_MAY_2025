@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PreserveCompilationContext>true</PreserveCompilationContext>
@@ -208,27 +208,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ClosedXML" Version="0.94.2" />
-		<PackageReference Include="EPPlus" Version="8.0.6" />
-		<PackageReference Include="itext7" Version="8.0.5" />
-		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.5" />
+		<PackageReference Include="ClosedXML" Version="0.105.0" />
+		<PackageReference Include="EPPlus" Version="8.4.2" />
+		<PackageReference Include="itext7" Version="8.0.0" />
+		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.22" />
-		<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.15" />
-		<PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.0" />
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="10.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.9" />
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.3" />
+		<PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>

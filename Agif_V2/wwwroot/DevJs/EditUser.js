@@ -41,7 +41,6 @@
 
      function enableEditMode() {                   
 
-            // Keep other fields disabled false
          $('#name').prop('disabled', false);       
          $('#EmailId').prop('disabled', false);    
          $('#MobileNo').prop('disabled', false);
@@ -50,10 +49,8 @@
          $('#DteFmn').prop('disabled', false);       
          $('#regtCorps').prop('disabled', false);       
 
-            // Update page title
             $('#page-title').html('Edit User Profile');
             
-            // Show/hide buttons
          $('#editButton').hide();
          $("#btnTokenDetails").removeClass("d-none");
         }
@@ -70,11 +67,8 @@
                 cancelButtonText: 'No, cancel!',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // If the user clicked 'Yes', submit the form
-                    // Assuming the form has an id of #signupForm
                     $("#editUserForm").submit();  // Or trigger your form submit action here
                 } else {
-                    // If the user clicked 'No', do nothing or show an alert
                     Swal.fire('Cancelled', 'Your Details was not Update.', 'info');
                 }
             });
@@ -103,10 +97,8 @@
 
     $('.form-control-Alphabets').on("keypress", function (e) {
 
-        // Get the key code of the pressed key
         const keyCode = e.which;
 
-        // Allow only alphabets (A-Z, a-z) and numbers (0-9)
         if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode == 32)) {
             return true; // Allow the keypress
         } else {
@@ -131,14 +123,12 @@
     });
 
     function isNumeric(key) {
-        // Allow only digits 0–9
         return /^[0-9]$/.test(key);
     }
 
     $('.form-email').on("keypress", function (e) {
         const keyCode = e.which;
 
-        // Allow only alphabets (A-Z, a-z) and numbers (0-9)
         if ((keyCode >= 65 && keyCode <= 90) ||  // A-Z
             (keyCode >= 97 && keyCode <= 122) ||  // a-z
             (keyCode >= 48 && keyCode <= 57) ||   // 0-9

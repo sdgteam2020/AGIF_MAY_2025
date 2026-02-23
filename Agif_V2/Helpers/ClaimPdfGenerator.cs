@@ -44,7 +44,6 @@ namespace Agif_V2.Helpers
             int counter = 0;
             string Splreason = string.Empty;
 
-            // First, determine the form type
             if (data.EducationDetailsResponse != null)
             {
                 formType = "Education of Ward";
@@ -77,7 +76,6 @@ namespace Agif_V2.Helpers
                     var document = new iText.Layout.Document(pdf, pageSize); // Use PageSize instead of Rectangle
                     document.SetMargins(30f, 25f, 40f, 25f);
 
-                    //Define Fonts
                     PdfFont titleFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                     PdfFont subtitleFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
                     PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
@@ -91,7 +89,6 @@ namespace Agif_V2.Helpers
                                                  .SetTextAlignment(TextAlignment.RIGHT).SetBorder(Border.NO_BORDER));
                     document.Add(headerTable);
 
-                    // Add a title
                     document.Add(new Paragraph("ARMY GROUP INSURANCE FUND")
                         .SetFont(boldFont)
                         .SetFontSize(12)
@@ -108,10 +105,8 @@ namespace Agif_V2.Helpers
 
                     LineSeparator line = new LineSeparator(new SolidLine());
 
-                    // Add the line to the document
                     document.Add(line);
 
-                    // Optionally, you can adjust the space after the line using SpacingAfter:
                     line.SetMarginBottom(5f); // Adjust the space after the line if needed
 
                     document.Add(new Paragraph("PART 1")
@@ -123,7 +118,6 @@ namespace Agif_V2.Helpers
 
 
                     Table table = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                    // Helper method
                     void AddRow(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                     {
                         Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -154,20 +148,6 @@ namespace Agif_V2.Helpers
 
 
 
-                    //AddRow("1. Army No", common.Number, "2. Old Army No", common.OldNumber);
-                    //AddRow("3. Rank", common.DdlRank, "4. Name", common.ApplicantName);
-                    //AddRow("5. Regt/Corps", common.RegtCorps, "6. Present Unit", common.PresentUnit);
-                    //AddRow("7. Unit Pin Code", common.PresentUnitPin, "8. Unit Address", common.ArmyPostOffice);
-                    //AddRow("9. Fmn HQ", common.NextFmnHQ, "10. Permanent Home Address", (common.Vill_Town ?? "") + ", " + (common.PostOffice ?? "") + ", " +
-                    //    (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""));
-                    //AddRow("11. Civil Postal Address", common.CivilPostalAddress, "12. Date of Enrollment", common.DateOfCommission?.ToString("dd-MM-yyyy"));
-                    //AddRow("13. Date of Birth", common.DateOfBirth?.ToString("dd-MM-yyyy"), "14. Date of Retirement", common.DateOfRetirement?.ToString("dd-MM-yyyy"));
-                    //AddRow("15. Total Service (In Years)", common.TotalService.ToString(), "16. E-Mail", common.Email + "@" + common.EmailDomain);
-                    //AddRow("17. Aadhaar No", common.AadharCardNo, "18. Pan No", common.PanCardNo);
-                    //AddRow("19. Mob No", common.MobileNo, "20. Salary Account No", common.SalaryAcctNo);
-                    //AddRow("21. IFSC Code", common.IfsCode, "22. Bank Branch", common.NameOfBankBranch);
-                    //AddRow("23. Purpose of Withdrawal", formType, "24. Amount of Withdrawal Reqd.", common.AmountwithdrwalRequired.ToString());
-                    //AddRow("25. No of Withdrawals", common.NoOfwithdrwal, "", "");
 
 
                     AddRow("1. Army No", common.Number, "2. Old Army No", common.OldNumber);
@@ -191,7 +171,6 @@ namespace Agif_V2.Helpers
 
 
                     Table table2 = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                    // Helper method
                     void AddRow2(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                     {
                         Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -277,7 +256,6 @@ namespace Agif_V2.Helpers
 
 
                         Table table3 = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                        // Helper method
                         void AddRow3(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                         {
                             Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -326,7 +304,6 @@ namespace Agif_V2.Helpers
                         document.Add(point16);
 
                         Table table4 = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                        // Helper method
                         void AddRow4(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                         {
                             Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -373,7 +350,6 @@ namespace Agif_V2.Helpers
                         document.Add(point17);
 
                         Table table5 = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                        // Helper method
                         void AddRow5(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                         {
                             Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -418,7 +394,6 @@ namespace Agif_V2.Helpers
                         document.Add(point17);
 
                         Table table5 = new Table(UnitValue.CreatePercentArray(new float[] { 3, 4, 3, 4 })).UseAllAvailableWidth();
-                        // Helper method
                         void AddRow5(string label1, string value1, string label2, string value2, bool isFirstRow = false)
                         {
                             Border topBorder = isFirstRow ? new SolidBorder(1) : Border.NO_BORDER;
@@ -478,8 +453,6 @@ namespace Agif_V2.Helpers
                             .SetTextAlignment(TextAlignment.JUSTIFIED)
                             .SetMarginLeft(20)
                             .SetMarginBottom(3);
-                        //if (i == checkPara.Count - 1)
-                        //    para.SetBold();
                         document.Add(para);
                     }
 
@@ -507,10 +480,8 @@ namespace Agif_V2.Helpers
 
 
 
-                    // Create a set to track which document descriptions have matches
                     HashSet<string> matchedDescriptions = new HashSet<string>();
 
-                    // First pass: Find all matched documents
                     foreach (var file in data.Documents)
                     {
                         foreach (var entry in documentMap)
@@ -539,19 +510,16 @@ namespace Agif_V2.Helpers
                             string romanNumeral = ToRoman(counter2);
                             docParagraph.Add(new Text($"({romanNumeral}) "));
 
-                            // Create paragraph with checkmark
                             Image newCheckIcon = new Image(checkimageData).ScaleToFit(15, 15);
                             docParagraph.Add(newCheckIcon);
                             docParagraph.Add(new Text(" " + entry));
 
-                            // Add the paragraph to the document
                             document.Add(docParagraph);
 
                             counter2++; // Increment the counter for the next matched document
                         }
                     }
 
-                    // Add part (d) and (e) after documentsRequired
                     List<string> checkParaDE = new List<string>
                     {
                         "(d) If the withdrawal is for second time, gaps after first withdrawal should be more than six months.",
@@ -578,7 +546,6 @@ namespace Agif_V2.Helpers
                         .SetFontColor(ColorConstants.BLACK); // Bold with light font weight (normal color)
                     document.Add(parae);
 
-                    // Verified by and Date Time
                     string domainInfo = $"Verified by - {Name}   IP Address – {IpAddress} Date Time  – {DateTime.Now:dd-MM-yyyy HH:mm}";
                     document.Add(new Paragraph(domainInfo)
                         .SetFont(normalFont)
@@ -588,10 +555,8 @@ namespace Agif_V2.Helpers
                         .SetMarginBottom(10));
                     document.Add(new Paragraph("\n"));
 
-                    // Date & Signature Alignment using Table
                     Table signatureTable = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
 
-                    // Left: Date
                     signatureTable.AddCell(new Cell().Add(new Paragraph("Date: " + DateTime.Now.ToString("dd-MM-yyyy"))
                         .SetFont(normalFont).SetFontSize(10))
                         .SetBorder(Border.NO_BORDER)
@@ -602,19 +567,16 @@ namespace Agif_V2.Helpers
                         .SetBorder(Border.NO_BORDER)
                         .SetTextAlignment(TextAlignment.LEFT));
 
-                    // Right: Signature (Army No)
                     signatureTable.AddCell(new Cell().Add(new Paragraph(common.Number ?? "")
                         .SetFont(normalFont).SetFontSize(10))
                         .SetBorder(Border.NO_BORDER)
                         .SetTextAlignment(TextAlignment.LEFT));
 
-                    // Left: Empty
                     signatureTable.AddCell(new Cell().Add(new Paragraph("")
                         .SetFont(normalFont).SetFontSize(10))
                         .SetBorder(Border.NO_BORDER)
                         .SetTextAlignment(TextAlignment.LEFT));
 
-                    // Right: Signature (Rank + Name)
                     signatureTable.AddCell(new Cell().Add(new Paragraph((common.DdlRank?.ToString() ?? "") + " " + (common.ApplicantName ?? ""))
                         .SetFont(normalFont).SetFontSize(10))
                         .SetBorder(Border.NO_BORDER)
@@ -629,7 +591,6 @@ namespace Agif_V2.Helpers
                         document.Add(new Paragraph("This is an electronially generated PDF")
                                  .SetFont(boldFont).SetFontColor(ColorConstants.BLUE).SetFontSize(10).SetMarginTop(10).SetMarginBottom(5));
 
-                        // Heading
                         document.Add(new Paragraph("RECOMMENDATIONS AND COUNTERSIGNATURE")
                             .SetFont(boldFont)
                             .SetFontSize(10)
@@ -638,7 +599,6 @@ namespace Agif_V2.Helpers
                             .SetMarginTop(10)
                             .SetMarginBottom(5));
 
-                        // Paragraph 1
                         Paragraph para = new Paragraph()
                             .SetFont(normalFont) // ✅ Apply the same font to the entire paragraph
                             .SetFontSize(10);
@@ -656,7 +616,6 @@ namespace Agif_V2.Helpers
                             .SetFont(normalFont));
                         document.Add(para);
 
-                        // Paragraph 2
                         Paragraph para2 = new Paragraph()
                             .SetFont(normalFont) // ✅ ensure same font
                             .SetFontSize(10);
@@ -674,7 +633,6 @@ namespace Agif_V2.Helpers
 
 
 
-                        // Paragraph 4
                         Paragraph para4 = new Paragraph()
                             .SetFont(normalFont)       // ✅ Set default font for the whole paragraph
                             .SetFontSize(10)
@@ -695,7 +653,6 @@ namespace Agif_V2.Helpers
 
                         document.Add(para4);
 
-                        // Paragraph 5
                         Paragraph para5 = new Paragraph(
                             "4. I have satisfied myself of the correctness of personal details and reasons for withdrawal given in application. I have perused the supporting documents and checked their correctness. Supporting documents uploaded are readable and latest."
                         )
@@ -705,7 +662,6 @@ namespace Agif_V2.Helpers
 
                         document.Add(para5);
 
-                        // Paragraph 6
                         Paragraph para6 = new Paragraph(
                             "Application is recommended for sanction and accordingly I countersign the same."
                         )
@@ -728,64 +684,54 @@ namespace Agif_V2.Helpers
                         document.Add(new Paragraph("\n\r\n\r"));
 
 
-                        // Signature and Rank details table (iText7)
                         Table signatureTable3 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 }))
     .UseAllAvailableWidth();
 
-                        // Right: Signature of CO with Stamp
                         signatureTable3.AddCell(new Cell().Add(new Paragraph("(Digital Signature of CO/OC Tps/Head of Adm Br)")
                                 .SetFont(normalFont)
                                 .SetFontSize(10)) // ✅ match other sections
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT));
 
-                        // Left: Date (empty)
                         signatureTable3.AddCell(new Cell().Add(new Paragraph("")
                                 .SetFont(normalFont)
                                 .SetFontSize(10)) // ✅ consistent font setup
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT));
 
-                        // Right: Army No
                         signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Armyno ?? ""}")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT));
 
-                        // Left: Empty
                         signatureTable3.AddCell(new Cell().Add(new Paragraph("")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER));
 
-                        // Right: Rank & Name
                         signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Name ?? ""}")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT));
 
-                        // Left: Empty
                         signatureTable3.AddCell(new Cell().Add(new Paragraph("")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER));
 
-                        // Right: Mobile No
                         signatureTable3.AddCell(new Cell().Add(new Paragraph($"Mobile No: {Mobile ?? ""}")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT));
 
-                        // Left: Empty
                         signatureTable3.AddCell(new Cell().Add(new Paragraph("")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))
                             .SetBorder(Border.NO_BORDER));
 
-                        // Right: Digital Sign On
                         signatureTable3.AddCell(new Cell().Add(new Paragraph($"Digital Sign On: {dated}")
                                 .SetFont(normalFont)
                                 .SetFontSize(10))

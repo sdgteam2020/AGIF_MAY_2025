@@ -4,10 +4,8 @@
 
 namespace DataAccessLayer.Migrations
 {
-    /// <inheritdoc />
     public partial class updatingTrnFwdTrnFwdCO : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
@@ -35,7 +33,6 @@ namespace DataAccessLayer.Migrations
                 oldType: "nvarchar(max)");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(

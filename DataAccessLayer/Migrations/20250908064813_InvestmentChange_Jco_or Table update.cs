@@ -4,10 +4,8 @@
 
 namespace DataAccessLayer.Migrations
 {
-    /// <inheritdoc />
     public partial class InvestmentChange_Jco_orTableupdate : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<decimal>(
@@ -18,7 +16,6 @@ namespace DataAccessLayer.Migrations
                 defaultValue: 0m);
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(

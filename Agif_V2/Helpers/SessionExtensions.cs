@@ -4,9 +4,6 @@ namespace Agif_V2.Helpers
 {
     public static class SessionExtensions
     {
-        /// <summary>
-        /// Stores an object in the session as a JSON string.
-        /// </summary>
         public static void SetObject<T>(this ISession session, string key, T value)
         {
             if (value == null)
@@ -19,9 +16,6 @@ namespace Agif_V2.Helpers
             session.SetString(key, jsonString);
         }
 
-        /// <summary>
-        /// Retrieves an object from the session, deserialized from a JSON string.
-        /// </summary>
         public static T? GetObject<T>(this ISession session, string key)
         {
             var jsonString = session.GetString(key);
@@ -34,7 +28,6 @@ namespace Agif_V2.Helpers
             }
             catch (JsonException)
             {
-                // Optionally log the error
                 return default;
             }
         }

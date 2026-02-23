@@ -21,17 +21,14 @@ namespace DataTransferObject.Model
         [Required]
         public string AddressOfProperty { get; set; }
 
-        // Name of property holder(s)
         [Required]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Property Holder Name must only contain alphabets and spaces.")]
         public string PropertyHolderName { get; set; }
 
-        // Estimated cost of expenditure
         [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Please enter a valid estimated cost.")]
         public double EstimatedCost { get; set; }
 
-        // Total expenditure file upload
         [NotMapped]
         [Required]
         public IFormFile TotalExpenditureFile { get; set; }

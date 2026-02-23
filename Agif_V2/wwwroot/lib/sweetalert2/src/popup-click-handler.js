@@ -10,11 +10,8 @@ export const handlePopupClick = (innerParams, domCache, dismissWith) => {
   if (innerParams.toast) {
     handleToastClick(innerParams, domCache, dismissWith)
   } else {
-    // Ignore click events that had mousedown on the popup but mouseup on the container
-    // This can happen when the user drags a slider
     handleModalMousedown(domCache)
 
-    // Ignore click events that had mousedown on the container but mouseup on the popup
     handleContainerMousedown(domCache)
 
     handleModalClick(innerParams, domCache, dismissWith)
@@ -27,7 +24,6 @@ export const handlePopupClick = (innerParams, domCache, dismissWith) => {
  * @param {Function} dismissWith
  */
 const handleToastClick = (innerParams, domCache, dismissWith) => {
-  // Closing toast by internal click
   domCache.popup.onclick = () => {
     if (innerParams && (isAnyButtonShown(innerParams) || innerParams.timer || innerParams.input)) {
       return
@@ -58,8 +54,6 @@ const handleModalMousedown = (domCache) => {
   domCache.popup.onmousedown = () => {
     domCache.container.onmouseup = function (e) {
       domCache.container.onmouseup = () => {}
-      // We only check if the mouseup target is the container because usually it doesn't
-      // have any other direct children aside of the popup
       if (e.target === domCache.container) {
         ignoreOutsideClick = true
       }
@@ -72,13 +66,11 @@ const handleModalMousedown = (domCache) => {
  */
 const handleContainerMousedown = (domCache) => {
   domCache.container.onmousedown = (e) => {
-    // prevent the modal text from being selected on double click on the container (allowOutsideClick: false)
     if (e.target === domCache.container) {
       e.preventDefault()
     }
     domCache.popup.onmouseup = function (e) {
       domCache.popup.onmouseup = () => {}
-      // We also need to check if the mouseup target is a child of the popup
       if (e.target === domCache.popup || (e.target instanceof HTMLElement && domCache.popup.contains(e.target))) {
         ignoreOutsideClick = true
       }

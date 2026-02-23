@@ -113,7 +113,6 @@ export const getTimerProgressBar = () => elementByClass(swalClasses['timer-progr
  */
 export const getCloseButton = () => elementByClass(swalClasses.close)
 
-// https://github.com/jkup/focusable/blob/master/index.js
 const focusable = `
   a[href],
   area[href],
@@ -141,7 +140,6 @@ export const getFocusableElements = () => {
   /** @type {NodeListOf<HTMLElement>} */
   const focusableElementsWithTabindex = popup.querySelectorAll('[tabindex]:not([tabindex="-1"]):not([tabindex="0"])')
   const focusableElementsWithTabindexSorted = Array.from(focusableElementsWithTabindex)
-    // sort according to tabindex
     .sort((a, b) => {
       const tabindexA = parseInt(a.getAttribute('tabindex') || '0')
       const tabindexB = parseInt(b.getAttribute('tabindex') || '0')

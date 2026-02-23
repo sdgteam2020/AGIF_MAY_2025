@@ -22,6 +22,5 @@ export const renderTitle = (instance, params) => {
     title.innerText = params.titleText
   }
 
-  // Custom class
   dom.applyCustomClass(title, params, 'title')
 }

@@ -27,24 +27,20 @@
         errorContainer.text('');
 
         if (file) {
-            // Check if the file is a PDF
             if (file.type !== 'application/pdf') {
                 errorContainer.text('Only PDF files are allowed').css('color', 'red');
                 input.value = '';
                 return;
             }
 
-            // Check the file size
             if (file.size > maxFileSize) {
                 errorContainer.text('File size must not exceed 1 MB').css('color', 'red');
                 input.value = '';
             } else {
-                // Show eye icon for preview
                 preview.html(`
                 <i class="bi bi-eye uploadeye"></i>
             `);
 
-                // Click event to show PDF in modal
                 preview.find('.uploadeye').on('click', function () {
                     showPdfInModal(file);
                 });
@@ -54,29 +50,22 @@
         }
     }
 
-    // Function to show PDF in modal using createObjectURL
     function showPdfInModal(file) {
-        // Clear previous PDF if any
         const pdfContainer = document.getElementById("pdfContainer");
         pdfContainer.innerHTML = '';
 
-        // Create blob URL
         const blob = new Blob([file], { type: 'application/pdf' });
         const pdfUrl = URL.createObjectURL(blob);
 
-        // Create embed element
         const embed = document.createElement("embed");
         embed.src = pdfUrl + "#toolbar=0&navpanes=0&scrollbar=0";
         embed.type = "application/pdf";
         embed.classList.add("w-100", "h-100", "border-0", "rounded");
 
-        // Append to container
         pdfContainer.appendChild(embed);
 
-        // Show modal
         $("#ViewPdf").modal("show");
 
-        // Clean up blob URL when modal is closed
         $('#ViewPdf').on('hidden.bs.modal', function () {
             URL.revokeObjectURL(pdfUrl);
             pdfContainer.innerHTML = '';
@@ -153,27 +142,21 @@ function checkUploadFiles() {
             }
         });
 
-        // Handle Service Extension field based on IsExtension
         const $serviceExtnField = $('#SeviceExtnPdf');
 
         if (IsExtension) {
-            // If extension is true: enable field and make it mandatory
             $serviceExtnField.prop('disabled', false);
             $serviceExtnField.prop('required', true);
 
-            // Check if Service Extension file is uploaded
             if ($serviceExtnField.length && (!$serviceExtnField[0].files || $serviceExtnField[0].files.length === 0)) {
                 allFilled = false;
             }
         } else {
-            // If extension is false: disable field and make it not required
             $serviceExtnField.prop('disabled', true);
             $serviceExtnField.prop('required', false);
-            // Clear the file input if disabled
             $serviceExtnField.val('');
         }
 
-        // Update upload button state
         $uploadBtn.prop('disabled', !allFilled);
         if (allFilled) {
             $uploadBtn.removeClass('btn-secondary').addClass('btn-success');
@@ -182,10 +165,8 @@ function checkUploadFiles() {
         }
     }
 
-    // Bind change event to all file inputs
     $('input[type="file"]').on('change', checkAllRequiredFiles);
 
-    // Initial check
     checkAllRequiredFiles();
 }
 

@@ -2,7 +2,6 @@
 let validatedRecords = [];
 let rejectedRecords = [];
 $(document).ready(function () {
-    // Check if DataTables is loaded
     if (typeof $.fn.DataTable === 'undefined') {
         console.error('DataTables library is not loaded!');
         alert('DataTables library is not loaded. Please check your script references.');
@@ -14,7 +13,6 @@ $(document).ready(function () {
 
     $(".submit-status").removeClass("active-page-highlight");
 
-    // Find the link in the sidebar that has the matching data-status and add the class
     $(`.submit-status[data-status='${value}']`).addClass("active-page-highlight");
     BindUsersData(value);
 
@@ -24,7 +22,6 @@ $(document).ready(function () {
 });
 
 
-// Export Validated Records
 $('#btnExportOk').on('click', function () {
     if (!validatedRecords.length) {
         alert("No validated records to export.");
@@ -111,7 +108,6 @@ $('#btnBulkUpload').on('click', function () {
                     text: response.message,
                     icon: 'success'
                 }).then(() => {
-                    // Reload the DataTable after successful upload
                     BindUsersData($('#Status').val());
                 });
             } else {
@@ -212,7 +208,6 @@ $('#btnProcessBulk').on('click', function () {
                     text: response.message,
                     icon: 'success'
                 }).then(() => {
-                    // Reload the DataTable after processing
                     BindUsersData($('#Status').val());
                 });
             } else {
@@ -272,7 +267,6 @@ $('#UploadExcel1').on('click', function () {
                             text: response.message,
                             icon: 'success'
                         }).then(() => {
-                            // Reload the DataTable after successful upload
                             BindUsersData($('#Status').val());
                         });
                     } else {
@@ -297,14 +291,12 @@ $(document).on('click', '.download-btn', function () {
 });
 
 function BindUsersData(status) {
-    // Check if DataTables is available
 
     if (typeof $.fn.DataTable === 'undefined') {
         console.error('DataTables is not available');
         return;
     }
 
-    // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblReceivedApplications')) {
         $('#tblReceivedApplications').DataTable().destroy();
     }
@@ -355,7 +347,6 @@ function BindUsersData(status) {
         }
     ];
 
-    // Add conditional columns for status = 104
     
     if (status === '104') {
         columns.push(
@@ -371,7 +362,6 @@ function BindUsersData(status) {
                 name: "DownloadedOn",
                 render: function (data, type, row) {
                     if (data) {
-                        // Format the date if needed
                         const date = new Date(data);
                         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
                     }
@@ -381,7 +371,6 @@ function BindUsersData(status) {
         );
     }
 
-    // Add download button column (always last)
     columns.push({
         data: null,
         name: "Download",
@@ -395,7 +384,6 @@ function BindUsersData(status) {
             </button>`;
         }
     });
-    // Initialize DataTable with server-side processing
     const table = $('#tblReceivedApplications').DataTable({
         width:"100%",
         processing: true,
@@ -448,7 +436,6 @@ function BindUsersData(status) {
         buttons: [
         ],
         drawCallback: function (settings) {
-            // Add any custom logic here after table is drawn
         }
     });
 }
@@ -462,7 +449,6 @@ function downloadApplication(applicationId, armyNo, applicationType) {
     let applicationIds = [];
     applicationIds.push(applicationId);
 
-    // Option 2: Using AJAX if you need to handle response differently
 
     $.ajax({
         url: '/ApplicationRequest/DownloadClaimApplication',
@@ -531,7 +517,6 @@ function downloadApplications(applicationIds) {
                 return;
             }
 
-            // Automatically trigger download of the zip file
             const downloadUrl = `/ClaimPdfDownloaded/${folderName}.zip`;
             window.location.href = downloadUrl; // triggers file download
         },

@@ -25,7 +25,6 @@ namespace DataAccessLayer.Repositories
 
             if (entity == null)
             {
-                // Handle the case where no entity was found, e.g., throw an exception or return a default value
                 throw new KeyNotFoundException($"Entity with id {id} not found.");
             }
 
@@ -38,7 +37,6 @@ namespace DataAccessLayer.Repositories
             var entity= await _context.Set<T>().FindAsync(val1);
             if (entity == null)
             {
-                // Handle the case where no entity was found, e.g., throw an exception or return a default value
                 throw new KeyNotFoundException($"Entity with id {val1} not found.");
             }
 
@@ -50,7 +48,6 @@ namespace DataAccessLayer.Repositories
             var ret= await _context.Set<T>().FindAsync(id);
             if (ret == null)
             {
-                // Handle the case where no entity was found, e.g., throw an exception or return a default value
                 throw new KeyNotFoundException($"Entity with id {ret} not found.");
             }
 
@@ -62,7 +59,6 @@ namespace DataAccessLayer.Repositories
             var ret = await _context.Set<T>().ToListAsync();
             if (ret == null)
             {
-                // Handle the case where no entity was found, e.g., throw an exception or return a default value
                 throw new KeyNotFoundException($"Entity not found.");
             }
             return ret;

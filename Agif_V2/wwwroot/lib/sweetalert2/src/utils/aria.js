@@ -1,9 +1,5 @@
 import { getContainer } from './dom/getters.js'
 
-// From https://developer.paciellogroup.com/blog/2018/06/the-current-state-of-modal-dialog-accessibility/
-// Adding aria-hidden="true" to elements outside of the active modal dialog ensures that
-// elements not within the active modal dialog will not be surfaced if a user opens a screen
-// reader’s list of elements (headings, form controls, landmarks, etc.) in the document.
 
 export const setAriaHidden = () => {
   const container = getContainer()

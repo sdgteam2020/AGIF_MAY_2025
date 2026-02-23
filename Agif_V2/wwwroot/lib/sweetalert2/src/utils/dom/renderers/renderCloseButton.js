@@ -12,7 +12,6 @@ export const renderCloseButton = (instance, params) => {
 
   dom.setInnerHtml(closeButton, params.closeButtonHtml || '')
 
-  // Custom class
   dom.applyCustomClass(closeButton, params, 'closeButton')
 
   dom.toggle(closeButton, params.showCloseButton)

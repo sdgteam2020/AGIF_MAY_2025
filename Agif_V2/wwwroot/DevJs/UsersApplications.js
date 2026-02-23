@@ -2,11 +2,8 @@
     addBlurEffect();
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
-    // 2. Highlight the Sidebar Link
-    // First, remove the active class from all links to be safe
     $(".submit-status").removeClass("active-page-highlight");
 
-    // Find the link in the sidebar that has the matching data-status and add the class
     $(`.submit-status[data-status='${value}']`).addClass("active-page-highlight");
     if (value == 2) {
         $('#tblApplications thead tr th ').eq(6).before('<th class="bg-danger text-white">Digital Sign On</th>');
@@ -210,10 +207,8 @@ function GetApplicationList(status, endpoint) {
         }
     ];
 
-    // Track the index for Digital Sign On column
     let digitalSignColumnIndex = -1;
 
-    // Add "Digital Sign On" column dynamically if status == 2
     if (status == 2 || status == 102) {
         digitalSignColumnIndex = dynamicColumns.length; // This will be index 6
         dynamicColumns.push({
@@ -271,7 +266,6 @@ function GetApplicationList(status, endpoint) {
     });
 
 
-    // Set the correct sorting order
     let tableOrder;
     if (status == 2 && digitalSignColumnIndex !== -1) {
         tableOrder = [[digitalSignColumnIndex, 'desc']]; // Sort by Digital Sign On column
@@ -291,12 +285,10 @@ function GetApplicationList(status, endpoint) {
                         </button>`);
     }
 
-    // Destroy existing DataTable if it exists
     if ($.fn.DataTable.isDataTable('#tblApplications')) {
         $('#tblApplications').DataTable().clear().destroy();
     }
 
-    // Initialize DataTable with server-side processing
     $('#tblApplications').DataTable({
         width:"100%",
         processing: true,
@@ -352,7 +344,6 @@ function OpenAction(applicationId, endpoint, category) {
     $("#spnapplicationId").html(applicationId);
     const val = $("#UserType").val() || "Loan";
 
-    // Show loading overlay (optional)
     $("#loadingOverlay").removeClass("d-none");
 
     fetch(endpoint, {
@@ -373,7 +364,6 @@ function OpenAction(applicationId, endpoint, category) {
                 return;
             }
 
-            // Assume `response` is the full URL to your PDF
             return fetch(response);
         })
         .then(r => {
@@ -503,7 +493,6 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify({
-            //"inputPersID": IcNo//HRMS Token
             "inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"//HRMS Token
 
         }),
@@ -582,7 +571,6 @@ function GetTokenSignXml(xml, Usertype, applicationId) {
         URL = "/ApplicationRequest/SaveClaimXML";
     SignXmlSendTOdatabase(xml, URL, Usertype);
 }
-//tez code start
 function DigitalSignByAPI(applicationId, type) {
     GetThumbprint().then(function (tprint) {
         let URL = '';
@@ -721,7 +709,6 @@ function SaveSignedPdf(base64String, fn, endpoint) {
         }
     });
 }
-//tez code end
 function SignXmlSendTOdatabase(xmlString, endpoint, userType) {
     const applnId = $('#spnapplicationId').html();
     const remarks = $('#txtRemark').val();
@@ -780,7 +767,6 @@ function rejectedApplication(applicationId, type) {
         }
     });
 }
-// Function to add blur effect when ApplicationAction modal opens
 function addBlurEffect() {
     const $modal1 = $('#ViewPdf');
     const $modal2 = $('#ApplicationAction');

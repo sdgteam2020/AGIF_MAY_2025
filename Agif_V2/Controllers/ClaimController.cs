@@ -150,7 +150,6 @@ namespace Agif_V2.Controllers
 
             TempData["WithdrwalPurposeNew"] = WithdrwalPurpose ?? string.Empty;
 
-            //TempData["ClaimapplicationId"] = id;
 
             var response = new DTOClaimCommonOnlineResponse();
             response = null;
@@ -192,10 +191,8 @@ namespace Agif_V2.Controllers
             }
           
 
-            // Perform custom validation (adds errors to ModelState)
             await ValidateModelAsync(model);
 
-            // Check ModelState.IsValid
             if (!ModelState.IsValid)
             {
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
@@ -203,13 +200,10 @@ namespace Agif_V2.Controllers
             }
                 
 
-            // Save common data
             var claimCommonModel = await SaveClaimCommonDataAsync(model);
 
-            // Save address & account details
             await SaveAddressAndAccountDetailsAsync(model, claimCommonModel.ApplicationId);
 
-            // Submit the specific form type
             string formType = await SubmitFormAsync(model, claimCommonModel.ApplicationId);
 
             TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
@@ -221,7 +215,6 @@ namespace Agif_V2.Controllers
         {            
             bool isValid = true;
 
-            // Validate each section
             isValid &= ValidateSection(model.ClaimCommonData, "ClaimCommonData");
             isValid &= ValidateSection(model.AddressDetails, "AddressDetails");
             isValid &= ValidateSection(model.AccountDetails, "AccountDetails");
@@ -231,7 +224,6 @@ namespace Agif_V2.Controllers
             isValid &= ValidateSection(model.SplWaiver, "SplWaiver");
 
 
-            // Form-specific validation
             if (model.EducationDetails != null)
                 isValid &= await ValidateFormFilesAsync(model.EducationDetails, "EducationDetails", new Dictionary<string, string>
             {
@@ -422,11 +414,9 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
-            // Return a success message or redirect after successful upload
             return RedirectToAction("ApplicationDetails", "Claim");
         }
 
-        // Helper to gather uploaded files
         private List<IFormFile> GetUploadedFiles(ClaimFileUploadViewModel model)
         {
             var files = new List<IFormFile>();
@@ -437,7 +427,6 @@ namespace Agif_V2.Controllers
             return files;
         }
 
-        // Helper to validate a single file
         private async Task ValidateFile(IFormFile file)
         {
             if (file.ContentType != "application/pdf")
@@ -524,13 +513,11 @@ namespace Agif_V2.Controllers
                 string sourceFolderPath = Path.Combine(_env.WebRootPath, "ClaimTempUploads", folderPath);
 
 
-                // Check if source folder exists
                 if (!Directory.Exists(sourceFolderPath))
                 {
                     return Json(new { success = false, message = $"Source folder not found: {sourceFolderPath}" });
                 }
 
-                // Get all PDF files from the source folder
                 string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
 
                 if (pdfFiles.Length == 0)
@@ -538,7 +525,6 @@ namespace Agif_V2.Controllers
                     return Json(new { success = false, message = "No PDF files found in the specified folder." });
                 }
 
-                // Generate the new PDF first (if needed)
                 string pdfName = folderPath + "_Application";
                 var generatedPdfPath = Path.Combine(sourceFolderPath, pdfName + ".pdf");
 
@@ -564,8 +550,6 @@ namespace Agif_V2.Controllers
                            .OrderBy(file =>
                            {
                                bool containsApplication = Path.GetFileName(file).Contains("Application");
-                               // Return a tuple where the first item is the priority (true/false) for sorting
-                               // We want "application" files to come first, so we return a boolean
                                return containsApplication ? 0 : 1;
                            })
                            .ThenBy(file => Path.GetFileName(file))  // After prioritizing, order by the filename
@@ -575,10 +559,8 @@ namespace Agif_V2.Controllers
                 catch (Exception pdfGenEx)
                 {
                     Console.WriteLine($"Error generating PDF: {pdfGenEx.Message}");
-                    // Continue with existing PDFs if generation fails
                 }
 
-                // Create merged PDF path in TempUploads root
                 string tempUploadsPath = Path.Combine(_env.WebRootPath, "ClaimMergePdf");
                 if (!Directory.Exists(tempUploadsPath))
                 {
@@ -588,13 +570,11 @@ namespace Agif_V2.Controllers
                 string MergePdfName = "App" + applicationIdStr + armyNo;
                 string mergedPdfPath = Path.Combine(tempUploadsPath, MergePdfName + ".pdf");
                 ViewBag.MergedPdfPath = mergedPdfPath;
-                // Merge all PDFs using iText7
                 bool mergeResult = await _mergePdf.MergePdfFiles(pdfFiles, mergedPdfPath);
 
 
                 if (mergeResult)
                 {
-                    // Get relative path for client
                     string relativePath = mergedPdfPath.Replace(_env.WebRootPath, "").Replace("\\", "/");
 
                     await _IClaimonlineApplication1.UpdateMergePdfStatus(applicationId, true);
@@ -686,7 +666,6 @@ namespace Agif_V2.Controllers
                     return Json(new { success = false, message = "Application not found" });
                 }
 
-                // Create a response object with the required fields for the modal
                 var response = new
                 {
                     success = true,
@@ -708,7 +687,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception if you have logging setup
                 return Json(new { success = false, message = "An error occurred while fetching application details" });
             }
         }
@@ -746,7 +724,6 @@ namespace Agif_V2.Controllers
             string directoryPath = Path.Combine(_env.WebRootPath, "ClaimMergePdf");
             try
             {
-                // Call the FileUtility method to save the Base64 string to a file
                 await _fileUtility.SaveBase64ToFileAsync(base64String, directoryPath, fileName);
                 return Json(new { success = true, message = "File saved successfully." });
             }

@@ -6,7 +6,6 @@ import * as dom from '../utils/dom/index.js'
  * Hides loader and shows back the button which was hidden by .showLoading()
  */
 function hideLoading() {
-  // do nothing if popup is closed
   const innerParams = privateProps.innerParams.get(this)
   if (!innerParams) {
     return

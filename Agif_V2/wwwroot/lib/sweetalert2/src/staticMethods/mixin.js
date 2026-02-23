@@ -23,6 +23,5 @@ export function mixin(mixinParams) {
       return super._main(params, Object.assign({}, mixinParams, priorityMixinParams))
     }
   }
-  // @ts-ignore
   return MixinSwal
 }

@@ -1,5 +1,4 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    // Initialize slider functionality
     initializeImageSlider();
 });
 
@@ -7,7 +6,6 @@ function initializeImageSlider() {
     const slides = document.querySelector('.slides');
     const dots = document.querySelectorAll('.dot');
 
-    // Check if slider elements exist
     if (!slides || !dots.length) {
         console.warn('Slider elements not found');
         return;
@@ -22,7 +20,6 @@ function initializeImageSlider() {
         index = (i + totalSlides) % totalSlides; // Ensure circular navigation
         slides.style.transform = `translateX(${-index * 100}%)`;
 
-        // Update active dot
         updateActiveDot(index);
     }
 
@@ -46,27 +43,20 @@ function initializeImageSlider() {
         clearInterval(intervalId);
     }
 
-    // Initialize first slide
     showSlide(0);
 
-    // Start auto-play
     let autoPlayInterval = startAutoPlay();
 
-    // Add click event listeners to dots
     dots.forEach((dot, i) => {
         dot.addEventListener('click', function () {
-            // Stop current auto-play
             stopAutoPlay(autoPlayInterval);
 
-            // Show clicked slide
             showSlide(i);
 
-            // Restart auto-play
             autoPlayInterval = startAutoPlay();
         });
     });
 
-    // Optional: Pause auto-play on hover
     const sliderContainer = document.querySelector('.slider');
     if (sliderContainer) {
         sliderContainer.addEventListener('mouseenter', function () {

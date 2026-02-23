@@ -79,7 +79,6 @@ namespace Agif_V2.Controllers
                 dTOTempSession.MobileNo = dTOUserProfileResponse.MobileNo ?? string.Empty;
                 dTOTempSession.ProfileName = dTOUserProfileResponse.ProfileName ?? string.Empty;
                 dTOTempSession.UserName = dTOUserProfileResponse.DomainId ?? string.Empty;
-                //dTOTempSession.EmailId = dTOUserProfileResponse.EmailId ?? string.Empty;
                 dTOTempSession.RankId = dTOUserProfileResponse.RankId;
                 dTOTempSession.RegtId = dTOUserProfileResponse.RegtId;
                 dTOTempSession.ApptId = dTOUserProfileResponse.ApptId;
@@ -138,16 +137,13 @@ namespace Agif_V2.Controllers
             var queryableData = await _userApplication.GetUsersApplication(dTOTempSession.MappingId, status);
             var query = queryableData.AsQueryable();
 
-            // Apply search filter if provided
             query = ApplySearchFilter(query, request.searchValue);
 
-            // Apply sorting if needed
             query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
             var totalRecords = queryableData.Count;
             var filteredRecords = query.Count();
 
-            // Paginate the result
             var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
             var responseData = new DTODataTablesResponse<DTOGetApplResponse>
@@ -161,7 +157,6 @@ namespace Agif_V2.Controllers
             return Json(responseData);
         }
 
-        // Updated method to handle potential null reference for 'searchValue'
         private IQueryable<DTOGetApplResponse> ApplySearchFilter(IQueryable<DTOGetApplResponse> query, string? searchValue)
         {
             if (string.IsNullOrEmpty(searchValue)) return query;
@@ -174,7 +169,6 @@ namespace Agif_V2.Controllers
             );
         }
 
-        // Separate method for sorting logic
         private IQueryable<DTOGetApplResponse> ApplySorting(IQueryable<DTOGetApplResponse> query, string sortColumn, string sortDirection)
         {
             if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
@@ -208,16 +202,13 @@ namespace Agif_V2.Controllers
 
             var query = queryableData.AsQueryable();
 
-            // Apply search filter if provided
             query = ApplySearchFilter(query, request.searchValue);
 
-            // Apply sorting if needed
             query = ApplySorting(query, request.sortColumn, request.sortDirection);
 
             var totalRecords = queryableData.Count;
             var filteredRecords = query.Count();
 
-            // Paginate the result
             var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
             var responseData = new DTODataTablesResponse<DTOGetApplResponse>
@@ -402,7 +393,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error or return appropriate response
                 Console.WriteLine($"Error in SaveXML: {ex.Message}\n{ex.StackTrace}");
                 throw;
             }
@@ -466,7 +456,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error or return appropriate response
                 Console.WriteLine($"Error in SaveXML: {ex.Message}\n{ex.StackTrace}");
                 throw;
             }
@@ -566,15 +555,12 @@ namespace Agif_V2.Controllers
                 var totalRecords = queryableData.Count;
                 var query = queryableData.AsQueryable();
 
-                // Apply search filter
                 query = AdminApplySearchFilter(query, request.searchValue);
 
                 var filteredRecords = query.Count();
 
-                // Apply sorting
                 query = AdminApplySorting(query, request.sortColumn, request.sortDirection);
 
-                // Paginate the result
                 var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
                 var responseData = new DTODataTablesResponse<DTOGetApplResponse>
@@ -589,12 +575,10 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
         }
 
-        // Method to apply search filter
         private IQueryable<DTOGetApplResponse> AdminApplySearchFilter(IQueryable<DTOGetApplResponse> query, string? searchValue)
         {
             if (string.IsNullOrEmpty(searchValue)) return query;
@@ -608,7 +592,6 @@ namespace Agif_V2.Controllers
             );
         }
 
-        // Method to apply sorting
         private IQueryable<DTOGetApplResponse> AdminApplySorting(IQueryable<DTOGetApplResponse> query, string sortColumn, string sortDirection)
         {
             if (string.IsNullOrEmpty(sortColumn) || string.IsNullOrEmpty(sortDirection)) return query;
@@ -645,15 +628,12 @@ namespace Agif_V2.Controllers
                 var totalRecords = queryableData.Count;
                 var query = queryableData.AsQueryable();
 
-                // Apply search filter - fixed to match actual DTO properties
                 query = AdminApplySearchFilter(query, request.searchValue);
 
                 var filteredRecords = query.Count();
 
-                // Apply sorting
                 query = AdminApplySorting(query, request.sortColumn, request.sortDirection);
 
-                // Paginate the result
                 var paginatedData = query.Skip(request.Start).Take(request.Length).ToList();
 
                 var responseData = new DTODataTablesResponse<DTOGetApplResponse>
@@ -668,7 +648,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception
                 return Json(new { error = "An error occurred while loading data: " + ex.Message });
             }
         }
@@ -700,7 +679,6 @@ namespace Agif_V2.Controllers
             Directory.CreateDirectory(newFolderPath);
 
             string downloadFolderPath = Path.Combine(basePath, "Downloads");
-            // Optional: keep the download/watermarked copy in a subfolder
             string downloadFolder = Path.Combine(downloadFolderPath, "Downloads");
             Directory.CreateDirectory(downloadFolder);
 
@@ -724,26 +702,21 @@ namespace Agif_V2.Controllers
             string pcaFolder = Path.Combine(newFolderPath, "PCA");
 
 
-            // Process and copy files
             bool isFilesCopied = CopyFilesToSubfolders(ret, newFolderPath, hbaFolder, caFolder, pcaFolder, downloadFolder);
 
-            // If file copy failed, return
             if (!isFilesCopied)
             {
                 return Json(Constants.DataNotExport);
             }
 
-            // Export to Excel in the new folder
             bool retexcel = await ExportToExcelInFolder(dTOExport, newFolderPath);
             if (!retexcel)
             {
                 return Json(Constants.DataNotExport);
             }
 
-            // Create a zip file
             string zipFileName = CreateZipFile(newFolderPath);
 
-            // Update application status
             bool updateStatus = await _userApplication.UpdateStatus(dTOExport);
             if (!updateStatus)
             {
@@ -753,7 +726,6 @@ namespace Agif_V2.Controllers
             return Json(newFolderName);
         }
 
-        // Helper methods
 
         private void CleanExistingFiles(string basePath)
         {
@@ -911,17 +883,14 @@ namespace Agif_V2.Controllers
                 System.IO.File.Delete(destinationFilePath);
             }
 
-            // Create the zip
             ZipFile.CreateFromDirectory(sourceFolderPath, destinationFilePath, System.IO.Compression.CompressionLevel.Optimal, includeBaseDirectory: false);
 
         }
         public string CreateFolder(string basePath)
         {
-            // Timestamp-based folder name
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string folderPath = Path.Combine(basePath, timestamp);
 
-            // Create the directory
             Directory.CreateDirectory(folderPath);
 
             return timestamp;
@@ -944,25 +913,20 @@ namespace Agif_V2.Controllers
             DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _IClaimonlineApplication1.GetApplicationDetailsForExport(dTOExport);
 
-            // Define base path
             string basePath = Path.Combine("wwwroot", "ClaimPdfDownloaded");
 
-            // Clean old folders/files
             CleanExistingFiles(basePath);
 
-            // Create new folder and subfolders   
             string newFolderName = CreateFolder(basePath);
 
             string newFolderPath = Path.Combine(basePath, newFolderName);
             Directory.CreateDirectory(newFolderPath);
 
-            // Create subfolders ED, MW, PR and SP inside new folder
             string EDFolder = Path.Combine(newFolderPath, "ED");
             string MWFolder = Path.Combine(newFolderPath, "MW");
             string PRFolder = Path.Combine(newFolderPath, "PR");
             string SPFolder = Path.Combine(newFolderPath, "SP");
 
-            // Process and copy files to subfolders
             bool isFilesCopied = CopyClaimFilesToSubfolders(ret, newFolderPath, EDFolder, MWFolder, PRFolder, SPFolder);
 
             if (!isFilesCopied)
@@ -970,17 +934,14 @@ namespace Agif_V2.Controllers
                 return Json(Constants.DataNotExport);
             }
 
-            // Export to Excel
             bool retexcel = await ClaimExportToExcelInFolder(dTOExport, newFolderPath);
             if (!retexcel)
             {
                 return Json(Constants.DataNotExport);
             }
 
-            // Create a zip file
             string zipFileName = CreateZipFile(newFolderPath);
 
-            // Update claim application status
             bool updateStatus = await _userApplication.UpdateClaimStatus(dTOExport);
             if (!updateStatus)
             {
@@ -990,7 +951,6 @@ namespace Agif_V2.Controllers
             return Json(newFolderName);
         }
 
-        // Helper Methods
 
         private bool CopyClaimFilesToSubfolders(dynamic ret, string newFolderPath,string EDFolder,string MWFolder,string PRFolder, string SPFolder)
         {
@@ -1113,7 +1073,6 @@ namespace Agif_V2.Controllers
             }
         }
 
-        // ---------------- Helper Methods ----------------
 
         private DTOApplStatusBulkUploadlst InitializeUploadList()
         {
@@ -1252,7 +1211,6 @@ namespace Agif_V2.Controllers
 
             DataTable applicationUpdatesTable = _userApplication.CreateApplicationUpdatesDataTable(lst);
 
-            // Call the bulk update method
             var result = await _userApplication.ProcessBulkApplicationUpdates(applicationUpdatesTable);
 
             if (result.Item1) // Assuming result is a tuple (bool, string)
@@ -1264,7 +1222,6 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = result.Item2 });
             }
 
-            // Unreachable code removed
         }
 
         public DataTable ExcelToDatatable(string filePath)
@@ -1281,7 +1238,6 @@ namespace Agif_V2.Controllers
                 {
                     dt.Columns.Add(worksheet.Cell(1, col).GetString().Trim(), typeof(string));
                 }
-                //Read data rows
                 for (int row = 2; row <= rowCount; row++)
                 {
                     var dataRow = dt.NewRow();
@@ -1451,7 +1407,6 @@ namespace Agif_V2.Controllers
 
             DataTable applicationUpdatesTable = _userApplication.CreateApplicationUpdatesDataTable(lst);
 
-            // Call the bulk update method
             var result = await _userApplication.ClaimProcessBulkApplicationUpdates(applicationUpdatesTable);
 
             if (result.Item1) // Assuming result is a tuple (bool, string)
@@ -1462,7 +1417,6 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = result.Item2 });
             }
-            // Unreachable code removed
         }
         [HttpPost]
         public async Task<IActionResult> GetApplicantHistory(string armyNo,string usertype)

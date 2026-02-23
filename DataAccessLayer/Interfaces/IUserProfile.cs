@@ -11,7 +11,6 @@ namespace DataAccessLayer.Interfaces
     public interface IUserProfile : IGenericRepositoryDL<UserProfile>
     {
         Task<UserProfile> GetByUserName(string userName);
-        //Task<List<DTOUserProfileResponse>> GetAllUser(bool status);
         IQueryable<DTOUserProfileResponse> GetAllUser(bool status);
 
 

@@ -24,7 +24,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
            .AddSupportedCultures(supportedCultures)
            .AddSupportedUICultures(supportedCultures);
 
-    // Force the request culture to always use "en-GB"
     options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(context =>
     {
         return Task.FromResult(new ProviderCultureResult("en-GB"));
@@ -59,7 +58,6 @@ builder.Services.AddResponseCompression(options =>
     options.Providers.Add<BrotliCompressionProvider>();
     options.Providers.Add<GzipCompressionProvider>();
 
-    // Add font MIME types
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
     {
         "font/woff",
@@ -137,7 +135,6 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.HttpOnly = true;
     options.HeaderName = "RequestVerificationToken";
 });
-// Add services to the container.
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
@@ -174,7 +171,6 @@ var app = builder.Build();
 app.UseRequestLocalization();
 app.UseSession();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -204,7 +200,6 @@ app.Use(async (ctx, next) =>
 
     var isDev = app.Environment.IsDevelopment();
 
-    // Base CSP strings
     string defaultSrc = "default-src 'self' blob:; ";
     string scriptSrc =  "script-src 'self'; ";
     string styleSrc = "style-src 'self'; "; // Bootstrap/JQuery often need unsafe-inline
@@ -233,22 +228,8 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-//app.Use(async (context, next) =>
-//{
-//    var referer = context.Request.Headers["Referer"].ToString();
-//    var path = context.Request.Path.Value;
 
-//    if (string.IsNullOrEmpty(referer) &&
-//        !path.StartsWith("/Default/Index", StringComparison.OrdinalIgnoreCase) &&
-//        !path.StartsWith("/css") &&
-//        !path.StartsWith("/js"))
-//    {
-//        context.Response.Redirect("/Default/Index");
-//        return;
-//    }
 
-//    await next();
-//});
 
 app.UseAuthorization();
 

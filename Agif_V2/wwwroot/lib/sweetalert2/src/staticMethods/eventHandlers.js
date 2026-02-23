@@ -24,17 +24,14 @@ export const once = (eventName, eventHandler) => {
  * @param {EventHandler} [eventHandler]
  */
 export const off = (eventName, eventHandler) => {
-  // Remove all handlers for all events
   if (!eventName) {
     globalState.eventEmitter.reset()
     return
   }
 
   if (eventHandler) {
-    // Remove a specific handler
     globalState.eventEmitter.removeListener(eventName, eventHandler)
   } else {
-    // Remove all handlers for a specific event
     globalState.eventEmitter.removeAllListeners(eventName)
   }
 }

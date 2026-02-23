@@ -96,7 +96,6 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Aadhar number is required" });
             }
 
-            // Format validation
             if (!Regex.IsMatch(armyNo, @"^[a-zA-Z0-9]{1,20}$"))
             {
                 return Json(new { success = false, message = "Invalid army number format" });
@@ -117,7 +116,6 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Aadhar number is required" });
             }
 
-            // Format validation
             if (!Regex.IsMatch(armyNo, @"^[a-zA-Z0-9]{1,20}$"))
             {
                 return Json(new { success = false, message = "Invalid Aadhar number format" });
@@ -188,25 +186,18 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Merged PDF not found." });
             }
 
-            // STEP 1: Create a temp folder inside /wwwroot/
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempPdf");
             Directory.CreateDirectory(tempFolder);
 
-            // STEP 2: Copy original to temp file
             string tempFilePath = Path.Combine(tempFolder, originalFileName);
             System.IO.File.Copy(originalFilePath, tempFilePath, overwrite: true);
 
-            // STEP 3: Apply watermark on temp file
-            // (This modifies ONLY the copied file, NOT the main one)
             _watermark.AddAnnotationAfterDigitalSign(ipAddress, tempFilePath);
 
-            // STEP 4: Read the watermarked temp file for download
             byte[] fileBytes = System.IO.File.ReadAllBytes(tempFilePath);
 
-            // STEP 5: Delete temp file after reading (optional but recommended)
             System.IO.File.Delete(tempFilePath);
 
-            // STEP 6: Return PDF file for download
             return File(fileBytes, "application/pdf", originalFileName);
             
         }
@@ -246,25 +237,18 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Merged PDF not found." });
             }
 
-            // STEP 1: Create a temp folder inside /wwwroot/
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempPdf");
             Directory.CreateDirectory(tempFolder);
 
-            // STEP 2: Copy original to temp file
             string tempFilePath = Path.Combine(tempFolder, originalFileName);
             System.IO.File.Copy(originalFilePath, tempFilePath, overwrite: true);
 
-            // STEP 3: Apply watermark on temp file
-            // (This modifies ONLY the copied file, NOT the main one)
             _watermark.AddAnnotationAfterDigitalSign(ipAddress, tempFilePath);
 
-            // STEP 4: Read the watermarked temp file for download
             byte[] fileBytes = System.IO.File.ReadAllBytes(tempFilePath);
 
-            // STEP 5: Delete temp file after reading (optional but recommended)
             System.IO.File.Delete(tempFilePath);
 
-            // STEP 6: Return PDF file for download
             return File(fileBytes, "application/pdf", originalFileName);
         }
     }

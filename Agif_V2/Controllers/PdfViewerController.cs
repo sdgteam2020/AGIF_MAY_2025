@@ -324,29 +324,13 @@ namespace Agif_V2.Controllers
             return File(stream, "application/pdf");
 
         }
-        //public IActionResult UserManual()
-        //{
 
-        //    string inputPath = System.IO.Path.Combine(_env.WebRootPath, "ImportantPdfFiles", "UserManual.pdf");
-        //    ReaderProperties readerProperties = new ReaderProperties();
-        //    PdfReader pdfReader = new PdfReader(inputPath, readerProperties);
-        //    OpenPdf(pdfReader);
-        //    string outputPath = System.IO.Path.Combine(_env.WebRootPath, "ImportantPdfFiles", "TempPdf.pdf");
-        //    if (!System.IO.File.Exists(outputPath))
-        //    {
-        //        return NotFound("The PDF file could not be generated.");
-        //    }
 
-        //    var stream = new FileStream(outputPath, FileMode.Open, FileAccess.Read);
-        //    Response.Headers.Append("Content-Disposition", "inline; filename=TempPdf.pdf");
-        //    return File(stream, "application/pdf");
 
-        //}
         public IActionResult UserManual(bool applyWatermark = false)
         {
             string inputPath = System.IO.Path.Combine(_env.WebRootPath, "ImportantPdfFiles", "UserManual.pdf");
 
-            // If watermark is not to be applied, serve the original PDF
             if (!applyWatermark)
             {
                 var stream = new FileStream(inputPath, FileMode.Open, FileAccess.Read);
@@ -354,7 +338,6 @@ namespace Agif_V2.Controllers
                 return File(stream, "application/pdf");
             }
 
-            // If watermark is to be applied, proceed with the watermarking process
             ReaderProperties readerProperties = new ReaderProperties();
             PdfReader pdfReader = new PdfReader(inputPath, readerProperties);
             OpenPdf(pdfReader); // This should contain watermarking logic or any processing

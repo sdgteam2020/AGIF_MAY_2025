@@ -18,6 +18,5 @@ export const renderFooter = (instance, params) => {
     dom.parseHtmlToContainer(params.footer, footer)
   }
 
-  // Custom class
   dom.applyCustomClass(footer, params, 'footer')
 }

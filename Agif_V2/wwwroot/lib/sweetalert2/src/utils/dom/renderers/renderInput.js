@@ -1,4 +1,3 @@
-/// <reference path="../../../../sweetalert2.d.ts"/>
 
 /**
  * @typedef { HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement } Input
@@ -31,10 +30,8 @@ export const renderInput = (instance, params) => {
       return
     }
 
-    // set attributes
     setAttributes(inputClass, params.inputAttributes)
 
-    // set class
     inputContainer.className = swalClasses[inputClass]
 
     if (rerender) {
@@ -46,7 +43,6 @@ export const renderInput = (instance, params) => {
     if (rerender) {
       showInput(params)
     }
-    // set custom class
     setCustomClass(params)
   }
 }
@@ -72,7 +68,6 @@ const showInput = (params) => {
   const input = renderInputType[params.input](inputContainer, params)
   dom.show(inputContainer)
 
-  // input autofocus
   if (params.inputAutoFocus) {
     setTimeout(() => {
       dom.focusInput(input)
@@ -295,13 +290,10 @@ renderInputType.textarea = (textarea, params) => {
   const getMargin = (el) =>
     parseInt(window.getComputedStyle(el).marginLeft) + parseInt(window.getComputedStyle(el).marginRight)
 
-  // https://github.com/sweetalert2/sweetalert2/issues/2291
   setTimeout(() => {
-    // https://github.com/sweetalert2/sweetalert2/issues/1699
     if ('MutationObserver' in window) {
       const initialPopupWidth = parseInt(window.getComputedStyle(dom.getPopup()).width)
       const textareaResizeHandler = () => {
-        // check if texarea is still in document (i.e. popup wasn't closed in the meantime)
         if (!document.body.contains(textarea)) {
           return
         }

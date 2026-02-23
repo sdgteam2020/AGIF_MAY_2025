@@ -4,7 +4,6 @@ let welcomeShown = false;
 let lastUserQuery = "";
 let heartbeatTimer = null;
 
-// Elements
 const dlg = document.getElementById('asdcChat');
 const toggleBtn = document.getElementById('asdcChatToggle');
 const closeBtn = document.getElementById('asdcClose');
@@ -13,7 +12,6 @@ const inputEl = document.getElementById('asdcQuery');
 const sendBtn = document.getElementById('asdcSend');
 const loadingEl = document.getElementById('asdcLoading');
 
-// Focus-trap support
 function focusableElements(root) {
     return Array.from(root.querySelectorAll(
         'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
@@ -26,29 +24,24 @@ function openChat() {
     toggleBtn.setAttribute('aria-expanded', 'true');
     isOpen = true;
 
-    // First-time welcome
     if (!welcomeShown) {
         showWelcome();
         welcomeShown = true;
     }
 
-    // Start heartbeat while open (every 4 min)
     if (!heartbeatTimer) {
         heartbeatTimer = setInterval(() => {
             sendQuery('hi', true);
         }, 240000);
     }
 
-    // Focus management
     const f = focusableElements(dlg);
     if (f.length) f[0].focus();
 
-    // Scroll to last
     requestAnimationFrame(() => {
         chatBox.scrollTop = chatBox.scrollHeight;
     });
 
-    // Close on ESC
     document.addEventListener('keydown', onEsc, { capture: true });
     dlg.addEventListener('keydown', trapFocus);
 }
@@ -59,13 +52,11 @@ function closeChat() {
     toggleBtn.setAttribute('aria-expanded', 'false');
     isOpen = false;
 
-    // Stop heartbeat
     if (heartbeatTimer) {
         clearInterval(heartbeatTimer);
         heartbeatTimer = null;
     }
 
-    // Return focus to toggle
     toggleBtn.focus();
 
     document.removeEventListener('keydown', onEsc, { capture: true });

@@ -83,10 +83,8 @@ function validateDateFormat(input) {
 }
 
 $('.form-space').on("keypress", function (e) {
-    // Get the key code of the pressed key
     const keyCode = e.which;
 
-    // Allow only alphabets (A-Z, a-z) and numbers (0-9)
     if (keyCode == 32) {
         showErrorMessage('Only Alphabets and Numbers allowed');
         return false; // Block the keypress
@@ -96,10 +94,8 @@ $('.form-space').on("keypress", function (e) {
 });
 $('.form-control-Alphabets').on("keypress", function (e) {
 
-    // Get the key code of the pressed key
     const keyCode = e.which;
 
-    // Allow only alphabets (A-Z, a-z) and numbers (0-9)
     if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode == 32)) {
         return true; // Allow the keypress
     } else {
@@ -109,10 +105,8 @@ $('.form-control-Alphabets').on("keypress", function (e) {
 });
 $('.form-control:not(.form-email-domain)').on("keypress", function (e) {
 
-    // Get the key code of the pressed key
     const keyCode = e.which;
    
-    // Allow only alphabets (A-Z, a-z) and numbers (0-9)
     if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode >= 48 && keyCode <= 57) || (keyCode == 32)) {
         return true; // Allow the keypress
     } else {
@@ -124,7 +118,6 @@ $('.form-control:not(.form-email-domain)').on("keypress", function (e) {
 $('.form-email').on("keypress", function (e) {
     const keyCode = e.which;
 
-    // Allow only alphabets (A-Z, a-z) and numbers (0-9)
     if ((keyCode >= 65 && keyCode <= 90) ||  // A-Z
         (keyCode >= 97 && keyCode <= 122) ||  // a-z
         (keyCode >= 48 && keyCode <= 57) ||   // 0-9
@@ -138,10 +131,8 @@ $('.form-email').on("keypress", function (e) {
     }
 });
 $('.form-control-domainId').on("keypress", function (e) {
-    // Get the key code of the pressed key
     const keyCode = e.which;
 
-    // Allow only alphabets (A-Z, a-z) and numbers (0-9)
     if ((keyCode >= 65 && keyCode <= 90) || (keyCode >= 97 && keyCode <= 122) || (keyCode >= 48 && keyCode <= 57) || (keyCode == 32) || keyCode == 95) {
         return true; // Allow the keypress
     } else {
@@ -176,12 +167,10 @@ $('.isNumerictxt').on("keypress", function (e) {
 });
 
 function isNumeric(key) {
-    // Allow only digits 0–9
     return /^[0-9]$/.test(key);
 }
 
 function showErrorMessage(message) {
-    // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `
         <div class="alert alert-danger alert-dismissible fade show" id="validationerrormessage" role="alert">
             <i class="lni lni-cross-circle"></i> ${message}
@@ -190,7 +179,6 @@ function showErrorMessage(message) {
     `;
     $('body').append(alertHtml);
 
-    // Auto remove after 5 seconds
     setTimeout(function () {
         $('.alert-danger').fadeOut(300, function () {
             $(this).remove();

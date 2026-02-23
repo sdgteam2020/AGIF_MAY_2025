@@ -2,7 +2,6 @@
   var pieCharts = document.querySelectorAll('.pie-chart');
   
   Array.prototype.forEach.call(pieCharts, function(wrapperEl) {
-    // Pull our variables out of our helper div
     var dataset = wrapperEl.dataset;
     var percentage = dataset.percentage ? parseInt(dataset.percentage, 10) : 0;
     var diameter = dataset.diameter ? parseInt(dataset.diameter, 10) : 150;
@@ -10,7 +9,6 @@
     var fillColor = dataset.fillColor || '#f47b28'; // orange
     var bgColor = dataset.bgColor || '#fac5a1'; // light orange
     
-    // Size our wrapper element and add our percentage
     wrapperEl.style.height = diameter + 'px';
     wrapperEl.style.width = diameter + 'px';
     var percentageEl = document.createElement('span');
@@ -19,14 +17,12 @@
     percentageEl.innerText = percentage + '%';
     wrapperEl.appendChild(percentageEl);
     
-    // Setting up the values we're gonna use to draw our circles
     var center = diameter;
     var radius = center - (strokeWidth);
     var startAngle = degreesToRadians(-90);
     var fullCircle = degreesToRadians(365);
     var endAngle = startAngle + degreesToRadians(percentage / 100 * 365);
     
-    // Draw our canvas! Note we're doubling our sizes so we look good on high res displays
     var canvas = document.createElement('canvas');
     canvas.classList.add('pie-chart__canvas');
     canvas.height = diameter * 2;

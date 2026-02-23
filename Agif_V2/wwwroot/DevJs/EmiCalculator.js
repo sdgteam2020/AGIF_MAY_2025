@@ -52,7 +52,6 @@ function calculateEMI(loanAmount, annualRate, maxEmi) {
         
     const roundedEmi = emi.toFixed(2);
 
-    // Display result using jQuery
     $('#emiAmount').text(Number(roundedEmi).toLocaleString('en-IN', {
         style: 'currency',
         currency: 'INR',

@@ -41,21 +41,18 @@ namespace DataAccessLayer.Repositories
         {
             errorMessage = string.Empty;
 
-            // Check if file is null
             if (file == null)
             {
                 errorMessage = "No file selected.";
                 return false;
             }
 
-            // Check if the file type is PDF
             if (file.ContentType != "application/pdf")
             {
                 errorMessage = "Only PDF files are allowed.";
                 return false;
             }
 
-            // Check if the file size exceeds 1 MB (1 * 1024 * 1024 bytes)
             if (file.Length > 1 * 1024 * 1024)
             {
                 errorMessage = "File size cannot exceed 1 MB.";
@@ -113,7 +110,6 @@ namespace DataAccessLayer.Repositories
 
             int appId = existingUser.ApplicationId;
 
-            // Delete single entities
             await DeleteEntityIfExists(_context.trnEducationDetails, appId);
             await DeleteEntityIfExists(_context.trnMarriageward, appId);
             await DeleteEntityIfExists(_context.trnPropertyRenovation, appId);
@@ -121,21 +117,18 @@ namespace DataAccessLayer.Repositories
             await DeleteEntityIfExists(_context.trnClaimAccountDetails, appId);
             await DeleteEntityIfExists(_context.trnClaimAddressDetails, appId);
 
-            // Delete document uploads
             var documents = await _context.trnClaimDocumentUpload
                 .Where(d => d.ApplicationId == appId)
                 .ToListAsync();
             if (documents.Any())
                 _context.trnClaimDocumentUpload.RemoveRange(documents);
 
-            // Delete main application
             await DeleteEntityIfExists(_context.trnClaim, appId);
 
             await _context.SaveChangesAsync();
             return true;
         }
 
-        // ===== Helper Method =====
         private async Task DeleteEntityIfExists<TEntity>(DbSet<TEntity> dbSet, int applicationId) where TEntity : class
         {
             var entity = await dbSet.FirstOrDefaultAsync(e => EF.Property<int>(e, "ApplicationId") == applicationId);
@@ -332,14 +325,12 @@ namespace DataAccessLayer.Repositories
 
         public async Task<UserMapping?> GetCoDetails(int applicationId)
         {
-            // Step 1: Get the application by applicationId
             var application = await _context.trnClaim
                 .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);
 
             if (application == null)
                 return null;
 
-            // Step 3: Get the UserMapping for the PresentUnit where IsPrimary and IsActive are true
             var userMapping = await _context.trnUserMappings
                 .FirstOrDefaultAsync(m => m.UnitId == application.PresentUnit && m.IsPrimary);
 
@@ -388,26 +379,21 @@ namespace DataAccessLayer.Repositories
             string folderName = $"{PurposeType}_{ArmyNo}_{ApplicationId}";
             string folderPath = Path.Combine(tempFolder, folderName);
 
-            //  Check if the folder exists
             if (!Directory.Exists(folderPath))
             {
-                // Folder not found, return false or handle as needed
                 return false;
             }
 
             var fileUpload = new ClaimDocumentUpload();
             fileUpload.ApplicationId = ApplicationId;
-            // Add PDFs to the folder
             foreach (var file in files)
             {
                 if (file != null)
                 {
-                    // Generate a file name based on PurposeType, ArmyNo, ApplicationId, and the file name
                     string fileExtension = Path.GetExtension(file.FileName);
                     string fileName = $"{file.Name}{fileExtension}";
                     string outputFile = Path.Combine(folderPath, fileName);
 
-                    // Save the file to the folder
                     using (var fileStream = new FileStream(outputFile, FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);
@@ -456,14 +442,12 @@ namespace DataAccessLayer.Repositories
             }
             else if (PurposeType == "PR")
             {
-                // Process Property Renovation Details
                 var PRdetails = await _Property.GetByApplicationId(ApplicationId);
                 fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
             }
             else if (PurposeType == "SP")
             {
-                // Process Special Waiver Details
                 var SPdetails = await _Special.GetByApplicationId(ApplicationId);
                 fileUpload.OtherReasonsPdf = SPdetails.OtherReasonsPdf;
                 fileUpload.IsOtherReasonPdf = SPdetails.IsOtherReasonPdf;
@@ -648,7 +632,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.EducationDetailsResponse = EDmodel;
                 }
 
@@ -687,7 +670,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.PropertyRenovationResponse = PRModal;
                 }
                 else if (result.ApplicationType == 4)
@@ -703,7 +685,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.SplWaiverResponse = SPModal;
                 }
 
@@ -787,7 +768,6 @@ namespace DataAccessLayer.Repositories
 
 
                     data.Documents = lstdoc; // Assign the list of documents to the response object
-                    // Get all files in the directory
 
                 }
 
@@ -801,23 +781,19 @@ namespace DataAccessLayer.Repositories
 
         public async Task<(string Name, string Mobile, string Armyno)> GetCODetails(int mappingId)
         {
-            // Get the UserMapping by MappingId
             var userMapping = await _context.trnUserMappings.FirstOrDefaultAsync(m => m.MappingId == mappingId);
             if (userMapping == null)
                 return (string.Empty, string.Empty, string.Empty);
 
-            // Get the UserProfile by ProfileId from UserMapping
             var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(u => u.ProfileId == userMapping.MappingId);
             if (userProfile == null)
                 return (string.Empty, string.Empty, string.Empty);
 
-            // Get the RankName from MRanks using rank id from UserProfile
             var rank = await _context.MRanks.FirstOrDefaultAsync(r => r.RankId == userProfile.rank);
             string rankName = rank != null ? rank.RankName : string.Empty;
 
 
 
-            // Concatenate rankName and userName
             string fullName = $"{rankName} {userProfile.Name}".Trim();
             string mobile = userProfile.MobileNo ?? string.Empty; // Assuming MobileNo is the field name
 
@@ -843,7 +819,6 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> CheckExtensionofservice(int applicationid)
         {
-            // Fetch the application record by applicationid
             var application = await _context.trnClaim
                 .Where(a => a.ApplicationId == applicationid).FirstOrDefaultAsync();
 
@@ -1059,7 +1034,6 @@ namespace DataAccessLayer.Repositories
 
             foreach (var item in query)
             {
-                // Concatenate Email + EmailId
                 item.E_Mail_Id = $"{item.E_Mail_Id??string.Empty}@{item.EmailDomain??string.Empty}".Trim();
             }
             dataTable = query.ToDataTable();
@@ -1315,7 +1289,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.EducationDetailsResponse = EDmodel;
                 }
 
@@ -1352,7 +1325,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.PropertyRenovationResponse = PRModal;
                 }
                 else if (result.ApplicationType == 4)
@@ -1367,7 +1339,6 @@ namespace DataAccessLayer.Repositories
 
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
-                    // Directly assign the DTO
                     data.SplWaiverResponse = SPModal;
                 }
 

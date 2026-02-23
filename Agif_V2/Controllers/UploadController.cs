@@ -76,7 +76,6 @@ namespace Agif_V2.Controllers
             return View(application);
         }
 
-        // Update ProcessUpload to redirect to ApplicationDetails after upload
         [HttpPost]
         public async Task<IActionResult> Upload(FileUploadViewModel model, string formType, int applicationId, bool isExtension = false)
         {
@@ -94,7 +93,6 @@ namespace Agif_V2.Controllers
 
             formType = await GetFormType(formType, applicationId);
 
-            // Validate required files based on form type
             if (!ValidateRequiredFilesByFormType(model, formType, isExtension))
             {
                 return View("Upload", model);
@@ -136,12 +134,10 @@ namespace Agif_V2.Controllers
             return RedirectToAction("ApplicationDetails", "Upload");
         }
 
-        // ------------------- Helpers -------------------
         private bool ValidateRequiredFilesByFormType(FileUploadViewModel model, string formType, bool isExtension)
         {
             bool isValid = true;
 
-            // Common required files for all form types
             if (model.CancelledCheque == null)
             {
                 ModelState.AddModelError(nameof(model.CancelledCheque), "Cancelled Cheque is required.");
@@ -154,7 +150,6 @@ namespace Agif_V2.Controllers
                 isValid = false;
             }
 
-            // Form type specific validations
             switch (formType.ToUpper())
             {
                 case "CA":
@@ -170,8 +165,6 @@ namespace Agif_V2.Controllers
                         ModelState.AddModelError(nameof(model.DrivingLicensePdf), "Driving License is required for Car/Two Wheeler Loan.");
                         isValid = false;
                     }
-                    // Service Extension is optional (if applicable)
-                    // Service Extension validation based on isExtension flag
                     if (isExtension && model.SeviceExtnPdf == null)
                     {
                         ModelState.AddModelError(nameof(model.SeviceExtnPdf), "Service Extension Pt II order is required.");
@@ -185,8 +178,6 @@ namespace Agif_V2.Controllers
                         ModelState.AddModelError(nameof(model.QuotationPdf), "Quotation is required for Computer Loan.");
                         isValid = false;
                     }
-                    // Service Extension is optional (if applicable)
-                    // Service Extension validation based on isExtension flag
                     if (isExtension && model.SeviceExtnPdf == null)
                     {
                         ModelState.AddModelError(nameof(model.SeviceExtnPdf), "Service Extension Pt II order is required.");
@@ -195,7 +186,6 @@ namespace Agif_V2.Controllers
                     break;
 
                 case "HBA":
-                    // Only Cancelled Cheque and Pay Slip are required (already validated above)
                     break;
 
                 default:
@@ -249,14 +239,8 @@ namespace Agif_V2.Controllers
                 if (file.Length > 1 * 1024 * 1024)
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
 
-                //if (!await _pdfUpload.IsValidPdfFile(file))
-                //    ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
 
-                //if (await _pdfUpload.IsPdfPasswordProtected(file))
-                //    ModelState.AddModelError(file.Name, "Password-protected PDF are not allowed.");
 
-                //if (await _pdfUpload.ContainsMaliciousPdfContent(file))
-                //    ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
             }
 
             return ModelState.IsValid;

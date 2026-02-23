@@ -62,7 +62,6 @@ namespace Agif_V2.Controllers
             int id = TempData["RedirectapplicationId"] is int applicationId ? applicationId : 0 ;
             TempData["loantypeNew"] = loanType ?? string.Empty;
             TempData["applicantcategoryNew"] = applicantCategory ?? string.Empty;
-            //TempData["applicationId"] = id;
 
             var response= new DTOCommonOnlineApplicationResponse();
             response = null;
@@ -100,7 +99,6 @@ namespace Agif_V2.Controllers
             {
                 return Json("Invalid Request.");
             }
-            // Map of (Prefix, RankId) to RetirementAge
             var prefixRankRetirementMap = new Dictionary<(int prefix, int rank), int>
             {
                 { (11, 21), 57 },
@@ -155,24 +153,8 @@ namespace Agif_V2.Controllers
             }
         }
 
-        //public async Task<JsonResult> CheckExistUser(string armyNumber, string Prefix, string Suffix, int appType)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Json("Invalid Request.");
-        //    }
 
-        //    var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
 
-        //    if (existingUser != null) // Check if the user exists
-        //    {
-        //        return Json(new { exists = true }); // User exists
-        //    }
-        //    else
-        //    {
-        //        return Json(new { exists = false }); // User does not exist
-        //    }
-        //}
         [HttpPost]
         public async Task<JsonResult> CheckExistUser([FromBody] CommonParameters model)
         {
@@ -223,18 +205,8 @@ namespace Agif_V2.Controllers
             return RedirectToAction("OnlineApplication");
         }
 
-        //public IActionResult Redirection()
-        //{
 
-        //    string LoanType = Request.Form["loanType"];
-        //    string ApplicantCategory = Request.Form["applicantCategory"];
 
-        //    //TempData["LoanType"] = loanType;
-        //    //TempData["ApplicantCategory"] = applicantCategory;
-        //    TempData["LoanType"] = LoanType;
-        //    TempData["ApplicantCategory"] = ApplicantCategory;
-        //    return RedirectToAction("OnlineApplication");
-        //}
 
         public async Task<JsonResult> CheckForCoRegister(string ArmyNo)
         {
@@ -264,12 +236,10 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("", "Please select an application type.");
             }
 
-            // Validate all nested objects
             ValidateModel(model.AddressDetails, "AddressDetails");
             ValidateModel(model.AccountDetails, "AccountDetails");
             ValidateModel(model.CommonData, "CommonData");
 
-            // Form-specific validation
             switch (formType)
             {
                 case "CA":
@@ -289,7 +259,6 @@ namespace Agif_V2.Controllers
                 return View("OnlineApplication", model);
             }
 
-            // Insert into database
             CommonDataModel common = new CommonDataModel();
             try
             {
@@ -321,7 +290,6 @@ namespace Agif_V2.Controllers
                     await _account.Add(model.AccountDetails);
                 }
 
-                // Form-specific insert mapping
                 var formModelMap = new Dictionary<string, object>
                  {
                      { "HBA", model.HBAApplication },
@@ -360,7 +328,6 @@ namespace Agif_V2.Controllers
             return RedirectToAction("Upload", "Upload");
         }
 
-        // Helper method to determine form type
         private string? GetFormType(DTOOnlineApplication model)
         {
             if (model.CarApplication != null) return "CA";
@@ -369,7 +336,6 @@ namespace Agif_V2.Controllers
             return null;
         }
 
-        // Helper method to validate any object
         private void ValidateModel(object model, string prefix)
         {
             if (model == null) return;
@@ -413,7 +379,6 @@ namespace Agif_V2.Controllers
                 string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
                 if (pdfFiles.Length == 0) return JsonError("No PDF files found in the specified folder.");
 
-                // Generate new PDF if needed
                 pdfFiles = await GeneratePdfIfNeeded(applicationId, sourceFolderPath, folderPath, isRejected, isApproved, pdfFiles, ip);
 
                 string mergedPdfPath = PrepareMergedPdfPath(applicationId, armyNo);
@@ -480,8 +445,6 @@ namespace Agif_V2.Controllers
                             .OrderBy(file =>
                             {
                                 bool containsApplication = Path.GetFileName(file).Contains("Application");
-                                // Return a tuple where the first item is the priority (true/false) for sorting
-                                // We want "application" files to come first, so we return a boolean
                                 return containsApplication ? 0 : 1;
                             })
                             .ThenBy(file => Path.GetFileName(file))  // After prioritizing, order by the filename
@@ -581,7 +544,6 @@ namespace Agif_V2.Controllers
                     return Json(new { success = false, message = "Application not found" });
                 }
 
-                // Create a response object with the required fields for the modal
                 var response = new
                 {
                     success = true,
@@ -604,7 +566,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception if you have logging setup
                 return Json(new { success = false, message = "An error occurred while fetching application details" });
             }
         }
@@ -618,26 +579,21 @@ namespace Agif_V2.Controllers
             }
             try
             {
-                // Fetch the PDF file path
                 var pdfFilePathResult = await GetPdfFilePath(applicationId);
                 if (pdfFilePathResult.Value is not string pdfPath || string.IsNullOrEmpty(pdfPath))
                 {
                     throw new FileNotFoundException("The specified file path is invalid or empty.");
                 }
 
-                // Resolve the full path
                 string fullPath = Path.Combine(_env.WebRootPath, pdfPath.TrimStart('/'));
 
-                // Check if the file exists
                 if (!System.IO.File.Exists(fullPath))
                 {
                     throw new FileNotFoundException("The specified file does not exist.", fullPath);
                 }
 
-                // Read the PDF file into a byte array
                 byte[] fileBytes = System.IO.File.ReadAllBytes(fullPath);
 
-                // Return the byte array as a JSON response
                 return Json(fileBytes);
             }
             catch (Exception ex)
@@ -652,7 +608,6 @@ namespace Agif_V2.Controllers
             string directoryPath = Path.Combine(_env.WebRootPath, "MergePdf");
             try
             {
-                // Call the FileUtility method to save the Base64 string to a file
                 await _fileUtility.SaveBase64ToFileAsync(base64String, directoryPath, fileName); 
                 return Json(new { success = true, message = "File saved successfully." });
             }
@@ -661,17 +616,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
             }
         }
-        //public async Task<JsonResult> GetDataByArmyNumber(string ArmyNo)
-        //{
-        //    var applicationId = await _IonlineApplication1.GetLatestApplicationIdByArmyNo(ArmyNo);
-        //    if (applicationId == null)
-        //    {
-        //        return Json(new { success = false, message = "Application ID not found." });
-        //    }
 
-        //    DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
-        //    return Json(data.OnlineApplicationResponse);
-        //}
         [HttpPost]
         public async Task<IActionResult> GetDataByArmyNumber([FromBody] SessionUserDTO sessionUserDTO)
         {
@@ -698,9 +643,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public IActionResult HandleApplicationRedirect(int appId, string type)
         {
-            // Here, you can perform any necessary processing based on the appId and type
 
-            // Depending on the type, determine the URL to redirect to
             string redirectUrl = string.Empty;
 
             if (type == "Loan")
@@ -714,7 +657,6 @@ namespace Agif_V2.Controllers
                 TempData["RedirectClaimapplicationId"] = appId;
             }
 
-            // Return the redirect URL to the client-side
             return Json(new { success = true, redirectUrl = redirectUrl });
         }
 

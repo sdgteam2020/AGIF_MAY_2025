@@ -9,14 +9,12 @@ namespace Agif_V2.Helpers
         {
             try
             {
-                // Ensure output directory exists
                 var outputDirectory = Path.GetDirectoryName(outputPath);
                 if (!Directory.Exists(outputDirectory))
                 {
                     Directory.CreateDirectory(outputDirectory);
                 }
 
-                // Validate input files exist
                 foreach (string file in inputFiles)
                 {
                     if (!File.Exists(file))
@@ -44,7 +42,6 @@ namespace Agif_V2.Helpers
                                         {
                                             using (var inputPdfDocument = new PdfDocument(inputPdfReader))
                                             {
-                                                // Merge all pages from the input document
                                                 merger.Merge(inputPdfDocument, 1, inputPdfDocument.GetNumberOfPages());
                                             }
                                         }
@@ -53,7 +50,6 @@ namespace Agif_V2.Helpers
                                 catch (Exception fileEx)
                                 {
                                     Console.WriteLine($"Error processing file {file}: {fileEx.Message}");
-                                    // Continue with other files instead of failing completely
                                     continue;
                                 }
                             }
@@ -61,7 +57,6 @@ namespace Agif_V2.Helpers
                     }
                 }
 
-                // Verify the output file was created
                 if (File.Exists(outputPath))
                 {
                     Console.WriteLine($"PDF merged successfully: {outputPath}");
@@ -75,7 +70,6 @@ namespace Agif_V2.Helpers
             }
             catch (Exception ex)
             {
-                // Log the exception with more details
                 Console.WriteLine($"Error merging PDFs: {ex.Message}");
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return false;

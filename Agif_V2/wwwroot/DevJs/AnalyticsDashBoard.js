@@ -1,5 +1,4 @@
 ﻿$(function () {
-    //Declaring charts
     let topRanksChart = null;
     let topRegtChart = null;
     let topUnitsChart = null;
@@ -13,7 +12,6 @@
     let topApplicantsChart = null;
     let comparisonChart = null;
 
-    // ---- DOM ----
     const $yearSelect = $('#yearSelect');
     const $btnLoan = $('#btnLoan');
     const $btnMaturity = $('#btnMaturity');
@@ -21,7 +19,6 @@
     const $matCanvas = $('#maturityChartCanvas');
     const currentYear = new Date().getFullYear();
     const chartvalue = $('#AdminTypeId').val();
-    // ---- state ----
     let activeMode = 'loan';   // 'loan' | 'maturity'
     let loanChart = null;
     let maturityChart = null;
@@ -41,16 +38,13 @@
         $('#btnMaturity').removeClass('d-none');
     }
 
-    // ---- utils ----
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     function showLoan() { $loanCanvas.removeClass('d-none'); $matCanvas.addClass('d-none'); }
     function showMaturity() { $matCanvas.removeClass('d-none'); $loanCanvas.addClass('d-none'); }
 
-    // years
     for (let y = currentYear; y >= 2000; y--) $yearSelect.append(new Option(y, y));
     $yearSelect.val(currentYear);
 
-    // ===================== LOAN CHART =====================
     function initLoanChart() {
         if (loanChart) return;
         const ctx = $loanCanvas[0].getContext('2d');
@@ -77,7 +71,6 @@
         });
 
         const topCtx = $('#topRanksChart')[0].getContext('2d');
-        // window.topRanksChart.destroy();
 
         topRanksChart = new Chart(topCtx, {
             type: 'bar',
@@ -129,7 +122,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -145,9 +137,7 @@
         });
 
 
-        // ---- Chart 3: Top Regt/Corps (Regt on X, Count on Y) ----
         const topregtCtx = $('#topRegtChart')[0].getContext('2d');
-        // window.topRegtChart.destroy();
         topRegtChart = new Chart(topregtCtx, {
             type: 'bar',
             data: {
@@ -183,7 +173,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -199,7 +188,6 @@
         });
 
 
-        // ---- Chart 4: Loan Statistics by Application Type & Vehicle Loan Type ----
         const loanCtx = $('#loanStatisticsChart')[0].getContext('2d');
 
         loanStatisticsChart = new Chart(loanCtx, {
@@ -271,7 +259,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -286,10 +273,8 @@
             }]
         });
 
-        // ---- Chart 5=: Top 10 Units by Number of Applications ----
         const topUnitsCtx = $('#topUnitsChart')[0].getContext('2d');
 
-        // ---- Chart: Top 10 Units (Horizontal Bar) ----
         topUnitsChart = new Chart(topUnitsCtx, {
             type: 'bar',
             data: {
@@ -358,7 +343,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -373,7 +357,6 @@
             }]
         });
 
-        //chart 6
         const toploanUnitsCtx = $('#topUnitsLoanChart')[0].getContext('2d');
 
         topUnitsLoanChart = new Chart(toploanUnitsCtx, {
@@ -434,12 +417,6 @@
                     x: {
                         title: { display: true, text: 'Unit Name', font: { weight: 'bold', size: 14 } },
                         stacked: false,
-                        //ticks: {
-                        //    maxRotation: 0,
-                        //    minRotation: 0,
-                        //    autoSkip: false,
-                        //    font: { size: 12 }
-                        //}
                     }
                 },
                 animation: { duration: 2000, easing: 'easeInOutQuart' }
@@ -454,10 +431,8 @@
                             meta.data.forEach(function (element, index) {
                                 const value = dataset.data[index];
 
-                                // Skip if value is 0 or too small
                                 if (value < 1000) return;
 
-                                // Format the value
                                 let displayText;
                                 if (value >= 10000000) {
                                     displayText = '₹' + (value / 10000000).toFixed(1) + 'Cr';
@@ -469,7 +444,6 @@
                                     displayText = '₹' + value;
                                 }
 
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 10px Arial';
                                 ctx.textAlign = 'center';
@@ -483,7 +457,6 @@
         });
 
 
-        //chart 7 Top 10 Dealers
         const topDealersCtx = $('#topDealersChart')[0].getContext('2d');
 
         topDealersChart = new Chart(topDealersCtx, {
@@ -573,18 +546,14 @@
                         const value = dataset.data[index];
                         const percentage = ((value / total) * 100).toFixed(1);
 
-                        // Get the position
                         const { x, y } = datapoint.tooltipPosition();
 
-                        // Dynamic font size based on percentage
                         let fontSize = 12;
                         if (parseFloat(percentage) < 3) {
-                            //fontSize = 10;
                             return;
                         }
 
 
-                        // Draw text background
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                         ctx.font = `bold ${fontSize}px Arial`;
                         const text1 = value.toString();
@@ -596,14 +565,12 @@
 
                         ctx.fillRect(x - maxWidth / 2 - 4, y - 18, maxWidth + 8, 32);
 
-                        // Draw count text
                         ctx.fillStyle = '#000';
                         ctx.font = `bold ${fontSize}px Arial`;
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         ctx.fillText(text1, x, y - 6);
 
-                        // Draw percentage text
                         ctx.font = `normal ${fontSize - 1}px Arial`;
                         ctx.fillText(text2, x, y + 6);
                     });
@@ -612,7 +579,6 @@
         });
 
 
-        //chart 8 Loan Amount for Top 10 Dealers
 
         const topLoanDealers = $('#topLoanDealersChart')[0].getContext('2d');
 
@@ -651,7 +617,6 @@
                                     const value = data.datasets[0].data[i];
                                     const percentage = ((value / total) * 100).toFixed(1);
 
-                                    // Format amount in Indian format
                                     let formattedAmount;
                                     if (value >= 10000000) {
                                         formattedAmount = '₹' + (value / 10000000).toFixed(1) + 'Cr';
@@ -705,10 +670,8 @@
                         const value = dataset.data[index];
                         const percentage = ((value / total) * 100).toFixed(1);
 
-                        // Only show label if percentage > 5% to avoid clutter
                         if (parseFloat(percentage) < 3) return;
 
-                        // Format amount in Indian format
                         let formattedAmount;
                         if (value >= 10000000) {
                             formattedAmount = '₹' + (value / 10000000).toFixed(1) + 'Cr';
@@ -720,10 +683,8 @@
                             formattedAmount = '₹' + value;
                         }
 
-                        // Get the position of the label
                         const { x, y } = datapoint.tooltipPosition();
 
-                        // Draw text background (optional - for better readability)
                         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
                         ctx.font = 'bold 11px Arial';
                         const text1 = formattedAmount;
@@ -734,14 +695,12 @@
 
                         ctx.fillRect(x - maxWidth / 2 - 4, y - 18, maxWidth + 8, 32);
 
-                        // Draw amount text
                         ctx.fillStyle = '#000';
                         ctx.font = 'bold 11px Arial';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         ctx.fillText(text1, x, y - 6);
 
-                        // Draw percentage text
                         ctx.font = 'normal 10px Arial';
                         ctx.fillText(text2, x, y + 6);
                     });
@@ -749,7 +708,6 @@
             }]
         });
 
-        //chart 9
 
         const topPersonnelCtx = $('#topPersonnelChart')[0].getContext('2d');
 
@@ -840,7 +798,6 @@
             }]
         });
 
-        //chart 10
         const statusChartCtx = $('#applicationStatusChart')[0].getContext('2d');
 
         applicationStatusChart = new Chart(statusChartCtx, {
@@ -878,7 +835,6 @@
             }
         });
 
-        //chart 11
         const ageGroupsCtx = $('#AgeGroupsChart')[0].getContext('2d');
 
         ageGroupsChart = new Chart(ageGroupsCtx, {
@@ -930,7 +886,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -946,7 +901,6 @@
         });
 
 
-        //chart 12
         const MultipleLoansChartCtx = $('#TopApplicantsMultipleLoansChart')[0].getContext('2d');
 
         topApplicantsChart = new Chart(MultipleLoansChartCtx, {
@@ -1009,7 +963,6 @@
             }
         });
 
-        //chart 13
         const comparisonChartCtx = $('#LoancomparisonChart')[0].getContext('2d');
 
         comparisonChart = new Chart(comparisonChartCtx, {
@@ -1047,11 +1000,6 @@
                             text: 'Unit Name',
                             font: { weight: 'bold', size: 14 }
                         },
-                        //ticks: {
-                        //    maxRotation: 45,
-                        //    minRotation: 45,
-                        //    font: { size: 11 }
-                        //}
                     },
                     y: {
                         stacked: true,
@@ -1080,19 +1028,15 @@
                             meta.data.forEach((bar, index) => {
                                 const value = dataset.data[index];
 
-                                // Only show label if value > 0
                                 if (value > 0) {
-                                    // Calculate position
                                     const x = bar.x;
                                     const y = bar.y + (bar.height / 2); // Center of the bar segment
 
-                                    // Set text style
                                     ctx.fillStyle = '#000'; // White text
                                     ctx.font = 'bold 11px Arial';
                                     ctx.textAlign = 'center';
                                     ctx.textBaseline = 'middle';
 
-                                    // Draw text
                                     ctx.fillText(value.toString(), x, y);
                                 }
                             });
@@ -1136,7 +1080,6 @@
                 loanChart.data.datasets[3].data = rows.map(r => r.total || (r.ca + r.pca + r.hba));
                 loanChart.update();
 
-                // Chart 2: top ranks
                 const ranksRaw = resp.data.topRanks || [];
                 const ranksSorted = ranksRaw
                     .map(r => ({ rank: r.rank ?? 'N/A', count: Number(r.rankCount || 0) }))
@@ -1147,7 +1090,6 @@
                 topRanksChart.data.datasets[0].data = ranksSorted.map(x => x.count);
                 topRanksChart.update();
 
-                // Chart 3: top Regt/Corps
                 const regtRaw = resp.data.topRegiments || [];
                 const regtSorted = regtRaw
                     .map(r => ({ regt: r.regt ?? 'N/A', count: Number(r.regtCount || 0) }))
@@ -1158,7 +1100,6 @@
                 topRegtChart.data.datasets[0].data = regtSorted.map(x => x.count);
                 topRegtChart.update();
 
-                //chart 4
                 const rawData = (resp.data.loanStats || [])
                     .map(item => ({
                         vehLoanType: item.vehLoanType || 'N/A',
@@ -1167,7 +1108,6 @@
                     }))
                     .sort((a, b) => b.loanCount - a.loanCount);
 
-                // Color palette - cycle through colors
                 const colors = [
                     'rgba(0, 123, 255, 0.8)',    // #007bff
                     'rgba(40, 167, 69, 0.8)',    // #28a745
@@ -1179,7 +1119,6 @@
 
                 const backgroundColors = rawData.map((_, index) => colors[index % colors.length]);
 
-                // Update chart
                 loanStatisticsChart.data.labels = rawData.map(x => x.loanType);
                 loanStatisticsChart.data.datasets[0].data = rawData.map(x => x.loanCount);
                 loanStatisticsChart.data.datasets[0].backgroundColor = backgroundColors;
@@ -1187,7 +1126,6 @@
                 loanStatisticsChart.update();
 
 
-                //chart 5
                 const UnitrawData = (resp.data.topUnits || [])
                     .map(item => ({
                         unitName: item.unitName || 'N/A',
@@ -1196,7 +1134,6 @@
                     .sort((a, b) => b.totalApplications - a.totalApplications)
                     .slice(0, 10);
 
-                // Color gradient - Top performers get darker/bolder colors
                 const Unitcolors = [
                     'rgba(0, 123, 255, 0.9)',    // Top 1 - Bold Blue
                     'rgba(0, 123, 255, 0.85)',   // Top 2
@@ -1212,14 +1149,12 @@
 
                 const UnitbackgroundColors = UnitrawData.map((_, index) => Unitcolors[index]);
 
-                // Update chart - Note: for horizontal bars, labels are Y-axis
                 topUnitsChart.data.labels = UnitrawData.map(x => x.unitName);
                 topUnitsChart.data.datasets[0].data = UnitrawData.map(x => x.totalApplications);
                 topUnitsChart.data.datasets[0].backgroundColor = UnitbackgroundColors;
                 topUnitsChart.update();
 
 
-                //chart 6
 
                 const rawLoanAmountData = (resp.data.topUnitsByLoanAmount || [])
                     .map(item => ({
@@ -1239,10 +1174,8 @@
                 const hbaLoanData = rawLoanAmountData.map(x => x.totalHbaLoan);
                 const totalLoanData = rawLoanAmountData.map(x => x.totalLoanAmount);
 
-                // Attach raw data to chart instance for tooltip usage
                 topUnitsLoanChart.rawLoanData = rawLoanAmountData;
 
-                // Update chart datasets (grouped)
                 topUnitsLoanChart.data.labels = unitLabelsLoan;
                 topUnitsLoanChart.data.datasets = [
                     { label: 'Car Loan', data: carLoanData, backgroundColor: 'rgba(0,123,255,0.85)' },
@@ -1251,7 +1184,6 @@
                     { label: 'Total Loan', data: totalLoanData, backgroundColor: 'rgba(220,53,69,0.85)' }
                 ];
 
-                // ensure axis labels and stacked flags retain defaults (grouped)
                 topUnitsLoanChart.options.scales.x.title = { display: true, text: 'Unit Name', font: { weight: 'bold', size: 14 } };
                 topUnitsLoanChart.options.scales.y.title = { display: true, text: 'Loan Amount (₹)', font: { weight: 'bold', size: 14 } };
                 topUnitsLoanChart.options.scales.x.stacked = false;
@@ -1260,7 +1192,6 @@
                 topUnitsLoanChart.update();
 
 
-                //chart 7
                 const dealers = (resp.data.topDealers || [])
                     .map(d => ({ name: d.dealerName || 'N/A', count: Number(d.totalApplications || 0) }))
                     .sort((a, b) => b.count - a.count)
@@ -1270,7 +1201,6 @@
                 topDealersChart.data.datasets[0].data = dealers.map(d => d.count);
                 topDealersChart.update();
 
-                //chart 8
                 const Loandealers = (resp.data.topLoanDealers || [])
                     .map(d => ({
                         name: d.dealerName || 'N/A',
@@ -1298,7 +1228,6 @@
 
                 topLoanDealersChart.update();
 
-                //chart 9
                 const topPersonnel = (resp.data.topPersonnel || [])
                     .map(item => ({
                         displayName: item.rank + ' ' + item.applicantName,
@@ -1330,8 +1259,6 @@
                 topPersonnelChart.update();
 
 
-                //chart 10
-                // --- Doughnut Chart: Applications by Status ---
 
                 if (resp.data.statusCounts != 0) {
                     const statusData = [
@@ -1340,7 +1267,6 @@
                         resp.data.statusCounts[0].rejectedCount
                     ];
 
-                    // Update dataset dynamically
                     applicationStatusChart.data.datasets[0].data = statusData;
                 }
                 else {
@@ -1349,14 +1275,11 @@
                 applicationStatusChart.update();
 
 
-                //chart 11
                 const ageGroupsData = resp.data.ageGroups;
 
-                // Extract labels and counts dynamically
                 const ageGroupsLabels = ageGroupsData.map(x => x.ageGroup);
                 const ageGroupsCounts = ageGroupsData.map(x => x.totalApplications);
 
-                // Optional: assign colors dynamically
                 const ageGroupsColors = [
                     'rgba(75,192,192,0.8)',
                     'rgba(54,162,235,0.8)',
@@ -1374,30 +1297,23 @@
                 ageGroupsChart.update();
 
 
-                //chart 12
                 const multipleLoans = resp.data.multipleLoans;
                 const datasets = multipleLoans.map((app, idx) => {
 
-                    // Filter and parse valid dates only
                     const points = (app.loanDates || [])
                         .filter(dateStr => dateStr != null && dateStr !== '')  // Remove null/empty
                         .map((dateStr, i) => {
-                            // Try to parse the date
                             let date;
 
-                            // Handle different date formats
                             if (typeof dateStr === 'string') {
-                                // ISO format: "2023-05-15T10:30:00"
                                 date = new Date(dateStr);
                             } else if (typeof dateStr === 'object' && dateStr !== null) {
-                                // Already a date object
                                 date = dateStr;
                             } else {
                                 console.warn('Invalid date format:', dateStr);
                                 return null;
                             }
 
-                            // Validate the date
                             if (isNaN(date.getTime())) {
                                 console.warn('Invalid date:', dateStr);
                                 return null;
@@ -1443,10 +1359,8 @@
                 topApplicantsChart.update();
 
 
-                //chart 13
                 const loanDataByUnit = resp.data.loanTypes;  // Assuming `resp.data` contains the loan data
 
-                // Prepare the datasets
                 const Compdatasets = [
                     {
                         label: 'Car Loans',
@@ -1474,16 +1388,13 @@
                     }
                 ];
 
-                // Prepare labels (unit names)
                 const labels = loanDataByUnit.map(unit => unit.unitName);
 
-                // Update chart data
                 comparisonChart.data.labels = labels;
 
 
                 comparisonChart.data.datasets = Compdatasets;
 
-                // Update the chart
                 comparisonChart.update();
 
             },
@@ -1494,7 +1405,6 @@
         });
     }
 
-    // ===================== MATURITY CHART =====================
     function initMaturityChart() {
         if (maturityChart) return;
         const ctx = $matCanvas[0].getContext('2d');
@@ -1525,7 +1435,6 @@
             topRanksChart.destroy();
             topRanksChart = null; // optional: clear reference
         }
-        //window.topRanksChart.destroy();
         topRanksChart = new Chart(topCtx, {
             type: 'bar',
             data: {
@@ -1576,7 +1485,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -1592,13 +1500,11 @@
         });
 
 
-        // ---- Chart 3: Top Regt/Corps (Regt on X, Count on Y) ----
         const topregtCtx = $('#topRegtChart')[0].getContext('2d');
         if (topRegtChart) {
            topRegtChart.destroy();
             topRegtChart = null; // optional: clear reference
         }
-        //window.topRegtChart.destroy();
         topRegtChart = new Chart(topregtCtx, {
             type: 'bar',
             data: {
@@ -1634,7 +1540,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -1650,15 +1555,12 @@
         });
 
 
-        // ---- Chart 5=: Top 10 Units by Number of Applications ----
         const topUnitsCtx = $('#topUnitsChart')[0].getContext('2d');
 
-        // ---- Chart: Top 10 Units (Horizontal Bar) ----
         if (topUnitsChart ) {
             topUnitsChart.destroy();
             topUnitsChart = null; // optional: clear reference
         }
-        // window.topUnitsChart.destroy();
         topUnitsChart = new Chart(topUnitsCtx, {
             type: 'bar',
             data: {
@@ -1727,7 +1629,6 @@
                         const meta = chart.getDatasetMeta(i);
                         if (!meta.hidden) {
                             meta.data.forEach(function (element, index) {
-                                // Draw the text
                                 ctx.fillStyle = '#000';
                                 ctx.font = 'bold 12px Arial';
                                 ctx.textAlign = 'center';
@@ -1759,8 +1660,6 @@
                     alert(resp?.message || "Failed to load Maturity data");
                     return;
                 }
-                // Flexible mapping: accept several possible field names
-                // Prefer: monthlyMaturity[] but fallback to monthlyApplications[] if that’s your shape
                 const raw = resp.data?.monthlyMaturity || resp.data?.monthlyApplications || [];
                 const rows = raw
                     .map(m => ({
@@ -1778,14 +1677,12 @@
                 maturityChart.data.datasets[2].data = rows.map(r => r.hba);
                 maturityChart.data.datasets[3].data = rows.map(r => r.total || (r.car + r.pc + r.hba));
 
-                // Auto-hide empty series for maturity if endpoint doesn’t provide per-scheme
                 maturityChart.getDatasetMeta(0).hidden = maturityChart.data.datasets[0].data.every(v => !v);
                 maturityChart.getDatasetMeta(1).hidden = maturityChart.data.datasets[1].data.every(v => !v);
                 maturityChart.getDatasetMeta(2).hidden = maturityChart.data.datasets[2].data.every(v => !v);
 
                 maturityChart.update();
 
-                // Chart 2: top ranks
                 const ranksRaw = resp.data.topRanks || [];
                 const ranksSorted = ranksRaw
                     .map(r => ({ rank: r.rank ?? 'N/A', count: Number(r.rankCount || 0) }))
@@ -1796,7 +1693,6 @@
                 topRanksChart.data.datasets[0].data = ranksSorted.map(x => x.count);
                 topRanksChart.update();
 
-                // Chart 3: top Regt/Corps
                 const regtRaw = resp.data.topRegiments || [];
                 const regtSorted = regtRaw
                     .map(r => ({ regt: r.regt ?? 'N/A', count: Number(r.regtCount || 0) }))
@@ -1807,7 +1703,6 @@
                 topRegtChart.data.datasets[0].data = regtSorted.map(x => x.count);
                 topRegtChart.update();
 
-                //chart 5
                 const UnitrawData = (resp.data.topUnits || [])
                     .map(item => ({
                         unitName: item.unitName || 'N/A',
@@ -1816,8 +1711,6 @@
                     .sort((a, b) => b.totalApplications - a.totalApplications)
                     .slice(0, 10);
 
-                // Color gradient - Top performers get darker/bolder colors
-                // Color palette - cycle through colors
                 const colors = [
                     'rgba(0, 123, 255, 0.9)',    // Top 1 - Bold Blue
                     'rgba(0, 123, 255, 0.85)',   // Top 2
@@ -1833,13 +1726,11 @@
 
                 const UnitbackgroundColors = UnitrawData.map((_, index) => colors[index]);
 
-                // Update chart - Note: for horizontal bars, labels are Y-axis
                 topUnitsChart.data.labels = UnitrawData.map(x => x.unitName);
                 topUnitsChart.data.datasets[0].data = UnitrawData.map(x => x.totalApplications);
                 topUnitsChart.data.datasets[0].backgroundColor = UnitbackgroundColors;
                 topUnitsChart.update();
 
-                // your existing chart logic here...
             },
             error: function (xhr, status, error) {
                 console.error('Error loading analytics:', error);
@@ -1848,7 +1739,6 @@
         });
     }
     
-    // ===================== COMMON: value labels plugin =====================
     function valueLabelsPlugin() {
         return {
             id: 'valueLabels',
@@ -1871,7 +1761,6 @@
         };
     }
 
-    // ===================== EVENTS =====================
     function refreshActive(year) {
         if (activeMode === 'loan') {
             initLoanChart();     // create if missing
@@ -1884,15 +1773,12 @@
         }
     }
 
-    // initial load
     refreshActive(currentYear);
 
-    // year change
     $yearSelect.on('change', function () {
         refreshActive($(this).val());
     });
 
-    // button toggles
     $btnLoan.on('click', function () {
         if (activeMode === 'loan') return;
         activeMode = 'loan';

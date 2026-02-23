@@ -144,19 +144,13 @@ function populateSelectOptions(popup, inputOptions, params) {
   inputOptions.forEach((inputOption) => {
     const optionValue = inputOption[0]
     const optionLabel = inputOption[1]
-    // <optgroup> spec:
-    // https://www.w3.org/TR/html401/interact/forms.html#h-17.6
-    // "...all OPTGROUP elements must be specified directly within a SELECT element (i.e., groups may not be nested)..."
-    // check whether this is a <optgroup>
     if (Array.isArray(optionLabel)) {
-      // if it is an array, then it is an <optgroup>
       const optgroup = document.createElement('optgroup')
       optgroup.label = optionValue
       optgroup.disabled = false // not configurable for now
       select.appendChild(optgroup)
       optionLabel.forEach((o) => renderOption(optgroup, o[1], o[0]))
     } else {
-      // case of <option>
       renderOption(select, optionLabel, optionValue)
     }
   })
@@ -211,7 +205,6 @@ const formatInputOptions = (inputOptions) => {
     inputOptions.forEach((value, key) => {
       let valueFormatted = value
       if (typeof valueFormatted === 'object') {
-        // case of <optgroup>
         valueFormatted = formatInputOptions(valueFormatted)
       }
       result.push([key, valueFormatted])
@@ -220,7 +213,6 @@ const formatInputOptions = (inputOptions) => {
     Object.keys(inputOptions).forEach((key) => {
       let valueFormatted = inputOptions[key]
       if (typeof valueFormatted === 'object') {
-        // case of <optgroup>
         valueFormatted = formatInputOptions(valueFormatted)
       }
       result.push([key, valueFormatted])

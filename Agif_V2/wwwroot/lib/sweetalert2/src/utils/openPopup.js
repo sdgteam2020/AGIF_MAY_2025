@@ -25,7 +25,6 @@ export const openPopup = (params) => {
   const initialBodyOverflow = bodyStyles.overflowY
   addClasses(container, popup, params)
 
-  // scrolling is 'hidden' until animation is done, after that 'auto'
   setTimeout(() => {
     setScrollingVisibility(container, popup)
   }, SHOW_CLASS_TIMEOUT)
@@ -87,7 +86,6 @@ const fixScrollContainer = (container, scrollbarPadding, initialBodyOverflow) =>
     replaceScrollbarWithPadding(initialBodyOverflow)
   }
 
-  // sweetalert2/issues/1247
   setTimeout(() => {
     container.scrollTop = 0
   })
@@ -101,13 +99,10 @@ const fixScrollContainer = (container, scrollbarPadding, initialBodyOverflow) =>
 const addClasses = (container, popup, params) => {
   dom.addClass(container, params.showClass.backdrop)
   if (params.animation) {
-    // this workaround with opacity is needed for https://github.com/sweetalert2/sweetalert2/issues/2059
     popup.style.setProperty('opacity', '0', 'important')
     dom.show(popup, 'grid')
     setTimeout(() => {
-      // Animate popup right after showing it
       dom.addClass(popup, params.showClass.popup)
-      // and remove the opacity workaround
       popup.style.removeProperty('opacity')
     }, SHOW_CLASS_TIMEOUT) // 10ms in order to fix #2062
   } else {

@@ -5,14 +5,11 @@
     });
 
     function clearAllData() {
-        // Hide result table and no results message
         $('#resultsTable').addClass('d-none');
         $('#noResultsMessage').addClass('d-none');
 
-        // Clear the table body
         $('#applicationTableBody').empty();
 
-        // Clear the input field (optional)
         $('#armyNoInput').val('');
         $('#aadharNoInput').val('');
         
@@ -51,12 +48,10 @@
         const selectedType = $('#typeSelect').val();
         const searchEndpoint = getSearchEndpoint(selectedType);
 
-        // Clear previous results
         $('#noResultsMessage').addClass('d-none');
         $('#resultsTable').addClass('d-none');
 
         try {
-            // Get CSRF token from page
             const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
 
             if (!token) {
@@ -66,13 +61,11 @@
             }
 
 
-            // Create FormData and add both armyNo AND token
             const params = new URLSearchParams();
             params.append('armyNo', armyNo);
             params.append('aadharNo', aadharNo);
 
 
-            // Disable submit button to prevent double submission
             const submitButton = $(this).find('button[type="submit"]');
             const originalText = submitButton.text();
             submitButton.prop('disabled', true).text('Searching...');
@@ -99,7 +92,6 @@
 
             const data = await response.json();
 
-            // Handle response
             if (data && data.length > 0) {
                 populateTable(data);
                 $('#resultsTable').removeClass('d-none');
@@ -111,13 +103,11 @@
             console.error('Search error:', error);
             alert('Search failed. Please try again.');
         } finally {
-            // Re-enable submit button
             const submitButton = $(this).find('button[type="submit"]');
             submitButton.prop('disabled', false).text('Search');
         }
     });
 
-    // Function to determine the search endpoint based on selected type
     function getSearchEndpoint(type) {
         switch (type) {
             case 'Loan':
@@ -137,7 +127,6 @@
         $.each(applications, function (index, app) {
             const safeAppId = (app.applicationId !== undefined && app.applicationId !== null) ? app.applicationId : index;
 
-            // Conditional extra button for statusId = 103
             let extraButtonHtml = '';
             let downloadButtonHtml = '';
             if (app.statusId !== 1 && app.statusId !== 101) {
@@ -201,35 +190,21 @@
     }
 
 
-    //$(document).on('click', '.editapp', function () {
-    //    // Adjust the URL according to your routing
-    //    const type = $('#typeSelect').val();
-
-    //    const appId = $(this).data('app-id');  // Get application ID from button
-    //    if (!appId) return;
-
-    //    if (type === 'Loan')
-    //        window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
-    //    else if (type === 'Maturity')
-    //        window.location.href = `/Claim/OnlineApplication/${appId}`;
 
 
-    //    //window.location.href = `/OnlineApplication/OnlineApplication/${appId}`;
-    //});
+
+
     $(document).on('click', '.editapp', function () {
-        // Get the loan type and application ID
         const type = $('#typeSelect').val();
         const appId = $(this).data('app-id');  // Get application ID from button
 
         if (!appId) return;
 
-        // Prepare the data to send to the server
         const requestData = {
             appId: appId,
             type: type
         };
 
-        // Send AJAX request to the server to process the data
         $.ajax({
             url: '/OnlineApplication/HandleApplicationRedirect', // Your controller and action to handle the logic
             type: 'POST',
@@ -239,10 +214,8 @@
             },
             success: function (response) {
                 if (response.success) {
-                    // If the server returns a URL to redirect to, perform the redirect
                     window.location.href = response.redirectUrl; // Redirect based on server response
                 } else {
-                    // Handle any errors if necessary
                     alert('Error: ' + response.message);
                 }
             },
@@ -268,7 +241,6 @@
             return;
         }
 
-        // Determine the action URL
         let actionUrl = '';
         if (type === 'Loan') {
             actionUrl = '/Default/DownloadApplication';
@@ -279,13 +251,11 @@
             return;
         }
 
-        // Create a hidden form
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = actionUrl;
         form.style.display = 'none';
 
-        // Add CSRF token (get from your page)
         const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
       
             const tokenInput = document.createElement('input');
@@ -295,14 +265,12 @@
             form.appendChild(tokenInput);
         
 
-        // Add application ID (encrypted on server side)
         const idInput = document.createElement('input');
         idInput.type = 'hidden';
         idInput.name = 'id';
         idInput.value = applicationId;
         form.appendChild(idInput);
 
-        // Add form to body, submit, then remove
         document.body.appendChild(form);
         form.submit();
         document.body.removeChild(form);
@@ -316,13 +284,11 @@
         const loadingDiv = $('#loading-' + appId);
         let selectedType = $('#typeSelect').val();
         let endpoint = '';
-        // Check if timeline is already loaded
         if (timelineContent.children().length > 0) {
             return; // Timeline already loaded, just toggle
         }
         
 
-        // Show loading
         loadingDiv.show();
         timelineContent.hide();
 
@@ -331,7 +297,6 @@
         else if (selectedType === 'Maturity')
             endpoint = '/Default/GetClaimTimeline';
 
-        // Get the appropriate timeline endpoint
         $.ajax({
             url: endpoint,
             type: 'POST',
@@ -340,11 +305,9 @@
                 "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
             },
             success: function (response) {
-                // Hide loading
                 loadingDiv.hide();
 
                 if (response && response.length > 0) {
-                    // Build timeline HTML
                     const timelineHtml = buildTimelineHtml(response);
                     timelineContent.html(timelineHtml);
                     timelineContent.show();
@@ -398,10 +361,8 @@
         if (!dateString) return 'N/A';
 
         try {
-            // Expecting dd-mm-yyyy
             const parts = dateString.split('-');
             if (parts.length === 3) {
-                // Rearranged to yyyy-mm-dd (ISO format)
                 const isoString = `${parts[2]}-${parts[1]}-${parts[0]}`;
                 const date = new Date(isoString);
                 return date.toLocaleDateString('en-GB', {

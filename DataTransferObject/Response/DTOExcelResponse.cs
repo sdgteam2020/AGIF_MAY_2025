@@ -71,7 +71,6 @@ namespace DataTransferObject.Response
         public string ono { get; set; }
         public string osfx { get; set; }
 
-        //New fields
 
 
         public int ApplicationID { get; set; }

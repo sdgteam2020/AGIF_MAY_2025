@@ -14,9 +14,7 @@ export const renderIcon = (instance, params) => {
     return
   }
 
-  // if the given icon already rendered, apply the styling without re-rendering the icon
   if (innerParams && params.icon === innerParams.icon) {
-    // Custom or default content
     setContent(icon, params)
 
     applyStyles(icon, params)
@@ -36,15 +34,12 @@ export const renderIcon = (instance, params) => {
 
   dom.show(icon)
 
-  // Custom or default content
   setContent(icon, params)
 
   applyStyles(icon, params)
 
-  // Animate icon
   dom.addClass(icon, params.showClass && params.showClass.icon)
 
-  // Re-adjust the success icon on system theme change
   const colorSchemeQueryList = window.matchMedia('(prefers-color-scheme: dark)');
   colorSchemeQueryList.addEventListener('change', adjustSuccessIconBackgroundColor);
 }
@@ -61,17 +56,13 @@ const applyStyles = (icon, params) => {
   }
   dom.addClass(icon, params.icon && iconTypes[params.icon])
 
-  // Icon color
   setColor(icon, params)
 
-  // Success icon background color
   adjustSuccessIconBackgroundColor()
 
-  // Custom class
   dom.applyCustomClass(icon, params, 'icon')
 }
 
-// Adjust success icon background color to match the popup background color
 const adjustSuccessIconBackgroundColor = () => {
   const popup = dom.getPopup()
   if (!popup) {

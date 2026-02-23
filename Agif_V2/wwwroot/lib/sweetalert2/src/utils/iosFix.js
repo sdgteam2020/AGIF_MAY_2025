@@ -1,7 +1,6 @@
 import { swalClasses } from '../utils/classes.js'
 import * as dom from './dom/index.js'
 
-// @ts-ignore
 export const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
 
 /**

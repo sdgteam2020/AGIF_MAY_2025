@@ -13,20 +13,16 @@ export const renderActions = (instance, params) => {
     return
   }
 
-  // Actions (buttons) wrapper
   if (!params.showConfirmButton && !params.showDenyButton && !params.showCancelButton) {
     dom.hide(actions)
   } else {
     dom.show(actions)
   }
 
-  // Custom class
   dom.applyCustomClass(actions, params, 'actions')
 
-  // Render all the buttons
   renderButtons(actions, loader, params)
 
-  // Loader
   dom.setInnerHtml(loader, params.loaderHtml || '')
   dom.applyCustomClass(loader, params, 'loader')
 }
@@ -44,7 +40,6 @@ function renderButtons(actions, loader, params) {
     return
   }
 
-  // Render buttons
   renderButton(confirmButton, 'confirm', params)
   renderButton(denyButton, 'deny', params)
   renderButton(cancelButton, 'cancel', params)
@@ -76,7 +71,6 @@ function handleButtonsStyling(confirmButton, denyButton, cancelButton, params) {
 
   dom.addClass([confirmButton, denyButton, cancelButton], swalClasses.styled)
 
-  // Buttons background colors
   if (params.confirmButtonColor) {
     confirmButton.style.backgroundColor = params.confirmButtonColor
     dom.addClass(confirmButton, swalClasses['default-outline'])
@@ -103,7 +97,6 @@ function renderButton(button, buttonType, params) {
   dom.setInnerHtml(button, params[`${buttonType}ButtonText`] || '') // Set caption text
   button.setAttribute('aria-label', params[`${buttonType}ButtonAriaLabel`] || '') // ARIA label
 
-  // Add buttons custom classes
   button.className = swalClasses[buttonType]
   dom.applyCustomClass(button, params, `${buttonType}Button`)
 }

@@ -23,7 +23,6 @@ function callingCommonFunctions() {
         ValInDataNo(this);
     });
 
-    // For all elements that need SetSuffixLetter on change
     $(document).on("change", ".js-setsuffix", function () {
         SetSuffixLetter(this);
     });
@@ -76,14 +75,11 @@ function callingCommonFunctions() {
 
     $(".js-unit-pin").on("input change", function (e) {
 
-        // Always validate numeric typing
         ValInDataNo(this);
 
-        // Only run format validation on change
         if (e.type === "change") {
             let isValid = validateUnitPin(this);
 
-            // If validateUnitPin returns false → clear value
             if (isValid === false) {
                 $(this).val("");     // CLEAR VALUE
             }
@@ -92,10 +88,8 @@ function callingCommonFunctions() {
 
     $("#salaryAcctNo").on("input change", function (e) {
 
-        // Numeric typing check
         ValInDataNo(this);
 
-        // On change, validate account no
         if (e.type === "change") {
             let isValid = validateAccountNo(this);
 
@@ -174,13 +168,10 @@ function isLoanTypeAlreadyAdded(loanType) {
     return isAlreadyAdded;
 }
 
-// Updated showLoanTypeFields to disable already added loan types
 function showLoanTypeFields(loanType) {
-    // Hide all sections first
     $('.loan-type-section').hide();
 
     if (loanType) {
-        // Check if this loan type is already added
         if (isLoanTypeAlreadyAdded(loanType)) {
             const loanTypeNames = {
                 'hba': 'House Building Advance (HBA)',
@@ -235,7 +226,6 @@ function removeLoanRow(button) {
         $('#loanGridContainer').addClass('d-none');
     }
 
-    // Update dropdown options after removing a loan
     updateLoanTypeDropdown();
 }
 
@@ -257,17 +247,14 @@ function addLoanToGrid() {
             return;
         }
 
-        // Store values before clearing
         const loanDate = $('#' + loanType + 'Date').val();
         const loanDuration = $('#' + loanType + 'Duration').val();
         const loanAmount = $('#' + loanType + 'Amount').val();
 
-        // Validate fields
         if (!validateLoanData(loanType, loanDate, loanDuration, loanAmount)) {
             return;
         }
 
-        // Get loan type display name
         const loanTypeNames = {
             'hba': 'HBA (House Building Advance)',
             'hra': 'HRA (House Repair Advance)',
@@ -275,7 +262,6 @@ function addLoanToGrid() {
             'pca': 'PCA (Personal Computer Advance)'
         };
 
-        // Add to grid
         const newRow = `
         <tr data-loan-type="${loanType}">
             <td>${loanTypeNames[loanType]}</td>
@@ -290,7 +276,6 @@ function addLoanToGrid() {
         $('#loanGridContainer').removeClass('d-none');
         $('#loanGrid').removeClass('d-none');
 
-        // Update dropdown to disable the added loan type
         updateLoanTypeDropdown();
 
         resetLoanForm();
@@ -298,7 +283,6 @@ function addLoanToGrid() {
 }
 
 function validateLoanData(loanType, date, duration, amount) {
-    // Date validation (yyyy-dd-mm format)
     const datePattern = /^(\d{4})-(\d{2})-(\d{2})$/; // Matches yyyy-dd-mm format
 
     if (!datePattern.test(date)) {
@@ -306,17 +290,14 @@ function validateLoanData(loanType, date, duration, amount) {
         return false;
     }
 
-    // Reformat date from yyyy-dd-mm to yyyy-mm-dd
     const parts = date.split('-'); // Split into [yyyy, dd, mm]
     const year = parts[0];
     const day = parts[2]; // day
     const month = parts[1]; // month
 
-    // Create a new valid date string in yyyy-mm-dd format
     const validDateString = `${year}-${month}-${day}`;
     const loanDate = new Date(validDateString);
 
-    // Validate if the constructed date is valid
     if (loanDate.getDate() !== parseInt(day) || loanDate.getMonth() + 1 !== parseInt(month) || loanDate.getFullYear() !== parseInt(year)) {
         showErrorMessage('Invalid date. Please enter a valid day, month, and year.');
         return false;
@@ -335,7 +316,6 @@ function validateLoanData(loanType, date, duration, amount) {
         return false;
     }
 
-    // Amount validation
     const amountNum = parseFloat(amount);
     if (isNaN(amountNum) || amountNum <= 0 || amountNum > 10000000) {
         showErrorMessage('Please enter a valid amount (₹1 - ₹1,00,00,000).');
@@ -356,11 +336,9 @@ function formatAmount(amount) {
     return parseFloat(amount).toLocaleString('en-IN');
 }
 
-// Function to update loan type dropdown options based on already added loans
 function updateLoanTypeDropdown() {
     const addedLoanTypes = [];
 
-    // Get all added loan types using data-loan-type attribute for accuracy
     $('#loanGrid tbody tr').each(function () {
         const loanTypeAttr = $(this).attr('data-loan-type');
         if (loanTypeAttr) {
@@ -368,7 +346,6 @@ function updateLoanTypeDropdown() {
         }
     });
 
-    // Store original option texts to avoid multiple "(Already Added)" appends
     const originalTexts = {
         'hba': 'HBA (House Building Advance)',
         'hra': 'HRA (House Repair Advance)',
@@ -376,17 +353,14 @@ function updateLoanTypeDropdown() {
         'pca': 'PCA (Personal Computer Advance)'
     };
 
-    // Update dropdown options
     $('#loanType option').each(function () {
         const optionValue = $(this).val();
 
         if (optionValue && originalTexts[optionValue]) {
             if (addedLoanTypes.includes(optionValue)) {
-                // Disable and mark as already added
                 $(this).prop('disabled', true).text(originalTexts[optionValue] + ' (Already Added)');
                 $('#' + optionValue + '_Loan').val(true);
             } else {
-                // Enable and restore original text
                 $(this).prop('disabled', false).text(originalTexts[optionValue]);
                 $('#' + optionValue + '_Loan').val(false);
             }
@@ -680,7 +654,6 @@ function addYears(date, years) {
     const m = d.getMonth();
     d.setFullYear(d.getFullYear() + years);
 
-    // Adjust Feb 29 for non-leap years
     if (m === 1 && date.getDate() === 29 && d.getMonth() !== 1) {
         d.setMonth(1, 28);
     }
@@ -723,22 +696,17 @@ $('.monthPicker').datepicker({
     defaultDate: null,
 
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
         const dt = $(this).val();
 
-        // Call custom functions
         formatDate(this);
         validateDateFormat(this);
 
-        // Calculate new date by adding 18 years
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
-        // Optional: Use `newdt` as needed
     },
 
     beforeShowDay: function (date) {
-        // Disable future dates
         const today = new Date();
         today.setHours(23, 59, 59, 999);
         return [date <= today];
@@ -757,15 +725,12 @@ $('.DocPicker').datepicker({
  
 
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
         const dt = $('#dateOfCommission').val();
 
-        // Call the custom functions on select
         formatDate(this); // Ensure the function formats the date
         validateDateFormat(this); // Ensure validation is handled
         calculateYearDifference(); // Calculate the year difference (if needed)
 
-        // Calculate new date by adding 18 years
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
         
@@ -782,18 +747,14 @@ $('.DopPicker').datepicker({
     defaultDate: null, // Default to today
    
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
         const dt = $('#dateOfPromotion').val();
 
-        // Call the custom functions on select
         formatDate(this); // Ensure the function formats the date
         updateRetDateOnPromotionDateSelection(); // Calculate the year difference (if needed)
 
-        // Calculate new date by adding 18 years
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
-        // Optional: Set the calculated date back to the field or use as needed
 
     }
    
@@ -807,31 +768,24 @@ $('.DOPartIIPicker').datepicker({
     defaultDate: null, // Default to today
 
     onSelect: function (dateText, inst) {
-        // Get the selected date from the input field
         const dt = $('this').val();
 
-        // Call the custom functions on select
         formatDate(this); // Ensure the function formats the date
 
-        // Calculate new date by adding 18 years
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
-        // Optional: Set the calculated date back to the field or use as needed
 
     }
 
 });
 
 function formatDate(input) {
-    // Get the current value and remove any non-numeric characters except existing slashes
     let value = input.value.replace(/[^\d]/g, '');
 
-    // Store cursor position
     let cursorPosition = input.selectionStart;
     let oldLength = input.value.length;
 
-    // Format the value with slashes
     if (value.length >= 2) {
         value = value.substring(0, 2) + '/' + value.substring(2);
     }
@@ -839,21 +793,17 @@ function formatDate(input) {
         value = value.substring(0, 5) + '/' + value.substring(5);
     }
 
-    // Limit to 10 characters (dd/mm/yyyy)
     if (value.length > 10) {
         value = value.substring(0, 10);
     }
 
-    // Update the input value
     input.value = value;
 
-    // Adjust cursor position
     let newLength = input.value.length;
     if (newLength > oldLength) {
         cursorPosition++;
     }
 
-    // Set cursor position
     input.setSelectionRange(cursorPosition, cursorPosition);
 }
 
@@ -869,7 +819,6 @@ function validateDateFormat(input) {
     const value = input.value;
     const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
 
-    // Check if the value matches the date format
     if (value && !datePattern.test(value)) {
         Swal.fire({
             icon: "error",
@@ -881,14 +830,12 @@ function validateDateFormat(input) {
         return;
     }
 
-    // Additional validation to check date validity and reasonable year range
     if (value && datePattern.test(value)) {
         const parts = value.split('/');
         const day = parseInt(parts[0], 10);
         const month = parseInt(parts[1], 10) - 1; // Month is 0-indexed
         const year = parseInt(parts[2], 10);
 
-        // Check for reasonable year range (e.g., 1900 to current year)
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         const currentMonth = currentDate.getMonth(); // 0-indexed month
@@ -905,7 +852,6 @@ function validateDateFormat(input) {
             return;
         }
 
-        // Check if the entered date's month and day are not in the future
         if (year === currentYear && month > currentMonth) {
             Swal.fire({
                 icon: "error",
@@ -917,7 +863,6 @@ function validateDateFormat(input) {
             return;
         }
 
-        // Check if the entered day is greater than today's day for the same month and year
         if (year === currentYear && month === currentMonth && day > currentDay) {
             Swal.fire({
                 icon: "error",
@@ -929,7 +874,6 @@ function validateDateFormat(input) {
             return;
         }
 
-        // Check if it's a valid date (for example, handle February 30th, etc.)
         const inputDate = new Date(year, month, day);
         if (inputDate.getDate() !== day) {
             Swal.fire({
@@ -1032,7 +976,6 @@ function SetRetDate() {
                                 return; // stop here
                             }
 
-                            // Format date as yyyy-mm-dd
                             const yyyy = lastDay.getFullYear();
                             const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
                             const dd = String(lastDay.getDate()).padStart(2, '0');
@@ -1071,7 +1014,6 @@ function SetRetDate() {
                                 return; // stop here
                             }
 
-                            // Format date as yyyy-mm-dd
                             const yyyy = lastDay.getFullYear();
                             const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
                             const dd = String(lastDay.getDate()).padStart(2, '0');
@@ -1114,7 +1056,6 @@ function SetRetDate() {
                                     $('#dateOfCommission').val('');
                                     return; // stop here
                                 }
-                                // Format date as yyyy-mm-dd
                                 const yyyy = lastDay.getFullYear();
                                 const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
                                 const dd = String(lastDay.getDate()).padStart(2, '0');
@@ -1140,7 +1081,6 @@ function SetRetDate() {
                                 const today = new Date();
                                 today.setHours(0, 0, 0, 0); // normalize to start of today
 
-                                // Format date as yyyy-mm-dd
                                 const yyyy = lastDay.getFullYear();
                                 const mm = String(lastDay.getMonth() + 1).padStart(2, '0');
                                 const dd = String(lastDay.getDate()).padStart(2, '0');
@@ -1180,7 +1120,6 @@ function calculateResidualService() {
     const retirementDate = new Date(retirementDateStr);
     const currentDate = new Date();
 
-    // Normalize both dates to remove time differences
     retirementDate.setHours(0, 0, 0, 0);
     currentDate.setHours(0, 0, 0, 0);
 
@@ -1207,20 +1146,6 @@ function calculateResidualService() {
     $('#residualService').val(years);
 
 
-    //if (purposetype === "3") {
-    //    if (totalmonths > 24) {
-    //        Swal.fire({
-    //            title: 'Residual Service Calculated',
-    //            text: 'Your residual service is not valid',
-    //            icon: 'info',
-    //            confirmButtonText: 'OK'
-    //        }).then((result) => {
-    //            if (result.isConfirmed) {
-    //                window.location.href = '/Claim/MaturityLoanType';  // Adjust URL if necessary
-    //            }
-    //        });
-    //    }
-    //}
 
     setOutlineActive("residualService");
 }
@@ -1230,7 +1155,6 @@ function enableDisablePromotionDate() {
         togglePromotionDate($(this).val());
     });
 
-    // Run once on load
     togglePromotionDate($('#ddlrank').val());
 }
 
@@ -1317,7 +1241,6 @@ function ExtensionOfServiceAccess() {
     const retirementDate = new Date(retirementDateStr);
     const currentDate = new Date();
 
-    // Normalize both dates to remove time differences
     retirementDate.setHours(0, 0, 0, 0);
     currentDate.setHours(0, 0, 0, 0);
 
@@ -1354,7 +1277,6 @@ function ExtensionOfServiceAccess() {
     const prefix = $('#armyPrefix').val();
     const yearOfService = parseFloat($('#residualService').val());
     const extensionDropdown = $('#ExtnOfService');
-    // Enable only if Year of Service < 2 and Prefix is JC or OR
     if ((prefix == 13 || prefix == 14) && yearOfService < 2 && yearOfService >= -2) {
         extensionDropdown.prop('disabled', false);
     } else {
@@ -1441,7 +1363,6 @@ function handleSubmitClick() {
         event.preventDefault(); // Prevent form submission
         const form = document.getElementById("myMaturityForm");
         const inputs = form.querySelectorAll("input, select");
-        // Clear previous error messages
         form.querySelectorAll(".error").forEach(span => span.textContent = "");
 
         let errorlist = []; // Use an array to store individual error messages
@@ -1543,7 +1464,6 @@ function handleSubmitClick() {
 }
 
 function checkCORegistration() {
-    // Get Prefix, Number, and Suffix
     const armyNumber = $("#armyPrefix option:selected").text().trim();
     const prefix = $("#armyNumber").val().trim();
     const suffix = $("#txtSuffix").val().trim();
@@ -1552,7 +1472,6 @@ function checkCORegistration() {
 
 
     if (prefix === "0" || armyNumber === "" || suffix === "") {
-        // Warn if Army No is incomplete
         console.warn("Incomplete Army No");
         return;
     }
@@ -1569,7 +1488,6 @@ function checkCORegistration() {
                 if (result === true) {
                     $('#unitSearchDialog').removeClass('d-none'); // Show the dialog if CO is registered
                 } else if (result === false) {
-                    // If not registered, set unit input back to required
                     formSubmitting = true;
                     $('#myMaturityForm').submit();
                 }
@@ -1623,7 +1541,6 @@ $("#unitSearchCancelBtn").click(function (e) {
     formSubmitting = false;
     formCancelled = true;
 
-    // Hide the message when Cancel is clicked
     const $message = $('#unitSearchMessage');
     if ($message.length) {
         $message.text('');
@@ -1631,7 +1548,6 @@ $("#unitSearchCancelBtn").click(function (e) {
 
     $(unitSearchInput).val('');
 
-    // Also clear any previous search results and reset form stat
 
     $('#unitSearchConfirmBtn').prop('disabled', true);
 });
@@ -1645,7 +1561,6 @@ function checkUnitSameOrNot(ArmyNo) {
     const Value = (armyNumber + prefix + suffix).toUpperCase();
 
     if (ArmyNo.toUpperCase() === Value) {
-        // Unit is same as Army No
         $('#unitSearchMessage').text(
             "Army Number Already Registered.\nYou are already registered as CO for this unit. Please select another Army Number."
         );
@@ -1664,7 +1579,6 @@ function checkUnitSameOrNot(ArmyNo) {
                         formSubmitting = true;
                         $('#myMaturityForm').submit();
                     } else if (result === false) {
-                        // If not registered, reset message and flag
                         $('#unitSearchMessage').text('');
                         formSubmitting = false;
 
@@ -1863,7 +1777,6 @@ $('#oldArmyNo').on('focus', function () {
 });
 
 $("#OtherReasonPdf").on("click", function () {
-    // Trigger SweetAlert with two messages
     Swal.fire({
         title: 'Important Information',
         html: '<p>Application Dully Recommended by Commanding Officer/IO</p><p>Otherwise DO Letter Of Commanding Officer</p>', // Two paragraphs
@@ -1879,10 +1792,8 @@ $('#OtherReasons').on('input', function () {
     const maxWords = 50;
     const currentValue = $(this).val();
 
-    // Split the value into words by whitespace
     let words = currentValue.trim().split(/\s+/);
 
-    // If the number of words exceeds the limit, truncate the string
     if (words.length > maxWords) {
         words = words.slice(0, maxWords); // Take only the first 50 words
         $(this).val(words.join(' ')); // Join them back into a string and update the input
@@ -2035,11 +1946,9 @@ $("#PresenttxtUnit").on('input', function () {
 $('#ifsCode').on('blur', function () {
     const ifsCode = $(this).val();
 
-    // Check if IFSC code length is less than 11
     if (ifsCode.length < 11) {
      
         showErrorMessage('IFSC code must be exactly 11 characters');
-        // Clear the input field if invalid
         $(this).val('');
     }
 });
@@ -2048,20 +1957,17 @@ $("input, textarea").on("paste", function (e) {
 });
 
 function MarrGenderDisplay() {
-    // Show gender options on input click
     $('#MarriageGenderDisplay').on('focus', function () {
         $('#genderRadioGroup').addClass('show');
         $(this).closest('.form-outline').find('.form-label').addClass('active');
     });
 
-    // Handle radio button selection
     $('.gender-radio').on('change', function () {
         const selectedGender = $(this).val();
         $('#MarriageGenderDisplay').val(selectedGender);
         $('#genderRadioGroup').removeClass('show');
     });
 
-    // Optional: Close dropdown when clicking outside
     $(document).on('click', function (e) {
         if (!$(e.target).closest('.form-outline').length) {
             $('#genderRadioGroup').removeClass('show');
@@ -2073,7 +1979,6 @@ function initGenderDropdown(inputId, dropdownId) {
     const input = document.getElementById(inputId);
     const dropdown = document.getElementById(dropdownId);
 
-    // Preselect radio if input has value
     if (input != null) {
         if (input.value) {
             const radio = dropdown.querySelector(`input[value="${input.value}"]`);
@@ -2081,12 +1986,10 @@ function initGenderDropdown(inputId, dropdownId) {
             input.closest('.form-outline').querySelector('.form-label').classList.add('active');
         }
 
-        // Show dropdown on click/focus
         input.addEventListener('click', () => {
             dropdown.style.display = 'block';
         });
 
-        // Update input and hide dropdown on selection
         dropdown.querySelectorAll('.gender-radio').forEach(radio => {
             radio.addEventListener('change', () => {
                 input.value = radio.value;
@@ -2095,7 +1998,6 @@ function initGenderDropdown(inputId, dropdownId) {
             });
         });
 
-        // Close dropdown if clicking outside
         document.addEventListener('click', e => {
             if (!e.target.closest('.form-outline') && !e.target.closest(`#${dropdownId}`)) {
                 dropdown.style.display = 'none';
@@ -2109,7 +2011,6 @@ function setInputValueWithFloatingLabel(inputId, value) {
 
     if (!$input.length) return; // Exit if element not found
 
-    // Set the value
     $input.val(value);
 
     $input.addClass('active');
@@ -2122,7 +2023,6 @@ function findDataWithArmyNumber() {
         const armyPrefix = $('#armyPrefix').val().trim();
         const armySuffix = $('#txtSuffix').val().trim();
 
-        // Validate required fields
         if (!armyPrefix) {
             $('#armyPrefix').focus();
             return;
@@ -2160,7 +2060,6 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('mobileNo', data.mobileNo);
                         setInputValueWithFloatingLabel('emailId', data.email);
 
-                        ////Unit Details
 
                         setInputValueWithFloatingLabel('pcda_pao', data.pcda_pao);
                         setInputValueWithFloatingLabel('pcda_AcctNo', data.pcda_AcctNo);
@@ -2172,20 +2071,17 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('civilPostalAddress', data.civilPostalAddress);
                         setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
 
-                        ////Permanent Address Details
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
                         setInputValueWithFloatingLabel('distt', data.distt);
                         setInputValueWithFloatingLabel('state', data.state);
                         setInputValueWithFloatingLabel('Code', data.code);
-                        ////Salary Account Details
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
                         setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
 
-                        // dropdown values
                         $('#armyPrefix').val(data.armyPrefix).addClass("d-none").trigger('change');
                         $('#oldArmyPrefix').val(data.oldArmyPrefix).addClass("d-none").trigger('change');
                         $('#ddlrank').val(data.rankId).addClass("d-none").trigger('change');
@@ -2235,7 +2131,6 @@ function findDataWithApplicationId() {
                     setInputValueWithFloatingLabel('mobileNo', data.onlineApplicationResponse.mobileNo);
                     setInputValueWithFloatingLabel('emailId', data.onlineApplicationResponse.email);
                   
-                    ////Unit Details
 
                     setInputValueWithFloatingLabel('pcda_pao', data.onlineApplicationResponse.pcda_pao);
                     setInputValueWithFloatingLabel('pcda_AcctNo', data.onlineApplicationResponse.pcda_AcctNo);
@@ -2247,14 +2142,12 @@ function findDataWithApplicationId() {
                     setInputValueWithFloatingLabel('civilPostalAddress', data.onlineApplicationResponse.civilPostalAddress);
                     setInputValueWithFloatingLabel('nextFmnHQ', data.onlineApplicationResponse.nextFmnHQ);
 
-                    ////Permanent Address Details
                     setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
                     setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
                     setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
                     setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
                     setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
 
-                    ////Salary Account Details
                     setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
                     setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
                     setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
@@ -2262,7 +2155,6 @@ function findDataWithApplicationId() {
                     setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
                     setInputValueWithFloatingLabel('AmountOfWithdrawalRequired', data.onlineApplicationResponse.amountwithdrwalRequired);
                   
-                    // dropdown value bind
                     $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).addClass("d-none").trigger('change');
                     $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).addClass("d-none").trigger('change');
                     $('#ddlrank').val(data.onlineApplicationResponse.rankId).addClass("d-none").trigger('change');
@@ -2336,7 +2228,6 @@ function findDataWithApplicationId() {
 
                     let hasExistingLoans = false;
 
-                    // Loop through each loan type and add if flag is true
                     $.each(loanMapping, function (loanType, loanData) {
                         if (loanData.flag === true && loanData.amount > 0) {
                             addExistingLoanToGrid(loanType, loanData);
@@ -2344,7 +2235,6 @@ function findDataWithApplicationId() {
                         }
                     });
 
-                    // If there are existing loans, show the grid and update dropdown
                     if (hasExistingLoans) {
                         $('#loanGridContainer').removeClass('d-none');
                         $('#loanGrid').removeClass('d-none');
@@ -2412,13 +2302,11 @@ $('#oldArmyNo').on('blur', function () {
     const oldprefixVal = $('#oldArmyPrefix').val();
     const prefixVal = $('#armyPrefix').val();
 
-    // Only apply rule when oldArmyPrefix == 13
     if (prefixVal === "13") {
         if (oldprefixVal === "13") {
             const armyNumber = $('#armyNumber').val().trim();
             const oldArmyNo = $('#oldArmyNo').val().trim();
 
-            // If both numbers exist and are NOT same → show alert
             if (armyNumber !== "" && oldArmyNo !== "" && armyNumber !== oldArmyNo) {
                 Swal.fire({
                     icon: 'warning',
@@ -2426,7 +2314,6 @@ $('#oldArmyNo').on('blur', function () {
                     text: 'Old Army No And Army No should be same.',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    // optional: clear old number and focus it
                     $('#oldArmyNo').val('');
                 });
             }

@@ -14,7 +14,6 @@ export function _destroy() {
     return // This instance has already been destroyed
   }
 
-  // Check if there is another Swal closing
   if (domCache.popup && globalState.swalCloseEventFinishedCallback) {
     globalState.swalCloseEventFinishedCallback()
     delete globalState.swalCloseEventFinishedCallback
@@ -32,12 +31,9 @@ export function _destroy() {
  */
 const disposeSwal = (instance) => {
   disposeWeakMaps(instance)
-  // Unset this.params so GC will dispose it (#1569)
   delete instance.params
-  // Unset globalState props so GC will dispose globalState (#1569)
   delete globalState.keydownHandler
   delete globalState.keydownTarget
-  // Unset currentInstance
   delete globalState.currentInstance
 }
 
@@ -45,7 +41,6 @@ const disposeSwal = (instance) => {
  * @param {SweetAlert} instance
  */
 const disposeWeakMaps = (instance) => {
-  // If the current instance is awaiting a promise result, we keep the privateMethods to call them once the promise result is retrieved #2335
   if (instance.isAwaitingPromise) {
     unsetWeakMaps(privateProps, instance)
     instance.isAwaitingPromise = true
@@ -54,7 +49,6 @@ const disposeWeakMaps = (instance) => {
     unsetWeakMaps(privateProps, instance)
 
     delete instance.isAwaitingPromise
-    // Unset instance methods
     delete instance.disableButtons
     delete instance.enableButtons
     delete instance.getInput

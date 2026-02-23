@@ -80,16 +80,13 @@ namespace Agif_V2.Helpers
                     float pw = pageSize.GetWidth();
                     float ph = pageSize.GetHeight();
 
-                    // Create a full-page appearance to mimic a real watermark
                     var appearance = new PdfFormXObject(new Rectangle(0, 0, pw, ph));
                     var appCanvas = new PdfCanvas(appearance, pdfDoc);
 
-                    // Semi-transparent drawing
                     var gs = new PdfExtGState().SetFillOpacity(0.35f); // ~35% opacity
                     appCanvas.SaveState();
                     appCanvas.SetExtGState(gs);
 
-                    // Layout on the appearance using high-level Canvas API
                     using (var layout = new Canvas(appCanvas, new Rectangle(0, 0, pw, ph)))
                     {
                         layout.SetFont(font)
@@ -119,15 +116,11 @@ namespace Agif_V2.Helpers
 
                     appCanvas.RestoreState();
 
-                    // Build an annotation that covers the whole page but has no visible border/background;
-                    // its *appearance* is the watermark we drew above.
                     var annotRect = new Rectangle(0, 0, pw, ph);
                     var stamp = new PdfStampAnnotation(annotRect);
 
-                    // Set the appearance we created as the normal appearance
                     stamp.SetNormalAppearance(appearance.GetPdfObject());
 
-                    // Important flags for print and stability
                     stamp.SetFlags(
                         PdfAnnotation.PRINT |
                         PdfAnnotation.READ_ONLY |
@@ -136,17 +129,12 @@ namespace Agif_V2.Helpers
                         PdfAnnotation.NO_ROTATE
                     );
 
-                    // No border
                     stamp.SetBorder(new PdfArray(new float[] { 0, 0, 0 }));
 
-                    // Transparent annotation background (the appearance already draws semi-transparent text)
-                    //stamp.SetColor(ColorConstants.WHITE, 0); // transparent
 
-                    // Handle page rotation so the watermark looks correct on rotated pages
                     int rotation = page.GetRotation();
                     if (rotation != 0)
                     {
-                        // Counter-rotate the appearance so it stays diagonal relative to visual page
                         stamp.Put(PdfName.Rotate, new PdfNumber((360 - rotation) % 360));
                     }
 
@@ -154,7 +142,6 @@ namespace Agif_V2.Helpers
                 }
             }
 
-            // Replace original file atomically
             if (File.Exists(wwwRootPath)) File.Delete(wwwRootPath);
             File.Move(tempOutputPath, wwwRootPath);
         }

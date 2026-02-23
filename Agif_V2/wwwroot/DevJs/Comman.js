@@ -1,5 +1,4 @@
 ﻿function showSuccessMessage(message) {
-    // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `
         <div class="alert alert-success alert-dismissible fade show" role="alert" id="validationerrormessage">
             <i class="lni lni-checkmark-circle"></i> ${message}
@@ -8,7 +7,6 @@
     `;
     $('body').append(alertHtml);
 
-    // Auto remove after 3 seconds
     setTimeout(function () {
         $('.alert-success').fadeOut(300, function () {
             $(this).remove();
@@ -16,7 +14,6 @@
     }, 2000);
 }
 function showErrorMessage(message) {
-    // Using Bootstrap alert (if you have Bootstrap)
     const alertHtml = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert" id="validationerrormessage">
             <i class="lni lni-cross-circle"></i> ${message}
@@ -25,7 +22,6 @@ function showErrorMessage(message) {
     `;
     $('body').append(alertHtml);
 
-    // Auto remove after 5 seconds
     setTimeout(function () {
         $('.alert-danger').fadeOut(300, function () {
             $(this).remove();
@@ -33,17 +29,14 @@ function showErrorMessage(message) {
     }, 2000);
 }
 $(document).ready(function () {
-    // Event listener for the link with id 'pendingLink'
     $('.submit-status').on('click', function (e) {
         e.preventDefault();  // Prevent default anchor behavior
 
-        // Retrieve data attributes from the link
         const controller = $(this).data('controller');
         const method = $(this).data('method');
         const status = $(this).data('status');
         var token = $('input[name="__RequestVerificationToken"]').val();
 
-        // Call the submitStatus function with the extracted data
         submitStatus(controller, method, status, token);
     });
 });

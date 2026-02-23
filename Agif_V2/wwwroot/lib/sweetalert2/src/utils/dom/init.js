@@ -127,7 +127,6 @@ const setupRTL = (targetElement) => {
  * @param {SweetAlertOptions} params
  */
 export const init = (params) => {
-  // Clean up the old popup container if it exists
   const oldContainerExisted = resetOldContainer()
 
   if (isNodeEnv()) {

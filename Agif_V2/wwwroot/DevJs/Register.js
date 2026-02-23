@@ -32,13 +32,11 @@ $('#DteFmn').on('change', function () {
 
 $("#btnsignup").on("click", function (e) {
     e.preventDefault(); // Prevent form submission for now
-    // Validate Unit selection
     if ($("#UnitId").val() == 0 || $("#txtUnit").val() == "") {
         $("#UnitId").val(0);
         $("#txtUnit").val("");
         return false;
     }
-    // Show the confirmation SweetAlert
     Swal.fire({
         title: 'Do you really want to save?',
         icon: 'warning',
@@ -49,7 +47,6 @@ $("#btnsignup").on("click", function (e) {
         if (result.isConfirmed) {
             $("#signupForm").submit();  // Or trigger your form submit action here
         } else {
-            // If the user clicked 'No', do nothing or show an alert
             Swal.fire('Cancelled', 'Your Details was not saved.', 'info');
         }
     });

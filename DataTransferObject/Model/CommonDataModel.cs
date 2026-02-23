@@ -127,7 +127,6 @@ namespace DataTransferObject.Model
         [StringLength(100, ErrorMessage = "Next Fmn HQ can't be longer than 100 characters.")]
         public string? NextFmnHQ { get; set; }
 
-        // Financial information
 
         [Required(ErrorMessage = "Monthly Pay Slip is required.")]
         [DataType(DataType.Date, ErrorMessage = "Invalid Date Format.")]

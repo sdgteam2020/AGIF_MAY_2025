@@ -11,11 +11,9 @@ function handleNavbarClick() {
         if (linkPath && currentPath === linkPath) {
             $(this).addClass("active fw-bold").attr("aria-current", "page");
 
-            // Highlight top-level menu (e.g., "Benefits")
             let topNavItem = $(this).closest(".nav-item.dropdown");
             topNavItem.find(".nav-link.dropdown-toggle").first().addClass("active fw-bold");
 
-            // ✅ Highlight middle-level parent (e.g., "While in Service")
             let parentSubmenuItem = $(this).closest(".dropdown-submenu").prev(".dropdown-item");
             parentSubmenuItem.addClass("active fw-bold");
         } else {

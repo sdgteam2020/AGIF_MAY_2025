@@ -21,7 +21,6 @@ namespace DataAccessLayer.Repositories
             _context = context;
         }
 
-        // Additional methods specific to UserMapping can be added here
 
         public async Task<UserMapping?> GetUnitDetails(int unitId)
         {

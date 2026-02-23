@@ -6,22 +6,18 @@ namespace Agif_V2.Helpers
 {
     public class AsymmetricEncryption
     {
-        // Generate RSA key pair and return PEM formatted public key
         public (string publicKeyPem, string privateKeyXml) GenerateKeyPair()
         {
             using (var rsa = new RSACryptoServiceProvider(2048))
             {
-                // Get private key in XML format for server-side storage
                 string privateKeyXml = rsa.ToXmlString(true);
 
-                // Export public key in PEM format for JavaScript
                 string publicKeyPem = ExportPublicKeyToPem(rsa);
 
                 return (publicKeyPem, privateKeyXml);
             }
         }
 
-        // Convert RSA public key to PEM format (compatible with JSEncrypt)
         private string ExportPublicKeyToPem(RSACryptoServiceProvider rsa)
         {
             var publicKey = rsa.ExportParameters(false);
@@ -30,17 +26,14 @@ namespace Agif_V2.Helpers
             {
                 var writer = new BinaryWriter(stream);
 
-                // Write the RSA public key in PKCS#1 format
                 writer.Write((byte)0x30); // SEQUENCE
 
                 using (var innerStream = new MemoryStream())
                 {
                     var innerWriter = new BinaryWriter(innerStream);
 
-                    // Write modulus
                     EncodeIntegerBigEndian(innerWriter, publicKey.Modulus);
 
-                    // Write exponent
                     EncodeIntegerBigEndian(innerWriter, publicKey.Exponent);
 
                     var length = (int)innerStream.Length;
@@ -50,11 +43,9 @@ namespace Agif_V2.Helpers
 
                 var base64 = Convert.ToBase64String(stream.GetBuffer(), 0, (int)stream.Length);
 
-                // Format as PEM
                 var sb = new StringBuilder();
                 sb.AppendLine("-----BEGIN PUBLIC KEY-----");
 
-                // Split into 64-character lines
                 for (int i = 0; i < base64.Length; i += 64)
                 {
                     sb.AppendLine(base64.Substring(i, Math.Min(64, base64.Length - i)));
@@ -120,7 +111,6 @@ namespace Agif_V2.Helpers
             }
         }
 
-        // Decrypt string using private key in XML format
         public string DecryptString(string encryptedText, string privateKeyXml)
         {
             try
@@ -135,7 +125,6 @@ namespace Agif_V2.Helpers
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging
                 Console.WriteLine($"Decryption failed: {ex.Message}");
                 return null;
             }
