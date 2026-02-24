@@ -232,48 +232,48 @@ namespace Agif_V2.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> OnlineApplication([FromForm] string EncryptedData)
+        public async Task<IActionResult> OnlineApplication(DTOOnlineApplication model)
         {
-            // 1. Validate that we actually received the encrypted payload
-            if (string.IsNullOrEmpty(EncryptedData))
-            {
-                ModelState.AddModelError("", "Form data is missing or corrupted.");
-                return View("OnlineApplication", new DTOOnlineApplication());
-            }
+            //// 1. Validate that we actually received the encrypted payload
+            //if (string.IsNullOrEmpty(EncryptedData))
+            //{
+            //    ModelState.AddModelError("", "Form data is missing or corrupted.");
+            //    return View("OnlineApplication", new DTOOnlineApplication());
+            //}
 
-            DTOOnlineApplication model;
+            //DTOOnlineApplication model;
 
-            try
-            {
-                // 2. Retrieve the EXACT same key you rendered to the front-end (#spnhdns)
-                // Make sure you pull this from your Session, Cache, or Database.
-                string secretKey = HttpContext.Session.GetString(SessionKeySalt); // Example
+            //try
+            //{
+            //    // 2. Retrieve the EXACT same key you rendered to the front-end (#spnhdns)
+            //    // Make sure you pull this from your Session, Cache, or Database.
+            //    string secretKey = HttpContext.Session.GetString(SessionKeySalt); // Example
 
-                // 3. Decrypt the string using your helper class
-                string decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, secretKey);
+            //    // 3. Decrypt the string using your helper class
+            //    string decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, secretKey);
 
-                // 4. Deserialize the JSON back into your C# Model
-                // 4. Deserialize the JSON back into your C# Model
-                var options = new System.Text.Json.JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true,
+            //    // 4. Deserialize the JSON back into your C# Model
+            //    // 4. Deserialize the JSON back into your C# Model
+            //    var options = new System.Text.Json.JsonSerializerOptions
+            //    {
+            //        PropertyNameCaseInsensitive = true,
 
-                    // Add this line to automatically parse "123" into 123
-                    NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
-                };
-                options.Converters.Add(new Agif_V2.Helpers.FlexibleDateTimeConverter());
-                options.Converters.Add(new Agif_V2.Helpers.FlexibleDecimalConverter()); // <-- Added this
-                model = System.Text.Json.JsonSerializer.Deserialize<DTOOnlineApplication>(decryptedJson, options);
+            //        // Add this line to automatically parse "123" into 123
+            //        NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
+            //    };
+            //    options.Converters.Add(new Agif_V2.Helpers.FlexibleDateTimeConverter());
+            //    options.Converters.Add(new Agif_V2.Helpers.FlexibleDecimalConverter()); // <-- Added this
+            //    model = System.Text.Json.JsonSerializer.Deserialize<DTOOnlineApplication>(decryptedJson, options);
 
-                // 5. Trigger built-in model validation since we bypassed standard model binding
-                TryValidateModel(model);
-            }
-            catch (Exception ex)
-            {
-                // Catch decryption failures (wrong key, manipulated payload, etc.)
-                ModelState.AddModelError("", "Security error: Failed to process the application payload.");
-                return View("OnlineApplication", new DTOOnlineApplication());
-            }
+            //    // 5. Trigger built-in model validation since we bypassed standard model binding
+            //    TryValidateModel(model);
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Catch decryption failures (wrong key, manipulated payload, etc.)
+            //    ModelState.AddModelError("", "Security error: Failed to process the application payload.");
+            //    return View("OnlineApplication", new DTOOnlineApplication());
+            //}
 
             string formType = GetFormType(model);
             if (formType == null)

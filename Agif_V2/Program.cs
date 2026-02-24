@@ -177,7 +177,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
+app.UseMiddleware<Agif_V2.Middlewares.DecryptionMiddleware>();
 app.Use(async (ctx, next) =>
 {
     var blockedMethods = new[] { "OPTIONS", "TRACE", "TRACK", "CONNECT" };
