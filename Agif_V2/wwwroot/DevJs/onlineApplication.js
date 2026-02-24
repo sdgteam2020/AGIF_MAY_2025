@@ -1,4 +1,4 @@
-﻿
+﻿const getSecretKey = () => $('#spanhdns').text().trim() || "";
 $(document).ready(function () {
     expandAccordions();
     confirmAccountNo();
@@ -1565,21 +1565,67 @@ function handleSubmitClick() {
         if (hasError) {
             return false;
         }
+        // Add this to your handleSubmitClick function inside the 'else' block (where hasError is false)
         else {
             $("#msgerror").html('');
-            if (formSubmitting) return;
-            if (formCancelled) {
-                formCancelled = false;
-                e.preventDefault();
-                return;
+
+            const formData = $("#myForm").serializeArray();
+            const dataObj = {};
+
+            // 1. Build a properly nested JSON object from ASP.NET MVC form names
+            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
+            formData.forEach(item => {
+                const parts = item.name.split('.');
+                let current = dataObj;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (!current[parts[i]]) {
+                        current[parts[i]] = {};
+                    }
+                    current = current[parts[i]];
+                }
+                current[parts[parts.length - 1]] = item.value;
+            });
+
+            // 2. Encrypt using your helper function
+            const plainTextJson = JSON.stringify(dataObj);
+            const encrypted = encryptData(plainTextJson);
+
+            if (!encrypted) {
+                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
+                return false;
             }
 
-            let unitVal = $('#PresenttxtUnit').val();
-            if (unitVal && unitVal.trim() !== '') {
-                event.preventDefault();
-                checkCORegistration();
-            }
+            // 3. Create a hidden input to hold the encrypted string
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'EncryptedData',
+                value: encrypted
+            }).appendTo('#myForm');
+
+            // 4. IMPORTANT: Disable original inputs so they DON'T show up in the Network Tab
+            $("#myForm").find("input, select, textarea")
+                .not("[name='EncryptedData']")
+                .not("[name='__RequestVerificationToken']")
+                .prop("disabled", true);
+
+            // 5. Submit the form naturally
+            $("#myForm").off("submit").submit();
         }
+        //else {
+        //    $("#msgerror").html('');
+        //    if (formSubmitting) return;
+        //    if (formCancelled) {
+        //        formCancelled = false;
+        //        e.preventDefault();
+        //        return;
+        //    }
+
+        //    let unitVal = $('#PresenttxtUnit').val();
+        //    if (unitVal && unitVal.trim() !== '') {
+        //        event.preventDefault();
+        //        checkCORegistration();
+        //    }
+        //}
     });
 }
 
@@ -2576,4 +2622,22 @@ function formatDateToDDMMYYYY(dateString) {
     const year = date.getFullYear();
 
     return `${day}/${month}/${year}`;
+}
+function encryptData(plainText) {
+    const secretKey = getSecretKey(); // Call the helper
+    if (!secretKey) {
+        console.error("Encryption Key Missing");
+        return "";
+    }
+
+    const key = CryptoJS.enc.Utf8.parse(secretKey);
+    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+
+    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    return encrypted.toString();
 }

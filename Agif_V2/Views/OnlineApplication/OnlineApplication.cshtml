@@ -24,6 +24,7 @@
     }
 }
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
+<script src="~/js/crypto-js.min.js"></script>
 
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -40,6 +41,7 @@
         <form id="myForm" class="needs-validation mb-8" name="myForm" method="post" action="/OnlineApplication/OnlineApplication" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
             <!-- Personal Info -->
+            <span id="spanhdns" class="d-none">@ViewBag.hiddenSalt</span>
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
@@ -1370,6 +1372,7 @@
                     </div>
                 }
             }
+
             <input type="hidden" id="totalResidualMonth" name="totalResidualMonth" value="0" />
             <div class="col-md-12">
                 <div class="mt-4 text-center">
