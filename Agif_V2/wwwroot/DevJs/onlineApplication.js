@@ -1572,17 +1572,23 @@ function handleSubmitClick() {
             const formData = $("#myForm").serializeArray();
             const dataObj = {};
 
-            // Create a flat dictionary of the form fields
+            // 1. Build a properly nested JSON object from ASP.NET MVC form names
+            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
             formData.forEach(item => {
-                // Treat empty inputs as empty strings to avoid null reference issues in the payload
-                dataObj[item.name] = item.value.trim();
+                const parts = item.name.split('.');
+                let current = dataObj;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (!current[parts[i]]) {
+                        current[parts[i]] = {};
+                    }
+                    current = current[parts[i]];
+                }
+                current[parts[parts.length - 1]] = item.value;
             });
 
-            // Encrypt the flat JSON
+            // 2. Encrypt using your helper function
             const plainTextJson = JSON.stringify(dataObj);
             const encrypted = encryptData(plainTextJson);
-
-            // ... The rest of the JS remains exactly the same (appending EncryptedData and disabling fields)
 
             if (!encrypted) {
                 $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');

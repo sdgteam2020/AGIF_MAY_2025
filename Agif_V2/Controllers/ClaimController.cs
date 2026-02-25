@@ -13,6 +13,7 @@ namespace Agif_V2.Controllers
 {
     public class ClaimController : Controller
     {
+        public const string SessionClaimKeySalt = "_Salt";
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
         private readonly IClaimDocumentUpload _IclaimDocumentUpload;
         private readonly ClaimPdfGenerator _pdfGenerator;
@@ -137,6 +138,10 @@ namespace Agif_V2.Controllers
         [HttpGet]
         public async Task<IActionResult> OnlineApplication()
         {
+
+            string dd = AESEncrytDecry.GetSalt();
+            HttpContext.Session.SetString(SessionClaimKeySalt, dd);
+            ViewBag.hiddenClaimSalt = dd;
             if (!ModelState.IsValid)
             {
                 return Json("Invalid Request.");
@@ -182,8 +187,86 @@ namespace Agif_V2.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> OnlineApplication(DTOClaimApplication model)
+        public async Task<IActionResult> OnlineApplication([FromForm] string EncryptedData)
         {
+
+            //// 1. Validate that we actually received the encrypted payload
+            if (string.IsNullOrEmpty(EncryptedData))
+            {
+                ModelState.AddModelError("", "Form data is missing or corrupted.");
+                return View("OnlineApplication", new DTOClaimApplication());
+            }
+
+            DTOClaimApplication model;
+
+            try
+            {
+                // 2. Retrieve the EXACT same key you rendered to the front-end (#spnhdns)
+                // Make sure you pull this from your Session, Cache, or Database.
+                string secretKey = HttpContext.Session.GetString(SessionClaimKeySalt); // Example
+
+                // 3. Decrypt the string using your helper class
+                string decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, secretKey);
+
+
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+
+                // This single line covers ints, decimals, doubles, booleans, dates, and all their nullables!
+                options.Converters.Add(new Agif_V2.Helpers.UniversalFlexibleConverterFactory());
+
+                model = System.Text.Json.JsonSerializer.Deserialize<DTOClaimApplication>(decryptedJson, options);
+
+                // 4. Deserialize the JSON back into your C# Model
+                // 4. Deserialize the JSON back into your C# Model
+       
+
+                // 5. Trigger built-in model validation since we bypassed standard model binding
+                // 2. MANUALLY ATTACH THE UPLOADED FILES
+                // ASP.NET Core places the naturally submitted files here:
+                var uploadedFiles = HttpContext.Request.Form.Files;
+
+                if (uploadedFiles.Count > 0)
+                {
+
+                    if (model.EducationDetails != null)
+     
+                    {
+
+                        model.EducationDetails.AttachPartIIOrder = uploadedFiles["EducationDetails.AttachPartIIOrder"];
+                        model.EducationDetails.AttachBonafideLetter= uploadedFiles["EducationDetails.AttachBonafideLetter"];
+                        model.EducationDetails.TotalExpenditureFile = uploadedFiles["EducationDetails.TotalExpenditureFile"];
+                    }
+                    // Example: Map Property Renovation files if the model exists
+                    if (model.PropertyRenovation != null)
+                    {
+                        model.PropertyRenovation.TotalExpenditureFile = uploadedFiles["PropertyRenovation.TotalExpenditureFile"];
+                    }
+
+                    // Example: Map Marriage files if the model exists
+                    if (model.Marriageward != null)
+                    {
+                        model.Marriageward.AttachPartIIOrder = uploadedFiles["Marriageward.AttachPartIIOrder"];
+                        model.Marriageward.AttachInvitationcard = uploadedFiles["Marriageward.AttachInvitationcard"];
+                    }
+
+                    // Add any other specific file mappings for your HBA/PCA/CA models here...
+                }
+
+                // 3. Clear the automatic validation state (since it failed previously due to missing files)
+                ModelState.Clear();
+
+                // 4. Re-validate the model now that the files are properly attached!
+                TryValidateModel(model);
+            }
+            catch (Exception ex)
+            {
+                // Catch decryption failures (wrong key, manipulated payload, etc.)
+                ModelState.AddModelError("", "Security error: Failed to process the application payload.");
+                return View("OnlineApplication", new DTOClaimApplication());
+            }
             if (model.ClaimCommonData != null && model.ClaimCommonData.ResidualService > 1 && model.PropertyRenovation != null)
             {
                 ModelState.AddModelError("ClaimCommonData.ResidualService", "Residual Service cannot exceed 2 years for Repair & Renovation.");

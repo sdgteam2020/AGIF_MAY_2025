@@ -29,7 +29,7 @@
 
 
  <link href="~/css/onlineapplication.css" rel="stylesheet" />
-
+ <script src="~/js/crypto-js.min.js"></script>
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 <div class="container-fluid mt-2">
@@ -43,6 +43,8 @@
         <form id="myMaturityForm" class="needs-validation mb-8" name="myForm" method="post" action="/Claim/OnlineApplication" enctype="multipart/form-data">
             <!-- Personal Info -->
             @Html.AntiForgeryToken()
+             <span id="spanhdns" class="d-none">@ViewBag.hiddenClaimSalt</span>
+
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">

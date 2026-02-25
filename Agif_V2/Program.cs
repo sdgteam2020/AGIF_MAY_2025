@@ -120,7 +120,6 @@ builder.Services.AddTransient<Watermark>();
 builder.Services.AddTransient<AsymmetricEncryption>();
 builder.Services.AddTransient<IClaimCalculator, ClaimCalculatorDL>();
 builder.Services.AddTransient<IModelStateLogger, ModelStateLogger>();
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
@@ -129,12 +128,12 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader());
 });
 
-builder.Services.AddAntiforgery(options =>
-{
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.HttpOnly = true;
-    options.HeaderName = "RequestVerificationToken";
-});
+//builder.Services.AddAntiforgery(options =>
+//{
+//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+//    options.Cookie.HttpOnly = true;
+//    options.HeaderName = "RequestVerificationToken";
+//});
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
@@ -177,7 +176,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<Agif_V2.Middlewares.DecryptionMiddleware>();
 app.Use(async (ctx, next) =>
 {
     var blockedMethods = new[] { "OPTIONS", "TRACE", "TRACK", "CONNECT" };

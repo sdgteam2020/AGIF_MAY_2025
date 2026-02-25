@@ -1,4 +1,5 @@
-﻿
+﻿const getSecretKey = () => $('#spanhdns').text().trim() || "";
+
 $(document).ready(function () {
     maturityInfo();
     expandAccordions();
@@ -1444,18 +1445,50 @@ function handleSubmitClick() {
         }
         else {
             $("#msgerror").html(''); // Clear error message
-            if (formSubmitting) return; // Allow submission after confirmation
-            if (formCancelled) {
-                formCancelled = false; // Reset flag
-                e.preventDefault();
-                return;
+
+            const formData = $("#myMaturityForm").serializeArray();
+            const dataObj = {};
+
+            // 1. Build a properly nested JSON object from ASP.NET MVC form names
+            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
+            formData.forEach(item => {
+                const parts = item.name.split('.');
+                let current = dataObj;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (!current[parts[i]]) {
+                        current[parts[i]] = {};
+                    }
+                    current = current[parts[i]];
+                }
+                current[parts[parts.length - 1]] = item.value;
+            });
+
+            // 2. Encrypt using your helper function
+            const plainTextJson = JSON.stringify(dataObj);
+            const encrypted = encryptData(plainTextJson);
+
+            if (!encrypted) {
+                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
+                return false;
             }
 
-            let unitVal = $('#PresenttxtUnit').val().trim();
-            if (unitVal != '') {
-                event.preventDefault(); // Stop form submission
-                checkCORegistration(); // First check CO registration
-            }
+            // 3. Create a hidden input to hold the encrypted string
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'EncryptedData',
+                value: encrypted
+            }).appendTo('#myMaturityForm');
+
+            // 4. IMPORTANT: Disable original inputs so they DON'T show up in the Network Tab
+            $("#myMaturityForm").find("input, select, textarea")
+                .not("[name='EncryptedData']")
+                .not("[name='__RequestVerificationToken']")
+                .not("[type='file']")
+                .prop("disabled", true);
+
+            // 5. Submit the form naturally
+            $("#myMaturityForm").off("submit").submit();
+            
         }
         
 
@@ -2345,4 +2378,22 @@ function preMatureRetirement() {
             calculateResidualService();
         }
     });
+}
+function encryptData(plainText) {
+    const secretKey = getSecretKey(); // Call the helper
+    if (!secretKey) {
+        console.error("Encryption Key Missing");
+        return "";
+    }
+
+    const key = CryptoJS.enc.Utf8.parse(secretKey);
+    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+
+    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    return encrypted.toString();
 }
