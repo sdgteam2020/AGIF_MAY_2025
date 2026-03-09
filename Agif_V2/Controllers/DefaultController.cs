@@ -151,6 +151,18 @@ namespace Agif_V2.Controllers
             return View();
         }
 
+        private string GetClientIp()
+        {
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                return forwardedHeader.Split(',')[0].Trim();
+            }
+
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        }
+
         [HttpPost]
         public async Task<IActionResult> DownloadApplication(int id)
         {
@@ -159,7 +171,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Invalid request." });
             }
 
-            string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "IpAddress";
+            string ipAddress = GetClientIp();
 
             DTOExportRequest dTOExport = new DTOExportRequest { Id = new List<int> { id } };
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
@@ -210,7 +222,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "Invalid request." });
             }
 
-            string ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "IpAddress";
+            string ipAddress = GetClientIp();
 
             DTOExportRequest dTOExport = new DTOExportRequest { Id = new List<int> { id } };
             var ret = await _IClaimonlineApplication.GetApplicationDetailsForExport(dTOExport);

@@ -204,10 +204,16 @@ namespace Agif_V2.Helpers
                     if (common.House_Building_Advance_Loan || common.House_Repair_Advance_Loan || common.Conveyance_Advance_Loan || common.Computer_Advance_Loan)
                     {
                         counter = 26;
+
                         Paragraph point14 = new Paragraph($"{counter}. Details of Existing Agif Loans:")
-                                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
                                             .SetFontSize(14)
-                                            .SetBold().SetMarginTop(10);
+                                            .SetMarginTop(10);
+
+                        //Paragraph point14 = new Paragraph($"{counter}. Details of Existing Agif Loans:")
+                        //                    .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
+                        //                    .SetFontSize(14)
+                        //                    .SetBold().SetMarginTop(10);
 
                         document.Add(point14);
                         AddRow2("S/No & Type of Loan", "Date of Loan taken", " Duration of loan", "Amount Taken");
@@ -247,10 +253,10 @@ namespace Agif_V2.Helpers
                     {
                         var EducationDetailsDTO = data.EducationDetailsResponse;
 
-                        Paragraph point15 = new Paragraph($"{++counter}. For Education of Child(Applicable for children studying in 12th Class and above")
-                                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                                            .SetFontSize(14)
-                                            .SetBold().SetMarginTop(10);
+                        Paragraph point15 = new Paragraph($"{++counter}. For Education of Child (Applicable for children studying in 12th Class and above)")
+    .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
+    .SetFontSize(14)
+    .SetMarginTop(10);
 
                         document.Add(point15);
 
@@ -297,9 +303,8 @@ namespace Agif_V2.Helpers
                         var MarraigeWardDTO = data.MarraigeWardResponse;
 
                         Paragraph point16 = new Paragraph($"{++counter}. For Marriage of Ward")
-                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                            .SetFontSize(14)
-                            .SetBold().SetMarginTop(10);
+                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
+                            .SetFontSize(14).SetMarginTop(10);
 
                         document.Add(point16);
 
@@ -343,9 +348,8 @@ namespace Agif_V2.Helpers
                         var PropertyRenovationDTO = data.PropertyRenovationResponse;
 
                         Paragraph point17 = new Paragraph($"{++counter}. For Renovation/Repair of House")
-                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                            .SetFontSize(14)
-                            .SetBold().SetMarginTop(10);
+                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
+                            .SetFontSize(14).SetMarginTop(10);
 
                         document.Add(point17);
 
@@ -387,9 +391,8 @@ namespace Agif_V2.Helpers
                         var SplWaiverResponseDTO = data.SplWaiverResponse;
 
                         Paragraph point17 = new Paragraph($"{++counter}. For Special Reason (Warranting waiver from competent authority)")
-                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                            .SetFontSize(14)
-                            .SetBold().SetMarginTop(10);
+                            .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
+                            .SetFontSize(14).SetMarginTop(10);
 
                         document.Add(point17);
 
@@ -429,14 +432,15 @@ namespace Agif_V2.Helpers
 
 
                     Paragraph point18 = new Paragraph($"{++counter}. Certificate {Splreason}")
-                                           .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                                           .SetFontSize(14)
-                                           .SetBold().SetMarginTop(10);
+                                           .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
+                                           .SetFontSize(14).SetMarginTop(10);
                     document.Add(point18);
 
                     if (data.SplWaiverResponse != null)
                     {
-                        document.Add(new Paragraph("* Claim process will take time and is subject to approval of competent authority").SetBold().SetFontSize(10));
+                        document.Add(new Paragraph("* Claim process will take time and is subject to approval of competent authority")
+    .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD))
+    .SetFontSize(10));
                     }
                     List<string> checkPara = new List<string>
                             {
@@ -542,7 +546,6 @@ namespace Agif_V2.Helpers
                         .SetTextAlignment(TextAlignment.JUSTIFIED)
                         .SetMarginLeft(20)
                         .SetMarginBottom(3)
-                        .SetBold()
                         .SetFontColor(ColorConstants.BLACK); // Bold with light font weight (normal color)
                     document.Add(parae);
 

@@ -543,6 +543,22 @@ namespace Agif_V2.Controllers
             }
         }
 
+        private string GetClientIp()
+        {
+            // 1. Check for the X-Forwarded-For header
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                // The header can contain multiple IPs separated by commas if it passed 
+                // through multiple proxies (e.g., "client_ip, proxy1_ip, proxy2_ip").
+                // The first IP is the original client.
+                return forwardedHeader.Split(',')[0].Trim();
+            }
+
+            // 2. Fall back to the current connection's RemoteIpAddress
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        }
 
         [HttpPost]
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
@@ -550,11 +566,7 @@ namespace Agif_V2.Controllers
 
             try
             {
-                string ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-                if (string.IsNullOrEmpty(ip))
-                {
-                    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-                }
+                string ip = GetClientIp();
                 var userData = await _IClaimonlineApplication1.GetApplicationDetails(applicationId);
                 if (userData == null)
                 {

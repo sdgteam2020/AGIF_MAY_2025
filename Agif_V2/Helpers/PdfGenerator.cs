@@ -70,12 +70,25 @@ namespace Agif_V2.Helpers
             {
                 using (var pdf = new PdfDocument(writer))
                 {
-                    var pageSize = PageSize.A4; // Use PageSize directly
-                    var document = new Document(pdf, pageSize); // Use PageSize instead of Rectangle
+                    //var pageSize = PageSize.A4; // Use PageSize directly
+                    //var document = new Document(pdf, pageSize); // Use PageSize instead of Rectangle
+                    //document.SetMargins(30f, 25f, 40f, 25f);
+
+                    //PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
+                    //PdfFont normalFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                    //float smallFontSize = 9f;
+                    var pageSize = PageSize.A4;
+                    var document = new Document(pdf, pageSize);
                     document.SetMargins(30f, 25f, 40f, 25f);
 
-                    PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-                    PdfFont normalFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                    // 1. Define physical paths to your custom fonts in wwwroot
+                    string normalFontPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Fonts", "arial.ttf");
+                    string boldFontPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Fonts", "arialbd.ttf");
+
+                    // 2. Load and embed the fonts directly, bypassing the IIS system registry entirely
+                    PdfFont normalFont = PdfFontFactory.CreateFont(normalFontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+                    PdfFont boldFont = PdfFontFactory.CreateFont(boldFontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+
                     float smallFontSize = 9f;
 
                     Table headerTable = new Table(2).UseAllAvailableWidth();
@@ -971,8 +984,8 @@ namespace Agif_V2.Helpers
                         }
 
                     }
-                    pdf.Close();
-                    writer.Close();
+                    //pdf.Close();
+                    //writer.Close();
 
                     document.Close();
                 }
