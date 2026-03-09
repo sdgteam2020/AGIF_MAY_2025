@@ -456,8 +456,14 @@ namespace Agif_V2.Controllers
         #region Helper Methods
         private string GetClientIp()
         {
-            string? ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            return string.IsNullOrEmpty(ip) ? HttpContext.Connection.RemoteIpAddress?.ToString() ?? "" : ip;
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                return forwardedHeader.Split(',')[0].Trim();
+            }
+
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
         }
 
         private string? GetApplicationTypeName(dynamic userData)

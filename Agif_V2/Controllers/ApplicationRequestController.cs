@@ -652,18 +652,24 @@ namespace Agif_V2.Controllers
             }
         }
 
+        private string GetClientIp()
+        {
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
 
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                return forwardedHeader.Split(',')[0].Trim();
+            }
+
+            return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+        }
         public async Task<IActionResult> DownloadApplication([FromQuery] List<int> id)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new { success = false, message = "Invalid request." });
             }
-            string? ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-            if (string.IsNullOrEmpty(ipAddress))
-            {
-                ipAddress = "IpAddress";
-            }
+            string? ipAddress = GetClientIp();
             DTOExportRequest dTOExport = new DTOExportRequest { Id = id };
             var ret = await _onlineApplication.GetApplicationDetailsForExport(dTOExport);
 

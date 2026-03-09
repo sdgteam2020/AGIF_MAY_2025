@@ -20,5 +20,6 @@ namespace DataTransferObject.Model
         public string XMLSignResponse { get; set; } = string.Empty;
         public string Remarks { get; set; } = string.Empty;
         public DateTime? SignOn { get; set; }
+        //public string ipAddress {  get; set; } = string.Empty;
     }
 }
