@@ -372,7 +372,7 @@ namespace Agif_V2.Controllers
                     DomainId = dTOTempSession.DomainId,
                     ArmyNo = dTOTempSession.ArmyNo,
                     RankName = dTOTempSession.RankName,
-                    IPAddress = ipAddress
+                    ipAddress = ipAddress
                 };
 
                 await _onlineApplication.UpdateApplicationStatus(applId, 2);
@@ -445,7 +445,7 @@ namespace Agif_V2.Controllers
                         DomainId = dTOTempSession.DomainId,
                         ArmyNo = dTOTempSession.ArmyNo,
                         RankName = dTOTempSession.RankName,
-                        IPAddress= ipAddress
+                    ipAddress = ipAddress
                 };
 
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);
