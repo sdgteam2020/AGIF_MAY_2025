@@ -7,7 +7,7 @@ using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
-using Microsoft.AspNet.Identity;
+//using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

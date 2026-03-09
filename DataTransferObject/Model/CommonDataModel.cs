@@ -219,7 +219,7 @@ namespace DataTransferObject.Model
 
         public string? AGIFRemarks { get; set; }= string.Empty;
 
-        //public string? ipAddress { get; set; }
+        public string? ipAddress { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

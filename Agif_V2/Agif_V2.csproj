@@ -210,18 +210,11 @@
 	<ItemGroup>
 		<PackageReference Include="ClosedXML" Version="0.105.0" />
 		<PackageReference Include="EPPlus" Version="8.5.0" />
-		<PackageReference Include="itext7" Version="9.5.0" />
-		<PackageReference Include="itext7.bouncy-castle-adapter" Version="9.5.0" />
-		<PackageReference Include="itext7.font-asian" Version="9.5.0" />
-		<PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="10.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.3.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.3.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Hosting.Server.Abstractions" Version="2.3.9" />
-		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
+		<PackageReference Include="itext7" Version="8.0.0" />
+		<PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.0" />
+		<PackageReference Include="itext7.font-asian" Version="8.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="10.0.3" />
-		<PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.9" />
 		<PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
@@ -229,7 +222,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.3" />
 		<PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
 	</ItemGroup>
 
