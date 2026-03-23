@@ -58,13 +58,13 @@ namespace Agif_V2.Controllers
             }
             var existingUser = await _IClaimonlineApplication1.GetApplicationDetailsByArmyNo(armyNumber, Prefix, Suffix, appType);
 
-            if (existingUser != null) // Check if the user exists
+            if (existingUser != null) 
             {
-                return Json(new { exists = true }); // User exists
+                return Json(new { exists = true }); 
             }
             else
             {
-                return Json(new { exists = false }); // User does not exist
+                return Json(new { exists = false });
             }
         }
 
@@ -189,8 +189,6 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> OnlineApplication([FromForm] string EncryptedData)
         {
-
-            //// 1. Validate that we actually received the encrypted payload
             if (string.IsNullOrEmpty(EncryptedData))
             {
                 ModelState.AddModelError("", "Form data is missing or corrupted.");
@@ -201,11 +199,8 @@ namespace Agif_V2.Controllers
 
             try
             {
-                // 2. Retrieve the EXACT same key you rendered to the front-end (#spnhdns)
-                // Make sure you pull this from your Session, Cache, or Database.
                 string secretKey = HttpContext.Session.GetString(SessionClaimKeySalt); // Example
 
-                // 3. Decrypt the string using your helper class
                 string decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, secretKey);
 
 
@@ -214,18 +209,10 @@ namespace Agif_V2.Controllers
                     PropertyNameCaseInsensitive = true,
                 };
 
-                // This single line covers ints, decimals, doubles, booleans, dates, and all their nullables!
                 options.Converters.Add(new Agif_V2.Helpers.UniversalFlexibleConverterFactory());
 
                 model = System.Text.Json.JsonSerializer.Deserialize<DTOClaimApplication>(decryptedJson, options);
 
-                // 4. Deserialize the JSON back into your C# Model
-                // 4. Deserialize the JSON back into your C# Model
-       
-
-                // 5. Trigger built-in model validation since we bypassed standard model binding
-                // 2. MANUALLY ATTACH THE UPLOADED FILES
-                // ASP.NET Core places the naturally submitted files here:
                 var uploadedFiles = HttpContext.Request.Form.Files;
 
                 if (uploadedFiles.Count > 0)
@@ -239,31 +226,25 @@ namespace Agif_V2.Controllers
                         model.EducationDetails.AttachBonafideLetter= uploadedFiles["EducationDetails.AttachBonafideLetter"];
                         model.EducationDetails.TotalExpenditureFile = uploadedFiles["EducationDetails.TotalExpenditureFile"];
                     }
-                    // Example: Map Property Renovation files if the model exists
                     if (model.PropertyRenovation != null)
                     {
                         model.PropertyRenovation.TotalExpenditureFile = uploadedFiles["PropertyRenovation.TotalExpenditureFile"];
                     }
 
-                    // Example: Map Marriage files if the model exists
                     if (model.Marriageward != null)
                     {
                         model.Marriageward.AttachPartIIOrder = uploadedFiles["Marriageward.AttachPartIIOrder"];
                         model.Marriageward.AttachInvitationcard = uploadedFiles["Marriageward.AttachInvitationcard"];
                     }
 
-                    // Add any other specific file mappings for your HBA/PCA/CA models here...
                 }
 
-                // 3. Clear the automatic validation state (since it failed previously due to missing files)
                 ModelState.Clear();
 
-                // 4. Re-validate the model now that the files are properly attached!
                 TryValidateModel(model);
             }
             catch (Exception ex)
             {
-                // Catch decryption failures (wrong key, manipulated payload, etc.)
                 ModelState.AddModelError("", "Security error: Failed to process the application payload.");
                 return View("OnlineApplication", new DTOClaimApplication());
             }
@@ -399,11 +380,6 @@ namespace Agif_V2.Controllers
         private async Task<ClaimCommonModel> SaveClaimCommonDataAsync(DTOClaimApplication model)
         {
             string? ip = GetClientIp();
-            //if (string.IsNullOrEmpty(ip))
-            //{
-            //    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            //}
-
             if (model.ClaimCommonData == null) return new ClaimCommonModel();
 
             model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
@@ -465,7 +441,6 @@ namespace Agif_V2.Controllers
 
 
         [HttpPost]
-        
         public async Task<IActionResult> Upload(ClaimFileUploadViewModel model, string formType, int applicationId)
         {
             TempData.Keep("ClaimapplicationId");
@@ -545,18 +520,12 @@ namespace Agif_V2.Controllers
 
         private string GetClientIp()
         {
-            // 1. Check for the X-Forwarded-For header
             var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
 
             if (!string.IsNullOrEmpty(forwardedHeader))
             {
-                // The header can contain multiple IPs separated by commas if it passed 
-                // through multiple proxies (e.g., "client_ip, proxy1_ip, proxy2_ip").
-                // The first IP is the original client.
                 return forwardedHeader.Split(',')[0].Trim();
             }
-
-            // 2. Fall back to the current connection's RemoteIpAddress
             return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
         }
 

@@ -48,11 +48,13 @@ namespace Agif_V2.Middleware
 
             await error.Add(errorLogs);
 
-            var response = new ErrorModel(httpContext.Response.StatusCode,ex.Message,ex.GetType().Name.ToString(),ex.StackTrace?.ToString());
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            string message = "An unexpected error occurred processing your request.";
+            string? details = null;
+            
+            var response = new ErrorModel(httpContext.Response.StatusCode, message, details);
 
-            var json = JsonSerializer.Serialize(response, options);
-            await httpContext.Response.WriteAsync(json);
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response, options));
         }
     }
 }

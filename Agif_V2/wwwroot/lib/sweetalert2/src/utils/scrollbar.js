@@ -2,7 +2,7 @@ import { swalClasses } from './classes.js'
 
 /**
  * Measure scrollbar width for padding body during modal show/hide
- * https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
+ * Links_github.com/twbs/bootstrap/blob/master/js/src/modal.js
  *
  * @returns {number}
  */
@@ -30,7 +30,7 @@ export const replaceScrollbarWithPadding = (initialBodyOverflow) => {
   }
   if (
     document.body.scrollHeight > window.innerHeight ||
-    initialBodyOverflow === 'scroll' // https://github.com/sweetalert2/sweetalert2/issues/2663
+    initialBodyOverflow === 'scroll' // Links_github.com/sweetalert2/sweetalert2/issues/2663
   ) {
     previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'))
     document.body.style.paddingRight = `${previousBodyPadding + measureScrollbar()}px`

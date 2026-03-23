@@ -169,13 +169,13 @@ namespace Agif_V2.Controllers
 
             var existingUser = await _IonlineApplication1.GetApplicationDetailsByArmyNo(model.armyNumber, model.Prefix, model.Suffix, model.appType);
 
-            if (existingUser != null) // Check if the user exists
+            if (existingUser != null)
             {
-                return Json(new { exists = true }); // User exists
+                return Json(new { exists = true }); 
             }
             else
             {
-                return Json(new { exists = false }); // User does not exist
+                return Json(new { exists = false }); 
             }
         }
         [HttpPost]
@@ -245,32 +245,24 @@ namespace Agif_V2.Controllers
 
             try
             {
-                // 2. Retrieve the EXACT same key you rendered to the front-end (#spnhdns)
-                // Make sure you pull this from your Session, Cache, or Database.
-                string secretKey = HttpContext.Session.GetString(SessionKeySalt); // Example
+                string secretKey = HttpContext.Session.GetString(SessionKeySalt); 
 
-                // 3. Decrypt the string using your helper class
                 string decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, secretKey);
 
-                // 4. Deserialize the JSON back into your C# Model
-                // 4. Deserialize the JSON back into your C# Model
                 var options = new System.Text.Json.JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
 
-                    // Add this line to automatically parse "123" into 123
                     NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
                 };
                 options.Converters.Add(new Agif_V2.Helpers.FlexibleDateTimeConverter());
                 options.Converters.Add(new Agif_V2.Helpers.FlexibleDecimalConverter()); // <-- Added this
                 model = System.Text.Json.JsonSerializer.Deserialize<DTOOnlineApplication>(decryptedJson, options);
 
-                // 5. Trigger built-in model validation since we bypassed standard model binding
                 TryValidateModel(model);
             }
             catch (Exception ex)
             {
-                // Catch decryption failures (wrong key, manipulated payload, etc.)
                 ModelState.AddModelError("", "Security error: Failed to process the application payload.");
                 return View("OnlineApplication", new DTOOnlineApplication());
             }
@@ -500,7 +492,7 @@ namespace Agif_V2.Controllers
                                 bool containsApplication = Path.GetFileName(file).Contains("Application");
                                 return containsApplication ? 0 : 1;
                             })
-                            .ThenBy(file => Path.GetFileName(file))  // After prioritizing, order by the filename
+                            .ThenBy(file => Path.GetFileName(file)) 
                             .ToArray();
                 }
             }

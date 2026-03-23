@@ -4,22 +4,22 @@
   "description": "Official open source SVG icon library for Bootstrap",
   "author": "mdo",
   "license": "MIT",
-  "homepage": "https://icons.getbootstrap.com/",
+  "homepage": "Links_icons.getbootstrap.com/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/twbs/icons.git"
+    "url": "git+Links_github.com/twbs/icons.git"
   },
   "bugs": {
-    "url": "https://github.com/twbs/icons/issues"
+    "url": "Links_github.com/twbs/icons/issues"
   },
   "funding": [
     {
       "type": "github",
-      "url": "https://github.com/sponsors/twbs"
+      "url": "Links_github.com/sponsors/twbs"
     },
     {
       "type": "opencollective",
-      "url": "https://opencollective.com/bootstrap"
+      "url": "Links_opencollective.com/bootstrap"
     }
   ],
   "keywords": [

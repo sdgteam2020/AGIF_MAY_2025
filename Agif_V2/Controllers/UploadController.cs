@@ -106,7 +106,7 @@ namespace Agif_V2.Controllers
                 return View("Upload", model);
             }
 
-            if (!ValidateFiles(files))
+            if (!await ValidateFiles(files))
             {
                 return View("Upload", model);
             }
@@ -226,7 +226,7 @@ namespace Agif_V2.Controllers
             return files;
         }
 
-        private bool ValidateFiles(List<IFormFile> files)
+        private async Task<bool> ValidateFiles(List<IFormFile> files)
         {
             foreach (var file in files)
             {
@@ -238,7 +238,10 @@ namespace Agif_V2.Controllers
                 
                 if (file.Length > 1 * 1024 * 1024)
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
-
+                if(await _pdfUpload.IsPdfPasswordProtected(file))
+                {
+                    ModelState.AddModelError(file.Name, "Password protected Pdfs are not allowed");
+                }
 
 
             }

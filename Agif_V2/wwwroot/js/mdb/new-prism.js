@@ -1,5 +1,5 @@
 /* PrismJS 1.14.0
-http://prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+markup-templating+json+php+typescript+scss&plugins=line-numbers+toolbar+previewers+normalize-whitespace+copy-to-clipboard */
+Link_prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascript+markup-templating+json+php+typescript+scss&plugins=line-numbers+toolbar+previewers+normalize-whitespace+copy-to-clipboard */
 
 var _self =
   typeof window !== 'undefined'
@@ -10,8 +10,8 @@ var _self =
 
 /**
  * Prism: Lightweight, robust, elegant syntax highlighting
- * MIT license http://www.opensource.org/licenses/mit-license.php/
- * @author Lea Verou http://lea.verou.me
+ * MIT license Link_www.opensource.org/licenses/mit-license.php/
+ * @author Lea Verou Link_lea.verou.me
  */
 
 var Prism = (function () {
@@ -875,8 +875,8 @@ Prism.languages.json = {
 Prism.languages.jsonp = Prism.languages.json;
 
 /**
- * Original by Aaron Harun: http://aahacreative.com/2012/07/31/php-syntax-highlighting-prism/
- * Modified by Miles Johnson: http://milesj.me
+ * Original by Aaron Harun: Link_aahacreative.com/2012/07/31/php-syntax-highlighting-prism/
+ * Modified by Miles Johnson: Link_milesj.me
  *
  * Supports the following:
  * 		- Extends clike syntax

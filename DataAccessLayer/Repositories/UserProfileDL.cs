@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Interfaces;
 using DataTransferObject.Model;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -229,5 +230,19 @@ namespace DataAccessLayer.Repositories
             }
         }
 
+        public async Task<bool> SaveLoginLogs(DTOLoginLogs loginLog)
+        {
+            var logEntry = new trnLoginLog
+            {
+                UserId = loginLog.UserId,
+                ProfileId = loginLog.ProfileId,
+                RoleId = loginLog.RoleId,   
+                IpAddress = loginLog.IpAddress,
+                LoginOn = loginLog.LoginOn
+            };
+            _context.TrnLoginLogs.Add(logEntry);
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

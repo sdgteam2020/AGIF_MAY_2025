@@ -1,7 +1,7 @@
 /*!
  * jQuery Validation Plugin v1.19.5
  *
- * https://jqueryvalidation.org/
+ * Links_jqueryvalidation.org/
  *
  * Copyright (c) 2022 Jörn Zaefferer
  * Released under the MIT license
@@ -158,7 +158,7 @@ $.validator.addMethod( "bic", function( value, element ) {
 
 /*
  * Código de identificación fiscal ( CIF ) is the tax identification code for Spanish legal entities
- * Further rules can be found in Spanish on http://es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal
+ * Further rules can be found in Spanish on Link_es.wikipedia.org/wiki/C%C3%B3digo_de_identificaci%C3%B3n_fiscal
  *
  * Spanish CIF structure:
  *
@@ -478,7 +478,7 @@ $.validator.addMethod( "creditcard", function( value, element ) {
 }, "Please enter a valid credit card number." );
 
 /* NOTICE: Modified version of Castle.Components.Validator.CreditCardValidator
- * Redistributed under the Apache License 2.0 at http://www.apache.org/licenses/LICENSE-2.0
+ * Redistributed under the Apache License 2.0 at Link_www.apache.org/licenses/LICENSE-2.0
  * Valid Types: mastercard, visa, amex, dinersclub, enroute, discover, jcb, unknown, all (overrides all other settings)
  */
 $.validator.addMethod( "creditcardtypes", function( value, element, param ) {
@@ -906,7 +906,7 @@ $.validator.addMethod( "mobileRU", function( phone_number, element ) {
  * Extract $1 and set $prefix to '+44<space>' if $1 is '44', otherwise set $prefix to '0'
  * Extract $2 and remove hyphens, spaces and parentheses. Phone number is combined $prefix and $2.
  * A number of very detailed GB telephone number RegEx patterns can also be found at:
- * http://www.aa-asterisk.org.uk/index.php/Regular_Expressions_for_Validating_and_Formatting_GB_Telephone_Numbers
+ * Link_www.aa-asterisk.org.uk/index.php/Regular_Expressions_for_Validating_and_Formatting_GB_Telephone_Numbers
  */
 $.validator.addMethod( "mobileUK", function( phone_number, element ) {
 	phone_number = phone_number.replace( /\(|\)|\s+|-/g, "" );
@@ -1012,8 +1012,8 @@ $.validator.addMethod( "nipPL", function( value ) {
  * that are being used for validation.
  * @copyright (c) 21/08/2018 13:14, Cleiton da Silva Mendonça
  * @author Cleiton da Silva Mendonça <cleiton.mendonca@gmail.com>
- * @link http://gitlab.com/csmendonca Gitlab of Cleiton da Silva Mendonça
- * @link http://github.com/csmendonca Github of Cleiton da Silva Mendonça
+ * @link Link_gitlab.com/csmendonca Gitlab of Cleiton da Silva Mendonça
+ * @link Link_github.com/csmendonca Github of Cleiton da Silva Mendonça
  */
 $.validator.addMethod( "nisBR", function( value ) {
 	var number;
@@ -1113,7 +1113,7 @@ $.validator.addMethod( "phoneNL", function( value, element ) {
  *
  * Excludes intelligent networks (premium rate, shared cost, free phone numbers).
  *
- * Poland National Numbering Plan http://www.itu.int/oth/T02020000A8/en
+ * Poland National Numbering Plan Link_www.itu.int/oth/T02020000A8/en
  */
 $.validator.addMethod( "phonePL", function( phone_number, element ) {
 	phone_number = phone_number.replace( /\s+/g, "" );
@@ -1127,7 +1127,7 @@ $.validator.addMethod( "phonePL", function( phone_number, element ) {
  * Extract $1 and set $prefix to '+44<space>' if $1 is '44', otherwise set $prefix to '0'
  * Extract $2 and remove hyphens, spaces and parentheses. Phone number is combined $prefix and $2.
  * A number of very detailed GB telephone number RegEx patterns can also be found at:
- * http://www.aa-asterisk.org.uk/index.php/Regular_Expressions_for_Validating_and_Formatting_GB_Telephone_Numbers
+ * Link_www.aa-asterisk.org.uk/index.php/Regular_Expressions_for_Validating_and_Formatting_GB_Telephone_Numbers
  */
 
 $.validator.addMethod( "phonesUK", function( phone_number, element ) {
@@ -1142,7 +1142,7 @@ $.validator.addMethod( "phonesUK", function( phone_number, element ) {
  * Extract $1 and set $prefix to '+44<space>' if $1 is '44', otherwise set $prefix to '0'
  * Extract $2 and remove hyphens, spaces and parentheses. Phone number is combined $prefix and $2.
  * A number of very detailed GB telephone number RegEx patterns can also be found at:
- * http://www.aa-asterisk.org.uk/index.php/Regular_Expressions_for_Validating_and_Formatting_GB_Telephone_Numbers
+ * Link_www.aa-asterisk.org.uk/index.php/Regular_Expressions_for_Validating_and_Formatting_GB_Telephone_Numbers
  */
 $.validator.addMethod( "phoneUK", function( phone_number, element ) {
 	phone_number = phone_number.replace( /\(|\)|\s+|-/g, "" );

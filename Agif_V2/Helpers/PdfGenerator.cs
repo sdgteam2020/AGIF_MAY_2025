@@ -70,22 +70,13 @@ namespace Agif_V2.Helpers
             {
                 using (var pdf = new PdfDocument(writer))
                 {
-                    //var pageSize = PageSize.A4; // Use PageSize directly
-                    //var document = new Document(pdf, pageSize); // Use PageSize instead of Rectangle
-                    //document.SetMargins(30f, 25f, 40f, 25f);
-
-                    //PdfFont boldFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD);
-                    //PdfFont normalFont = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-                    //float smallFontSize = 9f;
                     var pageSize = PageSize.A4;
                     var document = new Document(pdf, pageSize);
                     document.SetMargins(30f, 25f, 40f, 25f);
 
-                    // 1. Define physical paths to your custom fonts in wwwroot
                     string normalFontPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Fonts", "arial.ttf");
                     string boldFontPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Fonts", "arialbd.ttf");
 
-                    // 2. Load and embed the fonts directly, bypassing the IIS system registry entirely
                     PdfFont normalFont = PdfFontFactory.CreateFont(normalFontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
                     PdfFont boldFont = PdfFontFactory.CreateFont(boldFontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
 
@@ -158,7 +149,7 @@ namespace Agif_V2.Helpers
                          .SetBorderTop(new SolidBorder(1))
                          .SetBorderBottom(new SolidBorder(1))
                          .SetBorderLeft(Border.NO_BORDER)
-                         .SetBorderRight(Border.NO_BORDER)); // This is the heading cell
+                         .SetBorderRight(Border.NO_BORDER)); 
 
                     table.AddCell(new Cell(1, 3).Add(new Paragraph((common.Vill_Town ?? "") + ", " + (common.PostOffice ?? "") + ", " +
                         (common.Distt ?? "") + ", " + (common.State ?? "") + ", " + (common.Code ?? ""))
@@ -252,13 +243,13 @@ namespace Agif_V2.Helpers
                             .SetTextAlignment(TextAlignment.LEFT)
                             .SetFont(regularFont)
                             .SetFontSize(10));
-                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); // Empty left cell
+                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); 
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.DdlRank + " " + common.ApplicantName))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT)
                             .SetFont(regularFont)
                             .SetFontSize(10));
-                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); // Empty left cell
+                        signatureTable.AddCell(new Cell().SetBorder(Border.NO_BORDER)); 
                         signatureTable.AddCell(new Cell().Add(new Paragraph(common.UpdatedOn))
                             .SetBorder(Border.NO_BORDER)
                             .SetTextAlignment(TextAlignment.LEFT)
@@ -566,7 +557,7 @@ namespace Agif_V2.Helpers
                                 .SetMarginTop(10)
                                 .SetMarginBottom(5));
 
-                            string strAppType = "Loan"; // Example dynamic value
+                            string strAppType = "Loan"; 
                             string interviewDate = DateTime.Now.ToString("dd-MM-yyyy");
 
                             void AddRecParagraph(string text)
@@ -984,8 +975,6 @@ namespace Agif_V2.Helpers
                         }
 
                     }
-                    //pdf.Close();
-                    //writer.Close();
 
                     document.Close();
                 }

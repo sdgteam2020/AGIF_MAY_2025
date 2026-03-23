@@ -349,7 +349,7 @@ const isLoading = () => {
 
 /**
  * Securely set innerHTML of an element
- * https://github.com/sweetalert2/sweetalert2/issues/1926
+ * Links_github.com/sweetalert2/sweetalert2/issues/1926
  *
  * @param {HTMLElement} elem
  * @param {string} html
@@ -369,7 +369,7 @@ const setInnerHtml = (elem, html) => {
     if (body) {
       Array.from(body.childNodes).forEach(child => {
         if (child instanceof HTMLVideoElement || child instanceof HTMLAudioElement) {
-          elem.appendChild(child.cloneNode(true)); // https://github.com/sweetalert2/sweetalert2/issues/2507
+          elem.appendChild(child.cloneNode(true)); // Links_github.com/sweetalert2/sweetalert2/issues/2507
         } else {
           elem.appendChild(child);
         }
@@ -634,7 +634,7 @@ const allButtonsAreHidden = () => !isVisible$1(getConfirmButton()) && !isVisible
 const isScrollable = elem => !!(elem.scrollHeight > elem.clientHeight);
 
 /**
- * borrowed from https://stackoverflow.com/a/46352119
+ * borrowed from Links_stackoverflow.com/a/46352119
  *
  * @param {HTMLElement} elem
  * @returns {boolean}
@@ -1034,8 +1034,8 @@ function handleGrowParam(container, grow) {
  * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
  * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
  * This is the approach that Babel will probably take to implement private methods/fields
- *   https://github.com/tc39/proposal-private-methods
- *   https://github.com/babel/babel/pull/7555
+ *   Links_github.com/tc39/proposal-private-methods
+ *   Links_github.com/babel/babel/pull/7555
  * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
  *   then we can use that language feature.
  */
@@ -2010,8 +2010,8 @@ const handleEsc = (event, innerParams, dismissWith) => {
  * This module contains `WeakMap`s for each effectively-"private  property" that a `Swal` has.
  * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
  * This is the approach that Babel will probably take to implement private methods/fields
- *   https://github.com/tc39/proposal-private-methods
- *   https://github.com/babel/babel/pull/7555
+ *   Links_github.com/tc39/proposal-private-methods
+ *   Links_github.com/babel/babel/pull/7555
  * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
  *   then we can use that language feature.
  */
@@ -2047,11 +2047,11 @@ const unsetAriaHidden = () => {
   });
 };
 
-const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent; // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
+const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent; // true for Safari desktop + all iOS browsers Links_stackoverflow.com/a/70585394
 
 /**
  * Fix iOS scrolling
- * http://stackoverflow.com/q/39626302
+ * Link_stackoverflow.com/q/39626302
  */
 const iOSfix = () => {
   if (isSafariOrIOS && !hasClass(document.body, swalClasses.iosfix)) {
@@ -2063,7 +2063,7 @@ const iOSfix = () => {
 };
 
 /**
- * https://github.com/sweetalert2/sweetalert2/issues/1246
+ * Links_github.com/sweetalert2/sweetalert2/issues/1246
  */
 const lockBodyScroll = () => {
   const container = getContainer();
@@ -2116,7 +2116,7 @@ const shouldPreventTouchMove = event => {
 };
 
 /**
- * https://github.com/sweetalert2/sweetalert2/issues/1786
+ * Links_github.com/sweetalert2/sweetalert2/issues/1786
  *
  * @param {*} event
  * @returns {boolean}
@@ -2126,7 +2126,7 @@ const isStylus = event => {
 };
 
 /**
- * https://github.com/sweetalert2/sweetalert2/issues/1891
+ * Links_github.com/sweetalert2/sweetalert2/issues/1891
  *
  * @param {TouchEvent} event
  * @returns {boolean}
@@ -2145,7 +2145,7 @@ const undoIOSfix = () => {
 
 /**
  * Measure scrollbar width for padding body during modal show/hide
- * https://github.com/twbs/bootstrap/blob/master/js/src/modal.js
+ * Links_github.com/twbs/bootstrap/blob/master/js/src/modal.js
  *
  * @returns {number}
  */
@@ -2171,7 +2171,7 @@ const replaceScrollbarWithPadding = initialBodyOverflow => {
   if (previousBodyPadding !== null) {
     return;
   }
-  if (document.body.scrollHeight > window.innerHeight || initialBodyOverflow === 'scroll' // https://github.com/sweetalert2/sweetalert2/issues/2663
+  if (document.body.scrollHeight > window.innerHeight || initialBodyOverflow === 'scroll' // Links_github.com/sweetalert2/sweetalert2/issues/2663
   ) {
     previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
     document.body.style.paddingRight = `${previousBodyPadding + measureScrollbar()}px`;
@@ -4131,7 +4131,7 @@ function setParameters(params) {
   setDefaultInputValidators(params);
 
   if (params.showLoaderOnConfirm && !params.preConfirm) {
-    warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'https://sweetalert2.github.io/#ajax-request');
+    warn('showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' + 'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' + 'Links_sweetalert2.github.io/#ajax-request');
   }
   validateCustomTargetElement(params);
 
@@ -4404,7 +4404,7 @@ if (typeof window !== 'undefined' && /^ru\b/.test(navigator.language) && locatio
     setTimeout(() => {
       document.body.style.pointerEvents = 'none';
       const ukrainianAnthem = document.createElement('audio');
-      ukrainianAnthem.src = 'https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3';
+      ukrainianAnthem.src = 'Links_flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3';
       ukrainianAnthem.loop = true;
       document.body.appendChild(ukrainianAnthem);
       setTimeout(() => {

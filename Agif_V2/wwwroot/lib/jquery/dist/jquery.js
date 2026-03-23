@@ -1,13 +1,13 @@
 /*!
  * jQuery JavaScript Library v3.6.0
- * https://jquery.com/
+ * Links_jquery.com/
  *
  * Includes Sizzle.js
- * https://sizzlejs.com/
+ * Links_sizzlejs.com/
  *
  * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
- * https://jquery.org/license
+ * Links_jquery.org/license
  *
  * Date: 2021-03-02T17:08Z
  */
@@ -436,11 +436,11 @@ function isArrayLike( obj ) {
 var Sizzle =
 /*!
  * Sizzle CSS Selector Engine v2.3.6
- * https://sizzlejs.com/
+ * Links_sizzlejs.com/
  *
  * Copyright JS Foundation and other contributors
  * Released under the MIT license
- * https://js.foundation/
+ * Links_js.foundation/
  *
  * Date: 2021-02-16
  */

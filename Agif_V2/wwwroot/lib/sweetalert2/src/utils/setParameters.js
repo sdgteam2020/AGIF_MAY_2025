@@ -43,7 +43,7 @@ export default function setParameters(params) {
     warn(
       'showLoaderOnConfirm is set to true, but preConfirm is not defined.\n' +
         'showLoaderOnConfirm should be used together with preConfirm, see usage example:\n' +
-        'https://sweetalert2.github.io/#ajax-request'
+        'Links_sweetalert2.github.io/#ajax-request'
     )
   }
 

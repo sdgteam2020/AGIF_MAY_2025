@@ -172,7 +172,7 @@ namespace DataTransferObject.Model
 
         public int StatusCode { get; set; }
 
-        public bool IsMergePdf { get; set; } = false;
+        public bool? IsMergePdf { get; set; } = false;
         public string? IOArmyNo { get; set; }
 
         public DateTime? DownloadedOn { get; set; }
@@ -181,7 +181,7 @@ namespace DataTransferObject.Model
         public string? AGIFRemarks { get; set; } = string.Empty;
 
         public string? IPAddress { get; set; } = string.Empty;
-        public bool PrematureRetirement { get; set; }
+        public bool? PrematureRetirement { get; set; }
 
     }
 }

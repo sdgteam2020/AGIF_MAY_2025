@@ -3,7 +3,16 @@
         let selectedType = $(this).val();
         clearAllData();
     });
+    $('#armyNoInput').on('input', function () {
+        // 1. Remove any non-alphanumeric characters
+        let sanitizedValue = $(this).val().replace(/[^a-zA-Z0-9]/g, '');
 
+        // 2. Enforce the 10-character maximum length limit
+        sanitizedValue = sanitizedValue.substring(0, 14);
+
+        // 3. Update the input field (and capitalize it if desired)
+        $(this).val(sanitizedValue.toUpperCase());
+    });
     function clearAllData() {
         $('#resultsTable').addClass('d-none');
         $('#noResultsMessage').addClass('d-none');

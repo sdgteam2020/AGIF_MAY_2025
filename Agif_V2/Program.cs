@@ -128,12 +128,12 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader());
 });
 
-//builder.Services.AddAntiforgery(options =>
-//{
-//    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-//    options.Cookie.HttpOnly = true;
-//    options.HeaderName = "RequestVerificationToken";
-//});
+builder.Services.AddAntiforgery(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.HttpOnly = true;
+    options.HeaderName = "RequestVerificationToken";
+});
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
@@ -163,6 +163,13 @@ builder.Services.AddHsts(options =>
     options.Preload = true;
     options.IncludeSubDomains = true;
     options.MaxAge = TimeSpan.FromDays(365); // 1 year = 31536000 seconds
+});
+
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    // This acts as a global safety net forcing ALL cookies to be HttpOnly and Secure
+    options.HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always;
+    options.Secure = CookieSecurePolicy.Always;
 });
 
 var app = builder.Build();
@@ -225,7 +232,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseCors("CorsPolicy");
-
+app.UseCookiePolicy();
 
 app.UseAuthentication();
 

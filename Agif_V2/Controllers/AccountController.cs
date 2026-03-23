@@ -7,12 +7,10 @@ using DataTransferObject.Identitytable;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
-//using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OneLogin.Saml;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Ocsp;
 using System.Security.Cryptography;
@@ -31,8 +29,10 @@ namespace Agif_V2.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMasterOnlyTable _masterOnlyTable;
         private readonly AsymmetricEncryption _rsa;
+        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping, IMasterOnlyTable _masterOnlyTable,AsymmetricEncryption rsa)
+        public AccountController(Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext db, IUserProfile userProfile, IUserMapping userMapping, IMasterOnlyTable _masterOnlyTable,AsymmetricEncryption rsa, RoleManager<ApplicationRole> roleManager, IConfiguration configuration)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -41,22 +41,9 @@ namespace Agif_V2.Controllers
             _db = db;
             this._masterOnlyTable = _masterOnlyTable;
             _rsa = rsa;
+            _roleManager = roleManager;
+            _configuration = configuration;
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public IActionResult Login()
         {
@@ -69,8 +56,6 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-
-
             if (!string.IsNullOrEmpty(model.UserName) && !string.IsNullOrEmpty(model.Password))
             {
                 var salt = HttpContext.Session.GetString(SessionKeySalt);
@@ -197,9 +182,13 @@ namespace Agif_V2.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
             var profile = await _userProfile.GetUserAllDetails(model.UserName);
-
             string role = roles.Contains("Admin") ? "Admin" : roles.FirstOrDefault() ?? "User";
-
+            var roleEntry = await _roleManager.FindByNameAsync(role);
+            int finalRoleId = 0;
+            if (roleEntry != null)
+            {
+                int.TryParse(roleEntry.Id.ToString(), out finalRoleId);
+            }
 
             SessionUserDTO sessionUserDTO = new SessionUserDTO
             {
@@ -213,6 +202,23 @@ namespace Agif_V2.Controllers
                 ArmyNo = profile.ArmyNo ?? string.Empty,
                 name = profile.ProfileName ?? string.Empty,
             };
+
+            DTOLoginLogs loginLog = new DTOLoginLogs
+            {
+                UserId = user.Id,
+                ProfileId = profile.ProfileId,
+                RoleId = finalRoleId,
+                LoginOn = DateTime.Now,
+                IpAddress = GetClientIp()
+            };
+
+            var Result = await _userProfile.SaveLoginLogs(loginLog);
+            if (!Result)
+            {
+                // Intentional: We do not want to block the user login 
+                // even if the audit log fails to save.
+            }
+
 
             Helpers.SessionExtensions.SetObject(HttpContext.Session, "User", sessionUserDTO);
 
@@ -290,8 +296,8 @@ namespace Agif_V2.Controllers
                     UpdatedOn = DateTime.Now,
                     DomainId = signUpDto.userName
                 };
-
-                var Result = await _userManager.CreateAsync(newUser, "Admin123!");
+                string defaultPassword = _configuration["SecuritySettings:DefaultUserPassword"];
+                var Result = await _userManager.CreateAsync(newUser, defaultPassword);
                 if (!Result.Succeeded)
                 {
                     return Json(Result.Errors);
@@ -587,18 +593,13 @@ namespace Agif_V2.Controllers
         }
         private string GetClientIp()
         {
-            // 1. Check for the X-Forwarded-For header
             var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
 
             if (!string.IsNullOrEmpty(forwardedHeader))
             {
-                // The header can contain multiple IPs separated by commas if it passed 
-                // through multiple proxies (e.g., "client_ip, proxy1_ip, proxy2_ip").
-                // The first IP is the original client.
                 return forwardedHeader.Split(',')[0].Trim();
             }
 
-            // 2. Fall back to the current connection's RemoteIpAddress
             return HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
         }
 
@@ -612,10 +613,6 @@ namespace Agif_V2.Controllers
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
             string? ip = GetClientIp();
-            //if (string.IsNullOrEmpty(ip))
-            //{
-            //    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            //}
             if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
@@ -719,10 +716,6 @@ namespace Agif_V2.Controllers
             var sessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
             string? ip = GetClientIp();
-            //if (string.IsNullOrEmpty(ip))
-            //{
-            //    ip = HttpContext.Connection.RemoteIpAddress?.ToString();
-            //}
             if (string.IsNullOrWhiteSpace(domainId))
             {
                 return Json(new { success = false, message = "Domain ID cannot be null or empty." });
@@ -802,278 +795,6 @@ namespace Agif_V2.Controllers
             }
         }
 
-        [AllowAnonymous]
-        public async Task<IActionResult> UserLogin()
-        {
-           
-            System.String EncryptedResponse = Request.Form["SAMLResponse"];
-            if (!string.IsNullOrEmpty(EncryptedResponse))
-            {
-
-                string decryptedsamlresponse = DecryptSAmlResponseNew(EncryptedResponse, "C:\\Cert\\App Certificate\\agif.army.mil.pfx", "Abc@2022");
-                AccountSettings accountSettings = new AccountSettings();
-                OneLogin.Saml.Response samlResponse = new OneLogin.Saml.Response(accountSettings);
-
-                samlResponse.LoadXmlFromBase64(decryptedsamlresponse);
-
-                if (samlResponse.IsValid_sign())
-                {
-                    Log log = new Log();
-                    log.NameId = samlResponse.GetNameID();
-                    log.SAMLRole = samlResponse.GetSAMLRole();
-                    log.AppName = samlResponse.GetSAMLAppName();
-                    log.DomainId = samlResponse.GetEntityID();
-                    if(log.SAMLRole == "User" || string.IsNullOrEmpty(log.SAMLRole))
-                    {
-                        return RedirectToAction("Index", "Default");
-                    }
-
-                    if (log.NameId != null)
-                    {
-                        LoginViewModel model=new LoginViewModel();
-                        model.UserName = log.NameId.ToUpper();
-                        model.Password = "Admin123!";
-
-                        var user = await GetUserAsync(model.UserName);
-                        if (user == null)
-                        {
-                            ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                            TempData["UserName"] = model.UserName;
-                            return RedirectToAction("Register", "Account");
-                        }
-
-                        if (await _userManager.IsLockedOutAsync(user))
-                        {
-                            return await HandleLockedOutUser(model, user);
-                        }
-                        var roles = await _userManager.GetRolesAsync(user);
-                        string CurrentRole = roles[0].ToString().ToLower();
-                        if (CurrentRole == "LoanAdmin".ToLower() || CurrentRole == "ClaimAdmin".ToLower())
-                            CurrentRole = "Admin";
-
-                        if (CurrentRole.ToLower() != log.SAMLRole.ToLower())
-                        {
-                            TempData["Message"] = "You are not  authorized to access this role.";
-                            return RedirectToAction("Message", "Default");
-                        }
-
-                        var result = await SignInUserAsync(model, user);
-
-                        if (result.Succeeded)
-                        {
-                            return await HandleSuccessfulLogin(user, model);
-                        }
-
-                        return await HandleFailedLogin(result, model, user);
-                    }
-                    else
-                    {
-
-                        Response.Redirect("https://iam2.army.mil/IAM/User", true);
-                    }
-                }
-                else
-                {
-
-                    Response.Redirect("https://iam2.army.mil/IAM/User", true);
-                }
-            }
-            else
-            {
-                Response.Redirect("https://iam2.army.mil/IAM/User", true);
-            }
-            return RedirectToAction("Index", "Home");
-
-        }
-
-
-        [AllowAnonymous]
-        public string DecryptSAmlResponseNew(string Encryptedtext, string certificatepath, string password)
-        {
-
-            string result = "True";
-            try
-            {
-                var plainTextBytes = System.Text.Encoding.UTF8.GetBytes("alpha");
-
-                System.String[] spearator = { Convert.ToBase64String(plainTextBytes) };
-
-                System.String[] newstring = Encryptedtext.Split(spearator, StringSplitOptions.RemoveEmptyEntries);
-                string key = newstring[1].ToString();
-                string plain = newstring[0].ToString();
-                #region decryptkeyusingprivatekey
-                try
-                {
-                    byte[] byteData = Convert.FromBase64String(key);
-                    byte[] decryptedkey = new byte[32];
-                    X509Certificate2 myCert2 = null;
-                    RSACryptoServiceProvider rsa = null;
-
-                    try
-                    {
-                        myCert2 = new X509Certificate2(@"C:\\Cert\\App Certificate\\agif.army.mil.pfx", "Abc@2022");
-                        #region test
-                        using (RSA rs = myCert2.GetRSAPrivateKey())
-                        {
-                            decryptedkey = rs.Decrypt(byteData, RSAEncryptionPadding.Pkcs1);
-
-                        }
-                        #endregion
-                    }
-                    catch (Exception e)
-                    {
-
-                    }
-                    byte[] iv = new byte[32];
-
-
-                    byte[] iv1 = new byte[16] { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
-
-
-                    result = DecryptString0705222_Final(plain, decryptedkey, iv1);
-                }
-                catch (Exception exxx)
-                {
-                    result = exxx.Message;
-                }
-                #endregion
-
-            }
-            catch (Exception exx)
-            {
-                result = exx.Message;
-            }
-
-            return result;
-        }
-        [AllowAnonymous]
-        private string DecryptString0705222_Final(string cipherText, byte[] key, byte[] iv)
-        {
-            Aes encryptor = Aes.Create();
-
-            encryptor.Mode = CipherMode.ECB;
-
-            byte[] aesKey = new byte[32];
-            Array.Copy(key, 0, aesKey, 0, 32);
-            encryptor.Key = aesKey;
-            encryptor.IV = iv;
-            encryptor.Padding = PaddingMode.PKCS7;
-
-            MemoryStream memoryStream = new MemoryStream();
-
-            ICryptoTransform aesDecryptor = encryptor.CreateDecryptor();
-
-            CryptoStream cryptoStream = new CryptoStream(memoryStream, aesDecryptor, CryptoStreamMode.Write);
-
-            string plainText = System.String.Empty;
-
-            try
-            {
-                byte[] cipherBytes = Convert.FromBase64String(cipherText);
-
-                cryptoStream.Write(cipherBytes, 0, cipherBytes.Length);
-
-                cryptoStream.FlushFinalBlock();
-
-                byte[] plainBytes = memoryStream.ToArray();
-
-                plainText = Encoding.ASCII.GetString(plainBytes, 0, plainBytes.Length);
-            }
-            catch (Exception exx)
-            {
-
-            }
-            finally
-            {
-                memoryStream.Close();
-                cryptoStream.Close();
-            }
-
-            return plainText;
-
-        }
-        [AllowAnonymous]
-        public void Logout()
-        {
-            if (Request.Form["SAMLResponse"].Count > 0)
-            {
-                if (!string.IsNullOrEmpty(Convert.ToString(Request.Form["SAMLResponse"])))
-                {
-                    String EncryptedResponse = Convert.ToString(Request.Form["SAMLResponse"]);
-                    if (!string.IsNullOrEmpty(EncryptedResponse))
-                    {
-                        AccountSettings accountSettings = new AccountSettings();
-                        Response samlResponse = new Response(accountSettings);
-
-                        string decryptedsamlresponse = DecryptSAmlResponseNew(EncryptedResponse, "C:\\Cert\\App Certificate\\agif.army.mil.pfx", "Abc@2022");
-                        samlResponse.LoadXmlFromBase64(decryptedsamlresponse);
-
-
-
-                        string nameid = string.Empty;
-                        string issuer = string.Empty;
-                        samlResponse.GetLogoutParameter(out nameid, out issuer);
-                        HttpContext.Session.Clear();
-                        try
-                        {
-                            SendResponseToIAM("https://agif.army.mil/Account/Logout", accountSettings.entityId, nameid);
-                        }
-                        catch (Exception exx)
-                        {
-
-                        }
-                    }
-                }
-                else if (!string.IsNullOrEmpty(Convert.ToString(Request.Form["SAMLResponse"])))
-                {
-                    HttpContext.Session.Clear();
-
-                    Response.Redirect("https://agif.army.mil/Account/FinalLogout");
-                }
-                else
-                {
-                    AccountSettings acs = new AccountSettings();
-                    SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-                    string NameId = dTOTempSession.Nameid;
-                    string userRole = dTOTempSession.Role;
-                    HttpContext.Session.Clear();
-                    LogoutRequesttoIAM(userRole, acs.entityId, NameId);
-                }
-            }
-            else
-            {
-                AccountSettings acs = new AccountSettings();
-                SessionUserDTO? dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
-                string NameId = dTOTempSession.Nameid;
-                string role = dTOTempSession.Role;
-
-                HttpContext.Session.Clear();
-
-                LogoutRequesttoIAM(role, acs.entityId, NameId);
-            }
-        }
-
-        [AllowAnonymous]
-        public void SendResponseToIAM(String issueurl, string entityid, string usernam)
-        {
-            AccountSettings accountSettings = new AccountSettings();
-
-            OneLogin.Saml.AuthRequest req = new AuthRequest(new AppSettings(), accountSettings);
-
-            string ReuestXML = req.GetLogOutRequest(AuthRequest.AuthRequestFormat.Base64, issueurl, "https://iam2.army.mil/IAM/logout");
-
-            Response.Redirect("https://iam2.army.mil/IAM/logout?SAMLResponse=" + ReuestXML);
-
-        }
-        [AllowAnonymous]
-        public void LogoutRequesttoIAM(String role, string entityid, string usernam)
-        {
-            AccountSettings accountSettings = new AccountSettings();
-            OneLogin.Saml.AuthRequest req = new AuthRequest(new AppSettings(), accountSettings);
-
-            string ReuestXML = req.SingleLogoutRequest(AuthRequest.AuthRequestFormat.Base64, entityid, role, usernam);
-            Response.Redirect("https://iam2.army.mil/IAM/singleAppLogout?SAMLRequest=" + HttpUtility.UrlEncode(ReuestXML), true);
-        }
         public class Log
         {
             public string NameId { get; set; }

@@ -1602,30 +1602,14 @@ function handleSubmitClick() {
                 value: encrypted
             }).appendTo('#myForm');
 
-            // 4. IMPORTANT: Disable original inputs so they DON'T show up in the Network Tab
             $("#myForm").find("input, select, textarea")
                 .not("[name='EncryptedData']")
                 .not("[name='__RequestVerificationToken']")
                 .prop("disabled", true);
 
-            // 5. Submit the form naturally
             $("#myForm").off("submit").submit();
         }
-        //else {
-        //    $("#msgerror").html('');
-        //    if (formSubmitting) return;
-        //    if (formCancelled) {
-        //        formCancelled = false;
-        //        e.preventDefault();
-        //        return;
-        //    }
-
-        //    let unitVal = $('#PresenttxtUnit').val();
-        //    if (unitVal && unitVal.trim() !== '') {
-        //        event.preventDefault();
-        //        checkCORegistration();
-        //    }
-        //}
+        
     });
 }
 
@@ -2623,15 +2607,32 @@ function formatDateToDDMMYYYY(dateString) {
 
     return `${day}/${month}/${year}`;
 }
+//function encryptData(plainText) {
+//    const secretKey = getSecretKey(); // Call the helper
+//    if (!secretKey) {
+//        console.error("Encryption Key Missing");
+//        return "";
+//    }
+
+//    const key = CryptoJS.enc.Utf8.parse(secretKey);
+//    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+
+//    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+//        iv: iv,
+//        mode: CryptoJS.mode.CBC,
+//        padding: CryptoJS.pad.Pkcs7
+//    });
+
+//    return encrypted.toString();
+//}
 function encryptData(plainText) {
-    const secretKey = getSecretKey(); // Call the helper
+    const secretKey = getSecretKey(); // Ensure this matches what C# expects
     if (!secretKey) {
         console.error("Encryption Key Missing");
         return "";
     }
-
-    const key = CryptoJS.enc.Utf8.parse(secretKey);
-    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+    const key = CryptoJS.enc.Base64.parse(secretKey);
+    const iv = CryptoJS.lib.WordArray.random(16);
 
     const encrypted = CryptoJS.AES.encrypt(plainText, key, {
         iv: iv,
@@ -2639,5 +2640,7 @@ function encryptData(plainText) {
         padding: CryptoJS.pad.Pkcs7
     });
 
-    return encrypted.toString();
+    const combinedData = iv.clone().concat(encrypted.ciphertext);
+
+    return CryptoJS.enc.Base64.stringify(combinedData);
 }

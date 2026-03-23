@@ -2,7 +2,7 @@
   "name": "sweetalert2",
   "version": "11.16.1",
   "repository": "sweetalert2/sweetalert2",
-  "homepage": "https://sweetalert2.github.io/",
+  "homepage": "Links_sweetalert2.github.io/",
   "description": "A beautiful, responsive, customizable and accessible (WAI-ARIA) replacement for JavaScript's popup boxes, supported fork of sweetalert",
   "main": "dist/sweetalert2.all.js",
   "browser": "dist/sweetalert2.all.js",
@@ -38,14 +38,14 @@
     "src",
     "sweetalert2.d.ts"
   ],
-  "author": "Limon Monte (https://limonte.github.io)",
+  "author": "Limon Monte (Links_limonte.github.io)",
   "contributors": [
-    "Matthew Francis Brunetti <zenflow87@gmail.com> (https://github.com/zenflow)",
-    "Morgan Touverey-Quilling <mtouverey@alembic-dev.com> (https://github.com/toverux)",
-    "Giuseppe Verni (https://github.com/gverni)",
-    "Sam Turrell <sam@samturrell.co.uk> (https://github.com/samturrell)",
-    "Joseph Schultz (https://github.com/acupofjose)",
-    "Johan Fagerberg (https://github.com/birjolaxew)"
+    "Matthew Francis Brunetti <zenflow87@gmail.com> (Links_github.com/zenflow)",
+    "Morgan Touverey-Quilling <mtouverey@alembic-dev.com> (Links_github.com/toverux)",
+    "Giuseppe Verni (Links_github.com/gverni)",
+    "Sam Turrell <sam@samturrell.co.uk> (Links_github.com/samturrell)",
+    "Joseph Schultz (Links_github.com/acupofjose)",
+    "Johan Fagerberg (Links_github.com/birjolaxew)"
   ],
   "keywords": [
     "sweetalert",
@@ -69,7 +69,7 @@
   },
   "funding": {
     "type": "individual",
-    "url": "https://github.com/sponsors/limonte"
+    "url": "Links_github.com/sponsors/limonte"
   },
   "prettier": {
     "printWidth": 120,
@@ -78,6 +78,6 @@
     "quoteProps": "consistent",
     "trailingComma": "es5"
   },
-  "bugs": "https://github.com/sweetalert2/sweetalert2/issues",
+  "bugs": "Links_github.com/sweetalert2/sweetalert2/issues",
   "license": "MIT"
 }

@@ -1,5 +1,5 @@
 ﻿.select-arrow:before {
-    content: "\25BC"; /* Unicode escape for ▼             */
+    content: "\25BC"; 
 }
 
 div:where(.swal2-container) div:where(.swal2-popup) {
@@ -365,7 +365,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     color: #ffffff;
 }
 
-/* Radio Button Styles */
 .rank-selection {
     display: flex;
     gap: 1rem;
@@ -612,7 +611,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     z-index: 9999;
     min-width: 300px;
 }
-/* Calculate Button Styles */
 .calculate-btn {
     width: 100%;
     padding: 15px;
@@ -641,7 +639,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
         box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
     }
 
-/* Smooth fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -657,12 +654,10 @@ div:where(.swal2-container) div:where(.swal2-popup) {
 #dateFieldsContainer {
     animation: fadeIn 0.5s ease-out;
 }
-/* Smooth transitions for section movements */
 .input-section {
     transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Fade in animation */
 @keyframes smoothFadeIn {
     0% {
         opacity: 0;
@@ -675,7 +670,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     }
 }
 
-/* Fade out animation */
 @keyframes smoothFadeOut {
     0% {
         opacity: 1;
@@ -688,7 +682,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     }
 }
 
-/* Slide down animation */
 @keyframes smoothSlideDown {
     0% {
         opacity: 0;
@@ -703,7 +696,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     }
 }
 
-/* Class for smooth appearance */
 .smooth-appear {
     animation: smoothFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
@@ -712,7 +704,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     animation: smoothFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-/* Calculate Button Enhanced Styles */
 .calculate-btn {
     width: 100%;
     padding: 15px;
@@ -761,7 +752,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
         box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4);
     }
 
-/* Rank label enhanced hover */
 .rank-label {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -770,7 +760,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
         transform: translateY(-8px) scale(1.02);
     }
 
-/* Form control focus animation */
 .form-control:focus, .form-select:focus {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

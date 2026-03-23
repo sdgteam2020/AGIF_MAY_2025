@@ -1,11 +1,11 @@
 import { swalClasses } from '../utils/classes.js'
 import * as dom from './dom/index.js'
 
-export const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent // true for Safari desktop + all iOS browsers https://stackoverflow.com/a/70585394
+export const isSafariOrIOS = typeof window !== 'undefined' && !!window.GestureEvent // true for Safari desktop + all iOS browsers Links_stackoverflow.com/a/70585394
 
 /**
  * Fix iOS scrolling
- * http://stackoverflow.com/q/39626302
+ * Link_stackoverflow.com/q/39626302
  */
 export const iOSfix = () => {
   if (isSafariOrIOS && !dom.hasClass(document.body, swalClasses.iosfix)) {
@@ -17,7 +17,7 @@ export const iOSfix = () => {
 }
 
 /**
- * https://github.com/sweetalert2/sweetalert2/issues/1246
+ * Links_github.com/sweetalert2/sweetalert2/issues/1246
  */
 const lockBodyScroll = () => {
   const container = dom.getContainer()
@@ -76,7 +76,7 @@ const shouldPreventTouchMove = (event) => {
 }
 
 /**
- * https://github.com/sweetalert2/sweetalert2/issues/1786
+ * Links_github.com/sweetalert2/sweetalert2/issues/1786
  *
  * @param {*} event
  * @returns {boolean}
@@ -86,7 +86,7 @@ const isStylus = (event) => {
 }
 
 /**
- * https://github.com/sweetalert2/sweetalert2/issues/1891
+ * Links_github.com/sweetalert2/sweetalert2/issues/1891
  *
  * @param {TouchEvent} event
  * @returns {boolean}

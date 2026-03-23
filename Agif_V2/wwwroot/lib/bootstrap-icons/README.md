@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://getbootstrap.com/">
-    <img src="https://getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo-shadow.png" alt="Bootstrap logo" width="200" height="165">
+  <a href="Links_getbootstrap.com/">
+    <img src="Links_getbootstrap.com/docs/5.2/assets/brand/bootstrap-logo-shadow.png" alt="Bootstrap logo" width="200" height="165">
   </a>
 </p>
 
@@ -9,34 +9,34 @@
 <p align="center">
   Official open source SVG icon library for Bootstrap with over 1,900 icons.
   <br>
-  <a href="https://icons.getbootstrap.com/"><strong>Explore Bootstrap Icons »</strong></a>
+  <a href="Links_icons.getbootstrap.com/"><strong>Explore Bootstrap Icons »</strong></a>
   <br>
   <br>
-  <a href="https://getbootstrap.com/">Bootstrap</a>
+  <a href="Links_getbootstrap.com/">Bootstrap</a>
   ·
-  <a href="https://themes.getbootstrap.com/">Themes</a>
+  <a href="Links_themes.getbootstrap.com/">Themes</a>
   ·
-  <a href="https://blog.getbootstrap.com/">Blog</a>
+  <a href="Links_blog.getbootstrap.com/">Blog</a>
   <br>
 </p>
 
-[![Bootstrap Icons preview](https://github.com/twbs/icons/blob/main/.github/preview.png)](https://icons.getbootstrap.com/)
+[![Bootstrap Icons preview](Links_github.com/twbs/icons/blob/main/.github/preview.png)](Links_icons.getbootstrap.com/)
 
 ## Install
 
-Bootstrap Icons are packaged up and published to npm. We only include the processed SVGs in this package—it's up to you and your team to implement. [Read our docs](https://icons.getbootstrap.com/) for usage instructions.
+Bootstrap Icons are packaged up and published to npm. We only include the processed SVGs in this package—it's up to you and your team to implement. [Read our docs](Links_icons.getbootstrap.com/) for usage instructions.
 
 ```shell
 npm i bootstrap-icons
 ```
 
-For those [using Packagist](https://packagist.org/packages/twbs/bootstrap-icons), you can also install Bootstrap Icons via Composer:
+For those [using Packagist](Links_packagist.org/packages/twbs/bootstrap-icons), you can also install Bootstrap Icons via Composer:
 
 ```shell
 composer require twbs/bootstrap-icons
 ```
 
-[Also available in Figma](https://www.figma.com/community/file/1042482994486402696/Bootstrap-Icons).
+[Also available in Figma](Links_www.figma.com/community/file/1042482994486402696/Bootstrap-Icons).
 
 ## Usage
 
@@ -47,23 +47,23 @@ Depending on your setup, you can include Bootstrap Icons in a handful of ways.
 - Use the SVG sprite
 - Include via CSS
 
-[See the docs for more information](https://icons.getbootstrap.com/#usage).
+[See the docs for more information](Links_icons.getbootstrap.com/#usage).
 
 ## Development
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/twbs/icons/test.yml?branch=main&label=Tests&logo=github)](https://github.com/twbs/icons/actions/workflows/test.yml?query=workflow%3ATests+branch%3Amain)
-[![npm version](https://img.shields.io/npm/v/bootstrap-icons?logo=npm&logoColor=fff)](https://www.npmjs.com/package/bootstrap-icons)
+[![Build Status](Links_img.shields.io/github/actions/workflow/status/twbs/icons/test.yml?branch=main&label=Tests&logo=github)](Links_github.com/twbs/icons/actions/workflows/test.yml?query=workflow%3ATests+branch%3Amain)
+[![npm version](Links_img.shields.io/npm/v/bootstrap-icons?logo=npm&logoColor=fff)](Links_www.npmjs.com/package/bootstrap-icons)
 
 Clone the repo, install dependencies, and start the Hugo server locally.
 
 ```shell
-git clone https://github.com/twbs/icons/
+git clone Links_github.com/twbs/icons/
 cd icons
 npm i
 npm start
 ```
 
-Then open `http://localhost:4000` in your browser.
+Then open `Link_localhost:4000` in your browser.
 
 ### npm scripts
 
@@ -89,7 +89,7 @@ Use `npm run icons` to run the script, run `npm run pages` to build permalink pa
 
 ## Publishing
 
-Documentation is published automatically when a new Git tag is published. See our [GitHub Actions](https://github.com/twbs/icons/tree/main/.github/workflows) and [`package.json`](https://github.com/twbs/icons/blob/main/package.json) for more information.
+Documentation is published automatically when a new Git tag is published. See our [GitHub Actions](Links_github.com/twbs/icons/tree/main/.github/workflows) and [`package.json`](Links_github.com/twbs/icons/blob/main/package.json) for more information.
 
 ## License
 
@@ -97,4 +97,4 @@ MIT
 
 ## Author
 
-[@mdo](https://github.com/mdo)
+[@mdo](Links_github.com/mdo)

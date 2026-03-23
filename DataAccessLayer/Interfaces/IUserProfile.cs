@@ -1,4 +1,5 @@
 ﻿using DataTransferObject.Model;
+using DataTransferObject.Request;
 using DataTransferObject.Response;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace DataAccessLayer.Interfaces
         Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive,string coDomainId,int coProfileId);
 
         Task<bool> DeleteUserAsync(string domainId, int profileId);
+        Task<bool> SaveLoginLogs(DTOLoginLogs loginLog);
 
     }
 }

@@ -84,6 +84,7 @@ namespace DataAccessLayer
         public virtual DbSet<BonusJCO_OR> TrnBonusJCO_OR { get; set; }
 
         public virtual DbSet<InvestmentChange_Officers> TrnInvestmentChange_Officers { get; set; }
+        public virtual DbSet<trnLoginLog>TrnLoginLogs { get; set; }
 
         public virtual DbSet<BonusOfficers> TrnBonusOfficers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)

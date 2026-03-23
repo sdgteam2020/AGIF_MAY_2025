@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 
 namespace Agif_V2.Controllers
 {
+
+    [AutoValidateAntiforgeryToken]
     public class DefaultController : Controller
     {
         private readonly IDefault _default;
@@ -80,9 +82,21 @@ namespace Agif_V2.Controllers
         {
             return View();
         }
+        [HttpGet]
         public IActionResult CheckApplicationStatus()
         {
+            // 🚫 Block if query params are present
+            if (Request.Query.Count > 0)
+            {
+                return BadRequest("Invalid request");
+            }
+
             return View();
+        }
+        [HttpPost]
+        public IActionResult CheckApplicationStatusPost()
+        {
+            return View("CheckApplicationStatus");
         }
         [HttpPost]
         public async Task<IActionResult> SearchByArmyNo([FromForm] string armyNo,string aadharNo)
@@ -123,7 +137,7 @@ namespace Agif_V2.Controllers
             var data = await _default.GetClaimUserApplicationStatusByArmyNo(armyNo,aadharNo);
             return Json(data);
         }
-
+        [HttpPost]
         public async Task<IActionResult> GetTimeline(int ApplicationId)
         {
             if(!ModelState.IsValid)
@@ -134,7 +148,7 @@ namespace Agif_V2.Controllers
             var data = await _default.GetTimeLine(ApplicationId);
             return Json(data);
         }
-
+        [HttpPost]
         public async Task<IActionResult> GetClaimTimeline(int ApplicationId)
         {
             if (!ModelState.IsValid)

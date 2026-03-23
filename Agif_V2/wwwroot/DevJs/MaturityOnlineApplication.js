@@ -2379,15 +2379,33 @@ function preMatureRetirement() {
         }
     });
 }
+//function encryptData(plainText) {
+//    const secretKey = getSecretKey(); // Call the helper
+//    if (!secretKey) {
+//        console.error("Encryption Key Missing");
+//        return "";
+//    }
+
+//    const key = CryptoJS.enc.Utf8.parse(secretKey);
+//    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+
+//    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
+//        iv: iv,
+//        mode: CryptoJS.mode.CBC,
+//        padding: CryptoJS.pad.Pkcs7
+//    });
+
+//    return encrypted.toString();
+//}
+
 function encryptData(plainText) {
-    const secretKey = getSecretKey(); // Call the helper
+    const secretKey = getSecretKey(); // Ensure this matches what C# expects
     if (!secretKey) {
         console.error("Encryption Key Missing");
         return "";
     }
-
-    const key = CryptoJS.enc.Utf8.parse(secretKey);
-    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
+    const key = CryptoJS.enc.Base64.parse(secretKey);
+    const iv = CryptoJS.lib.WordArray.random(16);
 
     const encrypted = CryptoJS.AES.encrypt(plainText, key, {
         iv: iv,
@@ -2395,5 +2413,7 @@ function encryptData(plainText) {
         padding: CryptoJS.pad.Pkcs7
     });
 
-    return encrypted.toString();
+    const combinedData = iv.clone().concat(encrypted.ciphertext);
+
+    return CryptoJS.enc.Base64.stringify(combinedData);
 }

@@ -445,7 +445,7 @@ namespace Agif_V2.Controllers
                         DomainId = dTOTempSession.DomainId,
                         ArmyNo = dTOTempSession.ArmyNo,
                         RankName = dTOTempSession.RankName,
-                    ipAddress = ipAddress
+                        ipAddress = ipAddress
                 };
 
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);
@@ -488,6 +488,16 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Invalid request." });
             }
+            string ipAddress = string.Empty;
+
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                ipAddress = forwardedHeader.Split(',')[0].Trim();
+            }
+            else
+                ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
             var digitalSignRecords = new DigitalSignRecords
             {
                 ApplId = applId,
@@ -495,6 +505,7 @@ namespace Agif_V2.Controllers
                 Remarks = rem,
                 IsSign = false,
                 IsRejectced = true,
+                ipAddress = ipAddress,
             };
             await _application.Add(digitalSignRecords);
             await _onlineApplication.UpdateApplicationStatus(applId, 3);
@@ -515,7 +526,16 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Invalid request data." });
             }
+            string ipAddress = string.Empty;
 
+            var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(forwardedHeader))
+            {
+                ipAddress = forwardedHeader.Split(',')[0].Trim();
+            }
+            else
+                ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
             var digitalSignRecords = new ClaimDigitalSignRecords
             {
                 ApplId = applId,
@@ -523,6 +543,7 @@ namespace Agif_V2.Controllers
                 Remarks = rem,
                 IsSign = false,
                 IsRejectced = true,
+                ipAddress= ipAddress,
             };
             await _claimApplication.Add(digitalSignRecords);
 

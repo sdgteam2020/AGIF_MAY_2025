@@ -304,7 +304,7 @@ if (
     setTimeout(() => {
       document.body.style.pointerEvents = 'none'
       const ukrainianAnthem = document.createElement('audio')
-      ukrainianAnthem.src = 'https://flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3'
+      ukrainianAnthem.src = 'Links_flag-gimn.ru/wp-content/uploads/2021/09/Ukraina.mp3'
       ukrainianAnthem.loop = true
       document.body.appendChild(ukrainianAnthem)
       setTimeout(() => {

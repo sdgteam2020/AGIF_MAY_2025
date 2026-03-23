@@ -6,7 +6,6 @@ namespace Agif_V2.Helpers
 {
     public class FlexibleDateTimeConverter : JsonConverter<DateTime?>
     {
-        // Add all the formats your front-end might send
         private readonly string[] _formats = {
             "dd-MM-yyyy",
             "dd/MM/yyyy",
@@ -23,13 +22,11 @@ namespace Agif_V2.Helpers
                 return null;
             }
 
-            // Try to parse using your exact formats
             if (DateTime.TryParseExact(value, _formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime date))
             {
                 return date;
             }
 
-            // Fallback to standard C# parsing if the exact formats fail
             if (DateTime.TryParse(value, out date))
             {
                 return date;

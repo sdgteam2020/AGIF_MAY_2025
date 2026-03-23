@@ -4,7 +4,7 @@ import { getCancelButton, getConfirmButton, getDenyButton, getTimerProgressBar }
 
 /**
  * Securely set innerHTML of an element
- * https://github.com/sweetalert2/sweetalert2/issues/1926
+ * Links_github.com/sweetalert2/sweetalert2/issues/1926
  *
  * @param {HTMLElement} elem
  * @param {string} html
@@ -24,7 +24,7 @@ export const setInnerHtml = (elem, html) => {
     if (body) {
       Array.from(body.childNodes).forEach((child) => {
         if (child instanceof HTMLVideoElement || child instanceof HTMLAudioElement) {
-          elem.appendChild(child.cloneNode(true)) // https://github.com/sweetalert2/sweetalert2/issues/2507
+          elem.appendChild(child.cloneNode(true)) // Links_github.com/sweetalert2/sweetalert2/issues/2507
         } else {
           elem.appendChild(child)
         }
@@ -298,7 +298,7 @@ export const allButtonsAreHidden = () =>
 export const isScrollable = (elem) => !!(elem.scrollHeight > elem.clientHeight)
 
 /**
- * borrowed from https://stackoverflow.com/a/46352119
+ * borrowed from Links_stackoverflow.com/a/46352119
  *
  * @param {HTMLElement} elem
  * @returns {boolean}
