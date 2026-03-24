@@ -15,6 +15,7 @@
                         <h1>Sign Up</h1>
                     </div>
                     <form asp-action="Register" method="post" id="signupForm">
+                        <input type="hidden" id="serverCryptoKey" value="@ViewBag.hdns" />
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -119,3 +120,4 @@
 
 <script src="~/devjs/Validation.js"></script>
 <script src="~/devjs/register.js"></script>
+<script src="~/js/crypto-js.min.js"></script>

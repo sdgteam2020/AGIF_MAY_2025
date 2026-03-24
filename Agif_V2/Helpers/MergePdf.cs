@@ -70,8 +70,6 @@ namespace Agif_V2.Helpers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error merging PDFs: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return false;
             }
         }

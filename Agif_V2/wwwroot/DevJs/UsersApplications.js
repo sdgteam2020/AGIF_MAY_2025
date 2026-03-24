@@ -34,7 +34,7 @@
     $('#acceptButton').on('click', function () {
         const applnId = $("#spnapplicationId").html();
         const icNo = $("#IcNo").val();
-        const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
+        const type = $("#UserType").val() || "Loan"; 
         const $remarkField = $("#txtRemark");
         let remarkValue = $remarkField.val().trim();
         if (remarkValue === "") {
@@ -44,12 +44,12 @@
             title: "Are you sure?",
             text: "Do you want to approve!",
             icon: "warning",
-            iconColor: "#f1c40f", // Yellow icon
-            background: "#fff8e1", // Light yellow background
-            color: "#333",         // Text color
+            iconColor: "#f1c40f", 
+            background: "#fff8e1", 
+            color: "#333",         
             showCancelButton: true,
-            confirmButtonColor: "#f39c12", // Enhanced yellow-orange for "Yes"
-            cancelButtonColor: "#d33",     // Red for cancel
+            confirmButtonColor: "#f39c12", 
+            cancelButtonColor: "#d33",  
             confirmButtonText: "✅ Yes, approve it!",
             cancelButtonText: "❌ Cancel",
             customClass: {
@@ -66,7 +66,7 @@
     });
     $("#RejectButton").on('click', function () {
         const applnId = $("#spnapplicationId").html();
-        const type = $("#UserType").val() || "Loan"; // Default to "Loan" if not set
+        const type = $("#UserType").val() || "Loan"; 
         const $remarkField = $("#txtRemark");
         let remarkValue = $remarkField.val().trim();
         if (remarkValue === "") {
@@ -210,11 +210,11 @@ function GetApplicationList(status, endpoint) {
     let digitalSignColumnIndex = -1;
 
     if (status == 2 || status == 102) {
-        digitalSignColumnIndex = dynamicColumns.length; // This will be index 6
+        digitalSignColumnIndex = dynamicColumns.length;
         dynamicColumns.push({
             data: "digitalSignDate", 
-            name: "digitalSignDate", // Changed from "Digital Sign On" to avoid spaces
-            orderable: true, // Make sure it's orderable
+            name: "digitalSignDate",
+            orderable: true, 
             render: function (data, type, row) {
                 return data || 'N/A';
             }
@@ -268,9 +268,9 @@ function GetApplicationList(status, endpoint) {
 
     let tableOrder;
     if (status == 2 && digitalSignColumnIndex !== -1) {
-        tableOrder = [[digitalSignColumnIndex, 'desc']]; // Sort by Digital Sign On column
+        tableOrder = [[digitalSignColumnIndex, 'desc']];
     } else {
-        tableOrder = [[0, 'desc']]; // Default sort by first column
+        tableOrder = [[0, 'desc']];
     }
 
     if (status == 1 || status == 101) {
@@ -396,9 +396,9 @@ function OpenAction(applicationId, endpoint, category) {
 }
 
 function fetchApplicationDetails(applicationId, endpoint) {
-    currentApplicationData = {};// Clear previous application data
+    currentApplicationData = {};
     $.ajax({
-        url: endpoint, // Adjust URL as per your controller
+        url: endpoint,
         type: 'POST',
         data: { applicationId: applicationId },
         dataType: 'json',
@@ -493,8 +493,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify({
-            "inputPersID": "A2A7D3ED10E454CDD66285EBDFCC293549762148F74D4A65221250769C8E6448"//HRMS Token
-
+            "inputPersID": IcNo
         }),
 
         success: function (response) {

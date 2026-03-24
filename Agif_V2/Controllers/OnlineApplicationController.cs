@@ -443,7 +443,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return JsonError($"Error occurred while merging PDFs: {ex.Message}");
+                return JsonError($"Error occurred while merging PDFs");
             }
         }
 
@@ -498,7 +498,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error generating PDF: {ex.Message}");
+                Console.WriteLine($"Error generating PDF");
             }
             return pdfFiles;
         }
@@ -643,7 +643,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"An error occurred while fetching PDF: {ex.Message}" });
+                return Json(new { success = false, message = $"An error occurred while fetching PDF" });
             }
         }
 
@@ -658,7 +658,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
+                return Json(new { success = false, message = $"Error saving file" });
             }
         }
 

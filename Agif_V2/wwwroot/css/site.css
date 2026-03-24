@@ -55,9 +55,9 @@ body {
     font-size: clamp(18px, 5vw, 50px);
 }
 #headerLI, #headerRI {
-    height: clamp(40px, 10vw, 100px); /* min 40px, scales with screen, max 100px */
-    width: auto; /* keep aspect ratio */
-    max-width: 100%; /* don’t overflow */
+    height: clamp(40px, 10vw, 100px); 
+    width: auto; 
+    max-width: 100%; 
     object-fit: cover;
 }
 .nav-center {
@@ -107,9 +107,9 @@ body {
 }
 
     .navbar-nav .nav-link:hover {
-        color: white; /* Bootstrap primary color or any color you prefer */
-        background-color: #6e5353; /* Light background on hover (optional) */
-        border-radius: 5px; /* Rounded corners (optional) */
+        color: white; 
+        background-color: #6e5353; 
+        border-radius: 5px; 
     }
   
 .navbar-toggler {
@@ -127,9 +127,9 @@ body {
     bottom: 0;
     width: 100%;
     background-color: #310;
-    color: white; /* Optional: to make text readable */
+    color: white; 
     padding: 10px 0;
-    z-index: 999; /* Keep it above other content */
+    z-index: 999; 
     font-size: 14px;
 }
 .panel-default {
@@ -138,7 +138,7 @@ body {
 
     .panel-default > .panel-heading {
         color: #333;
-        /*background-color: rgb(66,57,51);*/
+        
         background-color: #310;
         border-color: #ddd
     }
@@ -477,10 +477,10 @@ body {
         border-bottom-color: #ebccd1
     }
 
-/*slide buttom to top*/
+
 
 .holder {
-    height: 50px; /* or desired visible height */
+    height: 50px; 
     overflow: hidden;
     position: relative;
     text-align:left;
@@ -495,7 +495,7 @@ body {
 }
 
     #ticker01 li {
-        height: 50px; /* same as .holder height */
+        height: 50px; 
         display: flex;
         align-items: center;
     }
@@ -510,9 +510,9 @@ body {
     }
 }
 
-/*End slide buttom to top*/
 
-/* Slider container */
+
+
 .slider {
     width: 100%;
     max-width: 1050px;
@@ -521,7 +521,7 @@ body {
     overflow: hidden;
 }
 
-/* Wrapper for slides */
+
 .slides {
     display: flex;
     transition: transform 0.5s ease-in-out;
@@ -537,7 +537,7 @@ body {
         height: 100%;
         object-fit: cover;
     }
-/* Navigation dots */
+
 .dots {
     text-align: center;
     position: absolute;
@@ -557,10 +557,10 @@ body {
 }
 
 
-/* === BASE HEADING === */
 
 
-/* === BASE HEADING === */
+
+
 
 h1 {
     position: relative;
@@ -586,7 +586,7 @@ h1 {
         font-weight: 600;
     }
 
-/* === HEADING STYLE #1 === */
+
 .pagetitle h1 {
     text-align: center;
     text-transform: uppercase;
@@ -720,11 +720,11 @@ h1 {
 }
 
 .fixed-header {
-    position: fixed; /* Fix the header to the top */
-    top: 0; /* Position it at the top of the viewport */
-    left: 0; /* Align it to the left of the page */
-    width: 100%; /* Make the header take the full width of the page */
-    z-index: 1000; /* Ensure the header stays on top of other elements */
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    z-index: 1000; 
     height: 190px;
 }
 
@@ -735,10 +735,10 @@ h1 {
 .renderbody {
     margin-top: 11rem !important
 }
-/* Mobile-specific styles */
+
 @media (max-width: 768px) {
     .renderbody {
-        margin-top: 25rem !important; /* Adjust this value as needed */
+        margin-top: 25rem !important; 
     }
 }
 .navbar {
@@ -772,7 +772,7 @@ h1 {
     }
 
 .ui-autocomplete {
-    z-index: 1050 !important; /* higher than your popup/modal */
+    z-index: 1050 !important; 
 }
 .w-9 {
     width: 9%;

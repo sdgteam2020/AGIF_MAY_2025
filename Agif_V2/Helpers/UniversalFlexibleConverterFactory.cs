@@ -7,7 +7,6 @@ namespace Agif_V2.Helpers
 {
     public class UniversalFlexibleConverterFactory : JsonConverterFactory
     {
-        // 1. Tell the factory which data types it is allowed to intercept
         public override bool CanConvert(Type typeToConvert)
         {
             var underlyingType = Nullable.GetUnderlyingType(typeToConvert) ?? typeToConvert;
@@ -18,14 +17,12 @@ namespace Agif_V2.Helpers
                    underlyingType == typeof(DateTime);
         }
 
-        // 2. Create the generic converter for the specific type being processed
         public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
             return (JsonConverter)Activator.CreateInstance(
                 typeof(FlexibleUniversalConverter<>).MakeGenericType(typeToConvert))!;
         }
 
-        // 3. The actual conversion logic
         private class FlexibleUniversalConverter<T> : JsonConverter<T>
         {
             public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -33,7 +30,6 @@ namespace Agif_V2.Helpers
                 Type underlyingType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
                 bool isNullable = Nullable.GetUnderlyingType(typeof(T)) != null;
 
-                // Handle native nulls
                 if (reader.TokenType == JsonTokenType.Null)
                 {
                     if (isNullable || !typeof(T).IsValueType) return default;
@@ -43,7 +39,6 @@ namespace Agif_V2.Helpers
 
                 string? value = null;
 
-                // Extract the value as a string, regardless of how it arrived
                 if (reader.TokenType == JsonTokenType.String)
                     value = reader.GetString()?.Trim();
                 else if (reader.TokenType == JsonTokenType.Number)
@@ -53,17 +48,15 @@ namespace Agif_V2.Helpers
                 else if (reader.TokenType == JsonTokenType.False)
                     value = "false";
 
-                // Handle Empty Strings from HTML Forms
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     if (isNullable) return default;
                     if (underlyingType == typeof(bool)) return (T)(object)false;
                     if (underlyingType == typeof(int) || underlyingType == typeof(decimal) || underlyingType == typeof(double))
-                        return (T)Convert.ChangeType(0, underlyingType); // Non-nullable numbers default to 0
+                        return (T)Convert.ChangeType(0, underlyingType); 
                     return default;
                 }
 
-                // Strip commas from financial inputs (e.g., "50,000.50" -> "50000.50")
                 if (underlyingType == typeof(int) || underlyingType == typeof(decimal) || underlyingType == typeof(double))
                 {
                     value = value.Replace(",", "");
@@ -71,7 +64,6 @@ namespace Agif_V2.Helpers
 
                 try
                 {
-                    // Parse Numbers
                     if (underlyingType == typeof(int))
                         return (T)(object)Convert.ToInt32(Math.Round(Convert.ToDouble(value, CultureInfo.InvariantCulture)));
                     if (underlyingType == typeof(decimal))
@@ -79,7 +71,6 @@ namespace Agif_V2.Helpers
                     if (underlyingType == typeof(double))
                         return (T)(object)Convert.ToDouble(value, CultureInfo.InvariantCulture);
 
-                    // Parse Booleans
                     if (underlyingType == typeof(bool))
                     {
                         value = value.ToLowerInvariant();
@@ -87,7 +78,6 @@ namespace Agif_V2.Helpers
                         return (T)(object)isTrue;
                     }
 
-                    // Parse Dates
                     if (underlyingType == typeof(DateTime))
                     {
                         string[] formats = { "dd-MM-yyyy", "dd/MM/yyyy", "yyyy-MM-dd", "MM/dd/yyyy" };
@@ -99,7 +89,6 @@ namespace Agif_V2.Helpers
                 }
                 catch
                 {
-                    // If parsing completely fails, fall through to the default return
                 }
 
                 return isNullable ? default : default!;

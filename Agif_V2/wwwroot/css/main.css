@@ -120,7 +120,7 @@ p {
     }
 }
 
-/* ========== cart style ========== */
+
 .card-style {
     background: #fff;
     box-sizing: border-box;
@@ -225,7 +225,7 @@ p {
         font-weight: 700;
     }
 
-/* ======= Border Radius ========= */
+
 .radius-4 {
     border-radius: 4px;
 }
@@ -296,7 +296,7 @@ p {
     text-decoration: underline;
 }
 
-/* ============= typography css ============= */
+
 h1,
 h2,
 h3,
@@ -374,7 +374,7 @@ h6,
     font-size: 12px;
 }
 
-/* ========== breadcrumb ============ */
+
 .title-wrapper .breadcrumb-wrapper,
 .title-wrapper .title {
     margin-bottom: 20px;
@@ -411,8 +411,8 @@ h6,
             color: #365CF5;
         }
 
-/* ========== Buttons css ========== */
-/* buttons base styles */
+
+
 .main-btn {
     display: inline-flex;
     align-items: center;
@@ -498,7 +498,7 @@ h6,
     font-weight: 400;
 }
 
-/* buttons hover effect */
+
 .btn-hover {
     position: relative;
     overflow: hidden;
@@ -535,7 +535,7 @@ h6,
         transform: translate3d(-50%, -50%, 0) scale(1.3);
     }
 
-/* Dropdown buttons */
+
 .base-dropdown-btn .main-btn {
     padding: 8px 15px;
 }
@@ -561,7 +561,7 @@ h6,
         background: #f5f8fc;
     }
 
-/* primary buttons */
+
 .primary-btn {
     background: #365CF5;
     color: #fff;
@@ -603,7 +603,7 @@ h6,
         border-color: #365CF5 !important;
     }
 
-/* secondary buttons */
+
 .secondary-btn {
     background: #00c1f8;
     color: #fff;
@@ -645,7 +645,7 @@ h6,
         border-color: #00c1f8 !important;
     }
 
-/* success buttons */
+
 .success-btn {
     background: #219653;
     color: #fff;
@@ -687,7 +687,7 @@ h6,
         border-color: #219653 !important;
     }
 
-/* danger buttons */
+
 .danger-btn {
     background: #d50100;
     color: #fff;
@@ -729,7 +729,7 @@ h6,
         border-color: #d50100 !important;
     }
 
-/* warning buttons */
+
 .warning-btn {
     background: #f7c800;
     color: #fff;
@@ -771,7 +771,7 @@ h6,
         border-color: #f7c800 !important;
     }
 
-/* info buttons */
+
 .info-btn {
     background: #97ca31;
     color: #fff;
@@ -813,7 +813,7 @@ h6,
         border-color: #97ca31 !important;
     }
 
-/* dark buttons */
+
 .dark-btn {
     background: #1A2142;
     color: #fff;
@@ -855,7 +855,7 @@ h6,
         border-color: #1A2142 !important;
     }
 
-/* light buttons */
+
 .light-btn {
     background: #DFE5EF;
     color: #1A2142;
@@ -897,7 +897,7 @@ h6,
         border-color: #DFE5EF !important;
     }
 
-/* active buttons */
+
 .active-btn {
     background: #365CF5;
     color: #fff;
@@ -939,7 +939,7 @@ h6,
         border-color: #365CF5 !important;
     }
 
-/* deactive buttons */
+
 .deactive-btn {
     background: #E9E9E9;
     color: #8F9AAD;
@@ -981,22 +981,22 @@ h6,
         border-color: #CBE1FF !important;
     }
 
-/* =========  square-btn ========= */
+
 .square-btn {
     border-radius: 0px;
 }
 
-/* =========  rounded-md ========= */
+
 .rounded-md {
     border-radius: 10px;
 }
 
-/* =========  rounded-full ========= */
+
 .rounded-full {
     border-radius: 30px;
 }
 
-/* ========== buttons group css ========= */
+
 .buttons-group {
     display: flex;
     flex-wrap: wrap;
@@ -1007,7 +1007,7 @@ h6,
         margin: 10px;
     }
 
-/* ====== Status Button ====== */
+
 .status-btn {
     padding: 7px 15px;
     border-radius: 30px;
@@ -1060,7 +1060,7 @@ h6,
         background: rgba(242, 153, 74, 0.1);
     }
 
-/* ============ alerts css ============ */
+
 .alert-box {
     display: flex;
     position: relative;
@@ -1113,7 +1113,7 @@ h6,
     }
 }
 
-/* Alert Primary */
+
 .primary-alert .left {
     background: #365CF5;
 }
@@ -1130,7 +1130,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert Danger */
+
 .danger-alert .left {
     background: #d50100;
 }
@@ -1147,7 +1147,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert warning */
+
 .warning-alert .left {
     background: #f7c800;
 }
@@ -1164,7 +1164,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert info */
+
 .info-alert .left {
     background: #97ca31;
 }
@@ -1181,7 +1181,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert success */
+
 .success-alert .left {
     background: #219653;
 }
@@ -1198,7 +1198,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert secondary */
+
 .secondary-alert .left {
     background: #00c1f8;
 }
@@ -1215,7 +1215,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert gray */
+
 .gray-alert .left {
     background: #5d657b;
 }
@@ -1232,7 +1232,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert black */
+
 .black-alert .left {
     background: #000;
 }
@@ -1249,7 +1249,7 @@ h6,
         margin-bottom: 15px;
     }
 
-/* Alert orange */
+
 .orange-alert .left {
     background: #f2994a;
 }
@@ -1266,8 +1266,8 @@ h6,
         margin-bottom: 15px;
     }
 
-/* ========== cards css =========== */
-/* card-style-1 */
+
+
 .card-style-1 {
     background: #fff;
     border: 1px solid #efefef;
@@ -1358,7 +1358,7 @@ h6,
         color: #365CF5;
     }
 
-/* card-style-2 */
+
 .card-style-2 {
     background: #fff;
     border: 1px solid #efefef;
@@ -1411,7 +1411,7 @@ h6,
         color: #365CF5;
     }
 
-/* card-style-3 */
+
 .card-style-3 {
     background: #fff;
     border: 1px solid #efefef;
@@ -1451,7 +1451,7 @@ h6,
             letter-spacing: 2px;
         }
 
-/* card-style-4 */
+
 .card-style-4 {
     background: #fff;
     border: 1px solid #efefef;
@@ -1512,7 +1512,7 @@ h6,
                 letter-spacing: 2px;
             }
 
-/* card-style-5 */
+
 .card-style-5 {
     background: #fff;
     border: 1px solid #efefef;
@@ -1602,7 +1602,7 @@ h6,
         margin-top: 20px;
     }
 
-/* ======= card-style-6 ======== */
+
 .card-style-6 {
     padding: 25px 30px;
     background: #fff;
@@ -1672,7 +1672,7 @@ h6,
                 color: #365CF5;
             }
 
-/* ======= icon-card ======== */
+
 .icon-card {
     display: flex;
     align-items: center;
@@ -1872,7 +1872,7 @@ h6,
                 color: #fff;
             }
 
-/* =========== tables css =========== */
+
 .table {
     border-collapse: inherit;
     border-spacing: 0px;
@@ -2054,7 +2054,7 @@ h6,
     padding: 10px;
 }
 
-/* ===== lead-table ===== */
+
 .lead-table th,
 .lead-table td {
     padding: 10px 5px;
@@ -2281,8 +2281,8 @@ h6,
     border: none;
 }
 
-/* =========== form elements css ========== */
-/* ===== input style ===== */
+
+
 .input-style-1 {
     position: relative;
     margin-bottom: 30px;
@@ -2433,7 +2433,7 @@ h6,
         padding: 16px;
     }
 
-/* ========= select style ========== */
+
 .select-style-1 {
     margin-bottom: 30px;
 }
@@ -2875,7 +2875,7 @@ h6,
     width: 100%;
 }
 
-/* ============= notification css ============= */
+
 .single-notification {
     display: flex;
     justify-content: space-between;
@@ -2995,12 +2995,12 @@ h6,
     display: none;
 }
 
-/* ========== Theme Change Css ============== */
+
 .darkTheme .single-notification {
     border-color: #2f3546;
 }
 
-/* ========== header css ========== */
+
 .header {
     padding: 22px 0;
     background: #310;
@@ -3331,7 +3331,7 @@ h6,
                         text-align: left;
                     }
 
-/* ========== Dashboards css ================= */
+
 @media (max-width: 767px) {
     #doughnutChart1 {
         height: 250px !important;
@@ -3642,7 +3642,7 @@ h6,
     text-decoration: underline;
 }
 
-/* ============ signup css ============= */
+
 .auth-row {
     background: #fff;
     border-radius: 4px;
@@ -3752,7 +3752,7 @@ h6,
     text-decoration: underline;
 }
 
-/* =========== settings css ============== */
+
 .settings-card-1 .profile-info .profile-image {
     max-width: 75px;
     width: 100%;
@@ -3802,7 +3802,7 @@ h6,
             z-index: 99;
         }
 
-/* =========== Invoice Css ============= */
+
 .invoice-card .invoice-header {
     display: flex;
     flex-wrap: wrap;
@@ -3915,7 +3915,7 @@ h6,
     min-width: 100px;
 }
 
-/* ============== Icons Css ===========*/
+
 .icons-wrapper .icons,
 .icons-wrapper ul {
     display: flex;
@@ -3968,7 +3968,7 @@ h6,
     user-select: all;
 }
 
-/* ============ Calendar Css ============= */
+
 .calendar-card .fc {
     height: 450px;
 }
@@ -4041,7 +4041,7 @@ h6,
     border-color: transparent;
 }
 
-/* =========== Sidebar css =========== */
+
 .sidebar-nav-wrapper {
     background: #310;
     width: 250px;
@@ -4278,8 +4278,8 @@ h6,
     }
 
 .nav-item > a.active {
-    color: #d50100 !important; /* Text color when active */
-    background-color: #fff; /* Background color when active */
+    color: #d50100 !important; 
+    background-color: #fff; 
 }
 
 
@@ -4444,8 +4444,8 @@ h6,
         justify-content: center;
     }
 
-/* ========== DEFAULT CSS ======== */
-/* ======= Margin Top ======= */
+
+
 .mt-5 {
     margin-top: 5px;
 }
@@ -4626,7 +4626,7 @@ h6,
     margin-top: 225px;
 }
 
-/* ======= Margin Bottom ======= */
+
 .mb-5 {
     margin-bottom: 5px;
 }
@@ -4807,7 +4807,7 @@ h6,
     margin-bottom: 225px;
 }
 
-/* ======= Margin Left ======= */
+
 .ml-5 {
     margin-left: 5px;
 }
@@ -4988,7 +4988,7 @@ h6,
     margin-left: 225px;
 }
 
-/* ======= Margin Right ======= */
+
 .mr-5 {
     margin-right: 5px;
 }
@@ -5169,7 +5169,7 @@ h6,
     margin-right: 225px;
 }
 
-/* ======= Padding Top ======= */
+
 .pt-5 {
     padding-top: 5px;
 }
@@ -5350,7 +5350,7 @@ h6,
     padding-top: 225px;
 }
 
-/* ======= Padding Bottom ======= */
+
 .pb-5 {
     padding-bottom: 5px;
 }
@@ -5531,7 +5531,7 @@ h6,
     padding-bottom: 225px;
 }
 
-/* ======= Padding Left ======= */
+
 .pl-5 {
     padding-left: 5px;
 }
@@ -5712,7 +5712,7 @@ h6,
     padding-left: 225px;
 }
 
-/* ======= Padding Right ======= */
+
 .pr-5 {
     padding-right: 5px;
 }
@@ -5893,7 +5893,7 @@ h6,
     padding-right: 225px;
 }
 
-/* ======= bg-primary shades ========= */
+
 .bg-primary-100 {
     background: rgba(54, 92, 245, 0.1);
 }
@@ -5930,7 +5930,7 @@ h6,
     background: rgba(54, 92, 245, 0.9);
 }
 
-/* ======= bg-secondary shades ========= */
+
 .bg-secondary-100 {
     background: rgba(0, 193, 248, 0.1);
 }
@@ -5967,7 +5967,7 @@ h6,
     background: rgba(0, 193, 248, 0.9);
 }
 
-/* ======= bg-success shades ========= */
+
 .bg-success-100 {
     background: rgba(33, 150, 83, 0.1);
 }
@@ -6004,7 +6004,7 @@ h6,
     background: rgba(33, 150, 83, 0.9);
 }
 
-/* ======= bg-danger shades ========= */
+
 .bg-danger-100 {
     background: rgba(213, 1, 0, 0.1);
 }
@@ -6041,7 +6041,7 @@ h6,
     background: rgba(213, 1, 0, 0.9);
 }
 
-/* ======= bg-warning shades ========= */
+
 .bg-warning-100 {
     background: rgba(247, 200, 0, 0.1);
 }
@@ -6078,7 +6078,7 @@ h6,
     background: rgba(247, 200, 0, 0.9);
 }
 
-/* ======= bg-info shades ========= */
+
 .bg-info-100 {
     background: rgba(151, 202, 49, 0.1);
 }
@@ -6115,7 +6115,7 @@ h6,
     background: rgba(151, 202, 49, 0.9);
 }
 
-/* ======= bg-dark shades ========= */
+
 .bg-dark-100 {
     background: rgba(26, 33, 66, 0.1);
 }
@@ -6152,7 +6152,7 @@ h6,
     background: rgba(26, 33, 66, 0.9);
 }
 
-/* ======= bg-purple shades ========= */
+
 .bg-purple-100 {
     background: rgba(155, 81, 224, 0.1);
 }
@@ -6189,7 +6189,7 @@ h6,
     background: rgba(155, 81, 224, 0.9);
 }
 
-/* ======= bg-orange shades ========= */
+
 .bg-orange-100 {
     background: rgba(242, 153, 74, 0.1);
 }
@@ -6226,7 +6226,7 @@ h6,
     background: rgba(242, 153, 74, 0.9);
 }
 
-/* ======== Background Colors ========== */
+
 .primary-bg {
     background-color: #365CF5;
 }
@@ -6295,7 +6295,7 @@ h6,
     background-color: #93cfe2;
 }
 
-/* ======== Text Colors ========== */
+
 .text-primary {
     color: #365CF5 !important;
 }
@@ -6370,7 +6370,7 @@ h6,
     color: #93cfe2 !important;
 }
 
-/* ========= Font Weight =========== */
+
 .fw-300 {
     font-weight: 300;
 }
@@ -6399,7 +6399,7 @@ h6,
     font-weight: 900;
 }
 
-/* =========== Sidebar css =========== */
+
 #preloader {
     position: fixed;
     top: 0;
@@ -6512,13 +6512,13 @@ tbody, td, tfoot, th, thead, tr {
 }
 
 .table-dark-red {
-    background-color: #c93e3e !important; /* Dark red */
-    color: white; /* White text color for contrast */
+    background-color: #c93e3e !important; 
+    color: white; 
 }
 
 .table-dark-green {
-    background-color: #008000ba !important; /* Dark red */
-    color: white; /* White text color for contrast */
+    background-color: #008000ba !important; 
+    color: white; 
 }
 
 .is-invalid {
@@ -6540,13 +6540,13 @@ tbody, td, tfoot, th, thead, tr {
 }
 
 .swal-success-theme {
-    background-color: #e6f9ec; /* light green background */
-    color: #155724; /* dark green text */
+    background-color: #e6f9ec; 
+    color: #155724; 
     border: 1px solid #c3e6cb;
 }
 
 .swal-confirm-green {
-    background-color: #28a745 !important; /* Bootstrap success green */
+    background-color: #28a745 !important; 
     color: white !important;
     border: none;
     padding: 6px 20px;
@@ -6561,7 +6561,7 @@ tbody, td, tfoot, th, thead, tr {
     }
 
 .swal-success-theme .swal2-icon.swal2-success {
-    border-color: #1e7e34 !important; /* very dark green */
+    border-color: #1e7e34 !important; 
     color: #1e7e34 !important;
 }
 
@@ -6577,7 +6577,7 @@ tbody, td, tfoot, th, thead, tr {
     .swal-success-theme .swal2-icon.swal2-success::after {
         background: #1e7e34 !important;
     }
-/* Loan button - Military green */
+
 .btn-loan {
     background-color: #28a745;
     border-color: #1e7e34;
@@ -6590,7 +6590,7 @@ tbody, td, tfoot, th, thead, tr {
         color: white;
     }
 
-/* Maturity button - Navy blue */
+
 .btn-maturity {
     background-color: #343a40;
     border-color: #23272b;
@@ -6602,22 +6602,22 @@ tbody, td, tfoot, th, thead, tr {
         border-color: #1d2124;
         color: white;
     }
-   /*Log Viewer*/
+   
    #ViewLog:hover{
        cursor:pointer;
    }
 #AnalyticsDashBoard:hover {
     cursor: pointer;
 }
-/* Firefox-specific hiding */
+
 @-moz-document url-prefix() {
     #pdfContainer iframe {
-        margin-top: -41px; /* Hide toolbar by shifting content up */
+        margin-top: -41px; 
         height: calc(100% + 41px);
     }
 }
 
-/* Alternative approach - overlay to hide toolbar area */
+
 #pdfContainer::before {
     content: '';
     position: absolute;
@@ -6630,28 +6630,28 @@ tbody, td, tfoot, th, thead, tr {
     display: none;
 }
 
-/* Show overlay only in Firefox */
+
 @-moz-document url-prefix() {
     #pdfContainer::before {
         display: block;
     }
 }
 .large-checkbox {
-    border: 2px solid #381c1c !important; /* light gray */
-    accent-color: #ccb; /* modern browsers - affects the tick color */
+    border: 2px solid #381c1c !important; 
+    accent-color: #ccb; 
 }
 .msg-title {
     font-size: 25px;
     font-weight: bold;
     color: black;
 }
-/* Table Header Styling */
+
 .table-header-agif {
     background-color: #310;
     color: #fff;
 }
 
-/* Column Width Classes */
+
 .w-7 {
     width: 7%;
 }
@@ -6676,21 +6676,21 @@ tbody, td, tfoot, th, thead, tr {
     width: 22%;
 }
 
-/* 1. Main Link Style */
+
 .sidebar-nav-wrapper .sidebar-nav ul li a.active-page-highlight {
-    background: #ffffff !important; /* White Background */
-    color: #d50100 !important; /* The AGIF Red Color */
-    font-weight: 700 !important; /* Bold */
-    border-radius: 4px 0px 0px 4px; /* Specific corner curve */
-    padding: 6px !important; /* Spacing */
-    display: flex; /* Keeps icon and text aligned */
+    background: #ffffff !important; 
+    color: #d50100 !important; 
+    font-weight: 700 !important; 
+    border-radius: 4px 0px 0px 4px; 
+    padding: 6px !important; 
+    display: flex; 
     align-items: center;
 }
 
-    /* 2. Icon Style inside the active link */
-    /* I changed this from Black to Red to match the text, or use #365CF5 for Blue */
+    
+    
     .sidebar-nav-wrapper .sidebar-nav ul li a.active-page-highlight i,
     .sidebar-nav-wrapper .sidebar-nav ul li a.active-page-highlight .icon {
-        color: #d50100 !important; /* Red Icon */
-        margin-right: 15px; /* Ensure spacing matches your existing CSS */
+        color: #d50100 !important; 
+        margin-right: 15px; 
     }

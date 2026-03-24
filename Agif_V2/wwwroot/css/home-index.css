@@ -7,7 +7,7 @@
 #ticker01 {
     animation: scroll 20s linear infinite;
     position: relative;
-    padding-top: 200px;*/ /* Start below the container */
+    padding-top: 200px;*/ 
 /*}
 
 @keyframes scroll {
@@ -21,7 +21,7 @@
 }*/
 .ticker-container {
     overflow: hidden;
-    height: 250px; /* adjust */
+    height: 250px; 
 }
 
 #ticker01 {
@@ -38,7 +38,7 @@
     }
 }
 
-/* 🔥 FREEZE ON HOVER */
+
 .ticker-container:hover #ticker01 {
     animation-play-state: paused;
 }
@@ -127,14 +127,14 @@
 }
 
 
-/* Base responsive styles using clamp() */
+
 html {
     font-size: clamp(14px, 2vw, 16px);
     position: relative;
     min-height: 100%;
 }
 
-/* Button styles */
+
 .btn-dark-brown {
     background-color: #310;
     color: #fff;
@@ -149,7 +149,7 @@ html {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/* Body and background */
+
 body {
     margin-bottom: clamp(60px, 8vw, 80px);
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -170,7 +170,7 @@ body {
     font-weight: 600;
 }
 
-/* Header styles - RESPONSIVE FIXES */
+
 #headerText {
     color: rgb(199, 0, 57);
     font-weight: 800;
@@ -187,7 +187,7 @@ body {
     object-fit: cover;
 }
 
-/* Navigation styles */
+
 .nav-center {
     display: flex;
     justify-content: center;
@@ -255,7 +255,7 @@ body {
     padding-top: var(--mdb-navbar-padding-top);
 }
 
-/* Fixed header with responsive height */
+
 .fixed-header {
     position: fixed;
     top: 0;
@@ -265,12 +265,12 @@ body {
     height: clamp(140px, 25vw, 190px);
 }
 
-/* Main content with responsive top margin */
+
 .renderbody {
     margin-top: clamp(145px, 26vw, 195px) !important;
 }
 
-/* Footer */
+
 #layout-footer {
     position: fixed;
     bottom: 0;
@@ -282,7 +282,7 @@ body {
     font-size: clamp(12px, 2vw, 14px);
 }
 
-/* Panel styles - RESPONSIVE IMPROVEMENTS */
+
 .panel-default {
     border-color: #ddd;
 }
@@ -354,7 +354,7 @@ body {
     border-bottom-left-radius: clamp(3px, 1vw, 6px);
 }
 
-/* Second row panels specific height adjustment */
+
 .second-row {
     height: clamp(280px, 40vw, 310px);
 }
@@ -363,7 +363,7 @@ body {
         height: clamp(200px, 28vw, 280px);
     }
 
-/* Ticker animation - RESPONSIVE */
+
 .holder {
     height: clamp(40px, 8vw, 50px);
     overflow: hidden;
@@ -384,18 +384,18 @@ body {
     padding: 0;
     position: absolute;
     animation: tickerMove 20s linear infinite;
-    padding-top: 20px; /* Start below the container */
+    padding-top: 20px; 
 }
 
     #ticker01 li {
         height: auto;
         display: flex;
         align-items: center;
-        padding: clamp(5px, 2vw, 10px) clamp(10px, 2vw, 15px); /* Responsive padding */
+        padding: clamp(5px, 2vw, 10px) clamp(10px, 2vw, 15px); 
         font-size: clamp(0.9rem, 2.5vw, 1.2rem);
     }
 
-/* Alternative scroll animation */
+
 @keyframes scroll {
     0% {
         transform: translateY(0);
@@ -416,23 +416,23 @@ body {
     }
 }
 
-/* Mobile specific adjustments */
+
 @media (max-width: 480px) {
     #ticker01 li {
-        font-size: clamp(0.8rem, 3vw, 1rem); /* Smaller font size on smaller screens */
-        padding: clamp(3px, 1.5vw, 6px) clamp(5px, 1.5vw, 10px); /* Adjust padding for small screens */
+        font-size: clamp(0.8rem, 3vw, 1rem); 
+        padding: clamp(3px, 1.5vw, 6px) clamp(5px, 1.5vw, 10px); 
     }
 }
 
-/* Tablet and larger screen adjustments */
+
 @media (max-width: 768px) {
     #ticker01 li {
-        font-size: clamp(1rem, 2.5vw, 1.1rem); /* Medium font size for tablets */
-        padding: clamp(4px, 1.8vw, 8px) clamp(8px, 1.8vw, 12px); /* Adjust padding for medium screens */
+        font-size: clamp(1rem, 2.5vw, 1.1rem); 
+        padding: clamp(4px, 1.8vw, 8px) clamp(8px, 1.8vw, 12px); 
     }
 }
 
-/* Slider - RESPONSIVE */
+
 .slider {
     width: 100%;
     max-width: clamp(300px, 80vw, 1050px);
@@ -459,7 +459,7 @@ body {
         object-fit: cover;
     }
 
-/* Navigation dots */
+
 .dots {
     text-align: center;
     position: absolute;
@@ -478,7 +478,7 @@ body {
     cursor: pointer;
 }
 
-/* Headings - RESPONSIVE */
+
 h1 {
     position: relative;
     padding: 0;
@@ -503,7 +503,7 @@ h1 {
         font-weight: 600;
     }
 
-/* Page titles - RESPONSIVE */
+
 .pagetitle h1 {
     text-align: center;
     text-transform: uppercase;
@@ -612,7 +612,7 @@ h1 {
         background-color: #f8f8f8;
     }
 
-/* Container and card styles - RESPONSIVE */
+
 .container {
     max-width: clamp(300px, 90vw, 1200px);
     padding: 0 clamp(10px, 2vw, 15px);
@@ -641,7 +641,7 @@ h1 {
     width: 100%;
 }
 
-/* Dropdown menus - RESPONSIVE */
+
 .dropdown-menu li {
     position: relative;
 }
@@ -662,7 +662,7 @@ h1 {
     display: block;
 }
 
-/* Utility classes */
+
 .readonly-blocked {
     pointer-events: none;
     background-color: #e9ecef;
@@ -716,7 +716,7 @@ h1 {
     cursor: pointer;
 }
 
-/* File preview - RESPONSIVE */
+
 .file-preview-container {
     margin-top: clamp(4px, 1vw, 6px);
     overflow: hidden;
@@ -740,7 +740,7 @@ h1 {
         font-size: clamp(12px, 2vw, 14px);
     }
 
-/* Image styles - RESPONSIVE */
+
 .imgfluid {
     width: 100%;
     max-width: clamp(120px, 25vw, 200px);
@@ -751,7 +751,7 @@ h1 {
     display: block;
 }
 
-/* Chat and Modal styles - RESPONSIVE */
+
 .chatModal {
     transition: all 0.3s ease-in-out;
     margin-top: clamp(300px, 50vw, 420px);
@@ -824,12 +824,12 @@ h1 {
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-/* Navigation visibility fix */
+
 .navbar .collapse {
     visibility: visible !important;
 }
 
-/* Specific mobile adjustments for very small screens */
+
 @media (max-width: 480px) {
     .navbar-nav {
         flex-direction: column;
@@ -860,7 +860,7 @@ h1 {
     }
 }
 
-/* Print styles */
+
 @media print {
     .fixed-header,
     #layout-footer,

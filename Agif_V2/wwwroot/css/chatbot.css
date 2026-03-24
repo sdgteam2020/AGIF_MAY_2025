@@ -2,7 +2,7 @@
    ASDC Chatbot – Responsive CSS
    ========================= */
 
-/* ---- Design tokens ---- */
+
 :root{
   --asdc-bg:#f5f7fb;
   --asdc-card:#ffffff;
@@ -20,10 +20,10 @@
 
   --asdc-vh: 100vh;
 
-  /* spacing scale */
+  
   --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
 
-  /* sizes */
+  
   --chat-w: 380px;
   --chat-h: min(70vh, calc(var(--asdc-vh) - 120px));
   --chat-bottom: max(16px, env(safe-area-inset-bottom));
@@ -31,7 +31,7 @@
   --chat-left: max(16px, env(safe-area-inset-left));
 }
 
-/* Dark mode */
+
 @media (prefers-color-scheme: dark){
   :root{
     --asdc-bg:#0b1220;
@@ -47,7 +47,7 @@
   }
 }
 
-/* Global resets for the chat area only */
+
 .asdc-body{
   background: var(--asdc-bg);
   color: var(--asdc-text);
@@ -55,7 +55,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Hide elements with [hidden] consistently */
+
 [hidden] { display:none !important; }
 
 /* -----------------------
@@ -112,7 +112,7 @@
   opacity: 1;
 }
 
-/* Mobile: bottom sheet */
+
 @media (max-width: 640px){
   .asdc-chat{
     right: var(--chat-left);
@@ -129,7 +129,7 @@
   }
 }
 
-/* Header */
+
 .asdc-chat-header{
   display: flex; align-items: center; justify-content: space-between;
   gap: var(--sp-3);
@@ -147,14 +147,14 @@
 .asdc-chat-close:hover{ background: rgba(127,127,127,.08); }
 .asdc-chat-close:focus-visible{ outline: 2px solid var(--asdc-primary); outline-offset: 2px; }
 
-/* Loading bar */
+
 .asdc-loading{
   padding: var(--sp-3) var(--sp-4);
   font-size: 14px; color: var(--asdc-subtext);
   border-bottom: 1px dashed var(--asdc-border);
 }
 
-/* Message list */
+
 .asdc-chat-box{
   padding: var(--sp-4);
   overflow: auto;
@@ -164,7 +164,7 @@
     var(--asdc-card);
 }
 
-/* Nice scrollbars */
+
 .asdc-chat-box::-webkit-scrollbar{ width: 10px; }
 .asdc-chat-box::-webkit-scrollbar-thumb{
   background: color-mix(in oklab, var(--asdc-border) 60%, #999);
@@ -172,7 +172,7 @@
 }
 .asdc-chat-box::-webkit-scrollbar-track{ background: transparent; }
 
-/* Composer */
+
 .asdc-chat-composer{
   display: grid;
   grid-template-columns: 1fr auto;
@@ -205,12 +205,12 @@
 .asdc-send:active{ transform: translateY(0); }
 .asdc-send:disabled{ opacity:.55; cursor:not-allowed; }
 
-/* Rows */
+
 .asdc-row{ display:flex; align-items:flex-end; gap: var(--sp-3); margin-bottom: var(--sp-3); }
 .asdc-row--me{ justify-content: flex-end; }
 .asdc-row--bot{ justify-content: flex-start; }
 
-/* Avatars (emoji blocks) */
+
 .asdc-icon{
   width: 28px; height: 28px; border-radius: 50%;
   display:grid; place-items:center; font-size: 16px;
@@ -218,7 +218,7 @@
   color: var(--asdc-text);
 }
 
-/* Message bubbles */
+
 .asdc-bubble{
   max-width: 78%;
   border-radius: 16px;
@@ -243,13 +243,13 @@
   border-color: color-mix(in oklab, var(--asdc-note) 60%, var(--asdc-border));
 }
 
-/* Content inside bubble */
+
 .asdc-bubble-content{ display:flex; flex-direction:column; gap: 6px; }
 .asdc-text{ font-size: 14px; color: var(--asdc-text);     font-family: Arial, Helvetica, sans-serif; }
 .asdc-link a{ color: var(--asdc-primary); text-decoration: underline; }
 .asdc-meta{ font-size: 12px; color: var(--asdc-subtext); }
 
-/* Controls (copy / edit) */
+
 .asdc-controls{ display:flex; gap: 10px; align-items:center; margin-top: 2px; }
 .asdc-icon-btn{
   border:none; background:transparent; cursor:pointer;
@@ -258,13 +258,13 @@
 .asdc-icon-btn:hover{ background: rgba(127,127,127,.08); color: var(--asdc-text); }
 .asdc-icon-btn:focus-visible{ outline: 2px solid var(--asdc-primary); outline-offset: 2px; }
 
-/* Like / Dislike feedback row */
+
 .asdc-feedback{
   display:flex; justify-content:flex-end; gap: 12px;
   margin-top: 4px;
 }
 
-/* Inline edit */
+
 .asdc-edit-wrap{ display:flex; flex-direction:column; gap: var(--sp-3); }
 .asdc-edit-input{
   width: 100%; padding: 10px 12px; font-size: 14px;
@@ -316,7 +316,7 @@
 @media print{
   .asdc-chat, .asdc-chat-toggle{ display:none !important; }
 }
-/* Bubble (pop) animation */
+
 @keyframes bubble-pop {
   0%   { transform: scale(1); }
   30%  { transform: scale(1.15); }
@@ -324,12 +324,12 @@
   100% { transform: scale(1); }
 }
 
-/* Pulsing “breathing” animation */
+
 @keyframes bubble-pulse {
   0%   { box-shadow: 0 0 0 0 rgba(124,92,255,0.6); }
   70%  { box-shadow: 0 0 0 18px rgba(124,92,255,0); }
   100% { box-shadow: 0 0 0 0 rgba(124,92,255,0); }
 }
 
-/* Apply effect to toggle button */
+
 
