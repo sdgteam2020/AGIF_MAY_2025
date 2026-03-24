@@ -7,7 +7,7 @@ Link_prismjs.com/download.html#themes=prism&languages=markup+css+clike+javascrip
  * @author Lea Verou
  */
 
-/* stylelint-disable */
+
 code[class*='language-'],
 pre[class*='language-'] {
   color: black;
@@ -54,7 +54,7 @@ code[class*='language-'] ::selection {
   }
 }
 
-/* Code blocks */
+
 pre[class*='language-'] {
   padding: 1em;
   margin: 0.5em 0;
@@ -66,7 +66,7 @@ pre[class*='language-'] {
   background: #f5f2f0;
 }
 
-/* Inline code */
+
 :not(pre) > code[class*='language-'] {
   padding: 0.1em;
   border-radius: 0.3em;
@@ -162,7 +162,7 @@ pre.line-numbers > code {
   top: 0;
   font-size: 100%;
   left: -3.8em;
-  width: 3em; /* works for line-numbers below 1000 lines */
+  width: 3em; 
   letter-spacing: -1px;
   border-right: 1px solid #999;
 
@@ -454,7 +454,7 @@ pre.line-numbers > code {
   animation: prism-previewer-time linear infinite 3s;
 }
 
-/* custom */
+
 .docs-pills .d-flex.justify-content-between {
   border-bottom: 1px solid #e0e0e0 !important;
 }
@@ -503,7 +503,7 @@ pre.line-numbers > code {
 
 pre.line-numbers {
   position: relative;
-  padding-left: 3.8em !important; /* It's important to overwrite px-3 class which breaks showing numbers */
+  padding-left: 3.8em !important; 
   counter-reset: linenumber;
 }
 
@@ -518,7 +518,7 @@ pre.line-numbers > code {
   top: 0;
   font-size: 100%;
   left: -3.8em;
-  width: 3em; /* works for line-numbers below 1000 lines */
+  width: 3em; 
   letter-spacing: -1px;
   border-right: 1px solid #999;
 
@@ -551,4 +551,3 @@ pre[class*='language-'] {
   max-height: 450px;
 }
 
-/* stylelint-enable */

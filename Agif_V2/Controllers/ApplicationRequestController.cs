@@ -404,8 +404,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in SaveXML: {ex.Message}\n{ex.StackTrace}");
-                throw;
+                throw ex;
             }
         }
       
@@ -478,7 +477,6 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in SaveXML: {ex.Message}\n{ex.StackTrace}");
                 throw;
             }
         }
@@ -618,7 +616,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { error = "An error occurred while loading data: " + ex.Message });
+                return Json(new { error = "An error occurred while loading data: "});
             }
         }
 
@@ -691,7 +689,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { error = "An error occurred while loading data: " + ex.Message });
+                return Json(new { error = "An error occurred while loading data: "});
             }
         }
 
@@ -1118,7 +1116,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error uploading file: " + ex.Message });
+                return Json(new { success = false, message = "Error uploading file "});
             }
         }
 
@@ -1412,7 +1410,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error uploading file: " + ex.Message });
+                return Json(new { success = false, message = "Error uploading file"});
             }
         }
 

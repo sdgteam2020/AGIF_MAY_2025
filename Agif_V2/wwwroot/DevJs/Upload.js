@@ -52,7 +52,16 @@
 
     function showPdfInModal(file) {
         const pdfContainer = document.getElementById("pdfContainer");
-        pdfContainer.innerHTML = '';
+        const loader = document.getElementById("loadingOverlay");
+
+        // ✅ Show loader
+        loader.classList.remove("d-none");
+
+        // ✅ Remove only existing embed (not loader)
+        const oldEmbed = pdfContainer.querySelector("embed");
+        if (oldEmbed) {
+            oldEmbed.remove();
+        }
 
         const blob = new Blob([file], { type: 'application/pdf' });
         const pdfUrl = URL.createObjectURL(blob);
@@ -62,16 +71,25 @@
         embed.type = "application/pdf";
         embed.classList.add("w-100", "h-100", "border-0", "rounded");
 
+        // ✅ Hide loader after load
+        embed.onload = function () {
+            loader.classList.add("d-none");
+        };
+
         pdfContainer.appendChild(embed);
 
         $("#ViewPdf").modal("show");
 
-        $('#ViewPdf').on('hidden.bs.modal', function () {
+        $('#ViewPdf').one('hidden.bs.modal', function () {
             URL.revokeObjectURL(pdfUrl);
-            pdfContainer.innerHTML = '';
+
+            // ✅ Remove only embed
+            const embed = pdfContainer.querySelector("embed");
+            if (embed) embed.remove();
+
+            loader.classList.add("d-none");
         });
     }
-
     $('#uploadBtn').on('click', function (e) {
         e.preventDefault();
 

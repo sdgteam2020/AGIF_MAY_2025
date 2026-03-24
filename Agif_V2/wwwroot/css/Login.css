@@ -1,4 +1,4 @@
-﻿/* Base styles for the login page */
+﻿
 .container-fluid {
     max-width: 100%;
     padding: 0rem;
@@ -50,7 +50,7 @@
     font-weight: bold;
 }
 
-/* Responsive styling */
+
 @media (max-width: 768px) {
     .card {
         padding: 15px;
@@ -424,7 +424,7 @@
     font-weight: 700;
 }
 
-/* Animation for loading state */
+
 .btn.loading {
     position: relative;
     color: transparent;
@@ -451,7 +451,7 @@
     }
 }
 
-/* Focus states for accessibility */
+
 .form-control:focus,
 .btn:focus,
 input[type="checkbox"]:focus {
@@ -459,7 +459,7 @@ input[type="checkbox"]:focus {
     outline-offset: 2px;
 }
 
-/* Mobile-first responsive adjustments */
+
 @media (max-width: 480px) {
     .login-card {
         width: 95vw;
@@ -477,14 +477,14 @@ input[type="checkbox"]:focus {
     }
 }
 
-/* Large screen optimizations */
+
 @media (min-width: 1200px) {
     .login-card {
         margin-top: 8vh !important;
     }
 }
 
-/* High contrast mode */
+
 @media (prefers-contrast: high) {
     .form-control {
         border-width: 3px;
@@ -495,7 +495,7 @@ input[type="checkbox"]:focus {
     }
 }
 
-/* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
     .btn,
     .form-control {
@@ -535,7 +535,7 @@ input[type="checkbox"]:focus {
     font-weight: 700;
 }
 
-/* Animation for loading state */
+
 .btn.loading {
     position: relative;
     color: transparent;
@@ -562,7 +562,7 @@ input[type="checkbox"]:focus {
     }
 }
 
-/* Focus states for accessibility */
+
 .form-control:focus,
 .btn:focus,
 input[type="checkbox"]:focus {
@@ -570,7 +570,7 @@ input[type="checkbox"]:focus {
     outline-offset: 2px;
 }
 
-/* Mobile-first responsive adjustments */
+
 @media (max-width: 480px) {
     .login-card {
         width: 95vw;
@@ -588,14 +588,14 @@ input[type="checkbox"]:focus {
     }
 }
 
-/* Large screen optimizations */
+
 @media (min-width: 1200px) {
     .login-card {
         margin-top: 8vh !important;
     }
 }
 
-/* High contrast mode */
+
 @media (prefers-contrast: high) {
     .form-control {
         border-width: 3px;
@@ -606,7 +606,7 @@ input[type="checkbox"]:focus {
     }
 }
 
-/* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
     .btn,
     .form-control {

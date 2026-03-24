@@ -17,7 +17,7 @@ Version: 4.0
   font-display:swap;
 }
 
-/* base class */
+
 .lni {
   display: inline-block;
   font: normal normal normal 1em/1 'lineicons';
@@ -27,7 +27,7 @@ Version: 4.0
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* size examples - relative units */
+
 .lni-sm {
   font-size: 0.8em;
 }
@@ -36,7 +36,7 @@ Version: 4.0
   font-size: 1.2em;
 }
 
-/* size examples - absolute units */
+
 .lni-16 {
   font-size: 16px;
 }
@@ -45,7 +45,7 @@ Version: 4.0
   font-size: 32px;
 }
 
-/* rotate the icon infinitely */
+
 .lni-is-spinning {
   animation: lni-spin 1s infinite linear;
 }
@@ -59,7 +59,7 @@ Version: 4.0
   }
 }
 
-/* transform */
+
 .lni-rotate-90 {
   transform: rotate(90deg);
 }
@@ -80,7 +80,7 @@ Version: 4.0
   transform: scaleX(-1);
 }
 
-/* icons */
+
 .lni-zoom-out::before {
   content: "\ea02";
 }

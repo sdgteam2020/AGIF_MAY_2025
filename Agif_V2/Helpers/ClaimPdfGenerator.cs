@@ -210,10 +210,6 @@ namespace Agif_V2.Helpers
                                             .SetFontSize(14)
                                             .SetMarginTop(10);
 
-                        //Paragraph point14 = new Paragraph($"{counter}. Details of Existing Agif Loans:")
-                        //                    .SetFont(iText.Kernel.Font.PdfFontFactory.CreateFont(StandardFonts.HELVETICA))
-                        //                    .SetFontSize(14)
-                        //                    .SetBold().SetMarginTop(10);
 
                         document.Add(point14);
                         AddRow2("S/No & Type of Loan", "Date of Loan taken", " Duration of loan", "Amount Taken");

@@ -658,7 +658,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error occurred while merging PDFs: {ex.Message}" });
+                return Json(new { success = false, message = $"Error occurred while merging PDFs" });
             }
         }
 
@@ -793,7 +793,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Error saving file: {ex.Message}" });
+                return Json(new { success = false, message = $"Error saving file" });
             }
         }
 

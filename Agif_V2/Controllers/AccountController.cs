@@ -274,6 +274,10 @@ namespace Agif_V2.Controllers
         }
         public IActionResult Register()
         {
+
+            string dd = AESEncrytDecry.GetSalt();
+            HttpContext.Session.SetString(SessionKeySalt, dd);
+            ViewBag.hdns = dd;
             DTOuserProfile userProfileDTO = new DTOuserProfile();
 
             TempData.Keep("UserName");
@@ -282,11 +286,52 @@ namespace Agif_V2.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Register(DTOuserProfile signUpDto)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(string EncryptedData)
         {
+            var keyBase64 = HttpContext.Session.GetString(SessionKeySalt);
+            if (string.IsNullOrEmpty(keyBase64))
+            {
+                return BadRequest("Session expired. Please refresh the page.");
+            }
+
+            // 1. Decrypt Payload
+            string decryptedJson;
+            try
+            {
+                decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, keyBase64);
+                decryptedJson = decryptedJson.Trim('\0', ' '); // Clean up AES padding
+            }
+            catch (CryptographicException)
+            {
+                return BadRequest("Invalid or tampered data.");
+            }
+
+            // 2. Deserialize with your Flexible Converters
+            DTOuserProfile signUpDto;
+            try
+            {
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
+                };
+                options.Converters.Add(new Agif_V2.Helpers.FlexibleDateTimeConverter());
+                options.Converters.Add(new Agif_V2.Helpers.FlexibleDecimalConverter());
+
+                signUpDto = System.Text.Json.JsonSerializer.Deserialize<DTOuserProfile>(decryptedJson, options);
+
+                // Clear any model state errors that might have snuck in, then re-validate
+                ModelState.Clear();
+                TryValidateModel(signUpDto);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Security error: Failed to process the registration payload.");
+                return View(new DTOuserProfile());
+            }
             if (ModelState.IsValid)
             {
-
                 var newUser = new ApplicationUser
                 {
                     UserName = signUpDto.userName,
@@ -296,7 +341,7 @@ namespace Agif_V2.Controllers
                     UpdatedOn = DateTime.Now,
                     DomainId = signUpDto.userName
                 };
-                string defaultPassword = _configuration["SecuritySettings:DefaultUserPassword"];
+                var defaultPassword = _configuration["Logging:SecuritySettings:DefaultUserPassword"];
                 var Result = await _userManager.CreateAsync(newUser, defaultPassword);
                 if (!Result.Succeeded)
                 {
@@ -580,7 +625,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "An error occurred while exporting the data. " + ex.Message });
+                return Json(new { success = false, message = "An error occurred while exporting the data."});
             }
         }
 

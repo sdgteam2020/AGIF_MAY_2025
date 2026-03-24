@@ -22,13 +22,11 @@ namespace Agif_V2.Helpers
             {
                 string? value = reader.GetString();
 
-                // If the form field was left blank, safely return null for the int?
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     return null;
                 }
 
-                // Strip any commas just in case
                 value = value.Replace(",", "").Trim();
 
                 if (int.TryParse(value, out int result))

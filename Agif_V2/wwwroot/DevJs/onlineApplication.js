@@ -2607,28 +2607,9 @@ function formatDateToDDMMYYYY(dateString) {
 
     return `${day}/${month}/${year}`;
 }
-//function encryptData(plainText) {
-//    const secretKey = getSecretKey(); // Call the helper
-//    if (!secretKey) {
-//        console.error("Encryption Key Missing");
-//        return "";
-//    }
-
-//    const key = CryptoJS.enc.Utf8.parse(secretKey);
-//    const iv = CryptoJS.enc.Utf8.parse(secretKey.substring(0, 16));
-
-//    const encrypted = CryptoJS.AES.encrypt(plainText, key, {
-//        iv: iv,
-//        mode: CryptoJS.mode.CBC,
-//        padding: CryptoJS.pad.Pkcs7
-//    });
-
-//    return encrypted.toString();
-//}
 function encryptData(plainText) {
     const secretKey = getSecretKey(); // Ensure this matches what C# expects
     if (!secretKey) {
-        console.error("Encryption Key Missing");
         return "";
     }
     const key = CryptoJS.enc.Base64.parse(secretKey);
@@ -2639,8 +2620,10 @@ function encryptData(plainText) {
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7
     });
+    const cipherText = encrypted.ciphertext;
+    const hmac = CryptoJS.HmacSHA256(iv.clone().concat(cipherText), key);
 
-    const combinedData = iv.clone().concat(encrypted.ciphertext);
+    const finalData = iv.clone().concat(cipherText).concat(hmac);
 
-    return CryptoJS.enc.Base64.stringify(combinedData);
+    return CryptoJS.enc.Base64.stringify(finalData);
 }

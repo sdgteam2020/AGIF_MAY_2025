@@ -45,7 +45,21 @@ $("#btnsignup").on("click", function (e) {
         cancelButtonText: 'No, cancel!',
     }).then((result) => {
         if (result.isConfirmed) {
-            $("#signupForm").submit();  // Or trigger your form submit action here
+            const formData = {};
+            $.each($("#signupForm").serializeArray(), function () {
+                formData[this.name] = this.value;
+            });
+            formData["DteFmn"] = $('#DteFmn').is(':checked');
+            const jsonString = JSON.stringify(formData);
+            const serverKey = $('#serverCryptoKey').val();
+            const encryptedPayload = encryptPayload(jsonString, serverKey);
+            $("<input>").attr({
+                type: "hidden",
+                name: "EncryptedData",
+                value: encryptedPayload
+            }).appendTo("#signupForm");
+            $("#signupForm").find("input:not([name='EncryptedData'], [name='__RequestVerificationToken']), select, textarea").removeAttr("name");
+            $("#signupForm")[0].submit();  // Or trigger your form submit action here
         } else {
             Swal.fire('Cancelled', 'Your Details was not saved.', 'info');
         }
@@ -65,6 +79,9 @@ $("#txtUnit").autocomplete({
                 contentType: 'application/x-www-form-urlencoded',
                 data: param,
                 type: 'POST',
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
                 success: function (data) {
                     if (data.length != 0) {
                         response($.map(data, function (item) {
@@ -106,3 +123,29 @@ $("#btnTokenDetails").on('click', function () {
 $("input, textarea").on("paste", function (e) {
     e.preventDefault();
 });
+function encryptPayload(plainText, keyBase64) {
+    // 1. Parse the Base64 key
+    var key = CryptoJS.enc.Base64.parse(keyBase64);
+
+    // 2. Generate a random 16-byte IV
+    var iv = CryptoJS.lib.WordArray.random(16);
+
+    // 3. Encrypt the data (AES-CBC, PKCS7 Padding)
+    var encrypted = CryptoJS.AES.encrypt(plainText, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7
+    });
+
+    // 4. Combine IV + CipherText (Need to clone to avoid mutating)
+    var ivAndCipher = iv.clone().concat(encrypted.ciphertext);
+
+    // 5. Generate HMAC-SHA256 of the combined IV + CipherText
+    var hmac = CryptoJS.HmacSHA256(ivAndCipher, key);
+
+    // 6. Combine IV + CipherText + HMAC
+    var finalData = ivAndCipher.clone().concat(hmac);
+
+    // 7. Return as Base64 string
+    return CryptoJS.enc.Base64.stringify(finalData);
+}

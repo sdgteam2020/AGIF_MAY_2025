@@ -36,7 +36,7 @@ button {
 .terms {
     margin-top: 20px;
 }
-/* General Reset and Font */
+
 
 
 .form-container {
@@ -61,7 +61,7 @@ button {
 }
 
     .form-group label {
-        width: 200px; /* or min-width if needed */
+        width: 200px; 
         font-weight: 600;
         font-size: 1rem;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -165,7 +165,7 @@ input:invalid {
 }
 
 .select-arrow:before {
-    content: "\25BC"; /* Unicode escape for ▼ */
+    content: "\25BC"; 
 }
 
 .inputFields {
@@ -213,8 +213,8 @@ input:invalid {
     color: #555;
 }
 .emi-select {
-    background-color: #ffffff; /* Sets background to white */
-    color: #000000; /* Optional: sets text color to black */
+    background-color: #ffffff; 
+    color: #000000; 
     border: 1px solid #ccc;
     border-radius: 6px;
     padding: 10px 12px;
@@ -266,7 +266,7 @@ input[disabled] {
 
 
 .ui-autocomplete {
-    z-index: 1050 !important; /* higher than your popup/modal */
+    z-index: 1050 !important; 
 }
 
 
@@ -416,15 +416,15 @@ input[disabled] {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent dark background */
+    background-color: rgba(0, 0, 0, 0.5); 
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1050; /* Make sure it's on top of other elements */
+    z-index: 1050; 
     padding: 10px;
 }
 
-/* Styling for the dialog box */
+
 .dialog-box {
     background-color: #fff;
     padding: 30px;
@@ -436,18 +436,18 @@ input[disabled] {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 20px; /* Add space between elements */
+    gap: 20px; 
     transition: all 0.3s ease-in-out;
 }
 
-    /* Heading style */
+    
     .dialog-box h4 {
         font-size: 1.5rem;
         font-weight: bold;
         color: #333;
     }
 
-/* Input field styling */
+
 #unitSearchDialog input {
     text-align: left !important;
     font-size: 1.2rem;
@@ -459,21 +459,21 @@ input[disabled] {
 }
 
     #unitSearchDialog input:focus {
-        border-color: #007bff; /* Blue color on focus */
+        border-color: #007bff; 
         outline: none;
     }
 
-/* Button styles */
+
 
 #unitSearchDialog .dialog-box {
-    width: 600px; /* keep your width */
+    width: 600px; 
     padding: 20px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
-    align-items: center; /* center children horizontally */
+    align-items: center; 
 }
 
 #unitSearchDialog h4 {
@@ -484,14 +484,14 @@ input[disabled] {
 }
 
 #unitSearchInput {
-    width: 100%; /* full width inside dialog */
+    width: 100%; 
     font-weight: bold;
-    font-size: 20px; /* larger font size */
+    font-size: 20px; 
     padding: 12px 15px;
     border-radius: 8px;
     border: 1px solid #ccc;
     box-sizing: border-box;
-    text-align: center; /* center the text */
+    text-align: center; 
     outline-offset: 2px;
     transition: border-color 0.3s;
 }
@@ -512,8 +512,8 @@ input[disabled] {
 }
 
 #unitSearchDialog .d-flex.justify-content-end.mt-3 {
-    justify-content: center !important; /* center the buttons container */
-    gap: 15px; /* spacing between buttons */
+    justify-content: center !important; 
+    gap: 15px; 
     margin-top: 25px !important;
     width: 100%;
 }
@@ -626,7 +626,7 @@ input[disabled] {
     color: #333;
 }
 
-/* Header Sections */
+
 .member-header,
 .authority-header {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -648,7 +648,7 @@ input[disabled] {
     font-weight: 600;
 }
 
-/* Guidelines Section */
+
 .guidelines-section {
     margin-bottom: 25px;
 }
@@ -683,7 +683,7 @@ input[disabled] {
     margin-left: 10px;
 }
 
-/* Sub Items */
+
 .sub-items {
     margin-left: 30px;
     margin-top: 10px;
@@ -731,7 +731,7 @@ input[disabled] {
     margin-left: 10px;
 }
 
-/* Rules Section */
+
 .rules-section {
     margin-bottom: 25px;
 }
@@ -775,7 +775,7 @@ input[disabled] {
     font-size: 16px;
 }
 
-/* Separator */
+
 .separator {
     border-top: 2px solid #e9ecef;
     margin: 30px 0;
@@ -793,7 +793,7 @@ input[disabled] {
     font-size: 14px;
 }
 
-/* Approval Guidelines */
+
 .approval-guidelines {
     margin-left: 20px;
 }
@@ -849,7 +849,7 @@ input[disabled] {
     position: relative;
 }
 
-/* Gender dropdown styling */
+
 .gender-dropdown {
     display: none;
     position: absolute;
@@ -865,18 +865,18 @@ input[disabled] {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-    /* Show dropdown when active */
+    
     .gender-dropdown.show {
         display: block;
     }
 
-/* Floating label */
+
 .form-label.active {
     transform: translateY(-1rem);
     font-size: 0.875rem;
 }
 
-/* Male button - Blue theme */
+
 .gender-male {
     border-color: #007bff !important;
     color: #007bff !important;
@@ -892,7 +892,7 @@ input[disabled] {
     border-color: #007bff !important;
 }
 
-/* Female button - Pink theme */
+
 .gender-female {
     border-color: #ff69b4 !important;
     color: #ff69b4 !important;
