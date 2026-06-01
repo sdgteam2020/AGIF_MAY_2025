@@ -14,7 +14,6 @@ namespace DataAccessLayer.Interfaces
     {
         Task<string> GetFormType(int ApplicationID);
 
-        Task<DateTime> GetRetirementDate(int rankId, int Prefix,DateTime dateTime);
         Task<DTOCommonOnlineApplicationResponse> GetApplicationDetails(int applicationId);
         Task<DTOCommonOnlineApplicationResponse> GetApplicationDetailsByApplicationId(int applicationId);
 

@@ -19,9 +19,6 @@ namespace DataAccessLayer.Repositories
 
         }
 
-        public async Task<SplWaiverModel?> GetByApplicationId(int ApplicationId)
-        {
-            return await _context.trnSplWaiver.FirstOrDefaultAsync(x => x.ApplicationId == ApplicationId);
-        }
+        
     }
 }

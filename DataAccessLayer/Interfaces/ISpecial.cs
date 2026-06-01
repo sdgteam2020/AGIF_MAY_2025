@@ -9,7 +9,6 @@ namespace DataAccessLayer.Interfaces
 {
     public interface ISpecial : IGenericRepositoryDL<SplWaiverModel>
     {
-        Task<SplWaiverModel?> GetByApplicationId(int ApplicationId);
 
     }
 }

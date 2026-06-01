@@ -4,6 +4,7 @@ using DataTransferObject.Request;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace Agif_V2.Controllers
@@ -12,6 +13,7 @@ namespace Agif_V2.Controllers
     [AutoValidateAntiforgeryToken]
     public class DefaultController : Controller
     {
+        public const string SessionKeySalt = "_Salt";
         private readonly IDefault _default;
         private readonly IOnlineApplication _onlineApplication;
         private readonly IClaimOnlineApplication _IClaimonlineApplication;
@@ -85,36 +87,84 @@ namespace Agif_V2.Controllers
         [HttpGet]
         public IActionResult CheckApplicationStatus()
         {
-            // 🚫 Block if query params are present
             if (Request.Query.Count > 0)
             {
                 return BadRequest("Invalid request");
             }
-
+            string dd = AESEncrytDecry.GetKey(32);
+            HttpContext.Session.SetString(SessionKeySalt, dd);
+            ViewBag.hdns = dd;
             return View();
         }
         [HttpPost]
-        public IActionResult CheckApplicationStatusPost()
+        [ValidateAntiForgeryToken]
+        public IActionResult CheckApplicationStatusPost([FromForm] string EncryptedData)
         {
             return View("CheckApplicationStatus");
         }
         [HttpPost]
-        public async Task<IActionResult> SearchByArmyNo([FromForm] string armyNo,string aadharNo)
+        [ValidateAntiForgeryToken] // Ensure this matches your JS header
+        public async Task<IActionResult> SearchByArmyNo([FromForm] string EncryptedData)
         {
-            if (string.IsNullOrWhiteSpace(armyNo))
+            // 1. Check if payload was received
+            if (string.IsNullOrEmpty(EncryptedData))
+            {
+                return Json(new { success = false, message = "Form data is missing or corrupted." });
+            }
+
+            // 2. Retrieve the decryption key from the session
+            var keyBase64 = HttpContext.Session.GetString(SessionKeySalt);
+            if (string.IsNullOrEmpty(keyBase64))
+            {
+                return Json(new { success = false, message = "Session expired. Please refresh the page." });
+            }
+
+            // 3. Decrypt the payload
+            string decryptedJson;
+            try
+            {
+                decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, keyBase64);
+                decryptedJson = decryptedJson.Trim('\0', ' '); // Clean up AES padding
+            }
+            catch (CryptographicException)
+            {
+                return Json(new { success = false, message = "Invalid or tampered data." });
+            }
+
+            // 4. Deserialize the JSON string back into C# variables
+            DTOApplicationSearch searchParams;
+            try
+            {
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                searchParams = System.Text.Json.JsonSerializer.Deserialize<DTOApplicationSearch>(decryptedJson, options);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Security error: Failed to process the payload." });
+            }
+
+            // 5. Apply your existing business validation rules
+            if (string.IsNullOrWhiteSpace(searchParams.ArmyNo))
             {
                 return Json(new { success = false, message = "Army number is required" });
             }
-            if (string.IsNullOrWhiteSpace(aadharNo))
+
+            if (string.IsNullOrWhiteSpace(searchParams.AadharNo))
             {
                 return Json(new { success = false, message = "Aadhar number is required" });
             }
 
-            if (!Regex.IsMatch(armyNo, @"^[a-zA-Z0-9]{1,20}$"))
+            if (!Regex.IsMatch(searchParams.ArmyNo, @"^[a-zA-Z0-9]{1,20}$"))
             {
                 return Json(new { success = false, message = "Invalid army number format" });
             }
-            var data = await _default.GetUserApplicationStatusByArmyNo(armyNo,aadharNo);
+
+            // 6. Execute your existing database query
+            var data = await _default.GetUserApplicationStatusByArmyNo(searchParams.ArmyNo, searchParams.AadharNo);
+
             return Json(data);
         }
 

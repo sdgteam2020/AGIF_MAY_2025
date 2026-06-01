@@ -21,25 +21,18 @@ namespace DataTransferObject.Model
         [MaxLength(50, ErrorMessage = "Maximum length of Rank Name is fifty character.")]
         public string RankName { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "required!")]
-        [RegularExpression("^[a-zA-Z0-9 ]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
-        [Column(TypeName = "varchar(30)")]
-        [MaxLength(30, ErrorMessage = "Maximum length of Rank Abbreviation is thirty character.")]
-        public string RankAbbreviation { get; set; } = string.Empty;
 
         [RegularExpression(@"^[\d]+$", ErrorMessage = "RankId is number.")]
         public short Orderby { get; set; }
 
         [Required(ErrorMessage = "required!")]
-        [ForeignKey("MApplyFor"), DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [ForeignKey(nameof(MApplicantType))]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [RegularExpression(@"^[\d]+$", ErrorMessage = "ApplyForId is number.")]
-        public byte ApplyForId { get; set; }
-        public MApplyFor? MApplyFor { get; set; }
+        public int ApplyForId { get; set; }
 
-        [RegularExpression(@"^[\d]+$", ErrorMessage = "Rank Cd is number.")]
-        public int? rank_cd { get; set; }
+        public MApplicantType? MApplicantType { get; set; }
 
-        public int? RetirementAge { get; set; }
 
     }
 }

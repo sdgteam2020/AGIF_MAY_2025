@@ -113,7 +113,6 @@ namespace DataAccessLayer.Repositories
             await DeleteEntityIfExists(_context.trnEducationDetails, appId);
             await DeleteEntityIfExists(_context.trnMarriageward, appId);
             await DeleteEntityIfExists(_context.trnPropertyRenovation, appId);
-            await DeleteEntityIfExists(_context.trnSplWaiver, appId);
             await DeleteEntityIfExists(_context.trnClaimAccountDetails, appId);
             await DeleteEntityIfExists(_context.trnClaimAddressDetails, appId);
 
@@ -446,14 +445,7 @@ namespace DataAccessLayer.Repositories
                 fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
             }
-            else if (PurposeType == "SP")
-            {
-                var SPdetails = await _Special.GetByApplicationId(ApplicationId);
-                fileUpload.OtherReasonsPdf = SPdetails.OtherReasonsPdf;
-                fileUpload.IsOtherReasonPdf = SPdetails.IsOtherReasonPdf;
-                fileUpload.TotalExpenditureFile = SPdetails.TotalExpenditureFilePdf;
-                fileUpload.IsTotalExpenditureFilePdf = SPdetails.IsTotalExpenditureFilePdf;
-            }
+            
 
             await _DocumentUpload.Add(fileUpload);
 
@@ -672,21 +664,7 @@ namespace DataAccessLayer.Repositories
 
                     data.PropertyRenovationResponse = PRModal;
                 }
-                else if (result.ApplicationType == 4)
-                {
-                    formtype = "SP";
-                    var SPModal = (from sp in _context.trnSplWaiver
-                                   where sp.ApplicationId == applicationId
-                                   select new DTOSplWaiverResponse
-                                   {
-                                       OtherReasons = sp.OtherReasons,
-
-                                   }).FirstOrDefault();
-
-                    data.OnlineApplicationResponse = result; // Assuming result is already defined
-
-                    data.SplWaiverResponse = SPModal;
-                }
+                
 
                 var DocumentModel = _context.trnClaimDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
 
@@ -961,8 +939,7 @@ namespace DataAccessLayer.Repositories
                          join PR in _context.trnPropertyRenovation on common.ApplicationId equals PR.ApplicationId into PRGroup
                          from PR in PRGroup.DefaultIfEmpty()
 
-                         join SP in _context.trnSplWaiver on common.ApplicationId equals SP.ApplicationId into SPGroup
-                         from SP in SPGroup.DefaultIfEmpty()
+                         
 
                          join AddressDetails in _context.trnClaimAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
@@ -1025,7 +1002,6 @@ namespace DataAccessLayer.Repositories
 
                              NameofPropertyHolder = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
 
-                             SpecialReason = common.WithdrawPurpose == 4 ? SP.OtherReasons : null,
 
                              EmailDomain=common.EmailDomain?? string.Empty,
                              dateandtimeofdocuuploadfrosanctioningauth = DigitalSignRecords.SignOn ?? null,
@@ -1326,20 +1302,6 @@ namespace DataAccessLayer.Repositories
                     data.OnlineApplicationResponse = result; // Assuming result is already defined
 
                     data.PropertyRenovationResponse = PRModal;
-                }
-                else if (result.ApplicationType == 4)
-                {
-                    var SPModal = (from sp in _context.trnSplWaiver
-                                   where sp.ApplicationId == applicationId
-                                   select new DTOSplWaiverResponse
-                                   {
-                                       OtherReasons = sp.OtherReasons,
-
-                                   }).FirstOrDefault();
-
-                    data.OnlineApplicationResponse = result; // Assuming result is already defined
-
-                    data.SplWaiverResponse = SPModal;
                 }
 
             }

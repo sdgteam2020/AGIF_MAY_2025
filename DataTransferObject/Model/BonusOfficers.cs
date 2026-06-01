@@ -23,7 +23,6 @@ namespace DataTransferObject.Model
         [Required]
         [Column(TypeName = "decimal(5,2)")]
         public decimal CumulativeBonus { get; set; }
-        public string? Remarks { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
