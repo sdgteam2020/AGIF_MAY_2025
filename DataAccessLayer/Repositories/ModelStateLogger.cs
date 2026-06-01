@@ -46,7 +46,7 @@ namespace DataAccessLayer.Repositories
             ErrorLog errorLog = new ErrorLog
             {
                 StatusCode = 400, // Bad Request
-                ExceptionType = "ModelStateValidationError",
+                ExceptionTypeId = 1,
                 Message = message,
                 StackTrace = null,
                 Path = httpContext.Request.Path,

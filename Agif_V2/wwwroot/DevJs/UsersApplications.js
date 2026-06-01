@@ -493,7 +493,7 @@ async function GetTokenvalidatepersid2fa(IcNo, applnId, type) {
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify({
-            "inputPersID": IcNo
+        "inputPersID": IcNo
         }),
 
         success: function (response) {
@@ -612,9 +612,20 @@ function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
         }
     });
 }
+function stripTrailingSlashes(str) {
+    let i = str.length;
+    while (i > 0 && str[i - 1] === '/') i--;
+    return str.slice(0, i);
+}
+
+function stripLeadingSlashes(str) {
+    let i = 0;
+    while (i < str.length && str[i] === '/') i++;
+    return str.slice(i);
+}
 function sendPDFToServer(filepath, thumbprint, type) {
     const baseUrl = window.location.origin;
-    const fullPath = `${baseUrl.replace(/\/+$/, '')}/${filepath.replace(/^\/+/, '')}`;
+    const fullPath = `${stripTrailingSlashes(baseUrl)}/${stripLeadingSlashes(filepath)}`;
     let URL = '';
 
     $.ajax({

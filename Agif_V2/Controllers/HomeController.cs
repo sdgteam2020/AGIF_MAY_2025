@@ -203,5 +203,9 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "An error occurred while fetching analytics data: " + ex.Message });
             }
         }
+        public IActionResult TestInvalidOperation()
+        {
+            throw new InvalidOperationException("Testing InvalidOperationException");
+        }
     }
 }

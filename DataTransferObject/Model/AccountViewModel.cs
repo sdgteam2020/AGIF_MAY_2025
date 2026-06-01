@@ -17,6 +17,8 @@ namespace DataTransferObject.Model
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
+        [StringLength(60, MinimumLength = 6, ErrorMessage = "Password must be between 6 and 60 characters.")]
+        [RegularExpression(@"^\S+$", ErrorMessage = "Password must not contain spaces.")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]

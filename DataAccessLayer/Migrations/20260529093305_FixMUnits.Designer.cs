@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260529093305_FixMUnits")]
+    partial class FixMUnits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,6 +255,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("TrnBonusJCO_OR");
@@ -276,6 +282,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1261,8 +1270,8 @@ namespace DataAccessLayer.Migrations
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExceptionTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("ExceptionType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
@@ -1277,8 +1286,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExceptionTypeId");
 
                     b.ToTable("ErrorLogs");
                 });
@@ -1371,6 +1378,9 @@ namespace DataAccessLayer.Migrations
                     b.Property<decimal>("PrAmount")
                         .HasColumnType("decimal(7,2)");
 
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("TrnInvestmentChange_JCO_OR");
@@ -1398,6 +1408,9 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<decimal>("PrAmount")
                         .HasColumnType("decimal(7,2)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1531,51 +1544,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("MArmyPrefixes");
                 });
 
-            modelBuilder.Entity("DataTransferObject.Model.MDist", b =>
-                {
-                    b.Property<int>("DistrictId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DistrictId"));
-
-                    b.Property<string>("DistrictName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("StateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DistrictId");
-
-                    b.HasIndex("StateId");
-
-                    b.ToTable("MDist");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MExceptionType", b =>
-                {
-                    b.Property<int>("ExceptionTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExceptionTypeId"));
-
-                    b.Property<string>("ExceptionTypeName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ExceptionTypeId");
-
-                    b.HasIndex("ExceptionTypeName")
-                        .IsUnique()
-                        .HasFilter("[ExceptionTypeName] IS NOT NULL");
-
-                    b.ToTable("MExceptionTypes");
-                });
-
             modelBuilder.Entity("DataTransferObject.Model.MLoanFreq", b =>
                 {
                     b.Property<int>("ID")
@@ -1668,34 +1636,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MRegtCorps");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MState", b =>
-                {
-                    b.Property<int>("StateId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StateId"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("StateCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("StateName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("StateId");
-
-                    b.ToTable("MState");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MStatusTable", b =>
@@ -2587,17 +2527,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("ClaimCommonModel");
                 });
 
-            modelBuilder.Entity("DataTransferObject.Model.ErrorLog", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MExceptionType", "MExceptionType")
-                        .WithMany("ErrorLogs")
-                        .HasForeignKey("ExceptionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("MExceptionType");
-                });
-
             modelBuilder.Entity("DataTransferObject.Model.HBAApplicationModel", b =>
                 {
                     b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModels")
@@ -2634,17 +2563,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MRank");
 
                     b.Navigation("MRegtCorps");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MDist", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MState", "State")
-                        .WithMany()
-                        .HasForeignKey("StateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("State");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MLoanType", b =>
@@ -2813,11 +2731,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MExceptionType", b =>
-                {
-                    b.Navigation("ErrorLogs");
                 });
 #pragma warning restore 612, 618
         }

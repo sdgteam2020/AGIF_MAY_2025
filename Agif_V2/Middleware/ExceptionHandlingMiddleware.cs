@@ -20,7 +20,9 @@ namespace Agif_V2.Middleware
             _next = requestDelegate;
         }
 
-        public async Task InvokeAsync(HttpContext httpContext,ApplicationDbContext context, IErrorLog error)
+        public async Task InvokeAsync(
+            HttpContext httpContext,
+            IErrorLog errorLog)
         {
             try
             {
@@ -28,33 +30,60 @@ namespace Agif_V2.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,ex.Message);
-                await HandleCustomExceptionResponseAsync(httpContext,ex, context,error);
+                _logger.LogError(ex, ex.Message);
+
+                await errorLog.LogExceptionAsync(ex, httpContext);
+
+                await HandleCustomExceptionResponseAsync(
+                    httpContext);
             }
-           
         }
 
-        public async Task HandleCustomExceptionResponseAsync(HttpContext httpContext,Exception ex, ApplicationDbContext context, IErrorLog error)
+        private async Task HandleCustomExceptionResponseAsync(
+            HttpContext httpContext)
         {
-            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            httpContext.Response.ContentType = MediaTypeNames.Application.Json;
+            httpContext.Response.StatusCode =
+                (int)HttpStatusCode.InternalServerError;
 
-            ErrorLog errorLogs = new ErrorLog();
-            errorLogs.StatusCode = (int)HttpStatusCode.InternalServerError;
-            errorLogs.Message = ex.Message;
-            errorLogs.StackTrace = ex.StackTrace;
-            errorLogs.Path = httpContext.Request.Path;
-            errorLogs.ExceptionType = ex.GetType().Name;
+            httpContext.Response.ContentType =
+                MediaTypeNames.Application.Json;
 
-            await error.Add(errorLogs);
+            var response = new ErrorModel(
+                httpContext.Response.StatusCode,
+                "An unexpected error occurred processing your request.",
+                null);
 
-            string message = "An unexpected error occurred processing your request.";
-            string? details = null;
-            
-            var response = new ErrorModel(httpContext.Response.StatusCode, message, details);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy =
+                    JsonNamingPolicy.CamelCase
+            };
 
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-            await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response, options));
+            await httpContext.Response.WriteAsync(
+                JsonSerializer.Serialize(response, options));
         }
+
+        //public async Task HandleCustomExceptionResponseAsync(HttpContext httpContext,Exception ex, ApplicationDbContext context, IErrorLog error)
+        //{
+        //    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //    httpContext.Response.ContentType = MediaTypeNames.Application.Json;
+
+        //    ErrorLog errorLogs = new ErrorLog();
+        //    errorLogs.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //    errorLogs.Message = ex.Message;
+        //    errorLogs.StackTrace = ex.StackTrace;
+        //    errorLogs.Path = httpContext.Request.Path;
+        //    errorLogs.ExceptionType = ex.GetType().Name;
+
+        //    await error.Add(errorLogs);
+
+        //    string message = "An unexpected error occurred processing your request.";
+        //    string? details = null;
+
+        //    var response = new ErrorModel(httpContext.Response.StatusCode, message, details);
+
+        //    var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+        //    await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response, options));
+    //}
     }
 }

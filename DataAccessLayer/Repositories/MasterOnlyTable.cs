@@ -91,6 +91,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAllUnit()
         {
             var ret = await (from unit in _context.MUnits
+                             where unit.IsActive == true
                              select new DTOMasterResponse
                              {
                                  Id = unit.UnitId,
@@ -103,7 +104,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAllRankByType(int type)
         {
             var ret = await (from rank in _context.MRanks
-                             where rank.ApplyForId == type
+                             where rank.ApplyForId == type && rank.IsActive == true
                              orderby rank.Orderby
                              select new DTOMasterResponse
                              {
@@ -214,6 +215,7 @@ namespace DataAccessLayer.Repositories
         public async Task<List<DTOMasterResponse>> GetAppointment()
         {
             var ret = await (from apptType in _context.MAppointments
+                             where apptType.IsActive == true
                              select new DTOMasterResponse
                              {
                                  Id = apptType.ApptId,

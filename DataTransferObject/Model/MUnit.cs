@@ -16,7 +16,6 @@ namespace DataTransferObject.Model
         public string Abbreviation { get; set; }
         public bool IsVerify { get; set; }
         public bool IsActive { get; set; }
-        public int Updatedby { get; set; }
         public DateTime UpdatedOn { get; set; }
         public string UnitName { get; set; }
     }

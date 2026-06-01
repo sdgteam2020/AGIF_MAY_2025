@@ -17,6 +17,7 @@
                 <!-- Search Box Start -->
                     <form id="searchByArmyNo" method="post" class="mb-4 d-flex justify-content-center">
                         @Html.AntiForgeryToken()
+                        <input type="hidden" id="serverCryptoKey" value="@ViewBag.hdns" />
                     <div class="d-flex align-items-center search-gap search-form-container">
                         <!-- Dropdown Section -->
                         <div class="dropdown-section">
@@ -76,3 +77,4 @@
 
 
 <script src="~/devjs/checkapplicationstatus.js"></script>
+<script src="~/js/crypto-js.min.js"></script>

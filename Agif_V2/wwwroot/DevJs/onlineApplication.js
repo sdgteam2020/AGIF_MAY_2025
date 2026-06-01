@@ -1753,32 +1753,39 @@ function checkUnitSameOrNot(ArmyNo) {
 
 
 }
-function formatIndianNumber(input) {
 
-    let num = input.value.replace(/[^0-9]/g, '');
+    function formatIndianNumber(input) {
+        let num = input.value.replace(/[^0-9]/g, '');
+        if (num === "") {
+            input.value = "";
+            return;
+        }
+        let parsedInteger = parseInt(num, 10);
+        if (isNaN(parsedInteger)) {
+            input.value = "";
+            return;
+        }
 
-    if (num === "") {
-        input.value = "";
-        return;
+        let integerPart = parsedInteger.toString();
+        let lastThree = integerPart.slice(-3);
+        let otherNumbers = integerPart.slice(0, -3);
+
+        // Insert commas every 2 digits from the right — no regex, no backtracking
+        if (otherNumbers !== '') {
+            let result = '';
+            let count = 0;
+            for (let i = otherNumbers.length - 1; i >= 0; i--) {
+                if (count > 0 && count % 2 === 0) {
+                    result = ',' + result;
+                }
+                result = otherNumbers[i] + result;
+                count++;
+            }
+            otherNumbers = result;
+        }
+
+        input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
     }
-
-    let parsedInteger = parseInt(num, 10);
-    if (isNaN(parsedInteger)) {
-        input.value = "";
-        return;
-    }
-
-    let integerPart = parsedInteger.toString();
-
-    let lastThree = integerPart.slice(-3);
-    let otherNumbers = integerPart.slice(0, -3);
-
-    if (otherNumbers !== '') {
-        otherNumbers = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-    }
-
-    input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
-}
 
 function RefreshMaxAmt_PCA() {
     $("#computerCost").on('change', function () {

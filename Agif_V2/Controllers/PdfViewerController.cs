@@ -52,20 +52,21 @@ namespace Agif_V2.Controllers
         public IActionResult InstrHBA() => ServeWatermarkedPdf("ImportantPdfFiles", "OnlineApplnProcedureforHBA.pdf");
         public IActionResult InstrCA() => ServeWatermarkedPdf("ImportantPdfFiles", "OnlineApplnProcedureforCA_Dec2024.pdf");
         public IActionResult InstrPCA() => ServeWatermarkedPdf("ImportantPdfFiles", "OnlineApplnProcedureforPCA_Dec2024.pdf");
+        public IActionResult UserManual() => ServeWatermarkedPdf("ImportantPdfFiles", "UserManual.pdf");
 
-        public IActionResult UserManual(bool applyWatermark = false)
-        {
-            if (!applyWatermark)
-            {
-                string inputPath = System.IO.Path.Combine(_env.WebRootPath, "ImportantPdfFiles", "UserManual.pdf");
-                if (!System.IO.File.Exists(inputPath)) return NotFound("Document not found.");
+        //public IActionResult UserManual(bool applyWatermark = false)
+        //{
+        //    if (!applyWatermark)
+        //    {
+        //        string inputPath = System.IO.Path.Combine(_env.WebRootPath, "ImportantPdfFiles", "UserManual.pdf");
+        //        if (!System.IO.File.Exists(inputPath)) return NotFound("Document not found.");
 
-                Response.Headers.Append("Content-Disposition", "inline; filename=UserManual.pdf");
-                return PhysicalFile(inputPath, "application/pdf");
-            }
+        //        Response.Headers.Append("Content-Disposition", "inline; filename=UserManual.pdf");
+        //        return PhysicalFile(inputPath, "application/pdf");
+        //    }
 
-            return ServeWatermarkedPdf("ImportantPdfFiles", "UserManual.pdf");
-        }
+        //    return ServeWatermarkedPdf("ImportantPdfFiles", "c.pdf");
+        //}
 
 
         private IActionResult ServeWatermarkedPdf(string folderName, string fileName)
@@ -94,53 +95,83 @@ namespace Agif_V2.Controllers
                 return StatusCode(500, "An error occurred while generating the document.");
             }
         }
-
         private byte[] ApplyWatermark(PdfReader pdfReader)
         {
             string ipAddress = GetClientIp();
             using var memoryStream = new MemoryStream();
-
             var writerProperties = new WriterProperties().UseSmartMode();
+
             using (var writer = new PdfWriter(memoryStream, writerProperties))
             using (var pdfDoc = new PdfDocument(pdfReader, writer))
             {
-                var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA, PdfEncodings.WINANSI, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-                string ipDisplay = string.IsNullOrEmpty(ipAddress) ? "IP Address Not Found!" : ipAddress.Replace(" ", "\u00A0");
-                string dateTimeDisplay = DateTime.Now.ToLocalTime().ToString("dd/MM/yyyy HH:mm").Trim().Replace(" ", "\u00A0");
+                var font = PdfFontFactory.CreateFont(
+                    StandardFonts.HELVETICA,
+                    PdfEncodings.WINANSI,
+                    PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
+
+                string ipDisplay = string.IsNullOrEmpty(ipAddress)
+                    ? "IP Address Not Found!"
+                    : ipAddress.Replace(" ", "\u00A0");
+                string dateTimeDisplay = DateTime.Now.ToLocalTime()
+                    .ToString("dd/MM/yyyy HH:mm").Trim().Replace(" ", "\u00A0");
                 Color watermarkColor = new DeviceRgb(150, 150, 150);
 
                 for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
                     var page = pdfDoc.GetPage(i);
-                    var pdfCanvas = new PdfCanvas(page.NewContentStreamBefore(), page.GetResources(), pdfDoc);
-                    var canvas = new Canvas(pdfCanvas, page.GetPageSize());
+                    int rotation = page.GetRotation();
+                    var mediaBox = page.GetMediaBox(); // ✅ Use GetMediaBox() not GetPageSize()
+
+                    // ✅ Always use raw mediaBox width/height for center — iText7 handles
+                    // rotation display internally, coordinates are always in unrotated space
+                    float centerX = mediaBox.GetLeft() + mediaBox.GetWidth() / 2;
+                    float centerY = mediaBox.GetBottom() + mediaBox.GetHeight() / 2;
+
+                    var pdfCanvas = new PdfCanvas(
+                        page.NewContentStreamAfter(),
+                        page.GetResources(),
+                        pdfDoc);
+
+                    var canvas = new Canvas(pdfCanvas, mediaBox);
 
                     pdfCanvas.SaveState();
+
                     PdfExtGState gState = new PdfExtGState().SetFillOpacity(0.5f);
                     pdfCanvas.SetExtGState(gState);
 
-                    var ipParagraph = new Paragraph(ipDisplay)
+                    var watermarkText = new Paragraph(ipDisplay + "\n" + dateTimeDisplay)
                         .SetFont(font)
-                        .SetFontSize(50)
-                        .SetRotationAngle(Math.PI / 4)
-                        .SetFontColor(watermarkColor);
+                        .SetFontSize(40)
+                        .SetFontColor(watermarkColor)
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetMultipliedLeading(1.2f);
 
-                    var dateParagraph = new Paragraph(dateTimeDisplay)
-                        .SetFont(font)
-                        .SetFontSize(50)
-                        .SetRotationAngle(Math.PI / 4)
-                        .SetFontColor(watermarkColor);
+                    // ✅ Fixed angle — always diagonal relative to the UNROTATED page
+                    // No need to subtract rotation; iText7 content stream is in unrotated space
+                    float radAngle = rotation switch
+                    {
+                        90 => 0f,                          // page displayed landscape → watermark horizontal looks diagonal
+                        270 => 0f,
+                        180 => -(float)(Math.PI / 4),       // upside-down → mirror flip corrected
+                        _ => (float)(Math.PI / 4)         // 0° portrait → standard 45°
+                    };
 
-                    canvas.ShowTextAligned(ipParagraph, 300, 420, i, TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
-                    canvas.ShowTextAligned(dateParagraph, 300, 350, i, TextAlignment.CENTER, VerticalAlignment.MIDDLE, 0);
+                    canvas.ShowTextAligned(
+                        watermarkText,
+                        centerX,
+                        centerY,
+                        i,
+                        TextAlignment.CENTER,
+                        VerticalAlignment.MIDDLE,
+                        radAngle);
 
                     pdfCanvas.RestoreState();
+                    canvas.Close();
                 }
             }
 
             return memoryStream.ToArray();
         }
-
         private string GetClientIp()
         {
             var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();

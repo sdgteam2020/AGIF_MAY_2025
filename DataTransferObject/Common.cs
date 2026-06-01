@@ -14,8 +14,6 @@ namespace DataTransferObject
         [Required]
         public bool IsActive { get; set; } = true;
 
-        public int? Updatedby { get; set; }
-
         [Required]
         [DataType(DataType.Date)]
         [Column(TypeName = "datetime2")]

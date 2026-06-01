@@ -21,9 +21,9 @@ namespace DataAccessLayer
 
         public virtual DbSet<MAppointment> MAppointments { get; set; }
         public virtual DbSet<MUnit> MUnits { get; set; }
-        public virtual DbSet<MApplyFor> MApplyFor { get; set; }
         public virtual DbSet<MRank> MRanks { get; set; }
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
+        public virtual DbSet<MExceptionType> MExceptionTypes { get; set; }
         public virtual DbSet<MApplicationType> MApplicationTypes { get; set; }
         public virtual DbSet<MApplicantType> MApplicantTypes { get; set; }
         public virtual DbSet<MArmyPrefix> MArmyPrefixes { get; set; }
@@ -58,7 +58,6 @@ namespace DataAccessLayer
 
         public virtual DbSet<PropertyRenovationModel> trnPropertyRenovation { get; set; }
 
-        public virtual DbSet<SplWaiverModel> trnSplWaiver { get; set; }
 
         public virtual DbSet<ClaimDocumentUpload> trnClaimDocumentUpload { get; set; }
 
@@ -87,6 +86,8 @@ namespace DataAccessLayer
         public virtual DbSet<trnLoginLog>TrnLoginLogs { get; set; }
 
         public virtual DbSet<BonusOfficers> TrnBonusOfficers { get; set; }
+        public virtual DbSet<MState> MState { get; set; }
+        public virtual DbSet<MDist> MDist { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CommonDataModel>()
@@ -106,7 +107,22 @@ namespace DataAccessLayer
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasConstraintName("FK_trnClaim_MUnits_PresentUnit");
 
+
+            builder.Entity<MExceptionType>()
+       .HasKey(x => x.ExceptionTypeId);
+
+            builder.Entity<MExceptionType>()
+                .HasIndex(x => x.ExceptionTypeName)
+                .IsUnique();
+
+            builder.Entity<ErrorLog>()
+                .HasOne(x => x.MExceptionType)
+                .WithMany(x => x.ErrorLogs)
+                .HasForeignKey(x => x.ExceptionTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(builder);
+
+
         }
     }
 

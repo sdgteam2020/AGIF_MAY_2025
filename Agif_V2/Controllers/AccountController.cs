@@ -582,9 +582,13 @@ namespace Agif_V2.Controllers
                 var queryableData = _userProfile.GetAllUser(userStatus);
                 var userList =  await queryableData.ToListAsync();
 
+                string filePassword = DateTime.Now.ToString("ddMMyyyy");  
+
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("Users");
+
+                    worksheet.Protect(filePassword);
 
                     worksheet.Cell(1, 1).Value = "S.No.";
                     worksheet.Cell(1, 2).Value = "User Name";
@@ -594,7 +598,7 @@ namespace Agif_V2.Controllers
                     worksheet.Cell(1, 6).Value = "Unit Name";
                     worksheet.Cell(1, 7).Value = "Mobile No";
                     worksheet.Cell(1, 8).Value = "Email Id";
-                    worksheet.Cell(1, 9).Value = "Regiment Name";
+                    worksheet.Cell(1, 9).Value = "Registered Date";
                     worksheet.Cell(1, 10).Value = "User Type";
                     worksheet.Cell(1, 11).Value = "Active Status";
 
@@ -609,7 +613,7 @@ namespace Agif_V2.Controllers
                         worksheet.Cell(row, 6).Value = user.UnitName;
                         worksheet.Cell(row, 7).Value = user.MobileNo;
                         worksheet.Cell(row, 8).Value = user.EmailId;
-                        worksheet.Cell(row, 9).Value = user.RegtName;
+                        worksheet.Cell(row, 9).Value = user.UpdatedOn;
                         worksheet.Cell(row, 10).Value = user.IsPrimary? "Primary" : "Secondary";
                         worksheet.Cell(row, 11).Value = user.IsActive ? "Active" : "Inactive";
                         row++;

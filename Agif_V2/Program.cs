@@ -207,8 +207,8 @@ app.Use(async (ctx, next) =>
 
     string defaultSrc = "default-src 'self' blob:; ";
     string scriptSrc =  "script-src 'self'; ";
-    string styleSrc = "style-src 'self'; "; // Bootstrap/JQuery often need unsafe-inline
-    string imgSrc = "img-src 'self' data: blob:; "; // Added 'data:' and 'blob:' explicitly
+    string styleSrc = "style-src 'self'; "; 
+    string imgSrc = "img-src 'self' data: blob:; "; 
     string fontSrc = "font-src 'self' data:; ";
     string connectSrc = isDev
         ? "connect-src 'self' https://dgisapp.army.mil:55102 ws://localhost:* wss://localhost:*; "

@@ -62,35 +62,7 @@ namespace DataAccessLayer.Repositories
             return string.Empty;
         }
 
-        public Task<DateTime> GetRetirementDate(int rankId, int Prefix, DateTime dateTime)
-        {
-            var userType = _context.MArmyPrefixes.FirstOrDefault(x => x.Id == Prefix);
-            var retAge = _context.MRanks.FirstOrDefault(x => x.RankId == rankId);
-            var retirementAge = retAge.RetirementAge;
-            var userTypeId = userType.UserType;
-
-            var ret = (from prefix in _context.MArmyPrefixes
-                       join rank in _context.MRanks on rankId equals Prefix
-                       where prefix.Id == Prefix
-                       select new
-                       {
-                           userType = prefix.UserType,
-                           retAge = rank.RetirementAge
-
-                       });
-
-
-            if (retirementAge > 0 && userTypeId != 0)
-            {
-                DateTime retirementDate = DateTime.Now.AddYears((int)retirementAge);
-                return Task.FromResult(retirementDate);
-            }
-            else
-            {
-                return Task.FromResult(DateTime.MinValue);
-            }
-        }
-
+       
         public async Task<CommonDataonlineResponse> GetApplicationDetailsByArmyNo(string armyNumber, string Prefix, string Suffix, int appType)
         {
             var existingUser = await (from app in _context.trnApplications
