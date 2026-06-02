@@ -469,9 +469,7 @@ namespace DataAccessLayer.Repositories
                     TrnFwdCO trnFwdCO = new TrnFwdCO
                     {
                         ApplicationId = ApplicationId,
-                        ArmyNo = ArmyNo,
                         COUserId = CoDetails.UserId,
-                        ProfileId = CoDetails.ProfileId,
                         CreatedOn = DateTime.Now,
                         Status = 101
                     };
@@ -489,9 +487,7 @@ namespace DataAccessLayer.Repositories
                         TrnFwdCO trnFwdCO = new TrnFwdCO
                         {
                             ApplicationId = ApplicationId,
-                            ArmyNo = ArmyNo,
                             COUserId = IoDetails.UserId,
-                            ProfileId = IoDetails.ProfileId,
                             CreatedOn = DateTime.Now,
                             Status = 101
                         };
