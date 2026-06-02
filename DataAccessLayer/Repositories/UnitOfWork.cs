@@ -3,11 +3,13 @@ using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
+using iText.Layout.Element;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DataAccessLayer.Repositories
 {
@@ -123,6 +125,16 @@ namespace DataAccessLayer.Repositories
             else if (Data.id == Convert.ToInt16(Constants.VehType))
             {
                 var Ret = await MasterOnlyTable.GetVehType();
+                lst = Ret;
+            }
+            else if (Data.id == Convert.ToInt16(Constants.State))
+            {
+                var Ret = await MasterOnlyTable.GetState();
+                lst = Ret;
+            }
+            else if (Data.id == Convert.ToInt16(Constants.District))
+            {
+                var Ret = await MasterOnlyTable.GetDistrictByState(Data.ParentId);
                 lst = Ret;
             }
             return lst;

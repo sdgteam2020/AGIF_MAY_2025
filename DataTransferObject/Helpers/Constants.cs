@@ -28,6 +28,8 @@ namespace DataTransferObject.Helpers
         public const string LoanTypePCA = "18";
         public const string PurposeOfWithdrawal = "19";
         public const string VehType = "20";
+        public const string State = "21";
+        public const string District = "22";
 
 
         #region Return To Front End

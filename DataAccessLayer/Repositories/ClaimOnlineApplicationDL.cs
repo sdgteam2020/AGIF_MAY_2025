@@ -531,6 +531,11 @@ namespace DataAccessLayer.Repositories
                           join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
+                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
+                          from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
+
+
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -597,8 +602,8 @@ namespace DataAccessLayer.Repositories
 
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = AddressDetails.Distt ?? string.Empty,
-                              State = AddressDetails.State ?? string.Empty,
+                              Distt = DistDetails.DistrictName ?? string.Empty,
+                              State = StateDetails.StateName ?? string.Empty,
                               Code = AddressDetails.Code ?? string.Empty,
                               ExtnOfService= string.IsNullOrEmpty(common.ExtnOfService) ? "No" : common.ExtnOfService,
                           }).FirstOrDefault();
@@ -842,6 +847,11 @@ namespace DataAccessLayer.Repositories
                           join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup
+                          from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
+                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
+                          from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
+
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -901,8 +911,8 @@ namespace DataAccessLayer.Repositories
 
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = AddressDetails.Distt ?? string.Empty,
-                              State = AddressDetails.State ?? string.Empty,
+                              Distt = DistDetails.DistrictName ?? string.Empty,
+                              State = StateDetails.StateName ?? string.Empty,
                               Code = AddressDetails.Code ?? string.Empty,
                           }).ToListAsync();
             data.OnlineApplicationResponse = result.Result; // Assuming result is already defined
@@ -1170,6 +1180,11 @@ namespace DataAccessLayer.Repositories
                           join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup
+                          from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
+                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
+                          from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
+
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -1241,8 +1256,8 @@ namespace DataAccessLayer.Repositories
 
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = AddressDetails.Distt ?? string.Empty,
-                              State = AddressDetails.State ?? string.Empty,
+                              Distt = DistDetails.DistrictName ?? string.Empty,
+                              State = StateDetails.StateName ?? string.Empty,
                               Code = AddressDetails.Code ?? string.Empty,
                           }).FirstOrDefault();
             if (result != null)

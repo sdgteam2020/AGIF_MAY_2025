@@ -424,6 +424,11 @@ function loadDropdown() {
     const parentunit = $('#parentUnit').data('parent-prefix');
     const presentunit = $('#presentUnit').data('present-prefix');
     const Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
+    const selectedState = $('#stateDropdown').data('state-prefix');
+    const selectedDistrict = $('#districtDropdown').data('district-prefix');
+
+    // Load state using same mMsater pattern as other dropdowns
+    mMsater(selectedState, "stateDropdown", 21, 0);
 
     if (loanType == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -444,7 +449,14 @@ function loadDropdown() {
     mMsater(presentunit, "presentUnit", 2, 0);
     mMsater(Armypostoffice, "armyPostOffice", 14, 0);
     mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
+    if (selectedState && parseInt(selectedState) > 0) {
+        mMsater(selectedDistrict, "districtDropdown", 22, parseInt(selectedState));
+    }
 }
+$(document).on('change', '#stateDropdown', function () {
+    const stateId = parseInt($(this).val()) || 0;
+    mMsater('', "districtDropdown", 22, stateId); // empty sectid = no pre-selection
+});
 
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
