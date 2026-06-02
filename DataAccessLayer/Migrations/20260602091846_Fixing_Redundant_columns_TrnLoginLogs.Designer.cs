@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260602091846_Fixing_Redundant_columns_TrnLoginLogs")]
+    partial class Fixing_Redundant_columns_TrnLoginLogs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -377,9 +380,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BankId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConfirmSalaryAcctNo")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -392,6 +392,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("NameOfBank")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NameOfBankBranch")
                         .IsRequired()
@@ -409,8 +414,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("AccountId");
 
                     b.HasIndex("ApplicationId");
-
-                    b.HasIndex("BankId");
 
                     b.ToTable("trnClaimAccountDetails");
                 });
@@ -2406,14 +2409,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MBank", "Bank")
-                        .WithMany()
-                        .HasForeignKey("BankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bank");
 
                     b.Navigation("ClaimCommonDataModels");
                 });

@@ -319,9 +319,7 @@ namespace Agif_V2.Controllers
             var trnFwdCO = new TrnFwdCO
             {
                 ApplicationId = applicationId,
-                ArmyNo = ArmyNo,
                 COUserId = userId,
-                ProfileId = profileId,
                 CreatedOn = DateTime.Now,
                 Status = 1
             };

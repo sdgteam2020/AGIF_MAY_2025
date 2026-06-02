@@ -56,7 +56,7 @@ namespace DataAccessLayer.Repositories
                             IsFmn = mapping.IsFmn,
                             UpdatedOn = user.UpdatedOn,
                             ProfileId = profile.ProfileId,
-                            status = _context.TrnFwdCO.Any(fwd => fwd.ProfileId == profile.ProfileId)
+                            status = _context.TrnFwdCO.Any(fwd => fwd.COUserId == user.Id)
                         };
 
             return users;
@@ -235,8 +235,8 @@ namespace DataAccessLayer.Repositories
             var logEntry = new trnLoginLog
             {
                 UserId = loginLog.UserId,
-                ProfileId = loginLog.ProfileId,
-                RoleId = loginLog.RoleId,   
+                //ProfileId = loginLog.ProfileId,
+                //RoleId = loginLog.RoleId,
                 IpAddress = loginLog.IpAddress,
                 LoginOn = loginLog.LoginOn
             };
