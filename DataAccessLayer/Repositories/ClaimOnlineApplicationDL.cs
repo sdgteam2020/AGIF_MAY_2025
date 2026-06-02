@@ -535,8 +535,8 @@ namespace DataAccessLayer.Repositories
                           join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
                           from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
 
-                         // join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
-                          // from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
+                          join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
+                           from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
 
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
@@ -569,7 +569,7 @@ namespace DataAccessLayer.Repositories
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                            //  NameOfBank = BankDetails.BankName ?? string.Empty,
+                              NameOfBank = BankDetails.BankName ?? string.Empty,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,

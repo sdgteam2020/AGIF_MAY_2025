@@ -627,7 +627,24 @@
                             </div>
                             *@
 
-                          
+                              <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">🏦</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="select form-select" id="BankId" name="AccountDetails.BankId" data-mdb-filter="true" required data-Bank-Id="@if (Model.AccountDetails != null)
+                                        {
+                                                    @Model.AccountDetails.BankId
+                                                ;
+                                        }
+                                        ">
+                                        </select>
+                                        <label class="form-label select-label " for="BankId">Bank Name</label>
+                                        @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
