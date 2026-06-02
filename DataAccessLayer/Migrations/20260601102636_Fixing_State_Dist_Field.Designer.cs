@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260601102636_Fixing_State_Dist_Field")]
+    partial class Fixing_State_Dist_Field
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,9 +148,6 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BankId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ConfirmSalaryAcctNo")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -160,6 +160,11 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("NameOfBank")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("NameOfBankBranch")
                         .IsRequired()
@@ -177,8 +182,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("AccountId");
 
                     b.HasIndex("ApplicationId");
-
-                    b.HasIndex("BankId");
 
                     b.ToTable("trnAccountDetails");
                 });
@@ -431,8 +434,10 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<int>("Distt")
-                        .HasColumnType("int");
+                    b.Property<string>("Distt")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -442,8 +447,10 @@ namespace DataAccessLayer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -1523,30 +1530,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("MArmyPrefixes");
                 });
 
-            modelBuilder.Entity("DataTransferObject.Model.MBank", b =>
-                {
-                    b.Property<int>("BankId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BankId"));
-
-                    b.Property<string>("BankAbbreviation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BankName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.HasKey("BankId");
-
-                    b.ToTable("MBank");
-                });
-
             modelBuilder.Entity("DataTransferObject.Model.MDist", b =>
                 {
                     b.Property<int>("DistrictId")
@@ -2370,14 +2353,6 @@ namespace DataAccessLayer.Migrations
                         .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MBank", "Bank")
-                        .WithMany()
-                        .HasForeignKey("BankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bank");
 
                     b.Navigation("CommonDataModels");
                 });
