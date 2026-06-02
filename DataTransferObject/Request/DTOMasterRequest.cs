@@ -10,6 +10,7 @@ namespace DataTransferObject.Request
     {
         public string tableName { get; set; }
         public int? id { get; set; }
-        public string? ParentId { get; set; }
+        public int ParentId { get; set; }
+        public int stateId { get; set; }
     }
 }

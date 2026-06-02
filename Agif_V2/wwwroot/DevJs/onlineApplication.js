@@ -410,6 +410,12 @@ function loadDropdown() {
     const computer_Loan_Type = $('#computer_Loan_Type').data('pcaloantype-prefix');
     const Pcaloanfreq = $('#PCA_LoanFreq').data('pcaloanfreq-prefix');
     const VehType = $('#VehTypeId').data('vehicletypeId-prefix');
+    // Inside loadDropdown() — replace old state/district lines with:
+    const selectedState = $('#stateDropdown').data('state-prefix');
+    const selectedDistrict = $('#districtDropdown').data('district-prefix');
+
+    // Load state using same mMsater pattern as other dropdowns
+    mMsater(selectedState, "stateDropdown", 21, 0);
 
     if (applicantCategory == 1) {
         mMsater(armyPrefixValue, "armyPrefix", 9, 0);
@@ -441,7 +447,18 @@ function loadDropdown() {
     mMsater(hbaloanfreq, "HBA_LoanFreq", 15, 0);
     mMsater(OldArmyPrefixvalue, "oldArmyPrefix", 7, 0);
     mMsater(VehType, "VehTypeId", 20, 0);
+
+    if (selectedState && parseInt(selectedState) > 0) {
+        mMsater(selectedDistrict, "districtDropdown", 22, parseInt(selectedState));
+    }
+    //mMsater(state, "state", 21, 0);
+    //mMsater(district, "district", 22, 0);
 }
+$(document).on('change', '#stateDropdown', function () {
+    const stateId = parseInt($(this).val()) || 0;
+    mMsater('', "districtDropdown", 22, stateId); // empty sectid = no pre-selection
+});
+
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
         const accountNo = $('#salaryAcctNo').val();

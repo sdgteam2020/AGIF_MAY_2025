@@ -355,23 +355,7 @@ namespace Agif_V2.Controllers
                     isValid = false;
                 }
 
-                if (!await _pdfUpload.IsValidPdfFile(file))
-                {
-                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", "File is not a valid PDF or appears to be a disguised file type.");
-                    isValid = false;
-                }
-
-                if (await _pdfUpload.IsPdfPasswordProtected(file))
-                {
-                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", "Password-protected PDFs are not allowed.");
-                    isValid = false;
-                }
-
-                if (await _pdfUpload.ContainsMaliciousPdfContent(file))
-                {
-                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", "PDF contains potentially malicious content.");
-                    isValid = false;
-                }
+                
             }
 
             return isValid;
@@ -502,20 +486,7 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
             }
 
-            if (!await _pdfUpload.IsValidPdfFile(file))
-            {
-                ModelState.AddModelError(file.Name, "File is not a valid PDF or appears to be a disguised file type.");
-            }
-
-            if (await _pdfUpload.IsPdfPasswordProtected(file))
-            {
-                ModelState.AddModelError(file.Name, "Password-protected PDFs are not allowed.");
-            }
-
-            if (await _pdfUpload.ContainsMaliciousPdfContent(file))
-            {
-                ModelState.AddModelError(file.Name, "PDF contains potentially malicious content.");
-            }
+            
         }
 
         private string GetClientIp()

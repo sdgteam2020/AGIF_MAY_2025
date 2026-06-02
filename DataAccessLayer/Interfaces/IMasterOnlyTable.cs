@@ -26,6 +26,8 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetALLByUnitName(string UnitName);
         Task<List<DTOMasterResponse>> GetPurposeOfWithdrawal();
         Task<List<DTOMasterResponse>> GetVehType();
+        Task<List<DTOMasterResponse>> GetState();
+        Task<List<DTOMasterResponse>> GetDistrictByState(int stateId);
 
 
     }

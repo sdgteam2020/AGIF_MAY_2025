@@ -216,6 +216,10 @@ namespace DataAccessLayer.Repositories
                           from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
                           join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup
+                          from StateDetails in StateDetailsGroup.DefaultIfEmpty()
+                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
+                          from DistDetails in DistDetailsGroup.DefaultIfEmpty()
 
                           where common.ApplicationId == applicationId
                           select new CommonDataonlineResponse
@@ -242,8 +246,8 @@ namespace DataAccessLayer.Repositories
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = AddressDetails.Distt ?? string.Empty,
-                              State = AddressDetails.State ?? string.Empty,
+                              Distt = DistDetails.DistrictName,
+                              State = StateDetails.StateName,
                               DateOfPromotion = common.DateOfPromotion,
                               DateOfRetirement = common.DateOfRetirement,
                               PanCardNo = common.PanCardNo ?? string.Empty,
@@ -252,7 +256,7 @@ namespace DataAccessLayer.Repositories
                               Code = AddressDetails.Code ?? string.Empty,
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              //NameOfBank = AccountDetails.BankId,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = regCorps.PCDA_PAO ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
@@ -609,7 +613,10 @@ namespace DataAccessLayer.Repositories
                           from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
                           join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
-
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup
+                          from StateDetails in StateDetailsGroup.DefaultIfEmpty()
+                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
+                          from DistDetails in DistDetailsGroup.DefaultIfEmpty()
 
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new CommonDataonlineResponse
@@ -637,8 +644,8 @@ namespace DataAccessLayer.Repositories
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = AddressDetails.Distt ?? string.Empty,
-                              State = AddressDetails.State ?? string.Empty,
+                              Distt = DistDetails.DistrictName,
+                              State = StateDetails.StateName,
                               DateOfPromotion = common.DateOfPromotion,
                               DateOfRetirement = common.DateOfRetirement,
                               PanCardNo = common.PanCardNo ?? string.Empty,
@@ -647,7 +654,7 @@ namespace DataAccessLayer.Repositories
                               Code = AddressDetails.Code ?? string.Empty,
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              //NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
@@ -688,6 +695,9 @@ namespace DataAccessLayer.Repositories
                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
                          join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                          from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+                         join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup from StateDetails in StateDetailsGroup.DefaultIfEmpty()
+                         join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
+                         from DistDetails in DistDetailsGroup.DefaultIfEmpty()
                          where dTOExport.Id.Contains(common.ApplicationId)
 
                                     select new DTOExcelResponse
@@ -707,8 +717,8 @@ namespace DataAccessLayer.Repositories
                                         Regt_Corps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
                                         Pers_Address_Line1 = AddressDetails.Vill_Town ?? string.Empty,
                                         Pers_Address_Line2 = AddressDetails.PostOffice ?? string.Empty,
-                                        Pers_Address_Line3 = AddressDetails.Distt ?? string.Empty,
-                                        Pers_Address_Line4 = AddressDetails.State ?? string.Empty,
+                                        Pers_Address_Line3 = DistDetails.DistrictName,
+                                        Pers_Address_Line4 = StateDetails.StateName,
                                         Promotion_Date = common.DateOfPromotion,
                                         Retirement_Date = common.DateOfRetirement,
                                         PANNo = common.PanCardNo ?? string.Empty,
@@ -827,6 +837,10 @@ namespace DataAccessLayer.Repositories
                           from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
                           join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup
+                          from StateDetails in StateDetailsGroup.DefaultIfEmpty()
+                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
+                          from DistDetails in DistDetailsGroup.DefaultIfEmpty()
 
                           where common.ApplicationId == applicationId
                           select new CommonDataonlineResponse
@@ -855,8 +869,8 @@ namespace DataAccessLayer.Repositories
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = AddressDetails.Distt ?? string.Empty,
-                              State = AddressDetails.State ?? string.Empty,
+                              Distt = DistDetails.DistrictName,
+                              State = StateDetails.StateName,
                               DateOfPromotion = common.DateOfPromotion,
                               DateOfRetirement = common.DateOfRetirement,
                               PanCardNo = common.PanCardNo ?? string.Empty,
@@ -865,7 +879,7 @@ namespace DataAccessLayer.Repositories
                               Code = AddressDetails.Code ?? string.Empty,
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              //NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,

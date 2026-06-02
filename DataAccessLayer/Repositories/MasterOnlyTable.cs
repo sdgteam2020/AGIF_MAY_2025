@@ -266,5 +266,31 @@ namespace DataAccessLayer.Repositories
 
             return ret;
         }
+
+        public async Task<List<DTOMasterResponse>> GetState()
+        {
+            var ret = await (from state in _context.MState
+                             where state.IsActive == true
+                             orderby state.StateName
+                             select new DTOMasterResponse
+                             {
+                                 Id = state.StateId,
+                                 Name = Convert.ToString(state.StateName)
+                             }).ToListAsync();
+            return ret;
+        }
+
+        public async Task<List<DTOMasterResponse>> GetDistrictByState(int stateId)
+        {
+            var ret = await (from district in _context.MDist
+                             where district.StateId == stateId
+                             orderby district.DistrictName
+                             select new DTOMasterResponse
+                             {
+                                 Id = district.DistrictId,
+                                 Name = Convert.ToString(district.DistrictName)
+                             }).ToListAsync();
+            return ret;
+        }
     }
 }
