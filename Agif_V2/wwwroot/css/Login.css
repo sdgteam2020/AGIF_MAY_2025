@@ -1,4 +1,11 @@
 ﻿
+#validationerrormessage {
+    position: fixed;
+    top: 200px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+}
 .container-fluid {
     max-width: 100%;
     padding: 0rem;

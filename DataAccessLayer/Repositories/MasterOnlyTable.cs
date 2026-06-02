@@ -292,5 +292,18 @@ namespace DataAccessLayer.Repositories
                              }).ToListAsync();
             return ret;
         }
+
+        public async Task<List<DTOMasterResponse>> GetBankNames()
+        {
+            var ret = await (from BankType in _context.MBank
+                             select new DTOMasterResponse
+                             {
+                                 Id = BankType.BankId,
+                                 Name = Convert.ToString(BankType.BankName)
+
+                             }).ToListAsync();
+
+            return ret;
+        }
     }
 }

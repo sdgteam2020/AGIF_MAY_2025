@@ -30,6 +30,7 @@ namespace DataTransferObject.Helpers
         public const string VehType = "20";
         public const string State = "21";
         public const string District = "22";
+        public const string BankName = "23";
 
 
         #region Return To Front End

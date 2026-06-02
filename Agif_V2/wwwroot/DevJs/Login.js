@@ -188,6 +188,37 @@ function showErrorMessage(message) {
 }
 
 
+$('.form-email').on("keypress", function (e) {
+    const keyCode = e.which;
+
+    if ((keyCode >= 65 && keyCode <= 90) ||  // A-Z
+        (keyCode >= 97 && keyCode <= 122) ||  // a-z
+        (keyCode >= 48 && keyCode <= 57) ||   // 0-9
+        (keyCode == 64) ||                    // '@' symbol (keyCode 64)
+        (keyCode == 46) ||                    // '.' symbol (keyCode 46)
+        (keyCode == 95)) {                   // '_' symbol (keyCode 95)
+        return true;
+    } else {
+        showErrorMessage('Only Alphabets, Numbers, @, . and _ are allowed');
+        return false; // Block the keypress
+    }
+});
+function showErrorMessage(message) {
+    const alertHtml = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="validationerrormessage">
+            <i class="lni lni-cross-circle"></i> ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    $('body').append(alertHtml);
+
+    setTimeout(function () {
+        $('.alert-danger').fadeOut(300, function () {
+            $(this).remove();
+        });
+    }, 2000);
+}
+
 $(document).ready(() => {
     const configEl = document.getElementById("loginConfig");
     if (configEl) {

@@ -355,7 +355,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💼</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="pcda_pao" name="CommonData.pcda_pao" class="form-control readonly-blocked" required readonly tabindex="-1" />
+                                        <input type="text" id="pcda_pao" name="CommonData.pcda_pao" class="form-control readonly-blocked" value="@Model.CommonData?.pcda_pao" required readonly tabindex="-1" />
                                         <label class="form-label select-label " for="pcda_pao">PCDA(O)/PAO(OR)</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.pcda_pao, "", new { @class = "text-danger" })
                                     </div>
@@ -365,7 +365,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📒</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="pcda_AcctNo" name="CommonData.pcda_AcctNo" class="form-control" data-inputmask="'mask': '99/999/999999A', 'placeholder': '99/999/999999A'" placeholder="99/999/999999A" required readonly />
+                                        <input type="text" id="pcda_AcctNo" name="CommonData.pcda_AcctNo" class="form-control" data-inputmask="'mask': '99/999/999999A', 'placeholder': '99/999/999999A'" placeholder="99/999/999999A" value="@Model.CommonData?.pcda_AcctNo" required readonly />
                                         <label class="form-label select-label " for="pcda_AcctNo">PCDA(O) Acct No</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.pcda_AcctNo, "", new { @class = "text-danger" })
                                     </div>
@@ -592,7 +592,8 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.IfsCode, "", new { @class = "text-danger" })
                             </div>
-                           @* <div class="col-md-2">
+
+                          @*  <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -601,7 +602,28 @@
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBank, "", new { @class = "text-danger" })
-                            </div>*@
+                            </div>
+                            *@
+
+                            <div class="col-md-2">
+                                <div class="input-group mb-2">
+                                    <div class="col-md-2">
+                                        <span class="input-group-text">🏦</span>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <select class="select form-select" id="BankId" name="AccountDetails.BankId" data-mdb-filter="true" required data-Bank-Id="@if (Model.AccountDetails != null)
+                                        {
+                                                    @Model.AccountDetails.BankId
+                                                ;
+                                        }
+                                        ">
+                                        </select>
+                                        <label class="form-label select-label " for="BankId">Bank Name</label>
+                                        @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>

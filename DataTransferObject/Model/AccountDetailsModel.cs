@@ -31,7 +31,9 @@ namespace DataTransferObject.Model
 
         //[Required(ErrorMessage = "Bank Name is required.")]
         //[StringLength(100, ErrorMessage = "Bank Name can't be longer than 100 characters.")]
-        //public int NameOfBank { get; set; }
+        //public string? NameOfBank { get; set; }
+
+        // Foreign Key
         [Required(ErrorMessage = "Bank Name is required.")]
         public int? BankId { get; set; }
 

@@ -29,6 +29,7 @@ namespace DataAccessLayer.Interfaces
         Task<List<DTOMasterResponse>> GetState();
         Task<List<DTOMasterResponse>> GetDistrictByState(int stateId);
 
+        Task<List<DTOMasterResponse>> GetBankNames();
 
     }
 }

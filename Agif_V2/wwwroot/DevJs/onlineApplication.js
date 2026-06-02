@@ -345,6 +345,7 @@ function resetCivilPostalAddress() {
         $('#civilPostalAddress').val("");
     });
 }
+
 function expandAccordions() {
 
     let $toggleButton = $('#toggleAll');
@@ -413,6 +414,7 @@ function loadDropdown() {
     // Inside loadDropdown() — replace old state/district lines with:
     const selectedState = $('#stateDropdown').data('state-prefix');
     const selectedDistrict = $('#districtDropdown').data('district-prefix');
+    const BankName = $('#BankId').data('data-Bank-Id');
 
     // Load state using same mMsater pattern as other dropdowns
     mMsater(selectedState, "stateDropdown", 21, 0);
@@ -453,6 +455,7 @@ function loadDropdown() {
     }
     //mMsater(state, "state", 21, 0);
     //mMsater(district, "district", 22, 0);
+    mMsater(BankName, "BankId", 23, 0);
 }
 $(document).on('change', '#stateDropdown', function () {
     const stateId = parseInt($(this).val()) || 0;
@@ -1392,6 +1395,12 @@ function EnableDisableCivilPostalAdd() {
         }
     });
 }
+
+
+// After init, grab the filter input MDB created
+
+    
+
 function Validate_Salary_Slip_date(inputElement) {
     const value = inputElement.value;
 
@@ -2475,17 +2484,16 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
-                        setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
+                      //  setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
                         
-
-
 
                         $('#oldArmyPrefix').val(data.oldArmyPrefix).trigger('change');
                         $('#ddlrank').val(data.rankId).trigger('change');
                         $('#regtCorps').val(data.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.emailDomain).trigger('change');
+                        $('#BankId').val(data.bankId).trigger('change');
                         
                     }
                     
@@ -2619,6 +2627,7 @@ function findDataWithApplicationId() {
             });
         }
 }
+
 function formatDateToDDMMYYYY(dateString) {
     if (!dateString) return '';
     const date = new Date(dateString);

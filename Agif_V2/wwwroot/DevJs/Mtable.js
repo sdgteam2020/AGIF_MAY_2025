@@ -37,10 +37,16 @@ function mMsater(sectid, ddl, TableId, ParentId) {
                         });
                     }
 
+                    //$("#" + ddl).html(listItemddl);
+
+                    //if (sectid !== '') {
+                    //    $("#" + ddl).val(sectid);
+                    //}
+
                     $("#" + ddl).html(listItemddl);
 
                     if (sectid !== '') {
-                        $("#" + ddl).val(sectid);
+                      $("#" + ddl).prop('selectedIndex', 0);
                     }
                 }
             }

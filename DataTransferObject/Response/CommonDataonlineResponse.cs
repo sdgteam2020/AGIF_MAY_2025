@@ -127,6 +127,8 @@ namespace DataTransferObject.Response
 
         public string? NameOfBank { get; set; }
 
+        public int BankId { get; set; }    
+
 
         public string? NameOfBankBranch { get; set; }
 

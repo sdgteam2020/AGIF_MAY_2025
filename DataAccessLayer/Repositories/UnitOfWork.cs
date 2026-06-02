@@ -137,6 +137,11 @@ namespace DataAccessLayer.Repositories
                 var Ret = await MasterOnlyTable.GetDistrictByState(Data.ParentId);
                 lst = Ret;
             }
+            else if (Data.id == Convert.ToInt16(Constants.BankName))
+            {
+                var Ret = await MasterOnlyTable.GetBankNames();
+                lst = Ret;
+            }
             return lst;
         }
     }

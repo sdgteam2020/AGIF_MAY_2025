@@ -426,6 +426,7 @@ function loadDropdown() {
     const Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
     const selectedState = $('#stateDropdown').data('state-prefix');
     const selectedDistrict = $('#districtDropdown').data('district-prefix');
+    const BankName = $('#BankId').data('data-Bank-Id');
 
     // Load state using same mMsater pattern as other dropdowns
     mMsater(selectedState, "stateDropdown", 21, 0);
@@ -452,6 +453,8 @@ function loadDropdown() {
     if (selectedState && parseInt(selectedState) > 0) {
         mMsater(selectedDistrict, "districtDropdown", 22, parseInt(selectedState));
     }
+    mMsater(BankName, "BankId", 23, 0);
+
 }
 $(document).on('change', '#stateDropdown', function () {
     const stateId = parseInt($(this).val()) || 0;

@@ -11,6 +11,7 @@ namespace DataTransferObject.Model
     {
         [Required]
         [Display(Name = "UserName")]
+        [StringLength(50, ErrorMessage = "Username cannot exceed 30 characters")]
         [RegularExpression(@"^[a-zA-Z0-9@._-]+$", ErrorMessage = "Invalid characters in Username")]
         public string UserName { get; set; }
 

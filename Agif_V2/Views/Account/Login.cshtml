@@ -42,7 +42,7 @@
                     <span id="spnhdns" class="d-none">@ViewBag.hdns</span>
                     <div class="form-group">
                         <label asp-for="UserName">Username:</label>
-                        <input type="text" asp-for="UserName" class="form-control"
+                        <input type="text" asp-for="UserName" class="form-control form-email"  maxlength="50"
                                disabled="@(Model?.IsLockedOut == true)" />
                         <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>

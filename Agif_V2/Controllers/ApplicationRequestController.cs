@@ -444,7 +444,7 @@ namespace Agif_V2.Controllers
                         DomainId = dTOTempSession.DomainId,
                         ArmyNo = dTOTempSession.ArmyNo,
                         RankName = dTOTempSession.RankName,
-                        ipAddress = ipAddress
+                        ipAddress= ipAddress
                 };
 
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);

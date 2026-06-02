@@ -189,6 +189,17 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> OnlineApplication([FromForm] string EncryptedData)
         {
+
+            string dd = HttpContext.Session.GetString(SessionClaimKeySalt);
+
+            if (string.IsNullOrEmpty(dd))
+            {
+                dd = AESEncrytDecry.GetSalt();
+                HttpContext.Session.SetString(SessionClaimKeySalt, dd);
+            }
+
+            ViewBag.hiddenClaimSalt = dd;
+
             if (string.IsNullOrEmpty(EncryptedData))
             {
                 ModelState.AddModelError("", "Form data is missing or corrupted.");
