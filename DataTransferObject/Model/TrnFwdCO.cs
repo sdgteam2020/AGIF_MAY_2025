@@ -12,9 +12,7 @@ namespace DataTransferObject.Model
         [Key]
         public int FwdCOId { get; set; }
         public int ApplicationId { get; set; }
-        public string ArmyNo { get; set; }
         public int COUserId { get; set; }
-        public int ProfileId { get; set; }
         public int Status { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
 
