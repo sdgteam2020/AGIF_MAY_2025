@@ -2205,14 +2205,14 @@ function findDataWithApplicationId() {
 
                     setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
                     setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
-                    setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
-                    setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
+                 //   setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
+                  //  setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
                     setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
 
                     setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
                     setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
                     setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
-                    setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
+                  //  setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
                     setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
                     setInputValueWithFloatingLabel('AmountOfWithdrawalRequired', data.onlineApplicationResponse.amountwithdrwalRequired);
                   
@@ -2222,6 +2222,12 @@ function findDataWithApplicationId() {
                     $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).addClass("d-none").trigger('change');
                     $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).addClass("d-none").trigger('change');
                     $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
+
+                    $('#BankId').val(data.onlineApplicationResponse.bankId).trigger('change');
+                    $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
+                    setTimeout(function () {
+                        $('#districtDropdown').val(data.onlineApplicationResponse.distId).trigger('change');
+                    }, 1000);
             
                     $('#Noofwithdrawal').val(data.onlineApplicationResponse.noOfwithdrwal).addClass("d-none").trigger('change');
 

@@ -343,9 +343,18 @@ namespace Agif_V2.Controllers
                 };
                 var defaultPassword = _configuration["Logging:SecuritySettings:DefaultUserPassword"];
                 var Result = await _userManager.CreateAsync(newUser, defaultPassword);
+                //if (!Result.Succeeded)
+                //{
+                //    return Json(Result.Errors);
+                //}
                 if (!Result.Succeeded)
                 {
-                    return Json(Result.Errors);
+                    foreach (var error in Result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+
+                    return View(signUpDto);
                 }
                 await _userManager.AddToRoleAsync(newUser, "UnitCdr");
 

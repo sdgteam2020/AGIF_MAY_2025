@@ -270,7 +270,7 @@
             endpoint = '/Default/GetClaimTimeline';
 
         // Encrypt the timeline request
-        const requestData = { applicationId: appId.toString() };
+        const requestData = { applicationId: appId };
         const serverKey = $('#serverCryptoKey').val();
         const encryptedString = encryptPayload(JSON.stringify(requestData), serverKey);
 

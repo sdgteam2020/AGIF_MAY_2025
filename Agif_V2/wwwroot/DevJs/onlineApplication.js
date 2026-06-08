@@ -2554,13 +2554,13 @@ function findDataWithApplicationId() {
 
                         setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
-                        setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
-                        setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
+                       // setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
+                       // setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
                         setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
                         setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
-                        setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
+                      //  setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
                        
                         $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
@@ -2569,6 +2569,11 @@ function findDataWithApplicationId() {
                         $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
+                        $('#BankId').val(data.onlineApplicationResponse.bankId).trigger('change');
+                        $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
+                        setTimeout(function () {
+                            $('#districtDropdown').val(data.onlineApplicationResponse.distId).trigger('change');
+                        }, 1000);
 
                          if (data.carApplicationResponse != null) {
                             $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');

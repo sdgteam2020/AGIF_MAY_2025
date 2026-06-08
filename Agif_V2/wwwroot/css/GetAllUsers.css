@@ -69,3 +69,12 @@ input:checked + .slider {
     z-index: 9999;
     min-width: 300px;
 }
+.validation-summary-errors ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+.text-danger ul {
+    list-style: none;
+    padding-left: 0;
+}
