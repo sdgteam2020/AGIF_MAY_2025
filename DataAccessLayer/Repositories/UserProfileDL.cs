@@ -56,7 +56,8 @@ namespace DataAccessLayer.Repositories
                             IsFmn = mapping.IsFmn,
                             UpdatedOn = user.UpdatedOn,
                             ProfileId = profile.ProfileId,
-                            status = _context.TrnFwdCO.Any(fwd => fwd.COUserId == user.Id)
+                            status = _context.TrnFwdCO.Any(fwd => fwd.COUserId == user.Id),
+                            UserId = user.Id
                         };
 
             return users;
@@ -139,7 +140,7 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive, string coDomainId, int coProfileId)
+        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive,  int coProfileId)
         {
             var user = await _context.UserProfiles
                 .Where(u => u.userName == DomainId)
@@ -152,12 +153,10 @@ namespace DataAccessLayer.Repositories
 
             var approvedLog = new TrnApprovedLog   // Entity mapped to table `trnApprovedLogs`
             {
-                Name = user.Name,
-                DomainId = user.userName,
+                AdminProfileId = user.ProfileId,
                 IpAddress = Ip,
                 IsApproved = isActive,
                 UpdatedOn = DateTime.Now,
-                coDomainId = coDomainId,
                 coProfileId = coProfileId
             };
 
@@ -234,9 +233,7 @@ namespace DataAccessLayer.Repositories
         {
             var logEntry = new trnLoginLog
             {
-                UserId = loginLog.UserId,
-                //ProfileId = loginLog.ProfileId,
-                //RoleId = loginLog.RoleId,
+                ProfileId = loginLog.ProfileId,
                 IpAddress = loginLog.IpAddress,
                 LoginOn = loginLog.LoginOn
             };

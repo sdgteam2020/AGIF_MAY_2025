@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Agif_V2.Models;
 using DataAccessLayer.Interfaces;
 using DataTransferObject.Helpers;
@@ -206,6 +207,21 @@ namespace Agif_V2.Controllers
         public IActionResult TestInvalidOperation()
         {
             throw new InvalidOperationException("Testing InvalidOperationException");
+        }
+        [HttpGet]
+        public async Task<IActionResult> UpdateHitCounter()
+        {
+            string ipAddress = Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                      ?? HttpContext.Connection.RemoteIpAddress?.ToString()
+                      ?? "Unknown";
+            await home.AddVisitorAsync(ipAddress);
+            return Json(new
+            {
+                todayCount = await home.GetTodayCountAsync(),
+                monthlyCount = await home.GetMonthlyCountAsync(),
+                totalCount = await home.GetTotalCountAsync()
+            });
+
         }
     }
 }

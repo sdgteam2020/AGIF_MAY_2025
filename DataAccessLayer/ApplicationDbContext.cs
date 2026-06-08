@@ -89,6 +89,8 @@ namespace DataAccessLayer
         public virtual DbSet<MState> MState { get; set; }
         public virtual DbSet<MDist> MDist { get; set; }
         public virtual DbSet<MBank> MBank { get; set; }
+        public virtual DbSet<HitCounter> HitCounters { get; set; }
+        public virtual DbSet<MIpAddress> MIpAddresses { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CommonDataModel>()

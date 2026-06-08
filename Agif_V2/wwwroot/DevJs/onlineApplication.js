@@ -2451,6 +2451,7 @@ function findDataWithArmyNumber() {
                     "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
                 },
                 success: function (data) {
+                    console.log(data);
                     if (data) {
 
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
@@ -2478,11 +2479,11 @@ function findDataWithArmyNumber() {
 
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
-                        setInputValueWithFloatingLabel('distt', data.distt);
-                        setInputValueWithFloatingLabel('state', data.state);
+                        //setInputValueWithFloatingLabel('distt', data.distt);
+                        //setInputValueWithFloatingLabel('state', data.state);
                         setInputValueWithFloatingLabel('Code', data.code);
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
-                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
+                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
                       //  setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
@@ -2494,6 +2495,11 @@ function findDataWithArmyNumber() {
                         $('#armyPostOffice').val(data.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.emailDomain).trigger('change');
                         $('#BankId').val(data.bankId).trigger('change');
+                        $('#stateDropdown').val(data.stateId).trigger('change');
+                        setTimeout(function () {
+                            $('#districtDropdown').val(data.distId).trigger('change');
+                        }, 1000);
+                        
                         
                     }
                     
@@ -2563,6 +2569,7 @@ function findDataWithApplicationId() {
                         $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
                         $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
                         $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
+
                          if (data.carApplicationResponse != null) {
                             $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');
                             $('#VehTypeId').val(data.carApplicationResponse.vehical_Type).trigger('change');

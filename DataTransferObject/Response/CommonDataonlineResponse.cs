@@ -108,11 +108,11 @@ namespace DataTransferObject.Response
 
         public string? Distt { get; set; }
 
-
+        
 
         public string? State { get; set; }
-
-
+        public int StateId { get; set; }
+        public int DistId { get; set; }
         public string? Code { get; set; }
 
 

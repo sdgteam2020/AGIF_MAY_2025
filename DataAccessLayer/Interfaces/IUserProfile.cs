@@ -20,7 +20,7 @@ namespace DataAccessLayer.Interfaces
         Task<DTOUserProfileResponse> GetAdminDetails();
 
         Task<bool> SaveTrnFwdRecords(TrnFwd trnFwd);
-        Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive,string coDomainId,int coProfileId);
+        Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive,int coProfileId);
 
         Task<bool> DeleteUserAsync(string domainId, int profileId);
         Task<bool> SaveLoginLogs(DTOLoginLogs loginLog);

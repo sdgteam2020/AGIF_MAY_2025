@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260604070405_fixing_car_hba_pca")]
+    partial class fixing_car_hba_pca
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -739,6 +742,21 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AttachBonafideLetterPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachInvitationcardPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachPartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attach_PartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CancelledCheque")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -748,10 +766,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsAttachInvitationcardPdf")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAttachPartIIOrderPdfEdu")
+                    b.Property<bool>("IsAttachPartIIOrderPdf")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAttach_PartIIOrderPdfMarr")
+                    b.Property<bool>("IsAttach_PartIIOrderPdf")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsCancelledChequePdf")
@@ -771,6 +789,21 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsTotalExpenditureFilePdf")
                         .HasColumnType("bit");
+
+                    b.Property<string>("OtherReasonsPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaySlipPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeviceExtnPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SplWaiverPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalExpenditureFile")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -1084,6 +1117,12 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("CancelledCheque")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DrivingLicensePdf")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1101,6 +1140,15 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsSeviceExtnPdf")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PaySlipPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("QuotationPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeviceExtnPdf")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -1270,27 +1318,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("HBA_LoanFreq");
 
                     b.ToTable("trnHBA");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.HitCounter", b =>
-                {
-                    b.Property<int>("HitCounterId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HitCounterId"));
-
-                    b.Property<int>("IpAddressId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("VisitDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("HitCounterId");
-
-                    b.HasIndex("IpAddressId");
-
-                    b.ToTable("HitCounters");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.InvestmentChange_JCO_OR", b =>
@@ -1543,25 +1570,6 @@ namespace DataAccessLayer.Migrations
                         .HasFilter("[ExceptionTypeName] IS NOT NULL");
 
                     b.ToTable("MExceptionTypes");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.MIpAddress", b =>
-                {
-                    b.Property<int>("IpAddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IpAddressId"));
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("IPAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IpAddressId");
-
-                    b.ToTable("MIpAddresses");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MLoanFreq", b =>
@@ -2588,17 +2596,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("CommonDataModels");
 
                     b.Navigation("MLoanFreq");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.HitCounter", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.MIpAddress", "MIpAddress")
-                        .WithMany()
-                        .HasForeignKey("IpAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MIpAddress");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.MAgeMapping", b =>

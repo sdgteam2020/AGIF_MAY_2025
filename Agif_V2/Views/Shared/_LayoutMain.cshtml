@@ -203,16 +203,20 @@
     </div>
     <footer id="layout-footer">
         <div class="row">
-            <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <!-- Invisible placeholder for balancing the center -->
-                    <!-- Left Section: Centered Content -->
-                    <div id="ftrMsg" class="flex-grow-1 text-center fw-bold">
-                        Copyright © 2024 Developed by ASDC, DGIS. Sponser Dte : AGI
-                    </div>
-                    <!-- Right Section: Info Spans -->
+            <div class="col-12 position-relative">
 
+                <!-- Center Copyright -->
+                <div id="ftrMsg" class="text-center fw-bold">
+                    Copyright © 2024 Developed by ASDC, DGIS. Sponser Dte : AGI
                 </div>
+
+                <!-- Right Hit Counter -->
+                <div class="position-absolute top-50 end-0 translate-middle-y pe-3">
+                    <span id="today"></span> |
+                    <span id="monthly"></span> |
+                    <span id="total"></span>
+                </div>
+
             </div>
         </div>
     </footer>

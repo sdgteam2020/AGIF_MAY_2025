@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260604115525_Fixing_IPAddress_Table")]
+    partial class Fixing_IPAddress_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -739,6 +742,21 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
+                    b.Property<string>("AttachBonafideLetterPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachInvitationcardPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AttachPartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attach_PartIIOrderPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CancelledCheque")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -748,10 +766,10 @@ namespace DataAccessLayer.Migrations
                     b.Property<bool>("IsAttachInvitationcardPdf")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAttachPartIIOrderPdfEdu")
+                    b.Property<bool>("IsAttachPartIIOrderPdf")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsAttach_PartIIOrderPdfMarr")
+                    b.Property<bool>("IsAttach_PartIIOrderPdf")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsCancelledChequePdf")
@@ -771,6 +789,21 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<bool>("IsTotalExpenditureFilePdf")
                         .HasColumnType("bit");
+
+                    b.Property<string>("OtherReasonsPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaySlipPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SeviceExtnPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SplWaiverPdf")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TotalExpenditureFile")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime2");

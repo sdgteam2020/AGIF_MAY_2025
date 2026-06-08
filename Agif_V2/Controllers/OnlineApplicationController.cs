@@ -63,32 +63,32 @@ namespace Agif_V2.Controllers
             var loanType = TempData["LoanType"] as string;
             var applicantCategory = TempData["ApplicantCategory"] as string;
 
-            int id = TempData["RedirectapplicationId"] is int applicationId ? applicationId : 0 ;
+            int id = TempData["RedirectapplicationId"] is int applicationId ? applicationId : 0;
             TempData["loantypeNew"] = loanType ?? string.Empty;
             TempData["applicantcategoryNew"] = applicantCategory ?? string.Empty;
 
-            var response= new DTOCommonOnlineApplicationResponse();
+            var response = new DTOCommonOnlineApplicationResponse();
             response = null;
 
             DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
 
-            if (id!=0)
+            if (id != 0)
             {
                 response = _IonlineApplication1.GetApplicationAndApplicantType(id);
             }
 
-            if(response!=null)
+            if (response != null)
             {
                 DTOOnlineapplication.loantype = response.OnlineApplicationResponse.ApplicationType.ToString();
                 DTOOnlineapplication.applicantCategory = response.OnlineApplicationResponse.ApplicantType.ToString();
             }
-         
-            
+
+
             TempData.Keep("LoanType");
             TempData.Keep("ApplicantCategory");
 
 
-          
+
             return View(DTOOnlineapplication);
         }
         public IActionResult LoanType()
@@ -99,7 +99,7 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<JsonResult> GetRetirementDate(int rankId, int Prefix, int regtId)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return Json("Invalid Request.");
             }
@@ -171,11 +171,11 @@ namespace Agif_V2.Controllers
 
             if (existingUser != null)
             {
-                return Json(new { exists = true }); 
+                return Json(new { exists = true });
             }
             else
             {
-                return Json(new { exists = false }); 
+                return Json(new { exists = false });
             }
         }
         [HttpPost]
@@ -230,7 +230,7 @@ namespace Agif_V2.Controllers
             }
             return Json(await _IonlineApplication1.CheckIsCoRegister(UnitId));
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> OnlineApplication([FromForm] string EncryptedData)
         {
@@ -255,7 +255,7 @@ namespace Agif_V2.Controllers
 
             try
             {
-                string secretKey = HttpContext.Session.GetString(SessionKeySalt); 
+                string secretKey = HttpContext.Session.GetString(SessionKeySalt);
 
                 string decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, secretKey);
 
@@ -302,7 +302,7 @@ namespace Agif_V2.Controllers
 
             if (!ModelState.IsValid)
             {
-                await _modelStateLogger.LogModelStateError(ModelState,HttpContext);
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("OnlineApplication", model);
             }
 
@@ -320,7 +320,7 @@ namespace Agif_V2.Controllers
                     {
                         model.CommonData.pcda_AcctNo = string.Empty;
                     }
-                    if(string.IsNullOrEmpty(model.CommonData.pcda_pao))
+                    if (string.IsNullOrEmpty(model.CommonData.pcda_pao))
                     {
                         model.CommonData.pcda_pao = string.Empty;
                     }
@@ -405,7 +405,7 @@ namespace Agif_V2.Controllers
 
         public async Task<JsonResult> MergePdf(int applicationId, bool isRejected, bool isApproved)
         {
-            
+
 
             try
             {
@@ -489,10 +489,10 @@ namespace Agif_V2.Controllers
                 var session = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
                 if (session == null) throw new Exception("Session expired or invalid user context.");
 
-                var (name, mobile, armyno,unitName,ApptName) = await _IonlineApplication1.GetCODetails(session.ProfileId);
+                var (name, mobile, armyno, unitName, ApptName) = await _IonlineApplication1.GetCODetails(session.ProfileId);
                 string generatedPdfPath = Path.Combine(sourceFolderPath, folderPath + "_Application.pdf");
 
-                int result = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, session.UserName, ip, name, mobile, armyno,unitName,ApptName);
+                int result = await _pdfGenerator.CreatePdfForOnlineApplication(applicationId, generatedPdfPath, isRejected, isApproved, session.UserName, ip, name, mobile, armyno, unitName, ApptName);
 
                 if (result == 1)
                 {
@@ -502,7 +502,7 @@ namespace Agif_V2.Controllers
                                 bool containsApplication = Path.GetFileName(file).Contains("Application");
                                 return containsApplication ? 0 : 1;
                             })
-                            .ThenBy(file => Path.GetFileName(file)) 
+                            .ThenBy(file => Path.GetFileName(file))
                             .ToArray();
                 }
             }
@@ -577,7 +577,7 @@ namespace Agif_V2.Controllers
             string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
             string mergepdfName = "App" + applicationIdStr + armyNo;
             string pdfFilePath = $"/MergePdf/{mergepdfName}.pdf";
-            
+
             return Json(pdfFilePath);
         }
 
@@ -663,7 +663,7 @@ namespace Agif_V2.Controllers
             string directoryPath = Path.Combine(_env.WebRootPath, "MergePdf");
             try
             {
-                await _fileUtility.SaveBase64ToFileAsync(base64String, directoryPath, fileName); 
+                await _fileUtility.SaveBase64ToFileAsync(base64String, directoryPath, fileName);
                 return Json(new { success = true, message = "File saved successfully." });
             }
             catch (Exception ex)

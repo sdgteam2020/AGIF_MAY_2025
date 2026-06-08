@@ -21,6 +21,7 @@ namespace DataTransferObject.Model
         [StringLength(20, ErrorMessage = "Salary Account No can't be longer than 20 characters.")]
         public string? SalaryAcctNo { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Re-Enter Salary Account No is required.")]
         [StringLength(20, ErrorMessage = "Confirm Salary Account No can't be longer than 20 characters.")]
         public string? ConfirmSalaryAcctNo { get; set; }
@@ -28,10 +29,6 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage = "IFSC Code is required.")]
         [StringLength(11, ErrorMessage = "IFSC Code can't be longer than 11 characters.")]
         public string? IfsCode { get; set; }
-
-        //[Required(ErrorMessage = "Bank Name is required.")]
-        //[StringLength(100, ErrorMessage = "Bank Name can't be longer than 100 characters.")]
-        //public string? NameOfBank { get; set; }
 
         // Foreign Key
         [Required(ErrorMessage = "Bank Name is required.")]

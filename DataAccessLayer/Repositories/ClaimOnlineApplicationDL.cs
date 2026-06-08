@@ -358,7 +358,7 @@ namespace DataAccessLayer.Repositories
             return userMapping;
         }
 
-        
+
         public async Task<bool> ProcessFileUploads(List<IFormFile> files, string PurposeType, int ApplicationId)
         {
             ClaimCommonModel commonDataModel = new ClaimCommonModel();
@@ -401,22 +401,22 @@ namespace DataAccessLayer.Repositories
                     if (file.Name.Contains("CancelledCheque"))
                     {
                         fileUpload.IsCancelledChequePdf = true;
-                        fileUpload.CancelledCheque = "CancelledCheque"; // Update with the dynamic file name
+                        //fileUpload.CancelledCheque = "CancelledCheque"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("PaySlip"))
                     {
                         fileUpload.IsPaySlipPdf = true;
-                        fileUpload.PaySlipPdf = "PaySlipPdf"; // Update with the dynamic file name
+                        //fileUpload.PaySlipPdf = "PaySlipPdf"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("Spdocus"))
                     {
                         fileUpload.IsSplWaiverPdf = true;
-                        fileUpload.SplWaiverPdf = "Spdocus"; // Update with the dynamic file name
+                        //fileUpload.SplWaiverPdf = "Spdocus"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("SeviceExtn"))
                     {
                         fileUpload.IsSeviceExtnPdf = true;
-                        fileUpload.SeviceExtnPdf = "SeviceExtnPdf"; // Update with the dynamic file name
+                        //fileUpload.SeviceExtnPdf = "SeviceExtnPdf"; // Update with the dynamic file name
                     }
                 }
             }
@@ -424,28 +424,28 @@ namespace DataAccessLayer.Repositories
             if (PurposeType == "ED")
             {
                 var Eddetails = await _Education.GetByApplicationId(ApplicationId);
-                fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
+                //fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
                 fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
-                fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
-                fileUpload.IsAttachPartIIOrderPdf = Eddetails.IsAttachPartIIOrderPdf;
-                fileUpload.TotalExpenditureFile = Eddetails.TotalExpenditureFilePdf;
+                //fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
+                fileUpload.IsAttachPartIIOrderPdfEdu = Eddetails.IsAttachPartIIOrderPdf;
+                //fileUpload.TotalExpenditureFile = Eddetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = Eddetails.IsTotalExpenditureFilePdf;
             }
             else if (PurposeType == "MW")
             {
                 var MWdetails = await _Marraige.GetByApplicationId(ApplicationId);
-                fileUpload.Attach_PartIIOrderPdf = MWdetails.AttachPartIIOrderPdf;
-                fileUpload.IsAttach_PartIIOrderPdf = MWdetails.IsAttachPartIIOrderPdf;
-                fileUpload.AttachInvitationcardPdf = MWdetails.AttachInvitationcardPdf;
+                //fileUpload.Attach_PartIIOrderPdf = MWdetails.AttachPartIIOrderPdf;
+                fileUpload.IsAttach_PartIIOrderPdfMarr = MWdetails.IsAttachPartIIOrderPdf;
+                //fileUpload.AttachInvitationcardPdf = MWdetails.AttachInvitationcardPdf;
                 fileUpload.IsAttachInvitationcardPdf = MWdetails.IsAttachInvitationcardPdf;
             }
             else if (PurposeType == "PR")
             {
                 var PRdetails = await _Property.GetByApplicationId(ApplicationId);
-                fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
+                //fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
             }
-            
+
 
             await _DocumentUpload.Add(fileUpload);
 
@@ -527,12 +527,13 @@ namespace DataAccessLayer.Repositories
                           join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
-                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
+                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup
+                          from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
                           join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
                           from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
 
                           join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
-                           from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
+                          from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
 
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
@@ -603,7 +604,7 @@ namespace DataAccessLayer.Repositories
                               Distt = DistDetails.DistrictName ?? string.Empty,
                               State = StateDetails.StateName ?? string.Empty,
                               Code = AddressDetails.Code ?? string.Empty,
-                              ExtnOfService= string.IsNullOrEmpty(common.ExtnOfService) ? "No" : common.ExtnOfService,
+                              ExtnOfService = string.IsNullOrEmpty(common.ExtnOfService) ? "No" : common.ExtnOfService,
                           }).FirstOrDefault();
             string formtype = string.Empty;
             if (result != null)
@@ -667,7 +668,7 @@ namespace DataAccessLayer.Repositories
 
                     data.PropertyRenovationResponse = PRModal;
                 }
-                
+
 
                 var DocumentModel = _context.trnClaimDocumentUpload.FirstOrDefault(x => x.ApplicationId == applicationId);
 
@@ -679,70 +680,70 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsAttachBonafideLetterPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.AttachBonafideLetterPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "AttachBonafideLetterPdf.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
-                    if (DocumentModel.IsAttachPartIIOrderPdf)
+                    if (DocumentModel.IsAttachPartIIOrderPdfEdu)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.AttachPartIIOrderPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "AttachPartIIOrderPdfEdu.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttachInvitationcardPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.AttachInvitationcardPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "AttachInvitationcardPdf.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
-                    if (DocumentModel.IsAttach_PartIIOrderPdf)
+                    if (DocumentModel.IsAttach_PartIIOrderPdfMarr)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.Attach_PartIIOrderPdf + ".Pdf";
+                        dTODocumentFileView.FileName =  "Attach_PartIIOrderPdfMarr.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsTotalExpenditureFilePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.TotalExpenditureFile + ".Pdf";
+                        dTODocumentFileView.FileName = "TotalExpenditureFile.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsCancelledChequePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque + ".Pdf" ;
+                        dTODocumentFileView.FileName =  "CancelledCheque.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsPaySlipPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "PaySlipPdf.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSplWaiverPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.SplWaiverPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "SplWaiverPdf.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSeviceExtnPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf + ".Pdf" ;
+                        dTODocumentFileView.FileName = "SeviceExtnPdf.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsOtherReasonPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.OtherReasonsPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "OtherReasonsPdf.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
@@ -850,9 +851,9 @@ namespace DataAccessLayer.Repositories
                           join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
                           from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
 
-                          //join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
-                         // from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
-                         
+                              //join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
+                              // from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
+
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -881,7 +882,7 @@ namespace DataAccessLayer.Repositories
                               Email = common.Email ?? string.Empty,
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                            //  NameOfBank = BankDetails.BankName ?? string.Empty,
+                              //  NameOfBank = BankDetails.BankName ?? string.Empty,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
@@ -950,7 +951,7 @@ namespace DataAccessLayer.Repositories
                          join PR in _context.trnPropertyRenovation on common.ApplicationId equals PR.ApplicationId into PRGroup
                          from PR in PRGroup.DefaultIfEmpty()
 
-                         
+
 
                          join AddressDetails in _context.trnClaimAddressDetails on common.ApplicationId equals AddressDetails.ApplicationId into AddressDetailsModelGroup
                          from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
@@ -965,7 +966,7 @@ namespace DataAccessLayer.Repositories
                          select new DTOClaimExcelResponse
                          {
                              Unit = presentUnit != null ? presentUnit.UnitName : string.Empty,
-                             
+
                              ApplicationType = applicationType.Id,
                              armyno = common.ArmyPrefix != 14 ? prefix.Prefix + common.Number : common.Number,
                              AadharNo = common.AadharCardNo ?? string.Empty,
@@ -975,31 +976,31 @@ namespace DataAccessLayer.Repositories
                              Enrollment_Date = common.DateOfCommission,
 
                              Regt_Cps = regCorps != null && regCorps.RegtName != null ? regCorps.RegtName : string.Empty,
-                            
+
                              Retirement_Date = common.DateOfRetirement,
                              PANNo = common.PanCardNo ?? string.Empty,
                              MobNo = common.MobileNo ?? string.Empty,
                              E_Mail_Id = (common.Email ?? string.Empty) ?? string.Empty,
                              Salary_Account_No = AccountDetails.SalaryAcctNo ?? string.Empty,
                              IFSC_Code = AccountDetails.IfsCode ?? string.Empty,
-                             
-                             CDA_PAO = common.pcda_pao ?? string.Empty,                            
+
+                             CDA_PAO = common.pcda_pao ?? string.Empty,
 
                              Amount_Applied_For_MAWD = (decimal?)common.AmountOfWithdrawalRequired ?? 0,
                              NoofWithdrawal = common.Noofwithdrawal ?? string.Empty,
                              Year_Of_Service = common.TotalService ?? 0,
                              Residual_Service = common.ResidualService ?? 0,
-                             Suffix=common.Suffix ?? string.Empty,
+                             Suffix = common.Suffix ?? string.Empty,
                              opfx = null,
                              ono = common.OldArmyPrefix != 14 ? oldPrefix.Prefix + common.OldNumber : common.OldNumber,
                              suffix_ = common.OldSuffix ?? string.Empty,
-                             Bank_Branch=AccountDetails.NameOfBankBranch ?? string.Empty,
+                             Bank_Branch = AccountDetails.NameOfBankBranch ?? string.Empty,
                              ChldrenName = common.WithdrawPurpose == 1 ? ED.ChildName : common.ApplicantType == 2 ? MW.NameOfChild : null,
-                             ChildrenDOB = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,                             
+                             ChildrenDOB = common.WithdrawPurpose == 1 ? ED.DateOfBirth : common.ApplicantType == 2 ? MW.DateOfBirth : null,
                              ChildbirthDOPartIIOrderNoAndDt = (common.WithdrawPurpose == 1 ? (ED.DoPartIIDate.HasValue ? ED.DOPartIINo + " " + ED.DoPartIIDate.Value.ToString("dd/MM/yyyy") : ED.DOPartIINo)
     : (common.ApplicantType == 2 ? (MW.DoPartIIDate.HasValue ? MW.DOPartIINo + " " + MW.DoPartIIDate.Value.ToString("dd/MM/yyyy") : MW.DOPartIINo) : null)),
 
-                            AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
+                             AgeOfWard = common.WithdrawPurpose == 2 ? MW.AgeOfWard.ToString() : null,
 
                              Marriagedt = common.WithdrawPurpose == 2 ? MW.DateofMarriage : null,
 
@@ -1014,42 +1015,42 @@ namespace DataAccessLayer.Repositories
                              NameofPropertyHolder = common.WithdrawPurpose == 3 ? PR.PropertyHolderName : null,
 
 
-                             EmailDomain=common.EmailDomain?? string.Empty,
+                             EmailDomain = common.EmailDomain ?? string.Empty,
                              dateandtimeofdocuuploadfrosanctioningauth = DigitalSignRecords.SignOn ?? null,
-                             IPaddress=common.IPAddress ?? string.Empty                           
+                             IPaddress = common.IPAddress ?? string.Empty
                          }).ToList();
 
             foreach (var item in query)
             {
-                item.E_Mail_Id = $"{item.E_Mail_Id??string.Empty}@{item.EmailDomain??string.Empty}".Trim();
+                item.E_Mail_Id = $"{item.E_Mail_Id ?? string.Empty}@{item.EmailDomain ?? string.Empty}".Trim();
             }
             dataTable = query.ToDataTable();
             return Task.FromResult(dataTable);
         }
 
-            public string Getloantype(bool? houseBuilding, bool? houseRepair, bool? conveyance, bool? computer)
+        public string Getloantype(bool? houseBuilding, bool? houseRepair, bool? conveyance, bool? computer)
+        {
+            if (houseBuilding == true)
             {
-                if (houseBuilding == true)
-                {
-                    return "House Building Advance Loan";
-                }
-                else if (houseRepair == true)
-                {
-                    return "House Repair Advance Loan";
-                }
-                else if (conveyance == true)
-                {
-                    return "Conveyance Advance Loan";
-                }
-                else if (computer == true)
-                {
-                    return "Computer Advance Loan";
-                }
-                else
-                    return "";
+                return "House Building Advance Loan";
             }
+            else if (houseRepair == true)
+            {
+                return "House Repair Advance Loan";
+            }
+            else if (conveyance == true)
+            {
+                return "Conveyance Advance Loan";
+            }
+            else if (computer == true)
+            {
+                return "Computer Advance Loan";
+            }
+            else
+                return "";
+        }
 
-    
+
 
         public Task<DTOClaimCommonOnlineResponse> GetUnitByApplicationId(int applicationId)
         {
@@ -1187,9 +1188,6 @@ namespace DataAccessLayer.Repositories
                           from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
 
 
-                        //  join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
-                         // from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
-
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -1204,7 +1202,7 @@ namespace DataAccessLayer.Repositories
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
                               Suffix = common.Suffix ?? string.Empty,
                               OldArmyPrefix = common.OldArmyPrefix,
-                              OldNumber =common.OldNumber,
+                              OldNumber = common.OldNumber,
                               OldSuffix = common.OldSuffix ?? string.Empty,
                               RankId = common.DdlRank,
                               DdlRank = rank != null ? rank.RankName : string.Empty,
@@ -1226,7 +1224,8 @@ namespace DataAccessLayer.Repositories
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                             // NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              // NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              BankId = AccountDetails.BankId ?? 0,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
@@ -1261,8 +1260,11 @@ namespace DataAccessLayer.Repositories
 
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = DistDetails.DistrictName ?? string.Empty,
-                              State = StateDetails.StateName ?? string.Empty,
+                              //Distt = DistDetails.DistrictName ?? string.Empty,
+                              //State = StateDetails.StateName ?? string.Empty,
+
+                              DistId = AddressDetails.Distt,
+                              StateId = AddressDetails.State,
                               Code = AddressDetails.Code ?? string.Empty,
                           }).FirstOrDefault();
             if (result != null)

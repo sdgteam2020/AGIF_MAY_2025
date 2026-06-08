@@ -679,7 +679,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "User mapping not found." });
             }
 
-            bool result = await _userProfile.SaveApprovedLogs(sessionUser.DomainId, ip, isActive, domainId, userProfile.ProfileId);
+            bool result = await _userProfile.SaveApprovedLogs(sessionUser.DomainId, ip, isActive, userProfile.ProfileId);
 
             userMapping.IsActive = isActive;
             userMapping.UpdatedOn = DateTime.Now;

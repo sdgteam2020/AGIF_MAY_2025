@@ -2102,6 +2102,9 @@ function findDataWithArmyNumber() {
                     "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
                 },
                 success: function (data) {
+                    console.log(
+                        $("#stateDropdown option[value='31']").length
+                    );
                     if (data) {
 
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
@@ -2127,13 +2130,13 @@ function findDataWithArmyNumber() {
 
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
-                        setInputValueWithFloatingLabel('distt', data.distt);
-                        setInputValueWithFloatingLabel('state', data.state);
+                        //setInputValueWithFloatingLabel('distt', data.distt);
+                        //setInputValueWithFloatingLabel('state', data.state);
                         setInputValueWithFloatingLabel('Code', data.code);
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
-                        setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
+                        //setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
 
                         $('#armyPrefix').val(data.armyPrefix).addClass("d-none").trigger('change');
@@ -2142,8 +2145,12 @@ function findDataWithArmyNumber() {
                         $('#regtCorps').val(data.regtCorpsId).addClass("d-none").trigger('change');
                         $('#armyPostOffice').val(data.armyPostOfficeId).addClass("d-none").trigger('change');
                         $('#emailDomain').val(data.emailDomain).trigger('change');
-
-
+                        $('#BankId').val(data.bankId).trigger('change');
+                        $('#stateDropdown').val(data.stateId).trigger('change');
+                        setTimeout(function () {
+                            $('#districtDropdown').val(data.distId).trigger('change');
+                        }, 1000);
+                       
                     }
                     else {
                         console.log("Data not found for the provided Army Number.");

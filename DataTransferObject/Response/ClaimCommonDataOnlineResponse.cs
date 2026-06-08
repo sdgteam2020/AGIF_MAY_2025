@@ -167,5 +167,8 @@ namespace DataTransferObject.Response
         public string? CoName { get; set; }
 
         public string? UpdatedOn { get; set; }
+        public int BankId { get; set; }
+        public int StateId { get; set; }
+        public int DistId { get; set; }
     }
 }

@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories
 {
-    public class ErrorLogDL:GenericRepositoryDL<ErrorLog>,IErrorLog
+    public class ErrorLogDL : GenericRepositoryDL<ErrorLog>, IErrorLog
     {
         protected new readonly ApplicationDbContext _context;
-        public ErrorLogDL(ApplicationDbContext context) :   base(context)
+        public ErrorLogDL(ApplicationDbContext context) : base(context)
         {
             _context = context;
 
@@ -28,15 +28,14 @@ namespace DataAccessLayer.Repositories
 
         public async Task LogExceptionAsync(Exception exception, HttpContext httpContext)
         {
-            string exceptionName = exception.GetType().Name;
-
-            var exceptionType = await _context.MExceptionTypes
-                .FirstOrDefaultAsync(x =>
-                    x.ExceptionTypeName == exceptionName);
-
-            if (exceptionType == null)
+            try
             {
-                try
+                string exceptionName = exception.GetType().Name;
+
+                var exceptionType = await _context.MExceptionTypes
+                    .FirstOrDefaultAsync(x => x.ExceptionTypeName == exceptionName);
+
+                if (exceptionType == null)
                 {
                     exceptionType = new MExceptionType
                     {
@@ -44,29 +43,40 @@ namespace DataAccessLayer.Repositories
                     };
 
                     _context.MExceptionTypes.Add(exceptionType);
-                    await _context.SaveChangesAsync();
+
+                    try
+                    {
+                        await _context.SaveChangesAsync();
+                    }
+                    catch
+                    {
+                        exceptionType = await _context.MExceptionTypes
+                            .FirstOrDefaultAsync(x => x.ExceptionTypeName == exceptionName);
+                    }
                 }
-                catch
+
+                if (exceptionType == null)
                 {
-                    exceptionType = await _context.MExceptionTypes
-                        .FirstAsync(x =>
-                            x.ExceptionTypeName == exceptionName);
+                    return; // Don't let logging throw another exception
                 }
+
+                var errorLog = new ErrorLog
+                {
+                    StatusCode = (int)HttpStatusCode.InternalServerError,
+                    ExceptionTypeId = exceptionType.ExceptionTypeId,
+                    Message = exception.Message,
+                    StackTrace = exception.StackTrace,
+                    Path = httpContext.Request.Path,
+                    Created = DateTime.Now
+                };
+
+                _context.ErrorLogs.Add(errorLog);
+                await _context.SaveChangesAsync();
             }
-
-            var errorLog = new ErrorLog
+            catch
             {
-                StatusCode = (int)HttpStatusCode.InternalServerError,
-                ExceptionTypeId = exceptionType.ExceptionTypeId,
-                Message = exception.Message,
-                StackTrace = exception.StackTrace,
-                Path = httpContext.Request.Path,
-                Created = DateTime.Now
-            };
-
-            _context.ErrorLogs.Add(errorLog);
-
-            await _context.SaveChangesAsync();
+                // Never allow logging failures to crash the application
+            }
         }
     }
 }

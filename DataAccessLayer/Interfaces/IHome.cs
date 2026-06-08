@@ -16,5 +16,9 @@ namespace DataAccessLayer.Interfaces
         Task<DTOAnalyticsResult> GetTotalMonthlyApplications(int year);
 
         Task<DTOAnalyticsResult> GetTotalClaimMonthlyApplications(int year);
+        Task AddVisitorAsync(string ipAddress);
+        Task<int> GetTodayCountAsync();
+        Task<int> GetMonthlyCountAsync();
+        Task<int> GetTotalCountAsync();
     }
 }

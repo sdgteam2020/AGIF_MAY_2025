@@ -177,7 +177,7 @@ function BindUsersData(status) {
                 return `
                     <div class='action action-container'>
                         <label class="toggle-switch">
-                            <input type="checkbox" class="cls-toggle-status" data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
+                            <input type="checkbox" class="cls-toggle-status" data-user-id='${row.userId || ''}' data-domain-id='${row.domainId || ''}' ${isActive ? 'checked' : ''}>
                             <span class="slider"></span>
                         </label>
                         <span class="status-text ${statusClass}">${statusText}</span>
@@ -198,7 +198,7 @@ function BindUsersData(status) {
                 return `
                     <div class='action action-container'>
                         <label class="toggle-switch">
-                            <input type="checkbox" class="cls-toggle-fmn" data-domain-id='${row.domainId || ''}' ${isFmn ? 'checked' : ''}>
+                            <input type="checkbox" class="cls-toggle-fmn" data-user-id='${row.userId || ''}' data-domain-id='${row.domainId || ''}' ${isFmn ? 'checked' : ''}>
                             <span class="slider"></span>
                         </label>
                         <span class="status-text ${statusClass}">${statusText}</span>

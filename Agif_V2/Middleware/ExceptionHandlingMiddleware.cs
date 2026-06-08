@@ -63,27 +63,5 @@ namespace Agif_V2.Middleware
                 JsonSerializer.Serialize(response, options));
         }
 
-        //public async Task HandleCustomExceptionResponseAsync(HttpContext httpContext,Exception ex, ApplicationDbContext context, IErrorLog error)
-        //{
-        //    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //    httpContext.Response.ContentType = MediaTypeNames.Application.Json;
-
-        //    ErrorLog errorLogs = new ErrorLog();
-        //    errorLogs.StatusCode = (int)HttpStatusCode.InternalServerError;
-        //    errorLogs.Message = ex.Message;
-        //    errorLogs.StackTrace = ex.StackTrace;
-        //    errorLogs.Path = httpContext.Request.Path;
-        //    errorLogs.ExceptionType = ex.GetType().Name;
-
-        //    await error.Add(errorLogs);
-
-        //    string message = "An unexpected error occurred processing your request.";
-        //    string? details = null;
-
-        //    var response = new ErrorModel(httpContext.Response.StatusCode, message, details);
-
-        //    var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-        //    await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response, options));
-    //}
     }
 }

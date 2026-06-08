@@ -44,14 +44,17 @@ namespace DataTransferObject.Model
         [ForeignKey("PCA_LoanFreq")]
         public MLoanFreq? MLoanFreq { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Eligible loan amount is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for eligible loan amount.")]
         public decimal? PCA_Amt_Eligible_for_loan { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "EMI Eligible amount is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for EMI eligible amount.")]
         public decimal? PCA_EMI_Eligible { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Repaying Capacity is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for repaying capacity.")]
         public decimal? PCA_repayingCapacity { get; set; }

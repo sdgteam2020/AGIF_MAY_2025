@@ -17,11 +17,11 @@ namespace DataTransferObject.Model
         [ForeignKey("ApplicationId")]
         public CommonDataModel? CommonDataModels { get; set; }
 
-        public string? CancelledCheque { get; set; }
-        public string? PaySlipPdf { get; set; }
-        public string? QuotationPdf { get; set; }
-        public string? DrivingLicensePdf { get; set; }
-        public string? SeviceExtnPdf { get; set; }
+        //public string? CancelledCheque { get; set; }
+        //public string? PaySlipPdf { get; set; }
+        //public string? QuotationPdf { get; set; }
+        //public string? DrivingLicensePdf { get; set; }
+        //public string? SeviceExtnPdf { get; set; }
 
 
         public bool IsCancelledCheque { get; set; }

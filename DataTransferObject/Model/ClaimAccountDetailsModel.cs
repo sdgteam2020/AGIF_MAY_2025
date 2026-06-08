@@ -28,11 +28,6 @@ namespace DataTransferObject.Model
         [StringLength(11, ErrorMessage = "IFSC Code can't be longer than 11 characters.")]
         public string? IfsCode { get; set; }
 
-        //[Required(ErrorMessage = "Bank Name is required.")]
-        //[StringLength(100, ErrorMessage = "Bank Name can't be longer than 100 characters.")]
-        //public string? NameOfBank { get; set; }
-
-        //// Foreign Key
         [Required(ErrorMessage = "Bank Name is required.")]
         public int? BankId { get; set; }
 

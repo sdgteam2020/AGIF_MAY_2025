@@ -37,14 +37,17 @@ namespace DataTransferObject.Model
         [ForeignKey("HBA_LoanFreq")]
         public MLoanFreq? MLoanFreq {  get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Repaying Capacity is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for repaying capacity.")]
         public decimal? HBA_repayingCapacity { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Eligible Loan Amount is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for eligible loan amount.")]
         public decimal? HBA_Amt_Eligible_for_loan { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "EMI Eligible amount is required.")]
         [DataType(DataType.Currency, ErrorMessage = "Invalid format for EMI eligible amount.")]
         public decimal? HBA_EMI_Eligible { get; set; }

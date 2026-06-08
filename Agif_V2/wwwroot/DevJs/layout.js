@@ -85,6 +85,23 @@ function trapFocus(e) {
     }
 }
 
+$(document).ready(function () {
+    $.ajax({
+        url: '/Home/UpdateHitCounter', // Controller Action
+        type: 'GET',
+        success: function (response) {
+            console.log(response);
+            $('#today').text('Today: ' + response.todayCount);
+            $('#monthly').text('Monthly: ' + response.monthlyCount);
+            $('#total').text('Total: ' + (response.totalCount + 171222));
+        },
+        error: function () {
+            console.log('Error loading hit counter');
+        }
+    });
+
+});
+
 
 $("#ViewLog").on('click', function () {
     window.location.href = '/Home/LogViewer'

@@ -365,48 +365,42 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsCancelledCheque)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.CancelledCheque + ".Pdf";
+                        dTODocumentFileView.FileName = "CancelledCheque.pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsSeviceExtnPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.SeviceExtnPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "SeviceExtnPdf.pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsPaySlipPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.PaySlipPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "PaySlipPdf.pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsQuotationPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.QuotationPdf + ".Pdf";
+                        dTODocumentFileView.FileName = "QuotationPdf.pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsDrivingLicensePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = DocumentModel.DrivingLicensePdf + ".Pdf";
+                        dTODocumentFileView.FileName = "DrivingLicensePdf.pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
 
                     data.Documents = lstdoc; // Assign the list of documents to the response object
-
                 }
-
-
-
-
             }
-
             return Task.FromResult(data);
         }
 
@@ -824,7 +818,7 @@ namespace DataAccessLayer.Repositories
         {
             DTOCommonOnlineApplicationResponse data = new DTOCommonOnlineApplicationResponse();
 
-            var result = (from common in _context.trnApplications
+             var result = (from common in _context.trnApplications
                           join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
                           from prefix in prefixGroup.DefaultIfEmpty()
                           join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
@@ -843,10 +837,10 @@ namespace DataAccessLayer.Repositories
                           from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
                           join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
-                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup
-                          from StateDetails in StateDetailsGroup.DefaultIfEmpty()
-                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
-                          from DistDetails in DistDetailsGroup.DefaultIfEmpty()
+                          //join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup
+                          //from StateDetails in StateDetailsGroup.DefaultIfEmpty()
+                          //join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
+                          //from DistDetails in DistDetailsGroup.DefaultIfEmpty()
 
                           join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
                           from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
@@ -878,8 +872,11 @@ namespace DataAccessLayer.Repositories
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              Distt = DistDetails.DistrictName,
-                              State = StateDetails.StateName,
+                              //Distt = DistDetails.DistrictName,
+                              //State = StateDetails.StateName,
+                              StateId = AddressDetails.State,
+                              DistId = AddressDetails.Distt,
+                              
                               DateOfPromotion = common.DateOfPromotion,
                               DateOfRetirement = common.DateOfRetirement,
                               PanCardNo = common.PanCardNo ?? string.Empty,
@@ -893,7 +890,7 @@ namespace DataAccessLayer.Repositories
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
                               CivilPostalAddress = common.CivilPostalAddress ?? string.Empty,
-                              ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo,
+                              ConfirmSalaryAcctNo = AccountDetails.SalaryAcctNo,
                               UpdatedOn = common.UpdatedOn.ToString(),
                               EmailDomain = common.EmailDomain ?? string.Empty,
                               BasicPay = common.BasicPay,

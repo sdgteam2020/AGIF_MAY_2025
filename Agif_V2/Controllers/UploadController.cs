@@ -269,11 +269,11 @@ namespace Agif_V2.Controllers
 
             var fileMap = new Dictionary<string, Action>
                {
-                   { nameof(model.CancelledCheque), () => { fileUpload.CancelledCheque = nameof(model.CancelledCheque); fileUpload.IsCancelledCheque = true; } },
-                   { nameof(model.PaySlipPdf), () => { fileUpload.PaySlipPdf = nameof(model.PaySlipPdf); fileUpload.IsPaySlipPdf = true; } },
-                   { nameof(model.QuotationPdf), () => { fileUpload.QuotationPdf = nameof(model.QuotationPdf); fileUpload.IsQuotationPdf = true; } },
-                   { nameof(model.DrivingLicensePdf), () => { fileUpload.DrivingLicensePdf = nameof(model.DrivingLicensePdf); fileUpload.IsDrivingLicensePdf = true; } },
-                   { nameof(model.SeviceExtnPdf), () => { fileUpload.SeviceExtnPdf = nameof(model.SeviceExtnPdf); fileUpload.IsSeviceExtnPdf = true; } },
+                   { nameof(model.CancelledCheque), () =>fileUpload.IsCancelledCheque = true},
+                   { nameof(model.PaySlipPdf), () => fileUpload.IsPaySlipPdf = true },
+                   { nameof(model.QuotationPdf), () => fileUpload.IsQuotationPdf = true },
+                   { nameof(model.DrivingLicensePdf), () => fileUpload.IsDrivingLicensePdf = true },
+                   { nameof(model.SeviceExtnPdf), () => fileUpload.IsSeviceExtnPdf = true },
                };
 
             foreach (var file in files)
