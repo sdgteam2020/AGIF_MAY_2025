@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608091314_Adding userid and profileid in trndigitalsignrecords")]
+    partial class Addinguseridandprofileidintrndigitalsignrecords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -690,14 +693,23 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ApplId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ArmyNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DomainId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsRejectced")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsSign")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
+                    b.Property<string>("RankName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
@@ -705,9 +717,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<DateTime?>("SignOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.Property<string>("XMLSignResponse")
                         .IsRequired()
@@ -718,10 +727,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("trnClaimDigitalSignRecords");
                 });
@@ -1061,10 +1066,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("trnDigitalSignRecords");
                 });
@@ -2444,25 +2445,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("WithdrawalPurposetype");
                 });
 
-            modelBuilder.Entity("DataTransferObject.Model.ClaimDigitalSignRecords", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Identitytable.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserProfile");
-                });
-
             modelBuilder.Entity("DataTransferObject.Model.ClaimDocumentUpload", b =>
                 {
                     b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
@@ -2544,25 +2526,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MUnitsParent");
 
                     b.Navigation("MUnitsPresent");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.DigitalSignRecords", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Identitytable.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.DocumentUpload", b =>

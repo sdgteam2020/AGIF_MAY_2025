@@ -1,6 +1,8 @@
-﻿using System;
+﻿using DataTransferObject.Identitytable;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +13,12 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int Id { get; set; }
-        public string ArmyNo { get; set; } = string.Empty;
-        public string DomainId { get; set; } = string.Empty;
-        public string RankName { get; set; } = string.Empty;
+        public int ProfileId { get; set; }
+        [ForeignKey("ProfileId")]
+        public  UserProfile UserProfile { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
         public int ApplId { get; set; }
         public bool IsSign { get; set; }
         public bool IsRejectced { get; set; }

@@ -369,9 +369,11 @@ namespace Agif_V2.Controllers
                     SignOn = DateTime.Now,
                     Remarks = remarks,
                     IsSign = true,
-                    DomainId = dTOTempSession.DomainId,
-                    ArmyNo = dTOTempSession.ArmyNo,
-                    RankName = dTOTempSession.RankName,
+                    //DomainId = dTOTempSession.DomainId,
+                    //ArmyNo = dTOTempSession.ArmyNo,
+                    //RankName = dTOTempSession.RankName,.
+                    ProfileId = dTOTempSession.ProfileId,
+                    UserId = dTOTempSession.UserId,
                     ipAddress = ipAddress
                 };
 
@@ -441,10 +443,12 @@ namespace Agif_V2.Controllers
                         SignOn = DateTime.Now,
                         Remarks = remarks,
                         IsSign = true,
-                        DomainId = dTOTempSession.DomainId,
-                        ArmyNo = dTOTempSession.ArmyNo,
-                        RankName = dTOTempSession.RankName,
-                        ipAddress= ipAddress
+                        //DomainId = dTOTempSession.DomainId,
+                        //ArmyNo = dTOTempSession.ArmyNo,
+                        //RankName = dTOTempSession.RankName,
+                        ProfileId = dTOTempSession.ProfileId,
+                        UserId = dTOTempSession.UserId,
+                    ipAddress = ipAddress
                 };
 
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);
@@ -486,6 +490,9 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Invalid request." });
             }
+            var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null)
+                throw new Exception("Session expired or invalid user context.");
             string ipAddress = string.Empty;
 
             var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
@@ -504,8 +511,18 @@ namespace Agif_V2.Controllers
                 IsSign = false,
                 IsRejectced = true,
                 ipAddress = ipAddress,
+                UserId = dTOTempSession.UserId,
+                ProfileId = dTOTempSession.ProfileId
             };
-            await _application.Add(digitalSignRecords);
+            try
+            {
+
+                await _application.Add(digitalSignRecords);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             await _onlineApplication.UpdateApplicationStatus(applId, 3);
             TrnStatusCounter trnStatusCounter = new TrnStatusCounter
             {
@@ -524,6 +541,9 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Invalid request data." });
             }
+            var dTOTempSession = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
+            if (dTOTempSession == null)
+                throw new Exception("Session expired or invalid user context.");
             string ipAddress = string.Empty;
 
             var forwardedHeader = HttpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault();
@@ -542,6 +562,8 @@ namespace Agif_V2.Controllers
                 IsSign = false,
                 IsRejectced = true,
                 ipAddress= ipAddress,
+                UserId = dTOTempSession.UserId,
+                ProfileId = dTOTempSession.ProfileId
             };
             await _claimApplication.Add(digitalSignRecords);
 

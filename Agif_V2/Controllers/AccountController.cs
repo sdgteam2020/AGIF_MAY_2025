@@ -354,10 +354,10 @@ namespace Agif_V2.Controllers
                 UserProfile userProfile = new UserProfile
                 {
                     ArmyNo = signUpDto.ArmyNo,
-                    userName = signUpDto.userName,
+                    //userName = signUpDto.userName,
                     Name = signUpDto.Name,
-                    Email = signUpDto.Email,
-                    MobileNo = signUpDto.MobileNo,
+                    //Email = signUpDto.Email,
+                    //MobileNo = signUpDto.MobileNo,
                     rank = signUpDto.rank,
                     regtCorps = signUpDto.regtCorps,
                     ApptId = signUpDto.ApptId,
@@ -679,7 +679,7 @@ namespace Agif_V2.Controllers
                 return Json(new { success = false, message = "User mapping not found." });
             }
 
-            bool result = await _userProfile.SaveApprovedLogs(sessionUser.DomainId, ip, isActive, userProfile.ProfileId);
+            bool result = await _userProfile.SaveApprovedLogs(sessionUser.UserId, ip, isActive, userProfile.ProfileId);
 
             userMapping.IsActive = isActive;
             userMapping.UpdatedOn = DateTime.Now;

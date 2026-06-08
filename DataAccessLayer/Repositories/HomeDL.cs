@@ -39,26 +39,48 @@ namespace DataAccessLayer.Repositories
         {
             var res = await (
                 from logs in _context.TrnApprovedLogs
-                join userMapping in _context.trnUserMappings on logs.coProfileId equals userMapping.ProfileId
-                join userProfile in _context.UserProfiles on logs.coProfileId equals userProfile.ProfileId
-                join userProfileAdmin in _context.UserProfiles on logs.AdminProfileId equals userProfileAdmin.ProfileId
-                join unit in _context.MUnits on userMapping.UnitId equals unit.UnitId
+
+                join coMapping in _context.trnUserMappings
+                    on logs.CoProfileId equals coMapping.ProfileId
+
+                join adminMapping in _context.trnUserMappings
+                    on logs.AdminProfileId equals adminMapping.ProfileId
+
+                join coProfile in _context.UserProfiles
+                    on logs.CoProfileId equals coProfile.ProfileId
+
+                join adminProfile in _context.UserProfiles
+                    on logs.AdminProfileId equals adminProfile.ProfileId
+
+                join coUser in _context.Users
+                    on coMapping.UserId equals coUser.Id
+
+                join adminUser in _context.Users
+                    on adminMapping.UserId equals adminUser.Id
+
+                join unit in _context.MUnits
+                    on coMapping.UnitId equals unit.UnitId
+
                 orderby logs.UpdatedOn descending
+
                 select new DTOApprovedLogs
                 {
-                    Name = userProfileAdmin.Name,
-                    DomainId = userProfileAdmin.userName,
+                    Name = adminProfile.Name,
+                    DomainId = adminUser.UserName,      // AspNetUsers.UserName
+
                     IpAddress = logs.IpAddress,
-                    CoDomainId = userProfile.userName,
-                    CoProfileId = logs.coProfileId,
+
+                    CoDomainId = coUser.UserName,       // AspNetUsers.UserName
+                    CoProfileId = logs.CoProfileId,
+
                     UnitName = unit.UnitName,
                     IsApproved = logs.IsApproved,
                     UpdatedOn = logs.UpdatedOn
-                }).ToListAsync();
+                })
+                .ToListAsync();
+
             return res;
         }
-
-
         public async Task<List<DTOUserCountResponse>> GetUserCount()
         {
             var counts = await _context.trnUserMappings

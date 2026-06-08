@@ -23,12 +23,20 @@ namespace DataAccessLayer.Repositories
 
         public async Task<UserProfile?> GetByUserName(string userName)
         {
-            return await _context.UserProfiles.FirstOrDefaultAsync(x => x.userName == userName);
+            return await (
+                from up in _context.UserProfiles
+                join tum in _context.trnUserMappings
+                    on up.ProfileId equals tum.ProfileId
+                join au in _context.Users
+                    on tum.UserId equals au.Id
+                where au.UserName == userName
+                select up
+            ).FirstOrDefaultAsync();
         }
 
-    
 
-       public IQueryable<DTOUserProfileResponse> GetAllUser(bool status)
+
+        public IQueryable<DTOUserProfileResponse> GetAllUser(bool status)
         {
             var users = from user in _context.Users
                         join mapping in _context.trnUserMappings on user.Id equals mapping.UserId
@@ -42,7 +50,7 @@ namespace DataAccessLayer.Repositories
                         orderby user.UpdatedOn descending
                         select new DTOUserProfileResponse
                         {
-                            DomainId = profile.userName,
+                            DomainId = user.UserName,
                             ProfileName = rank.RankName + " " + profile.Name,
                             AppointmentName = appt.AppointmentName,
                             ArmyNo = profile.ArmyNo,
@@ -81,7 +89,7 @@ namespace DataAccessLayer.Repositories
 
                 select new DTOUserProfileResponse
                 {
-                    DomainId = profile.userName,
+                    DomainId = user.UserName,
                     MappingId = mapping.MappingId,
                     IsCOActive = mapping.IsActive,
                     ProfileId = profile.ProfileId,
@@ -140,24 +148,46 @@ namespace DataAccessLayer.Repositories
             }
         }
 
-        public async Task<bool> SaveApprovedLogs(string DomainId, string Ip, bool isActive,  int coProfileId)
+        public async Task<bool> SaveApprovedLogs(int userId, string ip, bool isActive, int coProfileId)
         {
-            var user = await _context.UserProfiles
-                .Where(u => u.userName == DomainId)
-                .FirstOrDefaultAsync();
+            var userMapping = await (
+                from up in _context.UserProfiles
+                join um in _context.trnUserMappings
+                    on up.ProfileId equals um.ProfileId
+                where um.UserId == userId
+                select new
+                {
+                    up.ProfileId
+                }
+            ).FirstOrDefaultAsync();
+            if (userMapping == null)
+            {
+                return false;
+            }
+            var coUserMapping = await (
+                from um in _context.trnUserMappings
+                   
+                where um.ProfileId == coProfileId
+                select new
+                {
+                    um.UserId
+                }
+            ).FirstOrDefaultAsync();
 
-            if (user == null)
+            if (coUserMapping == null)
             {
                 return false;
             }
 
-            var approvedLog = new TrnApprovedLog   // Entity mapped to table `trnApprovedLogs`
+            var approvedLog = new TrnApprovedLog
             {
-                AdminProfileId = user.ProfileId,
-                IpAddress = Ip,
+                AdminProfileId = userMapping.ProfileId,
+                IpAddress = ip,
                 IsApproved = isActive,
                 UpdatedOn = DateTime.Now,
-                coProfileId = coProfileId
+                CoProfileId = coProfileId,
+                AdminUserId = userId,
+                CoUserId = coUserMapping.UserId
             };
 
             _context.TrnApprovedLogs.Add(approvedLog);
@@ -172,7 +202,7 @@ namespace DataAccessLayer.Repositories
             try
             {
                 var userProfile = await _context.UserProfiles
-                    .FirstOrDefaultAsync(p => p.ProfileId == profileId && p.userName == domainId);
+                    .FirstOrDefaultAsync(p => p.ProfileId == profileId);
 
                 if (userProfile == null)
                 {

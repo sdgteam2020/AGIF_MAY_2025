@@ -19,6 +19,7 @@ namespace DataTransferObject.Model
         public string ArmyNo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "User Name is required.")]
+        [NotMapped]
         public string userName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Name is required.")]
@@ -28,11 +29,13 @@ namespace DataTransferObject.Model
 
         [Required(ErrorMessage = "Email is required.")]
         [RegularExpression(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Enter valid email address")]
+        [NotMapped]
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Mobile No is required.")]
         [StringLength(10, ErrorMessage = "Mobile No must be 10 digits.")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Invalid Mobile No.")]
+        [NotMapped]
         public string MobileNo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Rank is required.")]
