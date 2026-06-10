@@ -371,30 +371,41 @@ function updateLoanTypeDropdown() {
 
 function expandAccordions() {
 
-    let $toggleButton = $('#toggleAll');
+    const $toggleButton = $('#toggleAll');
 
     $toggleButton.on('click', function () {
-        let isExpanding = $toggleButton.text().trim() === 'Expand All';
+
+        const isExpanding = $toggleButton.text().trim() === 'Expand All';
 
         $('.accordion-collapse').each(function () {
             const collapse = bootstrap.Collapse.getOrCreateInstance(this);
-            isExpanding ? collapse.show() : collapse.hide();
+
+            if (isExpanding) {
+                collapse.show();
+            } else {
+                collapse.hide();
+            }
         });
+
+        $toggleButton.text(
+            isExpanding ? 'Collapse All' : 'Expand All'
+        );
     });
+
     function updateToggleButtonText() {
         const total = $('.accordion-collapse').length;
         const open = $('.accordion-collapse.show').length;
 
-        if (total === open) {
-            $toggleButton.text('Collapse All');
-        } else {
-            $toggleButton.text('Expand All');
-        }
+        $toggleButton.text(
+            total === open ? 'Collapse All' : 'Expand All'
+        );
     }
 
-    $('.accordion-collapse').on('shown.bs.collapse hidden.bs.collapse', function () {
-        updateToggleButtonText();
-    });
+    $('.accordion-collapse').on(
+        'shown.bs.collapse hidden.bs.collapse',
+        updateToggleButtonText
+    );
+
     updateToggleButtonText();
 }
 function formatAadhar(input) {
@@ -720,6 +731,10 @@ $('.monthPicker').datepicker({
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
+        $(this).trigger('change');
+        setOutlineActive(this.id);
+        $(this).siblings('.form-label').addClass('active');
+
     },
 
     beforeShowDay: function (date) {
@@ -750,7 +765,9 @@ $('.DocPicker').datepicker({
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
         
-
+        $(this).trigger('change');
+        setOutlineActive(this.id);
+        $(this).siblings('.form-label').addClass('active');
     }
     
 });
@@ -771,7 +788,9 @@ $('.DopPicker').datepicker({
         const newdt = new Date(my_date(dt));
         newdt.setFullYear(newdt.getFullYear() + 18);
 
-
+        $(this).trigger('change');
+        setOutlineActive(this.id);
+        $(this).siblings('.form-label').addClass('active');
     }
    
 });
@@ -1720,9 +1739,14 @@ $("#ParenttxtUnit").autocomplete({
                         showErrorMessage("Unit Not found.");
                     }
                 },
-                error: function (resp) {
-                    console.error("Autocomplete AJAX error:", resp.responseText);
-                    alert(resp.responseText);
+                error: function (xhr) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Search Failed",
+                        text: "Unable to retrieve unit details. Please try again."
+                    });
+
+                    $("#ParentUnitId").val(0);
                 }
             });
         }
@@ -1743,7 +1767,7 @@ $("#PresenttxtUnit").autocomplete({
 
         if (request.term.length > 2) {
             const param = { "UnitName": request.term };
-            $("#ParentUnitId").val(0);
+            $("#PresentUnitId").val(0);
             $.ajax({
                 url: '/Account/GetALLByUnitName',
                 contentType: 'application/x-www-form-urlencoded',
@@ -1768,11 +1792,8 @@ $("#PresenttxtUnit").autocomplete({
                     }
 
                 },
-                error: function (response) {
-                    alert(response.responseText);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
+                error: function () {
+                    showErrorMessage("Unable to retrieve unit details. Please try again.");
                 }
             });
         }
@@ -2130,13 +2151,10 @@ function findDataWithArmyNumber() {
 
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
-                        //setInputValueWithFloatingLabel('distt', data.distt);
-                        //setInputValueWithFloatingLabel('state', data.state);
                         setInputValueWithFloatingLabel('Code', data.code);
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.confirmSalaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
-                        //setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
 
                         $('#armyPrefix').val(data.armyPrefix).addClass("d-none").trigger('change');
@@ -2162,7 +2180,6 @@ function findDataWithArmyNumber() {
             });
 
         }
-        getApplicantDetalis();
 
     });
 }

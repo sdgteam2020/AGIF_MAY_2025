@@ -1059,7 +1059,10 @@
             },
             success: function (resp) {
                 if (!resp || !resp.success) {
-                    alert(resp?.message || "Failed to load data");
+                    showErrorMessage(
+                        resp?.message ||
+                        "Unable to load application analytics."
+                    );
                     return;
                 }
 
@@ -1657,7 +1660,10 @@
             },
             success: function (resp) {
                 if (!resp || !resp.success) {
-                    alert(resp?.message || "Failed to load Maturity data");
+                    showErrorMessage(
+                        resp?.message ||
+                        "Unable to load application analytics."
+                    );
                     return;
                 }
                 const raw = resp.data?.monthlyMaturity || resp.data?.monthlyApplications || [];

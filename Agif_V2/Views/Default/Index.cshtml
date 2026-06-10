@@ -10,7 +10,7 @@
 
 
 
-<div class="container-fluid mt-2">
+<div class="container-fluid fw-bold">
     <div class="row align-items-center">
         <!-- First Column: MD Profile -->
         <div class="col-12 col-md-3 text-start">
@@ -87,7 +87,7 @@
     </div>
 
     <!-- Second Row -->
-    <div class="row align-items-center mt-3">
+    <div class="row align-items-stretch">
         <!-- FAQ Column -->
         <div class="col-12 col-md-3 text-center">
             <div class="panel panel-default border second-row">
@@ -95,7 +95,7 @@
                     <b class="m-0 text-white">FAQ</b>
                 </div>
                 <div class="panel-body p-3">
-                    <div class="h-100 text-start">
+                   @*  <div class="h-100 text-start"> *@
                         <ul class="list-styled">
                             <li class="mb-2">
                                 <a href="~/PdfViewer/AGIFLoanInwardPaymentUsingNEFT" target="_blank" class="text-decoration-none">Claims</a>
@@ -113,7 +113,7 @@
                                 <a href="~/PdfViewer/FaqPCA" target="_blank" class="text-decoration-none">Personal Computer Advance (PCA)</a>
                             </li>
                         </ul>
-                    </div>
+                    @* </div> *@
                 </div>
             </div>
         </div>
@@ -124,43 +124,14 @@
                 <div class="panel-heading d-flex justify-content-center align-items-center">
                     <b class="m-0 text-white">About Us</b>
                 </div>
-                <div class="panel-body text-justify p-3">
-                    <div class="overflow-auto h-100">
+                <div class="panel-body text-start p-3">
+                    <p class="mb-0">
                         The Army Group Insurance Scheme is a group insurance cum savings scheme. It provides insurance and allied benefits to all ranks of the Indian Army. It is a society registered with the Registrar of Societies under the Registration of Societies Act (Act XX1) of 1860. It is operated entirely on the basis of monthly contributions by all ranks of the Army and is a self supporting and self sustaining organisation. AGIF is dynamic in its outlook and keeps revising its schemes to meet the aspirations and needs of its members. The entire cost of running the scheme i.e pay and allowances and maintenance charges of the organization are borne by the Fund.
-                    </div>
+                     </p>
                 </div>
             </div>
         </div>
 
-        @* <!-- Quick Links Column -->
-        <div class="col-12 col-md-3 text-center">
-            <div class="panel panel-default border second-row">
-                <div class="panel-heading d-flex justify-content-center align-items-center">
-                    <b class="m-0 text-white">Quick Links</b>
-                </div>
-                <div class="panel-body p-3">
-                    <div class="d-flex flex-column h-100 justify-content-start">
-                        <ul class="p-0 list-unstyled">
-                            <li class="pb-2">
-                                <a target="_blank" href="Links_portal.army.mil" class="btn  btn-dark-brown w-100 fw-bold">Army Portal</a>
-                            </li>
-                            <li class="pb-2">
-                                <a target="_blank" href="Links_msweb.army.mil" class="btn  btn-dark-brown w-100 fw-bold">MS Web</a>
-                            </li>
-                            <li class="pb-2">
-                                <a target="_blank" href="Links_agweb.army.mil" class="btn  btn-dark-brown w-100 fw-bold">AG Web</a>
-                            </li>
-                            <li class="pb-2">
-                                <div class="btn  btn-dark-brown w-100 d-flex align-items-center justify-content-center fw-bold">
-                                    <i class="fa fa-envelope-o me-2"></i>
-                                    @Html.Raw(string.Join("", "adagif@gmail.com".Select(c => $"&#{(int)c};")))
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div> *@
     </div>
 </div>
 

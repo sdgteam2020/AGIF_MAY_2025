@@ -154,7 +154,7 @@ body {
     margin-bottom: clamp(60px, 8vw, 80px);
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: clamp(1rem, 2vw, 2rem) 0;
+    padding: 0;
 }
 
 .bg-gradient-custom {
@@ -256,19 +256,27 @@ body {
 }
 
 
-.fixed-header {
+/*.fixed-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1000;
-    height: clamp(140px, 25vw, 190px);
+    height: auto;
+}*/
+.fixed-header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    /* Remove 'left: 0;' and 'height: auto;' as they aren't strictly needed for sticky */
+    background-color: white; /* Ensure the header has a solid background so content doesn't show through it */
 }
 
 
-.renderbody {
+/*.renderbody {
     margin-top: clamp(145px, 26vw, 195px) !important;
-}
+}*/
 
 
 #layout-footer {
@@ -319,6 +327,10 @@ body {
     min-height: clamp(280px, 40vw, 380px);
 }
 
+/*.panel-body {
+    padding: clamp(9px, 2vw, 15px);
+    height: clamp(250px, 35vw, 331px);
+}*/
 .panel-body {
     padding: clamp(9px, 2vw, 15px);
     height: clamp(250px, 35vw, 331px);
@@ -355,13 +367,38 @@ body {
 }
 
 
-.second-row {
+/*.second-row {
     height: clamp(280px, 40vw, 310px);
+}*/
+.second-row {
+    min-height: 10px !important; /* Overrides the massive default panel min-height */
+    height: 100%; /* Ensures side-by-side boxes in the same row stay the exact same height */
+    display: flex;
+    flex-direction: column;
 }
+    .second-row .panel-heading {
+        flex: 0 0 auto;
+    }
 
     .second-row .panel-body {
-        height: clamp(200px, 28vw, 280px);
+        flex: 1 1 auto;
+        height: auto;
+        padding: clamp(15px, 2vw, 25px);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; /* <-- This pulls the content to the top! */
     }
+    /* Fix the detached bullets in the FAQ section */
+    .second-row .list-styled {
+        text-align: left;
+        display: inline-block; /* This keeps the block centered, but text left-aligned */
+        padding-left: 20px;
+        margin-bottom: 0;
+    }
+
+        .second-row .list-styled li {
+            margin-bottom: 12px; /* Adds nice breathing room between links */
+        }
 
 
 .holder {
@@ -387,15 +424,31 @@ body {
     padding-top: 20px; 
 }
 
-    #ticker01 li {
+   /* #ticker01 li {
         height: auto;
         display: flex;
         align-items: center;
         padding: clamp(5px, 2vw, 10px) clamp(10px, 2vw, 15px); 
         font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+    }*/
+    #ticker01 li {
+        height: auto;
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        /* Calmer scaling: stays between 13px and 16px */
+        font-size: clamp(13px, 1.2vw, 16px);
+        text-align: left;
     }
-
-
+        #ticker01 li a {
+            display: block;
+            width: 100%; /* Ensures the text utilizes the full available width */
+            line-height: 1.4; /* Better line spacing for readable multi-line links */
+        }
+        #ticker01 li img {
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
 @keyframes scroll {
     0% {
         transform: translateY(0);
@@ -433,7 +486,7 @@ body {
 }
 
 
-.slider {
+/*.slider {
     width: 100%;
     max-width: clamp(300px, 80vw, 1050px);
     margin: auto;
@@ -458,7 +511,36 @@ body {
         height: clamp(200px, 30vw, 400px);
         object-fit: cover;
     }
+*/
+.slider {
+    width: 100%;
+    max-width: clamp(300px, 80vw, 1050px);
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+    /* Syncing margins, height, and border-radius exactly with .panel */
+    margin-top: clamp(10px, 1vw, 20px);
+    margin-bottom: clamp(10px, 2vw, 20px);
+    height: clamp(280px, 40vw, 380px);
+    border-radius: clamp(4px, 1vw, 8px);
+}
 
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    height: 100%; /* Fill the newly sized slider container */
+}
+
+.slide {
+    min-width: 100%;
+    height: 100%; /* Inherit height */
+}
+
+    .slide img {
+        width: 100%;
+        height: 100%; /* Inherit height */
+        object-fit: cover; /* Prevents the image from distorting while filling the space */
+    }
 
 .dots {
     text-align: center;
@@ -847,6 +929,7 @@ h1 {
     }
 
     .container-fluid {
+        margin-top: -2.0rem !important;
         padding: 0 0.5rem;
     }
 
@@ -870,9 +953,9 @@ h1 {
         display: none !important;
     }
 
-    .renderbody {
+    /*.renderbody {
         margin-top: 0 !important;
-    }
+    }*/
 
     .panel {
         break-inside: avoid;
