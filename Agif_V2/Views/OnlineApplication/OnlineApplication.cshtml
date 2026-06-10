@@ -48,16 +48,16 @@
                         <span class="w-100 text-center text-decoration-underline"><strong>Personal Details </strong></span>
                     </button>
                 </h2>
-                <div id="personalInfo" class="accordion-collapse collapse show" data-bs-parent="#formAccordion">
+                <div id="personalInfo" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="input-group mb-2">
-                                            <div class="col-md-2 col-sm-1 col-1">
+                                            @* <div class="col-md-2 col-sm-1 col-1"> *@
                                                 <span class="input-group-text">👮</span>
-                                            </div>
+                                            @* </div> *@
                                             <div class="col-md-10 col-sm-11 col-11">
                                                 <select class="select form-select " data-mdb-filter="true" id="armyPrefix" name="CommonData.ArmyPrefix" required data-army-prefix="@if (Model.CommonData != null)
                                                     {
@@ -247,7 +247,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="date" class="form-control " id="dateOfRetirement" aria-label="Date of Retirement" value="@Model.CommonData?.DateOfRetirement?.ToString("yyyy-MM-dd")" name="CommonData.DateOfRetirement" tabindex="-1" readonly>
+                                        <input type="text" class="form-control readonly-blocked js-format-date" id="dateOfRetirement" aria-label="Date of Retirement" value="@Model.CommonData?.DateOfRetirement?.ToString("dd/MM/yyyy")" name="CommonData.DateOfRetirement" tabindex="-1" readonly>
                                         <label class="form-label select-label " for="dateOfRetirement">Date of Retirement</label>
                                     </div>
                                 </div>
@@ -347,7 +347,7 @@
                         <span class="w-100 text-center text-decoration-underline"><strong>Regt/Unit Details</strong></span>
                     </button>
                 </h2>
-                <div id="regt_Unit" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                <div id="regt_Unit" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
                             
@@ -468,7 +468,7 @@
                         <span class="w-100 text-center text-decoration-underline"><strong>Home Address</strong></span>
                     </button>
                 </h2>
-                <div id="address" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                <div id="address" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
                             <div class="col-md-2">
@@ -558,7 +558,7 @@
                         <span class="w-100 text-center text-decoration-underline"><strong>Salary Account Details</strong></span>
                     </button>
                 </h2>
-                <div id="salaryAcctDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                <div id="salaryAcctDetails" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
                             <div class="col-md-2">
@@ -647,7 +647,7 @@
                         <span class="w-100 text-center text-decoration-underline"><strong>Salary Details</strong></span>
                     </button>
                 </h2>
-                <div id="salaryDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                <div id="salaryDetails" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
                             <div class="col-md-4">
@@ -899,7 +899,7 @@
                                 <span class="w-100 text-center text-decoration-underline"><strong>Property and Loan Details</strong></span>
                             </button>
                         </h2>
-                        <div id="propertyDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                        <div id="propertyDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
                                     <div class="col-md-4">
@@ -1061,7 +1061,7 @@
                                 <span class="w-100 text-center text-decoration-underline"><strong>Vehicle Loan and Driving License Details</strong></span>
                             </button>
                         </h2>
-                        <div id="vehicleDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                        <div id="vehicleDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
                                     <div class="col-md-2">
@@ -1254,7 +1254,7 @@
                                 <span class="w-100 text-center text-decoration-underline"><strong>Personal Computer and Loan Details</strong></span>
                             </button>
                         </h2>
-                        <div id="computerDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                        <div id="computerDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
                                     <div class="col-md-4">

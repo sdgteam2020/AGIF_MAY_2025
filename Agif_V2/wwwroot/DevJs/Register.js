@@ -98,11 +98,8 @@ $("#txtUnit").autocomplete({
                     }
 
                 },
-                error: function (response) {
-                    alert(response.responseText);
-                },
-                failure: function (response) {
-                    alert(response.responseText);
+                error: function () {
+                    showErrorMessage("Unable to retrieve unit details. Please try again.");
                 }
             });
         }

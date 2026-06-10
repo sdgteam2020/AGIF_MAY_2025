@@ -102,7 +102,6 @@ $(document).ready(function () {
 
 });
 
-
 $("#ViewLog").on('click', function () {
     window.location.href = '/Home/LogViewer'
 })

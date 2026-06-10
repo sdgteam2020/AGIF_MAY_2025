@@ -183,7 +183,7 @@
                 if (response.success) {
                     window.location.href = response.redirectUrl;
                 } else {
-                    alert('Error: ' + response.message);
+                    alert('Error');
                 }
             },
             error: function () {

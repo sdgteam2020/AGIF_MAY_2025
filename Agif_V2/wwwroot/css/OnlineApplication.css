@@ -269,7 +269,7 @@ input[disabled] {
     z-index: 1050 !important; 
 }
 
-
+/*
 .ui-datepicker {
     animation: clipIn 0.4s ease-out;
     background: white;
@@ -408,8 +408,257 @@ input[disabled] {
 
     .ui-datepicker-calendar .ui-datepicker-other-month a {
         color: #ccc;
+    }*/
+
+/* ==========================================================================
+   JQUERY UI DATEPICKER STYLES (MDBootstrap Compatible)
+   ========================================================================== */
+
+/* 1. Reduce overall width and padding */
+.ui-datepicker {
+    animation: clipIn 0.4s ease-out;
+    background: white;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    padding: 12px; /* Reduced from 20px */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 235px !important; /* Reduced from 280px */
+    z-index: 9999 !important;
+    box-sizing: content-box;
+    max-width: 95vw !important; /* Prevents bleeding off mobile screens */
+    box-sizing: border-box !important; /* Keeps padding inside the width */
+}
+
+/* 2. Tighten the header padding */
+.ui-datepicker-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 10px; /* Reduced padding */
+    margin-bottom: 10px; /* Reduced margin */
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+}
+/* Title area holding the dropdowns */
+.ui-datepicker-title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Clean spacing between month and year */
+    line-height: 1;
+}
+.ui-datepicker .ui-datepicker-title {
+   margin: 0px 0.3em;
+}
+/* 3. Shrink the dropdown boxes slightly */
+.ui-datepicker .ui-datepicker-title select {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    padding: 2px 4px; /* Tighter padding */
+    margin: 0 !important;
+    outline: none;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px; /* Slightly smaller text */
+}
+    .ui-datepicker .ui-datepicker-title select option {
+        color: #333;
+        background: #fff;
+        font-weight: normal;
     }
 
+/* ==========================================================================
+   THEME ALIGNED ARROWS
+   ========================================================================== */
+
+.ui-datepicker-prev,
+.ui-datepicker-next {
+    position: static !important; /* Overrides jQuery UI's broken absolute position */
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.15) !important; /* Glassmorphism theme */
+    border: none;
+    border-radius: 50%;
+    width: 32px !important;
+    height: 32px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    flex-shrink: 0; /* Prevents arrows from being squished */
+}
+
+    /* Hover state brightens the translucent background */
+    .ui-datepicker-prev:hover,
+    .ui-datepicker-next:hover {
+        background: rgba(255, 255, 255, 0.3) !important;
+    }
+
+    /* Hide the default jQuery text/icons */
+    .ui-datepicker-prev span,
+    .ui-datepicker-next span {
+        display: none !important;
+    }
+
+    /* Inject crisp white custom icons */
+    .ui-datepicker-prev::before {
+        content: "❮";
+        color: #ffffff; /* Solid white for high contrast */
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1;
+    }
+
+    .ui-datepicker-next::before {
+        content: "❯";
+        color: #ffffff; /* Solid white for high contrast */
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1;
+    }/* FIX: Table overrides to stop MDBootstrap from breaking the layout */
+.ui-datepicker-calendar {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+    .ui-datepicker-calendar th {
+        padding: 10px 5px !important;
+        text-align: center;
+        font-weight: 600;
+        color: #667eea;
+        font-size: 12px;
+        text-transform: uppercase;
+        border: none !important;
+    }
+
+    .ui-datepicker-calendar td {
+        padding: 2px !important;
+        text-align: center;
+        border: none !important;
+    }
+
+        /* 4. Shrink the day buttons so they fit the new narrow width */
+        .ui-datepicker-calendar td a {
+            display: block;
+            width: 26px; /* Reduced from 32px */
+            height: 26px; /* Reduced from 32px */
+            line-height: 26px; /* Reduced from 32px */
+            text-decoration: none;
+            color: #333;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-size: 13px; /* Reduced from 14px */
+            margin: 0 auto;
+        }
+
+            .ui-datepicker-calendar td a:hover {
+                background: #667eea;
+                color: white;
+                transform: scale(1.1);
+            }
+
+    /* 5. Adjust the "Today" circle to match the new day button size */
+    .ui-datepicker-calendar .ui-datepicker-today a {
+        background: #f8f9fa;
+        border: 2px solid #667eea;
+        font-weight: bold;
+        line-height: 22px; /* Offset the 2px border (26 - 4) */
+    }
+
+    .ui-datepicker-calendar .ui-datepicker-current-day a,
+    .ui-datepicker-calendar .ui-state-active {
+        background: #667eea !important;
+        color: white !important;
+        font-weight: bold;
+        border: none;
+    }
+
+    .ui-datepicker-calendar .ui-datepicker-other-month a {
+        color: #ccc;
+    }
+
+/* FIX: Button Panel (Added by showButtonPanel: true) */
+.ui-datepicker-buttonpane {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+}
+
+    .ui-datepicker-buttonpane button {
+        padding: 6px 15px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .ui-datepicker-buttonpane .ui-datepicker-current {
+        background: #f0f2f5;
+        color: #333;
+    }
+
+        .ui-datepicker-buttonpane .ui-datepicker-current:hover {
+            background: #e2e6ea;
+        }
+
+    .ui-datepicker-buttonpane .ui-datepicker-close {
+        background: #667eea;
+        color: white;
+    }
+
+        .ui-datepicker-buttonpane .ui-datepicker-close:hover {
+            background: #764ba2;
+        }
+@media (max-width: 768px) {
+    .ui-datepicker {
+        width: 240px !important; /* Shrink overall width */
+        padding: 10px !important;
+    }
+
+    .ui-datepicker-header {
+        padding: 6px 8px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Shrink the dropdowns */
+    .ui-datepicker .ui-datepicker-title select {
+        font-size: 12px !important;
+        padding: 2px 20px 2px 4px !important;
+        min-width: 55px !important;
+        background-size: 10px !important; /* Smaller arrow */
+    }
+
+    /* Shrink the day headers (SU, MO, TU...) */
+    .ui-datepicker-calendar th {
+        padding: 4px 2px !important;
+        font-size: 10px !important;
+    }
+
+    /* Shrink the clickable day boxes */
+    .ui-datepicker-calendar td a {
+        width: 24px !important;
+        height: 24px !important;
+        line-height: 24px !important;
+        font-size: 12px !important;
+    }
+
+    /* Adjust today's highlighted border so it aligns with smaller boxes */
+    .ui-datepicker-calendar .ui-datepicker-today a {
+        line-height: 20px !important; /* 24px height - 4px borders */
+    }
+}
 .uploadDialog {
     position: fixed;
     top: 0;
@@ -921,4 +1170,29 @@ input[disabled] {
 }
 .f-20px{
     font-size:20px;
+}
+/* Ensure the input group items align perfectly */
+.input-group {
+    display: flex;
+    align-items: stretch; /* Forces both items to match height */
+}
+/* Style the icon span to match select/input height */
+.input-group-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 6px 0 0 6px;
+    padding: 0.65rem 1rem;
+}
+
+/* Optional: If you need to fix the select specifically */
+.input-group .form-select {
+    border-radius: 0 6px 6px 0 !important;
+    height: auto !important; /* Ensures it matches the input-group-text height */
+}
+
+.last-input {
+    padding-right: 0.1rem !important;
 }

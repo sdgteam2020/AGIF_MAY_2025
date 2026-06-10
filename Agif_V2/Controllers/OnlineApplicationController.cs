@@ -423,7 +423,7 @@ namespace Agif_V2.Controllers
                 string folderPath = applicationTypeName + armyNo + "_" + applicationIdStr;
                 string sourceFolderPath = Path.Combine(_env.WebRootPath, "TempUploads", folderPath);
                 if (!Directory.Exists(sourceFolderPath))
-                    return JsonError($"Source folder not found: {sourceFolderPath}");
+                    return JsonError("Source folder not found");
 
                 string[] pdfFiles = Directory.GetFiles(sourceFolderPath, "*.pdf");
                 if (pdfFiles.Length == 0) return JsonError("No PDF files found in the specified folder.");

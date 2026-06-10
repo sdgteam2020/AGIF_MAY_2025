@@ -458,31 +458,28 @@ function mergePdf(applicationId, isRejected, isApproved, endpoint, category) {
 
                 OpenAction(applicationId, url, val);
             } else {
-                alert('Error generating PDF: ' + response.message);
-                console.error('PDF merge failed:', response.message);
+                alert('Error generating PDF');
             }
 
         },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error Details:');
-            console.error('Status:', status);
-            console.error('Error:', error);
-            console.error('Response Text:', xhr.responseText);
-            console.error('Status Code:', xhr.status);
+        error: function (xhr) {
 
-            let errorMessage = 'An error occurred while generating the PDF.';
-            if (xhr.responseText) {
-                try {
-                    const errorResponse = JSON.parse(xhr.responseText);
-                    if (errorResponse.message) {
-                        errorMessage += ' Details: ' + errorResponse.message;
-                    }
-                } catch (e) {
-                    errorMessage += ' Server response: ' + xhr.responseText;
-                }
+            console.error("PDF generation failed.");
+
+            let message = "Unable to process your request at this time. Please try again later.";
+
+            if (xhr.status === 401) {
+                message = "Your session has expired. Please log in again.";
+            }
+            else if (xhr.status === 403) {
+                message = "You do not have permission to perform this action.";
             }
 
-            alert(errorMessage);
+            Swal.fire({
+                icon: "error",
+                title: "Operation Failed",
+                text: message
+            });
         }
     });
 }
