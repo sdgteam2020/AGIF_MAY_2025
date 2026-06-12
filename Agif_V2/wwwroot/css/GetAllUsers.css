@@ -78,3 +78,69 @@ input:checked + .slider {
     list-style: none;
     padding-left: 0;
 }
+/* --- Responsive Table Typography & Spacing --- */
+
+/* Tablet & Smaller Desktop */
+@media (max-width: 991px) {
+    #tblData th,
+    #tblData td {
+        font-size: 14px;
+        padding: 8px 6px !important;
+    }
+}
+
+/* Mobile Devices */
+@media (max-width: 767px) {
+    #tblData th,
+    #tblData td {
+        font-size: 12px;
+        padding: 6px 4px !important;
+    }
+
+    /* Shrink the page title to fit better */
+    .title-wrapper h2 {
+        font-size: 18px;
+    }
+
+    /* Stack the "Show X entries" and the Search bar neatly */
+    .dataTables_length,
+    .dataTables_filter {
+        text-align: left !important;
+        margin-bottom: 10px;
+    }
+
+        .dataTables_filter input {
+            width: 100%;
+            margin-left: 0 !important;
+        }
+}
+
+/* Small Mobile Devices */
+@media (max-width: 575px) {
+    #tblData th,
+    #tblData td {
+        font-size: 11px;
+        padding: 4px 2px !important;
+    }
+
+    /* Shrink the download button */
+    #btnDownloadExcel {
+        font-size: 11px;
+        padding: 5px 10px;
+        width: 100%; /* Make button full width on tiny screens */
+    }
+}
+#tblData thead th {
+    white-space: nowrap !important;
+    font-size: 13px !important; /* Adjust to 12px if you need it even smaller */
+    padding: 10px 8px !important; /* Optional: Tightens the padding slightly so more columns fit */
+}
+.main-wrapper .container-fluid {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+/* Optional: Slightly reduce the padding inside the white card itself */
+.card-body {
+    padding: 15px !important;
+}

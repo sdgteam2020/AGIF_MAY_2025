@@ -6471,13 +6471,13 @@ h6,
 .header .header-right .profile-box .profile-info .info .image {
     min-width: 36px; /* prevent shrink */
 }
-@media (max-width: 991px) {
+@media (max-width: 1500px) {
     .header .header-right .profile-box .profile-info .info h6 {
         display: none;
     }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1500px) {
     .header .header-right .profile-box .profile-info .info p {
         display: none;
     }
@@ -6712,3 +6712,13 @@ tbody, td, tfoot, th, thead, tr {
         color: #d50100 !important; 
         margin-right: 15px; 
     }
+/* Reduce the horizontal space between the sidebar/edges and the card */
+.main-wrapper .container-fluid {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+}
+
+/* Optional: Slightly reduce the padding inside the white card itself */
+.card-body {
+    padding: 15px !important;
+}

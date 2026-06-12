@@ -6766,3 +6766,45 @@ tbody, td, tfoot, th, thead, tr {
 .form-checkbox{
     border:3px solid #000;
 }
+/* --- Folder Tabs Styling --- */
+.folder-tabs-wrapper {
+    display: flex;
+    padding-left: 20px; /* Indent tabs slightly from the left edge */
+    gap: 5px; /* Space between the tabs */
+    margin-bottom: -1px; /* Crucial: Pulls the tabs down to overlap the card's top border */
+    position: relative;
+    z-index: 2; /* Ensures tabs sit on top of the card border */
+}
+
+.folder-tab {
+    background-color: #e2e8f0; /* Light gray background for inactive tabs */
+    color: #64748B; /* Muted text color */
+    border: 1px solid rgba(145, 158, 171, 0.2);
+    border-bottom: none;
+    padding: 10px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px 8px 0 0; /* Round the top corners only */
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+    .folder-tab:hover {
+        background-color: #cbd5e1; /* Slightly darker gray on hover */
+        color: #1A2142;
+    }
+
+    .folder-tab.active {
+        background-color: #ffffff; /* Pure white to match the card */
+        color: #1A2142; /* Dark, active text color */
+        border-bottom: 1px solid #ffffff; /* Creates the seamless blend into the card */
+        box-shadow: 0px -4px 10px -4px rgba(145, 158, 171, 0.15); /* Subtle shadow on top */
+    }
+
+/* Adjustments for the Card below the tabs */
+.custom-tab-card {
+    margin-top: 0 !important;
+    border-top-left-radius: 0; /* Squares off the corner under the tabs for a clean look */
+    position: relative;
+    z-index: 1;
+}
