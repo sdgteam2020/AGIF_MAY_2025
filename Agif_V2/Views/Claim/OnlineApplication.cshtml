@@ -28,8 +28,8 @@
 }
 
 
- <link href="~/css/onlineapplication.css" rel="stylesheet" />
- <script src="~/js/crypto-js.min.js"></script>
+<link href="~/css/onlineapplication.css" rel="stylesheet" />
+<script src="~/js/crypto-js.min.js"></script>
 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 <div class="container-fluid mt-2">
@@ -43,39 +43,38 @@
         <form id="myMaturityForm" class="needs-validation mb-8" name="myForm" method="post" action="/Claim/OnlineApplication" enctype="multipart/form-data">
             <!-- Personal Info -->
             @Html.AntiForgeryToken()
-             <span id="spanhdns" class="d-none">@ViewBag.hiddenClaimSalt</span>
+            <span id="spanhdns" class="d-none">@ViewBag.hiddenClaimSalt</span>
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
-                    <button class="accordion-button fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
+                    <button class="accordion-button fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" data-bs-target="#personalInfo" aria-expanded="true">
                         <span class="w-100 text-center text-decoration-underline"><strong>Personal Details </strong></span>
                     </button>
                 </h2>
                 <div id="personalInfo" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            <div class="col-12 col-sm-6">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-4 col-md-4">
                                         <div class="input-group mb-2">
-                                            <div class="col-md-2 col-sm-1 col-1">
-                                                <span class="input-group-text">👮</span>
-                                            </div>
+                                            <span class="input-group-text">👮</span>
                                             
-                                            <div class="col-md-10 col-sm-11 col-11">
-                                                <select class="select form-select " data-mdb-filter="true" id="armyPrefix" name="ClaimCommonData.ArmyPrefix" required data-army-prefix="@if (Model.ClaimCommonData != null)
+                                            <select class="select form-select " data-mdb-filter="true" id="armyPrefix" name="ClaimCommonData.ArmyPrefix" required data-army-prefix="@if (Model.ClaimCommonData != null)
                                                 {
-                                                    @Model.ClaimCommonData.ArmyPrefix;
+                                                    @Model.ClaimCommonData.ArmyPrefix
+                                                    ;
                                                     
-                                                }">
-                                                </select>
-                                                 <label class="form-label select-label " for="armyPrefix">Prefix</label>
-                                                @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPrefix, "", new { @class = "text-danger" })
-                                            </div>
+                                                }
+                                                ">
+                                            </select>
+                                            <label class="form-label select-label " for="armyPrefix">Prefix</label>
+                                            @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPrefix, "", new { @class = "text-danger" })
+                                            
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-4 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -85,7 +84,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.Number, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-4 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🧩</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -97,29 +96,26 @@
                                     </div>
                                 </div>
                             </div>
-                                @if(Category != "3")
-                                {
-                                <div class="col-md-6">
+                            @if (Category != "3")
+                            {
+                                <div class="col-12 col-sm-6">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-4 col-md-4">
                                             <div class="input-group mb-2">
-                                                <div class="col-md-2">
-                                                    <span class="input-group-text">👮</span>
-                                                </div>
-                                                <div class="col-md-10">
-                                                    <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
-                                                        {
-                                                            @Model.ClaimCommonData.OldArmyPrefix
-                                                            ;
-                                                        }
-                                                        ">
-                                                    </select>
-                                                    <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
-                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
-                                                </div>
+                                                <span class="input-group-text">👮</span>
+                                                <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
+                                                    {
+                                                        @Model.ClaimCommonData.OldArmyPrefix
+                                                        ;
+                                                    }
+                                                    " required>
+                                                </select>
+                                                <label class="form-label select-label ">Prefix</label>
+                                                @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
+                                                
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-4 col-md-4">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
@@ -129,7 +125,7 @@
                                             </div>
                                             @Html.ValidationMessageFor(m => m.ClaimCommonData.OldNumber, "", new { @class = "text-danger" })
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-4 col-md-4">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🧩</span>
                                                 <div class="form-outline" data-mdb-input-init>
@@ -143,32 +139,30 @@
                                     </div>
                                 </div>
 
-                                }
+                            }
 
                             
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">👮</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <select class="select form-select" data-mdb-filter="true" id="ddlrank" name="ClaimCommonData.DdlRank" required data-rank-prefix="@if (Model.ClaimCommonData != null)
+                                    <span class="input-group-text">👮</span>
+                                    <select class="select form-select" data-mdb-filter="true" id="ddlrank" name="ClaimCommonData.DdlRank" required data-rank-prefix="@if (Model.ClaimCommonData != null)
                                         {
                                             @Model.ClaimCommonData.DdlRank
                                             ;
-                                        }">
-                                        </select>
-                                        <label class="form-label select-label" >Rank & Trade</label>
-                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.DdlRank, "", new { @class = "text-danger" })
-                                    </div>
+                                        }
+                                        ">
+                                    </select>
+                                    <label class="form-label select-label">Rank & Trade</label>
+                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.DdlRank, "", new { @class = "text-danger" })
+                                   
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName"  maxlength="20"/>
+                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName" required maxlength="20" />
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
                                         <div class="invalid-feedback">
                                             Please choose a username.
@@ -178,37 +172,35 @@
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.ApplicantName, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">💼</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <select class="form-select select js-setregcorp" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps"  required data-regt-prefix="@if (Model.ClaimCommonData != null)
+                                    <span class="input-group-text">💼</span>
+                                    <select class="form-select select js-setregcorp" data-mdb-filter="true" id="regtCorps" aria-label="Regt/Corps" name="ClaimCommonData.RegtCorps" required data-regt-prefix="@if (Model.ClaimCommonData != null)
                                         {
                                             @Model.ClaimCommonData.RegtCorps
                                             ;
-                                        }">
-                                        </select>
-                                        <label class="form-label select-label ">Regt/Corps</label>
-                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
-                                    </div>
+                                        }
+                                        ">
+                                    </select>
+                                    <label class="form-label select-label ">Regt/Corps</label>
+                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
+                                    
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="dateOfBirth" aria-label="Date of Birth" name="ClaimCommonData.DateOfBirth" value="@Model.ClaimCommonData?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                                placeholder="dd/mm/yyyy" autocomplete="off">
+                                               placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">DOB</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -221,62 +213,56 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">👮</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DropDownListFor(m => m.ClaimCommonData.ExtnOfService,
-                                                 new SelectList(new[] {
+                                    <span class="input-group-text">👮</span>
+                                    @Html.DropDownListFor(m => m.ClaimCommonData.ExtnOfService,
+                                             new SelectList(new[] {
                                         new { Value = " ", Text = "Select one" },
                                         new { Value = "Yes", Text = "Yes" },
                                         new { Value = "No", Text = "No" }
-                                        }, "Value", "Text"),
-                                                 new
-                                                 {
-                                                     @class = "select form-select",
-                                                     id = "ExtnOfService"
+                                    }, "Value", "Text"),
+                                             new
+                                             {
+                                                 @class = "select form-select",
+                                                 id = "ExtnOfService"
                                                    
-                                                 })
-                                        <label class="form-label select-label ">Extn of Service in Present Rank</label>
-                                    </div>
+                                             })
+                                    <label class="form-label select-label ">Extn of Service in Present Rank</label>
+                                    
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" class="form-control DopPicker js-format-date" id="dateOfPromotion" aria-label="Date of Promotion" name="ClaimCommonData.DateOfPromotion" value="@Model.ClaimCommonData?.DateOfPromotion?.ToString("yyyy-MM-dd")" disabled
-                                                 placeholder="dd/mm/yyyy" autocomplete="off">
+                                               placeholder="dd/mm/yyyy" autocomplete="off">
                                         <label class="form-label select-label ">Date of Prom(Sub Maj Only)</label>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">👮</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        @Html.DropDownListFor(m => m.ClaimCommonData.PrematureRetirement,
-                                                                                new SelectList(new[] {
+                                    <span class="input-group-text">👮</span>
+                                    @Html.DropDownListFor(m => m.ClaimCommonData.PrematureRetirement,
+                                                                            new SelectList(new[] {
                                                                                 new { Value = false, Text = "No" },
                                                                                 new { Value = true, Text = "Yes" }
-                                                                                }, "Value", "Text"),
-                                                                                new
-                                                                                {
-                                                                                    @class = "select form-select",
-                                                                                    id = "PrematureRetirement"
-                                                                                })
-                                        <label class="form-label select-label ">Premature Retirement</label>
-                                    </div>
+                                                                            }, "Value", "Text"),
+                                                                            new
+                                                                            {
+                                                                                @class = "select form-select",
+                                                                                id = "PrematureRetirement"
+                                                                            })
+                                    <label class="form-label select-label ">Premature Retirement</label>
+                                    
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -286,17 +272,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="aadharCardNo" name="ClaimCommonData.AadharCardNo" class="form-control"  value="@Model.ClaimCommonData?.AadharCardNo"  maxlength="14" required />
+                                        <input type="text" id="aadharCardNo" name="ClaimCommonData.AadharCardNo" class="form-control" value="@Model.ClaimCommonData?.AadharCardNo" maxlength="14" required />
                                         <label class="form-label select-label ">Aadhar Card No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.AadharCardNo, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -308,7 +294,7 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📱</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -319,7 +305,7 @@
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.MobileNo, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-12 col-sm-6 col-md-3">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📧</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -345,7 +331,7 @@
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.EmailDomain, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -355,7 +341,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -373,14 +359,14 @@
             <!--Regt/Unit Details-->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" data-bs-target="#regt_Unit" aria-expanded="false">
                         <span class="w-100 text-center text-decoration-underline"><strong>Regt/Unit Details</strong></span>
                     </button>
                 </h2>
                 <div id="regt_Unit" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💼</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -390,7 +376,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📒</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -401,11 +387,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">🪖</span>
-                                    </div>
+                                    <span class="input-group-text">🪖</span>
                                     <div class="form-outline" data-mdb-input-init">
                                         @Html.EditorFor(m => m.ClaimCommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @dirName = "ParentUnit's name" } })
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.ParentUnit, "", new { @class = "text-danger" })
@@ -417,11 +401,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">🪖</span>
-                                    </div>
                                     <div class="form-outline" data-mdb-input-init>
                                         @Html.EditorFor(model => model.ClaimCommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @dirName = "PresentUnit's name" } })
                                         @Html.ValidationMessageFor(model => model.ClaimCommonData.PresentUnit, "", new { @class = "text-danger" })
@@ -431,7 +413,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -441,24 +423,22 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.ClaimCommonData.PresentUnitPin, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
-                                        <span class="input-group-text">📮</span>
-                                    </div>
-                                    <div class="col-md-10">
-                                        <select class="form-select select" data-mdb-filter="true" id="armyPostOffice" name="ClaimCommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.ClaimCommonData != null)
+                                    <span class="input-group-text">📮</span>
+                                    <select class="form-select select" data-mdb-filter="true" id="armyPostOffice" name="ClaimCommonData.ArmyPostOffice" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.ClaimCommonData != null)
                                         {
                                             @Model.ClaimCommonData.ArmyPostOffice
                                             ;
-                                        }">
-                                        </select>
-                                        <label class="form-label select-label ">Army Post Office</label>
-                                        @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPostOffice, "", new { @class = "text-danger" })
-                                    </div>
+                                        }
+                                        ">
+                                    </select>
+                                    <label class="form-label select-label ">Army Post Office</label>
+                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPostOffice, "", new { @class = "text-danger" })
+                                    
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -468,7 +448,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏢</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -487,19 +467,19 @@
             <!-- Address -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" data-bs-target="#address" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Home Address</strong></span>
                     </button>
                 </h2>
-                <div id="address" class="accordion-collapse collapse" >
+                <div id="address" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15"  required value="@Model.AddressDetails?.Vill_Town" />
+                                        <input type="text" id="Vill_Town" name="AddressDetails.Vill_Town" class="form-control form-control-Alphabets" maxlength="15" required value="@Model.AddressDetails?.Vill_Town" />
                                         <label class="form-label" for="Vill_Town">Village/Town</label>
                                     </div>
 
@@ -507,7 +487,7 @@
                                 @Html.ValidationMessageFor(m => m.AddressDetails.Vill_Town, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -518,12 +498,9 @@
                                 @Html.ValidationMessageFor(m => m.AddressDetails.PostOffice, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2 col-sm-1 col-1">
                                         <span class="input-group-text">🗺️</span>
-                                    </div>
-                                    <div class="col-md-10 col-sm-11 col-11">
                                         <select class="select form-select"
                                                 data-mdb-filter="true"
                                                 id="stateDropdown"
@@ -533,19 +510,16 @@
                                         </select>
                                         <label class="form-label select-label" for="stateDropdown">State</label>
                                         @Html.ValidationMessageFor(m => m.AddressDetails.State, "", new { @class = "text-danger" })
-                                    </div>
+                                    
                                 </div>
                             </div>
 
 
 
                             <!-- District dropdown -->
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2 col-sm-1 col-1">
                                         <span class="input-group-text">🗺️</span>
-                                    </div>
-                                    <div class="col-md-10 col-sm-11 col-11">
                                         <select class="select form-select"
                                                 data-mdb-filter="true"
                                                 id="districtDropdown"
@@ -555,15 +529,15 @@
                                         </select>
                                         <label class="form-label select-label" for="districtDropdown">District</label>
                                         @Html.ValidationMessageFor(m => m.AddressDetails.Distt, "", new { @class = "text-danger" })
-                                    </div>
+                                    
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt js-unit-pin"  required maxlength="6" value="@Model.AddressDetails?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt js-unit-pin" required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
@@ -579,38 +553,38 @@
             <!-- Salary Account Details -->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" data-bs-target="#salaryAcctDetails" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Salary Account Details</strong></span>
                     </button>
                 </h2>
-                <div id="salaryAcctDetails" class="accordion-collapse collapse" >
+                <div id="salaryAcctDetails" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
                             
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" maxlength="17" value="@Model.AccountDetails?.SalaryAcctNo" required autocomplete="off"/>
+                                        <input type="password" id="salaryAcctNo" name="AccountDetails.SalaryAcctNo" class="form-control" maxlength="17" value="@Model.AccountDetails?.SalaryAcctNo" required autocomplete="off" />
                                         <label class="form-label select-label ">Applicant's Salary Acct No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.SalaryAcctNo, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control"  maxlength="17" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
+                                        <input type="text" id="confirmSalaryAcctNo" name="AccountDetails.ConfirmSalaryAcctNo" class="form-control" maxlength="17" value="@Model.AccountDetails?.ConfirmSalaryAcctNo" required />
                                         <label class="form-label select-label ">Re-Enter Salary Acct No</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -621,38 +595,24 @@
                                 @Html.ValidationMessageFor(m => m.AccountDetails.IfsCode, "", new { @class = "text-danger" })
                             </div>
 
-                         @*   <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <span class="input-group-text">🏦</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control form-control-Alphabets"  maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
-                                        <label class="form-label select-label ">Name of Bank</label>
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBank, "", new { @class = "text-danger" })
-                            </div>
-                            *@
 
-                              <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">🏦</span>
-                                    </div>
-                                    <div class="col-md-10">
                                         <select class="select form-select" id="BankId" name="AccountDetails.BankId" data-mdb-filter="true" required data-Bank-Id="@if (Model.AccountDetails != null)
-                                        {
-                                                    @Model.AccountDetails.BankId
+                                            {
+                                                @Model.AccountDetails.BankId
                                                 ;
-                                        }
-                                        ">
+                                            }
+                                            ">
                                         </select>
                                         <label class="form-label select-label " for="BankId">Bank Name</label>
                                         @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
-                                    </div>
+                                    
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -671,7 +631,7 @@
             <!--Exisitng Agif Loan-->
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed fs-5 acc-btn h-50px"  type="button" data-bs-toggle="collapse" data-bs-target="#ExistingAGIFLoans" aria-expanded="false">
+                    <button class="accordion-button collapsed fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" data-bs-target="#ExistingAGIFLoans" aria-expanded="false">
 
                         <span class="w-100 text-center text-decoration-underline"><strong>Details of Existing AGIF Loans</strong></span>
                     </button>
@@ -695,7 +655,7 @@
                                         </button>
 
                                         <div class="row g-3">
-                                            <div class="col-md-6">
+                                            <div class="col-12 col-sm-12 col-md-6">
                                                 <label for="loanType" class="form-label"><strong>Choose your loan type</strong></label>
                                                 <select class="form-select" id="loanType">
                                                     <option value="">Select Loan Type</option>
@@ -711,11 +671,11 @@
                                         <div id="hbaFields" class="loan-type-section">
                                             <div class="row g-3 mt-3">
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="hbaDate" aria-label="Date of Birth" name="ClaimCommonData.House_Building_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Building_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" >
+                                                            <input type="date" class="form-control" id="hbaDate" aria-label="Date of Birth" name="ClaimCommonData.House_Building_Date_of_Loan_taken" value="@Model.ClaimCommonData?.House_Building_Date_of_Loan_taken?.ToString("yyyy-MM-dd")">
                                                             <label class="form-label select-label ">House Building Date of Loan taken</label>
                                                         </div>
 
@@ -723,11 +683,11 @@
                                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Building_Date_of_Loan_taken, "", new { @class = "text-danger" })
                                                 </div>
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan" class="form-control isNumerictxt"  maxlength="8" />
+                                                            <input type="text" id="hbaDuration" name="ClaimCommonData.House_Building_Duration_of_Loan" value="@Model.ClaimCommonData?.House_Building_Duration_of_Loan" class="form-control isNumerictxt" maxlength="8" />
                                                             <label class="form-label" for="hbaDuration">House Building Duration of Loan</label>
                                                         </div>
 
@@ -736,7 +696,7 @@
                                                 </div>
 
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
@@ -754,7 +714,7 @@
                                         <!-- HRA Fields -->
                                         <div id="hraFields" class="loan-type-section">
                                             <div class="row g-3 mt-3">
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
@@ -766,7 +726,7 @@
                                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.House_Repair_Advance_Date_of_Loan_taken, "", new { @class = "text-danger" })
                                                 </div>
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
@@ -779,7 +739,7 @@
                                                 </div>
 
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
@@ -796,11 +756,11 @@
                                         <!-- CA Fields -->
                                         <div id="caFields" class="loan-type-section">
                                             <div class="row g-3 mt-3">
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="caDate" aria-label="Date of Birth" name="ClaimCommonData.Conveyance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Conveyance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" >
+                                                            <input type="date" class="form-control" id="caDate" aria-label="Date of Birth" name="ClaimCommonData.Conveyance_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Conveyance_Date_of_Loan_taken?.ToString("yyyy-MM-dd")">
                                                             <label class="form-label select-label" for="caDate">Conveyance Date of Loan taken</label>
                                                         </div>
 
@@ -808,11 +768,11 @@
                                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.Conveyance_Date_of_Loan_taken, "", new { @class = "text-danger" })
                                                 </div>
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control isNumerictxt"  maxlength="8" />
+                                                            <input type="text" id="caDuration" name="ClaimCommonData.Conveyance_Duration_of_Loan" value="@Model.ClaimCommonData?.Conveyance_Duration_of_Loan" class="form-control isNumerictxt" maxlength="8" />
                                                             <label class="form-label" for="caDuration">Conveyance Duration of Loan</label>
                                                         </div>
 
@@ -821,11 +781,11 @@
                                                 </div>
 
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="caAmount" name="ClaimCommonData.Conveyance_Amount_Taken" value="@Model.ClaimCommonData?.Conveyance_Amount_Taken" class="form-control isNumerictxt"  maxlength="8" pattern="^\d{3,8}$" />
+                                                            <input type="text" id="caAmount" name="ClaimCommonData.Conveyance_Amount_Taken" value="@Model.ClaimCommonData?.Conveyance_Amount_Taken" class="form-control isNumerictxt" maxlength="8" pattern="^\d{3,8}$" />
                                                             <label class="form-label" for="caAmount">Conveyance Amount Taken</label>
                                                         </div>
 
@@ -838,11 +798,11 @@
                                         <!-- PCA Fields -->
                                         <div id="pcaFields" class="loan-type-section">
                                             <div class="row g-3 mt-3">
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🎂</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="date" class="form-control" id="pcaDate" aria-label="Date of Birth" name="ClaimCommonData.Computer_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Computer_Date_of_Loan_taken?.ToString("yyyy-MM-dd")" >
+                                                            <input type="date" class="form-control" id="pcaDate" aria-label="Date of Birth" name="ClaimCommonData.Computer_Date_of_Loan_taken" value="@Model.ClaimCommonData?.Computer_Date_of_Loan_taken?.ToString("yyyy-MM-dd")">
                                                             <label class="form-label select-label" for="pcaDate">Computer Date of Loan taken</label>
                                                         </div>
 
@@ -850,11 +810,11 @@
                                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.Computer_Date_of_Loan_taken, "", new { @class = "text-danger" })
                                                 </div>
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control isNumerictxt"  maxlength="8" />
+                                                            <input type="text" id="pcaDuration" name="ClaimCommonData.Computer_Duration_of_Loan" value="@Model.ClaimCommonData?.Computer_Duration_of_Loan" class="form-control isNumerictxt" maxlength="8" />
                                                             <label class="form-label" for="pcaDuration">Computer Duration of Loan</label>
                                                         </div>
 
@@ -863,11 +823,11 @@
                                                 </div>
 
 
-                                                <div class="col-md-3">
+                                                <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                                     <div class="input-group mb-2">
                                                         <span class="input-group-text">🔟</span>
                                                         <div class="form-outline" data-mdb-input-init>
-                                                            <input type="text" id="pcaAmount" name="ClaimCommonData.Computer_Amount_Taken" value="@Model.ClaimCommonData?.Computer_Amount_Taken" class="form-control isNumerictxt"  maxlength="8" pattern="^\d{3,8}$" />
+                                                            <input type="text" id="pcaAmount" name="ClaimCommonData.Computer_Amount_Taken" value="@Model.ClaimCommonData?.Computer_Amount_Taken" class="form-control isNumerictxt" maxlength="8" pattern="^\d{3,8}$" />
                                                             <label class="form-label" for="pcaAmount">Computer Amount Taken</label>
                                                         </div>
 
@@ -883,7 +843,7 @@
 
                                         <div id="loanGridContainer" class="d-none">
                                             <h5 class="mt-3">Added Loans</h5>
-                                            <table class="table d-none" id="loanGrid" >
+                                            <table class="table d-none" id="loanGrid">
                                                 <thead>
                                                     <tr>
                                                         <th>Loan Type</th>
@@ -905,7 +865,7 @@
 
                                 <div class="row g-3">
 
-                                    <div class="col-md-7">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-7">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -917,13 +877,10 @@
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.AmountOfWithdrawalRequired, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-5">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-5 col-xl-5">
                                         <div class="input-group mb-2">
-                                            <div class="col-md-1">
                                                 <span class="input-group-text">📚</span>
-                                            </div>
-                                            <div class="col-md-11">
-
+                                            
                                                 @Html.DropDownListFor(m => m.ClaimCommonData.Noofwithdrawal,
                                                          new SelectList(new[] {
                                                 new { Value = " ", Text = "Select one" },
@@ -937,7 +894,7 @@
 
                                                          })
                                                 <label class="form-label select-label ">No of withdrawal(Maximum two withdrawals permitted in entire service)</label>
-                                                </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -954,18 +911,18 @@
                     <!-- HBA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline"><strong>For Education only (Applicable for children studying in 12th Class and above)</strong></span>
                             </button>
                         </h2>
                         <div id="educationDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👶</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="txtChildName" name="EducationDetails.ChildName" class="form-control form-control-Alphabets" value="@Model.EducationDetails?.ChildName" required  maxlength="20"/>
+                                                <input type="text" id="txtChildName" name="EducationDetails.ChildName" class="form-control form-control-Alphabets" value="@Model.EducationDetails?.ChildName" required maxlength="20" />
                                                 <label class="form-label" for="txtChildName">Name of Child</label>
                                                 <div class="invalid-feedback">
                                                     Please choose a username.
@@ -975,12 +932,12 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.ChildName, "", new { @class = "text-danger" })
 
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🎂</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="EducationdateOfBirth" aria-label="Education date Of Birth" name="EducationDetails.DateOfBirth" value="@Model.EducationDetails?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                                        placeholder="dd/mm/yyyy" autocomplete="off">
+                                                       placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">DOB</label>
                                             </div>
 
@@ -988,68 +945,42 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.DateOfBirth, "", new { @class = "text-danger" })
                                     </div>
 
-                                    @*<div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🚻</span>
                                             <div class="form-outline">
                                                 <input type="text" class="form-control" id="EducationGenderDisplay" readonly
-                                                       value="@Model.EducationDetails?.Gender"                                                      
+                                                       value="@Model.EducationDetails?.Gender"
+                                                       placeholder=" "
                                                        autocomplete="off">
-                                                <label class="form-label select-label">Gender of Child</label>
+                                                <label class="form-label">Gender of Child</label>
+                                            </div>
 
-                                                <!-- Hidden radio group that appears on click -->
-                                                <div id="genderRadioGroup" class="gender-dropdown">
-                                                    <div class="btn-group w-100" role="group" aria-label="Gender of Child" >
-                                                        @Html.RadioButtonFor(m => m.EducationDetails.Gender, "Male",
-                                                             new { @class = "btn-check gender-radio", id = "EduGenderMale", required = "required", autocomplete = "off", data_gender = "Male" })
-                                                        <label class="btn btn-outline-primary gender-male mb-0" for="EduGenderMale">Male</label>
+                                       
 
-                                                        @Html.RadioButtonFor(m => m.EducationDetails.Gender, "Female",
-                                                             new { @class = "btn-check gender-radio", id = "EduGenderFemale", autocomplete = "off", data_gender = "Female" })
-                                                        <label class="btn btn-outline-danger gender-female mb-0" for="EduGenderFemale">Female</label>
-                                                    </div>
+                                            <div id="genderRadioGroup" class="gender-dropdown">
+                                                <div class="btn-group w-100">
+                                                    <input type="radio" class="btn-check gender-radio" name="EducationDetails.Gender" id="EduGenderMale" value="Male" required>
+                                                    <label class="btn btn-outline-primary  gender-male mb-0" for="EduGenderMale">Male</label>
+
+                                                    <input type="radio" class="btn-check gender-radio" name="EducationDetails.Gender" id="EduGenderFemale" value="Female">
+                                                    <label class="btn btn-outline-danger gender-female mb-0" for="EduGenderFemale">Female</label>
                                                 </div>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.EducationDetails.Gender, "", new { @class = "text-danger" })
-                                    </div>*@
-
-                                    <div class="col-md-2">
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text">🚻</span>
-                                        <div class="form-outline">
-                                            <input type="text" class="form-control" id="EducationGenderDisplay" readonly
-                                                   value="@Model.EducationDetails?.Gender"
-                                                   placeholder=" "
-                                                   autocomplete="off">
-                                            <label class="form-label">Gender of Child</label>
-                                        </div>
-
-                                       
-
-                                        <div id="genderRadioGroup" class="gender-dropdown" >
-                                            <div class="btn-group w-100">
-                                                <input type="radio" class="btn-check gender-radio" name="EducationDetails.Gender" id="EduGenderMale" value="Male" required>
-                                                <label class="btn btn-outline-primary  gender-male mb-0" for="EduGenderMale">Male</label>
-
-                                                <input type="radio" class="btn-check gender-radio" name="EducationDetails.Gender" id="EduGenderFemale" value="Female" >
-                                                <label class="btn btn-outline-danger gender-female mb-0" for="EduGenderFemale">Female</label>
-                                            </div>
-                                        </div>
                                     </div>
-                                    @Html.ValidationMessageFor(m => m.EducationDetails.Gender, "", new { @class = "text-danger" })
-                                    </div>
+
                                     
-
 
 
                                     @if (Category == "1")
                                     {
-                                        <div class="col-md-2">
+                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
-                                                    <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo" class="form-control" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" autocomplete="off"/>
+                                                    <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo" class="form-control" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" autocomplete="off" />
                                                     <label class="form-label" for="DOPartIINo">DO Part-II No</label>
                                                 </div>
 
@@ -1061,11 +992,11 @@
 
                                     else
                                     {
-                                        <div class="col-md-2">
+                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
-                                                    <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo" class="form-control" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" autocomplete="off"/>
+                                                    <input type="text" id="DOPartIINo" name="EducationDetails.DOPartIINo" value="@Model.EducationDetails?.DOPartIINo" class="form-control" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" autocomplete="off" />
                                                     <label class="form-label" for="DOPartIINo">DO Part-II No</label>
                                                 </div>
 
@@ -1076,24 +1007,23 @@
                                     }
 
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📅</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="DOPartIIDate" aria-label="DO Part II Date" name="EducationDetails.DoPartIIDate" value="@Model.EducationDetails?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
-                                                        placeholder="dd/mm/yyyy" autocomplete="off">
+                                                       placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label">DO Part-II Date</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.EducationDetails.DoPartIIDate, "", new { @class = "text-danger" })
                                     </div>
 
-                                   @*
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_Part_II_Order" name="EducationDetails.AttachPartIIOrder" class="form-control custom-file-text file-upload" required data-text="Attach Part-II Order" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p> <!-- Error message container -->
+                                                <p class="file-error-message text-danger"></p> <!-- Error message container -->
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1129,9 +1059,7 @@
 
                                     <div class="col-md-2">
                                         <div class="input-group mb-2">
-                                            <div class="col-md-2">
                                                 <span class="input-group-text">📚</span>
-                                            </div>
                                             <div class="col-md-10">
                                                 
                                                 @Html.DropDownListFor(m => m.EducationDetails.CourseForWithdrawal,
@@ -1145,19 +1073,19 @@
                                                      {
                                                          @class = "select form-select",
                                                          id = "CourseForWithdrawal",
-                                                          required = "required"
+                                                         required = "required"
                                                      })
                                                 <label class="form-label select-label ">Name of Course/Class for withdrawal required</label>
-                                                 </div>
+                                            </div>
                                         </div>
                                     </div>
 
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🎓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="NameOfcollege" name="EducationDetails.CollegeInstitution" value="@Model.EducationDetails?.CollegeInstitution" class="form-control form-control-Alphabets"  required maxlength="30" />
+                                                <input type="text" id="NameOfcollege" name="EducationDetails.CollegeInstitution" value="@Model.EducationDetails?.CollegeInstitution" class="form-control form-control-Alphabets" required maxlength="30" />
                                                 <label class="form-label" for="NameOfcollege">
                                                     Name of College/Institution where studying
                                                 </label>
@@ -1167,13 +1095,13 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.CollegeInstitution, "", new { @class = "text-danger" })
                                     </div>
 
-                                @*
-                                    <div class="col-md-4">
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_Bonafide_letter" name="EducationDetails.AttachBonafideletter" class="form-control custom-file-text file-upload" data-text="
-        Attach Bonafide cert/admission letter" required accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
+                                                Attach Bonafide cert/admission letter" required accept=".pdf" />
+                                                <p class="file-error-message text-danger"></p>
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1204,13 +1132,11 @@
                                          </div>
                                     </div>
 
-
-
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💸</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control"  required maxlength="10" />
+                                                <input type="text" id="TotalExpenditure" name="EducationDetails.TotalExpenditure" value="@Model.EducationDetails?.TotalExpenditure" class="form-control" required maxlength="10" />
                                                 <label class="form-label" for="TotalExpenditure">Total Expenditure</label>
                                             </div>
 
@@ -1218,12 +1144,12 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditure, "", new { @class = "text-danger" })
                                     </div>
 
-                                    @*
-                                    <div class="col-md-4">
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="TotalexpenditureFile" name="EducationDetails.TotalExpenditureFile" class="form-control custom-file-text file-upload" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
+                                                <p class="file-error-message text-danger"></p>
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1272,18 +1198,18 @@
                     <!-- Marriage Purpose -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline"><strong>For Marriage Purpose Only</strong></span>
                             </button>
                         </h2>
                         <div id="educationDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👶</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="txtNameOfChild" name="Marriageward.NameOfChild" class="form-control form-control-Alphabets" value="@Model.Marriageward?.NameOfChild" required maxlength="20"/>
+                                                <input type="text" id="txtNameOfChild" name="Marriageward.NameOfChild" class="form-control form-control-Alphabets" value="@Model.Marriageward?.NameOfChild" required maxlength="20" />
                                                 <label class="form-label" for="txtNameOfChild">Name of Child</label>
                                                 <div class="invalid-feedback">
                                                     Please choose a username.
@@ -1293,12 +1219,12 @@
                                         @Html.ValidationMessageFor(m => m.Marriageward.NameOfChild, "", new { @class = "text-danger" })
 
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🎂</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="MarriagewarddateOfBirth" aria-label="Date of Birth" name="Marriageward.DateOfBirth" value="@Model.Marriageward?.DateOfBirth?.ToString("yyyy-MM-dd")" required
-                                                        placeholder="dd/mm/yyyy" autocomplete="off">
+                                                       placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">DOB</label>
                                             </div>
 
@@ -1306,67 +1232,40 @@
                                         @Html.ValidationMessageFor(m => m.Marriageward.DateOfBirth, "", new { @class = "text-danger" })
                                     </div>
 
-                                    @*<div class="col-md-2">
+
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🚻</span>
-                                            <div class="form-outline" data-mdb-input-init>
+                                            <div class="form-outline">
                                                 <input type="text" class="form-control" id="MarriageGenderDisplay" readonly
                                                        value="@Model.Marriageward?.Gender"
                                                        placeholder=" "
                                                        autocomplete="off">
-                                                <label class="form-label select-label">Gender of Child</label>
+                                                <label class="form-label">Gender of Child</label>
+                                            </div>
 
-                                                <!-- Hidden radio group that appears on click -->
-                                                <div id="genderRadioGroup" class="gender-dropdown">
-                                                    <div class="btn-group w-100" role="group" aria-label="Gender of Child">
-                                                        @Html.RadioButtonFor(m => m.Marriageward.Gender, "Male",
-                                                             new { @class = "btn-check gender-radio", id = "MarrGenderMale", required = "required", autocomplete = "off", data_gender = "Male" })
-                                                        <label class="btn btn-outline-primary gender-male mb-0" for="MarrGenderMale">Male</label>
+                                       
 
-                                                        @Html.RadioButtonFor(m => m.Marriageward.Gender, "Female",
-                                                             new { @class = "btn-check gender-radio", id = "MarrGenderFemale", autocomplete = "off", data_gender = "Female" })
-                                                        <label class="btn btn-outline-danger gender-female mb-0" for="MarrGenderFemale">Female</label>
-                                                    </div>
+                                            <div id="genderRadioGroup" class="gender-dropdown">
+                                                <div class="btn-group w-100">
+                                                    <input type="radio" class="btn-check gender-radio" name="Marriageward.Gender" id="EduGenderMale" value="Male" required>
+                                                    <label class="btn btn-outline-primary  gender-male mb-0" for="EduGenderMale">Male</label>
+
+                                                    <input type="radio" class="btn-check gender-radio" name="Marriageward.Gender" id="EduGenderFemale" value="Female">
+                                                    <label class="btn btn-outline-danger gender-female mb-0" for="EduGenderFemale">Female</label>
                                                 </div>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.Marriageward.Gender, "", new { @class = "text-danger" })
-                                    </div>*@
-
-
-                                    <div class="col-md-2">
-                                    <div class="input-group mb-2">
-                                        <span class="input-group-text">🚻</span>
-                                        <div class="form-outline">
-                                            <input type="text" class="form-control" id="MarriageGenderDisplay" readonly
-                                                   value="@Model.Marriageward?.Gender"
-                                                   placeholder=" "
-                                                   autocomplete="off">
-                                            <label class="form-label">Gender of Child</label>
-                                        </div>
-
-                                       
-
-                                        <div id="genderRadioGroup" class="gender-dropdown" >
-                                            <div class="btn-group w-100">
-                                                <input type="radio" class="btn-check gender-radio" name="Marriageward.Gender" id="EduGenderMale" value="Male" required>
-                                                <label class="btn btn-outline-primary  gender-male mb-0" for="EduGenderMale">Male</label>
-
-                                                <input type="radio" class="btn-check gender-radio" name="Marriageward.Gender" id="EduGenderFemale" value="Female" >
-                                                <label class="btn btn-outline-danger gender-female mb-0" for="EduGenderFemale">Female</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @Html.ValidationMessageFor(m => m.Marriageward.Gender, "", new { @class = "text-danger" })
                                     </div>
 
                                     @if (Category == "1")
                                     {
-                                        <div class="col-md-2">
+                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
-                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"  required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" autocomplete="off"/>
+                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control" required data-inputmask="'mask': '99/999/9999', 'placeholder': '00/012/2025'" placeholder="00/012/2025" autocomplete="off" />
                                                     <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
                                                 </div>
 
@@ -1377,11 +1276,11 @@
 
                                     else
                                     {
-                                        <div class="col-md-2">
+                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
-                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control"  required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" autocomplete="off"/>
+                                                    <input type="text" id="MDOPartIINo" name="Marriageward.DOPartIINo" value="@Model.Marriageward?.DOPartIINo" class="form-control" required data-inputmask="'mask': '9/9999/9999/9999', 'placeholder': '0/0000/0000/2025'" placeholder="0/0000/0000/2025" autocomplete="off" />
                                                     <label class="form-label" for="MDOPartIINo">DO Part-II No</label>
                                                 </div>
 
@@ -1391,24 +1290,23 @@
                                     }
 
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📅</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="MarriagewardDOPartIIDate" aria-label="Date of Birth" name="Marriageward.DoPartIIDate" value="@Model.Marriageward?.DoPartIIDate?.ToString("yyyy-MM-dd")" required
-                                                        placeholder="dd/mm/yyyy" autocomplete="off">
+                                                       placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">DO Part-II Date</label>
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.Marriageward.DoPartIIDate, "", new { @class = "text-danger" })
                                     </div>
-                                    
-                                    @*
-                                    <div class="col-md-4">
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text file-upload" required data-text="Attach Part-II Order" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
+                                                <p class="file-error-message text-danger"></p>
 
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
                                             </div>
@@ -1441,7 +1339,7 @@
                                          </div>
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1453,12 +1351,12 @@
                                         @Html.ValidationMessageFor(m => m.Marriageward.AgeOfWard, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📅</span>
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="text" class="form-control monthPicker js-format-date js-monthpicker-date" id="DateOfMarriage" aria-label="Date of Birth" name="Marriageward.DateofMarriage" value="@Model.Marriageward?.DateofMarriage?.ToString("yyyy-MM-dd")" required
-                                                        placeholder="dd/mm/yyyy" autocomplete="off">
+                                                       placeholder="dd/mm/yyyy" autocomplete="off">
                                                 <label class="form-label select-label ">Date of Marriage</label>
                                             </div>
                                         </div>
@@ -1469,12 +1367,12 @@
 
 
 
-                                    @*
-                                    <div class="col-md-4">
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text file-upload" required data-text="Attach invitation card" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
+                                                <p class="file-error-message text-danger"></p>
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1514,10 +1412,9 @@
                 }
                 else if (Purpose == "3")
                 {
-                    <!-- PCA Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" type="button" data-bs-target="#educationDetails" aria-expanded="false">
                                 <span class="w-100 text-center text-decoration-underline">
                                     <strong>
                                         For Renovation/Repair of House only(Applicable only in last two years of service).
@@ -1528,7 +1425,7 @@
                         <div id="educationDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
-                                    <div class="col-md-3">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏠</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1544,11 +1441,11 @@
                                     </div>
 
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👤</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PropertyHolderName" name="PropertyRenovation.PropertyHolderName" class="form-control form-control-Alphabets" value="@Model.PropertyRenovation?.PropertyHolderName" required  maxlength="20" />
+                                                <input type="text" id="PropertyHolderName" name="PropertyRenovation.PropertyHolderName" class="form-control form-control-Alphabets" value="@Model.PropertyRenovation?.PropertyHolderName" required maxlength="20" />
                                                 <label class="form-label" for="PropertyHolderName">Name of property holder(s)</label>
                                                 <div class="invalid-feedback">
                                                     Please choose a username.
@@ -1560,7 +1457,7 @@
                                     </div>
 
 
-                                    <div class="col-md-3">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💸</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1575,12 +1472,12 @@
 
 
 
-                                    @*
-                                    <div class="col-md-4">
+
+                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
                                                 <input type="file" id="TotalexpenditureFile" name="PropertyRenovation.TotalExpenditureFile" class="form-control custom-file-text file-upload" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
+                                                <p class="file-error-message text-danger"></p>
                                                 @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
@@ -1636,8 +1533,8 @@
                     <input type="text" id="unitSearchInput" class="form-control form-space fw-bold" placeholder="Enter Army Number..." autocomplete="off" maxlength="15" />
                     <span class="text-danger" id="unitSearchMessage"></span>
                     <div class="d-flex justify-content-end mt-3">
-                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2 mt-10px" >Cancel</button>
-                        <button id="unitSearchConfirmBtn" class="btn btn-primary mt-10px" disabled >Confirm</button>
+                        <button id="unitSearchCancelBtn" class="btn btn-secondary me-2 mt-10px">Cancel</button>
+                        <button id="unitSearchConfirmBtn" class="btn btn-primary mt-10px" disabled>Confirm</button>
                     </div>
                 </div>
             </div>

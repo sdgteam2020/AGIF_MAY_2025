@@ -30,33 +30,21 @@ else
 <link href="~/css/validation.css" rel="stylesheet" />
 <div class="container">
     <div class="container-fluid">
-        <!-- ========== title-wrapper start ========== -->
         <div class="title-wrapper pt-30">
             <div class="row align-items-center">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <div class="title">
-                        <h2>
-                            @Page
-                        </h2>
+                        <h2>@Page</h2>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="container title d-flex justify-content-center align-items-center">
-                        <div class="btn-group">
-                            <button type="button" id="Loan" class="btn btn-loan me-2 fw-bold" value="Loan">Loan</button>
-                            <button type="button" id="Maturity" class="btn btn-maturity fw-bold" value="Maturity">Maturity</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- end col -->
-                <div class="col-md-4">
+            
+                <div class="col-md-6">
                     <div class="breadcrumb-wrapper">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
                                     <a asp-controller="default" asp-action="Index">Home</a>
                                 </li>
-
                                 <li class="breadcrumb-item">
                                     <a href="#0">Applications</a>
                                 </li>
@@ -67,14 +55,17 @@ else
                         </nav>
                     </div>
                 </div>
-                <!-- end col -->
             </div>
-            <!-- end row -->
         </div>
 
         <input type="hidden" id="Status" value="@ViewBag.Status" />
 
-        <div class="card mt-2">
+        <div class="folder-tabs-wrapper justify-content-center">
+            <button type="button" id="Loan" class="folder-tab active" value="Loan">Loan</button>
+            <button type="button" id="Maturity" class="folder-tab" value="Maturity">Maturity</button>
+        </div>
+
+        <div class="card custom-tab-card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
@@ -88,12 +79,10 @@ else
                                         <th class="bg-danger text-white">Application Type</th>
                                         <th class="bg-danger text-white">Date of Birth</th>
                                         <th class="bg-danger text-white">Applied Date</th>
-                                        @* <th>Digital Sign On</th> *@
                                         <th class="noExport bg-danger text-white">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- DataTables will populate this -->
                                 </tbody>
                             </table>
                         </div>

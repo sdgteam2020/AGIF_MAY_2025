@@ -10,7 +10,10 @@
     }
 
     GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
-
+    $('.folder-tab').on('click', function () {
+        $('.folder-tab').removeClass('active');
+        $(this).addClass('active');
+    });
     $('#Loan').click(function () {
         $("#UserType").val('Loan');
         $("#PdfViwerFOrDigital").attr("data", "");
