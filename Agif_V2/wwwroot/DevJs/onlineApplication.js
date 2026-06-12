@@ -23,10 +23,8 @@ $(document).ready(function () {
     findDataWithArmyNumber();
     findDataWithApplicationId();
     callingCommonFunctions();
-
+    BindDropDown();
 });
-
-
 
 function callingCommonFunctions() {
     $(document).on("input", ".js-valindata", function () {
@@ -399,6 +397,34 @@ function formatAadhar(input) {
     }
     input.value = formattedValue;
 }
+
+
+function BindDropDown() {
+
+    setTimeout(function () {
+
+        $('#ddlrank').val($('#ddlrank').data('rank-prefix')).trigger('change');
+
+        $('#armyPrefix').val($('#armyPrefix').data('army-prefix')).trigger('change');
+
+        $('#oldArmyPrefix').val($('#oldArmyPrefix').data('oldarmy-prefix')).trigger('change');
+
+        $('#regtCorps').val($('#regtCorps').data('regt-prefix')).trigger('change');
+
+        $('#armyPostOffice').val($('#armyPostOffice').data('armypost-prefix')).trigger('change');
+
+        $('#stateDropdown').val($('#stateDropdown').data('state-prefix')).trigger('change');
+
+        $('#BankId').val($('#BankId').data('bank-id')).trigger('change');
+
+    }, 1000);
+
+    const selectedDistrict = $('#districtDropdown').data('district-prefix');
+    setTimeout(function () {
+        $('#districtDropdown').val(selectedDistrict).trigger('change');
+    }, 2000);
+
+}
 function loadDropdown() {
   
 
@@ -427,7 +453,7 @@ function loadDropdown() {
     // Inside loadDropdown() — replace old state/district lines with:
     const selectedState = $('#stateDropdown').data('state-prefix');
     const selectedDistrict = $('#districtDropdown').data('district-prefix');
-    const BankName = $('#BankId').data('data-Bank-Id');
+    const BankName = $('#BankId').data('bank-id');
 
     // Load state using same mMsater pattern as other dropdowns
     mMsater(selectedState, "stateDropdown", 21, 0);

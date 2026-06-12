@@ -300,7 +300,6 @@ namespace DataAccessLayer.Repositories
                              {
                                  Id = BankType.BankId,
                                  Name = Convert.ToString(BankType.BankName)
-
                              }).ToListAsync();
 
             return ret;

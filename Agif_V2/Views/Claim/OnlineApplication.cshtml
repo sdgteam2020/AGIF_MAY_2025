@@ -107,14 +107,14 @@
                                                     <span class="input-group-text">👮</span>
                                                 </div>
                                                 <div class="col-md-10">
-                                                    <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
+                                                    <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
                                                         {
                                                             @Model.ClaimCommonData.OldArmyPrefix
                                                             ;
                                                         }
-                                                        " required>
+                                                        ">
                                                     </select>
-                                                    <label class="form-label select-label ">Prefix</label>
+                                                    <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
                                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
                                                 </div>
                                             </div>
@@ -168,7 +168,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName" required maxlength="20"/>
+                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName"  maxlength="20"/>
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
                                         <div class="invalid-feedback">
                                             Please choose a username.
@@ -948,7 +948,6 @@
                     </div>
                 </div>
             </div>
-
             @{
                 if (Purpose == "1")
                 {
@@ -1602,99 +1601,15 @@
                                                          class="btn btn-primary">
                                                       Total expenditure (attach details)
                                                   </label>
-
-                else
-                {
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
-                                <span class="w-100 text-center text-decoration-underline"><strong>Any other reason requiring waiver</strong></span>
-                            </button>
-                        </h2>
-                        <div id="educationDetails" class="accordion-collapse collapse">
-                            <div class="accordion-body">
-                                <div class="row g-3">
-                                    <div class="col-md-8">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text">💬</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control form-control-Alphabets" value="@Model.SplWaiver?.OtherReasons" required  />
-                                                <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
-                                                <div class="invalid-feedback">
-                                                    Please type other reason.
-                                                </div>
-                                            </div>
+                                          </div>
                                         </div>
-                                        @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
-                                                    <span class="selected-file-name">No file chosen</span>
-
-                                                      <p class="file-error-message text-danger"></p>
-
-                                                @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
                                               </div>
-                                         </div>
-                                    </div>
-
+                                      </div>
+                                  </div>
                                 </div>
-
                             </div>
-                        </div>
-                    </div>
-                }
 
-                // else
-                // {
-                //     <div class="accordion-item">
-                //         <h2 class="accordion-header" id="headingTwo">
-                //             <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
-                //                 <span class="w-100 text-center text-decoration-underline"><strong>Any other reason requiring waiver</strong></span>
-                //             </button>
-                //         </h2>
-                //         <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
-                //             <div class="accordion-body">
-                //                 <div class="row g-3">
-                //                     <div class="col-md-8">
-                //                         <div class="input-group mb-2">
-                //                             <span class="input-group-text">💬</span>
-                //                             <div class="form-outline" data-mdb-input-init>
-                //                                 <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control form-control-Alphabets" value="@Model.SplWaiver?.OtherReasons" required  />
-                //                                 <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
-                //                                 <div class="invalid-feedback">
-                //                                     Please type other reason.
-                //                                 </div>
-                //                             </div>
-                //                         </div>
-                //                         @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
-
-                //                     </div>
-
-                //                     <div class="col-md-4">
-                //                         <div class="mb-2">
-                //                             <div class="form-outline" data-mdb-input-init>
-                //                                 <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons" accept=".pdf" />
-                //                                 <p class="file-error-message text-danger" ></p>
-                //                                 @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
-                //                             </div>
-                //                         </div>
-                //                     </div>
-
-
-                //                     <div class="col-md-8">
-                //                         <div class="mb-2">
-                //                             <div class="form-outline" data-mdb-input-init>
-                //                                 <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                //                                 <p class="file-error-message text-danger" ></p>
-                //                                 @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
-                //                             </div>
-                //                         </div>
-                //                     </div>
-
-                //                 </div>
-
-                //             </div>
-                //         </div>
-                //     </div>
-                // }
+            }
             }
             <div class="col-md-12">
                 <div class="mt-4 text-center">

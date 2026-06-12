@@ -7,8 +7,8 @@
     string formType = Model.FormType ?? "ED";
 
     var message = TempData["Message"] ?? string.Empty;
-    //int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-    int applicationId = 32052;
+    int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+  //  int applicationId = 33053;
 
     var IsExtension = TempData["ClaimIsextensionOfService"] ?? false;
 

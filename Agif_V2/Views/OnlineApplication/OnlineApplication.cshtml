@@ -103,8 +103,7 @@
                                                     {
                                                         @Model.CommonData.OldArmyPrefix
                                                         ;
-                                                    }
-                                                    ">
+                                                    }">
                                                 </select>
                                                 <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.OldArmyPrefix, "", new { @class = "text-danger" })
@@ -157,7 +156,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName" required />
+                                        <input type="text" id="txtApplicantName" name="CommonData.ApplicantName" class="form-control" value="@Model.CommonData?.ApplicantName"  />
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
                                         
                                     </div>
@@ -580,14 +579,9 @@
                                 <div class="input-group mb-2">
                                         <span class="input-group-text">🏦</span>
                                     @* <div class="col-md-10 col-sm-11 col-11"> *@
-                                        <select class="select form-select" id="BankId" name="AccountDetails.BankId" data-mdb-filter="true" required data-Bank-Id="@if (Model.AccountDetails != null)
-                                        {
-                                                    @Model.AccountDetails.BankId
-                                                ;
-                                        }
-                                        ">
+                                    <select class="select form-select" id="BankId" name="AccountDetails.BankId" data-mdb-filter="true" required data-bank-id="@Model.AccountDetails?.BankId">
                                         </select>
-                                        <label class="form-label select-label " for="BankId">Bank Name</label>
+                                        <label class="form-label select-label" for="BankId">Bank Name</label>
                                         @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
                                     @* </div> *@
                                 </div>

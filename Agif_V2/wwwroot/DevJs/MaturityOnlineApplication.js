@@ -17,6 +17,7 @@ $(document).ready(function () {
     findDataWithApplicationId();
     callingCommonFunctions();
     preMatureRetirement();
+    BindDropDown();
 });
 
 function callingCommonFunctions() {
@@ -419,6 +420,62 @@ function formatAadhar(input) {
         formattedValue += value[i];
     }
     input.value = formattedValue;
+}
+
+
+
+//function BindDropDown() {
+
+//    setTimeout(function () {
+
+//        $('#ddlrank').val($('#ddlrank').data('rank-prefix')).trigger('change');
+
+//        $('#armyPrefix').val($('#armyPrefix').data('army-prefix')).trigger('change');
+
+//        $('#oldArmyPrefix').val($('#oldArmyPrefix').data('oldarmy-prefix')).trigger('change');
+
+//        $('#regtCorps').val($('#regtCorps').data('regt-prefix')).trigger('change');
+
+//        $('#armyPostOffice').val($('#armyPostOffice').data('armypost-prefix')).trigger('change');
+
+//        $('#stateDropdown').val($('#stateDropdown').data('state-prefix')).trigger('change');
+
+//        $('#BankId').val($('#BankId').data('bank-id')).trigger('change');
+
+//    }, 1000);
+
+//    const selectedDistrict = $('#districtDropdown').data('district-prefix');
+//    setTimeout(function () {
+//        $('#districtDropdown').val(selectedDistrict).trigger('change');
+//    }, 2000);
+
+//}
+function BindDropDown() {
+
+    setTimeout(function () {
+
+        SetDropDownValue('#ddlrank', 'rank-prefix');
+        SetDropDownValue('#armyPrefix', 'army-prefix');
+        SetDropDownValue('#oldArmyPrefix', 'oldarmy-prefix');
+        SetDropDownValue('#regtCorps', 'regt-prefix');
+        SetDropDownValue('#armyPostOffice', 'armypost-prefix');
+        SetDropDownValue('#stateDropdown', 'state-prefix');
+        SetDropDownValue('#BankId', 'bank-id');
+
+    }, 1000);
+
+    setTimeout(function () {
+        SetDropDownValue('#districtDropdown', 'district-prefix');
+    }, 2000);
+}
+
+function SetDropDownValue(selector, dataKey) {
+
+    var element = $(selector);
+
+    if (!element.hasClass('d-none')) {
+        element.val(element.data(dataKey)).trigger('change');
+    }
 }
 function loadDropdown() {
 
@@ -1322,7 +1379,7 @@ function ExtensionOfServiceAccess() {
 function fetchPCDA_PAO() {
     const regt = $('#regtCorps').val();
     if (!regt) {
-        alert("Please select Regt/Corps.");
+       // alert("Please select Regt/Corps.");
         return;
     }
     const param = { "regt": regt };

@@ -89,10 +89,10 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> Upload()
         {
-            // int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
-            int applicationId = 32052;
+             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+           // int applicationId = 33053;
 
-            //bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
+            bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
 
