@@ -30,9 +30,10 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> Upload()
         {
             int applicationId = Convert.ToInt32(TempData["applicationId"]);
+            //int applicationId = 65028;
 
 
-            bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
+           bool application = await _IonlineApplication1.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IonlineApplication1.GetFormType(applicationId);
 
@@ -239,9 +240,9 @@ namespace Agif_V2.Controllers
                 
                 if (file.Length > 1 * 1024 * 1024)
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
-                if(await _pdfUpload.IsPdfPasswordProtected(file))
+                if(await _pdfUpload.CheckIfPdfPasswordProtected(file))
                 {
-                    ModelState.AddModelError(file.Name, "Password protected Pdfs are not allowed");
+                    ModelState.AddModelError(file.Name, "Only valid, Non-password-protected PDF files are allowed.");
                 }
 
 

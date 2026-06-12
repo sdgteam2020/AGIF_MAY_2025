@@ -26,6 +26,7 @@ namespace DataAccessLayer.Repositories
         private readonly IProperty _Property;
         private readonly ISpecial _Special;
         private readonly IClaimDocumentUpload _DocumentUpload;
+
         public ClaimOnlineApplicationDL(ApplicationDbContext context, IArmyPrefixes iArmyPrefixes, IEducation education, IMarraige marraige, IProperty property, ISpecial special, IClaimDocumentUpload documentUpload) : base(context)
         {
             _context = context;
@@ -53,6 +54,12 @@ namespace DataAccessLayer.Repositories
                 return false;
             }
 
+            if (file.Length > 150 * 1024)
+            {
+                errorMessage = "File size cannot exceed 150 KB.";
+                return false;
+            }
+
             if (file.Length > 1 * 1024 * 1024)
             {
                 errorMessage = "File size cannot exceed 1 MB.";
@@ -60,11 +67,7 @@ namespace DataAccessLayer.Repositories
             }
 
 
-            if (file.Length > 150 * 1024)
-            {
-                errorMessage = "File size cannot exceed 150 KB.";
-                return false;
-            }
+          
 
             return true;
         }
@@ -716,28 +719,28 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsAttachBonafideLetterPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = "AttachBonafideLetterPdf.Pdf";
+                        dTODocumentFileView.FileName = "AttachBonafideLetter.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttachPartIIOrderPdfEdu)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = "AttachPartIIOrderPdfEdu.Pdf";
+                        dTODocumentFileView.FileName = "AttachPartIIOrder.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttachInvitationcardPdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = "AttachInvitationcardPdf.Pdf";
+                        dTODocumentFileView.FileName = "AttachInvitationcard.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
                     if (DocumentModel.IsAttach_PartIIOrderPdfMarr)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName = "Attach_PartIIOrderPdfMarr.Pdf";
+                        dTODocumentFileView.FileName = "AttachPartIIOrder.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
@@ -1215,11 +1218,13 @@ namespace DataAccessLayer.Repositories
                           join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
-                          join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup
-                          from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
-                          join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
-                          from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
+                          //join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup
+                          //from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
+                          //join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
+                          //from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
 
+                          join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
+                          from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
 
                           where common.ApplicationId == applicationId
                           select new ClaimCommonDataOnlineResponse
@@ -1257,7 +1262,8 @@ namespace DataAccessLayer.Repositories
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              BankId = AccountDetails.BankId ?? 0,
+                              // NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
+                              BankId = BankDetails.BankId,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,

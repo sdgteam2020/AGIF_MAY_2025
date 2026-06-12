@@ -26,6 +26,8 @@ $(document).ready(function () {
 
 });
 
+
+
 function callingCommonFunctions() {
     $(document).on("input", ".js-valindata", function () {
         ValInDataNo(this);

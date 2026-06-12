@@ -69,13 +69,13 @@ namespace Agif_V2.Controllers
         //}
 
 
-        private IActionResult ServeWatermarkedPdf(string folderName, string fileName)
+        public IActionResult ServeWatermarkedPdf(string folderName, string fileName)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid request.");
             }
-
+            folderName = folderName.TrimStart('/', '\\');
             string inputPath = System.IO.Path.Combine(_env.WebRootPath, folderName, fileName);
             if (!System.IO.File.Exists(inputPath))
             {

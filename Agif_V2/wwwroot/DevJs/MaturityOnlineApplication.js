@@ -2157,18 +2157,18 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
 
-                        $('#armyPrefix').val(data.armyPrefix).addClass("d-none").trigger('change');
+                       // $('#armyPrefix').val(data.armyPrefix).addClass("d-none").trigger('change');
                         $('#oldArmyPrefix').val(data.oldArmyPrefix).addClass("d-none").trigger('change');
                         $('#ddlrank').val(data.rankId).addClass("d-none").trigger('change');
                         $('#regtCorps').val(data.regtCorpsId).addClass("d-none").trigger('change');
                         $('#armyPostOffice').val(data.armyPostOfficeId).addClass("d-none").trigger('change');
                         $('#emailDomain').val(data.emailDomain).trigger('change');
-                        $('#BankId').val(data.bankId).trigger('change');
-                        $('#stateDropdown').val(data.stateId).trigger('change');
+                        $('#BankId').val(data.bankId).addClass("d-none").trigger('change');
+                        $('#stateDropdown').val(data.stateId).addClass("d-none").trigger('change');
                         setTimeout(function () {
-                            $('#districtDropdown').val(data.distId).trigger('change');
+                            $('#districtDropdown').val(data.distId).addClass("d-none").trigger('change');
                         }, 1000);
-                       
+
                     }
                     else {
                         console.log("Data not found for the provided Army Number.");
@@ -2240,10 +2240,10 @@ function findDataWithApplicationId() {
                     $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).addClass("d-none").trigger('change');
                     $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
 
-                    $('#BankId').val(data.onlineApplicationResponse.bankId).trigger('change');
-                    $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
+                    $('#BankId').val(data.onlineApplicationResponse.bankId).addClass("d-none").trigger('change');
+                    $('#stateDropdown').val(data.onlineApplicationResponse.stateId).addClass("d-none").trigger('change');
                     setTimeout(function () {
-                        $('#districtDropdown').val(data.onlineApplicationResponse.distId).trigger('change');
+                        $('#districtDropdown').val(data.onlineApplicationResponse.distId).addClass("d-none").trigger('change');
                     }, 1000);
             
                     $('#Noofwithdrawal').val(data.onlineApplicationResponse.noOfwithdrwal).addClass("d-none").trigger('change');
@@ -2369,18 +2369,18 @@ document.addEventListener('DOMContentLoaded', function () {
     initGenderDropdown('MarriageGenderDisplay', 'genderRadioGroup');
 });
 
-$('.file-upload').on('change', function () {
-    const file = this.files[0];
-    const errorrMessage = $(this).next('.file-error-message'); // container for error
+//$('.file-upload').on('change', function () {
+//    const file = this.files[0];
+//    const errorrMessage = $(this).next('.file-error-message'); // container for error
 
-    if (file && file.size > 150 * 1024) {
-        errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
-        this.value = ''; // Clear the input field
-    } else {
-        errorrMessage.text(''); // Clear the error message if file size is valid
+//    if (file && file.size > 150 * 1024) {
+//        errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
+//        this.value = ''; // Clear the input field
+//    } else {
+//        errorrMessage.text(''); // Clear the error message if file size is valid
 
-    }
-});
+//    }
+//});
 
 $('#oldArmyNo').on('blur', function () {
     const oldprefixVal = $('#oldArmyPrefix').val();
@@ -2450,3 +2450,47 @@ function encryptData(plainText) {
 
     return CryptoJS.enc.Base64.stringify(finalData);
 }
+//$(document).on('change', '#Attach_Part_II_Order', function () {
+
+
+//    var file = this.files[0];
+//    var maxSize = 150 * 1024;
+
+//    $(this).siblings('.file-error-message').text('');
+
+//    if (file && file.size > maxSize) {
+
+//        $(this).val('');
+
+//        $(this).siblings('.file-error-message')
+//            .text('File size should not exceed 150 KB.');
+
+//        return false;
+//    }
+//});
+
+$(document).on('change', '.file-upload', function () {
+
+    var file = this.files[0];
+    var maxSize = 150 * 1024;
+
+    $(this).siblings('.file-error-message').text('');
+
+    if (file) {
+
+        $(this).siblings('.selected-file-name').text(file.name);
+
+        if (file.size > maxSize) {
+
+            $(this).val('');
+
+            $(this).siblings('.selected-file-name')
+                .text('No file chosen');
+
+            $(this).siblings('.file-error-message')
+                .text('File size should not exceed 150 KB.');
+
+            return false;
+        }
+    }
+});

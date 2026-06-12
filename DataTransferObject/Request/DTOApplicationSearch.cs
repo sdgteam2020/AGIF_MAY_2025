@@ -8,5 +8,7 @@ namespace DataTransferObject.Request
     {
         public string ArmyNo { get; set; }
         public string AadharNo { get; set; }
+        public int ApplicationId { get; set; }
+        public string type { get; set; }
     }
 }

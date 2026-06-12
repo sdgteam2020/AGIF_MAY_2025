@@ -89,9 +89,10 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> Upload()
         {
-            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+            // int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+            int applicationId = 32052;
 
-            bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
+            //bool application = await _IclaimDocumentUpload.CheckDocumentUploaded(applicationId);
 
             string FormType = await _IClaimonlineApplication1.GetFormType(applicationId);
 
@@ -123,7 +124,8 @@ namespace Agif_V2.Controllers
 
         public async Task<IActionResult> ApplicationDetails()
         {
-            int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+             int applicationId = Convert.ToInt32(TempData["ClaimapplicationId"]);
+          //  int applicationId = 30044;
 
             TempData.Keep("ClaimapplicationId");
 
@@ -380,8 +382,14 @@ namespace Agif_V2.Controllers
                     ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", errorMessage);
                     isValid = false;
                 }
+                if (await _pdfUpload.CheckIfPdfPasswordProtected(file))
+                {
+                    errorMessage = "Only valid, Non-password-protected PDF files are allowed.";
+                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", errorMessage);
+                    isValid = false;
+                }
 
-                
+
             }
 
             return isValid;
@@ -528,7 +536,14 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
             }
 
-            
+            if (await _pdfUpload.CheckIfPdfPasswordProtected(file))
+            {
+                ModelState.AddModelError(file.Name, "Only valid, Non-password-protected PDF files are allowed.");
+            }
+            //if (await _pdfUpload.IsValidPdfFile(file))
+            //{
+            //    ModelState.AddModelError(file.Name, "Not A Valid Pdf");
+            //}
         }
 
         private string GetClientIp()

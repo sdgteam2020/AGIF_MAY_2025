@@ -537,6 +537,8 @@
                                 </div>
                             </div>
 
+
+
                             <!-- District dropdown -->
                             <div class="col-md-2">
                                 <div class="input-group mb-2">
@@ -1087,6 +1089,7 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.DoPartIIDate, "", new { @class = "text-danger" })
                                     </div>
 
+                                   @*
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
@@ -1096,7 +1099,33 @@
                                             </div>
                                         </div>
                                     </div>
+                                    *@
 
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                           <div class="form-outline" data-mdb-input-init>
+
+                                                  <input type="file"
+                                                         id="Attach_Part_II_Order"
+                                                         name="EducationDetails.AttachPartIIOrder"
+                                                         class="d-none form-control custom-file-text file-upload"
+                                                         accept=".pdf"
+                                                         required />
+
+                                                  <label for="Attach_Part_II_Order"
+                                                         class="btn btn-primary">
+                                                      Attach Part-II Order
+                                                  </label>
+
+                                                    <span class="selected-file-name">No file chosen</span>
+
+                                                      <p class="file-error-message text-danger"></p>
+
+                                                @Html.ValidationMessageFor(m => m.EducationDetails.AttachPartIIOrder, "", new { @class = "text-danger" })
+                                              </div>
+                                         </div>
+                                    </div>
+                                    
 
 
                                     <div class="col-md-2">
@@ -1139,7 +1168,7 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.CollegeInstitution, "", new { @class = "text-danger" })
                                     </div>
 
-
+                                @*
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
@@ -1150,7 +1179,31 @@
                                             </div>
                                         </div>
                                     </div>
+                                    *@
+                                       <div class="col-md-4">
+                                        <div class="mb-2">
+                                           <div class="form-outline" data-mdb-input-init>
 
+                                                  <input type="file"
+                                                         id="Attach_Bonafide_letter"
+                                                         name="EducationDetails.AttachBonafideletter"
+                                                         class="d-none form-control custom-file-text file-upload"
+                                                         accept=".pdf"
+                                                         required />
+
+                                                  <label for="Attach_Bonafide_letter"
+                                                         class="btn btn-primary">
+                                                      Attach Bonafide cert/admission letter
+                                                  </label>
+
+                                                    <span class="selected-file-name">No file chosen</span>
+
+                                                      <p class="file-error-message text-danger"></p>
+
+                                                @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
+                                              </div>
+                                         </div>
+                                    </div>
 
 
 
@@ -1166,7 +1219,7 @@
                                         @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditure, "", new { @class = "text-danger" })
                                     </div>
 
-
+                                    @*
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
@@ -1176,6 +1229,36 @@
                                             </div>
                                         </div>
                                     </div>
+                                    *@
+
+                                     <div class="col-md-4">
+                                        <div class="mb-2">
+                                           <div class="form-outline" data-mdb-input-init>
+
+                                                  <input type="file"
+                                                         id="TotalexpenditureFile"
+                                                         name="EducationDetails.TotalExpenditureFile"
+                                                         class="d-none form-control custom-file-text file-upload"
+                                                         accept=".pdf"
+                                                         required />
+
+                                                  <label for="TotalexpenditureFile"
+                                                         class="btn btn-primary">
+                                                      Total expenditure (attach details)
+                                                  </label>
+
+                                                    <span class="selected-file-name">No file chosen</span>
+
+                                                      <p class="file-error-message text-danger"></p>
+
+                                                @Html.ValidationMessageFor(m => m.EducationDetails.TotalExpenditureFile, "", new { @class = "text-danger" })
+                                              </div>
+                                         </div>
+                                    </div>
+
+
+
+
                                     <input type="hidden" id="PresentlyStudyingIn" name="EducationDetails.PresentlyStudyingIn" value="0" />
 
                                 </div>
@@ -1320,7 +1403,8 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.Marriageward.DoPartIIDate, "", new { @class = "text-danger" })
                                     </div>
-
+                                    
+                                    @*
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
@@ -1330,6 +1414,32 @@
                                                 @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
+                                    </div>
+                                    *@
+
+                                    <div class="col-md-4">
+                                        <div class="mb-2">
+                                           <div class="form-outline" data-mdb-input-init>
+
+                                                  <input type="file"
+                                                         id="Attach_Part_II_Order"
+                                                         name="Marriageward.AttachPartIIOrder"
+                                                         class="d-none form-control custom-file-text file-upload"
+                                                         accept=".pdf"
+                                                         required />
+
+                                                  <label for="Attach_Part_II_Order"
+                                                         class="btn btn-primary">
+                                                      Attach Part-II Order
+                                                  </label>
+
+                                                    <span class="selected-file-name">No file chosen</span>
+
+                                                      <p class="file-error-message text-danger"></p>
+
+                                                @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
+                                              </div>
+                                         </div>
                                     </div>
 
                                     <div class="col-md-2">
@@ -1360,7 +1470,7 @@
 
 
 
-
+                                    @*
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
@@ -1370,7 +1480,32 @@
                                             </div>
                                         </div>
                                     </div>
+                                    *@
 
+                                     <div class="col-md-4">
+                                        <div class="mb-2">
+                                           <div class="form-outline" data-mdb-input-init>
+
+                                                  <input type="file"
+                                                         id="Attach_invitation_card"
+                                                         name="Marriageward.AttachInvitationcard"
+                                                         class="d-none form-control custom-file-text file-upload"
+                                                         accept=".pdf"
+                                                         required />
+
+                                                  <label for="Attach_invitation_card"
+                                                         class="btn btn-primary">
+                                                      Attach invitation card
+                                                  </label>
+
+                                                    <span class="selected-file-name">No file chosen</span>
+
+                                                      <p class="file-error-message text-danger"></p>
+
+                                                @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
+                                              </div>
+                                         </div>
+                                    </div>
 
                                 </div>
 
@@ -1441,7 +1576,7 @@
 
 
 
-
+                                    @*
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                             <div class="form-outline" data-mdb-input-init>
@@ -1451,13 +1586,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                    *@
+                                     <div class="col-md-4">
+                                        <div class="mb-2">
+                                           <div class="form-outline" data-mdb-input-init>
 
-                                </div>
+                                                  <input type="file"
+                                                         id="TotalexpenditureFile"
+                                                         name="PropertyRenovation.TotalExpenditureFile"
+                                                         class="d-none form-control custom-file-text file-upload"
+                                                         accept=".pdf"
+                                                         required />
 
-                            </div>
-                        </div>
-                    </div>
-                }
+                                                  <label for="TotalexpenditureFile"
+                                                         class="btn btn-primary">
+                                                      Total expenditure (attach details)
+                                                  </label>
 
                 else
                 {
@@ -1482,28 +1626,13 @@
                                             </div>
                                         </div>
                                         @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
+                                                    <span class="selected-file-name">No file chosen</span>
 
-                                    </div>
+                                                      <p class="file-error-message text-danger"></p>
 
-                                    <div class="col-md-4">
-                                        <div class="mb-2">
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
-                                                @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-8">
-                                        <div class="mb-2">
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
-                                                <p class="file-error-message text-danger" ></p>
-                                                @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
+                                                @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
+                                              </div>
+                                         </div>
                                     </div>
 
                                 </div>
@@ -1512,6 +1641,60 @@
                         </div>
                     </div>
                 }
+
+                // else
+                // {
+                //     <div class="accordion-item">
+                //         <h2 class="accordion-header" id="headingTwo">
+                //             <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse"  type="button" data-bs-target="#educationDetails" aria-expanded="false">
+                //                 <span class="w-100 text-center text-decoration-underline"><strong>Any other reason requiring waiver</strong></span>
+                //             </button>
+                //         </h2>
+                //         <div id="educationDetails" class="accordion-collapse collapse" data-bs-parent="#formAccordion">
+                //             <div class="accordion-body">
+                //                 <div class="row g-3">
+                //                     <div class="col-md-8">
+                //                         <div class="input-group mb-2">
+                //                             <span class="input-group-text">💬</span>
+                //                             <div class="form-outline" data-mdb-input-init>
+                //                                 <input type="text" id="OtherReasons" name="SplWaiver.OtherReasons" class="form-control form-control-Alphabets" value="@Model.SplWaiver?.OtherReasons" required  />
+                //                                 <label class="form-label" for="OtherReasons">Other Reason requiring Waiver</label>
+                //                                 <div class="invalid-feedback">
+                //                                     Please type other reason.
+                //                                 </div>
+                //                             </div>
+                //                         </div>
+                //                         @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasons, "", new { @class = "text-danger" })
+
+                //                     </div>
+
+                //                     <div class="col-md-4">
+                //                         <div class="mb-2">
+                //                             <div class="form-outline" data-mdb-input-init>
+                //                                 <input type="file" id="OtherReasonPdf" name="SplWaiver.OtherReasonPdf" class="form-control custom-file-text" required data-text="Other Reasons" accept=".pdf" />
+                //                                 <p class="file-error-message text-danger" ></p>
+                //                                 @Html.ValidationMessageFor(m => m.SplWaiver.OtherReasonPdf, "", new { @class = "text-danger" })
+                //                             </div>
+                //                         </div>
+                //                     </div>
+
+
+                //                     <div class="col-md-8">
+                //                         <div class="mb-2">
+                //                             <div class="form-outline" data-mdb-input-init>
+                //                                 <input type="file" id="TotalexpenditureFile" name="SplWaiver.TotalExpenditureFile" class="form-control custom-file-text" required data-text="Total expenditure (attach details)" accept=".pdf" />
+                //                                 <p class="file-error-message text-danger" ></p>
+                //                                 @Html.ValidationMessageFor(m => m.SplWaiver.TotalExpenditureFile, "", new { @class = "text-danger" })
+                //                             </div>
+                //                         </div>
+                //                     </div>
+
+                //                 </div>
+
+                //             </div>
+                //         </div>
+                //     </div>
+                // }
             }
             <div class="col-md-12">
                 <div class="mt-4 text-center">

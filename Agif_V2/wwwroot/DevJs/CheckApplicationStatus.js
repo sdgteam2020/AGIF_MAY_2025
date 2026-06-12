@@ -168,7 +168,7 @@
 
         if (!appId) return;
 
-        const requestData = { appId: appId.toString(), type: type };
+        const requestData = { applicationId: appId, type: type };
         const serverKey = $('#serverCryptoKey').val();
         const encryptedString = encryptPayload(JSON.stringify(requestData), serverKey);
 
@@ -232,7 +232,7 @@
         form.appendChild(tokenInput);
 
         // Encrypt the download payload
-        const requestData = { id: applicationId.toString() };
+        const requestData = { applicationId: applicationId };
         const serverKey = $('#serverCryptoKey').val();
         const encryptedString = encryptPayload(JSON.stringify(requestData), serverKey);
 

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -718,21 +719,82 @@ namespace Agif_V2.Controllers
             return Json(data);
         }
 
+        //[HttpPost]
+        //public IActionResult HandleApplicationRedirect(int appId, string type)
+        //{
+
+        //    string redirectUrl = string.Empty;
+
+        //    if (type.ToUpper() == "LOAN")
+        //    {
+        //        redirectUrl = Url.Action("OnlineApplication", "OnlineApplication");
+        //        TempData["RedirectapplicationId"] = appId;
+        //    }
+        //    else if (type.ToUpper() == "MATURITY")
+        //    {
+        //        redirectUrl = Url.Action("OnlineApplication", "Claim");
+        //        TempData["RedirectClaimapplicationId"] = appId;
+        //    }
+
+        //    return Json(new { success = true, redirectUrl = redirectUrl });
+        //}
+
+
         [HttpPost]
-        public IActionResult HandleApplicationRedirect(int appId, string type)
+        [ValidateAntiForgeryToken] // Ensure this matches your JS header
+
+        public IActionResult HandleApplicationRedirect([FromForm] string EncryptedData)
         {
+            if (string.IsNullOrEmpty(EncryptedData))
+            {
+                return Json(new { success = false, message = "Form data is missing or corrupted." });
+            }
+
+            // 2. Retrieve the decryption key from the session
+            var keyBase64 = HttpContext.Session.GetString(SessionKeySalt);
+            if (string.IsNullOrEmpty(keyBase64))
+            {
+                return Json(new { success = false, message = "Session expired. Please refresh the page." });
+            }
+
+            // 3. Decrypt the payload
+            string decryptedJson;
+            try
+            {
+                decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, keyBase64);
+                decryptedJson = decryptedJson.Trim('\0', ' '); // Clean up AES padding
+            }
+            catch (CryptographicException)
+            {
+                return Json(new { success = false, message = "Invalid or tampered data." });
+            }
+
+            // 4. Deserialize the JSON string back into C# variables
+            DTOApplicationSearch searchParams;
+            try
+            {
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                searchParams = System.Text.Json.JsonSerializer.Deserialize<DTOApplicationSearch>(decryptedJson, options);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Security error: Failed to process the payload." });
+            }
 
             string redirectUrl = string.Empty;
 
-            if (type == "Loan")
+            if (searchParams.type.ToUpper() == "LOAN")
             {
                 redirectUrl = Url.Action("OnlineApplication", "OnlineApplication");
-                TempData["RedirectapplicationId"] = appId;
+                TempData["RedirectapplicationId"] = searchParams.ApplicationId;
             }
-            else if (type == "Maturity")
+            else if (searchParams.type.ToUpper() == "MATURITY")
             {
                 redirectUrl = Url.Action("OnlineApplication", "Claim");
-                TempData["RedirectClaimapplicationId"] = appId;
+                TempData["RedirectClaimapplicationId"] = searchParams.ApplicationId;
             }
 
             return Json(new { success = true, redirectUrl = redirectUrl });
