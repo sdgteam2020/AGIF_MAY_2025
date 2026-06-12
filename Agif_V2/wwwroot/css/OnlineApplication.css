@@ -1196,3 +1196,157 @@ input[disabled] {
 .last-input {
     padding-right: 0.1rem !important;
 }
+/* =============================================
+   RESPONSIVE: 800px–1080px and below
+   ============================================= */
+
+/* Stack inner row columns on small screens */
+@media (max-width: 991px) {
+    .accordion-body .row.g-3 > [class*="col-"] {
+        flex: 0 0 auto;
+    }
+
+    /* Inner nested rows (Army No / Prefix rows) */
+    .accordion-body .row > .col-md-6 > .row > [class*="col-md-"] {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+
+    /* Tighten input group text icon */
+    .input-group-text {
+        padding: 0.4rem 0.6rem;
+        font-size: 14px;
+    }
+
+    /* Allow labels to wrap */
+    .form-label.select-label {
+        font-size: 0.75rem;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Dialog box full width on mobile */
+    .dialog-box {
+        width: 95% !important;
+    }
+
+    .w-668 {
+        width: 95% !important;
+    }
+
+    /* Page title button stacks below heading */
+    .pagetitletwo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .pagetitletwo .btn {
+            position: static !important;
+            transform: none !important;
+            margin-top: 6px;
+        }
+
+    /* Salary credit/debit headers */
+    .accordion-body .col-md-4.text-center h3 {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Force all form columns to full width on phone */
+    .accordion-body .row.g-3 > [class*="col-"] {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    /* Nested prefix/number/suffix rows: stack them */
+    .col-md-6 > .row > [class*="col-md-"] {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    /* Make input group items full width */
+    .input-group {
+        flex-wrap: nowrap;
+    }
+
+    .form-outline {
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* Smaller accordion button text */
+    .acc-btn span {
+        font-size: 0.85rem;
+    }
+
+    /* Email domain select stacks below email input */
+    #emailDomain {
+        border-radius: 6px !important;
+    }
+}
+/* ==========================================================================
+   MDBootstrap Select + Input Group Layout Normalizer
+   ========================================================================== */
+
+/* 1. Reset input group alignments to handle nested flex dependencies */
+.input-group {
+    align-items: stretch !important;
+}
+
+    /* 2. Standardize uniform component heights across text blocks and selects */
+    .input-group > .input-group-text,
+    .input-group > .form-outline .form-control,
+    .input-group > .select-wrapper .select-input {
+        height: 38px !important; /* Standard Bootstrap form height */
+        box-sizing: border-box !important;
+    }
+
+    /* 3. Force MDB Select wrappers to scale fluidly without shrinking */
+    .input-group > .select-wrapper {
+        flex: 1 1 auto !important;
+        width: 1% !important;
+        position: relative !important;
+        display: block !important;
+    }
+
+        /* 4. Correct edge radiuses when prepended by icons */
+        .input-group > .select-wrapper .select-input {
+            border-top-left-radius: 0 !important;
+            border-bottom-left-radius: 0 !important;
+            border-top-right-radius: 6px !important;
+            border-bottom-right-radius: 6px !important;
+        }
+
+        /* 5. Precision alignment for dropdown labels at baseline */
+        .input-group > .select-wrapper .select-label {
+            position: absolute !important;
+            left: 12px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            margin: 0 !important;
+            transition: transform 0.2s ease, font-size 0.2s ease, top 0.2s ease, background-color 0.2s ease !important;
+            pointer-events: none;
+            z-index: 5 !important;
+        }
+
+            /* 6. Clean Floating execution: lifts labels seamlessly onto boundaries */
+            .input-group > .select-wrapper .select-input:focus ~ .select-label,
+            .input-group > .select-wrapper .select-label.active {
+                top: 0 !important;
+                transform: translateY(-50%) scale(0.85) !important;
+                background-color: #f0f2f5 !important; /* Blends perfectly with your body background variable */
+                padding: 0 6px !important;
+                z-index: 5 !important;
+            }
+
+        /* 7. Keep selection arrows dead-center inside scaled wrappers */
+        .input-group > .select-wrapper .select-arrow {
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+        }

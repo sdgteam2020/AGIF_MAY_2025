@@ -22,12 +22,9 @@ namespace DataTransferObject.Response
 
         public string? Number { get; set; }
 
-
-
         public string? Suffix { get; set; }
 
-
-        public int OldArmyPrefix { get; set; }
+        public int? OldArmyPrefix { get; set; }
 
         public string? OldNumber { get; set; }
 

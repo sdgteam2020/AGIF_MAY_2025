@@ -51,14 +51,11 @@
                 <div id="personalInfo" class="accordion-collapse collapse show">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            <div class="col-12 col-sm-6">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-4 col-md-4">
                                         <div class="input-group mb-2">
-                                            @* <div class="col-md-2 col-sm-1 col-1"> *@
                                                 <span class="input-group-text">👮</span>
-                                            @* </div> *@
-                                            <div class="col-md-10 col-sm-11 col-11">
                                                 <select class="select form-select " data-mdb-filter="true" id="armyPrefix" name="CommonData.ArmyPrefix" required data-army-prefix="@if (Model.CommonData != null)
                                                     {
                                                         @Model.CommonData.ArmyPrefix
@@ -68,11 +65,11 @@
                                                 <label class="form-label select-label " for="armyPrefix">Prefix</label>
                                                 
                                                 @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
-                                            </div>
+                                           
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-4 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🔟</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -82,7 +79,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CommonData.Number, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-4 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🧩</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -94,54 +91,55 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
-                                            <div class="col-md-2">
+                                @if(applicantCategory != "3")
+                                {
+                                <div class="col-12 col-sm-6">
+                                    <div class="row">
+                                        <div class="col-4 col-md-4">
+                                            <div class="input-group mb-2">
                                                 <span class="input-group-text">👮</span>
-                                            </div>
-                                            <div class="col-md-10">
+                                                @* <div class="col-md-10"> *@
                                                 <select class="select form-select" id="oldArmyPrefix" data-mdb-filter="true" name="CommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.CommonData != null)
-                                                {
-                                                    @Model.CommonData.OldArmyPrefix
-                                                    ;
-                                                }">
+                                                    {
+                                                        @Model.CommonData.OldArmyPrefix
+                                                        ;
+                                                    }
+                                                    ">
                                                 </select>
                                                 <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.OldArmyPrefix, "", new { @class = "text-danger" })
+                                                @* </div> *@
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text">🔟</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="oldArmyNo" name="CommonData.OldNumber" class="form-control js-valindata js-setsuffix" value="@Model.CommonData?.OldNumber" maxlength="8"  required pattern="^\d{3,8}$" />
-                                                <label class="form-label" for="txtOldNumber">Old Army No.</label>
+                                        <div class="col-4 col-md-4">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">🔟</span>
+                                                <div class="form-outline" data-mdb-input-init>
+                                                    <input type="text" id="oldArmyNo" name="CommonData.OldNumber" class="form-control js-valindata js-setsuffix" value="@Model.CommonData?.OldNumber" maxlength="8" required pattern="^\d{3,8}$" />
+                                                    <label class="form-label" for="txtOldNumber">Old Army No.</label>
+                                                </div>
                                             </div>
+                                            @Html.ValidationMessageFor(m => m.CommonData.OldNumber, "", new { @class = "text-danger" })
                                         </div>
-                                        @Html.ValidationMessageFor(m => m.CommonData.OldNumber, "", new { @class = "text-danger" })
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text">🧩</span>
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="txtOldSuffix" name="CommonData.OldSuffix" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.OldSuffix" />
-                                                <label class="form-label" for="txtOldSuffix">Suffix</label>
+                                        <div class="col-4 col-md-4">
+                                            <div class="input-group mb-2">
+                                                <span class="input-group-text">🧩</span>
+                                                <div class="form-outline" data-mdb-input-init>
+                                                    <input type="text" id="txtOldSuffix" name="CommonData.OldSuffix" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.OldSuffix" />
+                                                    <label class="form-label" for="txtOldSuffix">Suffix</label>
+                                                </div>
                                             </div>
-                                        </div>
-                                        @Html.ValidationMessageFor(m => m.CommonData.OldSuffix, "", new { @class = "text-danger" })
+                                            @Html.ValidationMessageFor(m => m.CommonData.OldSuffix, "", new { @class = "text-danger" })
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-2">
+                                }
+                                
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">👮</span>
-                                    </div>
-                                    <div class="col-md-10">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         <select class="select form-select" id="ddlrank" name="CommonData.DdlRank" data-mdb-filter="true" required data-rank-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.DdlRank
@@ -151,11 +149,11 @@
                                         </select>
                                         <label class="form-label select-label " for="ddlrank">Rank & Trade</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.DdlRank, "", new { @class = "text-danger" })
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
-                            
-                            <div class="col-md-2">
+
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -166,12 +164,10 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.ApplicantName, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">💼</span>
-                                    </div>
-                                    <div class="col-md-10">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         <select class="form-select select js-setregcorp" id="regtCorps" aria-label="Regt/Corps" data-mdb-filter="true" name="CommonData.RegtCorps" required data-regt-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.RegtCorps
@@ -180,10 +176,10 @@
                                         </select>
                                         <label class="form-label select-label" for="regtCorps">Regt/Corps</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.RegtCorps, "", new { @class = "text-danger" })
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🎂</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -195,7 +191,7 @@
                                 @Html.ValidationMessageFor(m => m.CommonData.DateOfBirth, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -208,12 +204,10 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">👮</span>
-                                    </div>
-                                    <div class="col-md-10">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         @Html.DropDownListFor(m => m.CommonData.ExtnOfService,
                                                  new SelectList(new[] {
                                         new { Value = "", Text = "Select one" },
@@ -228,11 +222,11 @@
                                                  })
 
                                         <label class="form-label select-label " for="ExtnOfService">Extn of Service in Present Rank</label>
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -243,7 +237,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📅</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -253,7 +247,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -263,7 +257,7 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.AadharCardNo, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🆔</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -275,7 +269,7 @@
 
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📱</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -286,7 +280,7 @@
                                 @Html.ValidationMessageFor(m => m.CommonData.MobileNo, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-12 col-sm-6 col-md-3">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📧</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -313,7 +307,7 @@
                                 @Html.ValidationMessageFor(m => m.CommonData.EmailDomain, "", new { @class = "text-danger" })
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -325,7 +319,7 @@
                             </div>
 
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -351,7 +345,7 @@
                     <div class="accordion-body">
                         <div class="row g-3">
                             
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💼</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -361,7 +355,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📒</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -372,11 +366,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">🪖</span>
-                                    </div>
                                     <div class="form-outline" data-mdb-input-init>
                                         @Html.EditorFor(m => m.CommonData.ParentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required",  @dirName = "ParentUnit's name", @data_val = "true" } })
                                         @Html.ValidationMessageFor(m => m.CommonData.ParentUnit, "", new { @class = "text-danger" })
@@ -389,11 +381,9 @@
 
 
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">🪖</span>
-                                    </div>
                                     <div class="form-outline" data-mdb-input-init>
                                         @Html.EditorFor(model => model.CommonData.PresentUnit, new { htmlAttributes = new { @class = "form-control form-control-Alphabets d-none", @required = "required", @dirName = "PresentUnit's name" } })
                                         @Html.ValidationMessageFor(model => model.CommonData.PresentUnit, "", new { @class = "text-danger" })
@@ -408,7 +398,7 @@
 
 
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -418,12 +408,10 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.PresentUnitPin, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">📮</span>
-                                    </div>
-                                    <div class="col-md-10">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         <select class="form-select select" id="armyPostOffice" name="CommonData.ArmyPostOffice" data-mdb-filter="true" aria-label="armyPostOffice" required data-armypost-prefix="@if (Model.CommonData != null)
                                         {
                                             @Model.CommonData.ArmyPostOffice
@@ -432,10 +420,10 @@
                                         </select>
                                         <label class="form-label select-label ">Army Post Office</label>
                                         @Html.ValidationMessageFor(m => m.CommonData.ArmyPostOffice, "", new { @class = "text-danger" })
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -445,7 +433,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏢</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -471,7 +459,7 @@
                 <div id="address" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -483,7 +471,7 @@
                                 @Html.ValidationMessageFor(m => m.AddressDetails.Vill_Town, "", new { @class = "text-danger" })
 
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏠</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -494,13 +482,10 @@
                                 @Html.ValidationMessageFor(m => m.AddressDetails.PostOffice, "", new { @class = "text-danger" })
                             </div>
                             <!-- State dropdown -->
-                            <!-- State dropdown -->
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2 col-sm-1 col-1">
                                         <span class="input-group-text">🗺️</span>
-                                    </div>
-                                    <div class="col-md-10 col-sm-11 col-11">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         <select class="select form-select"
                                                 data-mdb-filter="true"
                                                 id="stateDropdown"
@@ -510,17 +495,15 @@
                                         </select>
                                         <label class="form-label select-label" for="stateDropdown">State</label>
                                         @Html.ValidationMessageFor(m => m.AddressDetails.State, "", new { @class = "text-danger" })
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
 
                             <!-- District dropdown -->
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <div class="col-md-2 col-sm-1 col-1">
                                         <span class="input-group-text">🗺️</span>
-                                    </div>
-                                    <div class="col-md-10 col-sm-11 col-11">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         <select class="select form-select"
                                                 data-mdb-filter="true"
                                                 id="districtDropdown"
@@ -530,10 +513,10 @@
                                         </select>
                                         <label class="form-label select-label" for="districtDropdown">District</label>
                                         @Html.ValidationMessageFor(m => m.AddressDetails.Distt, "", new { @class = "text-danger" })
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -561,7 +544,7 @@
                 <div id="salaryAcctDetails" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -572,7 +555,7 @@
                                 @Html.ValidationMessageFor(m => m.AccountDetails.SalaryAcctNo, "", new { @class = "text-danger" })
 
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏧</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -582,7 +565,7 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.AccountDetails.ConfirmSalaryAcctNo, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -593,24 +576,10 @@
                                 @Html.ValidationMessageFor(m => m.AccountDetails.IfsCode, "", new { @class = "text-danger" })
                             </div>
 
-                          @*  <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
-                                    <span class="input-group-text">🏦</span>
-                                    <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBank" name="AccountDetails.NameOfBank" class="form-control form-control-Alphabets"  maxlength="50" value="@Model.AccountDetails?.NameOfBank" required />
-                                        <label class="form-label select-label ">Name of Bank</label>
-                                    </div>
-                                </div>
-                                @Html.ValidationMessageFor(m => m.AccountDetails.NameOfBank, "", new { @class = "text-danger" })
-                            </div>
-                            *@
-
-                            <div class="col-md-2">
-                                <div class="input-group mb-2">
-                                    <div class="col-md-2">
                                         <span class="input-group-text">🏦</span>
-                                    </div>
-                                    <div class="col-md-10">
+                                    @* <div class="col-md-10 col-sm-11 col-11"> *@
                                         <select class="select form-select" id="BankId" name="AccountDetails.BankId" data-mdb-filter="true" required data-Bank-Id="@if (Model.AccountDetails != null)
                                         {
                                                     @Model.AccountDetails.BankId
@@ -620,11 +589,11 @@
                                         </select>
                                         <label class="form-label select-label " for="BankId">Bank Name</label>
                                         @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
-                                    </div>
+                                    @* </div> *@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -650,7 +619,7 @@
                 <div id="salaryDetails" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🗓️</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -662,15 +631,15 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4 text-center">
+                            <div class="col-12 col-sm-6 col-md-4 text-center">
                                 <h3 class="fw-bold text-success"><u>Credit</u></h3>
                             </div>
-                            <div class="col-md-4 fw-bold text-center">
+                            <div class="col-12 col-sm-6 col-md-4 fw-bold text-center">
                                 <h3 class="fw-bold text-danger" ><u>Debit</u></h3>
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -680,7 +649,7 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.BasicPay, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -692,7 +661,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -701,7 +670,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -713,7 +682,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -723,7 +692,7 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Msp, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -734,7 +703,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -743,7 +712,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -754,7 +723,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -763,7 +732,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -774,7 +743,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -783,7 +752,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -794,7 +763,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -804,7 +773,7 @@
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.Da, "", new { @class = "text-danger" })
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -815,7 +784,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -824,7 +793,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -835,7 +804,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -846,7 +815,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -857,7 +826,7 @@
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -866,7 +835,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -875,7 +844,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
@@ -902,12 +871,9 @@
                         <div id="propertyDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
-                                            <div class="col-md-1">
                                                 <span class="input-group-text">👮</span>
-                                            </div>
-                                            <div class="col-md-11">
                                                 <select class="form-select select" id="propertyType" aria-label="Property Type" name="HBAApplication.PropertyType" required data-propertytype-prefix="@if (Model.HBAApplication != null)
                                                 {
                                                     @Model.HBAApplication.PropertyType
@@ -916,11 +882,11 @@
                                                 </select>
                                                 <label class="form-label select-label ">Property Type</label>
                                                 @Html.ValidationMessageFor(m => m.HBAApplication.PropertyType, "", new { @class = "text-danger" })
-                                            </div>
+                                            
                                         </div>
 
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👨</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -929,7 +895,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -939,12 +905,12 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.PropertyAddress, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">🔁</span>
                                             </div>
-                                            <div class="col-md-11">
+                                            <div class="col-md-10 col-sm-11 col-11">
                                                 <select class="form-select select" id="HBA_LoanFreq" aria-label="Frequency of Loan" name="HBAApplication.HBA_LoanFreq" required data-hbaloanfreq-prefix="@if (Model.HBAApplication != null)
                                                 {
                                                     @Model.HBAApplication.HBA_LoanFreq
@@ -956,7 +922,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💰</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -967,7 +933,7 @@
                                         @Html.ValidationMessageFor(m => m.HBAApplication.PropertyCost, "", new { @class = "text-danger" })
                                     </div>
                                     
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -979,7 +945,7 @@
                                     </div>
                                 </div>
                                 <div class="row g-3">
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -990,7 +956,7 @@
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_Amt_Eligible_for_loan, "", new { @class = "text-danger" })
 
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1003,7 +969,7 @@
                                     </div>
                                 </div>
                                 <div class="row g-3">
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1013,7 +979,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_Amount_Applied_For_Loan, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1025,7 +991,7 @@
                                     </div>
                                 </div>
                                 <div class="row g-3">
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1035,7 +1001,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.HBAApplication.HBA_approxEMIAmount, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1064,7 +1030,7 @@
                         <div id="vehicleDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👨</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1074,7 +1040,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.DealerName, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <select class="form-select select" data-mdb-filter="true" id="veh_Loan_Type" name="CarApplication.Veh_Loan_Type" aria-label="Vehicle Loan Type" required data-vehicletype-prefix="@if (Model.CarApplication != null)
                                         {
                                             @Model.CarApplication.Veh_Loan_Type
@@ -1083,7 +1049,7 @@
                                         </select>
                                         <label class="form-label select-label ">Vehicle Loan Type</label>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <select class="form-select select" id="VehTypeId" name="CarApplication.VehTypeId" aria-label="Vehicle Type" required data-vehicletypeId-prefix="@if (Model.CarApplication != null)
                                         {
                                             @Model.CarApplication.VehTypeId
@@ -1092,7 +1058,7 @@
                                         </select>
                                         <label class="form-label select-label ">Vehicle Type</label>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏢</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1102,7 +1068,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CompanyName, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🚘</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1113,7 +1079,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.ModelName, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <select class="form-select select" data-mdb-filter="true" id="CA_LoanFreq" name="CarApplication.CA_LoanFreq" aria-label="Frequency of Loan" required data-vehicleloanfreq-prefix="@if (Model.CarApplication != null)
                                         {
                                             @Model.CarApplication.CA_LoanFreq
@@ -1124,7 +1090,7 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_LoanFreq, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1135,7 +1101,7 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.VehicleCost, "", new { @class = "text-danger" })
                                     </div>
                                     
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1145,7 +1111,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_Amt_Eligible_for_loan, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1155,7 +1121,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_EMI_Eligible, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1166,7 +1132,7 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_repayingCapacity, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1177,7 +1143,7 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_Amount_Applied_For_Loan, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1188,7 +1154,7 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_EMI_Applied, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1199,7 +1165,7 @@
                                         @Html.ValidationMessageFor(m => m.CarApplication.CA_approxEMIAmount, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🪪</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1209,7 +1175,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.DrivingLicenseNo, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">📆</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1219,7 +1185,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.Validity_Date_DL, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🪪</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1229,7 +1195,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.CarApplication.DL_IssuingAuth, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1257,7 +1223,7 @@
                         <div id="computerDetails" class="accordion-collapse collapse">
                             <div class="accordion-body">
                                 <div class="row g-3">
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏠</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1267,7 +1233,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_dealerName, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">👮</span>
@@ -1285,7 +1251,7 @@
                                         @Html.ValidationMessageFor(m => m.PCAApplication.computer_Loan_Type, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1295,7 +1261,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_companyName, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1305,7 +1271,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_modelName, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <div class="col-md-1">
                                                 <span class="input-group-text">👮</span>
@@ -1324,7 +1290,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_LoanFreq, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1335,7 +1301,7 @@
                                         @Html.ValidationMessageFor(m => m.PCAApplication.computerCost, "", new { @class = "text-danger" })
                                     </div>
                                     
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1345,7 +1311,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_Amt_Eligible_for_loan, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1355,7 +1321,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_EMI_Eligible, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1365,7 +1331,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_repayingCapacity, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1375,7 +1341,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_Amount_Applied_For_Loan, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1386,7 +1352,7 @@
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_EMI_Applied, "", new { @class = "text-danger" })
 
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
@@ -1396,7 +1362,7 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.PCAApplication.PCA_approxEMIAmount, "", new { @class = "text-danger" })
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-12 col-sm-6 col-md-4">
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>

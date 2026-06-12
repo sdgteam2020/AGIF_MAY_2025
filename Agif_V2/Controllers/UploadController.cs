@@ -58,8 +58,7 @@ namespace Agif_V2.Controllers
         public async Task<IActionResult> ApplicationDetails()
         {
         int applicationId = Convert.ToInt32(TempData["applicationId"]);
-            //int applicationId = 63028;
-
+            
             TempData.Keep("applicationId");
 
             if (applicationId == 0)

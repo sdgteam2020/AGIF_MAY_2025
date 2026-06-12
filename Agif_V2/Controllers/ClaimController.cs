@@ -103,10 +103,18 @@ namespace Agif_V2.Controllers
                 TempData["Message"] = "You have already uploaded the Documents for this Application.";
                 return RedirectToAction("ApplicationDetails", "Claim");
             }
+            try
+            {
+                bool IsextensionOfService = await _IClaimonlineApplication1.CheckExtensionofservice(applicationId);
 
-            bool IsextensionOfService = await _IClaimonlineApplication1.CheckExtensionofservice(applicationId);
+                TempData["ClaimIsextensionOfService"] = IsextensionOfService;
+            }
+            catch (Exception ex)
+            {
 
-            TempData["ClaimIsextensionOfService"] = IsextensionOfService;
+                throw ex;
+            }
+            
 
             ClaimFileUploadViewModel ClaimfileUploadViewModel = new ClaimFileUploadViewModel();
             ClaimfileUploadViewModel.FormType= FormType;
@@ -268,6 +276,13 @@ namespace Agif_V2.Controllers
 
             await ValidateModelAsync(model);
 
+            if (model.Category == "3") // OR
+            {
+                ModelState.Remove("ClaimCommonData.OldArmyPrefix");
+                ModelState.Remove("ClaimCommonData.OldNumber");
+                ModelState.Remove("ClaimCommonData.OldSuffix");
+            }
+
             if (!ModelState.IsValid)
             {
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
@@ -382,6 +397,13 @@ namespace Agif_V2.Controllers
             model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
             model.ClaimCommonData.IPAddress = ip;
 
+            if (model.ClaimCommonData.ApplicantType == 3)
+            {
+                model.ClaimCommonData.OldArmyPrefix = 0;
+                model.ClaimCommonData.OldNumber = string.Empty;
+                model.ClaimCommonData.OldSuffix = string.Empty;
+            }
+
             if (string.IsNullOrEmpty(model.ClaimCommonData.pcda_AcctNo))
             {
                 model.ClaimCommonData.pcda_AcctNo = string.Empty;
@@ -438,7 +460,9 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> Upload(ClaimFileUploadViewModel model, string formType, int applicationId)
         {
-            TempData.Keep("ClaimapplicationId");
+            try
+            {
+                TempData.Keep("ClaimapplicationId");
 
             var files = GetUploadedFiles(model);
 
@@ -468,6 +492,13 @@ namespace Agif_V2.Controllers
             }
 
             return RedirectToAction("ApplicationDetails", "Claim");
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
 
         private List<IFormFile> GetUploadedFiles(ClaimFileUploadViewModel model)
@@ -787,9 +818,17 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Application ID not found." });
             }
+            try
+            {
+                DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
+                return Json(data.OnlineApplicationResponse);
+            }
+            catch (Exception ex)
+            {
 
-            DTOClaimCommonOnlineResponse data = await _IClaimonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
-            return Json(data.OnlineApplicationResponse);
+                throw ex;
+            }
+            
         }
         public async Task<JsonResult> GetDataByApplicationId(int applicationId)
         {

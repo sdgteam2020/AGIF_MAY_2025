@@ -6441,17 +6441,22 @@ h6,
 }
 
 .agi-title-font-size {
-    font-size: 45px;
+    font-size: clamp(16px, 3vw, 40px);
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-
 #headerText {
     color: rgb(199, 0, 57);
     font-weight: 800;
     text-shadow: 1px 1px 2px yellow, 0 0 25px white, 0 0 5px yellow;
-    font-size: 40px;
+    font-size: clamp(14px, 2.5vw, 36px);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
 }
-
 @media (min-width: 1400px) {
     .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
         max-width: 100%;
@@ -6463,7 +6468,20 @@ h6,
         max-width: 100%;
     }
 }
+.header .header-right .profile-box .profile-info .info .image {
+    min-width: 36px; /* prevent shrink */
+}
+@media (max-width: 991px) {
+    .header .header-right .profile-box .profile-info .info h6 {
+        display: none;
+    }
+}
 
+@media (max-width: 767px) {
+    .header .header-right .profile-box .profile-info .info p {
+        display: none;
+    }
+}
 .table > thead {
     vertical-align: bottom;
 }

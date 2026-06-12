@@ -293,45 +293,77 @@ namespace DataAccessLayer.Repositories
         }
 
 
+        //public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
+        //{
+        //    var application = await _context.trnClaim.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
+        //    if (application == null)
+        //    {
+        //        return false; // Just exit the method if not found
+        //    }
+
+        //    application.StatusCode = status;
+        //    _context.trnClaim.Update(application);
+        //    await _context.SaveChangesAsync();
+
+        //    return true;
+        //}
         public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
         {
-            var application = await _context.trnClaim.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
-            if (application == null)
-            {
-                return false; // Just exit the method if not found
-            }
+            // This executes an UPDATE statement directly on the database.
+            // It returns the number of rows affected.
+            var rowsAffected = await _context.trnClaim
+                .Where(i => i.ApplicationId == applicationId)
+                .ExecuteUpdateAsync(s => s.SetProperty(c => c.StatusCode, status));
 
-            application.StatusCode = status;
-            _context.trnClaim.Update(application);
-            await _context.SaveChangesAsync();
-
-            return true;
+            // If rowsAffected > 0, the record existed and was updated.
+            return rowsAffected > 0;
         }
+        //public async Task<string?> GetIOArmyNoAsync(int applicationId)
+        //{
+        //    var application = await _context.trnClaim
+        //        .FirstOrDefaultAsync(i => i.ApplicationId == applicationId);
 
+        //    if (application == null || string.IsNullOrWhiteSpace(application.IOArmyNo))
+        //    {
+        //        return null; // matches string? return type
+        //    }
+
+        //    return application.IOArmyNo;
+        //}
         public async Task<string?> GetIOArmyNoAsync(int applicationId)
         {
-            var application = await _context.trnClaim
-                .FirstOrDefaultAsync(i => i.ApplicationId == applicationId);
+            // By using .Select() BEFORE .FirstOrDefaultAsync(), 
+            // EF Core generates: SELECT TOP(1) IOArmyNo FROM trnClaim WHERE...
+            var ioArmyNo = await _context.trnClaim
+                .Where(i => i.ApplicationId == applicationId)
+                .Select(i => i.IOArmyNo)
+                .FirstOrDefaultAsync();
 
-            if (application == null || string.IsNullOrWhiteSpace(application.IOArmyNo))
+            // If the record doesn't exist, FirstOrDefaultAsync on a string returns null.
+            // If it does exist, we just check if it's whitespace.
+            if (string.IsNullOrWhiteSpace(ioArmyNo))
             {
-                return null; // matches string? return type
+                return null;
             }
 
-            return application.IOArmyNo;
+            return ioArmyNo;
         }
-
 
         public async Task<UserMapping?> GetCoDetails(int applicationId)
         {
-            var application = await _context.trnClaim
-                .FirstOrDefaultAsync(a => a.ApplicationId == applicationId);
+            // 1. Project ONLY the PresentUnit column
+            var presentUnitId = await _context.trnClaim
+                .Where(a => a.ApplicationId == applicationId)
+                .Select(a => a.PresentUnit)
+                .FirstOrDefaultAsync();
 
-            if (application == null)
+            // If the unit ID is 0 (or null, depending on your schema), exit early
+            if (presentUnitId == 0)
                 return null;
 
+            // 2. Fetch the mapping
             var userMapping = await _context.trnUserMappings
-                .FirstOrDefaultAsync(m => m.UnitId == application.PresentUnit && m.IsPrimary);
+                .FirstOrDefaultAsync(m => m.UnitId == presentUnitId && m.IsPrimary);
 
             return userMapping;
         }
@@ -346,14 +378,16 @@ namespace DataAccessLayer.Repositories
 
         public async Task<UserMapping?> GetUserDetails(string CoArmyNumber)
         {
-            var userProfile = await _context.UserProfiles
-                .FirstOrDefaultAsync(u => u.ArmyNo == CoArmyNumber);
+            var profileId = await _context.UserProfiles
+        .Where(u => u.ArmyNo == CoArmyNumber)
+        .Select(u => u.ProfileId)
+        .FirstOrDefaultAsync();
 
-            if (userProfile == null)
+            if (profileId == 0)
                 return null;
 
             var userMapping = await _context.trnUserMappings
-                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+                .FirstOrDefaultAsync(m => m.ProfileId == profileId);
 
             return userMapping;
         }
@@ -367,11 +401,21 @@ namespace DataAccessLayer.Repositories
 
             if (ApplicationId != 0)
             {
-                commonDataModel = _context.trnClaim.FirstOrDefault(c => c.ApplicationId == ApplicationId);
-                int id = commonDataModel.ArmyPrefix;
-                mArmyPrefix = await _IArmyPrefixes.Get(id);
-                ArmyNo = (mArmyPrefix.Prefix ?? "") + (commonDataModel.Number ?? "") + (commonDataModel.Suffix ?? "");
-                ArmyNo = ArmyNo.Trim();
+                var claimData = await _context.trnClaim
+    .Where(c => c.ApplicationId == ApplicationId)
+    .Select(c => new
+    {
+        c.ArmyPrefix,
+        c.Number,
+        c.Suffix
+    })
+    .FirstOrDefaultAsync();
+                if (claimData != null)
+                {
+                    mArmyPrefix = await _IArmyPrefixes.Get(claimData.ArmyPrefix);
+
+                    ArmyNo = $"{mArmyPrefix?.Prefix}{claimData.Number}{claimData.Suffix}".Trim();
+                }
             }
 
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClaimTempUploads");
@@ -401,22 +445,18 @@ namespace DataAccessLayer.Repositories
                     if (file.Name.Contains("CancelledCheque"))
                     {
                         fileUpload.IsCancelledChequePdf = true;
-                        //fileUpload.CancelledCheque = "CancelledCheque"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("PaySlip"))
                     {
                         fileUpload.IsPaySlipPdf = true;
-                        //fileUpload.PaySlipPdf = "PaySlipPdf"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("Spdocus"))
                     {
                         fileUpload.IsSplWaiverPdf = true;
-                        //fileUpload.SplWaiverPdf = "Spdocus"; // Update with the dynamic file name
                     }
                     else if (file.Name.Contains("SeviceExtn"))
                     {
                         fileUpload.IsSeviceExtnPdf = true;
-                        //fileUpload.SeviceExtnPdf = "SeviceExtnPdf"; // Update with the dynamic file name
                     }
                 }
             }
@@ -424,25 +464,19 @@ namespace DataAccessLayer.Repositories
             if (PurposeType == "ED")
             {
                 var Eddetails = await _Education.GetByApplicationId(ApplicationId);
-                //fileUpload.AttachBonafideLetterPdf = Eddetails.AttachBonafideLetterPdf;
                 fileUpload.IsAttachBonafideLetterPdf = Eddetails.IsAttachBonafideLetterPdf;
-                //fileUpload.AttachPartIIOrderPdf = Eddetails.AttachPartIIOrderPdf;
                 fileUpload.IsAttachPartIIOrderPdfEdu = Eddetails.IsAttachPartIIOrderPdf;
-                //fileUpload.TotalExpenditureFile = Eddetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = Eddetails.IsTotalExpenditureFilePdf;
             }
             else if (PurposeType == "MW")
             {
                 var MWdetails = await _Marraige.GetByApplicationId(ApplicationId);
-                //fileUpload.Attach_PartIIOrderPdf = MWdetails.AttachPartIIOrderPdf;
                 fileUpload.IsAttach_PartIIOrderPdfMarr = MWdetails.IsAttachPartIIOrderPdf;
-                //fileUpload.AttachInvitationcardPdf = MWdetails.AttachInvitationcardPdf;
                 fileUpload.IsAttachInvitationcardPdf = MWdetails.IsAttachInvitationcardPdf;
             }
             else if (PurposeType == "PR")
             {
                 var PRdetails = await _Property.GetByApplicationId(ApplicationId);
-                //fileUpload.TotalExpenditureFile = PRdetails.TotalExpenditureFilePdf;
                 fileUpload.IsTotalExpenditureFilePdf = PRdetails.IsTotalExpenditureFilePdf;
             }
 
@@ -507,7 +541,7 @@ namespace DataAccessLayer.Repositories
             var result = (from common in _context.trnClaim
                           join prefix in _context.MArmyPrefixes on common.ArmyPrefix equals prefix.Id into prefixGroup
                           from prefix in prefixGroup.DefaultIfEmpty()
-                          join oldPrefix in _context.MArmyPrefixes on common.OldArmyPrefix equals oldPrefix.Id into oldPrefixGroup
+                          join oldPrefix in _context.MArmyPrefixes on (int?)(common.ApplicantType == 3 ? (int?)null : common.OldArmyPrefix) equals (int?)oldPrefix.Id into oldPrefixGroup
                           from oldPrefix in oldPrefixGroup.DefaultIfEmpty()
                           join rank in _context.MRanks on common.DdlRank equals rank.RankId into rankGroup
                           from rank in rankGroup.DefaultIfEmpty()
@@ -546,9 +580,11 @@ namespace DataAccessLayer.Repositories
                               Number = $"{(prefix != null ? prefix.Prefix : string.Empty)}{common.Number ?? string.Empty}{common.Suffix ?? string.Empty}".Trim(),
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
                               Suffix = common.Suffix ?? string.Empty,
-                              OldArmyPrefix = common.OldArmyPrefix,
-                              OldNumber = $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
-                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              OldArmyPrefix = common.ApplicantType == 3 ? 0 : (common.OldArmyPrefix ?? 0),
+
+                              OldNumber = common.ApplicantType == 3 ? "NA" : $"{(oldPrefix != null ? oldPrefix.Prefix : string.Empty)}{common.OldNumber ?? string.Empty}{common.OldSuffix ?? string.Empty}".Trim(),
+
+                              OldSuffix = common.ApplicantType == 3 ? "NA" : common.OldSuffix ?? string.Empty,
                               DdlRank = rank != null ? rank.RankName : string.Empty,
                               ApplicantName = common.ApplicantName ?? string.Empty,
                               DateOfBirth = common.DateOfBirth,
@@ -701,7 +737,7 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsAttach_PartIIOrderPdfMarr)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName =  "Attach_PartIIOrderPdfMarr.Pdf";
+                        dTODocumentFileView.FileName = "Attach_PartIIOrderPdfMarr.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
@@ -715,7 +751,7 @@ namespace DataAccessLayer.Repositories
                     if (DocumentModel.IsCancelledChequePdf)
                     {
                         DTODocumentFileView dTODocumentFileView = new DTODocumentFileView();
-                        dTODocumentFileView.FileName =  "CancelledCheque.Pdf";
+                        dTODocumentFileView.FileName = "CancelledCheque.Pdf";
                         dTODocumentFileView.FilePath = directoryPath;
                         lstdoc.Add(dTODocumentFileView);
                     }
@@ -801,20 +837,21 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> CheckExtensionofservice(int applicationid)
         {
-            var application = await _context.trnClaim
-                .Where(a => a.ApplicationId == applicationid).FirstOrDefaultAsync();
+            try
+            {
+                var ExtnOfService = await _context.trnClaim
+                .Where(a => a.ApplicationId == applicationid)
+                .Select(a => a.ExtnOfService)
+                .FirstOrDefaultAsync();
 
-            if (application == null)
-                return false;
+                return ExtnOfService == "Yes";
+            }
+            catch (Exception ex)
+            {
 
-            if (string.IsNullOrEmpty(application.ExtnOfService))
-                return false;
-            else if (application.ExtnOfService == "Yes")
-                return true;
-            else if (application.ExtnOfService == "No")
-                return false;
-            else
-                return false;
+                throw ex;
+            }
+
 
         }
 
@@ -851,9 +888,6 @@ namespace DataAccessLayer.Repositories
                           join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
                           from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
 
-                              //join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
-                              // from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
-
                           where dTOExport.Id.Contains(common.ApplicationId)
                           select new ClaimCommonDataOnlineResponse
                           {
@@ -882,7 +916,6 @@ namespace DataAccessLayer.Repositories
                               Email = common.Email ?? string.Empty,
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              //  NameOfBank = BankDetails.BankName ?? string.Empty,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
                               pcda_AcctNo = common.pcda_AcctNo ?? string.Empty,
@@ -1201,9 +1234,9 @@ namespace DataAccessLayer.Repositories
                               Number = common.Number,
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
                               Suffix = common.Suffix ?? string.Empty,
-                              OldArmyPrefix = common.OldArmyPrefix,
-                              OldNumber = common.OldNumber,
-                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              OldArmyPrefix = common.ApplicantType == 3 ? 0 : common.OldArmyPrefix, /*common.OldArmyPrefix,*/
+                              OldNumber = common.ApplicantType == 3 ? "NA" : common.OldNumber,/*common.OldNumber,*/
+                              OldSuffix = common.ApplicantType == 3 ? "NA" : common.OldSuffix,/*common.OldSuffix ?? string.Empty,*/
                               RankId = common.DdlRank,
                               DdlRank = rank != null ? rank.RankName : string.Empty,
                               ApplicantName = common.ApplicantName ?? string.Empty,
@@ -1224,7 +1257,6 @@ namespace DataAccessLayer.Repositories
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               ConfirmSalaryAcctNo = AccountDetails.ConfirmSalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              // NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
                               BankId = AccountDetails.BankId ?? 0,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,
@@ -1260,9 +1292,6 @@ namespace DataAccessLayer.Repositories
 
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              //Distt = DistDetails.DistrictName ?? string.Empty,
-                              //State = StateDetails.StateName ?? string.Empty,
-
                               DistId = AddressDetails.Distt,
                               StateId = AddressDetails.State,
                               Code = AddressDetails.Code ?? string.Empty,

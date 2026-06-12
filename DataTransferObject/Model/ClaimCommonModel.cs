@@ -31,7 +31,7 @@ namespace DataTransferObject.Model
         public string? Suffix { get; set; }
 
         [Required(ErrorMessage = "Old Army Prefix is required.")]
-        public int OldArmyPrefix { get; set; }
+        public int? OldArmyPrefix { get; set; }
 
         [Required(ErrorMessage = "Old Number is required.")]
         [StringLength(10, ErrorMessage = "Army Prefix can't be longer than 10 characters.")]

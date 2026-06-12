@@ -209,9 +209,6 @@ namespace Agif_V2.Controllers
             return RedirectToAction("OnlineApplication");
         }
 
-
-
-
         public async Task<JsonResult> CheckForCoRegister(string ArmyNo)
         {
             return Json(await _IonlineApplication1.CheckForCoRegister(ArmyNo));
@@ -283,9 +280,13 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("", "Please select an application type.");
             }
 
+            
+
             ValidateModel(model.AddressDetails, "AddressDetails");
             ValidateModel(model.AccountDetails, "AccountDetails");
             ValidateModel(model.CommonData, "CommonData");
+
+            
 
             switch (formType)
             {
@@ -298,6 +299,13 @@ namespace Agif_V2.Controllers
                 case "HBA":
                     ValidateModel(model.HBAApplication, "HBAApplication");
                     break;
+            }
+
+            if (model.applicantCategory == "3") // OR
+            {
+                ModelState.Remove("CommonData.OldArmyPrefix");
+                ModelState.Remove("CommonData.OldNumber");
+                ModelState.Remove("CommonData.OldSuffix");
             }
 
             if (!ModelState.IsValid)
@@ -316,6 +324,12 @@ namespace Agif_V2.Controllers
                     model.CommonData.ApplicantType = int.Parse(model.applicantCategory);
                     model.CommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
                     model.CommonData.ipAddress = ip;
+                    if (model.CommonData.ApplicantType == 3)
+                    {
+                        model.CommonData.OldArmyPrefix = 0;
+                        model.CommonData.OldNumber = string.Empty;   // or string.Empty if non-nullable
+                        model.CommonData.OldSuffix = string.Empty;   // or string.Empty if non-nullable
+                    }
                     if (string.IsNullOrEmpty(model.CommonData.pcda_AcctNo))
                     {
                         model.CommonData.pcda_AcctNo = string.Empty;
@@ -680,9 +694,18 @@ namespace Agif_V2.Controllers
             {
                 return Json(new { success = false, message = "Application ID not found." });
             }
+            try
+            {
+                DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
+                return Json(data.OnlineApplicationResponse);
+            }
+            catch (Exception ex)
+            {
 
-            DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId.Value);
-            return Json(data.OnlineApplicationResponse);
+                throw ex;
+            }
+            
+            
         }
 
         public async Task<JsonResult> GetDataByApplicationId(int applicationId)

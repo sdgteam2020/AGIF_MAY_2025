@@ -406,64 +406,69 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
         {
-            var application = await _context.trnApplications.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
-            if (application == null)
-            {
-                return false; // Just exit the method if not found
-            }
+            // Executes a direct SQL UPDATE statement in the database.
+            // Returns the number of rows affected.
+            var rowsAffected = await _context.trnApplications
+                .Where(i => i.ApplicationId == applicationId)
+                .ExecuteUpdateAsync(s => s.SetProperty(a => a.StatusCode, status));
 
-            application.StatusCode = status;
-            _context.trnApplications.Update(application);
-            await _context.SaveChangesAsync();
-
-            return true;
+            // If rowsAffected is greater than 0, the record existed and was updated.
+            return rowsAffected > 0;
         }
 
         public async Task<bool> UpdateMergePdfStatus(int applicationId, bool status)
         {
-            var application = await _context.trnApplications.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
-            if (application == null)
-            {
-                return false; // Just exit the method if not found
-            }
+            // Directly executes the SQL UPDATE in a single database trip
+            var rowsAffected = await _context.trnApplications
+                .Where(i => i.ApplicationId == applicationId)
+                .ExecuteUpdateAsync(s => s.SetProperty(a => a.IsMergePdf, status));
 
-            application.IsMergePdf = status;
-            _context.trnApplications.Update(application);
-            await _context.SaveChangesAsync();
-
-            return true;
+            // Returns true if a row was actually updated
+            return rowsAffected > 0;
         }
 
         public async Task<bool> CheckForCoRegister(string ArmyNo)
         {
-            var userProfile = await _context.UserProfiles
-                .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
-
-            if (userProfile == null)
-                return false;
-
-            var userMapping = await _context.trnUserMappings
-                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
-
-            return userMapping != null;
+            // This executes a single SQL query using an INNER JOIN and an EXISTS check
+            return await _context.UserProfiles
+                .Where(u => u.ArmyNo == ArmyNo)
+                .Join(_context.trnUserMappings,
+                      u => u.ProfileId,        // Primary Key on UserProfile
+                      m => m.ProfileId,        // Foreign Key on trnUserMappings
+                      (u, m) => 1)             // We just project a dummy value (1) since we only care about existence
+                .AnyAsync();
         }
+
+        //public async Task<bool> CheckIsUnitRegister(string ArmyNo)
+        //{
+        //    var userProfile = await _context.UserProfiles
+        //       .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
+
+        //    if (userProfile == null)
+        //        return false;
+        //    else
+        //        return true;
+
+        //}
 
         public async Task<bool> CheckIsUnitRegister(string ArmyNo)
         {
-            var userProfile = await _context.UserProfiles
-               .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNo);
-
-            if (userProfile == null)
-                return false;
-            else
-                return true;
-            
+            // AnyAsync directly returns a boolean and does not load the entity into memory
+            return await _context.UserProfiles
+                .AnyAsync(u => u.ArmyNo == ArmyNo);
         }
+
+        //public async Task<bool> CheckIsCoRegister(int UnitId)
+        //{
+        //    var user = await _context.trnUserMappings.Where(i => i.UnitId == UnitId && i.IsActive == true).FirstOrDefaultAsync();
+        //    return user != null;
+        //}
 
         public async Task<bool> CheckIsCoRegister(int UnitId)
         {
-            var user = await _context.trnUserMappings.Where(i => i.UnitId == UnitId && i.IsActive == true).FirstOrDefaultAsync();
-            return user != null;
+            // AnyAsync directly returns a boolean and prevents any data from being downloaded into memory
+            return await _context.trnUserMappings
+                .AnyAsync(i => i.UnitId == UnitId && i.IsActive);
         }
 
         public async Task<bool> AddFwdCO(TrnFwdCO trnFwdCO)
@@ -473,18 +478,26 @@ namespace DataAccessLayer.Repositories
             return false;
         }
 
+        //public async Task<UserMapping?> GetIODetails(string ArmyNumber)
+        //{
+        //    var userProfile = await _context.UserProfiles
+        //        .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNumber);
+
+        //    if (userProfile == null)
+        //        return null;
+
+        //    var userMapping = await _context.trnUserMappings
+        //        .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
+
+        //    return userMapping;
+        //}
+
         public async Task<UserMapping?> GetIODetails(string ArmyNumber)
         {
-            var userProfile = await _context.UserProfiles
-                .FirstOrDefaultAsync(u => u.ArmyNo == ArmyNumber);
-
-            if (userProfile == null)
-                return null;
-
-            var userMapping = await _context.trnUserMappings
-                .FirstOrDefaultAsync(m => m.ProfileId == userProfile.ProfileId);
-
-            return userMapping;
+            // EF Core automatically generates an INNER JOIN in SQL
+            // and only materializes the UserMapping object.
+            return await _context.trnUserMappings
+                .FirstOrDefaultAsync(m => m.UserProfile.ArmyNo == ArmyNumber);
         }
 
         public async Task<UserMapping?> GetUserDetails(string CoArmyNumber)
@@ -546,23 +559,12 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> CheckExtensionofservice(int applicationid)
         {
-            var application = await _context.trnApplications
-                .Where(a => a.ApplicationId == applicationid).FirstOrDefaultAsync();
-
-            if (application == null)
-                return false;
-
-            if(string.IsNullOrEmpty(application.ExtnOfService))
-                return false;
-            else if(application.ExtnOfService=="Yes")
-                return true;
-            else if (application.ExtnOfService == "No")
-                return false;
-            else
-                return false;
-
+            var extnOfService = await _context.trnApplications
+                .Where(a => a.ApplicationId == applicationid)
+                .Select(a => a.ExtnOfService)
+                .FirstOrDefaultAsync();
+            return extnOfService == "Yes";
         }
-
 
         public async Task<bool> CheckDocumentUploaded(int ApplicationID)
         {
@@ -837,10 +839,7 @@ namespace DataAccessLayer.Repositories
                           from AddressDetails in AddressDetailsModelGroup.DefaultIfEmpty()
                           join AccountDetails in _context.trnAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
-                          //join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsGroup
-                          //from StateDetails in StateDetailsGroup.DefaultIfEmpty()
-                          //join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsGroup
-                          //from DistDetails in DistDetailsGroup.DefaultIfEmpty()
+                          
 
                           join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
                           from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
@@ -859,9 +858,9 @@ namespace DataAccessLayer.Repositories
                               Number =common.Number,
                               AadharCardNo = common.AadharCardNo ?? string.Empty,
                               Suffix = common.Suffix ?? string.Empty,
-                              OldArmyPrefix = common.OldArmyPrefix,
-                              OldNumber = common.OldNumber,
-                              OldSuffix = common.OldSuffix ?? string.Empty,
+                              OldArmyPrefix = common.ApplicantType == 3?0: common.OldArmyPrefix, /*common.OldArmyPrefix ?? 0,*/
+                              OldNumber = common.ApplicantType == 3 ? "NA": common.OldNumber, /*common.OldNumber ?? "NA",*/
+                              OldSuffix = common.ApplicantType == 3 ? "NA" : common.OldSuffix,/*common.OldSuffix ?? "NA",*/
                               RankId = common.DdlRank,
                               ApplicantName = common.ApplicantName ?? string.Empty,
                               DateOfBirth = common.DateOfBirth,
@@ -872,8 +871,7 @@ namespace DataAccessLayer.Repositories
                               PresentUnitPin = common.PresentUnitPin ?? string.Empty,
                               Vill_Town = AddressDetails.Vill_Town ?? string.Empty,
                               PostOffice = AddressDetails.PostOffice ?? string.Empty,
-                              //Distt = DistDetails.DistrictName,
-                              //State = StateDetails.StateName,
+                              
                               StateId = AddressDetails.State,
                               DistId = AddressDetails.Distt,
                               
