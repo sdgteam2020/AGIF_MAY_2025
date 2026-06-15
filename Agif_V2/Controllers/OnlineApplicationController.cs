@@ -34,8 +34,8 @@ namespace Agif_V2.Controllers
         private readonly IAddress _address;
         private readonly IAccount _account;
         private readonly IModelStateLogger _modelStateLogger;
-
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger)
+        private readonly ModelValidations _modelValidations;
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger, ModelValidations modelValidations)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -49,6 +49,7 @@ namespace Agif_V2.Controllers
             _address = address;
             _account = account;
             _modelStateLogger = modelStateLogger;
+            _modelValidations = modelValidations;
         }
         [HttpGet]
         public IActionResult OnlineApplication()
@@ -308,6 +309,36 @@ namespace Agif_V2.Controllers
                 ModelState.Remove("CommonData.OldNumber");
                 ModelState.Remove("CommonData.OldSuffix");
             }
+            //var allowedDomains = new[]
+            //    {
+            //        "gmail.com",
+            //        "yahoo.com",
+            //        "yahoo.co.in",
+            //        "rediffmail.com",
+            //        "outlook.com",
+            //        "protonmail.com",
+            //        "hotmail.com",
+            //        "icloud.com",
+            //        "zohomail.com"
+            //    };
+
+            //if (!allowedDomains.Contains(model.CommonData.EmailDomain, StringComparer.OrdinalIgnoreCase))
+            //{
+            //    ModelState.AddModelError(
+            //        "CommonData.EmailDomain",
+            //        "Invalid email domain selected.");
+            //}
+            if (!_modelValidations.IsValidEmailDomain(model.CommonData.EmailDomain))
+            {
+                ModelState.AddModelError("CommonData.EmailDomain","Invalid email domain selected.");
+            }
+            var expectedSuffix = _modelValidations.CalculateSuffix(model.CommonData.Number);
+
+            if (!string.Equals(expectedSuffix,model.CommonData.Suffix,StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("CommonData.Suffix","Invalid Army Number or Suffix.");
+            }
+
 
             if (!ModelState.IsValid)
             {
@@ -380,9 +411,10 @@ namespace Agif_V2.Controllers
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                ModelState.AddModelError("", "An error occurred while processing your application.");
+                ModelState.AddModelError("", "Security error: Failed to Process The Application.");
+                return View("OnlineApplication", model);
             }
 
             TempData["applicationId"] = common.ApplicationId;

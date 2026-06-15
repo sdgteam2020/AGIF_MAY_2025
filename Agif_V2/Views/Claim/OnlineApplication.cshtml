@@ -102,20 +102,22 @@
                                     <div class="row">
                                         <div class="col-4 col-md-4">
                                             <div class="input-group mb-2">
-                                                <span class="input-group-text">👮</span>
-                                                <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
-                                                    {
-                                                        @Model.ClaimCommonData.OldArmyPrefix
-                                                        ;
-                                                    }
-                                                    " required>
-                                                </select>
-                                                <label class="form-label select-label ">Prefix</label>
-                                                @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
-                                                
+                                                <div class="col-md-2">
+                                                    <span class="input-group-text">👮</span>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <select class="select form-select" data-mdb-filter="true" id="oldArmyPrefix" name="ClaimCommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.ClaimCommonData != null)
+                                                        {
+                                                            @Model.ClaimCommonData.OldArmyPrefix
+                                                            ;
+                                                        }">
+                                                    </select>
+                                                    <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
+                                                    @Html.ValidationMessageFor(m => m.ClaimCommonData.OldArmyPrefix, "", new { @class = "text-danger" })
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-4 col-md-4">
+                                        <div class="col-md-4">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
@@ -162,7 +164,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">👮</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName" required maxlength="20" />
+                                        <input type="text" id="txtApplicantName" name="ClaimCommonData.ApplicantName" class="form-control" value="@Model.ClaimCommonData?.ApplicantName"  maxlength="20"/>
                                         <label class="form-label" for="armyNumber">Applicant Name</label>
                                         <div class="invalid-feedback">
                                             Please choose a username.
@@ -380,7 +382,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📒</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="pcda_AcctNo" name="ClaimCommonData.pcda_AcctNo" class="form-control" data-inputmask="'mask': '99/999/999999A', 'placeholder': '99/999/999999A'" placeholder="99/999/999999A" required readonly />
+                                        <input type="text" id="pcda_AcctNo" name="ClaimCommonData.pcda_AcctNo" class="form-control" data-inputmask="'mask': '99/999/999999A', 'placeholder': '99/999/999999A'" placeholder="99/999/999999A" value="@Model.ClaimCommonData?.pcda_AcctNo" required readonly />
                                         <label class="form-label select-label ">PCDA(O) Acct No</label>
                                         @Html.ValidationMessageFor(m => m.ClaimCommonData.pcda_AcctNo, "", new { @class = "text-danger" })
                                     </div>
@@ -606,7 +608,7 @@
                                             }
                                             ">
                                         </select>
-                                        <label class="form-label select-label " for="BankId">Bank Name</label>
+                                        <label class="form-label select-label" for="BankId">Bank Name</label>
                                         @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
                                     
                                 </div>

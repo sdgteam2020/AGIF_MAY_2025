@@ -120,6 +120,7 @@ builder.Services.AddTransient<Watermark>();
 builder.Services.AddTransient<AsymmetricEncryption>();
 builder.Services.AddTransient<IClaimCalculator, ClaimCalculatorDL>();
 builder.Services.AddTransient<IModelStateLogger, ModelStateLogger>();
+builder.Services.AddTransient<ModelValidations>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",

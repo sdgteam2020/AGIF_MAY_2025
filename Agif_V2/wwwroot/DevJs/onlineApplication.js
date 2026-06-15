@@ -429,6 +429,41 @@ function BindDropDown() {
         $('#districtDropdown').val(selectedDistrict).trigger('change');
     }, 2000);
 
+    var unitId = $("input[name='CommonData.PresentUnit']").val();
+    var ParentUnitId = $("input[name='CommonData.ParentUnit']").val();
+
+    if (unitId && unitId != "0") {
+
+        $.ajax({
+            url: '/Account/GetUnitById',
+            type: 'POST',
+            data: { UnitId: unitId },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                $("#PresenttxtUnit").val(data);
+            }
+        });
+
+    }
+
+    if (ParentUnitId && ParentUnitId != "0") {
+
+        $.ajax({
+            url: '/Account/GetUnitById',
+            type: 'POST',
+            data: { UnitId: ParentUnitId },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                $("#ParenttxtUnit").val(data);
+            }
+        });
+
+    }
+
 }
 function loadDropdown() {
 

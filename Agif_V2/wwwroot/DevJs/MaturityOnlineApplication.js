@@ -430,59 +430,107 @@ function formatAadhar(input) {
 
 
 
+function BindDropDown() {
+    const armyNumber = $('#armyNumber').val().trim();
+    if (armyNumber) {
+        setTimeout(function () {
+
+            $('#ddlrank').val($('#ddlrank').data('rank-prefix')).addClass("d-none").trigger('change');
+
+            $('#armyPrefix').val($('#armyPrefix').data('army-prefix')).addClass("d-none").trigger('change');
+
+            $('#oldArmyPrefix').val($('#oldArmyPrefix').data('oldarmy-prefix')).addClass("d-none").trigger('change');
+
+            $('#regtCorps').val($('#regtCorps').data('regt-prefix')).addClass("d-none").trigger('change');
+
+            $('#armyPostOffice').val($('#armyPostOffice').data('armypost-prefix')).addClass("d-none").trigger('change');
+
+            $('#stateDropdown').val($('#stateDropdown').data('state-prefix')).addClass("d-none").trigger('change');
+
+            $('#BankId').val($('#BankId').data('bank-id')).addClass("d-none").trigger('change');
+
+        }, 1000);
+
+
+
+        const selectedDistrict = $('#districtDropdown').data('district-prefix');
+        setTimeout(function () {
+            $('#districtDropdown').val(selectedDistrict).addClass("d-none").trigger('change');
+        }, 2000);
+
+        var unitId = $("input[name='ClaimCommonData.PresentUnit']").val();
+        var ParentUnitId = $("input[name='ClaimCommonData.ParentUnit']").val();
+
+        if (unitId && unitId != "0") {
+
+            $.ajax({
+                url: '/Account/GetUnitById',
+                type: 'POST',
+                data: { UnitId: unitId },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    $("#PresenttxtUnit").val(data);
+                }
+            });
+
+        }
+
+        if (ParentUnitId && ParentUnitId != "0") {
+
+            $.ajax({
+                url: '/Account/GetUnitById',
+                type: 'POST',
+                data: { UnitId: ParentUnitId },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    $("#ParenttxtUnit").val(data);
+                }
+            });
+
+        }
+
+
+    }
+}
+
 //function BindDropDown() {
 
 //    setTimeout(function () {
 
-//        $('#ddlrank').val($('#ddlrank').data('rank-prefix')).trigger('change');
-
-//        $('#armyPrefix').val($('#armyPrefix').data('army-prefix')).trigger('change');
-
-//        $('#oldArmyPrefix').val($('#oldArmyPrefix').data('oldarmy-prefix')).trigger('change');
-
-//        $('#regtCorps').val($('#regtCorps').data('regt-prefix')).trigger('change');
-
-//        $('#armyPostOffice').val($('#armyPostOffice').data('armypost-prefix')).trigger('change');
-
-//        $('#stateDropdown').val($('#stateDropdown').data('state-prefix')).trigger('change');
-
-//        $('#BankId').val($('#BankId').data('bank-id')).trigger('change');
+//        SetDropDownValue('#ddlrank', 'rank-prefix');
+//        SetDropDownValue('#armyPrefix', 'army-prefix');
+//        SetDropDownValue('#oldArmyPrefix', 'oldarmy-prefix');
+//        SetDropDownValue('#regtCorps', 'regt-prefix');
+//        SetDropDownValue('#armyPostOffice', 'armypost-prefix');
+//        SetDropDownValue('#stateDropdown', 'state-prefix');
+//        SetDropDownValue('#BankId', 'bank-id');
 
 //    }, 1000);
 
-//    const selectedDistrict = $('#districtDropdown').data('district-prefix');
 //    setTimeout(function () {
-//        $('#districtDropdown').val(selectedDistrict).trigger('change');
+//        SetDropDownValue('#districtDropdown', 'district-prefix');
 //    }, 2000);
-
 //}
-function BindDropDown() {
+//function SetDropDownValue(selector, dataKey) {
 
-    setTimeout(function () {
+//    var element = $(selector);
+//    var wasHidden = element.hasClass('d-none');
 
-        SetDropDownValue('#ddlrank', 'rank-prefix');
-        SetDropDownValue('#armyPrefix', 'army-prefix');
-        SetDropDownValue('#oldArmyPrefix', 'oldarmy-prefix');
-        SetDropDownValue('#regtCorps', 'regt-prefix');
-        SetDropDownValue('#armyPostOffice', 'armypost-prefix');
-        SetDropDownValue('#stateDropdown', 'state-prefix');
-        SetDropDownValue('#BankId', 'bank-id');
+//    if (wasHidden) {
+//        element.removeClass('d-none');
+//    }
 
-    }, 1000);
+//    element.val(element.data(dataKey)).trigger('change');
 
-    setTimeout(function () {
-        SetDropDownValue('#districtDropdown', 'district-prefix');
-    }, 2000);
-}
+//    if (wasHidden) {
+//        element.addClass('d-none');
+//    }
+//}
 
-function SetDropDownValue(selector, dataKey) {
-
-    var element = $(selector);
-
-    if (!element.hasClass('d-none')) {
-        element.val(element.data(dataKey)).trigger('change');
-    }
-}
 function loadDropdown() {
 
     const loanTypeFromInput = document.getElementById('Category')?.value || null;
@@ -500,7 +548,7 @@ function loadDropdown() {
     const Armypostoffice = $('#armyPostOffice').data('armypost-prefix');
     const selectedState = $('#stateDropdown').data('state-prefix');
     const selectedDistrict = $('#districtDropdown').data('district-prefix');
-    const BankName = $('#BankId').data('data-Bank-Id');
+    const BankName = $('#BankId').data('bank-id');
 
     // Load state using same mMsater pattern as other dropdowns
     mMsater(selectedState, "stateDropdown", 21, 0);
