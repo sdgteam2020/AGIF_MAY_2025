@@ -40,7 +40,7 @@
     </div>
 
     <div class="accordion" id="formAccordion">
-        <form id="myMaturityForm" class="needs-validation mb-8" name="myForm" method="post" action="/Claim/OnlineApplication" enctype="multipart/form-data">
+        <form id="myMaturityForm" novalidate class="needs-validation mb-8" name="myForm" method="post" action="/Claim/OnlineApplication" enctype="multipart/form-data">
             <!-- Personal Info -->
             @Html.AntiForgeryToken()
             <span id="spanhdns" class="d-none">@ViewBag.hiddenClaimSalt</span>
@@ -452,7 +452,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏢</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nextFmnHQ" name="ClaimCommonData.NextFmnHQ" class="form-control" value="@Model.ClaimCommonData?.NextFmnHQ" maxlength="20" required />
+                                        <input type="text" id="nextFmnHQ" name="ClaimCommonData.NextFmnHQ" class="form-control last-input" value="@Model.ClaimCommonData?.NextFmnHQ" maxlength="20" required />
                                         <label class="form-label select-label ">Next Fmn HQ</label>
                                     </div>
                                 </div>
@@ -537,7 +537,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt js-unit-pin" required maxlength="6" value="@Model.AddressDetails?.Code" />
+                                        <input type="text" id="Code" name="AddressDetails.Code" class="form-control isNumerictxt js-unit-pin last-input" required maxlength="6" value="@Model.AddressDetails?.Code" />
                                         <label class="form-label" for="Code">Pin Code</label>
                                     </div>
                                 </div>
@@ -616,7 +616,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">🏦</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
+                                        <input type="text" id="nameOfBankBranch" name="AccountDetails.NameOfBankBranch" class="form-control form-control-Alphabets last-input" maxlength="50" value="@Model.AccountDetails?.NameOfBankBranch" required />
                                         <label class="form-label select-label ">Name of Bank Branch</label>
                                     </div>
                                 </div>
@@ -889,7 +889,7 @@
                                                 }, "Value", "Text"),
                                                          new
                                                          {
-                                                             @class = "select form-select",
+                                                         @class = "select form-select last-input",
                                                              id = "Noofwithdrawal"
 
                                                          })
@@ -908,7 +908,7 @@
             @{
                 if (Purpose == "1")
                 {
-                    <!-- HBA Application -->
+                    <!-- Education Application -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button  fs-5 acc-btn h-50px" type="button" data-bs-toggle="collapse" type="button" data-bs-target="#educationDetails" aria-expanded="false">
@@ -1028,7 +1028,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    *@
+                                    
 
                                     <div class="col-md-4">
                                         <div class="mb-2">
@@ -1106,7 +1106,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    *@
+                                    
                                        <div class="col-md-4">
                                         <div class="mb-2">
                                            <div class="form-outline" data-mdb-input-init>
@@ -1154,7 +1154,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    *@
+                                    
 
                                      <div class="col-md-4">
                                         <div class="mb-2">
@@ -1302,18 +1302,6 @@
                                         @Html.ValidationMessageFor(m => m.Marriageward.DoPartIIDate, "", new { @class = "text-danger" })
                                     </div>
 
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                        <div class="mb-2">
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="Attach_Part_II_Order" name="Marriageward.AttachPartIIOrder" class="form-control custom-file-text file-upload" required data-text="Attach Part-II Order" accept=".pdf" />
-                                                <p class="file-error-message text-danger"></p>
-
-                                                @Html.ValidationMessageFor(m => m.Marriageward.AttachPartIIOrder, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    *@
-
                                     <div class="col-md-4">
                                         <div class="mb-2">
                                            <div class="form-outline" data-mdb-input-init>
@@ -1362,22 +1350,6 @@
                                         </div>
                                         @Html.ValidationMessageFor(m => m.Marriageward.DateofMarriage, "", new { @class = "text-danger" })
                                     </div>
-
-
-
-
-
-
-                                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
-                                        <div class="mb-2">
-                                            <div class="form-outline" data-mdb-input-init>
-                                                <input type="file" id="Attach_invitation_card" name="Marriageward.Attachinvitationcard" class="form-control custom-file-text file-upload" required data-text="Attach invitation card" accept=".pdf" />
-                                                <p class="file-error-message text-danger"></p>
-                                                @Html.ValidationMessageFor(m => m.Marriageward.AttachInvitationcard, "", new { @class = "text-danger" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    *@
 
                                      <div class="col-md-4">
                                         <div class="mb-2">
@@ -1482,7 +1454,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    *@
+                                    
                                      <div class="col-md-4">
                                         <div class="mb-2">
                                            <div class="form-outline" data-mdb-input-init>

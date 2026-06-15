@@ -24,6 +24,7 @@ $(document).ready(function () {
     findDataWithApplicationId();
     callingCommonFunctions();
     BindDropDown();
+    setupRealTimeValidation();
 });
 
 function callingCommonFunctions() {
@@ -37,7 +38,11 @@ function callingCommonFunctions() {
 
 
     $(document).on("change", ".js-setregcorp", function () {
-        fetchPCDA_PAO();
+        if ($(this).val()) {
+            fetchPCDA_PAO();
+        } else {
+            $('#pcda_pao').val("");
+        }
     });
 
 
@@ -426,7 +431,7 @@ function BindDropDown() {
 
 }
 function loadDropdown() {
-  
+
 
     const loanTypeFromInput = document.getElementById('loanType')?.value || null;
 
@@ -625,7 +630,7 @@ function getApplicantDetalis() {
         type: "POST",
         url: "/OnlineApplication/CheckExistUser",
         data: JSON.stringify({ armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType }),
-        contentType: 'application/json', 
+        contentType: 'application/json',
         headers: {
             "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
         },
@@ -679,7 +684,7 @@ function DeleteExistingLoan() {
         type: "POST",
         url: "/OnlineApplication/DeleteExistingLoan",
         data: JSON.stringify({ armyNumber: armyNumber, Prefix: Prefix, Suffix: Suffix, appType: appType }),
-        contentType: 'application/json', 
+        contentType: 'application/json',
         headers: {
             "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
         },
@@ -1313,7 +1318,7 @@ function extensionOfService() {
                     $('#dateOfRetirement').val(formattedDate);
 
                     calculateResidualService();
-                    
+
                 } else {
                     $('#dateOfRetirement').val('');
 
@@ -1362,19 +1367,6 @@ function ExtensionOfServiceAccess() {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 function fetchPCDA_PAO() {
     const category = $('#applicantCategory').val();
 
@@ -1385,33 +1377,30 @@ function fetchPCDA_PAO() {
     else {
         const regt = $('#regtCorps').val();
         if (!regt) {
-            alert("Please select Regt/Corps.");
             return;
         }
-        const param = { "regt": regt }; 
+        const param = { "regt": regt };
 
         $.ajax({
-            url: '/OnlineApplication/GetPCDA_PAO',  // Your endpoint URL
+            url: '/OnlineApplication/GetPCDA_PAO', 
             type: 'POST',
-            contentType: 'application/x-www-form-urlencoded',  // Specify content type for URL-encoded data
-            data: param,  // Pass the data parameter
+            contentType: 'application/x-www-form-urlencoded', 
+            data: param,  
             headers: {
                 "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
             },
             success: function (data) {
                 if (data != null) {
-                    $('#pcda_pao').val(data.pcdaPao);  // Set the result into the input
-                    setOutlineActive("pcda_pao");  // Call the function to activate the outline
+                    $('#pcda_pao').val(data.pcdaPao);  
+                    setOutlineActive("pcda_pao");  
                 }
             },
             error: function (xhr, status, error) {
-                alert("Data Not loaded!");  // Alert the user in case of error
-                console.error('AJAX error:', error);  // Log the error for debugging
+                alert("Data Not loaded!"); 
+                console.error('AJAX error:', error);  
             }
         });
     }
-    
-
 
 }
 function setOutlineActive(id) {
@@ -1453,7 +1442,7 @@ function EnableDisableCivilPostalAdd() {
 
 // After init, grab the filter input MDB created
 
-    
+
 
 function Validate_Salary_Slip_date(inputElement) {
     const value = inputElement.value;
@@ -1538,65 +1527,211 @@ function filterAmountText(loanType) {
 }
 
 
+//function handleSubmitClick() {
+//    $("#btn-save").on("click", function (event) {
+//        event.preventDefault();
+//        const form = $("#myForm");
+//        const inputs = $('input[required], select[required]');
+//        form.find(".error").each(function () {
+//            $(this).text("");
+//        });
+
+//        let errorlist = [];
+//        let hasError = false;
+
+//        const params = new URLSearchParams(window.location.search);
+
+//        const loanTypeFromUrl = params.get("loanType");
+
+//        const loanTypeFromInput = $('#loanType').val() || null;
+
+//        const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+//        const applicantCategory = $('#applicantCategory').val() || null;
+
+//        filterAmountText(loanType);
+//        const serviceYearInput = $("#totalService");
+//        if (serviceYearInput.length) {
+//            const serviceYearValue = serviceYearInput.val();
+//            if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 1 && loanType == 1) {
+//                const errorSpan = serviceYearInput.parent().find(".error");
+//                if (errorSpan.length) {
+//                    errorSpan.text("Total service must be at least 1 yrs");
+//                }
+//                errorlist.push("Total Service");
+//                hasError = true;
+//            }
+//            else if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 2 && (loanType == 2 || loanType == 3)) {
+//                if (applicantCategory == 2 || applicantCategory == 3) {
+//                    const errorSpan = serviceYearInput.parent().find(".error");
+//                    if (errorSpan.length) {
+//                        errorSpan.text("Total service must be at least 1 yrs");
+//                    }
+//                    errorlist.push("Total Service");
+//                    hasError = true;
+//                }
+
+//            }
+//        }
+
+//        const residualServiceInput = $("#residualService");
+//        if (residualServiceInput.length) {
+//            const residualServiceValue = residualServiceInput.val();
+//            if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 2) {
+//                const errorSpan = residualServiceInput.parent().find(".error");
+//                if (errorSpan.length) {
+//                    errorSpan.text("Residual service must be at least 2 yrs");
+//                }
+//                errorlist.push("Residual Service");
+//                hasError = true;
+//            }
+//        }
+
+//        inputs.each(function () {
+//            const input = $(this);
+//            const inputElement = this;
+
+//            const loanWrappers = {
+//                "1": ["#pcaAccordianWrapper", "#caAccordianWrapper"],
+//                "2": ["#pcaAccordianWrapper", "#hbaAccordianWrapper"],
+//                "3": ["#caAccordianWrapper", "#hbaAccordianWrapper"]
+//            };
+
+//            if (loanWrappers[loanType] && (
+//                $(loanWrappers[loanType][0]).find(input).length ||
+//                $(loanWrappers[loanType][1]).find(input).length
+//            )) {
+//                return;
+//            }
+
+
+//            if (!inputElement.checkValidity()) {
+
+//                input.addClass("is-invalid").removeClass("is-valid");
+
+//                const errorSpan = input.parent().find(".error");
+//                if (errorSpan.length) {
+//                    errorSpan.text(inputElement.validationMessage);
+//                }
+//                let errorText = input.attr("name");
+//                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication.", "AddressDetails.", "AccountDetails."];
+//                prefixes.forEach(prefix => {
+//                    if (errorText.includes(prefix)) {
+//                        errorText = errorText.replace(prefix, "");
+//                    }
+//                });
+//                errorlist.push(errorText);
+//                hasError = true;
+//                if (input.val() && input.val().trim() !== "") {
+//                    input.removeAttr("required");
+//                }
+//            }
+//        });
+
+
+//        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+//        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
+
+//        if (hasError) {
+//            return false;
+//        }
+//        // Add this to your handleSubmitClick function inside the 'else' block (where hasError is false)
+//        else {
+//            $("#msgerror").html('');
+
+//            const formData = $("#myForm").serializeArray();
+//            const dataObj = {};
+
+//            // 1. Build a properly nested JSON object from ASP.NET MVC form names
+//            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
+//            formData.forEach(item => {
+//                const parts = item.name.split('.');
+//                let current = dataObj;
+//                for (let i = 0; i < parts.length - 1; i++) {
+//                    if (!current[parts[i]]) {
+//                        current[parts[i]] = {};
+//                    }
+//                    current = current[parts[i]];
+//                }
+//                current[parts[parts.length - 1]] = item.value;
+//            });
+
+//            // 2. Encrypt using your helper function
+//            const plainTextJson = JSON.stringify(dataObj);
+//            const encrypted = encryptData(plainTextJson);
+
+//            if (!encrypted) {
+//                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
+//                return false;
+//            }
+
+//            // 3. Create a hidden input to hold the encrypted string
+//            $('<input>').attr({
+//                type: 'hidden',
+//                name: 'EncryptedData',
+//                value: encrypted
+//            }).appendTo('#myForm');
+
+//            $("#myForm").find("input, select, textarea")
+//                .not("[name='EncryptedData']")
+//                .not("[name='__RequestVerificationToken']")
+//                .prop("disabled", true);
+
+//            $("#myForm").off("submit").submit();
+//        }
+
+//    });
+//}
+// TOP LEVEL — shared state
+let hasError = false;
+let firstErrorElement = null;
 function handleSubmitClick() {
     $("#btn-save").on("click", function (event) {
         event.preventDefault();
         const form = $("#myForm");
         const inputs = $('input[required], select[required]');
-        form.find(".error").each(function () {
-            $(this).text("");
-        });
 
-        let errorlist = [];
-        let hasError = false;
+        hasError = false;
+        firstErrorElement = null;
+        $("#myForm").find("input, select").attr("data-touched", "true");
 
         const params = new URLSearchParams(window.location.search);
-
         const loanTypeFromUrl = params.get("loanType");
-
         const loanTypeFromInput = $('#loanType').val() || null;
-
         const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
         const applicantCategory = $('#applicantCategory').val() || null;
 
-        filterAmountText(loanType);
+        if (typeof filterAmountText === "function") {
+            filterAmountText(loanType);
+        }
+
+
+
+        // 1. Check Custom Service Validations
         const serviceYearInput = $("#totalService");
         if (serviceYearInput.length) {
             const serviceYearValue = serviceYearInput.val();
-            if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 1 && loanType == 1) {
-                const errorSpan = serviceYearInput.parent().find(".error");
-                if (errorSpan.length) {
-                    errorSpan.text("Total service must be at least 1 yrs");
-                }
-                errorlist.push("Total Service");
-                hasError = true;
-            }
-            else if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 2 && (loanType == 2 || loanType == 3)) {
-                if (applicantCategory == 2 || applicantCategory == 3) {
-                    const errorSpan = serviceYearInput.parent().find(".error");
-                    if (errorSpan.length) {
-                        errorSpan.text("Total service must be at least 1 yrs");
-                    }
-                    errorlist.push("Total Service");
-                    hasError = true;
-                }
+            clearInlineError(serviceYearInput); // Clear previous
 
+            if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 1 && loanType == 1) {
+                setInlineError(serviceYearInput, "Total service must be at least 1 yrs");
+            } else if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 2 && (loanType == 2 || loanType == 3)) {
+                if (applicantCategory == 2 || applicantCategory == 3) {
+                    setInlineError(serviceYearInput, "Total service must be at least 1 yrs");
+                }
             }
         }
 
         const residualServiceInput = $("#residualService");
         if (residualServiceInput.length) {
             const residualServiceValue = residualServiceInput.val();
+            clearInlineError(residualServiceInput); // Clear previous
+
             if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 2) {
-                const errorSpan = residualServiceInput.parent().find(".error");
-                if (errorSpan.length) {
-                    errorSpan.text("Residual service must be at least 2 yrs");
-                }
-                errorlist.push("Residual Service");
-                hasError = true;
+                setInlineError(residualServiceInput, "Residual service must be at least 2 yrs");
             }
         }
 
+        // 2. Loop through all standard required inputs
         inputs.each(function () {
             const input = $(this);
             const inputElement = this;
@@ -1607,6 +1742,7 @@ function handleSubmitClick() {
                 "3": ["#caAccordianWrapper", "#hbaAccordianWrapper"]
             };
 
+            // Skip inputs in irrelevant loan accordions
             if (loanWrappers[loanType] && (
                 $(loanWrappers[loanType][0]).find(input).length ||
                 $(loanWrappers[loanType][1]).find(input).length
@@ -1614,46 +1750,43 @@ function handleSubmitClick() {
                 return;
             }
 
+            // Clean state before checking
+            clearInlineError(input);
 
             if (!inputElement.checkValidity()) {
+                // Use standard HTML5 validation message, or provide a default
+                let errMsg = inputElement.validationMessage || "This field is required.";
+                setInlineError(inputElement, errMsg);
 
-                input.addClass("is-invalid").removeClass("is-valid");
-
-                const errorSpan = input.parent().find(".error");
-                if (errorSpan.length) {
-                    errorSpan.text(inputElement.validationMessage);
-                }
-                let errorText = input.attr("name");
-                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication.", "AddressDetails.", "AccountDetails."];
-                prefixes.forEach(prefix => {
-                    if (errorText.includes(prefix)) {
-                        errorText = errorText.replace(prefix, "");
-                    }
-                });
-                errorlist.push(errorText);
-                hasError = true;
+                // Optional: remove required if it has a value (from your original logic)
                 if (input.val() && input.val().trim() !== "") {
                     input.removeAttr("required");
                 }
             }
         });
 
-
-        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
-        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
-
+        // 3. Handle Form Submission or Error Routing
         if (hasError) {
+            // Provide a clean, generic warning at the bottom instead of a giant list
+            $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Please fix the highlighted errors above.</div>');
+
+            // Scroll smoothly to the first error and focus it so the user isn't lost
+            if (firstErrorElement) {
+                setTimeout(() => {
+                    firstErrorElement[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstErrorElement.focus();
+                }, 300); // 300ms delay gives the accordion time to slide open
+            }
             return false;
         }
-        // Add this to your handleSubmitClick function inside the 'else' block (where hasError is false)
         else {
+            // Valid Form - Proceed to Encryption and Submission
             $("#msgerror").html('');
 
             const formData = $("#myForm").serializeArray();
             const dataObj = {};
 
-            // 1. Build a properly nested JSON object from ASP.NET MVC form names
-            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
+            // Build a properly nested JSON object from ASP.NET MVC form names
             formData.forEach(item => {
                 const parts = item.name.split('.');
                 let current = dataObj;
@@ -1666,33 +1799,163 @@ function handleSubmitClick() {
                 current[parts[parts.length - 1]] = item.value;
             });
 
-            // 2. Encrypt using your helper function
+            // Encrypt using your helper function
             const plainTextJson = JSON.stringify(dataObj);
-            const encrypted = encryptData(plainTextJson);
+            const encrypted = typeof encryptData === "function" ? encryptData(plainTextJson) : null;
 
             if (!encrypted) {
-                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
+                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed.</div>');
                 return false;
             }
 
-            // 3. Create a hidden input to hold the encrypted string
+            // Create a hidden input to hold the encrypted string
             $('<input>').attr({
                 type: 'hidden',
                 name: 'EncryptedData',
                 value: encrypted
             }).appendTo('#myForm');
 
+            // Disable other fields so they aren't sent in plaintext
             $("#myForm").find("input, select, textarea")
                 .not("[name='EncryptedData']")
                 .not("[name='__RequestVerificationToken']")
                 .prop("disabled", true);
 
+            // Submit
             $("#myForm").off("submit").submit();
         }
-        
     });
 }
+function setupRealTimeValidation() {
+    const CUSTOM_FIELDS = ["totalService", "residualService"];
 
+    // Single unified event handler
+    $("#myForm").on("input blur change", "input, select", function (e) {
+
+        if (!e.originalEvent && (e.type === "change" || e.type === "blur")) {
+            return;
+        }
+
+        const inputElement = this;
+        const input = $(this);
+        const eventType = e.type;
+
+
+
+        // Mark as touched on blur (safest — user has definitely left the field)
+        if (eventType === "blur") {
+            input.attr("data-touched", "true");
+        }
+
+        // For selects: only mark touched on change if user triggered it, not on page load
+        // We detect page load changes by checking if the document is fully loaded
+        if (eventType === "change" && input.is("select")) {
+            input.attr("data-touched", "true");
+        }
+
+        // Skip validation entirely until user has interacted with this field
+        if (!input.attr("data-touched")) return;
+
+        const fieldId = input.attr("id");
+
+        // --- Custom field validations ---
+        if (CUSTOM_FIELDS.includes(fieldId)) {
+            clearInlineError(input);
+
+            const params = new URLSearchParams(window.location.search);
+            const loanType = params.get("loanType") || $('#loanType').val() || null;
+            const applicantCategory = $('#applicantCategory').val() || null;
+            const val = parseFloat(input.val()?.trim());
+
+            if (!isNaN(val)) {
+                if (fieldId === "totalService") {
+                    if (val < 1 && loanType == 1) {
+                        setInlineError(input, "Total service must be at least 1 yrs");
+                    } else if (val < 2 && (loanType == 2 || loanType == 3)) {
+                        if (applicantCategory == 2 || applicantCategory == 3) {
+                            setInlineError(input, "Total service must be at least 1 yrs");
+                        }
+                    }
+                }
+                if (fieldId === "residualService" && val < 2) {
+                    setInlineError(input, "Residual service must be at least 2 yrs");
+                }
+            }
+            return;
+        }
+
+        // --- Standard HTML5 validation ---
+        clearInlineError(input);
+
+        // Don't nag while user is still typing in a text input
+        if (eventType === "input" && (!input.val() || input.val().trim() === "")) return;
+
+        if (!inputElement.checkValidity()) {
+            const errMsg = inputElement.validationMessage || "This field is required.";
+            setInlineError(inputElement, errMsg);
+        }
+
+        if ($("#myForm .is-invalid").length === 0) {
+            $("#msgerror").html('');
+        }
+    });
+}
+// Helper function to handle individual input errors visually (CSP Compliant)
+const setInlineError = (inputElement, errorMessage) => {
+    const input = $(inputElement);
+    hasError = true;
+    if (!firstErrorElement) firstErrorElement = input;
+
+    // Highlight the input
+    input.addClass("is-invalid").removeClass("is-valid");
+
+    // Target the surrounding input-group, NOT the inner form-outline
+    let inputGroup = input.closest('.input-group');
+    if (inputGroup.length === 0) inputGroup = input.closest('.form-outline');
+
+    let errorFeedback = inputGroup.siblings('.dynamic-error');
+
+    // Inject the error AFTER the input group using ONLY Bootstrap classes (No inline styles)
+    if (errorFeedback.length === 0) {
+        inputGroup.after(`<div class="dynamic-error w-100 text-danger small mt-1 mb-1 d-block clearfix"></div>`);
+        errorFeedback = inputGroup.siblings('.dynamic-error');
+    }
+
+    // Hide native ASP.NET MVC validation spans using classes, not .hide()
+    inputGroup.siblings(`span[data-valmsg-for="${input.attr('name')}"]`)
+        .removeClass("d-block d-inline d-inline-block")
+        .addClass("d-none");
+
+    // Show our custom error using classes, not .show()
+    errorFeedback.text(errorMessage).removeClass("d-none").addClass("d-block");
+
+    // Auto-open the parent accordion if it is currently collapsed
+    let parentAccordion = input.closest('.accordion-collapse');
+    if (parentAccordion.length && !parentAccordion.hasClass('show')) {
+        let bsCollapse = new bootstrap.Collapse(parentAccordion[0], { toggle: false });
+        bsCollapse.show();
+    }
+};
+
+// Helper function to clear individual input errors (CSP Compliant)
+const clearInlineError = (inputElement) => {
+    const input = $(inputElement);
+    input.removeClass("is-invalid");
+
+    let inputGroup = input.closest('.input-group');
+    if (inputGroup.length === 0) inputGroup = input.closest('.form-outline');
+
+    // Hide custom error using classes
+    inputGroup.siblings('.dynamic-error')
+        .removeClass("d-block")
+        .addClass("d-none")
+        .text("");
+
+    // Hide ASP.NET error using classes
+    inputGroup.siblings(`span[data-valmsg-for="${input.attr('name')}"]`)
+        .removeClass("d-block d-inline d-inline-block")
+        .addClass("d-none");
+};
 function checkCORegistration() {
     const armyNumber = $("#armyPrefix option:selected").text();
     const Prefix = $("#armyNumber").val();
@@ -1834,38 +2097,38 @@ function checkUnitSameOrNot(ArmyNo) {
 
 }
 
-    function formatIndianNumber(input) {
-        let num = input.value.replace(/[^0-9]/g, '');
-        if (num === "") {
-            input.value = "";
-            return;
-        }
-        let parsedInteger = parseInt(num, 10);
-        if (isNaN(parsedInteger)) {
-            input.value = "";
-            return;
-        }
-
-        let integerPart = parsedInteger.toString();
-        let lastThree = integerPart.slice(-3);
-        let otherNumbers = integerPart.slice(0, -3);
-
-        // Insert commas every 2 digits from the right — no regex, no backtracking
-        if (otherNumbers !== '') {
-            let result = '';
-            let count = 0;
-            for (let i = otherNumbers.length - 1; i >= 0; i--) {
-                if (count > 0 && count % 2 === 0) {
-                    result = ',' + result;
-                }
-                result = otherNumbers[i] + result;
-                count++;
-            }
-            otherNumbers = result;
-        }
-
-        input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
+function formatIndianNumber(input) {
+    let num = input.value.replace(/[^0-9]/g, '');
+    if (num === "") {
+        input.value = "";
+        return;
     }
+    let parsedInteger = parseInt(num, 10);
+    if (isNaN(parsedInteger)) {
+        input.value = "";
+        return;
+    }
+
+    let integerPart = parsedInteger.toString();
+    let lastThree = integerPart.slice(-3);
+    let otherNumbers = integerPart.slice(0, -3);
+
+    // Insert commas every 2 digits from the right — no regex, no backtracking
+    if (otherNumbers !== '') {
+        let result = '';
+        let count = 0;
+        for (let i = otherNumbers.length - 1; i >= 0; i--) {
+            if (count > 0 && count % 2 === 0) {
+                result = ',' + result;
+            }
+            result = otherNumbers[i] + result;
+            count++;
+        }
+        otherNumbers = result;
+    }
+
+    input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
+}
 
 function RefreshMaxAmt_PCA() {
     $("#computerCost").on('change', function () {
@@ -2394,15 +2657,6 @@ function CheckIsCoRegister(UnitId, UnitName) {
         }
     });
 }
-$('#oldArmyNo').on('focus', function () {
-    $(this).off('focus');
-    Swal.fire({
-        title: "Enter Present 'Army No'",
-        text: "If 'Old Army No' is not applicable for you.",
-        icon: "warning",
-        confirmButtonText: "OK"
-    });
-});
 
 function validateEMIForRepayingCapacity(prefix) {
     const approxEmi = parseFloat($(`#${prefix}_approxEMIAmount`).val().replace(/,/g, ''));
@@ -2505,7 +2759,6 @@ function findDataWithArmyNumber() {
                     "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
                 },
                 success: function (data) {
-                    console.log(data);
                     if (data) {
 
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
@@ -2539,9 +2792,9 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('salaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.salaryAcctNo);
                         setInputValueWithFloatingLabel('ifsCode', data.ifsCode);
-                      //  setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
+                        //  setInputValueWithFloatingLabel('nameOfBank', data.nameOfBank);
                         setInputValueWithFloatingLabel('nameOfBankBranch', data.nameOfBankBranch);
-                        
+
 
                         $('#oldArmyPrefix').val(data.oldArmyPrefix).trigger('change');
                         $('#ddlrank').val(data.rankId).trigger('change');
@@ -2553,17 +2806,17 @@ function findDataWithArmyNumber() {
                         setTimeout(function () {
                             $('#districtDropdown').val(data.distId).trigger('change');
                         }, 1000);
-                        
-                        
+
+
                     }
-                    
+
                 },
                 error: function (xhr, status, error) {
                     console.error("Error fetching data:", error);
                 }
             });
         }
-             //getApplicantDetalis();
+        //getApplicantDetalis();
 
     });
 }
@@ -2572,126 +2825,126 @@ function findDataWithApplicationId() {
 
     const applicationid = $('#applicationid').val();
 
-    if (applicationid!= 0) {
-            $.ajax({
-                url: '/OnlineApplication/GetDataByApplicationId',
-                type: 'POST',
-                data: { applicationid: applicationid },
-                headers: {
-                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-                },
-                success: function (data) {
-                    if (data) {
-                        
-                        setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
-                        setInputValueWithFloatingLabel('armyNumber', data.onlineApplicationResponse.number);
-                        setInputValueWithFloatingLabel('txtSuffix', data.onlineApplicationResponse.suffix);
-                        setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
-                        setInputValueWithFloatingLabel('oldArmyNo', data.onlineApplicationResponse.oldNumber);
-                        setInputValueWithFloatingLabel('txtOldSuffix', data.onlineApplicationResponse.oldSuffix);
-                        setInputValueWithFloatingLabel('aadharCardNo', data.onlineApplicationResponse.aadharCardNo);
-                        setInputValueWithFloatingLabel('panCardNo', data.onlineApplicationResponse.panCardNo);
-                        setInputValueWithFloatingLabel('mobileNo', data.onlineApplicationResponse.mobileNo);
-                        setInputValueWithFloatingLabel('emailId', data.onlineApplicationResponse.email);
-                        setInputValueWithFloatingLabel('totalService', data.onlineApplicationResponse.totalService);
-                        setInputValueWithFloatingLabel('residualService', data.onlineApplicationResponse.residualService);
+    if (applicationid != 0) {
+        $.ajax({
+            url: '/OnlineApplication/GetDataByApplicationId',
+            type: 'POST',
+            data: { applicationid: applicationid },
+            headers: {
+                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (data) {
+                if (data) {
 
-                        setInputValueWithFloatingLabel('pcda_pao', data.onlineApplicationResponse.pcda_pao);
-                        setInputValueWithFloatingLabel('pcda_AcctNo', data.onlineApplicationResponse.pcda_AcctNo);
-                        setInputValueWithFloatingLabel('ParenttxtUnit', data.onlineApplicationResponse.parentUnit);
-                        setInputValueWithFloatingLabel('CommonData_ParentUnit', data.onlineApplicationResponse.parentUnitId);
-                        setInputValueWithFloatingLabel('PresenttxtUnit', data.onlineApplicationResponse.presentUnit);
-                        setInputValueWithFloatingLabel('CommonData_PresentUnit', data.onlineApplicationResponse.presentUnitId);
-                        setInputValueWithFloatingLabel('presentUnitPin', data.onlineApplicationResponse.presentUnitPin);
-                        setInputValueWithFloatingLabel('civilPostalAddress', data.onlineApplicationResponse.civilPostalAddress);
-                        setInputValueWithFloatingLabel('nextFmnHQ', data.onlineApplicationResponse.nextFmnHQ);
+                    setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
+                    setInputValueWithFloatingLabel('armyNumber', data.onlineApplicationResponse.number);
+                    setInputValueWithFloatingLabel('txtSuffix', data.onlineApplicationResponse.suffix);
+                    setInputValueWithFloatingLabel('txtApplicantName', data.onlineApplicationResponse.applicantName);
+                    setInputValueWithFloatingLabel('oldArmyNo', data.onlineApplicationResponse.oldNumber);
+                    setInputValueWithFloatingLabel('txtOldSuffix', data.onlineApplicationResponse.oldSuffix);
+                    setInputValueWithFloatingLabel('aadharCardNo', data.onlineApplicationResponse.aadharCardNo);
+                    setInputValueWithFloatingLabel('panCardNo', data.onlineApplicationResponse.panCardNo);
+                    setInputValueWithFloatingLabel('mobileNo', data.onlineApplicationResponse.mobileNo);
+                    setInputValueWithFloatingLabel('emailId', data.onlineApplicationResponse.email);
+                    setInputValueWithFloatingLabel('totalService', data.onlineApplicationResponse.totalService);
+                    setInputValueWithFloatingLabel('residualService', data.onlineApplicationResponse.residualService);
 
-                        setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
-                        setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
-                       // setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
-                       // setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
-                        setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
-                        setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
-                        setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
-                        setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
-                      //  setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
-                        setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
-                       
-                        $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
-                        $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).trigger('change');
-                        $('#ddlrank').val(data.onlineApplicationResponse.rankId).trigger('change');
-                        $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
-                        $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
-                        $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
-                        $('#BankId').val(data.onlineApplicationResponse.bankId).trigger('change');
-                        $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
-                        setTimeout(function () {
-                            $('#districtDropdown').val(data.onlineApplicationResponse.distId).trigger('change');
-                        }, 1000);
+                    setInputValueWithFloatingLabel('pcda_pao', data.onlineApplicationResponse.pcda_pao);
+                    setInputValueWithFloatingLabel('pcda_AcctNo', data.onlineApplicationResponse.pcda_AcctNo);
+                    setInputValueWithFloatingLabel('ParenttxtUnit', data.onlineApplicationResponse.parentUnit);
+                    setInputValueWithFloatingLabel('CommonData_ParentUnit', data.onlineApplicationResponse.parentUnitId);
+                    setInputValueWithFloatingLabel('PresenttxtUnit', data.onlineApplicationResponse.presentUnit);
+                    setInputValueWithFloatingLabel('CommonData_PresentUnit', data.onlineApplicationResponse.presentUnitId);
+                    setInputValueWithFloatingLabel('presentUnitPin', data.onlineApplicationResponse.presentUnitPin);
+                    setInputValueWithFloatingLabel('civilPostalAddress', data.onlineApplicationResponse.civilPostalAddress);
+                    setInputValueWithFloatingLabel('nextFmnHQ', data.onlineApplicationResponse.nextFmnHQ);
 
-                         if (data.carApplicationResponse != null) {
-                            $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');
-                            $('#VehTypeId').val(data.carApplicationResponse.vehical_Type).trigger('change');
-                            $('#CA_LoanFreq').val(data.carApplicationResponse.cA_LoanFreq).trigger('change');
+                    setInputValueWithFloatingLabel('Vill_Town', data.onlineApplicationResponse.vill_Town);
+                    setInputValueWithFloatingLabel('postOffice', data.onlineApplicationResponse.postOffice);
+                    // setInputValueWithFloatingLabel('distt', data.onlineApplicationResponse.distt);
+                    // setInputValueWithFloatingLabel('state', data.onlineApplicationResponse.state);
+                    setInputValueWithFloatingLabel('Code', data.onlineApplicationResponse.code);
+                    setInputValueWithFloatingLabel('salaryAcctNo', data.onlineApplicationResponse.salaryAcctNo);
+                    setInputValueWithFloatingLabel('confirmSalaryAcctNo', data.onlineApplicationResponse.confirmSalaryAcctNo);
+                    setInputValueWithFloatingLabel('ifsCode', data.onlineApplicationResponse.ifsCode);
+                    //  setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
+                    setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
+
+                    $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
+                    $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).trigger('change');
+                    $('#ddlrank').val(data.onlineApplicationResponse.rankId).trigger('change');
+                    $('#regtCorps').val(data.onlineApplicationResponse.regtCorpsId).trigger('change');
+                    $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
+                    $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
+                    $('#BankId').val(data.onlineApplicationResponse.bankId).trigger('change');
+                    $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
+                    setTimeout(function () {
+                        $('#districtDropdown').val(data.onlineApplicationResponse.distId).trigger('change');
+                    }, 1000);
+
+                    if (data.carApplicationResponse != null) {
+                        $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');
+                        $('#VehTypeId').val(data.carApplicationResponse.vehical_Type).trigger('change');
+                        $('#CA_LoanFreq').val(data.carApplicationResponse.cA_LoanFreq).trigger('change');
 
 
-                            setInputValueWithFloatingLabel('dealerName', data.carApplicationResponse.dealerName);
-                            setInputValueWithFloatingLabel('companyName', data.carApplicationResponse.companyName);
-                            setInputValueWithFloatingLabel('modelName', data.carApplicationResponse.modelName);
-                            setInputValueWithFloatingLabel('vehicleCost', data.carApplicationResponse.vehicleCost);
-                            setInputValueWithFloatingLabel('CA_Amt_Eligible_for_loan', data.carApplicationResponse.cA_Amt_Eligible_for_loan);
-                            setInputValueWithFloatingLabel('CA_Amount_Applied_For_Loan', data.carApplicationResponse.cA_Amount_Applied_For_Loan);
-                            setInputValueWithFloatingLabel('CA_EMI_Eligible', data.carApplicationResponse.cA_EMI_Eligible);
-                            setInputValueWithFloatingLabel('CA_repayingCapacity', data.carApplicationResponse.cA_repayingCapacity);
-                            setInputValueWithFloatingLabel('CA_EMI_Applied', data.carApplicationResponse.cA_EMI_Applied);
-                            setInputValueWithFloatingLabel('CA_approxEMIAmount', data.carApplicationResponse.cA_approxEMIAmount);
-                            setInputValueWithFloatingLabel('drivingLicenseNo', data.carApplicationResponse.drivingLicenseNo);
-                            setInputValueWithFloatingLabel('validity_Date_DL', data.carApplicationResponse.validity_Date_DL);
-                            setInputValueWithFloatingLabel('DL_IssuingAuth', data.carApplicationResponse.dL_IssuingAuth);
-                            setInputValueWithFloatingLabel('CA_approxDisbursementAmt', data.carApplicationResponse.cA_approxDisbursementAmt);
-                        }
-                        else if (data.hbaApplicationResponse != null) {
-                            $('#propertyType').val(data.hbaApplicationResponse.propertyTypeId).trigger('change');
-                            $('#HBA_LoanFreq').val(data.hbaApplicationResponse.hbA_LoanFreq).trigger('change');
+                        setInputValueWithFloatingLabel('dealerName', data.carApplicationResponse.dealerName);
+                        setInputValueWithFloatingLabel('companyName', data.carApplicationResponse.companyName);
+                        setInputValueWithFloatingLabel('modelName', data.carApplicationResponse.modelName);
+                        setInputValueWithFloatingLabel('vehicleCost', data.carApplicationResponse.vehicleCost);
+                        setInputValueWithFloatingLabel('CA_Amt_Eligible_for_loan', data.carApplicationResponse.cA_Amt_Eligible_for_loan);
+                        setInputValueWithFloatingLabel('CA_Amount_Applied_For_Loan', data.carApplicationResponse.cA_Amount_Applied_For_Loan);
+                        setInputValueWithFloatingLabel('CA_EMI_Eligible', data.carApplicationResponse.cA_EMI_Eligible);
+                        setInputValueWithFloatingLabel('CA_repayingCapacity', data.carApplicationResponse.cA_repayingCapacity);
+                        setInputValueWithFloatingLabel('CA_EMI_Applied', data.carApplicationResponse.cA_EMI_Applied);
+                        setInputValueWithFloatingLabel('CA_approxEMIAmount', data.carApplicationResponse.cA_approxEMIAmount);
+                        setInputValueWithFloatingLabel('drivingLicenseNo', data.carApplicationResponse.drivingLicenseNo);
+                        setInputValueWithFloatingLabel('validity_Date_DL', data.carApplicationResponse.validity_Date_DL);
+                        setInputValueWithFloatingLabel('DL_IssuingAuth', data.carApplicationResponse.dL_IssuingAuth);
+                        setInputValueWithFloatingLabel('CA_approxDisbursementAmt', data.carApplicationResponse.cA_approxDisbursementAmt);
+                    }
+                    else if (data.hbaApplicationResponse != null) {
+                        $('#propertyType').val(data.hbaApplicationResponse.propertyTypeId).trigger('change');
+                        $('#HBA_LoanFreq').val(data.hbaApplicationResponse.hbA_LoanFreq).trigger('change');
 
-                            setInputValueWithFloatingLabel('propertySeller', data.hbaApplicationResponse.propertySeller);
-                            setInputValueWithFloatingLabel('propertyAddress', data.hbaApplicationResponse.propertyAddress);
-                            setInputValueWithFloatingLabel('propertyCost', data.hbaApplicationResponse.propertyCost);
-                            setInputValueWithFloatingLabel('HBA_repayingCapacity', data.hbaApplicationResponse.hbA_repayingCapacity);
-                            setInputValueWithFloatingLabel('HBA_Amt_Eligible_for_loan', data.hbaApplicationResponse.hbA_Amt_Eligible_for_loan);
-                            setInputValueWithFloatingLabel('HBA_EMI_Eligible', data.hbaApplicationResponse.hbA_EMI_Eligible);
-                            setInputValueWithFloatingLabel('HBA_Amount_Applied_For_Loan', data.hbaApplicationResponse.hbA_Amount_Applied_For_Loan);
-                            setInputValueWithFloatingLabel('HBA_EMI_Applied', data.hbaApplicationResponse.hbA_EMI_Applied);
-                            setInputValueWithFloatingLabel('HBA_approxEMIAmount', data.hbaApplicationResponse.hbA_approxEMIAmount);
-                            setInputValueWithFloatingLabel('HBA_approxDisbursementAmt', data.hbaApplicationResponse.hbA_approxDisbursementAmt);
-                        }
-                        else if (data.pcaApplicationResponse != null) {
+                        setInputValueWithFloatingLabel('propertySeller', data.hbaApplicationResponse.propertySeller);
+                        setInputValueWithFloatingLabel('propertyAddress', data.hbaApplicationResponse.propertyAddress);
+                        setInputValueWithFloatingLabel('propertyCost', data.hbaApplicationResponse.propertyCost);
+                        setInputValueWithFloatingLabel('HBA_repayingCapacity', data.hbaApplicationResponse.hbA_repayingCapacity);
+                        setInputValueWithFloatingLabel('HBA_Amt_Eligible_for_loan', data.hbaApplicationResponse.hbA_Amt_Eligible_for_loan);
+                        setInputValueWithFloatingLabel('HBA_EMI_Eligible', data.hbaApplicationResponse.hbA_EMI_Eligible);
+                        setInputValueWithFloatingLabel('HBA_Amount_Applied_For_Loan', data.hbaApplicationResponse.hbA_Amount_Applied_For_Loan);
+                        setInputValueWithFloatingLabel('HBA_EMI_Applied', data.hbaApplicationResponse.hbA_EMI_Applied);
+                        setInputValueWithFloatingLabel('HBA_approxEMIAmount', data.hbaApplicationResponse.hbA_approxEMIAmount);
+                        setInputValueWithFloatingLabel('HBA_approxDisbursementAmt', data.hbaApplicationResponse.hbA_approxDisbursementAmt);
+                    }
+                    else if (data.pcaApplicationResponse != null) {
 
-                            $('#computer_Loan_Type').val(data.pcaApplicationResponse.computer_Loan_TypeId).trigger('change');
-                            $('#PCA_LoanFreq').val(data.pcaApplicationResponse.pcA_LoanFreq).trigger('change');
+                        $('#computer_Loan_Type').val(data.pcaApplicationResponse.computer_Loan_TypeId).trigger('change');
+                        $('#PCA_LoanFreq').val(data.pcaApplicationResponse.pcA_LoanFreq).trigger('change');
 
-                            setInputValueWithFloatingLabel('PCA_dealerName', data.pcaApplicationResponse.pcA_dealerName);
-                            setInputValueWithFloatingLabel('PCA_companyName', data.pcaApplicationResponse.pcA_companyName);
-                            setInputValueWithFloatingLabel('PCA_modelName', data.pcaApplicationResponse.pcA_modelName);
-                            setInputValueWithFloatingLabel('computerCost', data.pcaApplicationResponse.computerCost);
-                            setInputValueWithFloatingLabel('PCA_Amt_Eligible_for_loan', data.pcaApplicationResponse.pcA_Amt_Eligible_for_loan);
-                            setInputValueWithFloatingLabel('PCA_EMI_Eligible', data.pcaApplicationResponse.pcA_EMI_Eligible);
-                            setInputValueWithFloatingLabel('PCA_repayingCapacity', data.pcaApplicationResponse.pcA_repayingCapacity);
-                            setInputValueWithFloatingLabel('PCA_Amount_Applied_For_Loan', data.pcaApplicationResponse.pcA_Amount_Applied_For_Loan);
-                            setInputValueWithFloatingLabel('PCA_EMI_Applied', data.pcaApplicationResponse.pcA_EMI_Applied);
-                            setInputValueWithFloatingLabel('PCA_approxEMIAmount', data.pcaApplicationResponse.pcA_approxEMIAmount);
-                            setInputValueWithFloatingLabel('PCA_approxDisbursementAmt', data.pcaApplicationResponse.pcA_approxDisbursementAmt);
-
-                        }
+                        setInputValueWithFloatingLabel('PCA_dealerName', data.pcaApplicationResponse.pcA_dealerName);
+                        setInputValueWithFloatingLabel('PCA_companyName', data.pcaApplicationResponse.pcA_companyName);
+                        setInputValueWithFloatingLabel('PCA_modelName', data.pcaApplicationResponse.pcA_modelName);
+                        setInputValueWithFloatingLabel('computerCost', data.pcaApplicationResponse.computerCost);
+                        setInputValueWithFloatingLabel('PCA_Amt_Eligible_for_loan', data.pcaApplicationResponse.pcA_Amt_Eligible_for_loan);
+                        setInputValueWithFloatingLabel('PCA_EMI_Eligible', data.pcaApplicationResponse.pcA_EMI_Eligible);
+                        setInputValueWithFloatingLabel('PCA_repayingCapacity', data.pcaApplicationResponse.pcA_repayingCapacity);
+                        setInputValueWithFloatingLabel('PCA_Amount_Applied_For_Loan', data.pcaApplicationResponse.pcA_Amount_Applied_For_Loan);
+                        setInputValueWithFloatingLabel('PCA_EMI_Applied', data.pcaApplicationResponse.pcA_EMI_Applied);
+                        setInputValueWithFloatingLabel('PCA_approxEMIAmount', data.pcaApplicationResponse.pcA_approxEMIAmount);
+                        setInputValueWithFloatingLabel('PCA_approxDisbursementAmt', data.pcaApplicationResponse.pcA_approxDisbursementAmt);
 
                     }
-                    
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching data:", error);
+
                 }
-            });
-        }
+
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    }
 }
 
 function formatDateToDDMMYYYY(dateString) {

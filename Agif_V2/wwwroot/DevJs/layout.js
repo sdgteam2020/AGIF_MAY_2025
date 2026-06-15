@@ -1,4 +1,5 @@
-﻿let isOpen = false;
+﻿// Chat state flags
+let isOpen = false;
 let isSending = false;
 let welcomeShown = false;
 let lastUserQuery = "";
@@ -12,12 +13,14 @@ const inputEl = document.getElementById('asdcQuery');
 const sendBtn = document.getElementById('asdcSend');
 const loadingEl = document.getElementById('asdcLoading');
 
+// Get all focusable and visible elements within a root element (used for keyboard trap)
 function focusableElements(root) {
     return Array.from(root.querySelectorAll(
         'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
     )).filter(el => !el.disabled && el.offsetParent !== null);
 }
 
+// Open the chat dialog, show welcome message and start heartbeat pings
 function openChat() {
     if (isOpen) return;
     dlg.hidden = false;
@@ -30,6 +33,7 @@ function openChat() {
     }
 
     if (!heartbeatTimer) {
+        // Periodically send a lightweight 'hi' to keep the session alive
         heartbeatTimer = setInterval(() => {
             sendQuery('hi', true);
         }, 240000);
@@ -42,10 +46,12 @@ function openChat() {
         chatBox.scrollTop = chatBox.scrollHeight;
     });
 
+    // Attach keyboard handlers for Escape and focus trapping
     document.addEventListener('keydown', onEsc, { capture: true });
     dlg.addEventListener('keydown', trapFocus);
 }
 
+// Close the chat dialog and clean up timers/handlers
 function closeChat() {
     if (!isOpen) return;
     dlg.hidden = true;
@@ -53,16 +59,19 @@ function closeChat() {
     isOpen = false;
 
     if (heartbeatTimer) {
+        // Stop periodic heartbeat when chat is closed
         clearInterval(heartbeatTimer);
         heartbeatTimer = null;
     }
 
     toggleBtn.focus();
 
+    // Remove keyboard handlers
     document.removeEventListener('keydown', onEsc, { capture: true });
     dlg.removeEventListener('keydown', trapFocus);
 }
 
+// Close chat when Escape key is pressed
 function onEsc(e) {
     if (e.key === 'Escape') {
         closeChat();
@@ -70,6 +79,7 @@ function onEsc(e) {
     }
 }
 
+// Keep focus trapped inside the chat dialog for accessibility
 function trapFocus(e) {
     if (e.key !== 'Tab') return;
     const f = focusableElements(dlg);
@@ -85,12 +95,12 @@ function trapFocus(e) {
     }
 }
 
+// Update hit counters on page load
 $(document).ready(function () {
     $.ajax({
         url: '/Home/UpdateHitCounter', // Controller Action
         type: 'GET',
         success: function (response) {
-            console.log(response);
             $('#today').text('Today: ' + response.todayCount);
             $('#monthly').text('Monthly: ' + response.monthlyCount);
             $('#total').text('Total: ' + (response.totalCount + 171222));
@@ -102,12 +112,15 @@ $(document).ready(function () {
 
 });
 
+// Navigation helpers for header buttons
 $("#ViewLog").on('click', function () {
     window.location.href = '/Home/LogViewer'
 })
 $("#AnalyticsDashBoard").on('click', function () {
     window.location.href = '/Home/AnalyticsDashBoard'
 })
+
+// Return anti-forgery token to include in AJAX requests
 function getCsrfToken() {
     return $('input[name="__RequestVerificationToken"]').val();
 }

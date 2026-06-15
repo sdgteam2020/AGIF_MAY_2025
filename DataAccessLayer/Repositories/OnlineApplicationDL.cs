@@ -406,30 +406,25 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
         {
-            // Executes a direct SQL UPDATE statement in the database.
-            // Returns the number of rows affected.
+            
             var rowsAffected = await _context.trnApplications
                 .Where(i => i.ApplicationId == applicationId)
                 .ExecuteUpdateAsync(s => s.SetProperty(a => a.StatusCode, status));
 
-            // If rowsAffected is greater than 0, the record existed and was updated.
             return rowsAffected > 0;
         }
 
         public async Task<bool> UpdateMergePdfStatus(int applicationId, bool status)
         {
-            // Directly executes the SQL UPDATE in a single database trip
             var rowsAffected = await _context.trnApplications
                 .Where(i => i.ApplicationId == applicationId)
                 .ExecuteUpdateAsync(s => s.SetProperty(a => a.IsMergePdf, status));
 
-            // Returns true if a row was actually updated
             return rowsAffected > 0;
         }
 
         public async Task<bool> CheckForCoRegister(string ArmyNo)
         {
-            // This executes a single SQL query using an INNER JOIN and an EXISTS check
             return await _context.UserProfiles
                 .Where(u => u.ArmyNo == ArmyNo)
                 .Join(_context.trnUserMappings,

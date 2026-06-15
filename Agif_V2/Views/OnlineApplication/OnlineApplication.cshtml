@@ -38,7 +38,7 @@
 
     
     <div class="accordion" id="formAccordion">
-        <form id="myForm" class="needs-validation mb-8" name="myForm" method="post" action="/OnlineApplication/OnlineApplication" enctype="multipart/form-data">
+        <form id="myForm" novalidate class="needs-validation mb-8" name="myForm" method="post" action="/OnlineApplication/OnlineApplication" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
             <!-- Personal Info -->
             <span id="spanhdns" class="d-none">@ViewBag.hiddenSalt</span>

@@ -18,6 +18,8 @@ $(document).ready(function () {
     callingCommonFunctions();
     preMatureRetirement();
     BindDropDown();
+    setupRealTimeValidation();
+    accordionAutoOpenClose();
 });
 
 function callingCommonFunctions() {
@@ -30,7 +32,11 @@ function callingCommonFunctions() {
     });
 
     $(document).on("change", ".js-setregcorp", function () {
-        fetchPCDA_PAO();
+        if ($(this).val()) {
+            fetchPCDA_PAO();
+        } else {
+            $('#pcda_pao').val("");
+        }
     });
 
 
@@ -1379,28 +1385,27 @@ function ExtensionOfServiceAccess() {
 function fetchPCDA_PAO() {
     const regt = $('#regtCorps').val();
     if (!regt) {
-       // alert("Please select Regt/Corps.");
         return;
     }
     const param = { "regt": regt };
 
     $.ajax({
-        url: '/OnlineApplication/GetPCDA_PAO',  // Your endpoint URL
+        url: '/OnlineApplication/GetPCDA_PAO',
         type: 'POST',
-        contentType: 'application/x-www-form-urlencoded',  // Specify content type for URL-encoded data
-        data: param,  // Pass the data parameter
+        contentType: 'application/x-www-form-urlencoded',
+        data: param,
         headers: {
             "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
         },
         success: function (data) {
             if (data != null) {
-                $('#pcda_pao').val(data.pcdaPao);  // Set the result into the input
-                setOutlineActive("pcda_pao");  // Call the function to activate the outline
+                $('#pcda_pao').val(data.pcdaPao);
+                setOutlineActive("pcda_pao");
             }
         },
         error: function (xhr, status, error) {
-            alert("Data Not loaded!");  // Alert the user in case of error
-            console.error('AJAX error:', error);  // Log the error for debugging
+            alert("Data Not loaded!");
+            console.error('AJAX error:', error);
         }
     });
 
@@ -1450,98 +1455,228 @@ function filterAmountText(loanType) {
     }
 }
 
-function handleSubmitClick() {
-    document.getElementById("btn-save").addEventListener("click", function (event) {
-        event.preventDefault(); // Prevent form submission
-        const form = document.getElementById("myMaturityForm");
-        const inputs = form.querySelectorAll("input, select");
-        form.querySelectorAll(".error").forEach(span => span.textContent = "");
+//function handleSubmitClick() {
+//    document.getElementById("btn-save").addEventListener("click", function (event) {
+//        event.preventDefault(); // Prevent form submission
+//        const form = document.getElementById("myMaturityForm");
+//        const inputs = form.querySelectorAll("input, select");
+//        form.querySelectorAll(".error").forEach(span => span.textContent = "");
 
-        let errorlist = []; // Use an array to store individual error messages
-        let hasError = false;
+//        let errorlist = []; // Use an array to store individual error messages
+//        let hasError = false;
+
+//        const params = new URLSearchParams(window.location.search);
+
+//        const loanTypeFromUrl = params.get("loanType");
+
+//        const loanTypeFromInput = document.getElementById('loanType')?.value || null;
+
+//        const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
+//        filterAmountText(loanType);
+
+
+//        const residualServiceInput = $("#residualService");
+//        if (residualServiceInput.length) {
+//            const residualServiceValue = residualServiceInput.val();
+//            if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 0) {
+//                const errorSpan = residualServiceInput.parent().find(".error");
+//                if (errorSpan.length) {
+//                    errorSpan.text("Invalid residual service.");
+//                }
+//                errorlist.push("Residual Service");
+//                hasError = true;
+//            }
+//            const purpoesValue = $('#Purpose').val();
+//            if (purpoesValue == 3 && residualServiceValue > 1) {
+//                const errorSpan = residualServiceInput.parent().find(".error");
+//                if (errorSpan.length) {
+//                    errorSpan.text("Cannot submit: Residual service must be 2 years or less for Repair & Renovation.");
+//                }
+//                errorlist.push("Invalid Residual Service and Purpose combination");
+//                hasError = true;
+//            }
+//        }
+
+
+//        inputs.forEach(input => {
+
+//            if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
+//                return;
+//            }
+//            else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+//                return;
+//            }
+//            else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
+//                return;
+//            }
+
+//            if (!input.checkValidity()) {
+//                const errorSpan = input.parentElement.querySelector(".error");
+//                if (errorSpan) {
+//                    errorSpan.textContent = input.validationMessage;
+//                }
+//                let errorText = input.name;
+//                const prefixes = ["ClaimCommonData.", "Marriageward.", "EducationDetails.", "PropertyRenovation.", "SplWaiver.", "AddressDetails.", "AccountDetails."];
+//                prefixes.forEach(prefix => {
+//                    if (errorText.includes(prefix)) {
+//                        errorText = errorText.replace(prefix, "");
+//                    }
+//                });
+//                errorlist.push(errorText);
+//                hasError = true;
+//                if (input.value.trim() !== "") {
+//                    input.removeAttribute("required");
+//                }
+
+//            }
+//        });
+
+
+
+//        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
+//        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
+
+//        if (hasError) {
+//            return false;
+//        }
+//        else {
+//            $("#msgerror").html(''); // Clear error message
+
+//            const formData = $("#myMaturityForm").serializeArray();
+//            const dataObj = {};
+
+//            // 1. Build a properly nested JSON object from ASP.NET MVC form names
+//            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
+//            formData.forEach(item => {
+//                const parts = item.name.split('.');
+//                let current = dataObj;
+//                for (let i = 0; i < parts.length - 1; i++) {
+//                    if (!current[parts[i]]) {
+//                        current[parts[i]] = {};
+//                    }
+//                    current = current[parts[i]];
+//                }
+//                current[parts[parts.length - 1]] = item.value;
+//            });
+
+//            // 2. Encrypt using your helper function
+//            const plainTextJson = JSON.stringify(dataObj);
+//            const encrypted = encryptData(plainTextJson);
+
+//            if (!encrypted) {
+//                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
+//                return false;
+//            }
+
+//            // 3. Create a hidden input to hold the encrypted string
+//            $('<input>').attr({
+//                type: 'hidden',
+//                name: 'EncryptedData',
+//                value: encrypted
+//            }).appendTo('#myMaturityForm');
+
+//            // 4. IMPORTANT: Disable original inputs so they DON'T show up in the Network Tab
+//            $("#myMaturityForm").find("input, select, textarea")
+//                .not("[name='EncryptedData']")
+//                .not("[name='__RequestVerificationToken']")
+//                .not("[type='file']")
+//                .prop("disabled", true);
+
+//            // 5. Submit the form naturally
+//            $("#myMaturityForm").off("submit").submit();
+
+//        }
+
+
+//    });
+
+//}
+
+// 1. The main submit function for Claim Application
+
+let hasError = false;
+let firstErrorElement = null;
+function handleSubmitClick() {
+    $("#btn-save").on("click", function (event) {
+        event.preventDefault();
+        const form = $("#myMaturityForm");
+        const inputs = form.find('input[required], select[required]');
+
+        hasError = false;
+        firstErrorElement = null;
+
+        // Mark all fields as touched on submit attempt
+        form.find("input, select").attr("data-touched", "true");
 
         const params = new URLSearchParams(window.location.search);
-
         const loanTypeFromUrl = params.get("loanType");
-
-        const loanTypeFromInput = document.getElementById('loanType')?.value || null;
-
+        const loanTypeFromInput = $('#loanType').val() || null;
         const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
-        filterAmountText(loanType);
 
+        if (typeof filterAmountText === "function") {
+            filterAmountText(loanType);
+        }
 
+        // 1. Check Custom Service Validations (Residual Service & Purpose)
         const residualServiceInput = $("#residualService");
         if (residualServiceInput.length) {
-            const residualServiceValue = residualServiceInput.val();
-            if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 0) {
-                const errorSpan = residualServiceInput.parent().find(".error");
-                if (errorSpan.length) {
-                    errorSpan.text("Invalid residual service.");
+            clearInlineError(residualServiceInput);
+            const residualServiceValue = parseFloat(residualServiceInput.val()?.trim());
+            const purposeValue = $('#Purpose').val();
+
+            if (!isNaN(residualServiceValue)) {
+                if (residualServiceValue < 0) {
+                    setInlineError(residualServiceInput, "Invalid residual service.");
+                } else if (purposeValue == 3 && residualServiceValue > 1) {
+                    setInlineError(residualServiceInput, "Cannot submit: Residual service must be 2 years or less for Repair & Renovation.");
                 }
-                errorlist.push("Residual Service");
-                hasError = true;
-            }
-            const purpoesValue = $('#Purpose').val();
-            if (purpoesValue == 3 && residualServiceValue > 1) {
-                const errorSpan = residualServiceInput.parent().find(".error");
-                if (errorSpan.length) {
-                    errorSpan.text("Cannot submit: Residual service must be 2 years or less for Repair & Renovation.");
-                }
-                errorlist.push("Invalid Residual Service and Purpose combination");
-                hasError = true;
             }
         }
 
+        // 2. Loop through all standard required inputs
+        inputs.each(function () {
+            const input = $(this);
+            const inputElement = this;
 
-        inputs.forEach(input => {
-
-            if (loanType === "1" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("caAccordianWrapper")?.contains(input))) {
+            // Skip inputs in irrelevant accordions based on loanType
+            if (loanType === "1" && ($("#pcaAccordianWrapper").has(inputElement).length || $("#caAccordianWrapper").has(inputElement).length)) {
+                return;
+            } else if (loanType === "2" && ($("#pcaAccordianWrapper").has(inputElement).length || $("#hbaAccordianWrapper").has(inputElement).length)) {
+                return;
+            } else if (loanType === "3" && ($("#caAccordianWrapper").has(inputElement).length || $("#hbaAccordianWrapper").has(inputElement).length)) {
                 return;
             }
-            else if (loanType === "2" && (document.getElementById("pcaAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-                return;
-            }
-            else if (loanType === "3" && (document.getElementById("caAccordianWrapper")?.contains(input) || document.getElementById("hbaAccordianWrapper")?.contains(input))) {
-                return;
-            }
 
-            if (!input.checkValidity()) {
-                const errorSpan = input.parentElement.querySelector(".error");
-                if (errorSpan) {
-                    errorSpan.textContent = input.validationMessage;
+            clearInlineError(input);
+
+            if (!inputElement.checkValidity()) {
+                let errMsg = inputElement.validationMessage || "This field is required.";
+                setInlineError(inputElement, errMsg);
+
+                if (input.val() && input.val().trim() !== "") {
+                    input.removeAttr("required");
                 }
-                let errorText = input.name;
-                const prefixes = ["ClaimCommonData.", "Marriageward.", "EducationDetails.", "PropertyRenovation.", "SplWaiver.", "AddressDetails.", "AccountDetails."];
-                prefixes.forEach(prefix => {
-                    if (errorText.includes(prefix)) {
-                        errorText = errorText.replace(prefix, "");
-                    }
-                });
-                errorlist.push(errorText);
-                hasError = true;
-                if (input.value.trim() !== "") {
-                    input.removeAttribute("required");
-                }
-
             }
         });
 
-        
-
-        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
-        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
-
+        // 3. Handle Form Submission or Error Routing
         if (hasError) {
+            $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Please fix the highlighted errors above.</div>');
+
+            if (firstErrorElement) {
+                setTimeout(() => {
+                    firstErrorElement[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstErrorElement.focus();
+                }, 300);
+            }
             return false;
         }
         else {
-            $("#msgerror").html(''); // Clear error message
+            $("#msgerror").html('');
 
             const formData = $("#myMaturityForm").serializeArray();
             const dataObj = {};
 
-            // 1. Build a properly nested JSON object from ASP.NET MVC form names
-            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
             formData.forEach(item => {
                 const parts = item.name.split('.');
                 let current = dataObj;
@@ -1554,38 +1689,147 @@ function handleSubmitClick() {
                 current[parts[parts.length - 1]] = item.value;
             });
 
-            // 2. Encrypt using your helper function
             const plainTextJson = JSON.stringify(dataObj);
-            const encrypted = encryptData(plainTextJson);
+            const encrypted = typeof encryptData === "function" ? encryptData(plainTextJson) : null;
 
             if (!encrypted) {
                 $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
                 return false;
             }
 
-            // 3. Create a hidden input to hold the encrypted string
             $('<input>').attr({
                 type: 'hidden',
                 name: 'EncryptedData',
                 value: encrypted
             }).appendTo('#myMaturityForm');
 
-            // 4. IMPORTANT: Disable original inputs so they DON'T show up in the Network Tab
+            // Disable inputs so they aren't sent in plaintext (ignoring file inputs per your logic)
             $("#myMaturityForm").find("input, select, textarea")
                 .not("[name='EncryptedData']")
                 .not("[name='__RequestVerificationToken']")
                 .not("[type='file']")
                 .prop("disabled", true);
 
-            // 5. Submit the form naturally
             $("#myMaturityForm").off("submit").submit();
-            
         }
-        
-
     });
-
 }
+
+// 2. Real-Time Validation Function for Claim Application
+function setupRealTimeValidation() {
+    const CUSTOM_FIELDS = ["residualService"];
+
+    // Added 'change' for type="file" inputs to clear immediately when a file is selected
+    $("#myMaturityForm").on("input blur change", "input, select", function (e) {
+
+        // Prevent Ghost Errors on load
+        if (!e.originalEvent && (e.type === "change" || e.type === "blur")) {
+            return;
+        }
+
+        const inputElement = this;
+        const input = $(this);
+        const eventType = e.type;
+
+        if (eventType === "blur") {
+            input.attr("data-touched", "true");
+        }
+
+        if (eventType === "change" && (input.is("select") || input.attr("type") === "file")) {
+            input.attr("data-touched", "true");
+        }
+
+        if (!input.attr("data-touched")) return;
+
+        const fieldId = input.attr("id");
+
+        // Custom field validations
+        if (CUSTOM_FIELDS.includes(fieldId)) {
+            clearInlineError(input);
+
+            const residualServiceValue = parseFloat(input.val()?.trim());
+            const purposeValue = $('#Purpose').val();
+
+            if (!isNaN(residualServiceValue)) {
+                if (fieldId === "residualService") {
+                    if (residualServiceValue < 0) {
+                        setInlineError(input, "Invalid residual service.");
+                    } else if (purposeValue == 3 && residualServiceValue > 1) {
+                        setInlineError(input, "Cannot submit: Residual service must be 2 years or less for Repair & Renovation.");
+                    }
+                }
+            }
+            return;
+        }
+
+        // Standard HTML5 validation
+        clearInlineError(input);
+
+        // Don't nag while typing text
+        if (eventType === "input" && (!input.val() || input.val().trim() === "")) return;
+
+        if (!inputElement.checkValidity()) {
+            const errMsg = inputElement.validationMessage || "This field is required.";
+            setInlineError(inputElement, errMsg);
+        }
+
+        if ($("#myMaturityForm .is-invalid").length === 0) {
+            $("#msgerror").html('');
+        }
+    });
+}
+
+// 3. Helper Functions (CSP Compliant & No Overlap)
+const setInlineError = (inputElement, errorMessage) => {
+    const input = $(inputElement);
+    hasError = true;
+    if (!firstErrorElement) firstErrorElement = input;
+
+    input.addClass("is-invalid").removeClass("is-valid");
+
+    let inputGroup = input.closest('.input-group');
+    if (inputGroup.length === 0) inputGroup = input.closest('.form-outline');
+
+    let errorFeedback = inputGroup.siblings('.dynamic-error');
+
+    if (errorFeedback.length === 0) {
+        inputGroup.after(`<div class="dynamic-error w-100 text-danger small mt-1 mb-1 d-block clearfix"></div>`);
+        errorFeedback = inputGroup.siblings('.dynamic-error');
+    }
+
+    inputGroup.siblings(`span[data-valmsg-for="${input.attr('name')}"]`)
+        .removeClass("d-block d-inline d-inline-block")
+        .addClass("d-none");
+
+    // Hide any hardcoded invalid-feedbacks
+    inputGroup.find('.invalid-feedback').removeClass("d-block").addClass("d-none");
+
+    errorFeedback.text(errorMessage).removeClass("d-none").addClass("d-block");
+
+    let parentAccordion = input.closest('.accordion-collapse');
+    if (parentAccordion.length && !parentAccordion.hasClass('show')) {
+        let bsCollapse = new bootstrap.Collapse(parentAccordion[0], { toggle: false });
+        bsCollapse.show();
+    }
+};
+
+const clearInlineError = (inputElement) => {
+    const input = $(inputElement);
+    input.removeClass("is-invalid");
+
+    let inputGroup = input.closest('.input-group');
+    if (inputGroup.length === 0) inputGroup = input.closest('.form-outline');
+
+    inputGroup.siblings('.dynamic-error')
+        .removeClass("d-block")
+        .addClass("d-none")
+        .text("");
+
+    inputGroup.siblings(`span[data-valmsg-for="${input.attr('name')}"]`)
+        .removeClass("d-block d-inline d-inline-block")
+        .addClass("d-none");
+};
+
 
 function checkCORegistration() {
     const armyNumber = $("#armyPrefix option:selected").text().trim();
@@ -1898,16 +2142,6 @@ function CheckIsCoRegister(UnitId, UnitName) {
 }
 
 
-$('#oldArmyNo').on('focus', function () {
-    $(this).off('focus');
-    Swal.fire({
-        title: "Enter Present 'Army No'",
-        text: "If old 'Army No' is not applicable for you.",
-        icon: "warning",
-        confirmButtonText: "OK"
-    });
-});
-
 $("#OtherReasonPdf").on("click", function () {
     Swal.fire({
         title: 'Important Information',
@@ -2113,7 +2347,7 @@ function initGenderDropdown(inputId, dropdownId) {
 
     if (input != null) {
         if (input.value) {
-            const radio = dropdown.querySelector(`input[value="${input.value}"]`);
+            const radio = dropdown.querySelector(`input[value="${input.value}"]`); 
             if (radio) radio.checked = true;
             input.closest('.form-outline').querySelector('.form-label').classList.add('active');
         }
@@ -2151,24 +2385,10 @@ function setInputValueWithFloatingLabel(inputId, value) {
 function findDataWithArmyNumber() {
 
     $('#armyNumber').on('blur', function () {
-        const armyNumber = $('#armyNumber').val().trim();
-        const armyPrefix = $('#armyPrefix').val().trim();
-        const armySuffix = $('#txtSuffix').val().trim();
-
-        if (!armyPrefix) {
-            $('#armyPrefix').focus();
-            return;
-        }
-
-        if (!armyNumber) {
-            $('#armyNumber').focus();
-            return;
-        }
-
-        if (!armySuffix) {
-            $('#txtSuffix').focus();
-            return;
-        }
+        // safe reads
+        const armyNumber = ($('#armyNumber').val() || '').trim();
+        const armyPrefix = ($('#armyPrefix').val() || '').trim();
+        const armySuffix = ($('#txtSuffix').val() || '').trim();
 
         const fullArmyNumber = `${armyPrefix}-${armyNumber}-${armySuffix}`.toUpperCase();
         if (fullArmyNumber) {
@@ -2426,18 +2646,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initGenderDropdown('MarriageGenderDisplay', 'genderRadioGroup');
 });
 
-//$('.file-upload').on('change', function () {
-//    const file = this.files[0];
-//    const errorrMessage = $(this).next('.file-error-message'); // container for error
 
-//    if (file && file.size > 150 * 1024) {
-//        errorrMessage.text('File size must not exceed 150 KB').css('color', 'red');
-//        this.value = ''; // Clear the input field
-//    } else {
-//        errorrMessage.text(''); // Clear the error message if file size is valid
-
-//    }
-//});
 
 $('#oldArmyNo').on('blur', function () {
     const oldprefixVal = $('#oldArmyPrefix').val();
@@ -2460,7 +2669,6 @@ $('#oldArmyNo').on('blur', function () {
             }
         }
     }
-    
 });
 function preMatureRetirement() {
     $('#PrematureRetirement').on('change', function () {
@@ -2507,24 +2715,7 @@ function encryptData(plainText) {
 
     return CryptoJS.enc.Base64.stringify(finalData);
 }
-//$(document).on('change', '#Attach_Part_II_Order', function () {
 
-
-//    var file = this.files[0];
-//    var maxSize = 150 * 1024;
-
-//    $(this).siblings('.file-error-message').text('');
-
-//    if (file && file.size > maxSize) {
-
-//        $(this).val('');
-
-//        $(this).siblings('.file-error-message')
-//            .text('File size should not exceed 150 KB.');
-
-//        return false;
-//    }
-//});
 
 $(document).on('change', '.file-upload', function () {
 
@@ -2551,3 +2742,20 @@ $(document).on('change', '.file-upload', function () {
         }
     }
 });
+function accordionAutoOpenClose() {
+    $('.accordion').on('keydown', '.last-input', function (e) {
+        if (e.key === 'Tab' && !e.shiftKey) {
+            e.preventDefault();
+            const currentAccordionItem = $(this).closest('.accordion-item');
+            const nextAccordionItem = currentAccordionItem.next('.accordion-item');
+            if (nextAccordionItem.length > 0) {
+                currentAccordionItem.find('.accordion-collapse').collapse('hide');
+                nextAccordionItem.find('.accordion-collapse').collapse('show');
+            }
+            setTimeout(() => {
+                nextAccordionItem.find('input:visible:first').focus();
+            }, 300);
+        }
+
+    });
+}
