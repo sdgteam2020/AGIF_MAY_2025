@@ -180,7 +180,6 @@ namespace Agif_V2.Controllers
             );
         }
 
-
         private async Task<IActionResult> HandleSuccessfulLogin(ApplicationUser user, LoginViewModel model)
         {
             await _userManager.ResetAccessFailedCountAsync(user);
