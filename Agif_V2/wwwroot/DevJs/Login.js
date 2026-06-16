@@ -37,15 +37,15 @@ class LoginManager {
             }
 
             // 🧠 Show messages (priority)
-            if (hasSpace && isTooLong) {
-                errorSpan.text("No spaces allowed and max 60 characters.");
-            } else if (hasSpace) {
-                errorSpan.text("Spaces are not allowed.");
-            } else if (isTooLong) {
-                errorSpan.text("Password cannot exceed 60 characters.");
-            } else {
-                errorSpan.text("");
-            }
+            //if (hasSpace && isTooLong) {
+            //    errorSpan.text("No spaces allowed and max 60 characters.");
+            //} else if (hasSpace) {
+            //    errorSpan.text("Spaces are not allowed.");
+            //} else if (isTooLong) {
+            //    errorSpan.text("Password cannot exceed 60 characters.");
+            //} else {
+            //    errorSpan.text("");
+            //}
 
             // ✅ Update value
             $(this).val(cleaned);
@@ -232,3 +232,14 @@ $(document).ready(() => {
 
     $("input, textarea").on("paste", (e) => e.preventDefault());
 });
+
+var message = $("#tempMessage").val();
+
+if (message) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Error',
+        text: message,
+        confirmButtonText: 'OK'
+    });
+}

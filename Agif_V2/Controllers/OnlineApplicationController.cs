@@ -309,25 +309,7 @@ namespace Agif_V2.Controllers
                 ModelState.Remove("CommonData.OldNumber");
                 ModelState.Remove("CommonData.OldSuffix");
             }
-            //var allowedDomains = new[]
-            //    {
-            //        "gmail.com",
-            //        "yahoo.com",
-            //        "yahoo.co.in",
-            //        "rediffmail.com",
-            //        "outlook.com",
-            //        "protonmail.com",
-            //        "hotmail.com",
-            //        "icloud.com",
-            //        "zohomail.com"
-            //    };
-
-            //if (!allowedDomains.Contains(model.CommonData.EmailDomain, StringComparer.OrdinalIgnoreCase))
-            //{
-            //    ModelState.AddModelError(
-            //        "CommonData.EmailDomain",
-            //        "Invalid email domain selected.");
-            //}
+          
             if (!_modelValidations.IsValidEmailDomain(model.CommonData.EmailDomain))
             {
                 ModelState.AddModelError("CommonData.EmailDomain","Invalid email domain selected.");

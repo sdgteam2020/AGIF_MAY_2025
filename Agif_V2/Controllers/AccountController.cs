@@ -61,9 +61,14 @@ namespace Agif_V2.Controllers
                 var salt = HttpContext.Session.GetString(SessionKeySalt);
                 if(string.IsNullOrEmpty(salt))
                 {
+
+                    salt = AESEncrytDecry.GetSalt();
+                    HttpContext.Session.SetString(SessionKeySalt, salt);
                     ModelState.AddModelError("", "Session expired. Please refresh the page.");
                     return View(model);
                 }
+                ViewBag.hdns = salt;
+
                 var decryptedUser = AESEncrytDecry.DecryptAES(model.UserName.Trim(), salt);
                 var decryptedPass = AESEncrytDecry.DecryptAES(model.Password.Trim(), salt);
 
@@ -248,14 +253,14 @@ namespace Agif_V2.Controllers
             if (result.IsLockedOut)
             {
                 model = await PopulateLockoutInfo(model, user);
-                TempData["Message"] = "Your account has been locked due to multiple failed login attempts. Please try again later or contact the administrator.";
-                return RedirectToAction("Message", "Default");
+                TempData["LoginMessage"] = "Your account has been locked due to multiple failed login attempts. Please try again later or contact the administrator.";
+                return RedirectToAction("Login", "Account");
             }
 
             if (result.IsNotAllowed)
             {
-                TempData["Message"] = "Your account is not allowed to sign in. Please contact administrator.";
-                return RedirectToAction("Message", "Default");
+                TempData["LoginMessage"] = "Your account is not allowed to sign in. Please contact administrator.";
+                return RedirectToAction("Login", "Account");
             }
 
             var updatedFailedAttempts = await _userManager.GetAccessFailedCountAsync(user);
@@ -263,14 +268,14 @@ namespace Agif_V2.Controllers
 
             if (remainingAttempts > 0)
             {
-                TempData["Message"] = $"Invalid username or password. {remainingAttempts} attempt(s) remaining before your account is locked.";
+                TempData["LoginMessage"] = $"Invalid username or password. {remainingAttempts} attempt(s) remaining before your account is locked.";
             }
             else
             {
-                TempData["Message"] = "Your account has been locked due to multiple failed login attempts. Please contact the administrator.";
+                TempData["LoginMessage"] = "Your account has been locked due to multiple failed login attempts. Please contact the administrator.";
             }
 
-            return RedirectToAction("Message", "Default");
+            return RedirectToAction("Login", "Account");
         }
         public IActionResult Register()
         {

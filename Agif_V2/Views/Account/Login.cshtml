@@ -4,6 +4,10 @@
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
+@if (TempData["LoginMessage"] != null)
+{
+    <input type="hidden" id="tempMessage" value="@TempData["LoginMessage"]" />
+}
 <link href="~/css/login.css" rel="stylesheet" />
 <script src="~/js/crypto-js.min.js"></script>
 <div class="container-fluid mt-2">
