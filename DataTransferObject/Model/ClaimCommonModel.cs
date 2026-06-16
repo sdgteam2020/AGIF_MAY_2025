@@ -68,9 +68,11 @@ namespace DataTransferObject.Model
         public DateTime? DateOfRetirement { get; set; }
 
         [Required(ErrorMessage = "Aadhar Card No is required.")]
+        [RegularExpression(@"^(\d{12}|\d{4}-\d{4}-\d{4})$", ErrorMessage = "Enter a valid Aadhaar Card Number.")]
         public string? AadharCardNo { get; set; }
 
         [Required(ErrorMessage = "PAN Card No is required.")]
+        [RegularExpression(@"^[A-Z]{5}[0-9]{4}[A-Z]{1}$", ErrorMessage = "Enter a valid PAN Card Number.")]
         public string? PanCardNo { get; set; }
 
         [Required(ErrorMessage = "Mobile No is required.")]
@@ -85,8 +87,10 @@ namespace DataTransferObject.Model
         [StringLength(100, ErrorMessage = "Email Domain can't be longer than 100 characters.")]
         public string? EmailDomain { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
         public int? TotalService { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
         public int? ResidualService { get; set; }
 
         [Required(ErrorMessage = "Regt/Corps is required.")]
@@ -135,22 +139,38 @@ namespace DataTransferObject.Model
 
 
         public DateTime? House_Building_Date_of_Loan_taken { get; set; }
+
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
         public int? House_Building_Duration_of_Loan { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "House Building Amount Taken must be a positive number.")]
         public decimal? House_Building_Amount_Taken { get; set; }
 
 
         public DateTime? House_Repair_Advance_Date_of_Loan_taken { get; set; }
-        public int? House_Repair_Advance_Duration_of_Loan { get; set; } 
+
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
+        public int? House_Repair_Advance_Duration_of_Loan { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "House Repair Advance Taken must be a positive number.")]
         public decimal? House_Repair_Advance_Amount_Taken { get; set; }
 
 
         public DateTime? Conveyance_Date_of_Loan_taken { get; set; }
-        public int? Conveyance_Duration_of_Loan { get; set; } 
+       
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
+        public int? Conveyance_Duration_of_Loan { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "House Repair Advance Taken must be a positive number.")]
         public decimal? Conveyance_Amount_Taken { get; set; }
 
 
         public DateTime? Computer_Date_of_Loan_taken { get; set; }
-        public int? Computer_Duration_of_Loan { get; set; } 
+
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
+        public int? Computer_Duration_of_Loan { get; set; }
+
+        [Range(0, double.MaxValue, ErrorMessage = "Computer Amount Taken must be a positive number.")]
         public decimal? Computer_Amount_Taken { get; set; }
 
         [Required]

@@ -53,5 +53,15 @@
                 _ => string.Empty
             };
         }
+        public bool IsValidCivilPostalAddress(string armyPostOfficeId, string civilPostalAddress)
+        {
+            const string CivilPostalAddressValue = "3";
+            if (armyPostOfficeId == CivilPostalAddressValue)
+            {
+                return !string.IsNullOrWhiteSpace(civilPostalAddress);
+            }
+
+            return string.IsNullOrWhiteSpace(civilPostalAddress);
+        }
     }
 }

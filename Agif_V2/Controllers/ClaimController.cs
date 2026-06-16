@@ -26,9 +26,9 @@ namespace Agif_V2.Controllers
         private readonly FileUtility _fileUtility;
         private readonly Watermark _watermark;
         private readonly IModelStateLogger _modelStateLogger;
+        private readonly ModelValidations _modelValidations;
 
-
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger,ModelValidations modelValidations)
         {
 
             _IClaimonlineApplication1 = OnlineApplication;      
@@ -42,6 +42,7 @@ namespace Agif_V2.Controllers
             _fileUtility = fileUtility;
             _watermark = watermark;
             _modelStateLogger = modelStateLogger;
+            _modelValidations = modelValidations;
         }
 
         public IActionResult MaturityLoanType()
@@ -266,7 +267,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Security error: Failed to process the application payload.");
+                ModelState.AddModelError("", "Security error: Failed to process the application.");
                 return View("OnlineApplication", new DTOClaimApplication());
             }
             if (model.ClaimCommonData != null && model.ClaimCommonData.ResidualService > 1 && model.PropertyRenovation != null)
@@ -278,11 +279,52 @@ namespace Agif_V2.Controllers
 
             await ValidateModelAsync(model);
 
+
             if (model.Category == "3") // OR
             {
                 ModelState.Remove("ClaimCommonData.OldArmyPrefix");
                 ModelState.Remove("ClaimCommonData.OldNumber");
                 ModelState.Remove("ClaimCommonData.OldSuffix");
+            }
+            var applicantCategory = Convert.ToInt32(TempData["Category"]);
+
+            if (applicantCategory == 2 && model.ClaimCommonData.ArmyPrefix != 13)
+            {
+                ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
+            }
+            if (applicantCategory == 3 && model.ClaimCommonData.ArmyPrefix != 14)
+            {
+                ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
+            }
+
+            if (!_modelValidations.IsValidEmailDomain(model.ClaimCommonData.EmailDomain))
+            {
+                ModelState.AddModelError("ClaimCommonData.EmailDomain", "Invalid email domain selected.");
+            }
+
+            // Army Number & Suffix Validation
+            var expectedSuffix = _modelValidations.CalculateSuffix(model.ClaimCommonData.Number);
+
+            if (!string.Equals(expectedSuffix, model.ClaimCommonData.Suffix, StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("ClaimCommonData.Suffix", "Invalid Army Number or Suffix.");
+            }
+
+            if(model.Category!= "3")
+            {
+                var expectedoldSuffix = _modelValidations.CalculateSuffix(model.ClaimCommonData.OldNumber);
+
+                if (!string.Equals(expectedoldSuffix, model.ClaimCommonData.OldSuffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    ModelState.AddModelError("ClaimCommonData.OldSuffix", "Invalid Old Army Number or Suffix.");
+                }
+            }
+
+
+            // Civil Postal Address Validation
+            if (!_modelValidations.IsValidCivilPostalAddress(model.ClaimCommonData.ArmyPostOffice.ToString(), model.ClaimCommonData.CivilPostalAddress))
+            {
+                ModelState.AddModelError("ClaimCommonData.CivilPostalAddress", "Civil Postal Address is not allowed for the selected Army Post Office.");
             }
 
             if (!ModelState.IsValid)
@@ -290,17 +332,26 @@ namespace Agif_V2.Controllers
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("OnlineApplication", model);
             }
-                
+            try
+            {
+                var claimCommonModel = await SaveClaimCommonDataAsync(model);
 
-            var claimCommonModel = await SaveClaimCommonDataAsync(model);
+                await SaveAddressAndAccountDetailsAsync(model, claimCommonModel.ApplicationId);
 
-            await SaveAddressAndAccountDetailsAsync(model, claimCommonModel.ApplicationId);
+                string formType = await SubmitFormAsync(model, claimCommonModel.ApplicationId);
 
-            string formType = await SubmitFormAsync(model, claimCommonModel.ApplicationId);
+                TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
+                TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
+                return RedirectToAction("Upload", "Claim");
+            }
+            catch (Exception ex)
+            {
 
-            TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
-            TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
-            return RedirectToAction("Upload", "Claim");
+                ModelState.AddModelError("", "Security error: Failed to process the application.");
+
+                return View("OnlineApplication", model);
+            }
+
         }
 
         private async Task<bool> ValidateModelAsync(DTOClaimApplication model)

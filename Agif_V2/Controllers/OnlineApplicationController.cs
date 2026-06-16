@@ -309,7 +309,16 @@ namespace Agif_V2.Controllers
                 ModelState.Remove("CommonData.OldNumber");
                 ModelState.Remove("CommonData.OldSuffix");
             }
-          
+            var applicantCategory = Convert.ToInt32(TempData["ApplicantCategory"]) ;
+
+            if (applicantCategory ==2 && model.CommonData.ArmyPrefix != 13)
+            {
+                ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
+            }
+            if (applicantCategory == 3 && model.CommonData.ArmyPrefix != 14)
+            {
+                ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
+            }
             if (!_modelValidations.IsValidEmailDomain(model.CommonData.EmailDomain))
             {
                 ModelState.AddModelError("CommonData.EmailDomain","Invalid email domain selected.");
@@ -321,7 +330,20 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("CommonData.Suffix","Invalid Army Number or Suffix.");
             }
 
+            if (model.applicantCategory != "3")
+            {
+                var expectedoldSuffix = _modelValidations.CalculateSuffix(model.CommonData.OldNumber);
 
+                if (!string.Equals(expectedoldSuffix, model.CommonData.OldSuffix, StringComparison.OrdinalIgnoreCase))
+                {
+                    ModelState.AddModelError("CommonData.OldSuffix", "Invalid Old Army Number or Suffix.");
+                }
+            }
+                
+            if (!_modelValidations.IsValidCivilPostalAddress(model.CommonData.ArmyPostOffice.ToString(), model.CommonData.CivilPostalAddress))
+            {
+                ModelState.AddModelError("CommonData.CivilPostalAddress", "Civil Postal Address is not allowed for the selected Army Post Office.");
+            }
             if (!ModelState.IsValid)
             {
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);

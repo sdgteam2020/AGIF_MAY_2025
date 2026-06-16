@@ -82,9 +82,9 @@ function callingCommonFunctions() {
         ValInDataNo(this);
     });
 
-    $("#mobileNo").on("blur", function () {
-        verifyMobileNo(this);
-    });
+    //$("#mobileNo").on("blur", function () {
+    //    verifyMobileNo(this);
+    //});
 
     $(".js-unit-pin").on("input change", function (e) {
 

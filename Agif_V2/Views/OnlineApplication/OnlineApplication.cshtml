@@ -62,11 +62,10 @@
                                                         ;
                                                     }">
                                                     </select>
-                                                <label class="form-label select-label " for="armyPrefix">Prefix</label>
-                                                
-                                                @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
-                                           
+                                                <label class="form-label select-label " for="armyPrefix">Prefix</label>                                           
                                         </div>
+                                        @Html.ValidationMessageFor(m => m.CommonData.ArmyPrefix, "", new { @class = "text-danger" })
+
                                     </div>
 
                                     <div class="col-4 col-md-4">

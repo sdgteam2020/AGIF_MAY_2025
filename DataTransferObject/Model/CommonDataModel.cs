@@ -68,10 +68,12 @@ namespace DataTransferObject.Model
         public DateTime? DateOfRetirement { get; set; }
 
         [Required(ErrorMessage = "Aadhar Card No is required.")]
+        [RegularExpression(@"^(\d{12}|\d{4}-\d{4}-\d{4})$",ErrorMessage = "Enter a valid Aadhaar Card Number.")]
         public string? AadharCardNo { get; set; }
 
         [Required(ErrorMessage = "PAN Card No is required.")]
-        public string? PanCardNo { get; set; }
+        [RegularExpression(@"^[A-Z]{5}[0-9]{4}[A-Z]{1}$", ErrorMessage = "Enter a valid PAN Card Number.")]
+        public string? PanCardNo { get; set; }  
 
         [Required(ErrorMessage = "Mobile No is required.")]
         [StringLength(10, ErrorMessage = "Mobile No must be 10 digits.")]
@@ -84,9 +86,10 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage = "Email Domain is required.")]
         [StringLength(100, ErrorMessage = "Email Domain can't be longer than 100 characters.")]
         public string? EmailDomain { get; set; }
-
+        [Range(0, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
         public int? TotalService { get; set; }
-
+        
+        [Range(0, int.MaxValue, ErrorMessage = "Only positive numbers are allowed.")]
         public int? ResidualService { get; set; }
 
         [Required(ErrorMessage = "Regt/Corps is required.")]
