@@ -31,7 +31,9 @@ namespace Agif_V2.Controllers
         private readonly IClaimOnlineApplication _IClaimonlineApplication1;
         private readonly IClaimApplication _claimApplication;
         private readonly Watermark _watermark;
-        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication, Watermark watermark)
+        private readonly PdfUpload _pdfUpload;
+
+        public ApplicationRequestController(IUsersApplications usersApplications, IOnlineApplication _onlineApplication, IApplication _application, IUserProfile _userProfile, IClaimOnlineApplication claimOnlineApplication, IClaimApplication claimApplication, Watermark watermark, PdfUpload pdfUpload)
         {
             _userApplication = usersApplications;
             this._onlineApplication = _onlineApplication;
@@ -40,6 +42,7 @@ namespace Agif_V2.Controllers
             this._IClaimonlineApplication1 = claimOnlineApplication;
             _claimApplication = claimApplication;
             _watermark = watermark;
+            _pdfUpload = pdfUpload;
         }
         public IActionResult Index()
         {
@@ -1095,6 +1098,52 @@ namespace Agif_V2.Controllers
         
         public async Task<IActionResult> UploadExcelFile(IFormFile file)
         {
+            if (file == null || file.Length == 0)
+            {
+                ModelState.AddModelError("file", "Please select an Excel file.");
+                return View();
+            }
+
+            // File size (Example: 5 MB)
+            //if (file.Length > 5 * 1024 * 1024)
+            //{
+            //    ModelState.AddModelError("file", "File size must not exceed 5 MB.");
+            //    return View();
+            //}
+
+            // Extension
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            var allowedExtensions = new[] { ".xlsx", ".xls" };
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                ModelState.AddModelError("file", "Only Excel files (.xlsx, .xls) are allowed.");
+                return View();
+            }
+
+            // MIME Type
+            var allowedMimeTypes = new[]
+            {
+                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+                        "application/vnd.ms-excel"                                           // .xls
+            };
+
+            if (!allowedMimeTypes.Contains(file.ContentType))
+            {
+                ModelState.AddModelError("file", "Invalid Excel file.");
+            }
+
+            // Signature Validation
+            if (!await _pdfUpload.IsValidExcelFile(file))
+            {
+                ModelState.AddModelError("file", "Invalid Excel file.");
+            }
+
+            if (await _pdfUpload.IsPasswordProtected(file))
+            {
+                ModelState.AddModelError("file", "Password-protected Excel files are not allowed.");
+            }
             if (!ModelState.IsValid)
             {
                 return Json(new { success = false, message = "Invalid request." });
@@ -1389,9 +1438,55 @@ namespace Agif_V2.Controllers
         
         public async Task<IActionResult> ClaimUploadExcelFile(IFormFile file)
         {
-            if(!ModelState.IsValid)
+            if (file == null || file.Length == 0)
             {
-                return Json("Invalid request");
+                ModelState.AddModelError("file", "Please select an Excel file.");
+                return View();
+            }
+
+            // File size (Example: 5 MB)
+            //if (file.Length > 5 * 1024 * 1024)
+            //{
+            //    ModelState.AddModelError("file", "File size must not exceed 5 MB.");
+            //    return View();
+            //}
+
+            // Extension
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            var allowedExtensions = new[] { ".xlsx", ".xls" };
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                ModelState.AddModelError("file", "Only Excel files (.xlsx, .xls) are allowed.");
+                return View();
+            }
+
+            // MIME Type
+            var allowedMimeTypes = new[]
+            {
+                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+                        "application/vnd.ms-excel"                                           // .xls
+            };
+
+            if (!allowedMimeTypes.Contains(file.ContentType))
+            {
+                ModelState.AddModelError("file", "Invalid Excel file.");
+            }
+
+            // Signature Validation
+            if (!await _pdfUpload.IsValidExcelFile(file))
+            {
+                ModelState.AddModelError("file", "Invalid Excel file.");
+            }
+
+            if (await _pdfUpload.IsPasswordProtected(file))
+            {
+                ModelState.AddModelError("file", "Password-protected Excel files are not allowed.");
+            }
+            if (!ModelState.IsValid)
+            {
+                return Json(new { success = false, message = "Invalid request." });
             }
             if (file == null || file.Length == 0)
                 return Json(new { success = false, message = "Please select a valid Excel file." });

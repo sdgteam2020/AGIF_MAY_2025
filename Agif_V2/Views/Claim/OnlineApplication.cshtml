@@ -65,8 +65,7 @@
                                                     @Model.ClaimCommonData.ArmyPrefix
                                                     ;
                                                     
-                                                }
-                                                ">
+                                                }">
                                             </select>
                                             <label class="form-label select-label " for="armyPrefix">Prefix</label>
                                         </div>
@@ -150,8 +149,7 @@
                                         {
                                             @Model.ClaimCommonData.DdlRank
                                             ;
-                                        }
-                                        ">
+                                        }">
                                     </select>
                                     <label class="form-label select-label">Rank & Trade</label>
                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.DdlRank, "", new { @class = "text-danger" })
@@ -180,8 +178,7 @@
                                         {
                                             @Model.ClaimCommonData.RegtCorps
                                             ;
-                                        }
-                                        ">
+                                        }">
                                     </select>
                                     <label class="form-label select-label ">Regt/Corps</label>
                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.RegtCorps, "", new { @class = "text-danger" })
@@ -431,8 +428,7 @@
                                         {
                                             @Model.ClaimCommonData.ArmyPostOffice
                                             ;
-                                        }
-                                        ">
+                                        }">
                                     </select>
                                     <label class="form-label select-label ">Army Post Office</label>
                                     @Html.ValidationMessageFor(m => m.ClaimCommonData.ArmyPostOffice, "", new { @class = "text-danger" })
@@ -604,8 +600,7 @@
                                             {
                                                 @Model.AccountDetails.BankId
                                                 ;
-                                            }
-                                            ">
+                                            }">
                                         </select>
                                         <label class="form-label select-label" for="BankId">Bank Name</label>
                                         @Html.ValidationMessageFor(m => m.AccountDetails.BankId, "", new { @class = "text-danger" })
@@ -1024,7 +1019,7 @@
 
                                     <div class="col-md-4">
                                         <div class="mb-2">
-                                           <div class="form-outline" data-mdb-input-init>
+                                           <div class="form-outline file-upload-wrapper" data-mdb-input-init>
 
                                                   <input type="file"
                                                          id="Attach_Part_II_Order"
@@ -1032,13 +1027,17 @@
                                                          class="d-none form-control custom-file-text file-upload"
                                                          accept=".pdf"
                                                          required />
+                                            <label for="Attach_Part_II_Order" class="file-upload-container">
 
-                                                  <label for="Attach_Part_II_Order"
-                                                         class="btn btn-primary">
-                                                      Attach Part-II Order
-                                                  </label>
+                                                          <span class="btn btn-primary">
+                                                              Attach Part-II Order
+                                                          </span>
 
-                                                    <span class="selected-file-name">No file chosen</span>
+                                                          <span class="selected-file-name">
+                                                              No file chosen
+                                                          </span>
+
+                                                      </label>
 
                                                       <p class="file-error-message text-danger"></p>
 
@@ -1090,7 +1089,7 @@
                                     
                                        <div class="col-md-4">
                                         <div class="mb-2">
-                                           <div class="form-outline" data-mdb-input-init>
+                                           <div class="form-outline file-upload-wrapper" data-mdb-input-init>
 
                                                   <input type="file"
                                                          id="Attach_Bonafide_letter"
@@ -1098,14 +1097,15 @@
                                                          class="d-none form-control custom-file-text file-upload"
                                                          accept=".pdf"
                                                          required />
+                                                <label for="Attach_Bonafide_letter" class="file-upload-container">
 
-                                                  <label for="Attach_Bonafide_letter"
+                                                  <span
                                                          class="btn btn-primary">
                                                       Attach Bonafide cert/admission letter
-                                                  </label>
+                                                  </span>
 
                                                     <span class="selected-file-name">No file chosen</span>
-
+                                                    </label>
                                                       <p class="file-error-message text-danger"></p>
 
                                                 @Html.ValidationMessageFor(m => m.EducationDetails.AttachBonafideLetter, "", new { @class = "text-danger" })
@@ -1127,7 +1127,7 @@
 
                                      <div class="col-md-4">
                                         <div class="mb-2">
-                                           <div class="form-outline" data-mdb-input-init>
+                                           <div class="form-outline file-upload-wrapper" data-mdb-input-init>
 
                                                   <input type="file"
                                                          id="TotalexpenditureFile"
@@ -1136,12 +1136,12 @@
                                                          accept=".pdf"
                                                          required />
 
-                                                  <label for="TotalexpenditureFile"
-                                                         class="btn btn-primary">
-                                                      Total expenditure (attach details)
-                                                  </label>
+                                                  <label for="TotalexpenditureFile" class="file-upload-container">
+                                                      <span class="btn btn-primary">
+                                                      Total expenditure (attach details)</span>   
 
                                                     <span class="selected-file-name">No file chosen</span>
+                                                  </label>
 
                                                       <p class="file-error-message text-danger"></p>
 
@@ -1273,7 +1273,7 @@
 
                                     <div class="col-md-4">
                                         <div class="mb-2">
-                                           <div class="form-outline" data-mdb-input-init>
+                                           <div class="form-outline file-upload-wrapper" data-mdb-input-init>
 
                                                   <input type="file"
                                                          id="Attach_Part_II_Order"
@@ -1283,11 +1283,12 @@
                                                          required />
 
                                                   <label for="Attach_Part_II_Order"
-                                                         class="btn btn-primary">
+                                                         class="file-upload-container">
+                                                         <span class="btn btn-primary">
                                                       Attach Part-II Order
-                                                  </label>
-
+                                                      </span>
                                                     <span class="selected-file-name">No file chosen</span>
+                                                   </label>
 
                                                       <p class="file-error-message text-danger"></p>
 
@@ -1322,7 +1323,7 @@
 
                                      <div class="col-md-4">
                                         <div class="mb-2">
-                                           <div class="form-outline" data-mdb-input-init>
+                                           <div class="form-outline file-upload-wrapper" data-mdb-input-init>
 
                                                   <input type="file"
                                                          id="Attach_invitation_card"
@@ -1331,12 +1332,13 @@
                                                          accept=".pdf"
                                                          required />
 
-                                                  <label for="Attach_invitation_card"
-                                                         class="btn btn-primary">
+                                                  <label for="Attach_invitation_card" class="file-upload-container">
+                                                      <span   class="btn btn-primary">
                                                       Attach invitation card
-                                                  </label>
+                                                      </span>
 
                                                     <span class="selected-file-name">No file chosen</span>
+                                                     </label>
 
                                                       <p class="file-error-message text-danger"></p>
 
@@ -1410,9 +1412,10 @@
                                         @Html.ValidationMessageFor(m => m.PropertyRenovation.EstimatedCost, "", new { @class = "text-danger" })
                                     </div>
 
-                                     <div class="col-md-4">
+
+                                <div class="col-md-4">
                                         <div class="mb-2">
-                                           <div class="form-outline" data-mdb-input-init>
+                                           <div class="form-outline file-upload-wrapper" data-mdb-input-init>
 
                                                   <input type="file"
                                                          id="TotalexpenditureFile"
@@ -1421,13 +1424,25 @@
                                                          accept=".pdf"
                                                          required />
 
-                                                  <label for="TotalexpenditureFile"
-                                                         class="btn btn-primary">
+                                                  <label for="TotalexpenditureFile" class="file-upload-container">
+                                                       <span  class="btn btn-primary">
                                                       Total expenditure (attach details)
-                                                  </label>
-                                          </div>
-                                        </div>
+                                                      </span>
+                                                    <span class="selected-file-name">No file chosen</span>
+                                                    </label>
+
+                                                      <p class="file-error-message text-danger"></p>
+
+                                                @Html.ValidationMessageFor(m => m.PropertyRenovation.TotalExpenditureFile, "", new { @class = "text-danger" })
                                               </div>
+                                         </div>
+                                    </div>
+
+
+
+
+
+
                                       </div>
                                   </div>
                                 </div>
@@ -1451,7 +1466,7 @@
             <input type="hidden" id="hra_Loan" name="ClaimCommonData.House_Repair_Advance_Loan" value="@Model.ClaimCommonData?.House_Repair_Advance_Loan" />
             <input type="hidden" id="ca_Loan" name="ClaimCommonData.Conveyance_Advance_Loan" value="@Model.ClaimCommonData?.Conveyance_Advance_Loan" />
             <input type="hidden" id="pca_Loan" name="ClaimCommonData.Computer_Advance_Loan" value="@Model.ClaimCommonData?.Computer_Advance_Loan" />
-            <input type="hidden" id="applicationid" name="applicationid" value="@applicationid" />
+            <input type="hidden" id="applicationid" name="ClaimCommonData.applicationid" value="@applicationid" />
 
             <div id="unitSearchDialog" class="uploadDialog d-none">
                 <div class="dialog-box w-668">

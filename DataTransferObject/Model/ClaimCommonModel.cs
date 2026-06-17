@@ -49,7 +49,7 @@ namespace DataTransferObject.Model
         public MRank? MRank { get; set; }
 
         [Required(ErrorMessage = "Applicant Name is required.")]
-        [StringLength(200, ErrorMessage = "Applicant Name can't be longer than 200 characters.")]
+        [StringLength(50, ErrorMessage = "Applicant Name can't be longer than 50 characters.")]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Applicant Name must only contain alphabets and spaces.")]
         public string? ApplicantName { get; set; }
 
@@ -81,6 +81,7 @@ namespace DataTransferObject.Model
         public string? MobileNo { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
+        [StringLength(60, ErrorMessage = "Email cannot exceed 60 characters.")]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Email Domain is required.")]

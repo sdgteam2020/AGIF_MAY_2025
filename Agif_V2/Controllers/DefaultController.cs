@@ -486,7 +486,10 @@ namespace Agif_V2.Controllers
 
             if (!System.IO.File.Exists(originalFilePath))
             {
-                return Json(new { success = false, message = "Merged PDF not found." });
+                TempData["PdfError"] = "Merged PDF not found.";
+
+                return RedirectToAction("CheckApplicationStatus");
+                //return Json(new { success = false, message = "Merged PDF not found." });
             }
 
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempPdf");
@@ -622,7 +625,10 @@ namespace Agif_V2.Controllers
 
             if (!System.IO.File.Exists(originalFilePath))
             {
-                return Json(new { success = false, message = "Merged PDF not found." });
+                TempData["PdfError"] = "Merged PDF not found.";
+
+                return RedirectToAction("CheckApplicationStatus");
+                //return Json(new { success = false, message = "Merged PDF not found." });
             }
 
             string tempFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "TempPdf");

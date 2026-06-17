@@ -3,7 +3,12 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
     
 }
-
+@if (TempData["PdfError"] != null)
+{
+    <input type="hidden"
+           id="tempErrorMessage"
+           value="@TempData["PdfError"]" />
+}
 <link href="~/css/checkapplicationstatus.css" rel="stylesheet" />
 <div class="container container1 py-4 bg-white">
 

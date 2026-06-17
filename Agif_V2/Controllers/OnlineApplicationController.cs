@@ -7,6 +7,7 @@ using DataTransferObject.Model;
 using DataTransferObject.Request;
 using DataTransferObject.Response;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Forms;
@@ -312,16 +313,38 @@ namespace Agif_V2.Controllers
                 ModelState.Remove("CommonData.OldNumber");
                 ModelState.Remove("CommonData.OldSuffix");
             }
-            var applicantCategory = Convert.ToInt32(TempData["ApplicantCategory"]) ;
 
-            if (applicantCategory ==2 && model.CommonData.ArmyPrefix != 13)
+            var applicantCategory = model.applicantCategory.ToString();
+
+            var response = new DTOCommonOnlineApplicationResponse();
+            response = null;
+
+            DTOOnlineApplication DTOOnlineapplication = new DTOOnlineApplication();
+
+            if (model.CommonData.ApplicationId != 0)
+            {
+                response = _IonlineApplication1.GetApplicationAndApplicantType(model.CommonData.ApplicationId);
+            }
+
+            if (response != null)
+            {
+                applicantCategory = response.OnlineApplicationResponse.ApplicantType.ToString();
+            }
+
+            if (applicantCategory == "1" &&( model.CommonData.ArmyPrefix== 13 || model.CommonData.ArmyPrefix == 14))
             {
                 ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
             }
-            if (applicantCategory == 3 && model.CommonData.ArmyPrefix != 14)
+            if (applicantCategory =="2" && model.CommonData.ArmyPrefix != 13)
             {
                 ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
             }
+            if (applicantCategory == "3" && model.CommonData.ArmyPrefix != 14)
+            {
+                ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
+            }
+
+
             if (!_modelValidations.IsValidEmailDomain(model.CommonData.EmailDomain))
             {
                 ModelState.AddModelError("CommonData.EmailDomain","Invalid email domain selected.");

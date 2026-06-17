@@ -261,6 +261,63 @@ namespace Agif_V2.Helpers
         {
             return await ContainsMaliciousPdfContent(file);
         }
+        public async Task<bool> IsValidExcelFile(IFormFile file)
+        {
+            try
+            {
+                using var stream = file.OpenReadStream();
 
+                byte[] header = new byte[8];
+                await stream.ReadAsync(header, 0, header.Length);
+
+                string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+                // .xlsx = ZIP
+                if (extension == ".xlsx")
+                {
+                    return header[0] == 0x50 &&
+                           header[1] == 0x4B &&
+                           header[2] == 0x03 &&
+                           header[3] == 0x04;
+                }
+
+                // .xls = OLE Compound Document
+                if (extension == ".xls")
+                {
+                    return header[0] == 0xD0 &&
+                           header[1] == 0xCF &&
+                           header[2] == 0x11 &&
+                           header[3] == 0xE0 &&
+                           header[4] == 0xA1 &&
+                           header[5] == 0xB1 &&
+                           header[6] == 0x1A &&
+                           header[7] == 0xE1;
+                }
+
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public async Task<bool> IsPasswordProtected(IFormFile file)
+        {
+            try
+            {
+                using var stream = file.OpenReadStream();
+                using var package = new OfficeOpenXml.ExcelPackage(stream);
+
+                return false;
+            }
+            catch (OfficeOpenXml.Packaging.Ionic.Zip.BadPasswordException)
+            {
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }

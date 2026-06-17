@@ -2765,31 +2765,90 @@ function encryptData(plainText) {
 }
 
 
+//$(document).on('change', '.file-upload', function () {
+
+//    var file = this.files[0];
+//    var maxSize = 150 * 1024;
+
+//    $(this).siblings('.file-error-message').text('');
+
+//    if (file) {
+
+//        $(this).siblings('.selected-file-name').text(file.name);
+
+//        if (file.size > maxSize) {
+
+//            $(this).val('');
+
+//            $(this).siblings('.selected-file-name')
+//                .text('No file chosen');
+
+//            $(this).siblings('.file-error-message')
+//                .text('File size should not exceed 150 KB.');
+
+//            return false;
+//        }
+//    }
+//});
+
 $(document).on('change', '.file-upload', function () {
 
     var file = this.files[0];
     var maxSize = 150 * 1024;
 
-    $(this).siblings('.file-error-message').text('');
+    var wrapper = $(this).closest('.file-upload-wrapper');
+
+    wrapper.find('.file-error-message').text('');
 
     if (file) {
 
-        $(this).siblings('.selected-file-name').text(file.name);
+        wrapper.find('.selected-file-name').text(file.name);
 
         if (file.size > maxSize) {
 
             $(this).val('');
 
-            $(this).siblings('.selected-file-name')
+            wrapper.find('.selected-file-name')
                 .text('No file chosen');
 
-            $(this).siblings('.file-error-message')
+            wrapper.find('.file-error-message')
                 .text('File size should not exceed 150 KB.');
 
-            return false;
+            return;
         }
     }
+    else {
+        wrapper.find('.selected-file-name')
+            .text('No file chosen');
+    }
 });
+//$(document).on('change', '.file-upload', function () {
+
+//    var file = this.files[0];
+//    var maxSize = 150 * 1024;
+
+//    var container = $(this).next('label');
+
+//    container.next('.file-error-message').text('');
+
+//    if (file) {
+
+//        container.find('.selected-file-name').text(file.name);
+
+//        if (file.size > maxSize) {
+
+//            $(this).val('');
+
+//            container.find('.selected-file-name')
+//                .text('No file chosen');
+
+//            container.next('.file-error-message')
+//                .text('File size should not exceed 150 KB.');
+
+//            return false;
+//        }
+//    }
+//});
 function accordionAutoOpenClose() {
     $('.accordion').on('keydown', '.last-input', function (e) {
         if (e.key === 'Tab' && !e.shiftKey) {

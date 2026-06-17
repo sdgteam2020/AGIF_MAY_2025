@@ -27,8 +27,9 @@ namespace Agif_V2.Controllers
         private readonly Watermark _watermark;
         private readonly IModelStateLogger _modelStateLogger;
         private readonly IModelValidationService _modelValidationService;
+        private readonly ModelValidations _modelValidations;
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger, IModelValidationService modelValidationService)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger, IModelValidationService modelValidationService, ModelValidations modelValidations )
         {
 
             _IClaimonlineApplication1 = OnlineApplication;      
@@ -43,6 +44,7 @@ namespace Agif_V2.Controllers
             _watermark = watermark;
             _modelStateLogger = modelStateLogger;
             _modelValidationService = modelValidationService;
+            _modelValidations = modelValidations;
         }
 
         public IActionResult MaturityLoanType()
@@ -286,13 +288,32 @@ namespace Agif_V2.Controllers
                 ModelState.Remove("ClaimCommonData.OldNumber");
                 ModelState.Remove("ClaimCommonData.OldSuffix");
             }
-            var applicantCategory = Convert.ToInt32(TempData["Category"]);
+            var applicantCategory = model.Category.ToString();
 
-            if (applicantCategory == 2 && model.ClaimCommonData.ArmyPrefix != 13)
+            var response = new DTOClaimCommonOnlineResponse();
+            response = null;
+
+            DTOClaimApplication DTOClaimApplication = new DTOClaimApplication();
+
+            if (model.ClaimCommonData.ApplicationId != 0)
+            {
+                response = _IClaimonlineApplication1.GetApplicationAndApplicantType(model.ClaimCommonData.ApplicationId);
+            }
+
+            if (response != null)
+            {
+                applicantCategory = response.OnlineApplicationResponse.ApplicantType.ToString();
+            }
+
+            if (applicantCategory == "1" && (model.ClaimCommonData.ArmyPrefix == 13 || model.ClaimCommonData.ArmyPrefix == 14))
+            {
+                ModelState.AddModelError("ClaimCommonData.ArmyPrefix", "Invalid Army Prefix");
+            }
+            if (applicantCategory == "2" && model.ClaimCommonData.ArmyPrefix != 13)
             {
                 ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
             }
-            if (applicantCategory == 3 && model.ClaimCommonData.ArmyPrefix != 14)
+            if (applicantCategory == "3" && model.ClaimCommonData.ArmyPrefix != 14)
             {
                 ModelState.AddModelError("CommonData.ArmyPrefix", "Invalid Army Prefix");
             }

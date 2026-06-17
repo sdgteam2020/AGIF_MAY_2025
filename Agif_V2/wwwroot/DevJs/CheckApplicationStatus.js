@@ -431,4 +431,16 @@
             return 'bg-primary';
         }
     }
+    let errorMessage = $('#tempErrorMessage').val();
+
+    if (errorMessage) {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: errorMessage,
+            confirmButtonText: 'OK'
+        });
+
+    }
 });

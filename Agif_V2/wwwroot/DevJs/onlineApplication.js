@@ -399,65 +399,66 @@ function formatAadhar(input) {
     input.value = formattedValue;
 }
 function BindDropDown() {
+    const armyNumber = $('#armyNumber').val().trim();
+    if (armyNumber) {
+        setTimeout(function () {
 
-    setTimeout(function () {
+            $('#ddlrank').val($('#ddlrank').data('rank-prefix')).trigger('change');
 
-        $('#ddlrank').val($('#ddlrank').data('rank-prefix')).trigger('change');
+            $('#armyPrefix').val($('#armyPrefix').data('army-prefix')).trigger('change');
 
-        $('#armyPrefix').val($('#armyPrefix').data('army-prefix')).trigger('change');
+            $('#oldArmyPrefix').val($('#oldArmyPrefix').data('oldarmy-prefix')).trigger('change');
 
-        $('#oldArmyPrefix').val($('#oldArmyPrefix').data('oldarmy-prefix')).trigger('change');
+            $('#regtCorps').val($('#regtCorps').data('regt-prefix')).trigger('change');
 
-        $('#regtCorps').val($('#regtCorps').data('regt-prefix')).trigger('change');
+            $('#armyPostOffice').val($('#armyPostOffice').data('armypost-prefix')).trigger('change');
 
-        $('#armyPostOffice').val($('#armyPostOffice').data('armypost-prefix')).trigger('change');
+            $('#stateDropdown').val($('#stateDropdown').data('state-prefix')).trigger('change');
 
-        $('#stateDropdown').val($('#stateDropdown').data('state-prefix')).trigger('change');
+            $('#BankId').val($('#BankId').data('bank-id')).trigger('change');
 
-        $('#BankId').val($('#BankId').data('bank-id')).trigger('change');
+        }, 1000);
 
-    }, 1000);
+        const selectedDistrict = $('#districtDropdown').data('district-prefix');
+        setTimeout(function () {
+            $('#districtDropdown').val(selectedDistrict).trigger('change');
+        }, 2000);
 
-    const selectedDistrict = $('#districtDropdown').data('district-prefix');
-    setTimeout(function () {
-        $('#districtDropdown').val(selectedDistrict).trigger('change');
-    }, 2000);
+        var unitId = $("input[name='CommonData.PresentUnit']").val();
+        var ParentUnitId = $("input[name='CommonData.ParentUnit']").val();
 
-    var unitId = $("input[name='CommonData.PresentUnit']").val();
-    var ParentUnitId = $("input[name='CommonData.ParentUnit']").val();
+        if (unitId && unitId != "0") {
 
-    if (unitId && unitId != "0") {
+            $.ajax({
+                url: '/Account/GetUnitById',
+                type: 'POST',
+                data: { UnitId: unitId },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    $("#PresenttxtUnit").val(data);
+                }
+            });
 
-        $.ajax({
-            url: '/Account/GetUnitById',
-            type: 'POST',
-            data: { UnitId: unitId },
-            headers: {
-                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-            },
-            success: function (data) {
-                $("#PresenttxtUnit").val(data);
-            }
-        });
+        }
 
+        if (ParentUnitId && ParentUnitId != "0") {
+
+            $.ajax({
+                url: '/Account/GetUnitById',
+                type: 'POST',
+                data: { UnitId: ParentUnitId },
+                headers: {
+                    "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function (data) {
+                    $("#ParenttxtUnit").val(data);
+                }
+            });
+
+        }
     }
-
-    if (ParentUnitId && ParentUnitId != "0") {
-
-        $.ajax({
-            url: '/Account/GetUnitById',
-            type: 'POST',
-            data: { UnitId: ParentUnitId },
-            headers: {
-                "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
-            },
-            success: function (data) {
-                $("#ParenttxtUnit").val(data);
-            }
-        });
-
-    }
-
 }
 function loadDropdown() {
 
@@ -2696,6 +2697,7 @@ function findDataWithApplicationId() {
                     //  setInputValueWithFloatingLabel('nameOfBank', data.onlineApplicationResponse.nameOfBank);
                     setInputValueWithFloatingLabel('nameOfBankBranch', data.onlineApplicationResponse.nameOfBankBranch);
 
+                    setTimeout(function () {
                     $('#armyPrefix').val(data.onlineApplicationResponse.armyPrefix).trigger('change');
                     $('#oldArmyPrefix').val(data.onlineApplicationResponse.oldArmyPrefix).trigger('change');
                     $('#ddlrank').val(data.onlineApplicationResponse.rankId).trigger('change');
@@ -2703,10 +2705,12 @@ function findDataWithApplicationId() {
                     $('#armyPostOffice').val(data.onlineApplicationResponse.armyPostOfficeId).trigger('change');
                     $('#emailDomain').val(data.onlineApplicationResponse.emailDomain).trigger('change');
                     $('#BankId').val(data.onlineApplicationResponse.bankId).trigger('change');
-                    $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
+                        $('#stateDropdown').val(data.onlineApplicationResponse.stateId).trigger('change');
+                    }, 500);
+
                     setTimeout(function () {
                         $('#districtDropdown').val(data.onlineApplicationResponse.distId).trigger('change');
-                    }, 1000);
+                    }, 2000);
 
                     if (data.carApplicationResponse != null) {
                         $('#veh_Loan_Type').val(data.carApplicationResponse.veh_Loan_TypeId).trigger('change');
