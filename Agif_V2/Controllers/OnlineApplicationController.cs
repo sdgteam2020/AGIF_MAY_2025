@@ -1,6 +1,7 @@
 ﻿using Agif_V2.Helpers;
 using DataAccessLayer;
 using DataAccessLayer.Interfaces;
+using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
 using DataTransferObject.Model;
 using DataTransferObject.Request;
@@ -35,7 +36,8 @@ namespace Agif_V2.Controllers
         private readonly IAccount _account;
         private readonly IModelStateLogger _modelStateLogger;
         private readonly ModelValidations _modelValidations;
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger, ModelValidations modelValidations)
+        private readonly IModelValidationService _modelValidationService;
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger, ModelValidations modelValidations, IModelValidationService modelValidationService)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -50,6 +52,7 @@ namespace Agif_V2.Controllers
             _account = account;
             _modelStateLogger = modelStateLogger;
             _modelValidations = modelValidations;
+            _modelValidationService = modelValidationService;
         }
         [HttpGet]
         public IActionResult OnlineApplication()
@@ -321,6 +324,27 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("CommonData.Suffix","Invalid Army Number or Suffix.");
             }
 
+            await ValidateRetirementDetails(model);
+            switch (formType)
+            {
+                case "HBA":
+                    await _modelValidationService.ValidateHBADetails(
+                        model,
+                        ModelState);
+                    break;
+
+                case "CA":
+                    await _modelValidationService.ValidateCADetails(
+                        model,
+                        ModelState);
+                    break;
+
+                case "PCA":
+                    await _modelValidationService.ValidatePCADetails(
+                        model,
+                        ModelState);
+                    break;
+            }
 
             if (!ModelState.IsValid)
             {
@@ -404,6 +428,79 @@ namespace Agif_V2.Controllers
             TempData["COArmyNumber"] = model.COArmyNo;
 
             return RedirectToAction("Upload", "Upload");
+        }
+
+        private async Task ValidateRetirementDetails(DTOOnlineApplication model)
+        {
+            var common = model.CommonData;
+
+            if (common == null)
+                return;
+
+            var retirementInfo =
+                await _modelValidationService.GetRetirementInfo(
+                    common.DdlRank,
+                    common.ArmyPrefix,
+                    common.RegtCorps);
+
+            if (retirementInfo == null)
+            {
+                ModelState.AddModelError("", "Unable to calculate retirement details.");
+                return;
+            }
+
+            var calculatedRetirementDate =
+                _modelValidationService.CalculateRetirementDate(
+                    retirementInfo.UserTypeId,
+                    common.DdlRank,
+                    common.ArmyPrefix.ToString(),
+                    common.RegtCorps,
+                    common.DateOfBirth!.Value,
+                    common.DateOfCommission!.Value,
+                    common.DateOfPromotion,
+                    common.ExtnOfService == "Yes",
+                    retirementInfo.RetirementAge);
+
+            // Retirement Date
+            if (common.DateOfRetirement == null ||
+                common.DateOfRetirement.Value.Date != calculatedRetirementDate.Date)
+            {
+                ModelState.AddModelError(
+                    "CommonData.DateOfRetirement",
+                    "Retirement date validation failed.");
+            }
+
+            // Total Service
+            var calculatedTotalService =
+                _modelValidationService.CalculateTotalService(
+                    common.DateOfCommission.Value);
+
+            if (common.TotalService != calculatedTotalService)
+            {
+                ModelState.AddModelError(
+                    "CommonData.TotalService",
+                    "Total service validation failed.");
+            }
+
+            // Residual Service
+            var calculatedResidualService =
+                _modelValidationService.CalculateResidualService(
+                    calculatedRetirementDate);
+
+            if (common.ResidualService != calculatedResidualService)
+            {
+                ModelState.AddModelError(
+                    "CommonData.ResidualService",
+                    "Residual service validation failed.");
+            }
+
+            // Business Rule
+            if (calculatedResidualService < 2)
+            {
+                ModelState.AddModelError(
+                    "CommonData.ResidualService",
+                    "Residual service must be at least 2 years.");
+            }
         }
 
         private string? GetFormType(DTOOnlineApplication model)
@@ -732,27 +829,6 @@ namespace Agif_V2.Controllers
             DTOCommonOnlineApplicationResponse data = await _IonlineApplication1.GetApplicationDetailsByApplicationId(applicationId);
             return Json(data);
         }
-
-        //[HttpPost]
-        //public IActionResult HandleApplicationRedirect(int appId, string type)
-        //{
-
-        //    string redirectUrl = string.Empty;
-
-        //    if (type.ToUpper() == "LOAN")
-        //    {
-        //        redirectUrl = Url.Action("OnlineApplication", "OnlineApplication");
-        //        TempData["RedirectapplicationId"] = appId;
-        //    }
-        //    else if (type.ToUpper() == "MATURITY")
-        //    {
-        //        redirectUrl = Url.Action("OnlineApplication", "Claim");
-        //        TempData["RedirectClaimapplicationId"] = appId;
-        //    }
-
-        //    return Json(new { success = true, redirectUrl = redirectUrl });
-        //}
-
 
         [HttpPost]
         [ValidateAntiForgeryToken] // Ensure this matches your JS header

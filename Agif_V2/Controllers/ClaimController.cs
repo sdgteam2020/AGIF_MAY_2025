@@ -26,9 +26,9 @@ namespace Agif_V2.Controllers
         private readonly FileUtility _fileUtility;
         private readonly Watermark _watermark;
         private readonly IModelStateLogger _modelStateLogger;
+        private readonly IModelValidationService _modelValidationService;
 
-
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger, IModelValidationService modelValidationService)
         {
 
             _IClaimonlineApplication1 = OnlineApplication;      
@@ -42,6 +42,7 @@ namespace Agif_V2.Controllers
             _fileUtility = fileUtility;
             _watermark = watermark;
             _modelStateLogger = modelStateLogger;
+            _modelValidationService = modelValidationService;
         }
 
         public IActionResult MaturityLoanType()
@@ -285,6 +286,8 @@ namespace Agif_V2.Controllers
                 ModelState.Remove("ClaimCommonData.OldSuffix");
             }
 
+            await _modelValidationService.ValidateClaimRetirementDetails(model,ModelState);
+
             if (!ModelState.IsValid)
             {
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
@@ -302,7 +305,6 @@ namespace Agif_V2.Controllers
             TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
             return RedirectToAction("Upload", "Claim");
         }
-
         private async Task<bool> ValidateModelAsync(DTOClaimApplication model)
         {            
             bool isValid = true;

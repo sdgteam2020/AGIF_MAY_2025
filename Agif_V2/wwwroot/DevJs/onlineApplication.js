@@ -300,7 +300,6 @@ resetFieldsOnChange('#dateOfBirth', [
     '#dateOfCommission'
 ]);
 
-
 function bindMinAmountValidation() {
     const selectors = [
         '#HBA_Amount_Applied_For_Loan',
@@ -338,8 +337,6 @@ function bindMinAmountValidation() {
         });
     });
 }
-
-
 function resetFieldsOnRankRegtChange() {
     $('#ddlrank, #regtCorps,#armyPrefix').on('change', function () {
         $('#dateOfPromotion,#dateOfRetirement, #dateOfBirth,#dateOfCommission, #totalService, #residualService, #totalResidualMonth, #HBA_EMI_Eligible,#HBA_Amt_Eligible_for_loan,#HBA_Amount_Applied_For_Loan,#HBA_EMI_Applied,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt,#propertyCost,#CA_Amt_Eligible_for_loan,#CA_EMI_Eligible,#CA_Amount_Applied_For_Loan,#CA_EMI_Applied,#CA_approxEMIAmount,#CA_approxDisbursementAmt,#vehicleCost,#PCA_Amt_Eligible_for_loan,#PCA_EMI_Eligible,#PCA_Amount_Applied_For_Loan,#PCA_EMI_Applied,#PCA_approxEMIAmount,#PCA_approxDisbursementAmt,#computerCost').val('');
@@ -350,7 +347,6 @@ function resetCivilPostalAddress() {
         $('#civilPostalAddress').val("");
     });
 }
-
 function expandAccordions() {
 
     const $toggleButton = $('#toggleAll');
@@ -402,8 +398,6 @@ function formatAadhar(input) {
     }
     input.value = formattedValue;
 }
-
-
 function BindDropDown() {
 
     setTimeout(function () {
@@ -540,7 +534,6 @@ $(document).on('change', '#stateDropdown', function () {
     const stateId = parseInt($(this).val()) || 0;
     mMsater('', "districtDropdown", 22, stateId); // empty sectid = no pre-selection
 });
-
 function confirmAccountNo() {
     $('#confirmSalaryAcctNo').change(function () {
         const accountNo = $('#salaryAcctNo').val();
@@ -647,13 +640,6 @@ function SetSuffixLetter(obj) {
     $("#" + targetSuffixId).val(Sletter);
     setOutlineActive(targetSuffixId);
 }
-
-
-
-
-
-
-
 function getApplicantDetalis() {
 
     const armyNumber = $("#armyPrefix").val();
@@ -692,7 +678,6 @@ function getApplicantDetalis() {
         }
     });
 }
-
 function DeleteConfirmation() {
     Swal.fire({
         title: "Previous Loan data deleted !",
@@ -708,8 +693,6 @@ function DeleteConfirmation() {
         }
     });
 }
-
-
 function DeleteExistingLoan() {
     const armyNumber = $("#armyPrefix").val();
     const Prefix = $("#armyNumber").val();
@@ -763,7 +746,6 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
         });
     }
 }
-
 function calculateYearDifference() {
     const value = $('#dateOfCommission').val();
     if (!value) {
@@ -828,9 +810,6 @@ $('.DocPicker').datepicker({
     maxDate: 0,
     yearRange: "1900:+0",
     defaultDate: null,
-
-
-
     onSelect: function (dateText, inst) {
         const dt = $('#dateOfCommission').val();
 
@@ -854,7 +833,6 @@ $('.DopPicker').datepicker({
     dateFormat: 'dd/mm/yy',
     yearRange: "1900:2100",
     defaultDate: null,
-
     onSelect: function (dateText, inst) {
         const dt = $('#dateOfPromotion').val();
 
@@ -877,7 +855,6 @@ $('.Payslippicker').datepicker({
     dateFormat: 'dd/mm/yy',
     yearRange: "1900:2100",
     defaultDate: null,
-
     onSelect: function (dateText, inst) {
         const dt = $('#monthlyPaySlip').val();
 
@@ -902,7 +879,6 @@ $('.LicencePicker').datepicker({
     yearRange: "1900:2100",
     minDate: 1,
     defaultDate: null,
-
     onSelect: function (dateText, inst) {
         const dt = $('#validity_Date_DL').val();
 
@@ -915,7 +891,6 @@ $('.LicencePicker').datepicker({
         setOutlineActive(this.id);
         $(this).siblings('.form-label').addClass('active');
     }
-
 });
 $('.LicencePicker').on('blur change', function () {
     const inputDate = $(this).val();
@@ -968,14 +943,12 @@ function formatDate(input) {
 
     input.setSelectionRange(cursorPosition, cursorPosition);
 }
-
 function formatDateToString(date) {
     const day = ("0" + date.getDate()).slice(-2);
     const month = ("0" + (date.getMonth() + 1)).slice(-2);
     const year = date.getFullYear();
     return day + "/" + month + "/" + year;
 }
-
 function validateDateFormat(input) {
     const value = input.value;
     const datePattern = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
@@ -1057,7 +1030,6 @@ function my_date(date_string) {
     const year = date_components[2];
     return new Date(year, month - 1, day);
 }
-
 function SetRetDate() {
     const Prefix = $('#armyPrefix').val();
     const ranks = $('#ddlrank').val();
@@ -1223,7 +1195,6 @@ function SetRetDate() {
         console.error('Invalid date string.');
     }
 }
-
 function calculateResidualService() {
     const retirementDateStr = $('#dateOfRetirement').val();
     if (!retirementDateStr) {
@@ -1264,7 +1235,6 @@ function calculateResidualService() {
     $("#residualService").val(totalYears);
     setOutlineActive("residualService");
 }
-
 function enableDisablePromotionDate() {
     $('#ddlrank').on('change', function () {
         togglePromotionDate($(this).val());
@@ -1272,7 +1242,6 @@ function enableDisablePromotionDate() {
 
     togglePromotionDate($('#ddlrank').val());
 }
-
 function togglePromotionDate(rankValue) {
     const eligibleRanks = ['1', '31'];
     const $promotionDate = $('#dateOfPromotion');
@@ -1283,8 +1252,6 @@ function togglePromotionDate(rankValue) {
         .prop('required', isEligible)
         .toggleClass('bg-white text-dark', isEligible);
 }
-
-
 function updateRetDateOnPromotionDateSelection() {
     const promotionDate = $('#dateOfPromotion').val();
     if (!promotionDate) {
@@ -1308,7 +1275,6 @@ function updateRetDateOnPromotionDateSelection() {
         console.error('Invalid date string.');
     }
 }
-
 function extensionOfService() {
     const prefix = $('#armyPrefix').val();
     const extension = $('#ExtnOfService').val();
@@ -1375,7 +1341,6 @@ function extensionOfService() {
 
     }
 }
-
 function isValidDate(dateString) {
     if (!dateString) return false;
     const regex = /^\d{4}-\d{2}-\d{2}$/;
@@ -1401,7 +1366,6 @@ function ExtensionOfServiceAccess() {
         extensionDropdown.val('');
     }
 }
-
 function fetchPCDA_PAO() {
     const category = $('#applicantCategory').val();
 
@@ -1474,10 +1438,7 @@ function EnableDisableCivilPostalAdd() {
     });
 }
 
-
 // After init, grab the filter input MDB created
-
-
 
 function Validate_Salary_Slip_date(inputElement) {
     const value = inputElement.value;
@@ -1562,160 +1523,6 @@ function filterAmountText(loanType) {
 }
 
 
-//function handleSubmitClick() {
-//    $("#btn-save").on("click", function (event) {
-//        event.preventDefault();
-//        const form = $("#myForm");
-//        const inputs = $('input[required], select[required]');
-//        form.find(".error").each(function () {
-//            $(this).text("");
-//        });
-
-//        let errorlist = [];
-//        let hasError = false;
-
-//        const params = new URLSearchParams(window.location.search);
-
-//        const loanTypeFromUrl = params.get("loanType");
-
-//        const loanTypeFromInput = $('#loanType').val() || null;
-
-//        const loanType = loanTypeFromUrl ? loanTypeFromUrl : loanTypeFromInput;
-//        const applicantCategory = $('#applicantCategory').val() || null;
-
-//        filterAmountText(loanType);
-//        const serviceYearInput = $("#totalService");
-//        if (serviceYearInput.length) {
-//            const serviceYearValue = serviceYearInput.val();
-//            if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 1 && loanType == 1) {
-//                const errorSpan = serviceYearInput.parent().find(".error");
-//                if (errorSpan.length) {
-//                    errorSpan.text("Total service must be at least 1 yrs");
-//                }
-//                errorlist.push("Total Service");
-//                hasError = true;
-//            }
-//            else if (serviceYearValue && !isNaN(parseFloat(serviceYearValue.trim())) && parseFloat(serviceYearValue.trim()) < 2 && (loanType == 2 || loanType == 3)) {
-//                if (applicantCategory == 2 || applicantCategory == 3) {
-//                    const errorSpan = serviceYearInput.parent().find(".error");
-//                    if (errorSpan.length) {
-//                        errorSpan.text("Total service must be at least 1 yrs");
-//                    }
-//                    errorlist.push("Total Service");
-//                    hasError = true;
-//                }
-
-//            }
-//        }
-
-//        const residualServiceInput = $("#residualService");
-//        if (residualServiceInput.length) {
-//            const residualServiceValue = residualServiceInput.val();
-//            if (residualServiceValue && !isNaN(parseFloat(residualServiceValue.trim())) && parseFloat(residualServiceValue.trim()) < 2) {
-//                const errorSpan = residualServiceInput.parent().find(".error");
-//                if (errorSpan.length) {
-//                    errorSpan.text("Residual service must be at least 2 yrs");
-//                }
-//                errorlist.push("Residual Service");
-//                hasError = true;
-//            }
-//        }
-
-//        inputs.each(function () {
-//            const input = $(this);
-//            const inputElement = this;
-
-//            const loanWrappers = {
-//                "1": ["#pcaAccordianWrapper", "#caAccordianWrapper"],
-//                "2": ["#pcaAccordianWrapper", "#hbaAccordianWrapper"],
-//                "3": ["#caAccordianWrapper", "#hbaAccordianWrapper"]
-//            };
-
-//            if (loanWrappers[loanType] && (
-//                $(loanWrappers[loanType][0]).find(input).length ||
-//                $(loanWrappers[loanType][1]).find(input).length
-//            )) {
-//                return;
-//            }
-
-
-//            if (!inputElement.checkValidity()) {
-
-//                input.addClass("is-invalid").removeClass("is-valid");
-
-//                const errorSpan = input.parent().find(".error");
-//                if (errorSpan.length) {
-//                    errorSpan.text(inputElement.validationMessage);
-//                }
-//                let errorText = input.attr("name");
-//                const prefixes = ["CommonData.", "HBAApplication.", "CarApplication.", "PCAApplication.", "AddressDetails.", "AccountDetails."];
-//                prefixes.forEach(prefix => {
-//                    if (errorText.includes(prefix)) {
-//                        errorText = errorText.replace(prefix, "");
-//                    }
-//                });
-//                errorlist.push(errorText);
-//                hasError = true;
-//                if (input.val() && input.val().trim() !== "") {
-//                    input.removeAttr("required");
-//                }
-//            }
-//        });
-
-
-//        const errors = hasError ? "Error in: " + errorlist.join(", ") : "";
-//        $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️' + errors + ' </div>')
-
-//        if (hasError) {
-//            return false;
-//        }
-//        // Add this to your handleSubmitClick function inside the 'else' block (where hasError is false)
-//        else {
-//            $("#msgerror").html('');
-
-//            const formData = $("#myForm").serializeArray();
-//            const dataObj = {};
-
-//            // 1. Build a properly nested JSON object from ASP.NET MVC form names
-//            // This turns "AddressDetails.City" into { AddressDetails: { City: "..." } }
-//            formData.forEach(item => {
-//                const parts = item.name.split('.');
-//                let current = dataObj;
-//                for (let i = 0; i < parts.length - 1; i++) {
-//                    if (!current[parts[i]]) {
-//                        current[parts[i]] = {};
-//                    }
-//                    current = current[parts[i]];
-//                }
-//                current[parts[parts.length - 1]] = item.value;
-//            });
-
-//            // 2. Encrypt using your helper function
-//            const plainTextJson = JSON.stringify(dataObj);
-//            const encrypted = encryptData(plainTextJson);
-
-//            if (!encrypted) {
-//                $("#msgerror").html('<div class="alert alert-danger" role="alert">⚠️ Encryption failed. Missing secret key.</div>');
-//                return false;
-//            }
-
-//            // 3. Create a hidden input to hold the encrypted string
-//            $('<input>').attr({
-//                type: 'hidden',
-//                name: 'EncryptedData',
-//                value: encrypted
-//            }).appendTo('#myForm');
-
-//            $("#myForm").find("input, select, textarea")
-//                .not("[name='EncryptedData']")
-//                .not("[name='__RequestVerificationToken']")
-//                .prop("disabled", true);
-
-//            $("#myForm").off("submit").submit();
-//        }
-
-//    });
-//}
 // TOP LEVEL — shared state
 let hasError = false;
 let firstErrorElement = null;
@@ -2025,7 +1832,6 @@ function checkCORegistration() {
     }
 }
 
-
 $('#unitSearchInput').on('input', function () {
     const inputValue = $(this).val().trim();
     $('#unitSearchConfirmBtn').prop('disabled', inputValue === '');
@@ -2073,7 +1879,6 @@ $("#unitSearchCancelBtn").click(function (e) {
     $(unitSearchInput).val('');
     $('#unitSearchConfirmBtn').prop('disabled', true);
 });
-
 
 function checkUnitSameOrNot(ArmyNo) {
     const armyNumber = $("#armyPrefix option:selected").text();
@@ -2131,7 +1936,6 @@ function checkUnitSameOrNot(ArmyNo) {
 
 
 }
-
 function formatIndianNumber(input) {
     let num = input.value.replace(/[^0-9]/g, '');
     if (num === "") {
@@ -2164,7 +1968,6 @@ function formatIndianNumber(input) {
 
     input.value = (otherNumbers ? otherNumbers + "," : "") + lastThree;
 }
-
 function RefreshMaxAmt_PCA() {
     $("#computerCost").on('change', function () {
         const rawValue = $('#computerCost').val().replace(/,/g, '');
@@ -2233,7 +2036,6 @@ function validateAmount_PCA(input) {
     $('#PCA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
     setOutlineActive("PCA_approxDisbursementAmt");
 }
-
 function validateEMI_PCA(input) {
     const $input = $(input);
     const enteredEMI = parseFloat($input.val());
@@ -2261,7 +2063,6 @@ function calculateEMI_PCA() {
 
     setOutlineActive("PCA_approxEMIAmount");
 }
-
 function RefreshMaxAmt_CA() {
     $("#vehicleCost").on('change', function () {
         const vehicalType = $('#veh_Loan_Type').val();
@@ -2373,7 +2174,6 @@ function validateAmount_CA(input) {
 
     setOutlineActive("CA_approxDisbursementAmt");
 }
-
 function validateEMI_CA(input) {
     const $input = $(input);
     let enteredEMI = parseFloat($input.val());
@@ -2387,7 +2187,6 @@ function validateEMI_CA(input) {
         }
     }
 }
-
 function calculateEMI_CA() {
     let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
     let N = parseInt($("#CA_EMI_Applied").val());
@@ -2403,7 +2202,6 @@ function calculateEMI_CA() {
 
     setOutlineActive("CA_approxEMIAmount");
 }
-
 function RefreshMaxAmt_HBA() {
     $("#propertyCost").on('change', function () {
         const propType = $('#propertyType').val();
@@ -2452,7 +2250,6 @@ function RefreshMaxAmt_HBA() {
         calculateEMIRepayingCapacity_HBA();
     });
 }
-
 function calculateEMIRepayingCapacity_HBA() {
     const credit = parseInt($('#totalCredit').val().replace(/,/g, ''));
     const debit = parseInt($('#totalDeductions').val().replace(/,/g, ''));
@@ -2500,7 +2297,6 @@ function validateAmount_HBA(input) {
     $('#HBA_approxDisbursementAmt').val(disbusermentAmt.toLocaleString('en-IN'));
     setOutlineActive("HBA_approxDisbursementAmt");
 }
-
 function validateEMI_HBA(input) {
     const $input = $(input);
     let enteredEMI = parseFloat($input.val());
@@ -2514,7 +2310,6 @@ function validateEMI_HBA(input) {
         }
     }
 }
-
 function calculateEMI_HBA() {
     let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
     let N = parseInt($("#HBA_EMI_Applied").val());
@@ -2530,7 +2325,6 @@ function calculateEMI_HBA() {
 
     setOutlineActive("HBA_approxEMIAmount");
 }
-
 function validateEMIHba() {
     const hbaApproxEmi = parseFloat($("#HBA_approxEMIAmount").val().replace(/,/g, ''));
     const hbaEmiRepayingCapacity = parseFloat($("#HBA_repayingCapacity").val().replace(/,/g, ''));
@@ -2551,7 +2345,6 @@ function validateEMIHba() {
         })
     }
 }
-
 $("#ParenttxtUnit").autocomplete({
     source: function (request, response) {
         $("input[name='ParentUnit']").val(0);
@@ -2662,7 +2455,6 @@ $("#PresenttxtUnit").autocomplete({
     },
     appendTo: '#suggesstion-box'
 });
-
 function CheckIsCoRegister(UnitId, UnitName) {
     const param = { "UnitId": UnitId };
     $("#PresentUnitId").val(0);
@@ -2692,7 +2484,6 @@ function CheckIsCoRegister(UnitId, UnitName) {
         }
     });
 }
-
 function validateEMIForRepayingCapacity(prefix) {
     const approxEmi = parseFloat($(`#${prefix}_approxEMIAmount`).val().replace(/,/g, ''));
     const repayingCapacity = parseFloat($(`#${prefix}_repayingCapacity`).val().replace(/,/g, ''));
