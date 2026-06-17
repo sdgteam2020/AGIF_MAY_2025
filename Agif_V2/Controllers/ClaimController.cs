@@ -26,9 +26,9 @@ namespace Agif_V2.Controllers
         private readonly FileUtility _fileUtility;
         private readonly Watermark _watermark;
         private readonly IModelStateLogger _modelStateLogger;
-        private readonly ModelValidations _modelValidations;
+        private readonly IModelValidationService _modelValidationService;
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger,ModelValidations modelValidations)
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger, IModelValidationService modelValidationService)
         {
 
             _IClaimonlineApplication1 = OnlineApplication;      
@@ -42,7 +42,7 @@ namespace Agif_V2.Controllers
             _fileUtility = fileUtility;
             _watermark = watermark;
             _modelStateLogger = modelStateLogger;
-            _modelValidations = modelValidations;
+            _modelValidationService = modelValidationService;
         }
 
         public IActionResult MaturityLoanType()
@@ -326,6 +326,8 @@ namespace Agif_V2.Controllers
             {
                 ModelState.AddModelError("ClaimCommonData.CivilPostalAddress", "Civil Postal Address is not allowed for the selected Army Post Office.");
             }
+
+            await _modelValidationService.ValidateClaimRetirementDetails(model,ModelState);
 
             if (!ModelState.IsValid)
             {
