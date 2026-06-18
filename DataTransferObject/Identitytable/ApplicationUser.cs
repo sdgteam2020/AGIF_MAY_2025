@@ -11,13 +11,13 @@ namespace DataTransferObject.Identitytable
 {
     public class ApplicationUser : IdentityUser<int>
     {
-        [StringLength(20)]
-        [Column(TypeName = "varchar(20)")]
-        public string DomainId { get; set; } = string.Empty;
-        public bool Active { get; set; } = false;
+        //[StringLength(20)]
+        //[Column(TypeName = "varchar(20)")]
+        //public string DomainId { get; set; } = string.Empty;
+        //public bool Active { get; set; } = false;
 
-        [Display(Name = "Updated By")]
-        public int Updatedby { get; set; }
+        //[Display(Name = "Updated By")]
+        //public int Updatedby { get; set; }
 
         [Display(Name = "Updated On")]
         [DataType(DataType.Date)]

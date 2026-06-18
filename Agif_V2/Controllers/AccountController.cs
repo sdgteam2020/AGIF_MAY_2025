@@ -201,7 +201,6 @@ namespace Agif_V2.Controllers
                 ProfileId = profile.ProfileId,
                 MappingId = profile.MappingId,
                 Role = role,
-                DomainId = user.DomainId,
                 RankName = profile.RankName ?? string.Empty,
                 ArmyNo = profile.ArmyNo ?? string.Empty,
                 name = profile.ProfileName ?? string.Empty,
@@ -341,9 +340,9 @@ namespace Agif_V2.Controllers
                     UserName = signUpDto.userName,
                     Email = signUpDto.Email,
                     PhoneNumber = signUpDto.MobileNo,
-                    Updatedby = 1,
-                    UpdatedOn = DateTime.Now,
-                    DomainId = signUpDto.userName
+                    //Updatedby = 1,
+                    UpdatedOn = DateTime.Now
+                    //DomainId = signUpDto.userName
                 };
                 var defaultPassword = _configuration["Logging:SecuritySettings:DefaultUserPassword"];
                 var Result = await _userManager.CreateAsync(newUser, defaultPassword);
