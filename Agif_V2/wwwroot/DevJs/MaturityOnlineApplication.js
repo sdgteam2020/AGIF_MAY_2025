@@ -2448,9 +2448,6 @@ function findDataWithArmyNumber() {
                     "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val()
                 },
                 success: function (data) {
-                    console.log(
-                        $("#stateDropdown option[value='31']").length
-                    );
                     if (data) {
 
                         setInputValueWithFloatingLabel('txtApplicantName', data.applicantName);
@@ -2494,9 +2491,6 @@ function findDataWithArmyNumber() {
                             $('#districtDropdown').val(data.distId).addClass("d-none").trigger('change');
                         }, 1000);
 
-                    }
-                    else {
-                        console.log("Data not found for the provided Army Number.");
                     }
                 },
                 error: function (xhr, status, error) {
@@ -2651,9 +2645,6 @@ function findDataWithApplicationId() {
                     }
                    
                     
-                }
-                else {
-                    console.log("Data not found for the provided Army Number.");
                 }
             },
             error: function (xhr, status, error) {

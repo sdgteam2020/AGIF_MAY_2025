@@ -208,9 +208,9 @@ app.Use(async (ctx, next) =>
     var isDev = app.Environment.IsDevelopment();
 
     string defaultSrc = "default-src 'self' blob:; ";
-    string scriptSrc =  "script-src 'self'; ";
-    string styleSrc = "style-src 'self'; "; 
-    string imgSrc = "img-src 'self' data: blob:; "; 
+    string scriptSrc = "script-src 'self'; ";
+    string styleSrc = "style-src 'self'; ";
+    string imgSrc = "img-src 'self' data: blob:; ";
     string fontSrc = "font-src 'self' data:; ";
     string connectSrc = isDev
         ? "connect-src 'self' https://dgisapp.army.mil:55102 ws://localhost:* wss://localhost:*; "

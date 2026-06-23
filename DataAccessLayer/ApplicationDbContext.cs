@@ -112,7 +112,7 @@ namespace DataAccessLayer
 
 
             builder.Entity<MExceptionType>()
-       .HasKey(x => x.ExceptionTypeId);
+                .HasKey(x => x.ExceptionTypeId);
 
             builder.Entity<MExceptionType>()
                 .HasIndex(x => x.ExceptionTypeName)
@@ -125,6 +125,14 @@ namespace DataAccessLayer
                 .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(builder);
 
+            builder.Entity<ApplicationUser>()
+                .Ignore(x => x.TwoFactorEnabled);
+
+            builder.Entity<ApplicationUser>()
+                .Ignore(x => x.PhoneNumberConfirmed);
+
+            builder.Entity<ApplicationUser>()
+                .Ignore(x => x.EmailConfirmed);
 
         }
     }

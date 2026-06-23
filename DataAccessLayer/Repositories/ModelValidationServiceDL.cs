@@ -16,134 +16,6 @@ namespace DataAccessLayer.Repositories
             _IMasterOnlyTable = MasterOnlyTable;
         }
 
-        public decimal CalculateResidualService(DateTime retirementDate)
-        {
-            var today = DateTime.Today;
-
-            if (retirementDate <= today)
-                return 0;
-
-            int years = retirementDate.Year - today.Year;
-
-            if (retirementDate.Date < today.AddYears(years))
-                years--;
-
-            return years;
-        }
-
-        public DateTime CalculateRetirementDate(int userTypeId, int rankId, string prefix, int regtId, DateTime dob, DateTime doc, DateTime? promotionDate, bool extensionOfService, int retirementAge)
-        {
-            DateTime retirementDate;
-
-            // Promotion Date Logic
-            if (promotionDate.HasValue &&
-                (rankId == 1 || rankId == 31))
-            {
-                retirementDate = promotionDate.Value.AddYears(4);
-            }
-            else
-            {
-                switch (userTypeId)
-                {
-                    case 1:
-                        retirementDate = dob.AddYears(retirementAge);
-                        break;
-
-                    case 2:
-                        retirementDate = doc.AddYears(10);
-                        break;
-
-                    case 3:
-                    case 4:
-
-                        if (rankId == 31 ||
-                            rankId == 32 ||
-                            rankId == 33)
-                        {
-                            retirementDate = dob.AddYears(retirementAge);
-                        }
-                        else
-                        {
-                            retirementDate = doc.AddYears(retirementAge);
-                        }
-
-                        break;
-
-                    default:
-                        throw new Exception("Invalid User Type");
-                }
-            }
-
-            // Extension of Service Logic
-            if ((prefix == "13" || prefix == "14")
-                && extensionOfService)
-            {
-                retirementDate = retirementDate.AddYears(2);
-            }
-
-            return retirementDate;
-        }
-
-        public decimal CalculateTotalService(DateTime doc)
-        {
-            var today = DateTime.Today;
-
-            var years = today.Year - doc.Year;
-
-            if (doc.Date > today.AddYears(-years))
-                years--;
-
-            return years;
-        }
-
-        private async Task<DTORetirementInforesponse?> GetRetirementInfo(int rankId, int prefix, int regtId)
-        {
-            var prefixRankRetirementMap = new Dictionary<(int prefix, int rank), int>
-            {
-                { (11, 21), 57 },
-                { (11, 22), 57 },
-                { (11, 23), 57 },
-                { (11, 24), 57 },
-                { (11, 29), 57 },
-                { (11, 26), 59 },
-                { (11, 27), 60 },
-                { (11, 28), 61 },
-
-                { (3, 21), 57 },
-                { (3, 22), 57 },
-                { (3, 23), 57 },
-                { (3, 24), 57 },
-                { (3, 29), 57 },
-                { (3, 26), 58 },
-                { (3, 27), 59 },
-                { (3, 28), 60 },
-            };
-
-            if (prefixRankRetirementMap.TryGetValue((prefix, rankId),
-                out int retirementAge))
-            {
-                return new DTORetirementInforesponse
-                {
-                    RetirementAge = retirementAge,
-                    UserTypeId = 1
-                };
-            }
-
-            var userType = await _IMasterOnlyTable.GetUserType(prefix);
-            var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
-
-            return new DTORetirementInforesponse
-            {
-                RetirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0,
-                UserTypeId = userType.FirstOrDefault()?.UserType ?? 0
-            };
-        }
-
-        Task<DTORetirementInforesponse?> IModelValidationService.GetRetirementInfo(int rankId, int prefix, int regtId)
-        {
-            return GetRetirementInfo(rankId, prefix, regtId);
-        }
-
         // HBA Validation Methods
         public async Task ValidateHBADetails(DTOOnlineApplication model, ModelStateDictionary modelState)
         {
@@ -297,17 +169,26 @@ namespace DataAccessLayer.Repositories
         }
         private decimal CalculateHBAEMI(DTOOnlineApplication model)
         {
-            decimal principal =
-                model.HBAApplication.HBA_Amount_Applied_For_Loan ?? 0;
+            int propertyType = model.HBAApplication.PropertyType;
+            string applicantType = model.applicantCategory;
 
-            int months =
-                Convert.ToInt32(
-                    model.HBAApplication.HBA_EMI_Applied ?? 0);
+            decimal principal = model.HBAApplication.HBA_Amount_Applied_For_Loan ?? 0m;
+            int months = Convert.ToInt32(model.HBAApplication.HBA_EMI_Applied ?? 0);
 
-            decimal monthlyRate =
-                (8.50m / 12m) / 100m;
+            decimal yearlyRate = 0m;
 
-            if (principal <= 0 || months <= 0)
+            if (propertyType == 5)
+            {
+                yearlyRate = (applicantType == "1") ? 8.00m : 7.50m;
+            }
+            else
+            {
+                yearlyRate = (applicantType == "1") ? 7.50m : 7.00m;
+            }
+
+            decimal monthlyRate = (yearlyRate / 12m) / 100m;
+
+            if (principal <= 0 || months <= 0 || monthlyRate <= 0)
             {
                 return 0;
             }
@@ -316,9 +197,7 @@ namespace DataAccessLayer.Repositories
             double r = (double)monthlyRate;
             double n = months;
 
-            double emi =
-                (p * r * Math.Pow(1 + r, n))
-                / (Math.Pow(1 + r, n) - 1);
+            double emi = (p * r * Math.Pow(1 + r, n)) / (Math.Pow(1 + r, n) - 1);
 
             return Math.Round((decimal)emi, 0);
         }
@@ -668,6 +547,8 @@ namespace DataAccessLayer.Repositories
             return Math.Round((decimal)emi, 0);
         }
 
+
+        // Retirement Validation Methods
         private int CalculateResidualMonth(DateTime retirementDate)
         {
             var today = DateTime.Today;
@@ -680,7 +561,129 @@ namespace DataAccessLayer.Repositories
                 months--;
             return Math.Max(0, months);
         }
+        public decimal CalculateResidualService(DateTime retirementDate)
+        {
+            var today = DateTime.Today;
 
+            if (retirementDate <= today)
+                return 0;
+
+            int years = retirementDate.Year - today.Year;
+
+            if (retirementDate.Date < today.AddYears(years))
+                years--;
+
+            return years;
+        }
+        public DateTime CalculateRetirementDate(int userTypeId, int rankId, string prefix, int regtId, DateTime dob, DateTime doc, DateTime? promotionDate, bool extensionOfService, int retirementAge)
+        {
+            DateTime retirementDate;
+
+            // Promotion Date Logic
+            if (promotionDate.HasValue &&
+                (rankId == 1 || rankId == 31))
+            {
+                retirementDate = promotionDate.Value.AddYears(4);
+            }
+            else
+            {
+                switch (userTypeId)
+                {
+                    case 1:
+                        retirementDate = dob.AddYears(retirementAge);
+                        break;
+
+                    case 2:
+                        retirementDate = doc.AddYears(10);
+                        break;
+
+                    case 3:
+                    case 4:
+
+                        if (rankId == 31 ||
+                            rankId == 32 ||
+                            rankId == 33)
+                        {
+                            retirementDate = dob.AddYears(retirementAge);
+                        }
+                        else
+                        {
+                            retirementDate = doc.AddYears(retirementAge);
+                        }
+
+                        break;
+
+                    default:
+                        throw new Exception("Invalid User Type");
+                }
+            }
+
+            // Extension of Service Logic
+            if ((prefix == "13" || prefix == "14")
+                && extensionOfService)
+            {
+                retirementDate = retirementDate.AddYears(2);
+            }
+
+            return retirementDate;
+        }
+        public decimal CalculateTotalService(DateTime doc)
+        {
+            var today = DateTime.Today;
+
+            var years = today.Year - doc.Year;
+
+            if (doc.Date > today.AddYears(-years))
+                years--;
+
+            return years;
+        }
+        private async Task<DTORetirementInforesponse?> GetRetirementInfo(int rankId, int prefix, int regtId)
+        {
+            var prefixRankRetirementMap = new Dictionary<(int prefix, int rank), int>
+            {
+                { (11, 21), 57 },
+                { (11, 22), 57 },
+                { (11, 23), 57 },
+                { (11, 24), 57 },
+                { (11, 29), 57 },
+                { (11, 26), 59 },
+                { (11, 27), 60 },
+                { (11, 28), 61 },
+
+                { (3, 21), 57 },
+                { (3, 22), 57 },
+                { (3, 23), 57 },
+                { (3, 24), 57 },
+                { (3, 29), 57 },
+                { (3, 26), 58 },
+                { (3, 27), 59 },
+                { (3, 28), 60 },
+            };
+
+            if (prefixRankRetirementMap.TryGetValue((prefix, rankId),
+                out int retirementAge))
+            {
+                return new DTORetirementInforesponse
+                {
+                    RetirementAge = retirementAge,
+                    UserTypeId = 1
+                };
+            }
+
+            var userType = await _IMasterOnlyTable.GetUserType(prefix);
+            var retAge = await _IMasterOnlyTable.GetRetirementAge(rankId, regtId);
+
+            return new DTORetirementInforesponse
+            {
+                RetirementAge = retAge.FirstOrDefault()?.RetirementAge ?? 0,
+                UserTypeId = userType.FirstOrDefault()?.UserType ?? 0
+            };
+        }
+        Task<DTORetirementInforesponse?> IModelValidationService.GetRetirementInfo(int rankId, int prefix, int regtId)
+        {
+            return GetRetirementInfo(rankId, prefix, regtId);
+        }
         public async Task ValidateClaimRetirementDetails(DTOClaimApplication model, ModelStateDictionary modelState)
         {
             var common = model.ClaimCommonData;
@@ -703,7 +706,7 @@ namespace DataAccessLayer.Repositories
                 return;
             }
 
-            var normalRetirementDate =
+            var exactRetirementDate =
                 CalculateRetirementDate(
                     retirementInfo.UserTypeId,
                     common.DdlRank,
@@ -714,6 +717,8 @@ namespace DataAccessLayer.Repositories
                     common.DateOfPromotion,
                     common.ExtnOfService == "Yes",
                     retirementInfo.RetirementAge);
+
+            var normalRetirementDate = new DateTime(exactRetirementDate.Year,exactRetirementDate.Month,DateTime.DaysInMonth(exactRetirementDate.Year,exactRetirementDate.Month));
 
             DateTime retirementDateToValidate;
             if (common.PrematureRetirement == true)
@@ -779,6 +784,78 @@ namespace DataAccessLayer.Repositories
                 modelState.AddModelError(
                     "ClaimCommonData.ResidualService",
                     "Residual Service cannot exceed 2 years for Repair & Renovation.");
+            }
+        }
+        public async Task ValidateLoanRetirementDetails(DTOOnlineApplication model, ModelStateDictionary modelState)
+        {
+            var common = model.CommonData;
+
+            if (common == null)
+                return;
+
+            var retirementInfo =
+                await GetRetirementInfo(
+                    common.DdlRank,
+                    common.ArmyPrefix,
+                    common.RegtCorps);
+
+            if (retirementInfo == null)
+            {
+                modelState.AddModelError("", "Unable to calculate retirement details.");
+                return;
+            }
+
+            var calculatedRetirementDate =
+                CalculateRetirementDate(
+                    retirementInfo.UserTypeId,
+                    common.DdlRank,
+                    common.ArmyPrefix.ToString(),
+                    common.RegtCorps,
+                    common.DateOfBirth!.Value,
+                    common.DateOfCommission!.Value,
+                    common.DateOfPromotion,
+                    common.ExtnOfService == "Yes",
+                    retirementInfo.RetirementAge);
+
+            // Retirement Date
+            if (common.DateOfRetirement == null ||
+                common.DateOfRetirement.Value.Date != calculatedRetirementDate.Date)
+            {
+                modelState.AddModelError(
+                    "CommonData.DateOfRetirement",
+                    "Retirement date validation failed.");
+            }
+
+            // Total Service
+            var calculatedTotalService =
+                CalculateTotalService(
+                    common.DateOfCommission.Value);
+
+            if (common.TotalService != calculatedTotalService)
+            {
+                modelState.AddModelError(
+                    "CommonData.TotalService",
+                    "Total service validation failed.");
+            }
+
+            // Residual Service
+            var calculatedResidualService =
+                CalculateResidualService(
+                    calculatedRetirementDate);
+
+            if (common.ResidualService != calculatedResidualService)
+            {
+                modelState.AddModelError(
+                    "CommonData.ResidualService",
+                    "Residual service validation failed.");
+            }
+
+            // Business Rule
+            if (calculatedResidualService < 2)
+            {
+                modelState.AddModelError(
+                    "CommonData.ResidualService",
+                    "Residual service must be at least 2 years.");
             }
         }
     }

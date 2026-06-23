@@ -8,15 +8,27 @@
 }
 @if (ViewBag.Status != null && ViewBag.Status == 1)
 {
-    Page = "Pending Applications";
+    Page = "Pending Loan Applications";
 }
 else if (ViewBag.Status != null && ViewBag.Status == 2)
 {
-    Page = "Approved Applications";
+    Page = "Approved Loan Applications";
 }
 else if (ViewBag.Status != null && ViewBag.Status == 3)
 {
-    Page = "Rejected Applications";
+    Page = "Rejected Loan Applications";
+}
+else if (ViewBag.Status != null && ViewBag.Status == 101)
+{
+    Page = "Pending Claim Applications";
+}
+else if (ViewBag.Status != null && ViewBag.Status == 102)
+{
+    Page = "Approved Claim Applications";
+}
+else if (ViewBag.Status != null && ViewBag.Status == 103)
+{
+    Page = "Rejected Claim Applications";
 }
 else
 {
@@ -61,8 +73,8 @@ else
         <input type="hidden" id="Status" value="@ViewBag.Status" />
 
         <div class="folder-tabs-wrapper justify-content-center">
-            <button type="button" id="Loan" class="folder-tab active" value="Loan">Loan</button>
-            <button type="button" id="Maturity" class="folder-tab" value="Maturity">Maturity</button>
+            <button type="button" hidden id="Loan" class="folder-tab active" value="Loan">Loan</button>
+            <button type="button" hidden id="Maturity" class="folder-tab" value="Maturity">Maturity</button>
         </div>
 
         <div class="card custom-tab-card">
@@ -170,7 +182,7 @@ else
                         <i class="bi bi-file-earmark-check me-2"></i>
                         Application Review & Approval
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close">X</button>
                 </div>
 
                 <div class="modal-body">

@@ -2191,7 +2191,7 @@ function validateEMI_CA(input) {
 function calculateEMI_CA() {
     let P = parseFloat($("#CA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
     let N = parseInt($("#CA_EMI_Applied").val());
-    let R = (8.50 / 12) / 100;
+    let R = (8.25 / 12) / 100;
 
     if (!P || !N || !R) {
         $("#CA_approxEMIAmount").val("");
@@ -2312,19 +2312,34 @@ function validateEMI_HBA(input) {
     }
 }
 function calculateEMI_HBA() {
-    let P = parseFloat($("#HBA_Amount_Applied_For_Loan").val().replace(/[^0-9.]/g, ''));
-    let N = parseInt($("#HBA_EMI_Applied").val());
-    let R = (8.50 / 12) / 100;
+    let propertytype = parseInt($("#propertyType").val(), 10);
+    let applicantCategory = parseInt($("#applicantCategory").val(), 10);
+    let R = 0;
+
+    if (applicantCategory === 1) {
+        R = (propertytype === 5) ? (8.00 / 12) / 100 : (7.50 / 12) / 100;
+    } else {
+        R = (propertytype === 5) ? (7.50 / 12) / 100 : (7.00 / 12) / 100;
+    }
+
+    let rawAmount = $("#HBA_Amount_Applied_For_Loan").val() || "";
+    let P = parseFloat(rawAmount.replace(/[^0-9.]/g, ''));
+    let N = parseInt($("#HBA_EMI_Applied").val(), 10);
 
     if (!P || !N || !R) {
         $("#HBA_approxEMIAmount").val("");
         return;
     }
 
+    // Standard EMI Calculation
     let EMI = (P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1);
+
+    // Formats to Indian numbering system (e.g., 1,50,000)
     $("#HBA_approxEMIAmount").val(Number(EMI.toFixed(0)).toLocaleString('en-IN'));
 
-    setOutlineActive("HBA_approxEMIAmount");
+    if (typeof setOutlineActive === "function") {
+        setOutlineActive("HBA_approxEMIAmount");
+    }
 }
 function validateEMIHba() {
     const hbaApproxEmi = parseFloat($("#HBA_approxEMIAmount").val().replace(/,/g, ''));

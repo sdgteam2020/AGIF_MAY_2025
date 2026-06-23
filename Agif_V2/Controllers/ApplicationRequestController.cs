@@ -372,9 +372,6 @@ namespace Agif_V2.Controllers
                     SignOn = DateTime.Now,
                     Remarks = remarks,
                     IsSign = true,
-                    //DomainId = dTOTempSession.DomainId,
-                    //ArmyNo = dTOTempSession.ArmyNo,
-                    //RankName = dTOTempSession.RankName,.
                     ProfileId = dTOTempSession.ProfileId,
                     UserId = dTOTempSession.UserId,
                     ipAddress = ipAddress

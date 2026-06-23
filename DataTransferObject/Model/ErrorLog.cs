@@ -12,9 +12,7 @@ namespace DataTransferObject.Model
         public int Id { get; set; }
         public int StatusCode { get; set; }
         public int ExceptionTypeId { get; set; }
-        public string? Message { get; set; }
-        public string? StackTrace { get; set; }
-        public string? Path { get; set; }
+        public string? ErrorDetail { get; set; }
         public DateTime? Created { get; set; } = DateTime.Now;
         [ForeignKey(nameof(ExceptionTypeId))]
         public virtual MExceptionType? MExceptionType { get; set; }

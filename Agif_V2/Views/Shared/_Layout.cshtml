@@ -50,54 +50,80 @@
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ddmenu_1"
-                           aria-controls="ddmenu_1"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
+                               data-bs-toggle="collapse"
+                               data-bs-target="#ddmenu_1"
+                               aria-controls="ddmenu_1"
+                               aria-expanded="false"
+                               aria-label="Toggle navigation">
                             <i class="bi bi-list-check mr-2"></i>
-                            <span class="text">Applications</span>
+                            <span class="text"> Loan Applications</span>
                         </a>
                         <ul id="ddmenu_1" class="collapse show dropdown-nav">
                             <li>
-                                   <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="1"><i class="bi bi-hourglass"></i> Pending</a>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="1"><i class="bi bi-hourglass"></i> Pending</a>
 
                             </li>
                             <li>
 
-                                   <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="2"><i class="bi bi-check-circle-fill"></i> Approved</a>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="2"><i class="bi bi-check-circle-fill"></i> Approved</a>
 
                             </li>
                             <li>
 
 
-                                  <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="3"><i class="bi bi-check-circle-fill"></i> Rejected</a>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="3"><i class="bi bi-x-circle-fill"></i> Rejected</a>
 
-                        </li>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item nav-item-has-children">
+                        <a href="#0"
+                               data-bs-toggle="collapse"
+                               data-bs-target="#ddmenu_2"
+                               aria-controls="ddmenu_2"
+                               aria-expanded="false"
+                               aria-label="Toggle navigation">
+                            <i class="bi bi-list-check mr-2"></i>
+                            <span class="text"> Claim Applications</span>
+                        </a>
+                        <ul id="ddmenu_2" class="collapse show dropdown-nav">
+                            <li>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="101"><i class="bi bi-hourglass"></i> Pending</a>
+
+                            </li>
+                            <li>
+
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="102"><i class="bi bi-check-circle-fill"></i> Approved</a>
+
+                            </li>
+                            <li>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UserApplicationList" data-status="103"><i class="bi bi-x-circle-fill"></i> Rejected</a>
+
+                            </li>
                         </ul>
                     </li>
                 }
 
-                else if(Model?.Role == "ClaimAdmin")
+                else if (Model?.Role == "ClaimAdmin")
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#receivedApplicationToAdmin"
-                           aria-controls="receivedApplicationToAdmin"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
+                               data-bs-toggle="collapse"
+                               data-bs-target="#receivedApplicationToAdmin"
+                               aria-controls="receivedApplicationToAdmin"
+                               aria-expanded="false"
+                               aria-label="Toggle navigation">
                             <i class="bi bi-list-check"></i>
                             <span class="text">Received Application</span>
                         </a>
                         <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
                             <li>
-                              <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="ClaimApplicationListAdmin" data-status="102"><i class="bi bi-hourglass"></i> Maturity Received Application</a>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="ClaimApplicationListAdmin" data-status="102"><i class="bi bi-hourglass"></i> Maturity Received Application</a>
 
                             </li>
                             <li>
 
-                             <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="ClaimApplicationListAdmin" data-status="104"><i class="bi bi-hourglass"></i> Maturity Downloaded Application</a>
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="ClaimApplicationListAdmin" data-status="104"><i class="bi bi-hourglass"></i> Maturity Downloaded Application</a>
 
                             </li>
                         </ul>
@@ -109,35 +135,31 @@
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#receivedApplicationToAdmin"
-                           aria-controls="receivedApplicationToAdmin"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
+                               data-bs-toggle="collapse"
+                               data-bs-target="#receivedApplicationToAdmin"
+                               aria-controls="receivedApplicationToAdmin"
+                               aria-expanded="false"
+                               aria-label="Toggle navigation">
                             <i class="bi bi-list-check"></i>
                             <span class="text">Received Application</span>
                         </a>
                         <ul id="receivedApplicationToAdmin" class="collapse show dropdown-nav">
                             <li>
                                 <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UsersApplicationListAdmin" data-status="2"><i class="bi bi-hourglass"></i> CA/PCA/HBA Received Application</a>
-
-                                
                             </li>
                             <li>
-                            
-                              <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UsersApplicationListAdmin" data-status="4"><i class="bi bi-hourglass"></i> CA/PCA/HBA Downloaded Application</a> 
-
+                                <a href="#" class="submit-status" data-controller="ApplicationRequest" data-method="UsersApplicationListAdmin" data-status="4"><i class="bi bi-hourglass"></i> CA/PCA/HBA Downloaded Application</a>
                             </li>
                         </ul>
                     </li>
 
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ddmenu_2"
-                           aria-controls="ddmenu_2"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
+                               data-bs-toggle="collapse"
+                               data-bs-target="#ddmenu_2"
+                               aria-controls="ddmenu_2"
+                               aria-expanded="false"
+                               aria-label="Toggle navigation">
                             <i class="bi bi-list-check"></i>
                             <span class="text">User Approval List</span>
                         </a>
@@ -159,11 +181,11 @@
                 {
                     <li class="nav-item nav-item-has-children">
                         <a href="#0"
-                           data-bs-toggle="collapse"
-                           data-bs-target="#ddmenu_2"
-                           aria-controls="ddmenu_2"
-                           aria-expanded="false"
-                           aria-label="Toggle navigation">
+                               data-bs-toggle="collapse"
+                               data-bs-target="#ddmenu_2"
+                               aria-controls="ddmenu_2"
+                               aria-expanded="false"
+                               aria-label="Toggle navigation">
                             <i class="bi bi-list-check"></i>
                             <span class="text">User Approval List</span>
                         </a>
@@ -295,8 +317,8 @@
     <script src="~/devjs/comman.js"></script>
     <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
     <script src="~/devjs/layout.js"></script>
-    
 
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -14,7 +14,6 @@ namespace DataTransferObject.Model
         public string Sus_no { get; set; }
         public string Suffix { get; set; }
         public string Abbreviation { get; set; }
-        public bool IsVerify { get; set; }
         public bool IsActive { get; set; }
         public DateTime UpdatedOn { get; set; }
         public string UnitName { get; set; }

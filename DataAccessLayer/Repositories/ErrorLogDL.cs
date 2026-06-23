@@ -64,9 +64,7 @@ namespace DataAccessLayer.Repositories
                 {
                     StatusCode = (int)HttpStatusCode.InternalServerError,
                     ExceptionTypeId = exceptionType.ExceptionTypeId,
-                    Message = exception.Message,
-                    StackTrace = exception.StackTrace,
-                    Path = httpContext.Request.Path,
+                    ErrorDetail = $"Path: {httpContext.Request.Path}{Environment.NewLine}{Environment.NewLine}{exception}",
                     Created = DateTime.Now
                 };
 

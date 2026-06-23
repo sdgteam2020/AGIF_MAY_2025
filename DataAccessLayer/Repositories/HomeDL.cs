@@ -34,6 +34,27 @@ namespace DataAccessLayer.Repositories
 
             return counts;
         }
+        public async Task<List<DTOUserCountResponse>> GetClaimApplicationCount(int userId)
+        {
+            var counts = await (
+                from appl in _context.trnClaim
+                join map in _context.trnUserMappings on userId equals map.UserId
+                where map.UnitId == appl.PresentUnit &&
+                      (appl.StatusCode == 101 || appl.StatusCode == 102 || appl.StatusCode == 103 || appl.StatusCode==104)
+                group appl by appl.StatusCode into g
+                select new DTOUserCountResponse
+                {
+                    Status = g.Key == 101 ? "Pending"
+                           : g.Key == 102 ? "Approved"
+                           : g.Key == 103 ? "Rejected"
+                           : g.Key == 104 ? "Downloaded"
+                           : "Unknown",
+                    Count = g.Count()
+                }
+            ).ToListAsync();
+
+            return counts;
+        }
 
         public async Task<List<DTOApprovedLogs>> GetApprovedLogs()
         {

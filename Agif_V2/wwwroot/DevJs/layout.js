@@ -19,7 +19,33 @@ function focusableElements(root) {
         'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
     )).filter(el => !el.disabled && el.offsetParent !== null);
 }
+document.querySelectorAll('.submit-status').forEach(link => {
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
 
+        // Remove active from all submit-status links
+        document.querySelectorAll('.submit-status').forEach(l => l.classList.remove('active'));
+
+        // Remove active from all parent nav-item-has-children
+        document.querySelectorAll('.nav-item-has-children').forEach(item => {
+            item.classList.remove('active');
+            // Also remove active from the direct <a> toggle link
+            const toggleLink = item.querySelector(':scope > a');
+            if (toggleLink) toggleLink.classList.remove('active');
+        });
+
+        // Add active to clicked link
+        this.classList.add('active');
+
+        // Find parent and highlight it
+        const parentNavItem = this.closest('.nav-item-has-children');
+        if (parentNavItem) {
+            parentNavItem.classList.add('active');
+            const toggleLink = parentNavItem.querySelector(':scope > a');
+            if (toggleLink) toggleLink.classList.add('active');
+        }
+    });
+});
 // Open the chat dialog, show welcome message and start heartbeat pings
 function openChat() {
     if (isOpen) return;

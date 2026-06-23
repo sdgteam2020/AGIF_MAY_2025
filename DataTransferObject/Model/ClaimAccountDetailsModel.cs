@@ -20,6 +20,7 @@ namespace DataTransferObject.Model
         [StringLength(20, ErrorMessage = "Salary Account No can't be longer than 20 characters.")]
         public string? SalaryAcctNo { get; set; }
 
+        [NotMapped]
         [Required(ErrorMessage = "Re-Enter Salary Account No is required.")]
         [StringLength(20, ErrorMessage = "Confirm Salary Account No can't be longer than 20 characters.")]
         public string? ConfirmSalaryAcctNo { get; set; }

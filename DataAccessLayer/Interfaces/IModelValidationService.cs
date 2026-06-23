@@ -31,6 +31,7 @@ namespace DataAccessLayer.Interfaces
 
         Task ValidatePCADetails(DTOOnlineApplication model, ModelStateDictionary modelState);
         Task ValidateClaimRetirementDetails(DTOClaimApplication model, ModelStateDictionary modelState);
+        Task ValidateLoanRetirementDetails(DTOOnlineApplication model, ModelStateDictionary modelState);
 
     }
 

@@ -45,11 +45,9 @@ namespace DataAccessLayer.Repositories
 
             ErrorLog errorLog = new ErrorLog
             {
-                StatusCode = 400, // Bad Request
+                StatusCode = 400,
                 ExceptionTypeId = 1,
-                Message = message,
-                StackTrace = null,
-                Path = httpContext.Request.Path,
+                ErrorDetail = message + httpContext.Request.Path,
                 Created = DateTime.Now
             };
             _context.ErrorLogs.Add(errorLog);

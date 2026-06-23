@@ -74,7 +74,7 @@ svg,
 video {
     vertical-align: middle;
     border-radius: 11px;
-    max-width: 83px;
+    max-width: 70px;
 }
 
 h1 a,
@@ -6721,4 +6721,17 @@ tbody, td, tfoot, th, thead, tr {
 /* Optional: Slightly reduce the padding inside the white card itself */
 .card-body {
     padding: 15px !important;
+}
+
+.sidebar-nav-wrapper .sidebar-nav ul .nav-item.nav-item-has-children.active > a {
+    background-color: #ffffff !important;
+    color: #a93226 !important; /* dark red to show on white */
+    font-weight: 700 !important;
+    border-left: 4px solid #a93226 !important;
+}
+
+.sidebar-nav-wrapper .sidebar-nav ul .nav-item a.submit-status.active {
+    color: #a93226 !important;
+    font-weight: 700 !important;
+    border-left: 4px solid #a93226 !important;
 }

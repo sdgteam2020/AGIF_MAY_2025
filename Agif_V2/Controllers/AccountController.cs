@@ -298,19 +298,17 @@ namespace Agif_V2.Controllers
                 return BadRequest("Session expired. Please refresh the page.");
             }
 
-            // 1. Decrypt Payload
             string decryptedJson;
             try
             {
                 decryptedJson = AESEncrytDecry.DecryptAES(EncryptedData, keyBase64);
-                decryptedJson = decryptedJson.Trim('\0', ' '); // Clean up AES padding
+                decryptedJson = decryptedJson.Trim('\0', ' ');
             }
             catch (CryptographicException)
             {
                 return BadRequest("Invalid or tampered data.");
             }
 
-            // 2. Deserialize with your Flexible Converters
             DTOuserProfile signUpDto;
             try
             {
@@ -324,7 +322,6 @@ namespace Agif_V2.Controllers
 
                 signUpDto = System.Text.Json.JsonSerializer.Deserialize<DTOuserProfile>(decryptedJson, options);
 
-                // Clear any model state errors that might have snuck in, then re-validate
                 ModelState.Clear();
                 TryValidateModel(signUpDto);
             }
@@ -333,43 +330,44 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("", "Security error: Failed to process the registration payload.");
                 return View(new DTOuserProfile());
             }
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
+                return View(signUpDto);
+
+            await using var transaction = await _db.Database.BeginTransactionAsync();
+            try
             {
                 var newUser = new ApplicationUser
                 {
                     UserName = signUpDto.userName,
                     Email = signUpDto.Email,
                     PhoneNumber = signUpDto.MobileNo,
-                    //Updatedby = 1,
                     UpdatedOn = DateTime.Now
-                    //DomainId = signUpDto.userName
                 };
-                var defaultPassword = _configuration["Logging:SecuritySettings:DefaultUserPassword"];
-                var Result = await _userManager.CreateAsync(newUser, defaultPassword);
-                //if (!Result.Succeeded)
-                //{
-                //    return Json(Result.Errors);
-                //}
-                if (!Result.Succeeded)
-                {
-                    foreach (var error in Result.Errors)
-                    {
-                        ModelState.AddModelError("", error.Description);
-                    }
 
+                var defaultPassword = _configuration["Logging:SecuritySettings:DefaultUserPassword"];
+                var result = await _userManager.CreateAsync(newUser, defaultPassword);
+
+                if (!result.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
                     return View(signUpDto);
                 }
-                await _userManager.AddToRoleAsync(newUser, "UnitCdr");
 
-                await _db.SaveChangesAsync();
+                var roleResult = await _userManager.AddToRoleAsync(newUser, "UnitCdr");
+                if (!roleResult.Succeeded)
+                {
+                    await transaction.RollbackAsync();
+                    ModelState.AddModelError("", "Failed to assign role. Please try again.");
+                    return View(signUpDto);
+                }
 
-                UserProfile userProfile = new UserProfile
+                var userProfile = new UserProfile
                 {
                     ArmyNo = signUpDto.ArmyNo,
-                    //userName = signUpDto.userName,
                     Name = signUpDto.Name,
-                    //Email = signUpDto.Email,
-                    //MobileNo = signUpDto.MobileNo,
                     rank = signUpDto.rank,
                     regtCorps = signUpDto.regtCorps,
                     ApptId = signUpDto.ApptId,
@@ -377,12 +375,10 @@ namespace Agif_V2.Controllers
                     UpdatedOn = DateTime.Now
                 };
                 await _userProfile.Add(userProfile);
+                await _db.SaveChangesAsync();
 
-                UserMapping user = await _userMapping.GetUnitDetails(signUpDto.UnitId);
-
-                bool IsPrimary = user == null;
-
-                UserMapping userMapping = new UserMapping
+                var existingMapping = await _userMapping.GetUnitDetails(signUpDto.UnitId);
+                var userMapping = new UserMapping
                 {
                     UserId = Convert.ToInt32(await _userManager.GetUserIdAsync(newUser)),
                     IsActive = false,
@@ -390,16 +386,21 @@ namespace Agif_V2.Controllers
                     UnitId = signUpDto.UnitId,
                     UpdatedOn = DateTime.Now,
                     IsFmn = signUpDto.DteFmn,
-                    IsPrimary = IsPrimary
+                    IsPrimary = existingMapping == null
                 };
                 await _userMapping.Add(userMapping);
+                await _db.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
                 return RedirectToAction("COContactUs", "Default");
             }
-            else
+            catch (Exception ex)
             {
+                await transaction.RollbackAsync();
+                ModelState.AddModelError("", "Registration failed due to an unexpected error. Please try again.");
                 return View(signUpDto);
             }
-
         }
 
         [Authorize(Roles = "Admin,LoanAdmin")]

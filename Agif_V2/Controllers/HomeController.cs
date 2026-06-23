@@ -52,12 +52,17 @@ namespace Agif_V2.Controllers
             }
             else
             {
-                var applCount = await home.GetApplicationCount(sessionUser.UserId);
+                var loanApplCount = await home.GetApplicationCount(sessionUser.UserId);
+                var claimApplCount = await home.GetClaimApplicationCount(sessionUser.UserId);
+
                 var metrics = new Dictionary<string, int>
                 {
-                    ["PendingApplications"] = applCount.FirstOrDefault(x => x.Status == "Pending")?.Count ?? 0,
-                    ["ApprovedApplications"] = applCount.FirstOrDefault(x => x.Status == "Approved")?.Count ?? 0,
-                    ["RejectedApplications"] = applCount.FirstOrDefault(x => x.Status == "Rejected")?.Count ?? 0,
+                    ["PendingApplications"] = loanApplCount.FirstOrDefault(x => x.Status == "Pending")?.Count ?? 0,
+                    ["ApprovedApplications"] = loanApplCount.FirstOrDefault(x => x.Status == "Approved")?.Count ?? 0,
+                    ["RejectedApplications"] = loanApplCount.FirstOrDefault(x => x.Status == "Rejected")?.Count ?? 0,
+                    ["PendingClaimApplications"] = claimApplCount.FirstOrDefault(x => x.Status == "Pending")?.Count ?? 0,
+                    ["ApprovedClaimApplications"] = (claimApplCount.FirstOrDefault(x => x.Status == "Approved")?.Count ?? 0) + (claimApplCount.FirstOrDefault(x => x.Status == "Downloaded")?.Count ?? 0),
+                    ["RejectedClaimApplications"] = claimApplCount.FirstOrDefault(x => x.Status == "Rejected")?.Count ?? 0,
                 };
 
                 ViewBag.Metrics = metrics;

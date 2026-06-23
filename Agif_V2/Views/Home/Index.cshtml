@@ -26,7 +26,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                 <a asp-controller="default" asp-action="Index">Home</a>
+                                    <a asp-controller="default" asp-action="Index">Home</a>
 
                                 </li>
                                 <li class="breadcrumb-item active" aria-current="page">
@@ -42,7 +42,7 @@
         </div>
         <!-- ========== title-wrapper end ========== -->
         <div class="row">
-            @if(role == "LoanAdmin" || role == "ClaimAdmin")
+            @if (role == "LoanAdmin" || role == "ClaimAdmin")
             {
                 <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="icon-card mb-30">
@@ -70,7 +70,7 @@
                     <!-- End Icon Cart -->
                 </div>
 
-                 <div class="col-xl-3 col-lg-4 col-sm-6">
+                <div class="col-xl-3 col-lg-4 col-sm-6">
                     <div class="icon-card mb-30" id="AnalyticsDashBoard">
                         <div class="icon red">
                             <i class="lni lni-list"></i>
@@ -115,22 +115,79 @@
             }
             else
             {
+                <div class="row">
 
-                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="col-xl-3 col-lg-4 col-sm-6">
                         <div class="icon-card mb-30 position-relative">
-                          <div class="icon orange">
-                            <i class="lni lni-credit-cards"></i>
-                          </div>
-                          <div class="content">
-                            <h6 class="mb-10">Pending Appl</h6>
-                            <h3 class="text-bold mb-10">@metrics["PendingApplications"]</h3>
-                          </div>
+                            <div class="icon orange">
+                                <i class="lni lni-credit-cards"></i>
+                            </div>
+                            <div class="content">
+                                <h6 class="mb-10">Pending Loan Appl</h6>
+                                <h3 class="text-bold mb-10">@metrics["PendingApplications"]</h3>
+                            </div>
 
-                             <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
-            <input type="hidden" name="status" value="1" />
-            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
-        </form>
+                            <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+                                <input type="hidden" name="status" value="1" />
+                                <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+                            </form>
                         </div>
+                    </div>
+
+                    <!-- End Col -->
+                    <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="icon-card mb-30 position-relative">
+                            <div class="icon success">
+                                <i class="lni lni-checkmark-circle"></i>
+                            </div>
+                            <div class="content">
+                                <h6 class="mb-10">Approved Loan Appl</h6>
+                                <h3 class="text-bold mb-10">@metrics["ApprovedApplications"]</h3>
+                            </div>
+                         
+                            <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+                                <input type="hidden" name="status" value="2" />
+                                <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+                            </form>
+                        </div>
+                        <!-- End Icon Cart -->
+                    </div>
+                    <!-- End Col -->
+                    <div class="col-xl-3 col-lg-4 col-sm-6">
+                        <div class="icon-card mb-30 position-relative">
+                            <div class="icon red">
+                                <i class="lni lni-close"></i>
+                            </div>
+                            <div class="content">
+                                <h6 class="mb-10">Rejected Loan Appl</h6>
+                                <h3 class="text-bold mb-10">@metrics["RejectedApplications"]</h3>
+                            </div>
+                     
+                            <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+                                <input type="hidden" name="status" value="3" />
+                                <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+                            </form>
+                        </div>
+                        <!-- End Icon Cart -->
+                    </div>
+                    <!-- End Col -->
+                </div>
+                <div class="row mt-4"></div>
+                <div class="col-xl-3 col-lg-4 col-sm-6">
+                    <div class="icon-card mb-30 position-relative">
+                        <div class="icon orange">
+                            <i class="lni lni-credit-cards"></i>
+                        </div>
+                        <div class="content">
+                            <h6 class="mb-10">Pending Claim Appl</h6>
+                            <h3 class="text-bold mb-10">@metrics["PendingClaimApplications"]</h3>
+                        </div>
+
+                        <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+                            <input type="hidden" name="status" value="101" />
+                            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+                        </form>
+                    </div>
                 </div>
 
                 <!-- End Col -->
@@ -140,14 +197,14 @@
                             <i class="lni lni-checkmark-circle"></i>
                         </div>
                         <div class="content">
-                            <h6 class="mb-10">Approved Appl</h6>
-                            <h3 class="text-bold mb-10">@metrics["ApprovedApplications"]</h3>
+                            <h6 class="mb-10">Approved Claim Appl</h6>
+                            <h3 class="text-bold mb-10">@metrics["ApprovedClaimApplications"]</h3>
                         </div>
                          
-                                 <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
-            <input type="hidden" name="status" value="2" />
-            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
-        </form>
+                        <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
+                            <input type="hidden" name="status" value="102" />
+                            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+                        </form>
                     </div>
                     <!-- End Icon Cart -->
                 </div>
@@ -158,14 +215,14 @@
                             <i class="lni lni-close"></i>
                         </div>
                         <div class="content">
-                            <h6 class="mb-10">Rejected Appl</h6>
-                            <h3 class="text-bold mb-10">@metrics["RejectedApplications"]</h3>
+                            <h6 class="mb-10">Rejected Claim Appl</h6>
+                            <h3 class="text-bold mb-10">@metrics["RejectedClaimApplications"]</h3>
                         </div>
                      
                         <form asp-action="UserApplicationList" asp-controller="ApplicationRequest" method="post" class="stretched-link-form">
-            <input type="hidden" name="status" value="3" />
-            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
-        </form>
+                            <input type="hidden" name="status" value="103" />
+                            <button type="submit" class="stretched-link stretched-link-button" aria-label="Open Pending Applications"></button>
+                        </form>
                     </div>
                     <!-- End Icon Cart -->
                 </div>

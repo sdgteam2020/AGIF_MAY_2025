@@ -356,7 +356,7 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("CommonData.Suffix","Invalid Army Number or Suffix.");
             }
 
-            await ValidateRetirementDetails(model);
+            await _modelValidationService.ValidateLoanRetirementDetails(model, ModelState);
             switch (formType)
             {
                 case "HBA":
@@ -476,78 +476,78 @@ namespace Agif_V2.Controllers
             return RedirectToAction("Upload", "Upload");
         }
 
-        private async Task ValidateRetirementDetails(DTOOnlineApplication model)
-        {
-            var common = model.CommonData;
+        //private async Task ValidateRetirementDetails(DTOOnlineApplication model)
+        //{
+        //    var common = model.CommonData;
 
-            if (common == null)
-                return;
+        //    if (common == null)
+        //        return;
 
-            var retirementInfo =
-                await _modelValidationService.GetRetirementInfo(
-                    common.DdlRank,
-                    common.ArmyPrefix,
-                    common.RegtCorps);
+        //    var retirementInfo =
+        //        await _modelValidationService.GetRetirementInfo(
+        //            common.DdlRank,
+        //            common.ArmyPrefix,
+        //            common.RegtCorps);
 
-            if (retirementInfo == null)
-            {
-                ModelState.AddModelError("", "Unable to calculate retirement details.");
-                return;
-            }
+        //    if (retirementInfo == null)
+        //    {
+        //        ModelState.AddModelError("", "Unable to calculate retirement details.");
+        //        return;
+        //    }
 
-            var calculatedRetirementDate =
-                _modelValidationService.CalculateRetirementDate(
-                    retirementInfo.UserTypeId,
-                    common.DdlRank,
-                    common.ArmyPrefix.ToString(),
-                    common.RegtCorps,
-                    common.DateOfBirth!.Value,
-                    common.DateOfCommission!.Value,
-                    common.DateOfPromotion,
-                    common.ExtnOfService == "Yes",
-                    retirementInfo.RetirementAge);
+        //    var calculatedRetirementDate =
+        //        _modelValidationService.CalculateRetirementDate(
+        //            retirementInfo.UserTypeId,
+        //            common.DdlRank,
+        //            common.ArmyPrefix.ToString(),
+        //            common.RegtCorps,
+        //            common.DateOfBirth!.Value,
+        //            common.DateOfCommission!.Value,
+        //            common.DateOfPromotion,
+        //            common.ExtnOfService == "Yes",
+        //            retirementInfo.RetirementAge);
 
-            // Retirement Date
-            if (common.DateOfRetirement == null ||
-                common.DateOfRetirement.Value.Date != calculatedRetirementDate.Date)
-            {
-                ModelState.AddModelError(
-                    "CommonData.DateOfRetirement",
-                    "Retirement date validation failed.");
-            }
+        //    // Retirement Date
+        //    if (common.DateOfRetirement == null ||
+        //        common.DateOfRetirement.Value.Date != calculatedRetirementDate.Date)
+        //    {
+        //        ModelState.AddModelError(
+        //            "CommonData.DateOfRetirement",
+        //            "Retirement date validation failed.");
+        //    }
 
-            // Total Service
-            var calculatedTotalService =
-                _modelValidationService.CalculateTotalService(
-                    common.DateOfCommission.Value);
+        //    // Total Service
+        //    var calculatedTotalService =
+        //        _modelValidationService.CalculateTotalService(
+        //            common.DateOfCommission.Value);
 
-            if (common.TotalService != calculatedTotalService)
-            {
-                ModelState.AddModelError(
-                    "CommonData.TotalService",
-                    "Total service validation failed.");
-            }
+        //    if (common.TotalService != calculatedTotalService)
+        //    {
+        //        ModelState.AddModelError(
+        //            "CommonData.TotalService",
+        //            "Total service validation failed.");
+        //    }
 
-            // Residual Service
-            var calculatedResidualService =
-                _modelValidationService.CalculateResidualService(
-                    calculatedRetirementDate);
+        //    // Residual Service
+        //    var calculatedResidualService =
+        //        _modelValidationService.CalculateResidualService(
+        //            calculatedRetirementDate);
 
-            if (common.ResidualService != calculatedResidualService)
-            {
-                ModelState.AddModelError(
-                    "CommonData.ResidualService",
-                    "Residual service validation failed.");
-            }
+        //    if (common.ResidualService != calculatedResidualService)
+        //    {
+        //        ModelState.AddModelError(
+        //            "CommonData.ResidualService",
+        //            "Residual service validation failed.");
+        //    }
 
-            // Business Rule
-            if (calculatedResidualService < 2)
-            {
-                ModelState.AddModelError(
-                    "CommonData.ResidualService",
-                    "Residual service must be at least 2 years.");
-            }
-        }
+        //    // Business Rule
+        //    if (calculatedResidualService < 2)
+        //    {
+        //        ModelState.AddModelError(
+        //            "CommonData.ResidualService",
+        //            "Residual service must be at least 2 years.");
+        //    }
+        //}
 
         private string? GetFormType(DTOOnlineApplication model)
         {
