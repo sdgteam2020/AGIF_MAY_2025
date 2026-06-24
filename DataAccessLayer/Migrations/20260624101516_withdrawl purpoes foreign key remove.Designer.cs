@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260624101516_withdrawl purpoes foreign key remove")]
+    partial class withdrawlpurpoesforeignkeyremove
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -647,8 +650,6 @@ namespace DataAccessLayer.Migrations
                     b.HasIndex("PresentUnit");
 
                     b.HasIndex("RegtCorps");
-
-                    b.HasIndex("WithdrawPurpose");
 
                     b.ToTable("trnClaim");
                 });
@@ -2421,12 +2422,6 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataTransferObject.Model.WithdrawalPurpose", "WithdrawalPurposetype")
-                        .WithMany()
-                        .HasForeignKey("WithdrawPurpose")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("MApplicantType");
 
                     b.Navigation("MArmyPostOffices");
@@ -2440,8 +2435,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MUnitsParent");
 
                     b.Navigation("MUnitsPresent");
-
-                    b.Navigation("WithdrawalPurposetype");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ClaimDigitalSignRecords", b =>

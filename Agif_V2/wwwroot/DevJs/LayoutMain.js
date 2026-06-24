@@ -2,7 +2,28 @@
 // Initialize navbar state on page load
 $(document).ready(function () {
     handleNavbarClick();
+    setTimeout(fixMDBAccessibility, 500);
 });
+function fixMDBAccessibility() {
+    $('.select-wrapper').each(function () {
+        var $wrapper = $(this);
+        var $select = $wrapper.find('select');
+        var $input = $wrapper.find('.select-input');
+        var $label = $wrapper.find('label');
+
+        if ($select.length && $input.length) {
+            var displayId = $select.attr('id') + '_display';
+
+            $input.attr('id', displayId);
+            $input.attr('name', $select.attr('name') + '_display');
+
+            if ($label.length) {
+                $label.attr('for', displayId);  // fixes label mismatch too
+            }
+        }
+    });
+}
+
 function handleNavbarClick() {
     let currentPath = window.location.pathname.toLowerCase();
 

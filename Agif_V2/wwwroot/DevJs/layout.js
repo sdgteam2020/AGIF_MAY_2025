@@ -14,6 +14,29 @@ const sendBtn = document.getElementById('asdcSend');
 const loadingEl = document.getElementById('asdcLoading');
 
 // Get all focusable and visible elements within a root element (used for keyboard trap)
+function fixMDBAccessibility() {
+    $('.select-wrapper').each(function () {
+        var $wrapper = $(this);
+        var $select = $wrapper.find('select');
+        var $input = $wrapper.find('.select-input');
+        var $label = $wrapper.find('label');
+
+        if ($select.length && $input.length) {
+            var displayId = $select.attr('id') + '_display';
+
+            $input.attr('id', displayId);
+            $input.attr('name', $select.attr('name') + '_display');
+
+            if ($label.length) {
+                $label.attr('for', displayId);  // fixes label mismatch too
+            }
+        }
+    });
+}
+
+$(function () {
+    setTimeout(fixMDBAccessibility, 500); // wait for MDB to finish rendering
+});
 function focusableElements(root) {
     return Array.from(root.querySelectorAll(
         'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'

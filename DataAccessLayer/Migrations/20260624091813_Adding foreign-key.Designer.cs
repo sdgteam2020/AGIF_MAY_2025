@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260624091813_Adding foreign-key")]
+    partial class Addingforeignkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1909,8 +1912,6 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("ApprovedLogId");
 
-                    b.HasIndex("CoProfileId");
-
                     b.ToTable("TrnApprovedLogs");
                 });
 
@@ -2719,17 +2720,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("ClaimCommonModel");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.TrnApprovedLog", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("CoProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.TrnClaimStatusCounter", b =>

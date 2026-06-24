@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260624084826_Add foreign key")]
+    partial class Addforeignkey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,8 +330,6 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("CA_LoanFreq");
 
-                    b.HasIndex("VehTypeId");
-
                     b.ToTable("trnCar");
                 });
 
@@ -411,10 +412,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("AddressId");
 
                     b.HasIndex("ApplicationId");
-
-                    b.HasIndex("Distt");
-
-                    b.HasIndex("State");
 
                     b.ToTable("trnClaimAddressDetails");
                 });
@@ -1909,8 +1906,6 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("ApprovedLogId");
 
-                    b.HasIndex("CoProfileId");
-
                     b.ToTable("TrnApprovedLogs");
                 });
 
@@ -1932,8 +1927,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
 
                     b.ToTable("TrnClaimStatusCounter");
                 });
@@ -1966,8 +1959,6 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("FwdId");
 
-                    b.HasIndex("ApplicationId");
-
                     b.ToTable("TrnFwd");
                 });
 
@@ -1993,8 +1984,6 @@ namespace DataAccessLayer.Migrations
 
                     b.HasKey("FwdCOId");
 
-                    b.HasIndex("ApplicationId");
-
                     b.ToTable("TrnFwdCO");
                 });
 
@@ -2016,8 +2005,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationId");
 
                     b.ToTable("TrnStatusCounter");
                 });
@@ -2144,8 +2131,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProfileId");
 
                     b.ToTable("TrnLoginLogs");
                 });
@@ -2313,17 +2298,9 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataTransferObject.Model.MVehType", "MVehType")
-                        .WithMany()
-                        .HasForeignKey("VehTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("CommonDataModels");
 
                     b.Navigation("MLoanFreq");
-
-                    b.Navigation("MVehType");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ClaimAccountDetailsModel", b =>
@@ -2353,23 +2330,7 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataTransferObject.Model.MDist", "MDist")
-                        .WithMany()
-                        .HasForeignKey("Distt")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataTransferObject.Model.MState", "MState")
-                        .WithMany()
-                        .HasForeignKey("State")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ClaimCommonDataModels");
-
-                    b.Navigation("MDist");
-
-                    b.Navigation("MState");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ClaimCommonModel", b =>
@@ -2421,7 +2382,7 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataTransferObject.Model.WithdrawalPurpose", "WithdrawalPurposetype")
+                    b.HasOne("DataTransferObject.Model.WithdrawalPurpose", "WithdrawalPurpose")
                         .WithMany()
                         .HasForeignKey("WithdrawPurpose")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2441,7 +2402,7 @@ namespace DataAccessLayer.Migrations
 
                     b.Navigation("MUnitsPresent");
 
-                    b.Navigation("WithdrawalPurposetype");
+                    b.Navigation("WithdrawalPurpose");
                 });
 
             modelBuilder.Entity("DataTransferObject.Model.ClaimDigitalSignRecords", b =>
@@ -2721,61 +2682,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("ClaimCommonModel");
                 });
 
-            modelBuilder.Entity("DataTransferObject.Model.TrnApprovedLog", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("CoProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.TrnClaimStatusCounter", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.ClaimCommonModel", "ClaimCommonModel")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClaimCommonModel");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.TrnFwd", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModel")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModel");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.TrnFwdCO", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModel")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModel");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.TrnStatusCounter", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.CommonDataModel", "CommonDataModel")
-                        .WithMany()
-                        .HasForeignKey("ApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CommonDataModel");
-                });
-
             modelBuilder.Entity("DataTransferObject.Model.UserMapping", b =>
                 {
                     b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
@@ -2828,17 +2734,6 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("MRank");
 
                     b.Navigation("MRegtCorps");
-                });
-
-            modelBuilder.Entity("DataTransferObject.Model.trnLoginLog", b =>
-                {
-                    b.HasOne("DataTransferObject.Model.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

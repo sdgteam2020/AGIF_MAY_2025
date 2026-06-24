@@ -25,13 +25,15 @@ namespace DataTransferObject.Model
         public string? PostOffice { get; set; }
 
         [Required(ErrorMessage = "District is required.")]
-        //[StringLength(100, ErrorMessage = "District can't be longer than 100 characters.")]
         public int Distt { get; set; }
+        [ForeignKey("Distt")]
+        public MDist? MDist { get; set; }
 
 
         [Required(ErrorMessage = "State is required.")]
-        //[StringLength(100, ErrorMessage = "State can't be longer than 100 characters.")]
         public int State { get; set; }
+        [ForeignKey("State")]
+        public MState? MState { get; set; }
 
         [Required(ErrorMessage = "Zip Code is required.")]
         [StringLength(6, ErrorMessage = "Zip Code can't be longer than 6 characters.")]

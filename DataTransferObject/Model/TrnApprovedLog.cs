@@ -15,7 +15,8 @@ namespace DataTransferObject.Model
         public string IpAddress { get; set; }
 
         public int CoProfileId { get; set; }
-
+        [ForeignKey("CoProfileId")]
+        public UserProfile? UserProfile { get; set; }
         public int AdminUserId { get; set; }
 
         public int CoUserId { get; set; }

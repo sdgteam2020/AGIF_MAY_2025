@@ -243,7 +243,6 @@ function BindUsersData(status) {
                 "RequestVerificationToken": requestToken
             },
             data: function (data) {
-                console.log(data)
                 const sortColumn = data.order.length > 0 ? data.columns[data.order[0].column].data : 'profileName';
                 const sortDirection = data.order.length > 0 ? data.order[0].dir : 'asc';
 

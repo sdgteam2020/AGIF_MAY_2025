@@ -97,7 +97,7 @@
                                         <div class="col-4 col-md-4">
                                             <div class="input-group mb-2">
                                                 <span class="input-group-text">👮</span>
-                                                @* <div class="col-md-10"> *@
+                                                
                                                 <select class="select form-select" id="oldArmyPrefix" data-mdb-filter="true" name="CommonData.OldArmyPrefix" required data-oldarmy-prefix="@if (Model.CommonData != null)
                                                     {
                                                         @Model.CommonData.OldArmyPrefix
@@ -106,7 +106,7 @@
                                                 </select>
                                                 <label class="form-label select-label " for="oldArmyPrefix">Prefix</label>
                                                 @Html.ValidationMessageFor(m => m.CommonData.OldArmyPrefix, "", new { @class = "text-danger" })
-                                                @* </div> *@
+                                                
                                             </div>
                                         </div>
                                         <div class="col-4 col-md-4">
@@ -114,7 +114,7 @@
                                                 <span class="input-group-text">🔟</span>
                                                 <div class="form-outline" data-mdb-input-init>
                                                     <input type="text" id="oldArmyNo" name="CommonData.OldNumber" class="form-control js-valindata js-setsuffix" value="@Model.CommonData?.OldNumber" maxlength="8" required pattern="^\d{3,8}$" />
-                                                    <label class="form-label" for="txtOldNumber">Old Army No.</label>
+                                                    <label class="form-label" for="oldArmyNo">Old Army No.</label>
                                                 </div>
                                             </div>
                                             @Html.ValidationMessageFor(m => m.CommonData.OldNumber, "", new { @class = "text-danger" })
@@ -375,7 +375,7 @@
                                         @Html.ValidationMessageFor(m => m.CommonData.ParentUnit, "", new { @class = "text-danger" })
                                         <span id="ParentUnitId" class="d-none">@Model.CommonData?.ParentUnit</span>
                                         <input type="text" class="form-control" id="ParenttxtUnit" placeholder="Search Parent Unit..." />
-                                        <label class="form-label" for="ParentUnit">Parent Unit</label>
+                                        <label class="form-label" for="ParenttxtUnit">Parent Unit</label>
                                     </div>
                                 </div>
                             </div>
@@ -390,7 +390,7 @@
                                         @Html.ValidationMessageFor(model => model.CommonData.PresentUnit, "", new { @class = "text-danger" })
                                         <span id="PresentUnitId" class="d-none">@Model.CommonData?.PresentUnit</span>
                                         <input type="text" class="form-control" id="PresenttxtUnit" placeholder="Search Present Unit..." />
-                                        <label class="form-label" for="PresentUnit">Present Unit</label>
+                                        <label class="form-label" for="PresenttxtUnit">Present Unit</label>
 
                                     </div>
                                 </div>

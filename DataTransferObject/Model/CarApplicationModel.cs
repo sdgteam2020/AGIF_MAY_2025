@@ -27,6 +27,8 @@ namespace DataTransferObject.Model
         public int Veh_Loan_Type { get; set; }
 
         public int VehTypeId { get; set; }
+        [ForeignKey("VehTypeId")]
+        public MVehType? MVehType { get; set; }
 
         [Required(ErrorMessage = "Company Name is required.")]
         [StringLength(100, ErrorMessage = "Company Name can't be longer than 100 characters.")]
