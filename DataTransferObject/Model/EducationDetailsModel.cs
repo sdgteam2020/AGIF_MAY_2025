@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class EducationDetailsModel : Common
+    public class EducationDetailsModel 
     {
         [Key]
         public int EDId { get; set; }
@@ -67,6 +67,9 @@ namespace DataTransferObject.Model
         public bool IsTotalExpenditureFilePdf { get; set; }
         [Required]
         public string Gender { get; set; } = string.Empty;
-
+        [Required]
+        [DataType(DataType.Date)]
+        [Column(TypeName = "datetime2")]
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

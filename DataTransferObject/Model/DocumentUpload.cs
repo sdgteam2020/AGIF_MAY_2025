@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class DocumentUpload:Common
+    public class DocumentUpload
     {
         [Key]
         public int UploadId { get; set; }
@@ -16,14 +16,6 @@ namespace DataTransferObject.Model
         public int ApplicationId { get; set; }
         [ForeignKey("ApplicationId")]
         public CommonDataModel? CommonDataModels { get; set; }
-
-        //public string? CancelledCheque { get; set; }
-        //public string? PaySlipPdf { get; set; }
-        //public string? QuotationPdf { get; set; }
-        //public string? DrivingLicensePdf { get; set; }
-        //public string? SeviceExtnPdf { get; set; }
-
-
         public bool IsCancelledCheque { get; set; }
 
         public bool IsPaySlipPdf { get; set; }
@@ -33,5 +25,9 @@ namespace DataTransferObject.Model
         public bool IsDrivingLicensePdf { get; set; }
 
         public bool IsSeviceExtnPdf { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Column(TypeName = "datetime2")]
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

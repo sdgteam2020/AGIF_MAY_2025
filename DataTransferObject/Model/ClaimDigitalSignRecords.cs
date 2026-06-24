@@ -13,9 +13,6 @@ namespace DataTransferObject.Model
     {
         [Key]
         public int Id { get; set; }
-        //public string ArmyNo { get; set; } = string.Empty;
-        //public string DomainId { get; set; } = string.Empty;
-        //public string RankName { get; set; } = string.Empty;
         public int ProfileId { get; set; }
         [ForeignKey("ProfileId")]
         public UserProfile UserProfile { get; set; }

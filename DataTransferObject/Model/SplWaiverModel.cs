@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class SplWaiverModel : Common
+    public class SplWaiverModel 
     {
 
         [Key]
@@ -38,6 +38,9 @@ namespace DataTransferObject.Model
 
         public bool IsOtherReasonPdf { get; set; }
         public bool IsTotalExpenditureFilePdf { get; set; }
-
+        [Required]
+        [DataType(DataType.Date)]
+        [Column(TypeName = "datetime2")]
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

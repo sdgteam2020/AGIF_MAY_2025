@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class ClaimAccountDetailsModel:Common
+    public class ClaimAccountDetailsModel
     {
         [Key]
         public int AccountId { get; set; }
@@ -38,5 +38,9 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage = "Bank Branch is required.")]
         [StringLength(100, ErrorMessage = "Bank Branch Name can't be longer than 100 characters.")]
         public string? NameOfBankBranch { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Column(TypeName = "datetime2")]
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }

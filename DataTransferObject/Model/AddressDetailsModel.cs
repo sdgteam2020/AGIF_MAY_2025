@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class AddressDetailsModel:Common
+    public class AddressDetailsModel
     {
         [Key]
         public int AddressId { get; set; }
@@ -36,6 +36,10 @@ namespace DataTransferObject.Model
         [Required(ErrorMessage = "Zip Code is required.")]
         [StringLength(6, ErrorMessage = "Zip Code can't be longer than 6 characters.")]
         public string? Code { get; set; }
+        [Required]
+        [DataType(DataType.Date)]
+        [Column(TypeName = "datetime2")]
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
 
     }
 }

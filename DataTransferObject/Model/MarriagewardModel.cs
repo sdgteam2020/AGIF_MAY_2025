@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataTransferObject.Model
 {
-    public class MarriagewardModel : Common
+    public class MarriagewardModel 
     {
 
         [Key]
@@ -56,6 +56,9 @@ namespace DataTransferObject.Model
         public bool IsAttachInvitationcardPdf { get;set; }
         [Required]
         public string Gender { get; set; } = string.Empty;
-
+        [Required]
+        [DataType(DataType.Date)]
+        [Column(TypeName = "datetime2")]
+        public DateTime? UpdatedOn { get; set; } = DateTime.Now;
     }
 }
