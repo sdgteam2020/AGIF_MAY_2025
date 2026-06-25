@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     populateDropdowns();
-
+    BindDropDown();
     function populateDropdowns() {
         const Rank = $('#rank').data('rank-prefix');
         const regtCorps = $('#regtCorps').data('regtcorps-prefix');
@@ -31,6 +31,15 @@
             });
         }
     }
+
+    function BindDropDown() { 
+            setTimeout(function () {
+
+                $('#rank').val($('#rank').data('rank-prefix')).trigger('change');
+                $('#regtCorps').val($('#regtCorps').data('regtcorps-prefix')).trigger('change');
+
+            }, 1000);
+        }
 
     $('#editButton').on('click',function () {
         enableEditMode();

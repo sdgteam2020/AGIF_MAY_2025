@@ -89,6 +89,7 @@ namespace Agif_V2.Controllers
                 dTOTempSession.name = dTOUserProfileResponse.username ?? string.Empty;
                 dTOTempSession.DteFmn = dTOUserProfileResponse.IsFmn;
                 dTOTempSession.MappingId = dTOUserProfileResponse.MappingId;
+                dTOTempSession.EmailId= dTOUserProfileResponse.EmailId ?? string.Empty;
             }
 
             return View(dTOTempSession);
@@ -97,15 +98,30 @@ namespace Agif_V2.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUser(SessionUserDTO sessionUserDTO)
         {
-            if(ModelState.IsValid)
-            {
-                return BadRequest("Invalid request data.");
-            }
             var trustedSessionUser = Helpers.SessionExtensions.GetObject<SessionUserDTO>(HttpContext.Session, "User");
 
             if (trustedSessionUser == null)
             {
                 return RedirectToAction("Login", "Account"); // Session expired
+            }
+            // Check if username was modified
+            if(!string.IsNullOrEmpty(sessionUserDTO.UserName))
+            {
+                if (!string.Equals(sessionUserDTO.UserName,
+                             trustedSessionUser.UserName,
+                             StringComparison.OrdinalIgnoreCase))
+                {
+                    ModelState.AddModelError("UserName",
+                        "You are not authorized to change the username.");
+
+                    return View("EditUser", sessionUserDTO);
+                }
+            }
+          
+
+            if (!ModelState.IsValid)
+            {
+                return View("EditUser", sessionUserDTO);
             }
 
             sessionUserDTO.ProfileId = trustedSessionUser.ProfileId;
