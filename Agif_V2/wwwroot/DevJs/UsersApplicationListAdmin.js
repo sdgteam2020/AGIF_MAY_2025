@@ -473,7 +473,6 @@ function downloadApplication(applicationId, armyNo, applicationType) {
                 window.location.href = '/PdfDownloaded/' + response+".zip";
              
             }
-            console.log('Download initiated successfully');
         },
         error: function (xhr, status, error) {
             console.error('Download failed:', error);

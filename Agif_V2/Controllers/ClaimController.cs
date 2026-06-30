@@ -355,8 +355,8 @@ namespace Agif_V2.Controllers
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("OnlineApplication", model);
             }
-            try
-            {
+            //try
+            //{
                 var claimCommonModel = await SaveClaimCommonDataAsync(model);
 
                 await SaveAddressAndAccountDetailsAsync(model, claimCommonModel.ApplicationId);
@@ -366,14 +366,15 @@ namespace Agif_V2.Controllers
                 TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
                 return RedirectToAction("Upload", "Claim");
-            }
-            catch (Exception ex)
-            {
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
 
-                ModelState.AddModelError("", "Security error: Failed to process the application.");
+            //    ModelState.AddModelError("", "Security error: Failed to process the application.");
 
-                return View("OnlineApplication", model);
-            }
+            //    return View("OnlineApplication", model);
+            //}
 
         }
 
@@ -546,41 +547,41 @@ namespace Agif_V2.Controllers
             {
                 TempData.Keep("ClaimapplicationId");
 
-            var files = GetUploadedFiles(model);
+                var files = GetUploadedFiles(model);
 
-            if (!files.Any())
-            {
-                ModelState.AddModelError("", "Please upload at least one file.");
-                return View("Upload", model);
-            }
+                if (!files.Any())
+                {
+                    ModelState.AddModelError("", "Please upload at least one file.");
+                    return View("Upload", model);
+                }
 
-            foreach (var file in files)
-            {
-                await ValidateFile(file);
-            }
+                foreach (var file in files)
+                {
+                    await ValidateFile(file);
+                }
 
-            if (!ModelState.IsValid)
-            {
-                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
-                return View("Upload", model);
-            }
+                if (!ModelState.IsValid)
+                {
+                    await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
+                    return View("Upload", model);
+                }
 
-            bool success = await _IClaimonlineApplication1.ProcessFileUploads(files, formType, applicationId);
+                bool success = await _IClaimonlineApplication1.ProcessFileUploads(files, formType, applicationId);
 
-            if (!success)
-            {
-                ModelState.AddModelError("", "File upload failed. Please try again.");
-                return View("Upload", model);
-            }
+                if (!success)
+                {
+                    ModelState.AddModelError("", "File upload failed. Please try again.");
+                    return View("Upload", model);
+                }
 
-            return RedirectToAction("ApplicationDetails", "Claim");
+                return RedirectToAction("ApplicationDetails", "Claim");
             }
             catch (Exception ex)
             {
 
                 throw ex;
             }
-            
+
         }
 
         private List<IFormFile> GetUploadedFiles(ClaimFileUploadViewModel model)

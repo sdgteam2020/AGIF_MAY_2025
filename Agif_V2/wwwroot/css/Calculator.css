@@ -16,7 +16,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
     padding: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     width: 280px;
-    z-index: 9999;
+    z-index: 9999 !important;
 }
 
 .ui-datepicker-header {

@@ -2,12 +2,12 @@
     addBlurEffect();
     let rawValue = $("#Status").val();
     let value = (rawValue === "0" || !rawValue) ? 1 : rawValue;
-    $(".submit-status").removeClass("active-page-highlight");
+    const initialUserType = (value >= 100) ? 'Maturity' : 'Loan';
+    $("#UserType").val(initialUserType);
 
+    $(".submit-status").removeClass("active-page-highlight");
     $(`.submit-status[data-status='${value}']`).addClass("active-page-highlight");
-    //if (value == 2 || value ==102) {
-    //    $('#tblApplications thead tr th ').eq(6).before('<th class="bg-danger text-white">Digital Sign On</th>');
-    //}
+
     if (value == 1 || value == 2 || value == 3) {
         GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
         $('#Maturity').removeClass('active');
@@ -18,31 +18,10 @@
         $('#Loan').removeClass('active');
         $('#Maturity').addClass('active');
     }
-    
 
     $('.folder-tab').on('click', function () {
         $('.folder-tab').removeClass('active');
         $(this).addClass('active');
-    });
-    $('#Loan').click(function () {
-        $("#UserType").val('Loan');
-        $("#PdfViwerFOrDigital").attr("data", "");
-        GetApplicationList(value, "/ApplicationRequest/GetUsersApplicationList");
-    });
-
-    $('#Maturity').click(function () {
-        $("#UserType").val('Maturity');
-        $("#PdfViwerFOrDigital").attr("data", "");
-
-        let Mvalue = 0;
-        if (value == 1)
-            Mvalue = 101;
-        else if (value == 2)
-            Mvalue = 102;
-        else if (value == 3)
-            Mvalue = 103;
-
-        GetApplicationList(Mvalue, "/ApplicationRequest/GetMaturityUsersApplicationList");
     });
     $('#acceptButton').on('click', function () {
         const applnId = $("#spnapplicationId").html();
@@ -127,13 +106,13 @@
         historyModal.show();
         fetchApplicantData(currentApplicationData.armyNo);
     })
+
 });
 
 $(document).on("click", ".btn-merge", function () {
     const id = $(this).data("id");
     const url = $(this).data("url");
     const category = $(this).data("category");
-
     mergePdf(id, 0, 0, url, category);
 });
 
@@ -299,7 +278,6 @@ function GetApplicationList(status, endpoint) {
 
     if ($.fn.DataTable.isDataTable('#tblApplications')) {
         $('#tblApplications').DataTable().clear().destroy();
-        // Reset thead to base 7 columns every time
         $('#tblApplications thead tr').html(`
         <th class="bg-danger text-white">Sr.No.</th>
         <th class="bg-danger text-white">Army No</th>
@@ -574,7 +552,7 @@ async function mergePdf(applicationId, isRejected, isApproved, endpoint, categor
     }
 
     const data = await response.json();
-
+    console.log("Merge PDF response:", data);
     if (isApproved) {
         await DigitalSignByAPI(applicationId, category);  // ✅ use category
 

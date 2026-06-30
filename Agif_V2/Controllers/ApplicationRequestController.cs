@@ -459,9 +459,6 @@ namespace Agif_V2.Controllers
                         SignOn = DateTime.Now,
                         Remarks = remarks,
                         IsSign = true,
-                        //DomainId = dTOTempSession.DomainId,
-                        //ArmyNo = dTOTempSession.ArmyNo,
-                        //RankName = dTOTempSession.RankName,
                         ProfileId = dTOTempSession.ProfileId,
                         UserId = dTOTempSession.UserId,
                     ipAddress = ipAddress
@@ -479,20 +476,6 @@ namespace Agif_V2.Controllers
                 await _IClaimonlineApplication1.InsertStatusCounter(trnStatusCounter);
 
                 await _claimApplication.Add(digitalSignRecords);
-
-                DTOUserProfileResponse adminDetails = await _userProfile.GetAdminDetails();
-                var TrnFwd = new TrnFwd
-                {
-                    ApplicationId = applId,
-                    FromUserId = dTOTempSession.UserId,
-                    FromProfileId = dTOTempSession.ProfileId,
-                    ToUserId = adminDetails.UserId,
-                    ToProfileId = adminDetails.ProfileId,
-                    CreatedOn = DateTime.Now
-                };
-
-                await _userProfile.SaveTrnFwdRecords(TrnFwd);// Save TrnFwd to database
-
 
             }
             catch (Exception ex)
