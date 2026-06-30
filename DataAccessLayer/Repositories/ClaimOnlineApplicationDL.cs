@@ -295,25 +295,8 @@ namespace DataAccessLayer.Repositories
             return true;
         }
 
-
-        //public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
-        //{
-        //    var application = await _context.trnClaim.Where(i => i.ApplicationId == applicationId).SingleOrDefaultAsync();
-        //    if (application == null)
-        //    {
-        //        return false; // Just exit the method if not found
-        //    }
-
-        //    application.StatusCode = status;
-        //    _context.trnClaim.Update(application);
-        //    await _context.SaveChangesAsync();
-
-        //    return true;
-        //}
         public async Task<bool> UpdateApplicationStatus(int applicationId, int status)
         {
-            // This executes an UPDATE statement directly on the database.
-            // It returns the number of rows affected.
             var rowsAffected = await _context.trnClaim
                 .Where(i => i.ApplicationId == applicationId)
                 .ExecuteUpdateAsync(s => s.SetProperty(c => c.StatusCode, status));
@@ -321,29 +304,16 @@ namespace DataAccessLayer.Repositories
             // If rowsAffected > 0, the record existed and was updated.
             return rowsAffected > 0;
         }
-        //public async Task<string?> GetIOArmyNoAsync(int applicationId)
-        //{
-        //    var application = await _context.trnClaim
-        //        .FirstOrDefaultAsync(i => i.ApplicationId == applicationId);
-
-        //    if (application == null || string.IsNullOrWhiteSpace(application.IOArmyNo))
-        //    {
-        //        return null; // matches string? return type
-        //    }
-
-        //    return application.IOArmyNo;
-        //}
+        
         public async Task<string?> GetIOArmyNoAsync(int applicationId)
         {
-            // By using .Select() BEFORE .FirstOrDefaultAsync(), 
-            // EF Core generates: SELECT TOP(1) IOArmyNo FROM trnClaim WHERE...
+            
             var ioArmyNo = await _context.trnClaim
                 .Where(i => i.ApplicationId == applicationId)
                 .Select(i => i.IOArmyNo)
                 .FirstOrDefaultAsync();
 
-            // If the record doesn't exist, FirstOrDefaultAsync on a string returns null.
-            // If it does exist, we just check if it's whitespace.
+            
             if (string.IsNullOrWhiteSpace(ioArmyNo))
             {
                 return null;
@@ -496,43 +466,6 @@ namespace DataAccessLayer.Repositories
                 ActionOn = DateTime.Now,
             };
             await InsertStatusCounter(trnStatusCounter);
-
-            var IOArmyNo = await GetIOArmyNoAsync(ApplicationId);
-            if (IOArmyNo == null)
-            {
-                var CoDetails = await GetCoDetails(ApplicationId);
-                if (CoDetails != null)
-                {
-                    TrnFwdCO trnFwdCO = new TrnFwdCO
-                    {
-                        ApplicationId = ApplicationId,
-                        COUserId = CoDetails.UserId,
-                        CreatedOn = DateTime.Now,
-                        Status = 101
-                    };
-                    await AddFwdCO(trnFwdCO);
-                }
-
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(IOArmyNo))
-                {
-                    var IoDetails = await GetUserDetails(IOArmyNo);
-                    if (IoDetails != null)
-                    {
-                        TrnFwdCO trnFwdCO = new TrnFwdCO
-                        {
-                            ApplicationId = ApplicationId,
-                            COUserId = IoDetails.UserId,
-                            CreatedOn = DateTime.Now,
-                            Status = 101
-                        };
-                        await AddFwdCO(trnFwdCO);
-                    }
-
-                }
-            }
 
             return true;
         }
@@ -1218,11 +1151,6 @@ namespace DataAccessLayer.Repositories
                           join AccountDetails in _context.trnClaimAccountDetails on common.ApplicationId equals AccountDetails.ApplicationId into AccountDetailsModelGroup
                           from AccountDetails in AccountDetailsModelGroup.DefaultIfEmpty()
 
-                          //join StateDetails in _context.MState on AddressDetails.State equals StateDetails.StateId into StateDetailsModelGroup
-                          //from StateDetails in StateDetailsModelGroup.DefaultIfEmpty()
-                          //join DistDetails in _context.MDist on AddressDetails.Distt equals DistDetails.DistrictId into DistDetailsModelGroup
-                          //from DistDetails in DistDetailsModelGroup.DefaultIfEmpty()
-
                           join BankDetails in _context.MBank on AccountDetails.BankId equals BankDetails.BankId into BankDetailsModelGroup
                           from BankDetails in BankDetailsModelGroup.DefaultIfEmpty()
 
@@ -1262,7 +1190,6 @@ namespace DataAccessLayer.Repositories
                               SalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               ConfirmSalaryAcctNo = AccountDetails.SalaryAcctNo ?? string.Empty,
                               IfsCode = AccountDetails.IfsCode ?? string.Empty,
-                              // NameOfBank = AccountDetails.NameOfBank ?? string.Empty,
                               BankId = BankDetails.BankId,
                               NameOfBankBranch = AccountDetails.NameOfBankBranch ?? string.Empty,
                               pcda_pao = common.pcda_pao ?? string.Empty,

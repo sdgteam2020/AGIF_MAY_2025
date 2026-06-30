@@ -202,6 +202,7 @@ app.Use(async (ctx, next) =>
         ctx.Response.Headers.Remove("Server");
         ctx.Response.Headers.Remove("X-Powered-By");
         ctx.Response.Headers.Remove("x-aspnet-version");
+        ctx.Response.Headers.Remove("Date");
         return Task.CompletedTask;
     });
 
@@ -218,7 +219,9 @@ app.Use(async (ctx, next) =>
     string other = "frame-ancestors 'none'; base-uri 'self'; object-src 'self' blob:; form-action 'self';";
 
     ctx.Response.Headers["Content-Security-Policy"] = $"{defaultSrc}{scriptSrc}{styleSrc}{imgSrc}{fontSrc}{connectSrc}{other}";
-
+    ctx.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+    ctx.Response.Headers["Pragma"] = "no-cache";
+    ctx.Response.Headers["Expires"] = "0";
     ctx.Response.Headers["X-Frame-Options"] = "DENY";
     ctx.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
     ctx.Response.Headers["X-Content-Type-Options"] = "nosniff";

@@ -103,12 +103,12 @@ namespace DataAccessLayer
 
 
             builder.Entity<ClaimCommonModel>()
-                .HasOne<MUnit>()
-                .WithMany()
-                .HasForeignKey(a => a.PresentUnit)
-                .HasPrincipalKey(u => u.UnitId)
-                .OnDelete(DeleteBehavior.NoAction)
-                .HasConstraintName("FK_trnClaim_MUnits_PresentUnit");
+            .HasOne(x => x.MUnitsPresent)   // ← Specify the nav property
+            .WithMany()
+            .HasForeignKey(x => x.PresentUnit)
+            .HasPrincipalKey(x => x.UnitId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .HasConstraintName("FK_trnClaim_MUnits_PresentUnit");
 
 
             builder.Entity<MExceptionType>()
