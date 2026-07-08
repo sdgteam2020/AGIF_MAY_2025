@@ -50,6 +50,8 @@ namespace DataAccessLayer.Interfaces
 
         Task<int?> GetLatestApplicationIdByArmyNo(string armyNo);
 
+        Task<int> GetIpAddressId(string ipAddress);
+
         DTOCommonOnlineApplicationResponse GetApplicationAndApplicantType(int applicationId);
     }
 }

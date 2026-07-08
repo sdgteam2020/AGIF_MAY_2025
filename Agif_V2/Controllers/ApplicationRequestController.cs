@@ -381,6 +381,8 @@ namespace Agif_V2.Controllers
                 else
                     ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
 
+                int ipAddressId = await _onlineApplication.GetIpAddressId(ipAddress);
+
                 var digitalSignRecords = new DigitalSignRecords
                 {
                     ApplId = applId,
@@ -390,7 +392,7 @@ namespace Agif_V2.Controllers
                     IsSign = true,
                     ProfileId = dTOTempSession.ProfileId,
                     UserId = dTOTempSession.UserId,
-                    ipAddress = ipAddress
+                    IpAddressId = ipAddressId
                 };
 
                 await _onlineApplication.UpdateApplicationStatus(applId, 2);
@@ -451,7 +453,7 @@ namespace Agif_V2.Controllers
                 else
                     ipAddress= HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
 
-
+                int ipAddressId = await _onlineApplication.GetIpAddressId(ipAddress);
                 var digitalSignRecords = new ClaimDigitalSignRecords
                     {
                         ApplId = applId,
@@ -461,7 +463,7 @@ namespace Agif_V2.Controllers
                         IsSign = true,
                         ProfileId = dTOTempSession.ProfileId,
                         UserId = dTOTempSession.UserId,
-                    ipAddress = ipAddress
+                        IpAddressId = ipAddressId
                 };
 
                 await _IClaimonlineApplication1.UpdateApplicationStatus(applId, 102);
@@ -502,6 +504,8 @@ namespace Agif_V2.Controllers
             }
             else
                 ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+
+            int ipAddressId = await _onlineApplication.GetIpAddressId(ipAddress);
             var digitalSignRecords = new DigitalSignRecords
             {
                 ApplId = applId,
@@ -509,7 +513,7 @@ namespace Agif_V2.Controllers
                 Remarks = rem,
                 IsSign = false,
                 IsRejectced = true,
-                ipAddress = ipAddress,
+                IpAddressId = ipAddressId,
                 UserId = dTOTempSession.UserId,
                 ProfileId = dTOTempSession.ProfileId
             };
@@ -553,6 +557,8 @@ namespace Agif_V2.Controllers
             }
             else
                 ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? string.Empty;
+
+            int ipAddressId = await _onlineApplication.GetIpAddressId(ipAddress);
             var digitalSignRecords = new ClaimDigitalSignRecords
             {
                 ApplId = applId,
@@ -560,7 +566,7 @@ namespace Agif_V2.Controllers
                 Remarks = rem,
                 IsSign = false,
                 IsRejectced = true,
-                ipAddress= ipAddress,
+                IpAddressId= ipAddressId,
                 UserId = dTOTempSession.UserId,
                 ProfileId = dTOTempSession.ProfileId
             };

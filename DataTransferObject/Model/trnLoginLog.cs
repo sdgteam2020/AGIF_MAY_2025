@@ -13,7 +13,9 @@ namespace DataTransferObject.Model
         public int ProfileId { get; set; }
         [ForeignKey("ProfileId")]
         public UserProfile? UserProfile { get; set; }
-        public string IpAddress { get; set; } = string.Empty;
+        public int IpAddressId { get; set; }
+        [ForeignKey("IpAddressId")]
+        public MIpAddress? MIpAddress { get; set; }
         public DateTime LoginOn { get; set; }
 
     }

@@ -25,6 +25,8 @@ namespace DataTransferObject.Model
         public string XMLSignResponse { get; set; } = string.Empty;
         public string Remarks { get; set; } = string.Empty;
         public DateTime? SignOn { get; set; }
-        public string? ipAddress { get; set; }
+        public int IpAddressId { get; set; }
+        [ForeignKey("IpAddressId")]
+        public MIpAddress? MIpAddress { get; set; }
     }
 }

@@ -47,6 +47,7 @@ namespace Agif_V2.Controllers
         public IActionResult FaqHBA() => ServeWatermarkedPdf("FAQs", "faq_HBA.pdf");
         public IActionResult FaqCA() => ServeWatermarkedPdf("FAQs", "faq_CA.pdf");
         public IActionResult FaqPCA() => ServeWatermarkedPdf("FAQs", "faq_PCA.pdf");
+        public IActionResult InstrARPAN() => ServeWatermarkedPdf("FAQs", "faq_PCA.pdf");
 
         public IActionResult ClaimInstruction() => ServeWatermarkedPdf("ImportantPdfFiles", "OnlineApplnProcedureforCA_Dec2024.pdf");
         public IActionResult InstrHBA() => ServeWatermarkedPdf("ImportantPdfFiles", "OnlineApplnProcedureforHBA.pdf");

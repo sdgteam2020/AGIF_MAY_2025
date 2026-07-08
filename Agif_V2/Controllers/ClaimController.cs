@@ -473,12 +473,13 @@ namespace Agif_V2.Controllers
         private async Task<ClaimCommonModel> SaveClaimCommonDataAsync(DTOClaimApplication model)
         {
             string? ip = GetClientIp();
+            int ipAddressId = await _IClaimonlineApplication1.GetIpAddressId(ip);
             if (model.ClaimCommonData == null) return new ClaimCommonModel();
 
             model.ClaimCommonData.ApplicantType = int.Parse(model.Category);
             model.ClaimCommonData.WithdrawPurpose = int.Parse(model.Purpose);
             model.ClaimCommonData.IOArmyNo = string.IsNullOrEmpty(model.COArmyNo) ? "" : model.COArmyNo;
-            model.ClaimCommonData.IPAddress = ip;
+            model.ClaimCommonData.IpAddressId = ipAddressId;
 
             if (model.ClaimCommonData.ApplicantType == 3)
             {

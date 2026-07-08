@@ -931,6 +931,9 @@ namespace DataAccessLayer.Repositories
                          join DigitalSignRecords in _context.trnClaimDigitalSignRecords on common.ApplicationId equals DigitalSignRecords.ApplId into DigitalSignRecordsGroup
                          from DigitalSignRecords in DigitalSignRecordsGroup.DefaultIfEmpty()
 
+                         join ip in _context.MIpAddresses on common.IpAddressId equals ip.IpAddressId into ipGroup
+                         from ip in ipGroup.DefaultIfEmpty()
+
                          where dTOExport.Id.Contains(common.ApplicationId)
                          select new DTOClaimExcelResponse
                          {
@@ -986,7 +989,7 @@ namespace DataAccessLayer.Repositories
 
                              EmailDomain = common.EmailDomain ?? string.Empty,
                              dateandtimeofdocuuploadfrosanctioningauth = DigitalSignRecords.SignOn ?? null,
-                             IPaddress = common.IPAddress ?? string.Empty
+                             IPaddress = ip.IPAddress ?? string.Empty
                          }).ToList();
 
             foreach (var item in query)
@@ -1291,6 +1294,28 @@ namespace DataAccessLayer.Repositories
             }
 
             return Task.FromResult(data);
+        }
+
+        public async Task<int> GetIpAddressId(string ipAddress)
+        {
+            if (string.IsNullOrWhiteSpace(ipAddress))
+                throw new ArgumentException("IP address cannot be null or empty.", nameof(ipAddress));
+
+            var ipEntry = await _context.MIpAddresses
+                .FirstOrDefaultAsync(ip => ip.IPAddress == ipAddress);
+
+            if (ipEntry == null)
+            {
+                ipEntry = new MIpAddress
+                {
+                    IPAddress = ipAddress
+                };
+
+                _context.MIpAddresses.Add(ipEntry);
+                await _context.SaveChangesAsync();
+            }
+
+            return ipEntry.IpAddressId;
         }
     }
 }

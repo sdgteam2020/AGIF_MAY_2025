@@ -200,8 +200,9 @@ namespace DataTransferObject.Model
         public int DownloadCount { get; set; }
 
         public string? AGIFRemarks { get; set; } = string.Empty;
-
-        public string? IPAddress { get; set; } = string.Empty;
+        public int IpAddressId { get; set; }
+        [ForeignKey("IpAddressId")]
+        public MIpAddress? MIpAddress { get; set; }
         public bool? PrematureRetirement { get; set; }
 
     }

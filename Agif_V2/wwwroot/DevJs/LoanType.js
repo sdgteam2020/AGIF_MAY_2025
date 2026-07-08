@@ -10,7 +10,14 @@ $(document).ready(function () {
             if ((loanType == 3) && (applicantCategory == 2 || applicantCategory == 3)) {
                 Swal.fire({
                     title: "Warning",
-                    text: "You are requested to fill application on Arpan website with your login ID.",
+                    html: `
+                <p>You are requested to fill application on Arpan website with your login ID.</p>
+                <p class="mt-2">
+                    <a href="/PdfViewer/InstrARPAN" target="_blank">
+                        📄 Click here to read General Instructions
+                    </a>
+                </p>
+            `,
                     icon: "warning",
                     showDenyButton: true,
                     confirmButtonText: "OK",

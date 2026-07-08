@@ -261,15 +261,36 @@ namespace DataAccessLayer.Repositories
 
         public async Task<bool> SaveLoginLogs(DTOLoginLogs loginLog)
         {
-            var logEntry = new trnLoginLog
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                ProfileId = loginLog.ProfileId,
-                IpAddress = loginLog.IpAddress,
-                LoginOn = loginLog.LoginOn
-            };
-            _context.TrnLoginLogs.Add(logEntry);
-            await _context.SaveChangesAsync();
-            return true;
+                var ipEntry = await _context.MIpAddresses.FirstOrDefaultAsync(ip => ip.IPAddress == loginLog.IpAddress);
+                if (ipEntry == null)
+                {
+                    ipEntry = new MIpAddress
+                    {
+                        IPAddress = loginLog.IpAddress
+                    };
+                    _context.MIpAddresses.Add(ipEntry);
+                    await _context.SaveChangesAsync();
+                }
+                var logEntry = new trnLoginLog
+                {
+                    ProfileId = loginLog.ProfileId,
+                    IpAddressId = ipEntry.IpAddressId,
+                    LoginOn = loginLog.LoginOn
+                };
+                _context.TrnLoginLogs.Add(logEntry);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch 
+            {
+                await transaction.RollbackAsync();
+                return false;
+            }
+            
         }
     }
 }

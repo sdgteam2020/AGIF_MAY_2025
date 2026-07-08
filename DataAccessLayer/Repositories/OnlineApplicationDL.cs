@@ -1025,6 +1025,26 @@ namespace DataAccessLayer.Repositories
             return response;
         }
 
+        public async Task<int> GetIpAddressId(string ipAddress)
+        {
+            if (string.IsNullOrWhiteSpace(ipAddress))
+                throw new ArgumentException("IP address cannot be null or empty.", nameof(ipAddress));
 
+            var ipEntry = await _context.MIpAddresses
+                .FirstOrDefaultAsync(ip => ip.IPAddress == ipAddress);
+
+            if (ipEntry == null)
+            {
+                ipEntry = new MIpAddress
+                {
+                    IPAddress = ipAddress
+                };
+
+                _context.MIpAddresses.Add(ipEntry);
+                await _context.SaveChangesAsync();
+            }
+
+            return ipEntry.IpAddressId;
+        }
     }
 }
