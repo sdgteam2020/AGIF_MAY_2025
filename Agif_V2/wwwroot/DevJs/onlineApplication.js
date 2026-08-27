@@ -25,6 +25,21 @@ $(document).ready(function () {
     callingCommonFunctions();
     BindDropDown();
     setupRealTimeValidation();
+
+    const errorElement = document.getElementById("serverValidationError");
+
+    if (errorElement) {
+        const message = errorElement.dataset.message;
+
+        if (message) {
+            Swal.fire({
+                icon: "error",
+                title: "Application Submission Failed",
+                text: message,
+                confirmButtonText: "OK"
+            });
+        }
+    }
 });
 
 function callingCommonFunctions() {
@@ -82,6 +97,25 @@ function callingCommonFunctions() {
         ValInDataNo(this);
     });
 
+    $("#totalService").on("input", function () {
+        ValInDataNo(this);
+    });
+
+    $("#residualService").on("input", function () {
+        ValInDataNo(this);
+    });
+
+    $("#totalCredit").on("input", function () {
+        ValInDataNo(this);
+    });
+
+    $("#totalDeductions").on("input", function () {
+        ValInDataNo(this);
+    });
+
+    $("#salary_After_Deductions").on("input", function () {
+        ValInDataNo(this);
+    });
     //$("#mobileNo").on("blur", function () {
     //    verifyMobileNo(this);
     //});
@@ -134,6 +168,58 @@ function callingCommonFunctions() {
         formatIndianNumber(this);
         validateAmount_HBA(this);
     });
+
+    $("#propertySeller,#propertyAddress").on("input", function () {
+        if (this.value.length > 250) {
+            this.value = this.value.substring(0, 250);
+        }
+    });
+
+    $("#propertyCost,#HBA_repayingCapacity,#HBA_Amt_Eligible_for_loan,#HBA_approxEMIAmount,#HBA_approxDisbursementAmt,#CA_Amt_Eligible_for_loan,#CA_repayingCapacity,#CA_Amount_Applied_For_Loan,#CA_approxEMIAmount,#CA_approxDisbursementAmt,#computerCost,#PCA_Amt_Eligible_for_loan,#PCA_repayingCapacity,#PCA_Amount_Applied_For_Loan,#PCA_approxEMIAmount,#PCA_approxDisbursementAmt").on("input", function () {
+        formatIndianNumber(this);
+        if (this.value.length > 13) {
+            this.value = this.value.substring(0, 13);
+        }
+    });
+
+    $("#dealerName,#PCA_dealerName").on("input", function () {
+        if (this.value.length > 100) {
+            this.value = this.value.substring(0, 100);
+        }
+    });
+
+    $("#companyName,#modelName,#PCA_companyName,#PCA_modelName").on("input", function () {
+        if (this.value.length > 50) {
+            this.value = this.value.substring(0, 50);
+        }
+    });
+
+    $("#HBA_EMI_Eligible,#HBA_EMI_Applied,#CA_EMI_Eligible,#CA_EMI_Applied,#PCA_EMI_Eligible,#PCA_EMI_Applied").on("input", function () {
+        if (this.value.length > 3) {
+            this.value = this.value.substring(0, 3);
+        }
+    });
+
+    $("#drivingLicenseNo").on("input", function () {
+        if (this.value.length > 20) {
+            this.value = this.value.substring(0, 20);
+        }
+    });
+
+    $("#emailId").on("input", function () {
+        if (this.value.length > 64) {
+            this.value = this.value.substring(0, 64);
+        }
+    });
+
+
+
+    $("#DL_IssuingAuth").on("input", function () {
+        if (this.value.length > 100) {
+            this.value = this.value.substring(0, 100);
+        }
+    });
+
 
     $(document).on("input", ".js-hba-emi", function () {
         validateEMI_HBA(this);
@@ -726,13 +812,25 @@ function DeleteExistingLoan() {
 function calculateDifferenceBetweenDOBAndDOC(doc) {
     const dob = $('#dateOfBirth').val();
     if (!dob) {
-        alert("Please select a Date of Birth.");
+        //alert("Please select a Date of Birth.");
+
         return;
     }
     const dateOfBirth = new Date(my_date(dob));
     const dateOfCommission = new Date(my_date(doc));
     if (dateOfCommission < dateOfBirth) {
-        alert("Date of Commission cannot be earlier than Date of Birth.");
+        Swal.fire({
+            title: 'Warning!',
+            text: 'Date of Commission Cannot Be Earlier Than Date of Birth.',
+            icon: 'warning'
+        }).then(() => {
+            $('#dateOfCommission').val("");
+            $('#dateOfBirth').val("");
+            $('#totalService').val("");
+            $('#residualService').val("");
+            $('#dateOfRetirement').val("");
+        });
+
         return;
     }
     const ageInMilliseconds = dateOfCommission - dateOfBirth;
@@ -744,6 +842,10 @@ function calculateDifferenceBetweenDOBAndDOC(doc) {
             icon: 'warning'
         }).then(() => {
             $('#dateOfCommission').val("");
+            $('#dateOfCommission').val("");
+            $('#totalService').val("");
+            $('#residualService').val("");
+            $('#dateOfRetirement').val("");
         });
     }
 }
@@ -1501,8 +1603,8 @@ function textChange() {
     $('#totalDeductions').val(totalDebit);
     $('#totalCredit').val(cr.toLocaleString('en-IN'));
     $('#salary_After_Deductions').val((cr - debt).toLocaleString('en-IN'));
-    setOutlineActive("totalDeductions");
     setOutlineActive("totalCredit");
+    setOutlineActive("totalDeductions");
     setOutlineActive("salary_After_Deductions");
     calculateEMIRepayingCapacity_CA();
     calculateEMIRepayingCapacity_HBA();
@@ -2627,7 +2729,9 @@ function findDataWithArmyNumber() {
                         setInputValueWithFloatingLabel('nextFmnHQ', data.nextFmnHQ);
 
                         setInputValueWithFloatingLabel('Vill_Town', data.vill_Town);
+                        
                         setInputValueWithFloatingLabel('postOffice', data.postOffice);
+                        
                         //setInputValueWithFloatingLabel('distt', data.distt);
                         //setInputValueWithFloatingLabel('state', data.state);
                         setInputValueWithFloatingLabel('Code', data.code);

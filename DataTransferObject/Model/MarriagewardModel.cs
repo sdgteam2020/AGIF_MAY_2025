@@ -21,6 +21,7 @@ namespace DataTransferObject.Model
         public ClaimCommonModel? ClaimCommonModel { get; set; }
         [Required]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Child Name must only contain alphabets and spaces.")]
+        [StringLength(20, ErrorMessage = "Child Name can't be longer than 20 characters.")]
         public string NameOfChild { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required.")]
@@ -38,6 +39,7 @@ namespace DataTransferObject.Model
         public IFormFile AttachPartIIOrder { get; set; }
 
         [Required]
+        [StringLength(2, ErrorMessage = "Age of Ward can't be longer than 2 characters.")]
         public int AgeOfWard { get; set; }
 
         [Required(ErrorMessage = "Date of Marraige is required.")]

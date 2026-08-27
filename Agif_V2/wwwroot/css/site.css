@@ -164,11 +164,19 @@ h1 {
     border-radius: 4px;
 }
 
-.navbar-toggler-icon {
+/*.navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23331100' stroke-linecap='round' stroke-miterlimit='10' stroke-width='3.5' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
+*/
+.navbar-toggler-icon {
+    background-image: none !important;
+    position: relative;
+}
 
-
+    .navbar-toggler-icon::after {
+        content: "☰";
+        font-size: 24px;
+    }
 /* ==========================================================================
    5. DROPDOWN MENUS
    ========================================================================== */

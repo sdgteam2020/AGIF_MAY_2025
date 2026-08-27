@@ -677,14 +677,13 @@ namespace Agif_V2.Helpers
 
 
 
-                    if (isRejected || isApproved)
+                    if (isApproved)
                     {
 
                         document.Add(new Paragraph("\n\r\n\r"));
 
 
-                        Table signatureTable3 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 }))
-    .UseAllAvailableWidth();
+                        Table signatureTable3 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
 
                         signatureTable3.AddCell(new Cell().Add(new Paragraph("(Digital Signature of CO/OC Tps/Head of Adm Br)")
                                 .SetFont(normalFont)
@@ -738,34 +737,94 @@ namespace Agif_V2.Helpers
                             .SetTextAlignment(TextAlignment.LEFT));
 
                         document.Add(signatureTable3);
-
-
-                        if (isApproved)
-                        {
-                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
-                            if (File.Exists(imagePath))
-                            {
-                                ImageData imageData = ImageDataFactory.Create(imagePath);
-                                Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                                icon.SetFixedPosition(pdf.GetNumberOfPages(), 25, 320);
-                                document.Add(icon);
-                            }
-                        }
-                        if (isRejected)
-                        {
-                            string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
-                            if (File.Exists(imagePath))
-                            {
-
-                                ImageData imageData = ImageDataFactory.Create(imagePath);
-                                Image icon = new Image(imageData).ScaleToFit(80f, 80f);
-                                icon.SetFixedPosition(pdf.GetNumberOfPages(), 25, 580);
-                                document.Add(icon);
-                            }
-                        }
+                        
                     }
 
+                    if(isRejected)
+                    {
 
+                        document.Add(new Paragraph("\n\r\n\r"));
+
+
+                        Table signatureTable3 = new Table(UnitValue.CreatePercentArray(new float[] { 1, 1 })).UseAllAvailableWidth();
+
+                        //signatureTable3.AddCell(new Cell().Add(new Paragraph("(Digital Signature of CO/OC Tps/Head of Adm Br)")
+                        //        .SetFont(normalFont)
+                        //        .SetFontSize(10)) // ✅ match other sections
+                        //    .SetBorder(Border.NO_BORDER)
+                        //    .SetTextAlignment(TextAlignment.LEFT));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph("")
+                                .SetFont(normalFont)
+                                .SetFontSize(10)) // ✅ consistent font setup
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Armyno ?? ""}")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph("")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"{Name ?? ""}")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph("")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"Mobile No: {Mobile ?? ""}")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph("")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER));
+
+                        signatureTable3.AddCell(new Cell().Add(new Paragraph($"Rejected On: {dated}")
+                                .SetFont(normalFont)
+                                .SetFontSize(10))
+                            .SetBorder(Border.NO_BORDER)
+                            .SetTextAlignment(TextAlignment.LEFT));
+
+                        document.Add(signatureTable3);
+                    }
+
+                    if (isApproved)
+                    {
+                        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "DigitalSign.png");
+                        if (File.Exists(imagePath))
+                        {
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 25, 320);
+                            document.Add(icon);
+                        }
+                    }
+                    if (isRejected)
+                    {
+                        string imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Images", "Icon", "RejectedIcon.png");
+                        if (File.Exists(imagePath))
+                        {
+
+                            ImageData imageData = ImageDataFactory.Create(imagePath);
+                            Image icon = new Image(imageData).ScaleToFit(80f, 80f);
+                            icon.SetFixedPosition(pdf.GetNumberOfPages(), 25, 580);
+                            document.Add(icon);
+                        }
+                    }
 
 
 

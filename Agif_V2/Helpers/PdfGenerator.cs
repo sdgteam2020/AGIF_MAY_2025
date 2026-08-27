@@ -351,7 +351,7 @@ namespace Agif_V2.Helpers
                                 .SetMarginBottom(10));
                         }
 
-                        if (isApproved || isRejected)
+                        if (isApproved)
                         {
                                 document.Add(new Paragraph("\n\n").SetMarginBottom(35));
 
@@ -388,6 +388,51 @@ namespace Agif_V2.Helpers
                                 .SetTextAlignment(TextAlignment.LEFT));
 
                             signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Sign On: " + dated)
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            document.Add(signatureTable2);
+                        }
+
+                        if(isRejected)
+                        {
+                            document.Add(new Paragraph("\n\n").SetMarginBottom(35));
+
+                            Table signatureTable2 = new Table(UnitValue.CreatePercentArray(new float[] { 100 }))
+                                .UseAllAvailableWidth();
+
+                            //signatureTable2.AddCell(new Cell().Add(new Paragraph("Digital Signature of CO")
+                            //        .SetFont(boldFont)
+                            //        .SetFontSize(10))
+                            //    .SetBorder(Border.NO_BORDER)
+                            //    .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(armyno)
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph(Name)
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph($"{apptName},{unitName}")
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Mobile No: " + Mobile)
+                                    .SetFont(regularFont)
+                                    .SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell().Add(new Paragraph("Rejected On: " + dated)
                                     .SetFont(regularFont)
                                     .SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
@@ -639,7 +684,7 @@ namespace Agif_V2.Helpers
                         }
 
 
-                        if (isApproved || isRejected)
+                        if (isApproved)
                         {
                             document.Add(new Paragraph("\n\n\n"));
 
@@ -678,6 +723,50 @@ namespace Agif_V2.Helpers
 
                             signatureTable2.AddCell(new Cell()
                                 .Add(new Paragraph("Digital Sign On: " + dated).SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
+                            document.Add(signatureTable2);
+                        }
+                        if (isRejected)
+                        {
+                            document.Add(new Paragraph("\n\n\n"));
+
+                            Table signatureTable2 = new Table(UnitValue.CreatePercentArray(new float[] { 1 }))
+                                .UseAllAvailableWidth();
+
+
+                            //signatureTable2.AddCell(new Cell()
+                            //    .Add(new Paragraph("Digital Signature of CO").SetFont(boldFont).SetFontSize(10))
+                            //    .SetTextAlignment(TextAlignment.LEFT)
+                            //    .SetBorder(Border.NO_BORDER));
+
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(armyno).SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(Name).SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph($"{apptName},{unitName}").SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph("Mobile No: " + Mobile).SetFont(normalFont).SetFontSize(10))
+                                .SetTextAlignment(TextAlignment.LEFT)
+                                .SetBorder(Border.NO_BORDER));
+
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph("Rejected On: " + dated).SetFont(normalFont).SetFontSize(10))
                                 .SetTextAlignment(TextAlignment.LEFT)
                                 .SetBorder(Border.NO_BORDER));
 
@@ -885,7 +974,7 @@ namespace Agif_V2.Helpers
                         }
 
 
-                        if (isApproved || isRejected)
+                        if (isApproved)
                         {
                             document.Add(new Paragraph("\n\n\n"));
 
@@ -948,6 +1037,76 @@ namespace Agif_V2.Helpers
 
                             signatureTable2.AddCell(new Cell()
                                 .Add(new Paragraph($"Digital Sign On: {dated}")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            document.Add(signatureTable2);
+                        }
+
+                        if (isRejected)
+                        {
+                            document.Add(new Paragraph("\n\n\n"));
+
+                            Table signatureTable2 = new Table(new float[] { 1, 1 }).UseAllAvailableWidth();
+
+                            //signatureTable2.AddCell(new Cell()
+                            //    .Add(new Paragraph("Digital Signature of CO")
+                            //        .SetFont(boldFont).SetFontSize(10))
+                            //    .SetBorder(Border.NO_BORDER)
+                            //    .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph("")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(armyno)
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph("")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph(Name)
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell()
+                               .Add(new Paragraph("")
+                                   .SetFont(normalFont).SetFontSize(10))
+                               .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph($"{apptName},{unitName}")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph("")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph($"Mobile No: {Mobile}")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER)
+                                .SetTextAlignment(TextAlignment.LEFT));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph("")
+                                    .SetFont(normalFont).SetFontSize(10))
+                                .SetBorder(Border.NO_BORDER));
+
+                            signatureTable2.AddCell(new Cell()
+                                .Add(new Paragraph($"Rejected On: {dated}")
                                     .SetFont(normalFont).SetFontSize(10))
                                 .SetBorder(Border.NO_BORDER)
                                 .SetTextAlignment(TextAlignment.LEFT));

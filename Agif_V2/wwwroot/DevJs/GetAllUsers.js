@@ -288,6 +288,10 @@ function BindUsersData(status) {
             }
         },
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+        initComplete: function () {
+            $('#tblData_filter input')
+                .attr('id', 'applicationSearch');
+        },
         drawCallback: function (settings) {
             $('#tblData tbody').off('change', '.cls-toggle-status').on('change', '.cls-toggle-status', function () {
                 const $toggle = $(this);

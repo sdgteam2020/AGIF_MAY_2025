@@ -19,10 +19,13 @@ namespace DataTransferObject.Model
         [ForeignKey("ApplicationId")]
         public ClaimCommonModel? ClaimCommonModel { get; set; }
         [Required]
+        [StringLength(100, ErrorMessage = "Property Address can't be longer than 100 characters.")]
+
         public string AddressOfProperty { get; set; }
 
         [Required]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Property Holder Name must only contain alphabets and spaces.")]
+        [StringLength(20, ErrorMessage = "Property Holder Name can't be longer than 20 characters.")]
         public string PropertyHolderName { get; set; }
 
         [Required]

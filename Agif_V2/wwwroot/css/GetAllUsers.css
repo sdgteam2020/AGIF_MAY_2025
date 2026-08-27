@@ -144,3 +144,12 @@ input:checked + .slider {
 .card-body {
     padding: 15px !important;
 }
+
+.register {
+    margin-top: 5px;
+}
+.register-msg {
+    padding: 5px;
+    text-align: right;
+    font-size: 12px;
+}

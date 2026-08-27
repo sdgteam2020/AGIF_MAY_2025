@@ -38,7 +38,9 @@ namespace Agif_V2.Controllers
         private readonly IModelStateLogger _modelStateLogger;
         private readonly ModelValidations _modelValidations;
         private readonly IModelValidationService _modelValidationService;
-        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger, ModelValidations modelValidations, IModelValidationService modelValidationService)
+        private readonly ApplicationDbContext _context;
+
+        public OnlineApplicationController(IOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ICar _car, IHba _Hba, IPca _Pca, PdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf, IAddress address, IAccount account, FileUtility fileUtility, IModelStateLogger modelStateLogger, ModelValidations modelValidations, IModelValidationService modelValidationService, ApplicationDbContext context)
         {
             _IonlineApplication1 = OnlineApplication;
             _IMasterOnlyTable = MasterOnlyTable;
@@ -54,6 +56,7 @@ namespace Agif_V2.Controllers
             _modelStateLogger = modelStateLogger;
             _modelValidations = modelValidations;
             _modelValidationService = modelValidationService;
+            _context = context;
         }
         [HttpGet]
         public IActionResult OnlineApplication()
@@ -276,8 +279,9 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Security error: Failed to process the application payload.");
-                return View("OnlineApplication", new DTOOnlineApplication());
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
+                ModelState.AddModelError("", "Invalid or tampered form data detected. Please do not bypass or modify the application validations.");
+                return View("OnlineApplication", new DTOOnlineApplication());     
             }
 
             string formType = GetFormType(model);
@@ -356,26 +360,63 @@ namespace Agif_V2.Controllers
                 ModelState.AddModelError("CommonData.Suffix","Invalid Army Number or Suffix.");
             }
 
-            await _modelValidationService.ValidateLoanRetirementDetails(model, ModelState);
-            switch (formType)
+            //await _modelValidationService.ValidateLoanRetirementDetails(model, ModelState);
+            //switch (formType)
+            //{
+            //    case "HBA":
+            //        await _modelValidationService.ValidateHBADetails(
+            //            model,
+            //            ModelState);
+            //        break;
+
+            //    case "CA":
+            //        await _modelValidationService.ValidateCADetails(
+            //            model,
+            //            ModelState);
+            //        break;
+
+            //    case "PCA":
+            //        await _modelValidationService.ValidatePCADetails(
+            //            model,
+            //            ModelState);
+            //        break;
+            //}
+            try
             {
-                case "HBA":
-                    await _modelValidationService.ValidateHBADetails(
-                        model,
-                        ModelState);
-                    break;
+                await _modelValidationService.ValidateLoanRetirementDetails(
+                    model,
+                    ModelState);
 
-                case "CA":
-                    await _modelValidationService.ValidateCADetails(
-                        model,
-                        ModelState);
-                    break;
+                switch (formType)
+                {
+                    case "HBA":
+                        await _modelValidationService.ValidateHBADetails(
+                            model,
+                            ModelState);
+                        break;
 
-                case "PCA":
-                    await _modelValidationService.ValidatePCADetails(
-                        model,
-                        ModelState);
-                    break;
+                    case "CA":
+                        await _modelValidationService.ValidateCADetails(
+                            model,
+                            ModelState);
+                        break;
+
+                    case "PCA":
+                        await _modelValidationService.ValidatePCADetails(
+                            model,
+                            ModelState);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Invalid or tampered form data detected. Please do not bypass or modify the application validations.");
+
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
+
+                return View("OnlineApplication", model);
             }
 
             if (model.applicantCategory != "3")
@@ -402,6 +443,9 @@ namespace Agif_V2.Controllers
             int ipAddressId = await _IonlineApplication1.GetIpAddressId(ip);
 
             CommonDataModel common = new CommonDataModel();
+
+            await using var transaction =
+                await _context.Database.BeginTransactionAsync();
             try
             {
                 if (model.CommonData != null)
@@ -464,10 +508,24 @@ namespace Agif_V2.Controllers
                             break;
                     }
                 }
+                await transaction.CommitAsync();
+
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Security error: Failed to Process The Application.");
+
+                // Undo everything that was saved above
+                await transaction.RollbackAsync();
+
+
+                ModelState.AddModelError("", "Invalid or tampered form data detected. Please do not bypass or modify the application validations.");
+
+                //await _modelStateLogger.LogModelStateError(
+                //    ModelState,
+                //    HttpContext);
+
+
+
                 return View("OnlineApplication", model);
             }
 

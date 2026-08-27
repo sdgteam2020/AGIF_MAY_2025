@@ -36,6 +36,15 @@
 .file-upload-container .btn {
     pointer-events: none; /* Entire label remains clickable */
 }
+
+.pdf-only-label {
+    display: block;
+    margin-top: 4px;
+    margin-left: 2px;
+    font-size: 12px;
+    color: #6c757d;
+    font-weight:bold;
+}
 .form-box {
     padding: 40px 30px;
     background: #fff;
@@ -1387,3 +1396,14 @@ input[disabled] {
             top: 50% !important;
             transform: translateY(-50%) !important;
         }
+
+.form-outline.active .form-label {
+    position: absolute;
+    top: 0;
+    left: 0.75rem;
+    padding: 0 5px;
+    background-color: #e9ecef !important;
+    z-index: 10;
+    transform: translateY(-50%) scale(0.8) !important;
+    transform-origin: 0 120%;
+}

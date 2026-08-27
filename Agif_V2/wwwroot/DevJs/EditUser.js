@@ -1,6 +1,8 @@
 ﻿$(document).ready(function () {
     populateDropdowns();
     BindDropDown();
+    let tokenDetailsVerified = false;
+
     function populateDropdowns() {
         const Rank = $('#rank').data('rank-prefix');
         const regtCorps = $('#regtCorps').data('regtcorps-prefix');
@@ -99,9 +101,35 @@
     });
 
 
-    $("#btnTokenDetails").on('click', function () {
+    //$("#btnTokenDetails").on('click', function () {
+    //    tokenDetailsVerified = false;
+    //    $("#btnsignup").prop("disabled", true);
 
-        GetTokenDetails("ArmyNo", "name", "errormsg", "btnsignup")
+    //    let result = GetTokenDetails("ArmyNo", "name", "errormsg", "btnsignup")
+    //    if (result === true) {
+    //        tokenDetailsVerified = true;
+
+    //        $("#btnsignup").prop("disabled", false);
+    //    }
+    //});
+
+    $("#btnTokenDetails").on("click", async function () {
+
+        tokenDetailsVerified = false;
+        $("#btnsignup").prop("disabled", true);
+
+        let result = await GetTokenDetails(
+            "ArmyNo",
+            "name",
+            "errormsg",
+            "btnsignup"
+        );
+
+        if (result === true) {
+            tokenDetailsVerified = true;
+
+            $("#btnsignup").prop("disabled", false);
+        }
     });
 
     $('.form-control-Alphabets').on("keypress", function (e) {
@@ -113,6 +141,23 @@
         } else {
             showErrorMessage('Only Alphabets allowed');
             return false; // Block the keypress
+        }
+    });
+
+    $("#btnsignup").on("click", function (e) {
+
+        if (!tokenDetailsVerified) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Error',
+                text: 'Please verify token details first.',
+                icon: 'warning',
+                confirmButtonText: 'OK'
+            });
+
+            return false;
         }
     });
 

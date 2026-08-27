@@ -22,10 +22,11 @@ namespace DataTransferObject.Model
         public int PropertyType { get; set; }
 
         [Required(ErrorMessage = "Property Seller is required.")]
+        [StringLength(250, ErrorMessage = "Property Address can't be longer than 250 characters.")]
         public string? PropertySeller { get; set; }
 
         [Required(ErrorMessage = "Property Address is required.")]
-        [StringLength(300, ErrorMessage = "Property Address can't be longer than 300 characters.")]
+        [StringLength(250, ErrorMessage = "Property Address can't be longer than 300 characters.")]
         public string? PropertyAddress { get; set; }
 
         [Required(ErrorMessage = "Property Cost is required.")]

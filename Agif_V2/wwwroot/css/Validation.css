@@ -6812,8 +6812,31 @@ tbody, td, tfoot, th, thead, tr {
 .form-check-input:checked {
     background-color: #0d6efd;
     border-color: #0d6efd;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
-    background-repeat: no-repeat;
+/*    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e") !important;
+*/    background-repeat: no-repeat;
     background-position: center;
     background-size: 1em;
+}
+
+.large-checkbox {
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.large-checkbox:checked {
+    background-image: none !important;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-checkbox {
+    float: left;
+    margin-left: -1.5em;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    margin-top: 7px;
+    border: 3px solid #000;
+    border-width: 5px;
 }

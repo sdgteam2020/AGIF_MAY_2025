@@ -233,6 +233,45 @@ $('#btnProcessBulk').on('click', function () {
         },
     });
 });
+
+$("#fileExcel").on("change", function () {
+
+    var file = this.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    // Extension
+    var fileName = file.name.toLowerCase();
+
+    var validExtension =
+        fileName.endsWith(".xls") ||
+        fileName.endsWith(".xlsx");
+
+    if (!validExtension) {
+        $(".file-error-message").text("Please select a valid Excel file(.xls or.xlsx).");
+        this.value = "";
+        return;
+    }
+    else
+        $(".file-error-message").empty();
+
+    // MIME type
+    var validMimeTypes = [
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ];
+
+    if (!validMimeTypes.includes(file.type)) {
+        $(".file-error-message").text("Invalid Excel file type.");
+        this.value = "";
+        return;
+    }
+    else
+        $(".file-error-message").empty();
+});
+
 $('#UploadExcel1').on('click', function () {
     Swal.fire({
         title: "Upload Excel File",
@@ -443,6 +482,10 @@ function BindUsersData(status) {
             }
         },
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+        initComplete: function () {
+            $('#tblReceivedApplications_filter input')
+                .attr('id', 'applicationSearch');
+        },
         buttons: [
         ],
         drawCallback: function (settings) {

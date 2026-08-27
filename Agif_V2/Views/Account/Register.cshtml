@@ -21,8 +21,8 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="userName">Username:</label>
-                                    <input asp-for="userName" class="form-control" value="@Html.Encode(Username)" id="username" name="userName" readonly />
+                                    <span>Username:</span>
+                                    <input asp-for="userName" class="form-control" value="@Html.Encode(Username)" id="username" name="userName" readonly autocomplete="off"/>
 
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                             <div class="col-md-6">
                                 <div class="form-group form-control-Alphabets">
                                     <label asp-for="Name">Name:</label>
-                                    <input asp-for="Name" class="form-control" id="Name" name="Name" value="@Model?.Name" maxlength="15" required />
+                                    <input asp-for="Name" class="form-control" id="Name" name="Name" value="@Model?.Name" maxlength="15" required autocomplete="off" />
                                     @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
 
                                 </div>
@@ -51,7 +51,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label asp-for="Email">Email:</label>
-                                    <input type="email" asp-for="Email" class="form-email" id="Email" name="Email" value="@Model?.Email" maxlength="50" required />
+                                    <input type="email" asp-for="Email" class="form-email" id="Email" name="Email" value="@Model?.Email" maxlength="50" required autocomplete="off" />
                                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                                 </div>
                             </div>

@@ -21,6 +21,7 @@ namespace DataTransferObject.Model
 
         [Required]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Child Name must only contain alphabets and spaces.")]
+        [StringLength(20, ErrorMessage = "Child Name can't be longer than 20 characters.")]
         public string ChildName { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required.")]
@@ -41,7 +42,9 @@ namespace DataTransferObject.Model
         public string CourseForWithdrawal { get; set; }
 
         [Required]
+        [StringLength(50, ErrorMessage = "Name Of college can't be longer than 50 characters.")]
         public string CollegeInstitution { get; set; }
+
 
         [NotMapped]
         [Required]

@@ -33,7 +33,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.name, "Full Name", htmlAttributes: new { @class = "control-label" })
-                                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control form-control-Alphabets", @placeholder = "Enter Full Name", @disabled = "disabled", maxlength="15", @required = "required" } })
+                                    @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control form-control-Alphabets", @placeholder = "Enter Full Name", @disabled = "disabled", maxlength="15", @required = "required",autocomplete = "off" } })
                                     @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     @Html.LabelFor(model => model.UserName, "Username", htmlAttributes: new { @class = "control-label" })
-                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control form-control-Alphabets", @placeholder = "Enter Username", @disabled = "disabled", @required = "required" } })
+                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control form-control-Alphabets", @placeholder = "Enter Username", @disabled = "disabled", @required = "required",autocomplete = "off" } })
                                     @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label asp-for="RankId">Rank:</label>
+                                    <span>Rank:</span>
                                     <select class="form-select select" asp-for="RankId" id="rank" name="RankId" data-rank-prefix="@(Model?.RankId)" required disabled></select>
                                     @Html.ValidationMessageFor(m => m.RankId, "", new { @class = "text-danger" })
                                 </div>
@@ -79,7 +79,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                <label asp-for="RegtId">Regt/Corps:</label>
+                                <span>Regt/Corps:</span>
                                     <select class="form-select select" asp-for="RegtId" id="regtCorps" name="RegtId" required disabled data-regtcorps-prefix="@if (Model != null) {
                                                 @Model.RegtId;}"></select>
                                     @Html.ValidationMessageFor(m => m.RegtId, "", new { @class = "text-danger" })
@@ -112,7 +112,7 @@
 
                             <div class="col-md-6  mt-4">
                                 <div class="form-group">
-                                    <input type="checkbox" asp-for="DteFmn" id="DteFmn" class="form-check-input large-checkbox" disabled />
+                                    <input type="checkbox" asp-for="DteFmn" id="DteFmn" class="large-checkbox" disabled />
                                     <label for="DteFmn" class="form-label">I am posted at Fmn HQ/Dte (Applicable for Col Rank & Above)</label>
                                      
                                 </div>

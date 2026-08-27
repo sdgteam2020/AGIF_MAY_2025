@@ -123,10 +123,47 @@ namespace Agif_V2.Helpers
             {
                 return true;
             }
-            catch
+            
+        }
+
+        public async Task<bool> IsValidDocHeader(IFormFile file)
+        {
+            bool retMsg = false;
+
+            if (file != null && file.Length > 0)
             {
-                return true;
+                using (var stream = file.OpenReadStream())
+                using (var reader = new BinaryReader(stream))
+                {
+                    reader.BaseStream.Position = 0x0;
+
+                    byte[] data = reader.ReadBytes(0x10);
+
+                    string data_as_hex = BitConverter.ToString(data);
+
+                    string fUpload = data_as_hex.Substring(0, 11);
+
+                    string? output = null;
+                    bool isGeniun = false;
+
+                    switch (fUpload)
+                    {
+                        case "25-50-44-46":
+                            output = "pdf";
+                            isGeniun = true;
+                            break;
+
+                        default:
+                            output = "notmatched";
+                            isGeniun = false;
+                            break;
+                    }
+
+                    retMsg = isGeniun;
+                }
             }
+
+            return retMsg;
         }
         public async Task<bool> IsPdfPasswordProtected(IFormFile file)
         {

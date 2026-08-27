@@ -753,7 +753,7 @@ namespace DataAccessLayer.Repositories
                 {
                     modelState.AddModelError(
                         "ClaimCommonData.DateOfRetirement",
-                        "Retirement date validation failed.");
+                        "Invalid Retirement date.Please verify the entered details.");
                 }
             }
             var totalService =
@@ -765,7 +765,7 @@ namespace DataAccessLayer.Repositories
             {
                 modelState.AddModelError(
                     "ClaimCommonData.TotalService",
-                    "Total service validation failed.");
+                    "Invalid Total service.Please verify the entered details.");
             }
             var residualService =
     CalculateResidualService(
@@ -776,7 +776,7 @@ namespace DataAccessLayer.Repositories
             {
                 modelState.AddModelError(
                     "ClaimCommonData.ResidualService",
-                    "Residual service validation failed.");
+                    "Invalid Residual service.Please verify the entered details.");
             }
             if (model.PropertyRenovation != null &&
     residualService > 1)
@@ -823,7 +823,7 @@ namespace DataAccessLayer.Repositories
             {
                 modelState.AddModelError(
                     "CommonData.DateOfRetirement",
-                    "Retirement date validation failed.");
+                    "Invalid Retirement date.Please verify the entered details.");
             }
 
             // Total Service
@@ -835,7 +835,7 @@ namespace DataAccessLayer.Repositories
             {
                 modelState.AddModelError(
                     "CommonData.TotalService",
-                    "Total service validation failed.");
+                    "Invalid Total service.Please verify the entered details.");
             }
 
             // Residual Service
@@ -847,7 +847,7 @@ namespace DataAccessLayer.Repositories
             {
                 modelState.AddModelError(
                     "CommonData.ResidualService",
-                    "Residual service validation failed.");
+                    "Invalid Residual service.Please verify the entered details.");
             }
 
             // Business Rule

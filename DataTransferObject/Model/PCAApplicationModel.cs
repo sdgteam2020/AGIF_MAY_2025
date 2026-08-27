@@ -27,11 +27,11 @@ namespace DataTransferObject.Model
         public int computer_Loan_Type { get; set; }
 
         [Required(ErrorMessage = "Company Name is required.")]
-        [StringLength(100, ErrorMessage = "Company Name can't be longer than 100 characters.")]
+        [StringLength(50, ErrorMessage = "Company Name can't be longer than 50 characters.")]
         public string? PCA_companyName { get; set; }
 
         [Required(ErrorMessage = "Model Name is required.")]
-        [StringLength(100, ErrorMessage = "Model Name can't be longer than 100 characters.")]
+        [StringLength(50, ErrorMessage = "Model Name can't be longer than 50 characters.")]
         public string? PCA_modelName { get; set; }
 
         [Required(ErrorMessage = "Computer Cost is required.")]

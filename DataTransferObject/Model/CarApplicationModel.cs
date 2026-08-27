@@ -31,12 +31,12 @@ namespace DataTransferObject.Model
         public MVehType? MVehType { get; set; }
 
         [Required(ErrorMessage = "Company Name is required.")]
-        [StringLength(100, ErrorMessage = "Company Name can't be longer than 100 characters.")]
+        [StringLength(50, ErrorMessage = "Company Name can't be longer than 50 characters.")]
         [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Company Name must only contain alphabets and spaces.")]
         public string? CompanyName { get; set; }
 
         [Required(ErrorMessage = "Model Name is required.")]
-        [StringLength(100, ErrorMessage = "Model Name can't be longer than 100 characters.")]
+        [StringLength(50, ErrorMessage = "Model Name can't be longer than 100 characters.")]
         public string? ModelName { get; set; }
 
         [Required(ErrorMessage = "Vehicle Cost is required.")]
@@ -77,7 +77,7 @@ namespace DataTransferObject.Model
         public decimal? CA_approxEMIAmount { get; set; }
 
         [Required(ErrorMessage = "Driving License Number is required.")]
-        [StringLength(50, ErrorMessage = "Driving License Number can't be longer than 50 characters.")]
+        [StringLength(20, ErrorMessage = "Driving License Number can't be longer than 20 characters.")]
         public string? DrivingLicenseNo { get; set; }
 
         [Required(ErrorMessage = "Validity Date of Driving License is required.")]

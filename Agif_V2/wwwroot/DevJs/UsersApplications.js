@@ -107,6 +107,14 @@
         fetchApplicantData(currentApplicationData.armyNo);
     })
 
+    $("#txtRemark").on("input", function () {
+        this.value = this.value.replace(/[^a-zA-Z ]/g, "");
+        if (this.value.length > 30) {
+            this.value = this.value.substring(0, 30);
+        }
+    });
+
+
 });
 
 $(document).on("click", ".btn-merge", function () {
@@ -172,7 +180,7 @@ function GetApplicationList(status, endpoint) {
             data: "name",
             name: "Name",
             render: function (data, type, row) {
-                return data ? `<a href='mailto:${data}'>${data}</a>` : 'N/A';
+                return data || 'N/A';
             }
         },
         {
@@ -235,7 +243,7 @@ function GetApplicationList(status, endpoint) {
                             data-category='${categorytype}'
                             data-bs-toggle="tooltip"
                             data-bs-placement="top"
-                            title="Merge Pdf">
+                            title="Click here to View Pdf">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                 </div>`;
@@ -248,7 +256,7 @@ function GetApplicationList(status, endpoint) {
                             data-category='${categorytype}'
                             data-bs-toggle="tooltip"
                             data-bs-placement="top"
-                            title="View Pdf">
+                            title="Click here to View Pdf">
                         <i class="bi bi-pencil-square"></i>
                     </button>
                 </div>`;
@@ -345,6 +353,10 @@ function GetApplicationList(status, endpoint) {
         pageLength: 10,
         lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
         dom: '<"row"<"col-md-6"l><"col-md-6"f>>rt<"row"<"col-md-6"i><"col-md-6"p>>',
+        initComplete: function () {
+            $('#tblApplications_filter input')
+                .attr('id', 'applicationSearch');
+        }
     });
 }
 function OpenAction(applicationId, endpoint, category) {
@@ -638,6 +650,7 @@ function GetThumbprint() {
         throw error;
     });
 }
+
 function getPdfFilePath(applicationId, thumbprint, endpoint, type) {
 
     return $.ajax({

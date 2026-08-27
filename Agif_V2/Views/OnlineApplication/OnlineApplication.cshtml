@@ -26,7 +26,23 @@
 <link href="~/css/onlineapplication.css" rel="stylesheet" />
 <script src="~/js/crypto-js.min.js"></script>
 
-@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+
+@if (!ViewData.ModelState.IsValid)
+{
+    var errorMessage = ViewData.ModelState.Values
+        .SelectMany(x => x.Errors)
+        .Select(x => x.ErrorMessage)
+        .FirstOrDefault(x => !string.IsNullOrEmpty(x));
+
+    if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div id="serverValidationError"
+             data-message="@errorMessage"
+             hidden>
+        </div>
+    }
+}
 
 
 <div class="container-fluid mt-2">
@@ -310,7 +326,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="totalService" name="CommonData.TotalService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.TotalService" required />
+                                        <input type="text" id="totalService" name="CommonData.TotalService" class="form-control readonly-blocked" maxlength="2" readonly tabindex="-1" value="@Model.CommonData?.TotalService" required />
                                         <label class="form-label select-label " for="totalService">Total Service(Years)</label>
                                         <span class="error text-danger small"></span>
                                     </div>
@@ -323,7 +339,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">📆</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="residualService" name="CommonData.ResidualService" class="form-control readonly-blocked" readonly tabindex="-1" value="@Model.CommonData?.ResidualService" required />
+                                        <input type="text" id="residualService" name="CommonData.ResidualService" class="form-control readonly-blocked" maxlength="2" readonly tabindex="-1" value="@Model.CommonData?.ResidualService" required />
                                         <label class="form-label select-label " for="residualService">Residual Service(Years)</label>
                                         <span class="error text-danger small"></span>
                                     </div>
@@ -404,7 +420,7 @@
                                     <span class="input-group-text">🧷</span>
                                     <div class="form-outline" data-mdb-input-init>
                                         <input type="text" id="presentUnitPin" name="CommonData.PresentUnitPin" class="form-control isNumerictxt js-unit-pin" required maxlength="6" value="@Model.CommonData?.PresentUnitPin" />
-                                        <label class="form-label select-label ">Present Unit PIN</label>
+                                        <label class="form-label" for="presentUnitPin">Present Unit PIN</label>
                                     </div>
                                 </div>
                                 @Html.ValidationMessageFor(m => m.CommonData.PresentUnitPin, "", new { @class = "text-danger" })
@@ -826,8 +842,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="totalCredit" name="CommonData.TotalCredit" class="form-control readonly-blocked" maxlength="11" readonly required value="@Model.CommonData?.TotalCredit" />
-                                        <label class="form-label select-label ">Total Credit</label>
+                                        <input type="text" id="totalCredit" name="CommonData.TotalCredit" class="form-control readonly-blocked" maxlength="11" readonly required value="@Model.CommonData?.TotalCredit" tabindex="-1" />
+                                        <label class="form-label" for="totalCredit">Total Credit</label>
                                     </div>
                                 </div>
                             </div>
@@ -835,8 +851,8 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="totalDeductions" name="CommonData.TotalDeductions" class="form-control readonly-blocked" maxlength="11" readonly required value="@Model.CommonData?.TotalDeductions" />
-                                        <label class="form-label select-label ">Total Deductions</label>
+                                        <input type="text" id="totalDeductions" name="CommonData.TotalDeductions" class="form-control readonly-blocked" maxlength="11" readonly required value="@Model.CommonData?.TotalDeductions" tabindex="-1" />
+                                        <label class="form-label select-label">Total Deductions</label>
                                     </div>
                                 </div>
                             </div>
@@ -844,7 +860,7 @@
                                 <div class="input-group mb-2">
                                     <span class="input-group-text">💸</span>
                                     <div class="form-outline" data-mdb-input-init>
-                                        <input type="text" id="salary_After_Deductions" name="CommonData.salary_After_Deductions" class="form-control readonly-blocked" maxlength="11" required readonly value="@Model.CommonData?.salary_After_Deductions" />
+                                        <input type="text" id="salary_After_Deductions" name="CommonData.salary_After_Deductions" class="form-control readonly-blocked" maxlength="11" required readonly value="@Model.CommonData?.salary_After_Deductions" tabindex="-1" />
                                         <label class="form-label select-label ">Salary After Deductions</label>
                                     </div>
                                 </div>
@@ -886,7 +902,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👨</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="propertySeller" name="HBAApplication.propertySeller" class="form-control" value="@Model.HBAApplication?.PropertySeller" required/>
+                                                <input type="text" id="propertySeller" name="HBAApplication.propertySeller" class="form-control" maxlength="250" value="@Model.HBAApplication?.PropertySeller" required />
                                                 <label class="form-label select-label ">Property Seller Name and Address</label>
                                             </div>
                                         </div>
@@ -895,7 +911,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="propertyAddress" name="HBAApplication.PropertyAddress" class="form-control" required value="@Model.HBAApplication?.PropertyAddress" />
+                                                <input type="text" id="propertyAddress" name="HBAApplication.PropertyAddress" class="form-control" required maxlength="250" value="@Model.HBAApplication?.PropertyAddress" />
                                                 <label class="form-label select-label ">Property Address</label>
                                             </div>
                                         </div>
@@ -922,7 +938,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💰</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control js-inputtext" maxlength="12" required value="@Model.HBAApplication?.PropertyCost" />
+                                                <input type="text" id="propertyCost" name="HBAApplication.PropertyCost" class="form-control js-inputtext" maxlength="13" required value="@Model.HBAApplication?.PropertyCost" />
                                                 <label class="form-label select-label " for="propertyCost">Cost of House/Flat/Constr Cost/Repair & Renovation</label>
                                             </div>
                                         </div>
@@ -933,7 +949,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_repayingCapacity" name="HBAApplication.HBA_repayingCapacity" class="form-control readonly-blocked" required readonly value="@Model.HBAApplication?.HBA_repayingCapacity" />
+                                                <input type="text" id="HBA_repayingCapacity" name="HBAApplication.HBA_repayingCapacity" class="form-control js-inputtext readonly-blocked" maxlength="13" required readonly value="@Model.HBAApplication?.HBA_repayingCapacity" />
                                                 <label class="form-label select-label " for="HBA_repayingCapacity">Your max EMI Repaying Capacity</label>
                                             </div>
                                         </div>
@@ -945,7 +961,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_Amt_Eligible_for_loan" name="HBAApplication.HBA_Amt_Eligible_for_loan" class="form-control readonly-blocked" required readonly value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
+                                                <input type="text" id="HBA_Amt_Eligible_for_loan" name="HBAApplication.HBA_Amt_Eligible_for_loan" class="form-control js-inputtext readonly-blocked" maxlength="13" required readonly value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
                                                 <label class="form-label select-label " for="HBA_Amt_Eligible_for_loan">Max Eligible Loan Amount</label>
                                             </div>
                                         </div>
@@ -956,7 +972,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_EMI_Eligible" name="HBAApplication.HBA_EMI_Eligible" class="form-control readonly-blocked" readonly required value="@Model.HBAApplication?.HBA_EMI_Eligible" />
+                                                <input type="text" id="HBA_EMI_Eligible" name="HBAApplication.HBA_EMI_Eligible" class="form-control js-inputtext readonly-blocked" maxlength="3" readonly required value="@Model.HBAApplication?.HBA_EMI_Eligible" />
                                                 <label class="form-label select-label " for="HBA_EMI_Eligible">Max EMI Eligible</label>
                                             </div>
                                         </div>
@@ -969,7 +985,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_Amount_Applied_For_Loan" name="HBAApplication.HBA_Amount_Applied_For_Loan" class="form-control" required value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
+                                                <input type="text" id="HBA_Amount_Applied_For_Loan" name="HBAApplication.HBA_Amount_Applied_For_Loan" class="form-control js-inputtext" maxlength="13" required value="@Model.HBAApplication?.HBA_Amt_Eligible_for_loan" />
                                                 <label class="form-label select-label " for="HBA_Amount_Applied_For_Loan">Amount Applied For Loan</label>
                                             </div>
                                         </div>
@@ -979,7 +995,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗓</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control js-hba-emi" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
+                                                <input type="text" id="HBA_EMI_Applied" name="HBAApplication.HBA_EMI_Applied" class="form-control js-hba-emi" maxlength="3" required value="@Model.HBAApplication?.HBA_EMI_Applied" />
                                                 <label class="form-label select-label " for="HBA_EMI_Applied">No of EMI Applied</label>
                                             </div>
                                         </div>
@@ -991,7 +1007,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_approxEMIAmount" name="HBAApplication.HBA_approxEMIAmount" class="form-control readonly-blocked" readonly required value="@Model.HBAApplication?.HBA_approxEMIAmount" />
+                                                <input type="text" id="HBA_approxEMIAmount" name="HBAApplication.HBA_approxEMIAmount" class="form-control js-inputtext readonly-blocked" maxlength="13" readonly required value="@Model.HBAApplication?.HBA_approxEMIAmount" />
                                                 <label class="form-label select-label " for="HBA_approxEMIAmount">Your Approx EMI Amount will be</label>
                                             </div>
                                         </div>
@@ -1001,7 +1017,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">💵</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="HBA_approxDisbursementAmt" name="HBAApplication.HBA_approxDisbursementAmt" class="form-control readonly-blocked" readonly required value="@Model.HBAApplication?.HBA_approxDisbursementAmt" />
+                                                <input type="text" id="HBA_approxDisbursementAmt" name="HBAApplication.HBA_approxDisbursementAmt" class="form-control js-inputtext readonly-blocked" maxlength="13" readonly required value="@Model.HBAApplication?.HBA_approxDisbursementAmt" />
                                                 <label class="form-label select-label " for="HBA_approxDisbursementAmt">Approx Disbursement Amount</label>
                                             </div>
                                         </div>
@@ -1030,7 +1046,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">👨</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="dealerName" name="CarApplication.DealerName" class="form-control" required value="@Model.CarApplication?.DealerName" />
+                                                <input type="text" id="dealerName" name="CarApplication.DealerName" class="form-control" maxlength="100" required value="@Model.CarApplication?.DealerName" />
                                                 <label class="form-label select-label ">Dealers Name and Address</label>
                                             </div>
                                         </div>
@@ -1058,7 +1074,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏢</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="companyName" name="CarApplication.CompanyName" class="form-control form-control-Alphabets" required value="@Model.CarApplication?.CompanyName" />
+                                                <input type="text" id="companyName" name="CarApplication.CompanyName" class="form-control form-control-Alphabets" maxlength="100" required value="@Model.CarApplication?.CompanyName" />
                                                 <label class="form-label select-label ">Company Name</label>
                                             </div>
                                         </div>
@@ -1068,7 +1084,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🚘</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="modelName" name="CarApplication.ModelName" class="form-control" required value="@Model.CarApplication?.ModelName" />
+                                                <input type="text" id="modelName" name="CarApplication.ModelName" class="form-control" maxlength="100" required value="@Model.CarApplication?.ModelName" />
                                                 <label class="form-label" for="modelName">Model Name</label>
                                                 <label class="form-label select-label ">Model Name</label>
                                             </div>
@@ -1165,7 +1181,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🪪</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="drivingLicenseNo" name="CarApplication.DrivingLicenseNo" class="form-control" required value="@Model.CarApplication?.DrivingLicenseNo" />
+                                                <input type="text" id="drivingLicenseNo" name="CarApplication.DrivingLicenseNo" class="form-control" maxlength="20" required value="@Model.CarApplication?.DrivingLicenseNo" />
                                                 <label class="form-label select-label ">Driving License No</label>
                                             </div>
                                         </div>
@@ -1185,7 +1201,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🪪</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="DL_IssuingAuth" name="CarApplication.DL_IssuingAuth" class="form-control form-control-Alphabets" required value="@Model.CarApplication?.DL_IssuingAuth" />
+                                                <input type="text" id="DL_IssuingAuth" name="CarApplication.DL_IssuingAuth" class="form-control form-control-Alphabets" required maxlength="100" value="@Model.CarApplication?.DL_IssuingAuth" />
                                                 <label class="form-label select-label ">Driving License Issuing Auth</label>
                                             </div>
                                         </div>
@@ -1223,7 +1239,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🏠</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_dealerName" name="PCAApplication.PCA_dealerName" class="form-control" required value="@Model.PCAApplication?.PCA_dealerName" />
+                                                <input type="text" id="PCA_dealerName" name="PCAApplication.PCA_dealerName" class="form-control" maxlength="100" required value="@Model.PCAApplication?.PCA_dealerName" />
                                                 <label class="form-label select-label ">Dealers Name and Address</label>
                                             </div>
                                         </div>
@@ -1251,7 +1267,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_companyName" name="PCAApplication.PCA_companyName" class="form-control form-control-Alphabets" required value="@Model.PCAApplication?.PCA_companyName" />
+                                                <input type="text" id="PCA_companyName" name="PCAApplication.PCA_companyName" class="form-control form-control-Alphabets" maxlength="50" required value="@Model.PCAApplication?.PCA_companyName" />
                                                 <label class="form-label select-label ">Company Name</label>
                                             </div>
                                         </div>
@@ -1261,7 +1277,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="PCA_modelName" name="PCAApplication.PCA_modelName" class="form-control" required value="@Model.PCAApplication?.PCA_modelName" />
+                                                <input type="text" id="PCA_modelName" name="PCAApplication.PCA_modelName" class="form-control" required maxlength="50" value="@Model.PCAApplication?.PCA_modelName" />
                                                 <label class="form-label select-label ">Model Name</label>
                                             </div>
                                         </div>
@@ -1290,7 +1306,7 @@
                                         <div class="input-group mb-2">
                                             <span class="input-group-text">🗺️</span>
                                             <div class="form-outline" data-mdb-input-init>
-                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control js-inputtext" maxlength="12"  required value="@Model.PCAApplication?.computerCost" />
+                                                <input type="text" id="computerCost" name="PCAApplication.computerCost" class="form-control js-inputtext" maxlength="13"  required value="@Model.PCAApplication?.computerCost" />
                                                 <label class="form-label select-label " for="computerCost">Total Price of Computer</label>
                                             </div>
                                         </div>

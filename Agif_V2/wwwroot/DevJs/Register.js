@@ -8,6 +8,7 @@
 
    
 })
+let RegistertokenDetailsVerified = false;
 
 function loadDropdown() {
 
@@ -33,6 +34,20 @@ $('#DteFmn').on('change', function () {
 
 $("#btnsignup").on("click", function (e) {
     e.preventDefault(); // Prevent form submission for now
+    const form = $("#signupForm")[0];
+
+    // ==========================================
+    // 1. Browser required-field validation
+    // ==========================================
+    if (!form.checkValidity()) {
+
+        // Shows:
+        // "Please fill out this field"
+        // "Please enter an email address", etc.
+        form.reportValidity();
+
+        return false;
+    }
     if ($("#UnitId").val() == 0 || $("#txtUnit").val() == "") {
         $("#UnitId").val(0);
         $("#txtUnit").val("");
@@ -113,9 +128,45 @@ $("#txtUnit").autocomplete({
     appendTo: '#suggesstion-box'
 });
 
-$("#btnTokenDetails").on('click', function () {
+//$("#btnTokenDetails").on('click', function () {
 
-    GetTokenDetails("ArmyNo", "Name", "errormsg", "btnsignup")
+//    GetTokenDetails("ArmyNo", "Name", "errormsg", "btnsignup")
+//});
+
+$("#btnTokenDetails").on("click", async function () {
+
+    RegistertokenDetailsVerified = false;
+    $("#btnsignup").prop("disabled", true);
+
+    let result = await GetTokenDetails(
+        "ArmyNo",
+        "name",
+        "errormsg",
+        "btnsignup"
+    );
+
+    if (result === true) {
+        RegistertokenDetailsVerified = true;
+
+        $("#btnsignup").prop("disabled", false);
+    }
+});
+
+$("#btnsignup").on("click", function (e) {
+
+    if (!RegistertokenDetailsVerified) {
+
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Error',
+            text: 'Please verify token details first.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+
+        return false;
+    }
 });
 
 $("input, textarea").on("paste", function (e) {

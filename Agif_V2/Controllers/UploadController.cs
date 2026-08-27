@@ -242,9 +242,12 @@ namespace Agif_V2.Controllers
                     ModelState.AddModelError(file.Name, "File size must not exceed 1 MB.");
                 if(await _pdfUpload.CheckIfPdfPasswordProtected(file))
                 {
-                    ModelState.AddModelError(file.Name, "Only valid, Non-password-protected PDF files are allowed.");
+                    ModelState.AddModelError(file.Name, "Only valid PDF files are allowed.");
                 }
-
+                if (!await _pdfUpload.IsValidDocHeader(file))
+                {
+                    ModelState.AddModelError(file.Name, "Invalid PDF. The file may be corrupted or not a valid PDF.");
+                }
 
             }
 

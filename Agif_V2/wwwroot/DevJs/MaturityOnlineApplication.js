@@ -20,6 +20,21 @@ $(document).ready(function () {
     BindDropDown();
     setupRealTimeValidation();
     accordionAutoOpenClose();
+
+    const errorElement = document.getElementById("serverValidationError");
+
+    if (errorElement) {
+        const message = errorElement.dataset.message;
+
+        if (message) {
+            Swal.fire({
+                icon: "error",
+                title: "Application Submission Failed",
+                text: message,
+                confirmButtonText: "OK"
+            });
+        }
+    }
 });
 
 function callingCommonFunctions() {
@@ -120,6 +135,43 @@ function callingCommonFunctions() {
         formatIndianNumber(this);
     });
 
+    $("#emailId").on("input", function () {
+        if (this.value.length > 64) {
+            this.value = this.value.substring(0, 64);
+        }
+    });
+
+    $("#txtChildName,#txtNameOfChild,#PropertyHolderName").on("input", function () {
+        if (this.value.length > 20) {
+            this.value = this.value.substring(0, 20);
+        }
+    });
+
+    $("#AddressOfProperty").on("input", function () {
+        if (this.value.length > 100) {
+            this.value = this.value.substring(0, 100);
+        }
+    });
+
+
+    $("#AgeOfWard").on("input", function () {
+        if (this.value.length > 2) {
+            this.value = this.value.substring(0, 2);
+        }
+    });
+
+
+    $("#NameOfcollege").on("input", function () {
+        if (this.value.length > 50) {
+            this.value = this.value.substring(0, 50);
+        }
+    });
+
+    $("#AmountOfWithdrawalRequired,#TotalExpenditure,#EstimatedCost").on("input", function () {
+        if (this.value.length > 10) {
+            this.value = this.value.substring(0, 10);
+        }
+    });
 }
 
 function resetCivilPostalAddress() {
@@ -757,13 +809,23 @@ function DeleteExistingLoan() {
 function calculateDifferenceBetweenDOBAndDOC(doc) {
     const dob = $('#dateOfBirth').val();
     if (!dob) {
-        alert("Please select a Date of Birth.");
+       // alert("Please select a Date of Birth.");
         return;
     }
     const dateOfBirth = new Date(my_date(dob));
     const dateOfCommission = new Date(my_date(doc));
     if (dateOfCommission < dateOfBirth) {
-        alert("Date of Commission cannot be earlier than Date of Birth.");
+        Swal.fire({
+            title: 'Warning!',
+            text: 'Date of Commission Cannot Be Earlier Than Date of Birth.',
+            icon: 'warning'
+        }).then(() => {
+            $('#dateOfCommission').val("");
+            $('#dateOfBirth').val("");
+            $('#totalService').val("");
+            $('#residualService').val("");
+            $('#dateOfRetirement').val("");
+        });
         return;
     }
     const today = new Date(); // current date
@@ -801,8 +863,8 @@ function calculateYearDifference() {
     const value = $('#dateOfCommission').val();
 
     if (!value) {
-        alert("Please select a Date of Commission.");
-        return;
+       //alert("Please select a Date of Commission.");
+       return;
     }
     calculateDifferenceBetweenDOBAndDOC(value);
     const commissionDate = new Date(my_date(value));
@@ -2782,6 +2844,88 @@ function encryptData(plainText) {
 //    }
 //});
 
+//$(document).on('change', '.file-upload', function () {
+
+//    var file = this.files[0];
+//    var maxSize = 150 * 1024;
+
+//    var wrapper = $(this).closest('.file-upload-wrapper');
+
+//    wrapper.find('.file-error-message').text('');
+
+//    if (file) {
+
+//        wrapper.find('.selected-file-name').text(file.name);
+
+//        if (file.size > maxSize) {
+
+//            $(this).val('');
+
+//            wrapper.find('.selected-file-name')
+//                .text('No file chosen');
+
+//            wrapper.find('.file-error-message')
+//                .text('File size should not exceed 150 KB.');
+
+//            return;
+//        }
+//    }
+//    else {
+//        wrapper.find('.selected-file-name')
+//            .text('No file chosen');
+//    }
+//});
+
+//$(document).on('change', '.file-upload', function () {
+
+//    var file = this.files[0];
+//    var maxSize = 150 * 1024;
+
+//    var wrapper = $(this).closest('.file-upload-wrapper');
+
+//    wrapper.find('.file-error-message').text('');
+
+//    if (file) {
+
+//        wrapper.find('.selected-file-name').text(file.name);
+
+//        // Check PDF extension
+//        var extension = file.name.split('.').pop().toLowerCase();
+
+//        if (extension !== 'pdf') {
+
+//            $(this).val('');
+
+//            wrapper.find('.selected-file-name')
+//                .text('No file chosen');
+
+//            wrapper.find('.file-error-message')
+//                .text('Only PDF files are allowed.');
+
+//            return;
+//        }
+
+//        // Check file size
+//        if (file.size > maxSize) {
+
+//            $(this).val('');
+
+//            wrapper.find('.selected-file-name')
+//                .text('No file chosen');
+
+//            wrapper.find('.file-error-message')
+//                .text('File size should not exceed 150 KB.');
+
+//            return;
+//        }
+//    }
+//    else {
+//        wrapper.find('.selected-file-name')
+//            .text('No file chosen');
+//    }
+//});
+
+
 $(document).on('change', '.file-upload', function () {
 
     var file = this.files[0];
@@ -2795,6 +2939,24 @@ $(document).on('change', '.file-upload', function () {
 
         wrapper.find('.selected-file-name').text(file.name);
 
+        // Check file extension
+        var extension = file.name.split('.').pop().toLowerCase();
+
+        // Check both extension and MIME type
+        if (extension !== 'pdf' || file.type !== 'application/pdf') {
+
+            $(this).val('');
+
+            wrapper.find('.selected-file-name')
+                .text('No file chosen');
+
+            wrapper.find('.file-error-message')
+                .text('Only valid PDF files are allowed.');
+
+            return;
+        }
+
+        // Check file size
         if (file.size > maxSize) {
 
             $(this).val('');
@@ -2813,6 +2975,7 @@ $(document).on('change', '.file-upload', function () {
             .text('No file chosen');
     }
 });
+
 //$(document).on('change', '.file-upload', function () {
 
 //    var file = this.files[0];

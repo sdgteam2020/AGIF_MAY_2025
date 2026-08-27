@@ -1,4 +1,5 @@
 ﻿using Agif_V2.Helpers;
+using DataAccessLayer;
 using DataAccessLayer.Interfaces;
 using DataAccessLayer.Repositories;
 using DataTransferObject.Helpers;
@@ -28,8 +29,9 @@ namespace Agif_V2.Controllers
         private readonly IModelStateLogger _modelStateLogger;
         private readonly IModelValidationService _modelValidationService;
         private readonly ModelValidations _modelValidations;
+        private readonly ApplicationDbContext _context;
 
-        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger, IModelValidationService modelValidationService, ModelValidations modelValidations )
+        public ClaimController(IClaimOnlineApplication OnlineApplication, IMasterOnlyTable MasterOnlyTable, ClaimPdfGenerator pdfGenerator, IWebHostEnvironment env, MergePdf mergePdf,IClaimDocumentUpload claimDocumentUpload, PdfUpload pdfUpload, IClaimAddress claimAddress, IClaimAccount claimAccount, FileUtility fileUtility, Watermark watermark, IModelStateLogger modelStateLogger, IModelValidationService modelValidationService, ModelValidations modelValidations, ApplicationDbContext context)
         {
 
             _IClaimonlineApplication1 = OnlineApplication;      
@@ -45,6 +47,7 @@ namespace Agif_V2.Controllers
             _modelStateLogger = modelStateLogger;
             _modelValidationService = modelValidationService;
             _modelValidations = modelValidations;
+            _context = context;
         }
 
         public IActionResult MaturityLoanType()
@@ -269,6 +272,7 @@ namespace Agif_V2.Controllers
             }
             catch (Exception ex)
             {
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 ModelState.AddModelError("", "Security error: Failed to process the application.");
                 return View("OnlineApplication", new DTOClaimApplication());
             }
@@ -347,34 +351,57 @@ namespace Agif_V2.Controllers
             {
                 ModelState.AddModelError("ClaimCommonData.CivilPostalAddress", "Civil Postal Address is not allowed for the selected Army Post Office.");
             }
+            try
+            {
+                await _modelValidationService.ValidateClaimRetirementDetails(
+                    model,
+                    ModelState);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(
+                    "",
+                    "Invalid or tampered form data detected. Please do not bypass or modify the application validations.");
 
-            await _modelValidationService.ValidateClaimRetirementDetails(model,ModelState);
+                await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
 
+                return View("OnlineApplication", model);
+            }
             if (!ModelState.IsValid)
             {
                 await _modelStateLogger.LogModelStateError(ModelState, HttpContext);
                 return View("OnlineApplication", model);
             }
-            //try
-            //{
+            await using var transaction =await _context.Database.BeginTransactionAsync();
+            try
+            { 
                 var claimCommonModel = await SaveClaimCommonDataAsync(model);
 
                 await SaveAddressAndAccountDetailsAsync(model, claimCommonModel.ApplicationId);
 
                 string formType = await SubmitFormAsync(model, claimCommonModel.ApplicationId);
 
+                await transaction.CommitAsync();
+
+
                 TempData["ClaimapplicationId"] = claimCommonModel.ApplicationId;
                 TempData["Message"] = "Your application has been saved successfully. Please upload the required document to proceed.";
                 return RedirectToAction("Upload", "Claim");
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
+            }
+            catch (Exception ex)
+            {
+                //throw ex;
+                await transaction.RollbackAsync();
 
-            //    ModelState.AddModelError("", "Security error: Failed to process the application.");
+                //await _modelStateLogger.LogModelStateError(
+                //    ModelState,
+                //    HttpContext);
 
-            //    return View("OnlineApplication", model);
-            //}
+                ModelState.AddModelError("", "Invalid or tampered form data detected. Please do not bypass or modify the application validations.");
+
+
+                return View("OnlineApplication", model);
+            }
 
         }
 
@@ -459,7 +486,13 @@ namespace Agif_V2.Controllers
                 }
                 if (await _pdfUpload.CheckIfPdfPasswordProtected(file))
                 {
-                    errorMessage = "Only valid, Non-password-protected PDF files are allowed.";
+                    errorMessage = "Only valid PDF files are allowed.";
+                    ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", errorMessage);
+                    isValid = false;
+                }
+                if (!await _pdfUpload.IsValidDocHeader(file))
+                {
+                    errorMessage = "Invalid PDF. The file may be corrupted or not a valid PDF.";
                     ModelState.AddModelError($"{formPrefix}.{fileProp.Value}", errorMessage);
                     isValid = false;
                 }
@@ -614,7 +647,12 @@ namespace Agif_V2.Controllers
 
             if (await _pdfUpload.CheckIfPdfPasswordProtected(file))
             {
-                ModelState.AddModelError(file.Name, "Only valid, Non-password-protected PDF files are allowed.");
+                ModelState.AddModelError(file.Name, "Only valid PDF files are allowed.");
+            }
+
+            if (!await _pdfUpload.IsValidDocHeader(file))
+            {
+               ModelState.AddModelError(file.Name, "Invalid PDF. The file may be corrupted or not a valid PDF.");
             }
             //if (await _pdfUpload.IsValidPdfFile(file))
             //{
